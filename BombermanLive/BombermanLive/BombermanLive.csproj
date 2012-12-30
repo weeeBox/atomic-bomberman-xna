@@ -112,10 +112,10 @@
     <Compile Include="core\Drawable.cs" />
     <Compile Include="core\Updatable.cs" />
     <Compile Include="game\ApplicationImpl.cs" />
+    <Compile Include="game\ContextImpl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="BombermanGame.cs" />
-    <Compile Include="util\WeakList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

@@ -7,6 +7,6 @@ namespace core
 {
     public interface Drawable
     {
-        void draw(Context context);
+        void Draw(Context context);
     }
 }
