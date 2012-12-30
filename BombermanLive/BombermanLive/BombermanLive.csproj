@@ -129,8 +129,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BombermanLiveContent\BombermanLiveContent.contentproj">
-      <Name>BombermanLiveContent</Name>
+      <Name>BombermanLiveContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
+      <Project>{C6AEAEDD-8396-4E89-A335-3D8FC84E5675}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

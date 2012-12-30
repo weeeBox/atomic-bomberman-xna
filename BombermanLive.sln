@@ -3,20 +3,56 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BombermanLive", "BombermanLive\BombermanLive\BombermanLive.csproj", "{25BF6344-885F-4CC0-99CF-9CE2F95C539A}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "BombermanLiveContent", "BombermanLive\BombermanLiveContent\BombermanLiveContent.contentproj", "{C6AEAEDD-8396-4E89-A335-3D8FC84E5675}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BombermanLiveContent", "BombermanLive\BombermanLiveContent\BombermanLiveContent.contentproj", "{C6AEAEDD-8396-4E89-A335-3D8FC84E5675}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BombermanLiveTests", "BombermanLiveTests\BombermanLiveTests.csproj", "{3503B2D9-C658-4B93-85EF-0D0DAF5B985D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F1F6D97D-C080-4D0F-9993-E95F86A2E0E0}"
+	ProjectSection(SolutionItems) = preProject
+		BombermanLive.vsmdi = BombermanLive.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
 EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = BombermanLive.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{25BF6344-885F-4CC0-99CF-9CE2F95C539A}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{25BF6344-885F-4CC0-99CF-9CE2F95C539A}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{25BF6344-885F-4CC0-99CF-9CE2F95C539A}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{25BF6344-885F-4CC0-99CF-9CE2F95C539A}.Debug|x86.ActiveCfg = Debug|x86
 		{25BF6344-885F-4CC0-99CF-9CE2F95C539A}.Debug|x86.Build.0 = Debug|x86
+		{25BF6344-885F-4CC0-99CF-9CE2F95C539A}.Release|Any CPU.ActiveCfg = Release|x86
+		{25BF6344-885F-4CC0-99CF-9CE2F95C539A}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{25BF6344-885F-4CC0-99CF-9CE2F95C539A}.Release|Mixed Platforms.Build.0 = Release|x86
 		{25BF6344-885F-4CC0-99CF-9CE2F95C539A}.Release|x86.ActiveCfg = Release|x86
 		{25BF6344-885F-4CC0-99CF-9CE2F95C539A}.Release|x86.Build.0 = Release|x86
+		{C6AEAEDD-8396-4E89-A335-3D8FC84E5675}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{C6AEAEDD-8396-4E89-A335-3D8FC84E5675}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{C6AEAEDD-8396-4E89-A335-3D8FC84E5675}.Debug|x86.ActiveCfg = Debug|x86
+		{C6AEAEDD-8396-4E89-A335-3D8FC84E5675}.Release|Any CPU.ActiveCfg = Release|x86
+		{C6AEAEDD-8396-4E89-A335-3D8FC84E5675}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{C6AEAEDD-8396-4E89-A335-3D8FC84E5675}.Release|x86.ActiveCfg = Release|x86
+		{3503B2D9-C658-4B93-85EF-0D0DAF5B985D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3503B2D9-C658-4B93-85EF-0D0DAF5B985D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3503B2D9-C658-4B93-85EF-0D0DAF5B985D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3503B2D9-C658-4B93-85EF-0D0DAF5B985D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3503B2D9-C658-4B93-85EF-0D0DAF5B985D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3503B2D9-C658-4B93-85EF-0D0DAF5B985D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3503B2D9-C658-4B93-85EF-0D0DAF5B985D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3503B2D9-C658-4B93-85EF-0D0DAF5B985D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3503B2D9-C658-4B93-85EF-0D0DAF5B985D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3503B2D9-C658-4B93-85EF-0D0DAF5B985D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
+using System;
 
 namespace core
 {
     public class UpdatableList : Updatable, Composite<Updatable>
     {
         private List<Updatable> list;
-        
+
+        private bool insideLoop;
+        private bool insideLoopObjectWereDeleted;
+
         public UpdatableList()
         {
             list = new List<Updatable>();
@@ -18,20 +22,24 @@ namespace core
 
         public void Update(float delta)
         {
-            int index = 0;
-            int count = list.Count; // remember the list's size here: during the loop we may add more objects
-            while (index < count)
-            {
-                Updatable item = list[index];
-                if (item == null)
-                {
-                    list.RemoveAt(index);
-                    --count;
-                    continue;
-                }
+            insideLoop = true;
 
-                item.Update(delta);
-                ++index;
+            int count = list.Count; // remember the list's size here: during the loop we may add more objects
+            for (int i = 0; i < count; ++i)
+            {
+                Updatable item = list[i];
+                if (item != null)
+                {
+                    item.Update(delta);
+                }
+            }
+
+            insideLoop = false;
+
+            if (insideLoopObjectWereDeleted)
+            {
+                RemoveDeleted();
+                insideLoopObjectWereDeleted = false;
             }
         }
 
@@ -45,13 +53,56 @@ namespace core
             int index = list.IndexOf(item);
             if (index != -1)
             {
-                list[index] = null; // we can't remove it now, because it may screw the update loop
+                if (insideLoop)
+                {
+                    list[index] = null; // we can't remove it now, because it may screw the update loop
+                    insideLoopObjectWereDeleted = true;
+                }
+                else
+                {
+                    list.RemoveAt(index);
+                }
             }
         }
 
         public int Count()
         {
             return list.Count;
+        }
+
+        private void RemoveDeleted()
+        {
+            int newCount = 0;
+            int oldCount = list.Count;
+
+            for (int to = 0, from = 0; to < oldCount && from < oldCount; ++to)
+            {
+                if (list[to] == null)
+                {
+                    from = Math.Max(to + 1, from);
+                    for (; from < oldCount; ++from)
+                    {
+                        Updatable item = list[from];
+                        if (item != null)
+                        {
+                            list[to] = item;
+                            list[from] = null;
+
+                            ++newCount;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    ++newCount;
+                }
+            }
+
+            if (newCount != oldCount)
+            {
+                list.RemoveRange(newCount, oldCount - newCount);
+            }
         }
     }
 }
