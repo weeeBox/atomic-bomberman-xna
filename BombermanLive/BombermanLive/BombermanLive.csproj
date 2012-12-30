@@ -108,11 +108,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="core\Application.cs" />
+    <Compile Include="core\Composite.cs" />
     <Compile Include="core\Context.cs" />
     <Compile Include="core\Drawable.cs" />
+    <Compile Include="core\DrawableList.cs" />
+    <Compile Include="core\Timer.cs" />
+    <Compile Include="core\TimerManager.cs" />
     <Compile Include="core\Updatable.cs" />
+    <Compile Include="core\UpdatableList.cs" />
     <Compile Include="game\ApplicationImpl.cs" />
     <Compile Include="game\ContextImpl.cs" />
+    <Compile Include="game\Global.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="BombermanGame.cs" />

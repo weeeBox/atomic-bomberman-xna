@@ -5,8 +5,11 @@ using System.Text;
 
 namespace core
 {
-    public interface Updatable
+    public interface Composite<T>
     {
-        void Update(float delta);
+        void Add(T t);
+        void Remove(T t);
+        
+        int Count();
     }
 }

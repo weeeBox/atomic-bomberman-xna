@@ -9,8 +9,8 @@ namespace game
 {
     public class ApplicationImpl : Application
     {
-        private IEnumerable<Updatable> updatables;
-        private IEnumerable<Drawable> drawables;
+        private Updatable updatable;
+        private Drawable drawable;
 
         private Context context;
 
@@ -19,9 +19,10 @@ namespace game
         public ApplicationImpl(GraphicsDeviceManager graphics)
         {
             context = new ContextImpl(graphics);
-            updatables = new LinkedList<Updatable>();
-            drawables = new LinkedList<Drawable>();
-        }
+
+            Global.application = this;
+            Global.timerManager = new TimerManager();
+       }
 
         public void Start()
         {
@@ -30,9 +31,17 @@ namespace game
 
         public void Update(float delta)
         {
-            foreach (Updatable e in updatables)
+            if (updatable != null)
             {
-                e.update(delta);
+                updatable.Update(delta);
+            }
+        }
+
+        public void Draw()
+        {
+            if (drawable != null)
+            {
+                drawable.Draw(context);
             }
         }
 
@@ -44,14 +53,6 @@ namespace game
         public bool IsRunning()
         {
             return running;
-        }
-
-        public void Draw()
-        {
-            foreach (Drawable e in drawables)
-            {
-                e.Draw(context);
-            }
         }
     }
 }
