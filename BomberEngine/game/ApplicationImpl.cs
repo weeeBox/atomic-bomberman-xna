@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using core;
+using BomberEngine.Core;
 using Microsoft.Xna.Framework;
 
-namespace game
+namespace BomberEngine.Game
 {
     public class ApplicationImpl : Application
     {

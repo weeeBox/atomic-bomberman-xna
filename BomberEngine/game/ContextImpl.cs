@@ -1,8 +1,8 @@
-﻿using core;
+﻿using BomberEngine.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace game
+namespace BomberEngine.Game
 {
     public class ContextImpl : Context
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
 
-namespace core.input
+namespace BomberEngine.Core.Input
 {   
     public interface KeyboardListener
     {

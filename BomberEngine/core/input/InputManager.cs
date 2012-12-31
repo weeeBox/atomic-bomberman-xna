@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace core.input
+namespace BomberEngine.Core.Input
 {
     public class InputManager : Updatable
     {

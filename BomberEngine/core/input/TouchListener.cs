@@ -1,4 +1,4 @@
-﻿namespace core.input
+﻿namespace BomberEngine.Core.Input
 {
     public interface TouchListener
     {

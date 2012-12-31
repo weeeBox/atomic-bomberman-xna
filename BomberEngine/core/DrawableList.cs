@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace core
+namespace BomberEngine.Core
 {
     public class DrawableList : Drawable, Composite<Drawable>
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 
-namespace core
+namespace BomberEngine.Core
 {
     public class UpdatableList : Updatable, Composite<Updatable>
     {

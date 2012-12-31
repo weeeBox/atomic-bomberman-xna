@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace core
+namespace BomberEngine.Core
 {
     public interface Application
     {
