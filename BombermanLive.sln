@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BombermanLive", "BombermanL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BombermanLiveContent", "BombermanLive\BombermanLiveContent\BombermanLiveContent.contentproj", "{C6AEAEDD-8396-4E89-A335-3D8FC84E5675}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BombermanLiveTests", "BombermanLiveTests\BombermanLiveTests.csproj", "{3503B2D9-C658-4B93-85EF-0D0DAF5B985D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BomberEngineTests", "BomberEngineTests\BomberEngineTests.csproj", "{3503B2D9-C658-4B93-85EF-0D0DAF5B985D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F1F6D97D-C080-4D0F-9993-E95F86A2E0E0}"
 	ProjectSection(SolutionItems) = preProject

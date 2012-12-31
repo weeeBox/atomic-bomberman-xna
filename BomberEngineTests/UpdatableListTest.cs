@@ -5,7 +5,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using core;
 
-namespace BombermanLiveTests
+namespace BomberEngineTests
 {
     [TestClass]
     public class UpdatableListTest
