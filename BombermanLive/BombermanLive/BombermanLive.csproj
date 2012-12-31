@@ -112,6 +112,11 @@
     <Compile Include="core\Context.cs" />
     <Compile Include="core\Drawable.cs" />
     <Compile Include="core\DrawableList.cs" />
+    <Compile Include="core\input\GamePadListener.cs" />
+    <Compile Include="core\input\GamePadStateListener.cs" />
+    <Compile Include="core\input\InputManager.cs" />
+    <Compile Include="core\input\KeyboardListener.cs" />
+    <Compile Include="core\input\TouchListener.cs" />
     <Compile Include="core\Timer.cs" />
     <Compile Include="core\TimerManager.cs" />
     <Compile Include="core\Updatable.cs" />
