@@ -49,10 +49,17 @@
     <Compile Include="UpdatableListTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BomberEngine\BomberEngine.csproj">
+      <Project>{EB25DAB8-4089-4C9A-A41B-9ECEF8EC1CEF}</Project>
+      <Name>BomberEngine</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BombermanLive\BombermanLive\BombermanLive.csproj">
       <Project>{25BF6344-885F-4CC0-99CF-9CE2F95C539A}</Project>
       <Name>BombermanLive</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
