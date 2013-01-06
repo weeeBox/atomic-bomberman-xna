@@ -98,11 +98,13 @@
     <Compile Include="Core\DrawableList.cs" />
     <Compile Include="Core\Input\GamePadListener.cs" />
     <Compile Include="Core\Input\GamePadStateListener.cs" />
+    <Compile Include="Core\Input\InputListener.cs" />
     <Compile Include="Core\Input\InputManager.cs" />
     <Compile Include="Core\Input\KeyboardListener.cs" />
     <Compile Include="Core\Input\TouchListener.cs" />
     <Compile Include="Core\Timer.cs" />
     <Compile Include="Core\TimerManager.cs" />
+    <Compile Include="Core\TimerManagerListener.cs" />
     <Compile Include="Core\Updatable.cs" />
     <Compile Include="Core\UpdatableList.cs" />
     <Compile Include="Game\ApplicationImpl.cs" />
