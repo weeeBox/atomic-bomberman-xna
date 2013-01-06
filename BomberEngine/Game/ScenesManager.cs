@@ -12,6 +12,7 @@ namespace BomberEngine.Game
     public class ScenesManager : ScenesContainer, Updatable, Drawable, InputListener
     {   
         private List<Scene> scenes;
+
         private Scene currentScene;
 
         public ScenesManager()
@@ -24,15 +25,8 @@ namespace BomberEngine.Game
         #region Updatable
 
         public void Update(float delta)
-        {   
-        }
-
-        protected void AddUpdatabled(Updatable updatable)
-        {   
-        }
-
-        protected void RemoveUpdatable(Updatable updatable)
-        {   
+        {
+            currentScene.Update(delta);
         }
 
         #endregion
@@ -43,15 +37,7 @@ namespace BomberEngine.Game
 
         public void Draw(Context context)
         {
-   
-        }
-
-        protected void AddDrawable(Drawable drawable)
-        {   
-        }
-
-        protected void RemoveDrawable(Drawable drawable)
-        {   
+            currentScene.Draw(context);
         }
 
         #endregion
@@ -62,42 +48,52 @@ namespace BomberEngine.Game
 
         public void KeyPressed(Keys key)
         {
+            currentScene.KeyPressed(key);
         }
 
         public void KeyReleased(Keys key)
         {
+            currentScene.KeyReleased(key);
         }
 
         public void ButtonPressed(ButtonEvent e)
         {
+            currentScene.ButtonPressed(e);
         }
 
         public void ButtonReleased(ButtonEvent e)
         {
+            currentScene.ButtonReleased(e);
         }
 
         public void GamePadConnected(int playerIndex)
         {
+            currentScene.GamePadConnected(playerIndex);
         }
 
         public void GamePadDisconnected(int playerIndex)
         {
+            currentScene.GamePadDisconnected(playerIndex);
         }
 
         public void PointerMoved(int x, int y, int fingerId)
         {
+            currentScene.PointerMoved(x, y, fingerId);
         }
 
         public void PointerPressed(int x, int y, int fingerId)
         {
+            currentScene.PointerPressed(x, y, fingerId);
         }
 
         public void PointerDragged(int x, int y, int fingerId)
         {
+            currentScene.PointerDragged(x, y, fingerId);
         }
 
         public void PointerReleased(int x, int y, int fingerId)
         {
+            currentScene.PointerReleased(x, y, fingerId);
         }
 
         #endregion
@@ -131,6 +127,8 @@ namespace BomberEngine.Game
                 }
             }
 
+            currentScene = scene;
+
             scenes.Add(scene);
             scene.SceneContainer = this;
             scene.Start();
@@ -151,10 +149,17 @@ namespace BomberEngine.Game
             scene.SceneContainer = null;
             scenes.Remove(scene);
 
-            if (scene == currentScene && scenes.Count > 0)
+            if (scene == currentScene)
             {
-                currentScene = scenes[scenes.Count - 1];
-                currentScene.BringFront();
+                if (scenes.Count > 0)
+                {
+                    currentScene = scenes[scenes.Count - 1];
+                    currentScene.BringFront();
+                }
+                else
+                {
+                    currentScene = null;
+                }
             }
         }
 

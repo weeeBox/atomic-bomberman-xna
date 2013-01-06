@@ -20,17 +20,8 @@ namespace BomberEngine.Game
 
         private SceneListener listener;
 
-        private bool fullscreen;
-
         public Scene()
-            : this(true)
         {
-        }
-
-        public Scene(bool fullscreen)
-        {   
-            this.fullscreen = fullscreen;
-
             timerManager = new TimerManager(this);
             updatablesList = new UpdatableList();
             drawableList = new DrawableList();
@@ -308,11 +299,6 @@ namespace BomberEngine.Game
         //////////////////////////////////////////////////////////////////////////////
 
         #region Properties
-
-        public bool IsFullscreen
-        {
-            get { return fullscreen; }
-        }
 
         public SceneListener Listener
         {
