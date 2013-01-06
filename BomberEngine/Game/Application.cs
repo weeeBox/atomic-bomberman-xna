@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace BomberEngine.Game
 {
-    public class Application
+    public abstract class Application
     {
         private Updatable updatable;
         private Drawable drawable;
