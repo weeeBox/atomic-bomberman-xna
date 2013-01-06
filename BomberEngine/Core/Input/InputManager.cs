@@ -52,7 +52,6 @@ namespace BomberEngine.Core.Input
         private KeyboardListener keyboardListener;
         private GamePadListener gamePadListener;
         private GamePadStateListener gamePadStateListener;
-
         private TouchListener touchListener;
 
         private GamePadDeadZone deadZone;
@@ -79,6 +78,10 @@ namespace BomberEngine.Core.Input
             #endif
         }
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Gamepad
+
         private void UpdateGamepads()
         {
             for (int i = 0; i < MAX_GAMEPADS_COUNT; ++i)
@@ -95,11 +98,11 @@ namespace BomberEngine.Core.Input
             bool connected = currentGamepadStates[gamePadIndex].IsConnected;
             if (gamePadStateListener != null)
             {
-                if (isControllerConnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
+                if (IsControllerConnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
                 {
                     gamePadStateListener.GamePadConnected(gamePadIndex);
                 }
-                else if (isControllerDisconnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
+                else if (IsControllerDisconnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
                 {
                     gamePadStateListener.GamePadConnected(gamePadIndex);
                 }
@@ -110,17 +113,74 @@ namespace BomberEngine.Core.Input
                 for (int buttonIndex = 0; buttonIndex < CHECK_BUTTONS.Length; ++buttonIndex)
                 {
                     Buttons button = CHECK_BUTTONS[buttonIndex];
-                    if (isButtonDown(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
+                    if (IsButtonDown(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
                     {
                         gamePadListener.ButtonPressed(new ButtonEvent(gamePadIndex, button));
                     }
-                    else if (isButtonUp(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
+                    else if (IsButtonUp(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
                     {
                         gamePadListener.ButtonReleased(new ButtonEvent(gamePadIndex, button));
                     }
                 }
             }
         }
+
+        private bool IsControllerConnected(ref GamePadState oldState, ref GamePadState newState)
+        {
+            return newState.IsConnected && !oldState.IsConnected;
+        }
+
+        private bool IsControllerDisconnected(ref GamePadState oldState, ref GamePadState newState)
+        {
+            return !newState.IsConnected && oldState.IsConnected;
+        }
+
+        private bool IsButtonDown(Buttons button, ref GamePadState oldState, ref GamePadState newState)
+        {
+            return newState.IsButtonDown(button) && oldState.IsButtonUp(button);
+        }
+
+        private bool IsButtonUp(Buttons button, ref GamePadState oldState, ref GamePadState newState)
+        {
+            return newState.IsButtonUp(button) && oldState.IsButtonDown(button);
+        }
+
+        public bool IsControllerConnected(int playerIndex)
+        {
+            return currentGamepadStates[playerIndex].IsConnected;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Gamepad analogs
+
+        public GamePadThumbSticks ThumbSticks()
+        {
+            return ThumbSticks(0);
+        }
+
+        public GamePadThumbSticks ThumbSticks(int playerIndex)
+        {
+            return currentGamepadStates[playerIndex].ThumbSticks;
+        }
+
+        public GamePadTriggers Triggers()
+        {
+            return Triggers(0);
+        }
+
+        public GamePadTriggers Triggers(int playerIndex)
+        {
+            return currentGamepadStates[playerIndex].Triggers;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Keyboard
 
         private void UpdateKeyboard()
         {
@@ -149,54 +209,11 @@ namespace BomberEngine.Core.Input
             }
         }
 
-        private bool isControllerConnected(ref GamePadState oldState, ref GamePadState newState)
-        {
-            return newState.IsConnected && !oldState.IsConnected;
-        }
-
-        private bool isControllerDisconnected(ref GamePadState oldState, ref GamePadState newState)
-        {
-            return !newState.IsConnected && oldState.IsConnected;
-        }
-
-        private bool isButtonDown(Buttons button, ref GamePadState oldState, ref GamePadState newState)
-        {
-            return newState.IsButtonDown(button) && oldState.IsButtonUp(button);
-        }
-
-        private bool isButtonUp(Buttons button, ref GamePadState oldState, ref GamePadState newState)
-        {
-            return newState.IsButtonUp(button) && oldState.IsButtonDown(button);
-        }
-
-        public GamePadThumbSticks ThumbSticks()
-        {
-            return ThumbSticks(0);
-        }
-
-        public GamePadThumbSticks ThumbSticks(int playerIndex)
-        {   
-            return currentGamepadStates[playerIndex].ThumbSticks;
-        }
-
-        public GamePadTriggers Triggers()
-        {
-            return Triggers(0);
-        }
-
-        public GamePadTriggers Triggers(int playerIndex)
-        {   
-            return currentGamepadStates[playerIndex].Triggers;
-        }
-
-        public bool isKeyPressed(Keys key)
+        public bool IsKeyPressed(Keys key)
         {
             return currentKeyboardState.IsKeyDown(key);
         }
 
-        public bool isControllerConnected(int playerIndex)
-        {   
-            return currentGamepadStates[playerIndex].IsConnected;
-        }
+        #endregion
     }
 }
