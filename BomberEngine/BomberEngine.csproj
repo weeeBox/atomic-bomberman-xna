@@ -108,6 +108,8 @@
     <Compile Include="Core\UpdatableList.cs" />
     <Compile Include="Game\Application.cs" />
     <Compile Include="Game\ContextImpl.cs" />
+    <Compile Include="Game\Controller.cs" />
+    <Compile Include="Game\RootController.cs" />
     <Compile Include="Game\Scene.cs" />
     <Compile Include="Game\SceneListener.cs" />
     <Compile Include="Game\ScenesContainer.cs" />

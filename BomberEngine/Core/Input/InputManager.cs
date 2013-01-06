@@ -96,31 +96,26 @@ namespace BomberEngine.Core.Input
             currentGamepadStates[gamePadIndex] = GamePad.GetState(PLAYERS_INDICES[gamePadIndex], deadZone);
 
             bool connected = currentGamepadStates[gamePadIndex].IsConnected;
-            if (gamePadStateListener != null)
+            
+            if (IsControllerConnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
             {
-                if (IsControllerConnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
-                {
-                    gamePadStateListener.GamePadConnected(gamePadIndex);
-                }
-                else if (IsControllerDisconnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
-                {
-                    gamePadStateListener.GamePadConnected(gamePadIndex);
-                }
+                gamePadStateListener.GamePadConnected(gamePadIndex);
+            }
+            else if (IsControllerDisconnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
+            {
+                gamePadStateListener.GamePadConnected(gamePadIndex);
             }
 
-            if (gamePadListener != null)
+            for (int buttonIndex = 0; buttonIndex < CHECK_BUTTONS.Length; ++buttonIndex)
             {
-                for (int buttonIndex = 0; buttonIndex < CHECK_BUTTONS.Length; ++buttonIndex)
+                Buttons button = CHECK_BUTTONS[buttonIndex];
+                if (IsButtonDown(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
                 {
-                    Buttons button = CHECK_BUTTONS[buttonIndex];
-                    if (IsButtonDown(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
-                    {
-                        gamePadListener.ButtonPressed(new ButtonEvent(gamePadIndex, button));
-                    }
-                    else if (IsButtonUp(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
-                    {
-                        gamePadListener.ButtonReleased(new ButtonEvent(gamePadIndex, button));
-                    }
+                    gamePadListener.ButtonPressed(new ButtonEvent(gamePadIndex, button));
+                }
+                else if (IsButtonUp(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
+                {
+                    gamePadListener.ButtonReleased(new ButtonEvent(gamePadIndex, button));
                 }
             }
         }
@@ -187,24 +182,21 @@ namespace BomberEngine.Core.Input
             KeyboardState oldState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
 
-            if (keyboardListener != null)
-            {
-                Keys[] oldKeys = oldState.GetPressedKeys();
-                Keys[] newKeys = currentKeyboardState.GetPressedKeys();
+            Keys[] oldKeys = oldState.GetPressedKeys();
+            Keys[] newKeys = currentKeyboardState.GetPressedKeys();
 
-                for (int i = 0; i < newKeys.Length; ++i)
-                {
-                    if (!oldKeys.Contains(newKeys[i]))
-                    {   
-                        keyboardListener.KeyPressed(newKeys[i]);
-                    }
+            for (int i = 0; i < newKeys.Length; ++i)
+            {
+                if (!oldKeys.Contains(newKeys[i]))
+                {   
+                    keyboardListener.KeyPressed(newKeys[i]);
                 }
-                for (int i = 0; i < oldKeys.Length; ++i)
+            }
+            for (int i = 0; i < oldKeys.Length; ++i)
+            {
+                if (!newKeys.Contains(oldKeys[i]))
                 {
-                    if (!newKeys.Contains(oldKeys[i]))
-                    {
-                        keyboardListener.KeyReleased(oldKeys[i]);
-                    }
+                    keyboardListener.KeyReleased(oldKeys[i]);
                 }
             }
         }
@@ -219,6 +211,17 @@ namespace BomberEngine.Core.Input
         //////////////////////////////////////////////////////////////////////////////
 
         #region Properties
+
+        public InputListener InputListener
+        {
+            set
+            {
+                KeyboardListener = value;
+                GamePadListener = value;
+                GamePadStateListener = value;
+                TouchListener = value;
+            }
+        }
 
         public KeyboardListener KeyboardListener
         {

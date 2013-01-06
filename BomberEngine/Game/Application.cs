@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Core;
 using Microsoft.Xna.Framework;
+using BomberEngine.Core.Input;
+using Microsoft.Xna.Framework.Input;
 
 namespace BomberEngine.Game
 {
     public abstract class Application
-    {
-        private Updatable updatable;
-        private Drawable drawable;
+    {   
+        private RootController rootController;
 
         private Context context;
 
@@ -18,7 +19,7 @@ namespace BomberEngine.Game
         private bool stoped;
 
         public Application(GraphicsDeviceManager graphics)
-        {
+        {   
             context = new ContextImpl(graphics);
         }
 
@@ -33,6 +34,8 @@ namespace BomberEngine.Game
                 throw new InvalidOperationException("Application already started");
             }
             started = true;
+            rootController.Start();
+
             OnStart();
         }
 
@@ -49,15 +52,17 @@ namespace BomberEngine.Game
             }
 
             stoped = true;
+            rootController.Stop();
+
             OnStop();
         }
 
-        protected void OnStart()
+        protected virtual void OnStart()
         {
 
         }
 
-        protected void OnStop()
+        protected virtual void OnStop()
         {
 
         }
@@ -67,13 +72,13 @@ namespace BomberEngine.Game
         //////////////////////////////////////////////////////////////////////////////
 
         public void Update(float delta)
-        {
-            updatable.Update(delta);
+        {   
+            rootController.Update(delta);
         }
 
         public void Draw()
         {
-            drawable.Draw(context);
+            rootController.Draw(context);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -85,16 +90,15 @@ namespace BomberEngine.Game
             get { return !stoped; }
         }
 
-        protected Updatable Updatable
+        public RootController RootController
         {
-            get { return updatable; }
-            set { updatable = value; }
+            get { return rootController; }
+            set { rootController = value; }
         }
 
-        protected Drawable Drawable
+        public InputManager InputManager
         {
-            get { return drawable; }
-            set { drawable = value; }
+            get { return InputManager; }
         }
 
         #endregion

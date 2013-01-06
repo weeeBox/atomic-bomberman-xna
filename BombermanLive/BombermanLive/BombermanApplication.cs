@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Game;
 using Microsoft.Xna.Framework;
+using BombermanLive.game;
 
 namespace BombermanLive
 {
@@ -11,7 +12,7 @@ namespace BombermanLive
     {
         public BombermanApplication(GraphicsDeviceManager graphics) : base(graphics)
         {
-
+            RootController = new BombermanRootController();
         }
     }
 }
