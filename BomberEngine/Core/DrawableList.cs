@@ -2,21 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BomberEngine.Util;
 
 namespace BomberEngine.Core
 {
-    public class DrawableList : Drawable, Composite<Drawable>
+    public class DrawableList : Drawable, Collection<Drawable>
     {
-        private List<Drawable> list;
+        private ObjectsList<Drawable> list;
 
         public DrawableList()
         {
-            list = new List<Drawable>();
+            list = new ObjectsList<Drawable>();
         }
 
         public DrawableList(int capacity)
         {
-            list = new List<Drawable>(capacity);
+            list = new ObjectsList<Drawable>(capacity);
         }
 
         public void Draw(Context context)
@@ -27,14 +28,20 @@ namespace BomberEngine.Core
             }
         }
 
-        public void Add(Drawable t)
+        public bool Add(Drawable drawable)
         {
-            list.Add(t);
+            list.Add(drawable);
+            return true;
         }
 
-        public void Remove(Drawable t)
+        public bool Remove(Drawable drawable)
         {
-            list.Remove(t);
+            return list.Remove(drawable);
+        }
+
+        public void Clear()
+        {
+            list.Clear();
         }
 
         public int Count()

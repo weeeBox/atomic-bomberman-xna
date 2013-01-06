@@ -5,8 +5,12 @@ using System.Text;
 
 namespace BomberEngine.Core
 {
-    public abstract class Timer
+    public delegate void TimerCallback(Timer timer);
+
+    public class Timer
     {
+        private TimerCallback callback;
+
         private int numRepeats;
         private int numRepeated;
 
@@ -15,30 +19,63 @@ namespace BomberEngine.Core
 
         private bool cancelled;
 
-        protected abstract void onTimer(Timer timer);
+        public Timer(TimerCallback callback, float timeout) : this(callback, timeout, 1)
+        {
+        }
+
+        public Timer(TimerCallback callback, float timeout, int numRepeats)
+        {
+            if (callback == null)
+            {
+                throw new ArgumentException("Callback cannot be null");
+            }
+
+            if (numRepeats < 0)
+            {
+                throw new ArgumentException("Illegal number of repeats: " + numRepeats);
+            }
+
+            this.callback = callback;
+            this.timeout = timeout < 0 ? 0 : timeout;
+            this.numRepeats = numRepeats;
+        }
 
         public void Cancel()
         {
             cancelled = true;
         }
 
-        internal void AdvanceTime(float delta)
+        public void Reset()
+        {   
+            numRepeated = 0;
+            elaspedTime = 0;
+        }
+
+        public void AdvanceTime(float delta)
         {
             elaspedTime += delta;
+            if (elaspedTime >= timeout)
+            {
+                Fire();
+            }
         }
 
-        internal void Fire()
-        {
-            onTimer(this);
+        protected void Fire()
+        {   
+            callback(this);
+
             ++numRepeated;
+            if (numRepeated == numRepeats)
+            {
+                Cancel();
+            }
+            else
+            {
+                Reset();
+            }
         }
 
-        internal bool IsDoneRepeating
-        {
-            get { return numRepeats != 0 && numRepeats == numRepeated; }
-        }
-
-        public bool Repeated
+        public bool IsRepeated
         {
             get { return numRepeats != 1; }
         }
