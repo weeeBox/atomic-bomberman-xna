@@ -26,7 +26,7 @@ namespace BombermanLive
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            application = new Application(graphics);
+            application = new BombermanApplication(graphics);
         }
 
         /// <summary>
