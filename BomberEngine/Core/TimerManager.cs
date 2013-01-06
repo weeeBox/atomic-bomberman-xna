@@ -7,6 +7,7 @@ namespace BomberEngine.Core
 {
     public class TimerManager : Updatable
     {   
+        // TODO: reuse objects + store timers in a sorted order (for a faster iteration)
         private List<Timer> timers;
         
         public TimerManager()
@@ -55,7 +56,7 @@ namespace BomberEngine.Core
 
         public Timer ScheduleRepeated(TimerCallback callback, float delay, int numRepeats)
         {
-            Timer timer = new Timer(callback, numRepeats);
+            Timer timer = new Timer(callback, delay, numRepeats);
             timers.Add(timer);
             return timer;
         }
@@ -64,22 +65,5 @@ namespace BomberEngine.Core
         {
             get { return timers.Count; }
         }
-
-        public int AliveTimersCount
-        {
-            get
-            {
-                int aliveCount = 0;
-                foreach (Timer timer in timers)
-                {
-                    if (!timer.IsCancelled)
-                    {
-                        ++aliveCount;
-                    }
-                }
-                return aliveCount;
-            }
-        }
-
     }
 }
