@@ -123,7 +123,7 @@ namespace BomberEngine.Game
                 }
                 else
                 {
-                    currentScene.PushBack();
+                    currentScene.Suspend();
                 }
             }
 
@@ -154,7 +154,7 @@ namespace BomberEngine.Game
                 if (scenes.Count > 0)
                 {
                     currentScene = scenes[scenes.Count - 1];
-                    currentScene.BringFront();
+                    currentScene.Resume();
                 }
                 else
                 {

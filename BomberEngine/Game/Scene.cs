@@ -49,18 +49,6 @@ namespace BomberEngine.Game
             NotifyResumed();
         }
 
-        internal void PushBack()
-        {
-            OnPushBack();
-            NotifyPushedBack();
-        }
-
-        internal void BringFront()
-        {
-            OnBringFront();
-            NotifyBringFront();
-        }
-
         internal void Stop()
         {   
             OnStop();
@@ -252,22 +240,6 @@ namespace BomberEngine.Game
             if (listener != null)
             {
                 listener.OnSceneResumed(this);
-            }
-        }
-
-        private void NotifyPushedBack()
-        {
-            if (listener != null)
-            {
-                listener.OnScenePushedBack(this);
-            }
-        }
-
-        private void NotifyBringFront()
-        {
-            if (listener != null)
-            {
-                listener.OnSceneBringFront(this);
             }
         }
 

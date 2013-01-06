@@ -92,7 +92,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Application.cs" />
     <Compile Include="Core\Context.cs" />
     <Compile Include="Core\Drawable.cs" />
     <Compile Include="Core\DrawableList.cs" />
@@ -107,9 +106,8 @@
     <Compile Include="Core\TimerManagerListener.cs" />
     <Compile Include="Core\Updatable.cs" />
     <Compile Include="Core\UpdatableList.cs" />
-    <Compile Include="Game\ApplicationImpl.cs" />
+    <Compile Include="Game\Application.cs" />
     <Compile Include="Game\ContextImpl.cs" />
-    <Compile Include="Game\Global.cs" />
     <Compile Include="Game\Scene.cs" />
     <Compile Include="Game\SceneListener.cs" />
     <Compile Include="Game\ScenesContainer.cs" />

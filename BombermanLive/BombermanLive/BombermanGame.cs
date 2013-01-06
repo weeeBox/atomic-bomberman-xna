@@ -26,7 +26,7 @@ namespace BombermanLive
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            application = new ApplicationImpl(graphics);
+            application = new Application(graphics);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace BombermanLive
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (application.IsRunning())
+            if (application.IsRunning)
             {
                 float delta = (float) gameTime.ElapsedGameTime.TotalSeconds;
                 application.Update(delta);

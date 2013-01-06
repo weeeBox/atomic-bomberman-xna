@@ -55,8 +55,6 @@ namespace BomberEngine.Core.Input
 
         private TouchListener touchListener;
 
-        private Dictionary<Keys, Buttons>[] buttonsMappings;
-
         private GamePadDeadZone deadZone;
 
         public InputManager()

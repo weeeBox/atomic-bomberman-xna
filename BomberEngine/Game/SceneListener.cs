@@ -13,10 +13,6 @@ namespace BomberEngine.Game
 
         void OnSceneResumed(Scene scene);
 
-        void OnScenePushedBack(Scene scene);
-
-        void OnSceneBringFront(Scene scene);
-
         void OnSceneStoped(Scene scene);
     }
 }
