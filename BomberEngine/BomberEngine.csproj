@@ -110,7 +110,10 @@
     <Compile Include="Game\ApplicationImpl.cs" />
     <Compile Include="Game\ContextImpl.cs" />
     <Compile Include="Game\Global.cs" />
-    <Compile Include="Game\GameScene.cs" />
+    <Compile Include="Game\Scene.cs" />
+    <Compile Include="Game\SceneListener.cs" />
+    <Compile Include="Game\ScenesContainer.cs" />
+    <Compile Include="Game\ScenesManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\Collection.cs" />
     <Compile Include="Util\ObjectsList.cs" />

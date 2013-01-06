@@ -5,9 +5,18 @@ using System.Text;
 
 namespace BomberEngine.Game
 {
-    interface SceneListener
+    public interface SceneListener
     {
         void OnSceneStarted(Scene scene);
+
+        void OnSceneSuspended(Scene scene);
+
+        void OnSceneResumed(Scene scene);
+
+        void OnScenePushedBack(Scene scene);
+
+        void OnSceneBringFront(Scene scene);
+
         void OnSceneStoped(Scene scene);
     }
 }

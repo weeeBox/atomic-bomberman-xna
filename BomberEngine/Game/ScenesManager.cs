@@ -9,50 +9,16 @@ using BomberEngine.Core.Input;
 
 namespace BomberEngine.Game
 {
-    public class SceneManager : SceneListener, Updatable, Drawable, InputListener
+    public class ScenesManager : ScenesContainer, Updatable, Drawable, InputListener
     {   
         private List<Scene> scenes;
         private Scene currentScene;
 
-        public SceneManager()
+        public ScenesManager()
         {
             scenes = new List<Scene>();
         }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        public void StartScene(Scene scene)
-        {
-            if (ContainsScene(scene))
-            {
-                throw new InvalidOperationException("Scene already started: " + scenes);
-            }
-
-            if (currentScene != null)
-            {
-                currentScene.Stop();
-                currentScene.Listener = null;
-            }
-
-            scene.Listener = this;
-            scene.Start();
-        }
-
-        private void AddScene(Scene scene)
-        {
-
-        }
-
-        private void RemoveScene(Scene scene)
-        {
-
-        }
-
-        private bool ContainsScene(Scene scene)
-        {
-            return scenes.Contains(scene);
-        }
-
+        
         //////////////////////////////////////////////////////////////////////////////
 
         #region Updatable
@@ -138,16 +104,58 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Scene Listener
+        #region Scene Container
 
-        public void OnSceneStarted(Scene scene)
+        public void StartScene(Scene scene)
         {
-            AddScene(scene);
+            StartScene(scene, false);
         }
 
-        public void OnSceneStoped(Scene scene)
+        public void StartScene(Scene scene, bool replaceCurrent)
         {
-            RemoveScene(scene);
+            if (scenes.Contains(scene))
+            {
+                throw new InvalidOperationException("Scene already started: " + scene);
+            }
+
+            if (currentScene != null)
+            {
+                if (replaceCurrent)
+                {
+                    currentScene.Stop();
+                    currentScene.SceneContainer = null;
+                }
+                else
+                {
+                    currentScene.PushBack();
+                }
+            }
+
+            scenes.Add(scene);
+            scene.SceneContainer = this;
+            scene.Start();
+        }
+
+        public void RemoveScene(Scene scene)
+        {
+            if (scene.SceneContainer != this)
+            {
+                throw new InvalidOperationException("Scene doesn't belong to this container: " + scene);
+            }
+
+            if (!scenes.Contains(scene))
+            {
+                throw new InvalidOperationException("Scene manager doesn't contain the scene: " + scene);   
+            }
+
+            scene.SceneContainer = null;
+            scenes.Remove(scene);
+
+            if (scene == currentScene && scenes.Count > 0)
+            {
+                currentScene = scenes[scenes.Count - 1];
+                currentScene.BringFront();
+            }
         }
 
         #endregion

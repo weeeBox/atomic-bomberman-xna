@@ -16,6 +16,8 @@ namespace BomberEngine.Game
 
         private DrawableList drawableList;
 
+        private ScenesContainer sceneContainer;
+
         private SceneListener listener;
 
         private bool fullscreen;
@@ -26,7 +28,7 @@ namespace BomberEngine.Game
         }
 
         public Scene(bool fullscreen)
-        {
+        {   
             this.fullscreen = fullscreen;
 
             timerManager = new TimerManager(this);
@@ -38,19 +40,65 @@ namespace BomberEngine.Game
 
         #region Lifecycle
 
-        public void Start()
+        internal void Start()
         {   
             OnStart();
-            NotifySceneStarted();
+            NotifyStarted();
         }
 
-        public void Stop()
+        internal void Suspend()
+        {
+            OnSuspend();
+            NotifySuspended();
+        }
+
+        internal void Resume()
+        {
+            OnResume();
+            NotifyResumed();
+        }
+
+        internal void PushBack()
+        {
+            OnPushBack();
+            NotifyPushedBack();
+        }
+
+        internal void BringFront()
+        {
+            OnBringFront();
+            NotifyBringFront();
+        }
+
+        internal void Stop()
         {   
             OnStop();
-            NotifySceneStoped();
+            NotifyStoped();
+            RemoveFromContainer();
+        }
+
+        protected void Finish()
+        {
+            Stop();
         }
 
         protected void OnStart()
+        {
+        }
+
+        protected void OnSuspend()
+        {
+        }
+
+        protected void OnResume()
+        {
+        }
+
+        protected void OnPushBack()
+        {
+        }
+
+        protected void OnBringFront()
         {
         }
 
@@ -190,15 +238,9 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Scene Listener
+        #region Notifications
 
-        public SceneListener Listener
-        {
-            get { return listener; }
-            set { listener = value; }
-        }
-
-        private void NotifySceneStarted()
+        private void NotifyStarted()
         {
             if (listener != null)
             {
@@ -206,7 +248,39 @@ namespace BomberEngine.Game
             }
         }
 
-        private void NotifySceneStoped()
+        private void NotifySuspended()
+        {
+            if (listener != null)
+            {
+                listener.OnSceneSuspended(this);
+            }
+        }
+
+        private void NotifyResumed()
+        {
+            if (listener != null)
+            {
+                listener.OnSceneResumed(this);
+            }
+        }
+
+        private void NotifyPushedBack()
+        {
+            if (listener != null)
+            {
+                listener.OnScenePushedBack(this);
+            }
+        }
+
+        private void NotifyBringFront()
+        {
+            if (listener != null)
+            {
+                listener.OnSceneBringFront(this);
+            }
+        }
+
+        private void NotifyStoped()
         {
             if (listener != null)
             {
@@ -218,11 +292,38 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Scene container
+
+        private void RemoveFromContainer()
+        {
+            if (sceneContainer == null)
+            {
+                throw new InvalidOperationException("Scene container is not set");
+            }
+            sceneContainer.RemoveScene(this);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
         #region Properties
 
         public bool IsFullscreen
         {
             get { return fullscreen; }
+        }
+
+        public SceneListener Listener
+        {
+            get { return listener; }
+            set { listener = value; }
+        }
+
+        public ScenesContainer SceneContainer
+        {
+            get { return sceneContainer; }
+            set { sceneContainer = value; }
         }
 
         #endregion
