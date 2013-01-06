@@ -215,5 +215,35 @@ namespace BomberEngine.Core.Input
         }
 
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
+        public KeyboardListener KeyboardListener
+        {
+            get { return keyboardListener; }
+            set { keyboardListener = value; }
+        }
+
+        public GamePadListener GamePadListener
+        {
+            get { return gamePadListener; }
+            set { gamePadListener = value; }
+        }
+
+        public GamePadStateListener GamePadStateListener
+        {
+            get { return gamePadStateListener; }
+            set { gamePadStateListener = value; }
+        }
+
+        public TouchListener TouchListener
+        {
+            get { return touchListener; }
+            set { touchListener = value; }
+        }
+
+        #endregion
     }
 }
