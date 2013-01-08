@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BomberEngine.Game;
-using BombermanLive.game;
+using BombermanLive.Game;
 
 namespace BombermanLive
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Game;
 using Microsoft.Xna.Framework;
-using BombermanLive.game;
+using BombermanLive.Game;
 
 namespace BombermanLive
 {
