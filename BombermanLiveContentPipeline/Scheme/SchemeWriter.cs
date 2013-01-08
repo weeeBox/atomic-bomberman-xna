@@ -18,9 +18,9 @@ namespace BombermanLiveContentPipeline.Scheme
     /// This should be part of a Content Pipeline Extension Library project.
     /// </summary>
     [ContentTypeWriter]
-    public class SchemeWriter : ContentTypeWriter<SchemeInfo>
+    public class SchemeWriter : ContentTypeWriter<SchemeResource>
     {
-        protected override void Write(ContentWriter output, SchemeInfo scheme)
+        protected override void Write(ContentWriter output, SchemeResource scheme)
         {
             output.Write(scheme.Version);
             output.Write(scheme.Name);
@@ -57,9 +57,7 @@ namespace BombermanLiveContentPipeline.Scheme
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            // TODO: change this to the name of your ContentTypeReader
-            // class which will be used to load this data.
-            return "MyNamespace.MyContentReader, MyGameAssembly";
+            return "BombermanLive.Content.SchemeReader, BombermanLive";
         }
     }
 }

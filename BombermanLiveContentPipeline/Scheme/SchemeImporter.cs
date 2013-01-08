@@ -11,7 +11,7 @@ using BombermanLiveCommon.Resources.Scheme;
 namespace BombermanLiveContentPipeline.Scheme
 {
     [ContentImporter(".sch", DisplayName = "Scheme Importer", DefaultProcessor = "SchemeProcessor")]
-    public class SchemeImporter : ContentImporter<SchemeInfo>
+    public class SchemeImporter : ContentImporter<SchemeResource>
     {
         /// <summary>
         /// Number of tiles in one line of the field.
@@ -28,15 +28,15 @@ namespace BombermanLiveContentPipeline.Scheme
         /// </summary>
         private const int MAX_PLAYERS = 10;
 
-        public override SchemeInfo Import(string filename, ContentImporterContext context)
+        public override SchemeResource Import(string filename, ContentImporterContext context)
         {
             string[] lines = File.ReadAllLines(filename);
             return Read(lines);
         }
 
-        private SchemeInfo Read(string[] lines)
+        private SchemeResource Read(string[] lines)
         {
-            SchemeInfo scheme = new SchemeInfo();
+            SchemeResource scheme = new SchemeResource();
 
             FieldData fieldData = new FieldData(FIELD_WIDTH, FIELD_HEIGHT);
             PlayerInfo[] playerLocations = new PlayerInfo[MAX_PLAYERS];

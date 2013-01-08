@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BombermanLiveCommon.Resources.Scheme
 {
-    public class SchemeInfo
+    public class SchemeResource
     {
         private int version;
         private string name;
