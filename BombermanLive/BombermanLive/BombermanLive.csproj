@@ -110,6 +110,17 @@
     <Compile Include="BombermanApplication.cs" />
     <Compile Include="BombermanRootController.cs" />
     <Compile Include="Content\SchemeReader.cs" />
+    <Compile Include="Game\Elements\Cells\BrickCell.cs" />
+    <Compile Include="Game\Elements\Cells\EmptyCell.cs" />
+    <Compile Include="Game\Elements\Cells\MovingCell.cs" />
+    <Compile Include="Game\Elements\Direction.cs" />
+    <Compile Include="Game\Elements\Field.cs" />
+    <Compile Include="Game\Elements\FieldCell.cs" />
+    <Compile Include="Game\Elements\FieldCellArray.cs" />
+    <Compile Include="Game\Elements\Items\Bomb.cs" />
+    <Compile Include="Game\Elements\Items\BombList.cs" />
+    <Compile Include="Game\Elements\Players\Player.cs" />
+    <Compile Include="Game\GameSettings.cs" />
     <Compile Include="Game\StartupController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
