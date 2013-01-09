@@ -4,30 +4,28 @@ using System.Linq;
 using System.Text;
 using BombermanLive.Game.Elements.Players;
 using BombermanLive.Game.Elements.Cells;
+using BomberEngine.Util;
 
 namespace BombermanLive.Game.Elements.Items
 {
     public class Bomb : MovingCell
     {
         private Player player;
+        
         private int radius;
         private float timeout;
         private bool dud;
         private bool bouncing;
         private bool detonated;
 
-        public Bomb(int x, int y) : base(x, y)
+        public Bomb(Player player, bool dud) : base(player.GetX(), player.GetY())
         {
-            Reset();
-        }
-
-        public void Reset()
-        {
-            player = null;
-            radius = 1;
-            dud = false;
-            bouncing = false;
-            detonated = false;
+            this.player = player;
+            this.radius = player.GetBombRadius();
+            this.timeout = player.GetBombTimeout();
+            this.dud = dud;
+            this.bouncing = player.IsBombBouncing();
+            this.detonated = player.IsBobmDetonated();
         }
 
         public Player GetPlayer()
@@ -35,19 +33,9 @@ namespace BombermanLive.Game.Elements.Items
             return player;
         }
 
-        public void SetPlayer(Player player)
-        {
-            this.player = player;
-        }
-
         public int GetRadius()
         {
             return radius;
-        }
-
-        public void SetRadius(int radius)
-        {
-            this.radius = radius;
         }
 
         public float GetTimeout()
@@ -55,19 +43,9 @@ namespace BombermanLive.Game.Elements.Items
             return timeout;
         }
 
-        public void SetTimeout(float timeout)
-        {
-            this.timeout = timeout;
-        }
-
         public bool IsDud()
         {
             return dud;
-        }
-
-        public void SetDud(bool dud)
-        {
-            this.dud = dud;
         }
 
         public bool IsBouncing()
@@ -75,19 +53,9 @@ namespace BombermanLive.Game.Elements.Items
             return bouncing;
         }
 
-        public void SetBouncing(bool bouncing)
-        {
-            this.bouncing = bouncing;
-        }
-
         public bool IsDetonated()
         {
             return detonated;
-        }
-
-        public void SetDetonated(bool detonated)
-        {
-            this.detonated = detonated;
         }
     }
 }
