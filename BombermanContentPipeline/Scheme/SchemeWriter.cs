@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
-using BombermanLiveCommon.Resources.Scheme;
+using BombermanCommon.Resources.Scheme;
 
-namespace BombermanLiveContentPipeline.Scheme
+namespace BombermanContentPipeline.Scheme
 {
     /// <summary>
     /// This class will be instantiated by the XNA Framework Content Pipeline
@@ -57,7 +57,7 @@ namespace BombermanLiveContentPipeline.Scheme
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return "BombermanLive.Content.SchemeReader, BombermanLive";
+            return "Bomberman.Content.SchemeReader, Bomberman";
         }
     }
 }

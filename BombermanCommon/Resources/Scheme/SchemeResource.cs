@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BombermanLiveCommon.Resources.Scheme
+namespace BombermanCommon.Resources.Scheme
 {
     public class SchemeResource
     {

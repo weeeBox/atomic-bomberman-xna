@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using BombermanLiveCommon.Resources.Scheme;
+using BombermanCommon.Resources.Scheme;
 
 // TODO: replace this with the type you want to read.
 

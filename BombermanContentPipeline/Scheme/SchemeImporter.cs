@@ -6,9 +6,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using System.IO;
-using BombermanLiveCommon.Resources.Scheme;
+using BombermanCommon.Resources.Scheme;
 
-namespace BombermanLiveContentPipeline.Scheme
+namespace BombermanContentPipeline.Scheme
 {
     [ContentImporter(".sch", DisplayName = "Scheme Importer", DefaultProcessor = "SchemeProcessor")]
     public class SchemeImporter : ContentImporter<SchemeResource>

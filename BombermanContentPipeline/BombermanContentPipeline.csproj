@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BombermanLiveContentPipeline</RootNamespace>
-    <AssemblyName>BombermanLiveContentPipeline</AssemblyName>
+    <RootNamespace>BombermanContentPipeline</RootNamespace>
+    <AssemblyName>BombermanContentPipeline</AssemblyName>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
@@ -55,9 +55,9 @@
     <Compile Include="Scheme\SchemeImporter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BombermanLiveCommon\BombermanLiveCommon.csproj">
+    <ProjectReference Include="..\BombermanCommon\BombermanCommon.csproj">
       <Project>{08E52DD3-F9C0-4C5A-8F1C-3BB6E9B06396}</Project>
-      <Name>BombermanLiveCommon</Name>
+      <Name>BombermanCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

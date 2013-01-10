@@ -53,7 +53,7 @@
       <Project>{EB25DAB8-4089-4C9A-A41B-9ECEF8EC1CEF}</Project>
       <Name>BomberEngine</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BombermanLive\BombermanLive\Bomberman.csproj">
+    <ProjectReference Include="..\Bomberman\Bomberman\Bomberman.csproj">
       <Project>{25BF6344-885F-4CC0-99CF-9CE2F95C539A}</Project>
       <Name>Bomberman</Name>
     </ProjectReference>
