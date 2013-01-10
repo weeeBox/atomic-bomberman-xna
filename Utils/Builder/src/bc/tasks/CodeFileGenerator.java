@@ -57,10 +57,11 @@ public class CodeFileGenerator
 		int packIndex;
 		for (packIndex = 0; packIndex < packs.size(); packIndex++)
 		{
-			String packName = packs.get(packIndex).getName().toUpperCase();
-			out.writeln("public const int " + packName + " = " + packIndex + ";");
+			String packName = packs.get(packIndex).getName();
+			out.writelnf("public const int %s = %d;", packName, packIndex);
 		}
-		out.writeln("public const int PACKS_COUNT = " + packIndex + ";");
+		out.writeln("// total packs count");
+		out.writelnf("public const int PacksCount = %d;", packIndex);
 
 		out.writeBlockClose();
 	}
@@ -78,11 +79,11 @@ public class CodeFileGenerator
 			List<Asset> packResources = pack.getResources();
 			for (Asset res : packResources)
 			{
-				out.writeln("public const int " + res.getLongName() + " = " + resIndex++ + ";");
+				out.writelnf("public const int %s = %d;", res.getLongName(), resIndex++);
 			}
 		}
-		out.writeln("// total");
-		out.writeln("public const int RES_COUNT = " + resIndex + ";");
+		out.writeln("// total resources count");
+		out.writelnf("public const int RES_COUNT = %d;", resIndex);
 
 		out.writeBlockClose();
 	}

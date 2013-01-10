@@ -7,7 +7,7 @@ import bc.assets.AssetInfo;
 
 public class MusicAsset extends Asset 
 {
-	private static final AssetInfo info = new AssetInfo("MUSIC", "MUSIC", "Mp3Importer", "SongProcessor");
+	private static final AssetInfo info = new AssetInfo("Music", "music", "Mp3Importer", "SongProcessor");
 	
 	public MusicAsset()
 	{

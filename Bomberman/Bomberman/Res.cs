@@ -7,17 +7,18 @@ namespace Assets
 	public class AssetPacks
 	{
 		public const int PACK_ALL = 0;
-		public const int PACKS_COUNT = 1;
+		// total packs count
+		public const int PacksCount = 1;
 	}
 	
 	public class A
 	{
 		// PACK_ALL
-		public const int TXWLKE0001 = 0;
-		public const int TXWLKN0001 = 1;
-		public const int TXWLKS0001 = 2;
-		public const int TXWLKW0001 = 3;
-		// total
+		public const int tex_WLKE0001 = 0;
+		public const int tex_WLKN0001 = 1;
+		public const int tex_WLKS0001 = 2;
+		public const int tex_WLKW0001 = 3;
+		// total resources count
 		public const int RES_COUNT = 4;
 	}
 	
@@ -28,10 +29,10 @@ namespace Assets
 			// PACK_ALL
 			new AssetLoadInfo[]
 			{
-				new AssetLoadInfo("WLKE0001", A.TXWLKE0001, AssetType.TEXTURE),
-				new AssetLoadInfo("WLKN0001", A.TXWLKN0001, AssetType.TEXTURE),
-				new AssetLoadInfo("WLKS0001", A.TXWLKS0001, AssetType.TEXTURE),
-				new AssetLoadInfo("WLKW0001", A.TXWLKW0001, AssetType.TEXTURE),
+				new AssetLoadInfo("WLKE0001", A.tex_WLKE0001, AssetType.Texture),
+				new AssetLoadInfo("WLKN0001", A.tex_WLKN0001, AssetType.Texture),
+				new AssetLoadInfo("WLKS0001", A.tex_WLKS0001, AssetType.Texture),
+				new AssetLoadInfo("WLKW0001", A.tex_WLKW0001, AssetType.Texture),
 			}
 		};
 	}

@@ -7,7 +7,7 @@ import bc.assets.AssetInfo;
 
 public class TextureAsset extends Asset 
 {
-	private static final AssetInfo info = new AssetInfo("TEXTURE", "TX", "TextureImporter", "TextureProcessor");
+	private static final AssetInfo info = new AssetInfo("Texture", "tex", "TextureImporter", "TextureProcessor");
 	
 	private boolean dxtCompressed;
 	

@@ -7,7 +7,7 @@ import bc.assets.AssetInfo;
 
 public class PixelFontRes extends Asset 
 {	
-	private static final AssetInfo info = new AssetInfo("PIXEL_FONT", "FNT", "PixelFontImporter", "PixelFontProcessor");
+	private static final AssetInfo info = new AssetInfo("PixelFont", "fnt", "PixelFontImporter", "PixelFontProcessor");
 	
 	public PixelFontRes()
 	{

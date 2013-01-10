@@ -7,8 +7,10 @@ namespace BomberEngine.Core.Assets
 {
     public enum AssetType
     {
-        TEXTURE,
-        SOUND,
-        MUSIC,
+        Texture,
+        Sound,
+        Music,
+        CorelFont,
+        PixelFont,
     }
 }

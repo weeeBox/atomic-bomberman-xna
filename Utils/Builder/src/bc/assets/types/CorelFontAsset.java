@@ -7,7 +7,7 @@ import bc.assets.AssetInfo;
 
 public class CorelFontAsset extends Asset 
 {	
-	private static final AssetInfo info = new AssetInfo("COREL_FONT", "FNT", "FontDescriptionImporter", "FontDescriptionProcessor");
+	private static final AssetInfo info = new AssetInfo("CorelFont", "fnt", "FontDescriptionImporter", "FontDescriptionProcessor");
 	
 	public CorelFontAsset()
 	{

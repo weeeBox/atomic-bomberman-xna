@@ -7,7 +7,7 @@ import bc.assets.AssetInfo;
 
 public class SoundAsset extends Asset
 {
-	private static final AssetInfo info = new AssetInfo("SOUND", "SND", "WavImporter", "SoundEffectProcessor");
+	private static final AssetInfo info = new AssetInfo("Sound", "snd", "WavImporter", "SoundEffectProcessor");
 
 	public SoundAsset()
 	{

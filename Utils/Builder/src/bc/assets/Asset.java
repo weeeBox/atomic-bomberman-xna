@@ -79,7 +79,7 @@ public abstract class Asset
 	
 	public String getLongName() 
 	{
-		return (getResourceTypePrefix() + name).toUpperCase();
+		return getResourceTypePrefix() + "_" + name;
 	}
 	
 	public void setName(String name) 
