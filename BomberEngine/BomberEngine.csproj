@@ -92,6 +92,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Assets\AssetLoadInfo.cs" />
+    <Compile Include="Core\Assets\AssetType.cs" />
     <Compile Include="Core\Context.cs" />
     <Compile Include="Core\Drawable.cs" />
     <Compile Include="Core\DrawableList.cs" />
@@ -101,6 +103,7 @@
     <Compile Include="Core\Input\InputManager.cs" />
     <Compile Include="Core\Input\KeyboardListener.cs" />
     <Compile Include="Core\Input\TouchListener.cs" />
+    <Compile Include="Core\Assets\AssetManager.cs" />
     <Compile Include="Core\Timer.cs" />
     <Compile Include="Core\TimerManager.cs" />
     <Compile Include="Core\TimerManagerListener.cs" />
