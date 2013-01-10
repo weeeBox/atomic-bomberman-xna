@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BomberEngine.Game;
-using BombermanLive.Game;
+using Bomberman.Game;
 
-namespace BombermanLive
+namespace Bomberman
 {
     public class BombermanRootController : RootController
     {

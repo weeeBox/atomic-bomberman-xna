@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Core;
 
-namespace BombermanLive.Game.Elements
+namespace Bomberman.Game.Elements
 {
     public class Field : Drawable, Updatable
     {   

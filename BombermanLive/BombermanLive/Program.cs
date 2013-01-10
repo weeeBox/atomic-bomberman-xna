@@ -1,6 +1,6 @@
 using System;
 
-namespace BombermanLive
+namespace Bomberman
 {
 #if WINDOWS || XBOX
     static class Program

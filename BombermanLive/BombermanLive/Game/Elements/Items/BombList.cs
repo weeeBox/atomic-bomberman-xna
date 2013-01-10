@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Core;
 
-namespace BombermanLive.Game.Elements.Items
+namespace Bomberman.Game.Elements.Items
 {
     public class BombList : Updatable
     {

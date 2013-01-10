@@ -7,7 +7,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BombermanLive</RootNamespace>
+    <RootNamespace>Bomberman</RootNamespace>
     <AssemblyName>BombermanLive</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -135,12 +135,12 @@
       <Project>{EB25DAB8-4089-4C9A-A41B-9ECEF8EC1CEF}</Project>
       <Name>BomberEngine</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\BombermanLiveCommon\BombermanLiveCommon.csproj">
+    <ProjectReference Include="..\..\BombermanLiveCommon\BombermanCommon.csproj">
       <Project>{08E52DD3-F9C0-4C5A-8F1C-3BB6E9B06396}</Project>
-      <Name>BombermanLiveCommon</Name>
+      <Name>BombermanCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BombermanLiveContent\BombermanLiveContent.contentproj">
-      <Name>BombermanLiveContent %28Content%29</Name>
+    <ProjectReference Include="..\BombermanLiveContent\BombermanContent.contentproj">
+      <Name>BombermanContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
       <Project>{C6AEAEDD-8396-4E89-A335-3D8FC84E5675}</Project>
     </ProjectReference>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Debug;
 
-namespace BombermanLive.Game
+namespace Bomberman.Game
 {
     public sealed class Settings
     {

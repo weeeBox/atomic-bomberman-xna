@@ -8,7 +8,7 @@ using BombermanLiveCommon.Resources.Scheme;
 
 // TODO: replace this with the type you want to read.
 
-namespace BombermanLive.Content
+namespace Bomberman.Content
 {
     /// <summary>
     /// This class will be instantiated by the XNA Framework Content

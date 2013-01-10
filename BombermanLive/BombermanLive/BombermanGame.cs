@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 using BomberEngine.Core;
 using BomberEngine.Game;
 
-namespace BombermanLive
+namespace Bomberman
 {
     /// <summary>
     /// This is the main type for your game

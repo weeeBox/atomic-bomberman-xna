@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Game;
 using Microsoft.Xna.Framework;
-using BombermanLive.Game;
+using Bomberman.Game;
 
-namespace BombermanLive
+namespace Bomberman
 {
     public class BombermanApplication : Application
     {

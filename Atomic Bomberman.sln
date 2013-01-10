@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BombermanLive", "BombermanLive\BombermanLive\BombermanLive.csproj", "{25BF6344-885F-4CC0-99CF-9CE2F95C539A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bomberman", "BombermanLive\BombermanLive\Bomberman.csproj", "{25BF6344-885F-4CC0-99CF-9CE2F95C539A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BombermanLiveContent", "BombermanLive\BombermanLiveContent\BombermanLiveContent.contentproj", "{C6AEAEDD-8396-4E89-A335-3D8FC84E5675}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BombermanContent", "BombermanLive\BombermanLiveContent\BombermanContent.contentproj", "{C6AEAEDD-8396-4E89-A335-3D8FC84E5675}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BomberEngineTests", "BomberEngineTests\BomberEngineTests.csproj", "{3503B2D9-C658-4B93-85EF-0D0DAF5B985D}"
 EndProject
@@ -16,9 +16,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BomberEngine", "BomberEngine\BomberEngine.csproj", "{EB25DAB8-4089-4C9A-A41B-9ECEF8EC1CEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BombermanLiveContentPipeline", "BombermanLiveContentPipeline\BombermanLiveContentPipeline.csproj", "{416DEC6A-7E49-4EDF-B93A-C149F7F7D95C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BombermanContentPipeline", "BombermanLiveContentPipeline\BombermanContentPipeline.csproj", "{416DEC6A-7E49-4EDF-B93A-C149F7F7D95C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BombermanLiveCommon", "BombermanLiveCommon\BombermanLiveCommon.csproj", "{08E52DD3-F9C0-4C5A-8F1C-3BB6E9B06396}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BombermanCommon", "BombermanLiveCommon\BombermanCommon.csproj", "{08E52DD3-F9C0-4C5A-8F1C-3BB6E9B06396}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution

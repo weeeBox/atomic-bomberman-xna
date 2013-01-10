@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BombermanLive.Game.Elements.Players;
-using BombermanLive.Game.Elements.Cells;
+using Bomberman.Game.Elements.Players;
+using Bomberman.Game.Elements.Cells;
 using BomberEngine.Util;
 
-namespace BombermanLive.Game.Elements.Items
+namespace Bomberman.Game.Elements.Items
 {
     public class Bomb : MovingCell
     {

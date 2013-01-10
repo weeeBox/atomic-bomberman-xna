@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BombermanLive.Game.Elements.Cells
+namespace Bomberman.Game.Elements.Cells
 {
     public class EmptyCell : FieldCell
     {
