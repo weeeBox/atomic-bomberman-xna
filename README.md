@@ -1,4 +1,4 @@
-bomberman-live
-==============
+Atomic Bomberman Xna
+====================
 
-Got no mood for work or for the side projects, so new one is started (probably will be abandoned forever tomorrow)
+The attempt to create a remake of "Atomic Bomberman". Boy, I love this game and if I'm not gonna make it (95% chance for screwing), please, grab the code and finish it :)
