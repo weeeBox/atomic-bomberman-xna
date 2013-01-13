@@ -12,22 +12,32 @@ namespace Bomberman.Game.Elements.Fields
     {
         private Field field;
 
-        private int cellWidth;
-        private int cellHeight;
-
         public FieldDrawable(Field field, int x, int y, int width, int height)
             : base(x, y, width, height)
         {
             this.field = field;
-
-            cellWidth = width / field.GetWidth();
-            cellHeight = height / field.GetHeight();
         }
 
         public override void Draw(Context context)
         {
             PreDraw(context);
-            
+
+            DrawGrid(context);
+            DrawBlocks(context);
+
+            PostDraw(context);
+        }
+
+        private void DrawBlocks(Context context)
+        {
+            field.
+        }
+
+        private void DrawGrid(Context context)
+        {
+            int cellWidth = width / field.GetWidth();
+            int cellHeight = height / field.GetHeight();
+
             for (int i = 0; i <= field.GetWidth(); ++i)
             {
                 context.DrawLine(i * cellWidth, 0, i * cellWidth, height, Color.Gray);
@@ -37,8 +47,6 @@ namespace Bomberman.Game.Elements.Fields
             {
                 context.DrawLine(0, i * cellHeight, width, i * cellHeight, Color.Gray);
             }
-
-            PostDraw(context);
         }
     }
 }
