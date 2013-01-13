@@ -26,6 +26,10 @@ namespace Bomberman
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
+            #if WINDOWS
+            IsMouseVisible = true;
+            #endif
+
             application = new BombermanApplication(Content, graphics);
         }
 

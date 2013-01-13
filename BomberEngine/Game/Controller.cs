@@ -18,10 +18,12 @@ namespace BomberEngine.Game
 
         public void Start()
         {
+            OnStart();
         }
 
         public void Stop()
-        {   
+        {
+            OnStop();
         }
 
         public void Update(float delta)
@@ -32,6 +34,24 @@ namespace BomberEngine.Game
         public void Draw(Context context)
         {
             sceneManager.Draw(context);
+        }
+
+        protected virtual void OnStart()
+        {
+        }
+
+        protected virtual void OnStop()
+        {
+        }
+
+        protected void StartScene(Scene scene)
+        {
+            sceneManager.StartScene(scene, true);
+        }
+
+        protected void StartNextScene(Scene scene)
+        {
+            sceneManager.StartScene(scene, false);
         }
 
         public InputListener InputListener

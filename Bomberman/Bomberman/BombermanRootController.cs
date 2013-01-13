@@ -9,13 +9,16 @@ namespace Bomberman
 {
     public class BombermanRootController : RootController
     {
+        private GameController gameController;
+
         public BombermanRootController()
         {
+            gameController = new GameController();
         }
 
         protected override void OnStart()
         {
-            StartController(new StartupController());
+            StartController(gameController);
         }
     }
 }

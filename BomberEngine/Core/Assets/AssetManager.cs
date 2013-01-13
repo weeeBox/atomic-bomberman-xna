@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
 using BomberEngine.Debugging;
+using BomberEngine.Game;
 
 namespace BomberEngine.Core.Assets
 {
@@ -51,7 +52,7 @@ namespace BomberEngine.Core.Assets
 
         public void Load()
         {
-            
+            loadingTimer = Application.ScheduleTimer(OnTimer, 0.05f);
         }
 
         public void AddLoader(AssetType type, AssetLoader loader)
