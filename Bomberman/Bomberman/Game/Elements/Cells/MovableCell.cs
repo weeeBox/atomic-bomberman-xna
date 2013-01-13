@@ -53,8 +53,20 @@ namespace Bomberman.Game.Elements.Cells
             this.px = px;
             this.py = py;
 
+            int oldX = x;
+            int oldY = y;
+
             x = (int)(px / Constant.CELL_WIDTH + 0.5f);
             y = (int)(py / Constant.CELL_HEIGHT + 0.5f);
+
+            if (oldX != x || oldY != y)
+            {
+                OnCellChanged(x, y);
+            }
+        }
+
+        protected void OnCellChanged(int x, int y)
+        {   
         }
 
         public float GetPx()
