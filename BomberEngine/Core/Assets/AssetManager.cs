@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Content;
 using BomberEngine.Debugging;
 using BomberEngine.Game;
+using BomberEngine.Core.Assets.Loaders;
 
 namespace BomberEngine.Core.Assets
 {
@@ -30,7 +31,13 @@ namespace BomberEngine.Core.Assets
 
             assets = new Asset[resourcesCount];
             loadingQueue = new List<AssetLoadInfo>();
+            InitLoaders();
+        }
+
+        private void InitLoaders()
+        {
             loaders = new Dictionary<AssetType, AssetLoader>();
+            loaders.Add(AssetType.Texture, new TextureLoader());
         }
 
         public void AddToQueue(AssetLoadInfo info)

@@ -6,11 +6,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BomberEngine.Core.Assets.Types
 {
-    public class Texture : Asset
+    public class TextureImage : Asset
     {
         private Texture2D texture;
 
-        public Texture(Texture2D texture)
+        public TextureImage(Texture2D texture)
         {
             this.texture = texture;
         }

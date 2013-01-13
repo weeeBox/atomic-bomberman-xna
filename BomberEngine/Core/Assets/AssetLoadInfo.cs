@@ -21,7 +21,7 @@ namespace BomberEngine.Core.Assets
         public String GetAssetContentName()
         {
             int dotIndex = path.LastIndexOf('.');
-            return dotIndex != -1 ? path : path.Substring(0, dotIndex);
+            return dotIndex != -1 ? path.Substring(0, dotIndex) : path;
         }
     }
 }
