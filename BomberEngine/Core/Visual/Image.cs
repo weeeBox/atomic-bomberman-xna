@@ -18,7 +18,7 @@ namespace BomberEngine.Core.Visual
         public override void Draw(Context context)
         {
             PreDraw(context);
-            context.DrawImage(texture, drawX, drawY);
+            context.DrawImage(texture, 0, 0);
             PostDraw(context);
         }
     }

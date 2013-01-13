@@ -14,9 +14,7 @@ namespace BomberEngine.Core.Visual
 
         public float x;
         public float y;
-        protected float drawX;
-        protected float drawY;
-
+        
         protected int width;
         protected int height;
 
@@ -93,13 +91,13 @@ namespace BomberEngine.Core.Visual
         public virtual void PreDraw(Context context)
         {
             // align to parent
-            drawX = x - width * alignX;
-            drawY = y - height * alignY;
+            translateX = x - width * alignX;
+            translateY = y - height * alignY;
 
             if (parent != null)
             {
-                drawX += parent.drawX + parent.width * parentAlignX;
-                drawY += parent.drawY + parent.height * parentAlignY;
+                translateX += parent.translateX + parent.width * parentAlignX;
+                translateY += parent.translateY + parent.height * parentAlignY;
             }
 
             bool changeScale = (scaleX != 1.0 || scaleY != 1.0);
@@ -107,14 +105,14 @@ namespace BomberEngine.Core.Visual
             bool changeTranslate = (translateX != 0.0 || translateY != 0.0);
 
             // apply transformations
-            if (changeScale || changeRotation || changeTranslate)
+            if (changeTranslate || changeRotation || changeScale)
             {
                 context.PushMatrix();
 
-                if (changeScale || changeRotation)
+                if (changeRotation || changeScale)
                 {
-                    float rotationOffsetX = drawX + (width >> 1) + rotationCenterX;
-                    float rotationOffsetY = drawY + (height >> 1) + rotationCenterY;
+                    float rotationOffsetX = translateX + (width >> 1) + rotationCenterX;
+                    float rotationOffsetY = translateY + (height >> 1) + rotationCenterY;
 
                     context.Translate(rotationOffsetX, rotationOffsetY, 0);
 
