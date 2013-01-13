@@ -5,31 +5,31 @@ using System.Text;
 
 namespace BomberEngine.Core.Visual
 {
-    public class CompositeVisualElement : VisualElement
+    public class DrawableElementComposite : DrawableElement
     {
-        private List<VisualElement> children;
+        private List<DrawableElement> children;
 
-        public CompositeVisualElement()
+        public DrawableElementComposite()
             : this(0, 0, 0, 0)
         {
         }
 
-        public CompositeVisualElement(int width, int height)
+        public DrawableElementComposite(int width, int height)
             : this(0, 0, width, height)
         {
         }
 
-        public CompositeVisualElement(float x, float y, int width, int height)
+        public DrawableElementComposite(float x, float y, int width, int height)
             : base(x, y, width, height)
         {
-            children = new List<VisualElement>();
+            children = new List<DrawableElement>();
         }
 
         public override void Update(float delta)
         {
             base.Update(delta);
 
-            foreach (VisualElement child in children)
+            foreach (DrawableElement child in children)
             {
                 child.Update(delta);
             }
@@ -37,7 +37,7 @@ namespace BomberEngine.Core.Visual
 
         public override void PostDraw(Context context)
         {
-            foreach (VisualElement child in children)
+            foreach (DrawableElement child in children)
             {
                 child.Draw(context);
             }
@@ -45,7 +45,7 @@ namespace BomberEngine.Core.Visual
             RestoreTransformations(context);
         }
 
-        public virtual void AddChild(VisualElement child)
+        public virtual void AddChild(DrawableElement child)
         {
             child.SetParent(this);
             children.Add(child);

@@ -100,7 +100,7 @@
     <Compile Include="Core\Assets\Loaders\TextureLoader.cs" />
     <Compile Include="Core\Assets\Types\TextureImage.cs" />
     <Compile Include="Core\Visual\Camera.cs" />
-    <Compile Include="Core\Visual\CompositeVisualElement.cs" />
+    <Compile Include="Core\Visual\DrawableElementComposite.cs" />
     <Compile Include="Core\Visual\Context.cs" />
     <Compile Include="Core\Drawable.cs" />
     <Compile Include="Core\DrawableList.cs" />
@@ -116,7 +116,7 @@
     <Compile Include="Core\TimerManagerListener.cs" />
     <Compile Include="Core\Updatable.cs" />
     <Compile Include="Core\UpdatableList.cs" />
-    <Compile Include="Core\Visual\VisualElement.cs" />
+    <Compile Include="Core\Visual\DrawableElement.cs" />
     <Compile Include="Core\Visual\Image.cs" />
     <Compile Include="Debugging\Debug.cs" />
     <Compile Include="Debugging\Log.cs" />

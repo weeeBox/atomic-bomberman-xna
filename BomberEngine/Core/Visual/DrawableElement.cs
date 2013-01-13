@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace BomberEngine.Core.Visual
 {
-    public abstract class VisualElement : Updatable, Drawable
+    public abstract class DrawableElement : Updatable, Drawable
     {
         public const float ALIGN_MIN = 0.0f;
         public const float ALIGN_CENTER = 0.5f;
@@ -36,20 +36,20 @@ namespace BomberEngine.Core.Visual
         public float parentAlignX;
         public float parentAlignY;
 
-        private VisualElement parent;
+        private DrawableElement parent;
 
         // timeline support
-        public VisualElement()
+        public DrawableElement()
             : this(0, 0)
         {
         }
 
-        public VisualElement(int width, int height)
+        public DrawableElement(int width, int height)
             : this(0, 0, width, height)
         {
         }
 
-        public VisualElement(float x, float y, int width, int height)
+        public DrawableElement(float x, float y, int width, int height)
         {
             this.x = x;
             this.y = y;
@@ -151,12 +151,12 @@ namespace BomberEngine.Core.Visual
             PostDraw(context);
         }
 
-        public VisualElement getParent()
+        public DrawableElement getParent()
         {
             return parent;
         }
 
-        public void SetParent(VisualElement parent)
+        public void SetParent(DrawableElement parent)
         {
             this.parent = parent;
         }

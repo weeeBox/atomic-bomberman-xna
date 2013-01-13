@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class FieldDrawable : VisualElement
+    public class FieldDrawable : DrawableElement
     {
         private Field field;
 
