@@ -22,6 +22,11 @@ namespace Bomberman.Game.Elements.Fields
         {   
         }
 
+        public FieldCellArray GetCells()
+        {
+            return cells;
+        }
+
         public int GetWidth()
         {
             return cells.GetWidth();

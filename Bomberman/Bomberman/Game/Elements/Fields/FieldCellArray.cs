@@ -24,6 +24,11 @@ namespace Bomberman.Game.Elements.Fields
             cells = new FieldCell[width * height];
         }
 
+        public FieldCell[] GetArray()
+        {
+            return cells;
+        }
+
         public FieldCell Get(int x, int y)
         {
             int index = GetIndex(x, y);

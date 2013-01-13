@@ -8,6 +8,7 @@ using Assets;
 using BomberEngine.Core.Assets.Types;
 using Bomberman.Game.Elements;
 using Bomberman.Game.Elements.Fields;
+using Bomberman.Game.Elements.Cells;
 
 namespace Bomberman.Game.Scenes
 {
@@ -24,7 +25,7 @@ namespace Bomberman.Game.Scenes
 
         public GameScene()
         {
-            field = new Field(15, 11);
+            field = LoadField();
 
             // field background
             fieldBackground = Helper.CreateImage(A.tex_FIELD7);
@@ -33,5 +34,60 @@ namespace Bomberman.Game.Scenes
             // field drawer
             AddDrawable(new FieldDrawable(field, FIELD_OFFSET_X, FIELD_OFFSET_Y, FIELD_WIDTH, FIELD_HEIGHT));
         }
+
+        private Field LoadField()
+        {
+            int fieldWidth = FIELD_DATA[0].Length;
+            int fieldHeight = FIELD_DATA.Length;
+
+            Field field = new Field(fieldWidth, fieldHeight);
+            FieldCellArray cells = field.GetCells();
+
+            for (int y = 0; y < FIELD_DATA.Length; ++y)
+            {
+                String data = FIELD_DATA[y];
+                for (int x = 0; x < data.Length; ++x)
+                {
+                    char chr = data[x];
+                    switch (chr)
+                    {
+                        case '.':
+                        {
+                            cells.Set(x, y, new EmptyCell(x, y));
+                            break;
+                        }
+
+                        case '#':
+                        {
+                            cells.Set(x, y, new BrickCell(x, y, true));
+                            break;
+                        }
+
+                        case ':':
+                        {
+                            cells.Set(x, y, new BrickCell(x, y, false));
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return field;
+        }
+
+        private static String[] FIELD_DATA =
+        {
+            ".....#:::#.....",
+            "#.....#:#.....#",
+            ":#.....:.....#:",
+            "::#.........#::",
+            ":::#.......#:::",
+            "::::.......::::",
+            ":::#.......#:::",
+            "::#.........#::",
+            ":#.....:.....#:",
+            "#.....#:#.....#",
+            ".....#:::#....."
+        };
     }
 }

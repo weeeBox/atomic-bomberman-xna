@@ -75,14 +75,26 @@
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="SKULLZ.png">
-      <Name>SKULLZ</Name>
+    <Compile Include="FIELD7.png">
+      <Name>FIELD7</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="FIELD7.png">
-      <Name>FIELD7</Name>
+    <Compile Include="BMB1001.png">
+      <Name>BMB1001</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
+    <Compile Include="F0BRICK.png">
+      <Name>F0BRICK</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
+    <Compile Include="F0SOLID.png">
+      <Name>F0SOLID</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>

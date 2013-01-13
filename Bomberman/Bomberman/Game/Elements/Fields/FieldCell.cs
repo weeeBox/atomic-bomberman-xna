@@ -22,6 +22,21 @@ namespace Bomberman.Game.Elements.Fields
             this.y = y;
         }
 
+        public virtual bool IsEmpty()
+        {
+            return false;
+        }
+
+        public virtual bool IsSolid()
+        {
+            return false;
+        }
+
+        public virtual bool IsBreakable()
+        {
+            return false;
+        }
+
         public int GetX()
         {
             return x;

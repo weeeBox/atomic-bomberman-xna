@@ -16,7 +16,12 @@ namespace Bomberman.Game.Elements.Cells
             this.solid = solid;
         }
 
-        public bool IsSolid()
+        public override bool IsBreakable()
+        {
+            return !solid;
+        }
+
+        public override bool IsSolid()
         {
             return solid;
         }

@@ -12,5 +12,10 @@ namespace Bomberman.Game.Elements.Cells
             : base(x, y)
         {
         }
+
+        public override bool IsEmpty()
+        {
+            return true;
+        }
     }
 }
