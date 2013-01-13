@@ -48,10 +48,13 @@ namespace Bomberman.Game.Elements.Cells
             SetPx(px + dx, py + dy);
         }
 
-        public void SetPx(float x, float y)
+        public void SetPx(float px, float py)
         {
-            px = x;
-            py = y;
+            this.px = px;
+            this.py = py;
+
+            x = (int)(px / Constant.CELL_WIDTH + 0.5f);
+            y = (int)(py / Constant.CELL_HEIGHT + 0.5f);
         }
 
         public float GetPx()

@@ -112,6 +112,7 @@
     <Compile Include="BombermanAssetManager.cs" />
     <Compile Include="BombermanRootController.cs" />
     <Compile Include="Content\SchemeReader.cs" />
+    <Compile Include="Game\Constant.cs" />
     <Compile Include="Game\Elements\Cells\BrickCell.cs" />
     <Compile Include="Game\Elements\Cells\EmptyCell.cs" />
     <Compile Include="Game\Elements\Cells\MovableCell.cs" />
