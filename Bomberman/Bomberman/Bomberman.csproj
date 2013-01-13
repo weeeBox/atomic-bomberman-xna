@@ -122,6 +122,7 @@
     <Compile Include="Game\Elements\Fields\FieldDrawable.cs" />
     <Compile Include="Game\Elements\Items\Bomb.cs" />
     <Compile Include="Game\Elements\Items\BombList.cs" />
+    <Compile Include="Game\Elements\Players\Input\KeyboardPlayerInput.cs" />
     <Compile Include="Game\Elements\Players\Player.cs" />
     <Compile Include="Game\Elements\Players\PlayerAction.cs" />
     <Compile Include="Game\Elements\Players\PlayerArray.cs" />

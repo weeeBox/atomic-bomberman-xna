@@ -62,7 +62,7 @@ namespace BomberEngine.Core.Input
             currentGamepadStates = new GamePadState[MAX_GAMEPADS_COUNT];
 
             for (int i = 0; i < currentGamepadStates.Length; ++i)
-            {   
+            {
                 currentGamepadStates[i] = GamePad.GetState(PLAYERS_INDICES[i], deadZone);
             }
 
@@ -96,7 +96,7 @@ namespace BomberEngine.Core.Input
             currentGamepadStates[gamePadIndex] = GamePad.GetState(PLAYERS_INDICES[gamePadIndex], deadZone);
 
             bool connected = currentGamepadStates[gamePadIndex].IsConnected;
-            
+
             if (IsControllerConnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
             {
                 gamePadStateListener.GamePadConnected(gamePadIndex);
@@ -215,39 +215,52 @@ namespace BomberEngine.Core.Input
 
         #region Properties
 
-        public InputListener InputListener
+        public void SetInputListener(InputListener listener)
         {
-            set
-            {
-                KeyboardListener = value;
-                GamePadListener = value;
-                GamePadStateListener = value;
-                TouchListener = value;
-            }
+            SetKeyboardListener(listener);
+            SetGamePadListener(listener);
+            SetGamePadStateListener(listener);
+            SetTouchListener(listener);
         }
 
-        public KeyboardListener KeyboardListener
-        {
-            get { return keyboardListener; }
-            set { keyboardListener = value; }
+        public KeyboardListener GetKeyboardListener()
+        { 
+            return keyboardListener; 
         }
 
-        public GamePadListener GamePadListener
-        {
-            get { return gamePadListener; }
-            set { gamePadListener = value; }
+        public void SetKeyboardListener(KeyboardListener listener)
+        { 
+            keyboardListener = listener; 
         }
 
-        public GamePadStateListener GamePadStateListener
-        {
-            get { return gamePadStateListener; }
-            set { gamePadStateListener = value; }
+        public GamePadListener GamePadListener()
+        { 
+            return gamePadListener; 
         }
 
-        public TouchListener TouchListener
+        public void SetGamePadListener(GamePadListener listener)
+        { 
+            gamePadListener = listener; 
+        }
+
+        public GamePadStateListener GetGamePadStateListener()
         {
-            get { return touchListener; }
-            set { touchListener = value; }
+            return gamePadStateListener;
+        }
+
+        private void SetGamePadStateListener(GamePadListener listener)
+        {
+            this.gamePadListener = listener;
+        }
+
+        public TouchListener GetTouchListener()
+        {
+            return touchListener;
+        }
+
+        public void SetTouchListener(TouchListener listener)
+        {
+            this.touchListener = listener;
         }
 
         #endregion

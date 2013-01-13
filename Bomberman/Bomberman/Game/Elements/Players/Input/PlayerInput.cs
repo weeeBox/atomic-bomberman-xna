@@ -14,9 +14,8 @@ namespace Bomberman.Game.Elements.Players.Input
         private bool[] actionsPressedState;
         private int pressedCount;
 
-        public PlayerInput(PlayerInputListener listener)
-        {
-            this.listener = listener;
+        public PlayerInput()
+        {   
             actionsPressedState = new bool[GetIndex(PlayerAction.Count)];
         }
 
@@ -28,7 +27,10 @@ namespace Bomberman.Game.Elements.Players.Input
             actionsPressedState[index] = true;
             ++pressedCount;
 
-            listener.OnActionPressed(this, action);
+            if (listener != null)
+            {
+                listener.OnActionPressed(this, action);
+            }
         }
 
         protected void NotifyActionReleased(PlayerAction action)
@@ -40,7 +42,10 @@ namespace Bomberman.Game.Elements.Players.Input
             actionsPressedState[index] = false;
             --pressedCount;
 
-            listener.OnActionReleased(this, action);
+            if (listener != null)
+            {
+                listener.OnActionReleased(this, action);
+            }
         }
 
         protected void ReleaseAllActions()
@@ -54,7 +59,10 @@ namespace Bomberman.Game.Elements.Players.Input
                         Debug.Assert(pressedCount > 0, "Invalid pressed counter: " + pressedCount);
                         --pressedCount;
 
-                        listener.OnActionReleased(this, GetAction(i));
+                        if (listener != null)
+                        {
+                            listener.OnActionReleased(this, GetAction(i));
+                        }
                         actionsPressedState[i] = false;
                     }
                 }
@@ -66,6 +74,21 @@ namespace Bomberman.Game.Elements.Players.Input
         {
             int index = GetIndex(action);
             return actionsPressedState[index];
+        }
+
+        public int GetPressedActionCount()
+        {
+            return pressedCount;
+        }
+
+        public PlayerInputListener GetListener()
+        {
+            return listener;
+        }
+
+        public void SetListener(PlayerInputListener listener)
+        {
+            this.listener = listener;
         }
 
         private int GetIndex(PlayerAction action)

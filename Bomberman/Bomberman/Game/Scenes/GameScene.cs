@@ -10,6 +10,7 @@ using Bomberman.Game.Elements;
 using Bomberman.Game.Elements.Fields;
 using Bomberman.Game.Elements.Cells;
 using Bomberman.Game.Elements.Players;
+using Bomberman.Game.Elements.Players.Input;
 
 namespace Bomberman.Game.Scenes
 {
@@ -28,8 +29,13 @@ namespace Bomberman.Game.Scenes
         {
             field = LoadField();
 
-            Player player = new Player(0, 0, 0);
+            KeyboardPlayerInput input = new KeyboardPlayerInput();
+            Application.Input().SetKeyboardListener(input);
+
+            Player player = new Player(input, 0, 0);
             field.AddPlayer(player);
+
+            AddUpdatabled(field);
 
             // field background
             fieldBackground = Helper.CreateImage(A.tex_FIELD7);

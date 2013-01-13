@@ -23,7 +23,8 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         public void Update(float delta)
-        {   
+        {
+            players.Update(delta);
         }
 
         public void AddPlayer(Player player)

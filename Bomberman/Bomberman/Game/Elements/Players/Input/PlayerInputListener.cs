@@ -9,5 +9,6 @@ namespace Bomberman.Game.Elements.Players.Input
     {
         void OnActionPressed(PlayerInput playerInput, PlayerAction action);
         void OnActionReleased(PlayerInput playerInput, PlayerAction action);
+        void OnActonsReleased(PlayerInput playerInput);
     }
 }
