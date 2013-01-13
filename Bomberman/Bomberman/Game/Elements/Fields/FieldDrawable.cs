@@ -80,6 +80,7 @@ namespace Bomberman.Game.Elements.Fields
                 float drawX = player.GetPx();
                 float drawY = player.GetPy() - image.GetHeight() + cellHeight;
 
+                context.DrawRect(player.GetX() * cellWidth, player.GetY() * cellHeight, cellWidth, cellHeight, Color.White);
                 context.DrawImage(image, drawX, drawY);
             }
         }
