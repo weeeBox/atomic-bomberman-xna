@@ -72,7 +72,7 @@ namespace BomberEngine.Core.Visual
             parent = null;
         }
 
-        public void Update(float delta)
+        public virtual void Update(float delta)
         {   
         }
 

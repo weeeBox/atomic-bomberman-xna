@@ -100,6 +100,7 @@
     <Compile Include="Core\Assets\Loaders\TextureLoader.cs" />
     <Compile Include="Core\Assets\Types\TextureImage.cs" />
     <Compile Include="Core\Visual\Camera.cs" />
+    <Compile Include="Core\Visual\CompositeVisualElement.cs" />
     <Compile Include="Core\Visual\Context.cs" />
     <Compile Include="Core\Drawable.cs" />
     <Compile Include="Core\DrawableList.cs" />

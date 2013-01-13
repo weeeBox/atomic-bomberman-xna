@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Debugging;
 
-namespace Bomberman.Game.Elements
+namespace Bomberman.Game.Elements.Fields
 {
     public class FieldCellArray
     {

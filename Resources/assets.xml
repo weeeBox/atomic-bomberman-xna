@@ -3,4 +3,6 @@
 	<image name="WLKN0001" file="${dir.gfx}/WLKN0001.png" />
 	<image name="WLKS0001" file="${dir.gfx}/WLKS0001.png" />
 	<image name="WLKW0001" file="${dir.gfx}/WLKW0001.png" />
+	<image name="SKULLZ" file="${dir.gfx}/SKULLZ.png" />
+	<image name="FIELD7" file="${dir.gfx}/FIELD7.png" />
 </package>
