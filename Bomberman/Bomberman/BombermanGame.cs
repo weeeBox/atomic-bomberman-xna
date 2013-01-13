@@ -12,25 +12,28 @@ using BomberEngine.Core;
 using BomberEngine.Game;
 
 namespace Bomberman
-{
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
+{   
     public class BombermanGame : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
-        Application application;
-       
+        private static readonly int WIDTH = 640;
+        private static readonly int HEIGHT = 480;
+
+        private GraphicsDeviceManager graphics;
+        private Application application;
+
         public BombermanGame()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = WIDTH;
+            graphics.PreferredBackBufferHeight = HEIGHT;
+
             Content.RootDirectory = "Content";
 
             #if WINDOWS
             IsMouseVisible = true;
             #endif
 
-            application = new BombermanApplication(Content, graphics);
+            application = new BombermanApplication(Content, WIDTH, HEIGHT);
         }
 
         /// <summary>
@@ -91,7 +94,7 @@ namespace Bomberman
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            application.Draw();
+            application.Draw(graphics.GraphicsDevice);
 
             base.Draw(gameTime);
         }

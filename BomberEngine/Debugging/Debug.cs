@@ -36,5 +36,10 @@ namespace BomberEngine.Debugging
         {   
             System.Diagnostics.Debug.Assert(condition, "Assertion failed", message);
         }
+
+        public static void Assert(bool condition)
+        {
+            System.Diagnostics.Debug.Assert(condition, "Assertion failed");
+        }
     }
 }

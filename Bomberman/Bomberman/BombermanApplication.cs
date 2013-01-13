@@ -15,7 +15,7 @@ namespace Bomberman
     {
         private ContentManager contentManager;
 
-        public BombermanApplication(ContentManager contentManager, GraphicsDeviceManager graphics) : base(graphics)
+        public BombermanApplication(ContentManager contentManager, int width, int height) : base(width, height)
         {
             this.contentManager = contentManager;
         }

@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework;
 using BomberEngine.Core.Input;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core.Assets;
+using BomberEngine.Core.Visual;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace BomberEngine.Game
 {
@@ -26,9 +28,15 @@ namespace BomberEngine.Game
         private UpdatableList updatables;
         private DrawableList drawables;
 
-        public Application(GraphicsDeviceManager graphics)
-        {   
-            context = new ContextImpl(graphics);
+        private int width;
+        private int height;
+
+        public Application(int width, int height)
+        {
+            this.width = width;
+            this.height = height;
+
+            context = new Context();
             updatables = new UpdatableList();
             drawables = new DrawableList();
         }
@@ -112,9 +120,11 @@ namespace BomberEngine.Game
             updatables.Update(delta);
         }
 
-        public void Draw()
+        public void Draw(GraphicsDevice graphicsDevice)
         {
+            context.Begin(graphicsDevice, width, height);
             drawables.Draw(context);
+            context.End();
         }
 
         //////////////////////////////////////////////////////////////////////////////

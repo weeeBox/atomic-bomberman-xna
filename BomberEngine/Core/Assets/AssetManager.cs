@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using BomberEngine.Debugging;
 using BomberEngine.Game;
 using BomberEngine.Core.Assets.Loaders;
+using BomberEngine.Core.Assets.Types;
 
 namespace BomberEngine.Core.Assets
 {
@@ -67,6 +68,11 @@ namespace BomberEngine.Core.Assets
             loaders.Add(type, loader);
         }
 
+        public TextureImage GetTexture(int id)
+        {
+            return (TextureImage)GetAsset(id);
+        }
+
         public Asset GetAsset(int id)
         {
             return assets[id];
@@ -112,6 +118,8 @@ namespace BomberEngine.Core.Assets
 
             Asset asset = loader.LoadAsset(contentManager, info);
             Debug.Assert(asset != null, "Loader returned null: " + info.path);
+
+            assets[info.index] = asset;
 
             return asset != null;
         }

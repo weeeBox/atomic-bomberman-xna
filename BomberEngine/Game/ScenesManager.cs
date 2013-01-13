@@ -6,6 +6,7 @@ using BomberEngine.Util;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core;
 using BomberEngine.Core.Input;
+using BomberEngine.Core.Visual;
 
 namespace BomberEngine.Game
 {

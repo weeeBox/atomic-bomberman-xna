@@ -13,8 +13,7 @@ namespace Bomberman
         private GameController gameController;
 
         public BombermanRootController()
-        {
-            gameController = new GameController();
+        {   
         }
 
         protected override void OnStart()
@@ -22,6 +21,8 @@ namespace Bomberman
             BombermanAssetManager manager = (BombermanAssetManager) Application.Assets();
             manager.AddPackToLoad(AssetPacks.Packs.ALL);
             manager.LoadImmediately();
+
+            gameController = new GameController();
 
             StartController(gameController);
         }

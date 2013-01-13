@@ -25,5 +25,15 @@ namespace BomberEngine.Core.Assets.Types
         {
             return texture;
         }
+
+        public int GetWidth()
+        {
+            return texture.Width;
+        }
+
+        public int GetHeight()
+        {
+            return texture.Height;
+        }
     }
 }

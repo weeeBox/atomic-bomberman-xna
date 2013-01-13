@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BomberEngine.Core;
+using BomberEngine.Core.Visual;
 
 namespace Bomberman.Game.Elements
 {

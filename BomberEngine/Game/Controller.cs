@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Core;
 using BomberEngine.Core.Input;
+using BomberEngine.Core.Visual;
 
 namespace BomberEngine.Game
 {
