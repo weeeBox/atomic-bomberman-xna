@@ -4,11 +4,15 @@ using System.Linq;
 using System.Text;
 using Bomberman.Game.Elements.Cells;
 using Bomberman.Game.Elements.Items;
+using Bomberman.Game.Elements.Players.Input;
 
 namespace Bomberman.Game.Elements.Players
 {
     public class Player : MovingCell
     {
+        private static readonly int SPEED_START = 145;
+        private static readonly int SPEED_INCREASE = 25;
+
         private bool alive;
 
         private int bombRadius;
@@ -16,11 +20,17 @@ namespace Bomberman.Game.Elements.Players
         private bool bombBouncing;
         private bool bombDetonated;
 
+        private PlayerInput input;
+
         public Player(int index, int x, int y)
             : base(x, y)
         {
             alive = true;
-            SetDirection(Direction.DOWN);
+            direction = Direction.DOWN;
+        }
+
+        public override void Update(float delta)
+        {
         }
 
         public bool IsAlive()

@@ -123,7 +123,10 @@
     <Compile Include="Game\Elements\Items\Bomb.cs" />
     <Compile Include="Game\Elements\Items\BombList.cs" />
     <Compile Include="Game\Elements\Players\Player.cs" />
+    <Compile Include="Game\Elements\Players\PlayerAction.cs" />
     <Compile Include="Game\Elements\Players\PlayerArray.cs" />
+    <Compile Include="Game\Elements\Players\Input\PlayerInput.cs" />
+    <Compile Include="Game\Elements\Players\Input\PlayerInputListener.cs" />
     <Compile Include="Game\GameController.cs" />
     <Compile Include="Game\GameSettings.cs" />
     <Compile Include="Game\Helper.cs" />

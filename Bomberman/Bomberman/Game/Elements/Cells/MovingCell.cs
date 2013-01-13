@@ -8,14 +8,14 @@ namespace Bomberman.Game.Elements.Cells
 {
     public class MovingCell : FieldCell
     {
-        private Direction direction;
+        protected Direction direction;
 
         /* Points coordinates */
-        private float px;
-        private float py;
+        protected float px;
+        protected float py;
 
         /* Points per second */
-        private float speed;
+        protected float speed;
 
         public MovingCell(int x, int y)
             : base(x, y)

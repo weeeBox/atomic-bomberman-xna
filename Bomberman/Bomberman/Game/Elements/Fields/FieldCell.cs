@@ -2,18 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BomberEngine.Core;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class FieldCell
+    public class FieldCell : Updatable
     {
         /* Cells coordinates */
-        private int x;
-        private int y;
+        protected int x;
+        protected int y;
 
         public FieldCell(int x, int y)
         {
             Set(x, y);
+        }
+
+        public virtual void Update(float delta)
+        {   
         }
 
         public void Set(int x, int y)
