@@ -174,17 +174,21 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Properties
+        #region Getters/Setters
 
-        public bool IsRunning
+        public static AssetManager Assets()
         {
-            get { return !stoped; }
+            return assetManager;
         }
 
-        public RootController RootController
+        public static InputManager Input()
         {
-            get { return rootController; }
-            set { rootController = value; }
+            return inputManager;
+        }
+
+        public bool IsRunning()
+        {
+            return !stoped;
         }
 
         #endregion

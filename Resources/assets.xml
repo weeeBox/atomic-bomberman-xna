@@ -1,4 +1,4 @@
-<package name="PACK_ALL">
+<package name="ALL">
 	<image name="WLKE0001" file="${dir.gfx}/WLKE0001.png" />
 	<image name="WLKN0001" file="${dir.gfx}/WLKN0001.png" />
 	<image name="WLKS0001" file="${dir.gfx}/WLKS0001.png" />

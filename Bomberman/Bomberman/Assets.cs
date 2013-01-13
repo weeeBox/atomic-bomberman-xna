@@ -4,16 +4,9 @@ using BomberEngine.Core.Assets;
  
 namespace Assets
 {
-	public class AssetPacks
-	{
-		public const int PACK_ALL = 0;
-		// total packs count
-		public const int PacksCount = 1;
-	}
-	
 	public class A
 	{
-		// PACK_ALL
+		// ALL
 		public const int tex_WLKE0001 = 0;
 		public const int tex_WLKN0001 = 1;
 		public const int tex_WLKS0001 = 2;
@@ -22,11 +15,16 @@ namespace Assets
 		public const int RES_COUNT = 4;
 	}
 	
-	public class Assets
+	public class AssetPacks
 	{
-		public static readonly AssetLoadInfo[][] PACKS =
+		public enum Packs
 		{
-			// PACK_ALL
+			ALL
+		}
+		
+		private static readonly AssetLoadInfo[][] PACKS =
+		{
+			// ALL
 			new AssetLoadInfo[]
 			{
 				new AssetLoadInfo("WLKE0001", A.tex_WLKE0001, AssetType.Texture),
@@ -35,5 +33,10 @@ namespace Assets
 				new AssetLoadInfo("WLKW0001", A.tex_WLKW0001, AssetType.Texture),
 			}
 		};
+		
+		public static AssetLoadInfo[] GetPack(Packs pack)
+		{
+			return PACKS[(int)pack];
+		}
 	}
 }

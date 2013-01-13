@@ -42,28 +42,9 @@ public class CodeFileGenerator
 
 	private void writeCode(WriteDestination dest, List<AssetPackage> packs) throws IOException
 	{
-		writePacksIds(dest, packs);
-		dest.writeln();
 		writeResIds(dest, packs);
 		dest.writeln();
 		writeResInfos(dest, packs);
-	}
-
-	private void writePacksIds(WriteDestination out, List<AssetPackage> packs)
-	{
-		out.writeln("public class AssetPacks");
-		out.writeBlockOpen();
-
-		int packIndex;
-		for (packIndex = 0; packIndex < packs.size(); packIndex++)
-		{
-			String packName = packs.get(packIndex).getName();
-			out.writelnf("public const int %s = %d;", packName, packIndex);
-		}
-		out.writeln("// total packs count");
-		out.writelnf("public const int PacksCount = %d;", packIndex);
-
-		out.writeBlockClose();
 	}
 
 	private void writeResIds(WriteDestination out, List<AssetPackage> packs)
@@ -90,9 +71,21 @@ public class CodeFileGenerator
 
 	private void writeResInfos(WriteDestination out, List<AssetPackage> packs)
 	{
-		out.writeln("public class Assets");
+		out.writeln("public class AssetPacks");
 		out.writeBlockOpen();
-		out.writelnf("public static readonly %s[][] PACKS =", ASSET_LOAD_INFO_CLASS);
+		
+		out.writeln("public enum Packs");
+		out.writeBlockOpen();
+		for (int packIndex = 0; packIndex < packs.size(); packIndex++)
+		{
+			String packName = packs.get(packIndex).getName();
+			out.writelnf("%s%s", packName, packIndex < packs.size() - 1 ? "," : "");
+		}
+		out.writeBlockClose();
+		
+		out.writeln();
+		
+		out.writelnf("private static readonly %s[][] PACKS =", ASSET_LOAD_INFO_CLASS);
 		out.writeBlockOpen();
 
 		for (AssetPackage pack : packs)
@@ -101,6 +94,13 @@ public class CodeFileGenerator
 		}
 
 		out.writeBlockClose(true);
+		
+		out.writeln();
+		out.writelnf("public static %s[] GetPack(Packs pack)", ASSET_LOAD_INFO_CLASS);
+		out.writeBlockOpen();
+		out.writeln("return PACKS[(int)pack];");
+		out.writeBlockClose();
+		
 		out.writeBlockClose();
 	}
 

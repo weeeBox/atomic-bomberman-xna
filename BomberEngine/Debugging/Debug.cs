@@ -29,12 +29,12 @@ namespace BomberEngine.Debugging
 
         public static void Assert(bool condition, String format, params Object[] args)
         {
-            System.Diagnostics.Debug.Assert(false, "Assertion failed", format, args);
+            System.Diagnostics.Debug.Assert(condition, "Assertion failed", format, args);
         }
 
         public static void Assert(bool condition, String message)
         {   
-            System.Diagnostics.Debug.Assert(false, "Assertion failed", message);
+            System.Diagnostics.Debug.Assert(condition, "Assertion failed", message);
         }
     }
 }

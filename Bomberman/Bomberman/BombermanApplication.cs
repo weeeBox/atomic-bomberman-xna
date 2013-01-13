@@ -22,7 +22,7 @@ namespace Bomberman
 
         protected override AssetManager CreateAssetManager()
         {
-            return new AssetManager(contentManager, A.RES_COUNT);
+            return new BombermanAssetManager(contentManager);
         }
 
         protected override RootController CreateRootController()
