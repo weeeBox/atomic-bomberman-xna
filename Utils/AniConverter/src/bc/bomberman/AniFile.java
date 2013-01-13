@@ -89,7 +89,7 @@ public class AniFile
 			//
 
 			String fileSignature = r.ReadChars(10);
-			if (fileSignature != "CHFILEANI ")
+			if (!fileSignature.equals("CHFILEANI "))
 				throw new FormatException("Invalid ANI file signature: " + fileSignature);
 
 			int fileLength = r.readUInt32();
@@ -891,8 +891,8 @@ public class AniFile
 
 								//stat.FrameX = readInt16(r);
 								//stat.FrameY = readInt16(r);
-								frameX = r.ReadInt16();
-								frameY = r.ReadInt16();
+								frameX = (short) r.ReadInt16();
+								frameY = (short) r.ReadInt16();
 
 								if ((a = r.readUInt32()) != 0)
 									OutputInfo("Seq{0}State{1}Frame{2} end dword: " + a, iSeq, iStat, i);

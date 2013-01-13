@@ -173,7 +173,7 @@ public class BitmapBuilder
 	/// <remarks>
 	/// TRYTRY: this should read PaletteSize bytes
 	/// </remarks>
-	public void ReadPaletteFromPCX(BinaryReader r)
+	public void ReadPaletteFromPCX(BinaryReader r) throws IOException
 	{
 		for (int i = PaletteLocation; i < DataLocation; ++i)
 		{
