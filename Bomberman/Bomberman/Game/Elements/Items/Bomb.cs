@@ -8,7 +8,7 @@ using BomberEngine.Util;
 
 namespace Bomberman.Game.Elements.Items
 {
-    public class Bomb : MovingCell
+    public class Bomb : MovableCell
     {
         private Player player;
         

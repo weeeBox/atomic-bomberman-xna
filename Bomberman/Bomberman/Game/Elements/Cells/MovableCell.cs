@@ -6,7 +6,7 @@ using Bomberman.Game.Elements.Fields;
 
 namespace Bomberman.Game.Elements.Cells
 {
-    public class MovingCell : FieldCell
+    public class MovableCell : FieldCell
     {
         protected Direction direction;
 
@@ -17,7 +17,7 @@ namespace Bomberman.Game.Elements.Cells
         /* Points per second */
         protected float speed;
 
-        public MovingCell(int x, int y)
+        public MovableCell(int x, int y)
             : base(x, y)
         {
             direction = Direction.DOWN;

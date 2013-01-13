@@ -8,7 +8,7 @@ using Bomberman.Game.Elements.Players.Input;
 
 namespace Bomberman.Game.Elements.Players
 {
-    public class Player : MovingCell, PlayerInputListener
+    public class Player : MovableCell, PlayerInputListener
     {
         private static readonly int SPEED_START = 145;
         private static readonly int SPEED_INCREASE = 25;

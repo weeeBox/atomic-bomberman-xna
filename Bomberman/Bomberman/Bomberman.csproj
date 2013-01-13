@@ -114,7 +114,7 @@
     <Compile Include="Content\SchemeReader.cs" />
     <Compile Include="Game\Elements\Cells\BrickCell.cs" />
     <Compile Include="Game\Elements\Cells\EmptyCell.cs" />
-    <Compile Include="Game\Elements\Cells\MovingCell.cs" />
+    <Compile Include="Game\Elements\Cells\MovableCell.cs" />
     <Compile Include="Game\Elements\Direction.cs" />
     <Compile Include="Game\Elements\Fields\Field.cs" />
     <Compile Include="Game\Elements\Fields\FieldCell.cs" />
