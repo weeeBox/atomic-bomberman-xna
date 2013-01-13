@@ -92,8 +92,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Assets\Asset.cs" />
+    <Compile Include="Core\Assets\AssetLoader.cs" />
     <Compile Include="Core\Assets\AssetLoadInfo.cs" />
+    <Compile Include="Core\Assets\AssetManagerListener.cs" />
     <Compile Include="Core\Assets\AssetType.cs" />
+    <Compile Include="Core\Assets\Types\Texture.cs" />
     <Compile Include="Core\Context.cs" />
     <Compile Include="Core\Drawable.cs" />
     <Compile Include="Core\DrawableList.cs" />
@@ -109,8 +113,8 @@
     <Compile Include="Core\TimerManagerListener.cs" />
     <Compile Include="Core\Updatable.cs" />
     <Compile Include="Core\UpdatableList.cs" />
-    <Compile Include="Debug\Debug.cs" />
-    <Compile Include="Debug\Log.cs" />
+    <Compile Include="Debugging\Debug.cs" />
+    <Compile Include="Debugging\Log.cs" />
     <Compile Include="Game\Application.cs" />
     <Compile Include="Game\ContextImpl.cs" />
     <Compile Include="Game\Controller.cs" />
@@ -124,7 +128,9 @@
     <Compile Include="Util\ObjectsList.cs" />
     <Compile Include="Util\StringUtils.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Core\Assets\Loaders\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

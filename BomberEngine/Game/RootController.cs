@@ -8,13 +8,12 @@ using BomberEngine.Core.Input;
 namespace BomberEngine.Game
 {
     public class RootController : Updatable, Drawable
-    {
-        private InputManager inputManager;
+    {   
         private Controller currentController;
 
         public RootController()
         {
-            inputManager = new InputManager();
+            
         }
 
         public void Start()
@@ -37,7 +36,6 @@ namespace BomberEngine.Game
 
         public void Update(float delta)
         {
-            inputManager.Update(delta);
             currentController.Update(delta);
         }
 
@@ -64,7 +62,6 @@ namespace BomberEngine.Game
             }
 
             currentController = controller;
-            inputManager.InputListener = controller.InputListener;
             controller.Start();
         }
     }

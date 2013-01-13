@@ -17,5 +17,11 @@ namespace BomberEngine.Core.Assets
             this.index = index;
             this.type = type;
         }
+
+        public String GetAssetContentName()
+        {
+            int dotIndex = path.LastIndexOf('.');
+            return dotIndex != -1 ? path : path.Substring(0, dotIndex);
+        }
     }
 }

@@ -61,10 +61,10 @@ namespace BomberEngine.Core
 
         public Timer Schedule(TimerCallback callback, float delay, Boolean repeated)
         {
-            return ScheduleRepeated(callback, delay, repeated ? 0 : 1);
+            return Schedule(callback, delay, repeated ? 0 : 1);
         }
 
-        public Timer ScheduleRepeated(TimerCallback callback, float delay, int numRepeats)
+        public Timer Schedule(TimerCallback callback, float delay, int numRepeats)
         {
             Timer timer = new Timer(callback, delay, numRepeats);
             AddTimer(timer);

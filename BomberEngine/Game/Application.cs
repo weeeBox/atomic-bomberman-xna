@@ -6,10 +6,11 @@ using BomberEngine.Core;
 using Microsoft.Xna.Framework;
 using BomberEngine.Core.Input;
 using Microsoft.Xna.Framework.Input;
+using BomberEngine.Core.Assets;
 
 namespace BomberEngine.Game
 {
-    public abstract class Application
+    public abstract class Application : TimerManagerListener
     {   
         private RootController rootController;
 
@@ -18,11 +19,35 @@ namespace BomberEngine.Game
         private bool started;
         private bool stoped;
 
+        private static TimerManager timerManager;
+        private static InputManager inputManager;
+        private static AssetManager assetManager;
+
+        private UpdatableList updatables;
+        private DrawableList drawables;
+
         public Application(GraphicsDeviceManager graphics)
         {   
             context = new ContextImpl(graphics);
+            updatables = new UpdatableList();
+            drawables = new DrawableList();
         }
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        protected TimerManager CreateTimerManager()
+        {
+            return new TimerManager(this);
+        }
+
+        protected InputManager CreateInputManager()
+        {
+            return new InputManager();
+        }
+
+        protected abstract AssetManager CreateAssetManager();
+        protected abstract RootController CreateRootController();
+        
         //////////////////////////////////////////////////////////////////////////////
 
         #region Lifecycle
@@ -33,8 +58,19 @@ namespace BomberEngine.Game
             {
                 throw new InvalidOperationException("Application already started");
             }
+
+            timerManager = CreateTimerManager();
+            inputManager = CreateInputManager();
+            assetManager = CreateAssetManager();
+            rootController = CreateRootController();
+            
             started = true;
             rootController.Start();
+
+            AddUpdatable(inputManager);
+            AddUpdatable(rootController);
+
+            AddDrawable(rootController);
 
             OnStart();
         }
@@ -73,12 +109,67 @@ namespace BomberEngine.Game
 
         public void Update(float delta)
         {   
-            rootController.Update(delta);
+            updatables.Update(delta);
         }
 
         public void Draw()
         {
-            rootController.Draw(context);
+            drawables.Draw(context);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        public Timer ScheduleTimer(TimerCallback callback, float delay)
+        {
+            return ScheduleTimer(callback, delay, false);
+        }
+
+        public Timer ScheduleTimer(TimerCallback callback, float delay, Boolean repeated)
+        {
+            return ScheduleTimer(callback, delay, repeated ? 0 : 1);
+        }
+
+        public Timer ScheduleTimer(TimerCallback callback, float delay, int numRepeats)
+        {
+            return timerManager.Schedule(callback, delay, numRepeats);
+        }
+
+        public void OnTimerAdded(TimerManager manager, Timer timer)
+        {
+            if (manager.TimersCount == 1)
+            {
+                AddUpdatable(manager);
+            }
+        }
+
+        public void OnTimerRemoved(TimerManager manager, Timer timer)
+        {
+            if (manager.TimersCount == 0)
+            {
+                RemoveUpdatable(manager);
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        protected void AddUpdatable(Updatable updatable)
+        {
+            updatables.Add(updatable);
+        }
+
+        protected void RemoveUpdatable(Updatable updatable)
+        {
+            updatables.Remove(updatable);
+        }
+
+        protected void AddDrawable(Drawable drawable)
+        {
+            drawables.Add(drawable);
+        }
+
+        protected void RemoveDrawable(Drawable drawable)
+        {
+            drawables.Remove(drawable);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -94,11 +185,6 @@ namespace BomberEngine.Game
         {
             get { return rootController; }
             set { rootController = value; }
-        }
-
-        public InputManager InputManager
-        {
-            get { return InputManager; }
         }
 
         #endregion

@@ -5,14 +5,29 @@ using System.Text;
 using BomberEngine.Game;
 using Microsoft.Xna.Framework;
 using Bomberman.Game;
+using Microsoft.Xna.Framework.Content;
+using BomberEngine.Core.Assets;
+using Assets;
 
 namespace Bomberman
 {
     public class BombermanApplication : Application
     {
-        public BombermanApplication(GraphicsDeviceManager graphics) : base(graphics)
+        private ContentManager contentManager;
+
+        public BombermanApplication(ContentManager contentManager, GraphicsDeviceManager graphics) : base(graphics)
         {
-            RootController = new BombermanRootController();
+            this.contentManager = contentManager;
+        }
+
+        protected override AssetManager CreateAssetManager()
+        {
+            return new AssetManager(contentManager, A.RES_COUNT);
+        }
+
+        protected override RootController CreateRootController()
+        {
+            return new BombermanRootController();
         }
     }
 }
