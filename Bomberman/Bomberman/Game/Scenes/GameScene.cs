@@ -9,6 +9,7 @@ using BomberEngine.Core.Assets.Types;
 using Bomberman.Game.Elements;
 using Bomberman.Game.Elements.Fields;
 using Bomberman.Game.Elements.Cells;
+using Bomberman.Game.Elements.Players;
 
 namespace Bomberman.Game.Scenes
 {
@@ -26,6 +27,9 @@ namespace Bomberman.Game.Scenes
         public GameScene()
         {
             field = LoadField();
+
+            Player player = new Player(0, 0, 0);
+            field.AddPlayer(player);
 
             // field background
             fieldBackground = Helper.CreateImage(A.tex_FIELD7);

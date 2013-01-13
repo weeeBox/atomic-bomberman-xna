@@ -9,6 +9,9 @@ namespace Bomberman.Game.Elements.Players
 {
     public class Player : MovingCell
     {
+        private bool alive;
+        private Direction direction;
+
         private int bombRadius;
         private float bombTimeout;
         private bool bombBouncing;
@@ -17,6 +20,18 @@ namespace Bomberman.Game.Elements.Players
         public Player(int index, int x, int y)
             : base(x, y)
         {
+            alive = true;
+            direction = Direction.DOWN;
+        }
+
+        public bool IsAlive()
+        {
+            return alive;
+        }
+
+        public Direction GetDirection()
+        {
+            return direction;
         }
 
         public Bomb SetBomb()

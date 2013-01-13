@@ -182,21 +182,24 @@ namespace BomberEngine.Core.Input
             KeyboardState oldState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
 
-            Keys[] oldKeys = oldState.GetPressedKeys();
-            Keys[] newKeys = currentKeyboardState.GetPressedKeys();
+            if (keyboardListener != null)
+            {
+                Keys[] oldKeys = oldState.GetPressedKeys();
+                Keys[] newKeys = currentKeyboardState.GetPressedKeys();
 
-            for (int i = 0; i < newKeys.Length; ++i)
-            {
-                if (!oldKeys.Contains(newKeys[i]))
-                {   
-                    keyboardListener.KeyPressed(newKeys[i]);
-                }
-            }
-            for (int i = 0; i < oldKeys.Length; ++i)
-            {
-                if (!newKeys.Contains(oldKeys[i]))
+                for (int i = 0; i < newKeys.Length; ++i)
                 {
-                    keyboardListener.KeyReleased(oldKeys[i]);
+                    if (!oldKeys.Contains(newKeys[i]))
+                    {
+                        keyboardListener.KeyPressed(newKeys[i]);
+                    }
+                }
+                for (int i = 0; i < oldKeys.Length; ++i)
+                {
+                    if (!newKeys.Contains(oldKeys[i]))
+                    {
+                        keyboardListener.KeyReleased(oldKeys[i]);
+                    }
                 }
             }
         }

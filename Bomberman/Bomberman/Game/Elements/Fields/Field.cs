@@ -6,6 +6,7 @@ using BomberEngine.Core;
 using BomberEngine.Core.Visual;
 using Assets;
 using BomberEngine.Game;
+using Bomberman.Game.Elements.Players;
 
 namespace Bomberman.Game.Elements.Fields
 {
@@ -13,13 +14,26 @@ namespace Bomberman.Game.Elements.Fields
     {   
         private FieldCellArray cells;
 
+        private PlayerArray players;
+
         public Field(int width, int height)
         {
             cells = new FieldCellArray(width, height);
+            players = new PlayerArray();
         }
 
         public void Update(float delta)
         {   
+        }
+
+        public void AddPlayer(Player player)
+        {
+            players.Add(player);
+        }
+
+        public PlayerArray GetPlayers()
+        {
+            return players;
         }
 
         public FieldCellArray GetCells()

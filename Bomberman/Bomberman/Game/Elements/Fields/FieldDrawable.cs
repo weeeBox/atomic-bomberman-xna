@@ -6,6 +6,7 @@ using BomberEngine.Core.Visual;
 using Assets;
 using Microsoft.Xna.Framework;
 using BomberEngine.Core.Assets.Types;
+using Bomberman.Game.Elements.Players;
 
 namespace Bomberman.Game.Elements.Fields
 {
@@ -23,6 +24,8 @@ namespace Bomberman.Game.Elements.Fields
 
             cellWidth = width / field.GetWidth();
             cellHeight = height / field.GetHeight();
+
+            TempInitPlayerImages();
         }
 
         public override void Draw(Context context)
@@ -31,6 +34,8 @@ namespace Bomberman.Game.Elements.Fields
 
             DrawGrid(context);
             DrawBlocks(context);
+            DrawPowerups(context);
+            DrawPlayers(context);
 
             PostDraw(context);
         }
@@ -61,6 +66,24 @@ namespace Bomberman.Game.Elements.Fields
             }
         }
 
+        private void DrawPowerups(Context context)
+        {
+
+        }
+
+        private void DrawPlayers(Context context)
+        {
+            List<Player> players = field.GetPlayers().GetList();
+            foreach (Player player in players)
+            {
+                TextureImage image = TempFindPlayerImage(player.GetDirection());
+                float drawX = player.GetPx();
+                float drawY = player.GetPy() - image.GetHeight() + cellHeight;
+
+                context.DrawImage(image, drawX, drawY);
+            }
+        }
+
         private void DrawGrid(Context context)
         {
             for (int i = 0; i <= field.GetWidth(); ++i)
@@ -72,6 +95,22 @@ namespace Bomberman.Game.Elements.Fields
             {
                 context.DrawLine(0, i * cellHeight, width, i * cellHeight, Color.Gray);
             }
+        }
+
+        private Dictionary<Direction, TextureImage> playerImages;
+
+        private TextureImage TempFindPlayerImage(Direction direction)
+        {
+            return playerImages[direction];
+        }
+
+        private void TempInitPlayerImages()
+        {
+            playerImages = new Dictionary<Direction, TextureImage>();
+            playerImages.Add(Direction.DOWN, Helper.GetTexture(A.tex_WLKS0001));
+            playerImages.Add(Direction.UP, Helper.GetTexture(A.tex_WLKN0001));
+            playerImages.Add(Direction.LEFT, Helper.GetTexture(A.tex_WLKW0001));
+            playerImages.Add(Direction.RIGHT, Helper.GetTexture(A.tex_WLKE0001));
         }
     }
 }
