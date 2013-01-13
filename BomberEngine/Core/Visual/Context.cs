@@ -182,9 +182,9 @@ namespace BomberEngine.Core.Visual
             matrix = Matrix.Multiply(t, matrix);
         }
 
-        public void Translate(float tx, float ty, float tz)
+        public void Translate(float tx, float ty)
         {
-            AddTransform(Matrix.CreateTranslation(tx, ty, tz));
+            AddTransform(Matrix.CreateTranslation(tx, ty, 0.0f));
         }
 
         public void Rotate(float rad, float ax, float ay, float az)

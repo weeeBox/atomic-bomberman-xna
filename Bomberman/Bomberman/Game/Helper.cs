@@ -11,9 +11,14 @@ namespace Bomberman.Game
 {
     public class Helper
     {
+        public static TextureImage GetTexture(int id)
+        {
+            return Application.Assets().GetTexture(id);
+        }
+
         public static Image CreateImage(int id)
         {
-            TextureImage texture = Application.Assets().GetTexture(id);
+            TextureImage texture = GetTexture(id);
             return new Image(texture);
         }
     }

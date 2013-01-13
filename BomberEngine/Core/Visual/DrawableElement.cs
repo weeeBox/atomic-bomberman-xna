@@ -15,8 +15,8 @@ namespace BomberEngine.Core.Visual
         public float x;
         public float y;
         
-        protected int width;
-        protected int height;
+        public int width;
+        public int height;
 
         public float rotation;
         public float rotationCenterX;
@@ -27,8 +27,8 @@ namespace BomberEngine.Core.Visual
 
         public Color color;
 
-        public float translateX;
-        public float translateY;
+        protected float translateX;
+        protected float translateY;
 
         public float alignX;
         public float alignY;
@@ -114,7 +114,7 @@ namespace BomberEngine.Core.Visual
                     float rotationOffsetX = translateX + (width >> 1) + rotationCenterX;
                     float rotationOffsetY = translateY + (height >> 1) + rotationCenterY;
 
-                    context.Translate(rotationOffsetX, rotationOffsetY, 0);
+                    context.Translate(rotationOffsetX, rotationOffsetY);
 
                     if (changeRotation)
                     {
@@ -125,12 +125,12 @@ namespace BomberEngine.Core.Visual
                     {
                         context.Scale(scaleX, scaleY, 1);
                     }
-                    context.Translate(-rotationOffsetX, -rotationOffsetY, 0);
+                    context.Translate(-rotationOffsetX, -rotationOffsetY);
                 }
 
                 if (changeTranslate)
                 {
-                    context.Translate(translateX, translateY, 0);
+                    context.Translate(translateX, translateY);
                 }
             }
 
