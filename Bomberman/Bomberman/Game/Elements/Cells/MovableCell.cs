@@ -50,8 +50,16 @@ namespace Bomberman.Game.Elements.Cells
 
         public void SetPx(float px, float py)
         {
+            float oldPx = px;
+            float oldPy = py;
+
             this.px = px;
             this.py = py;
+
+            if (oldPx != px || oldPy != py)
+            {
+                OnPositionChanged(oldPx, oldPy);
+            }
 
             int oldX = x;
             int oldY = y;
@@ -61,14 +69,20 @@ namespace Bomberman.Game.Elements.Cells
 
             if (oldX != x || oldY != y)
             {
-                OnCellChanged(x, y);
+                OnCellChanged(oldX, oldY);
             }
         }
 
-        protected void OnCellChanged(int x, int y)
-        {   
+        protected void OnPositionChanged(float oldPx, float oldPy)
+        {
+            Field.Current().CellPointsPosChanged(this, oldPx, oldPy);
         }
 
+        protected void OnCellChanged(int oldX, int oldY)
+        {
+            Field.Current().CellCoordChanged(this, oldX, oldY);
+        }
+        
         public float GetPx()
         {
             return px;
@@ -92,6 +106,16 @@ namespace Bomberman.Game.Elements.Cells
         public float GetSpeed()
         {
             return speed;
+        }
+
+        public virtual bool IsBomb()
+        {
+            return false;
+        }
+
+        public virtual bool IsPlayer()
+        {
+            return false;
         }
     }
 }

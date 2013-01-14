@@ -139,6 +139,11 @@ namespace Bomberman.Game.Elements.Players
             moving = true;
         }
 
+        public override bool IsPlayer()
+        {
+            return true;
+        }
+
         public bool IsAlive()
         {
             return alive;

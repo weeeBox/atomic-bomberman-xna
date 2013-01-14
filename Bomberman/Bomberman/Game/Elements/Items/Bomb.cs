@@ -33,6 +33,11 @@ namespace Bomberman.Game.Elements.Items
             return player;
         }
 
+        public override bool IsBomb()
+        {
+            return true;
+        }
+
         public int GetRadius()
         {
             return radius;

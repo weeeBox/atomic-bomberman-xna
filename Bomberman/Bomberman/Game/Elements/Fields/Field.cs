@@ -7,6 +7,7 @@ using BomberEngine.Core.Visual;
 using Assets;
 using BomberEngine.Game;
 using Bomberman.Game.Elements.Players;
+using Bomberman.Game.Elements.Cells;
 
 namespace Bomberman.Game.Elements.Fields
 {
@@ -16,8 +17,12 @@ namespace Bomberman.Game.Elements.Fields
 
         private PlayerArray players;
 
+        private static Field currentField;
+
         public Field(int width, int height)
         {
+            currentField = this;
+
             cells = new FieldCellArray(width, height);
             players = new PlayerArray();
         }
@@ -50,6 +55,19 @@ namespace Bomberman.Game.Elements.Fields
         public int GetHeight()
         {
             return cells.GetHeight();
+        }
+
+        public void CellPointsPosChanged(MovableCell cell, float oldPx, float oldPy)
+        {
+        }
+
+        public void CellCoordChanged(MovableCell cell, int oldX, int oldY)
+        {
+        }
+
+        public static Field Current()
+        {
+            return currentField;
         }
     }
 }
