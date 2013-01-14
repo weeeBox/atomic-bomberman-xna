@@ -57,12 +57,58 @@ namespace Bomberman.Game.Elements.Fields
             return cells.GetHeight();
         }
 
-        public void CellPointsPosChanged(MovableCell cell, float oldPx, float oldPy)
+        public void CellPosChanged(MovableCell cell, float oldPx, float oldPy)
         {
+            float px = cell.GetPx();
+            float py = cell.GetPy();
+
+            Direction direction = cell.GetDirection();
+            switch (direction)
+            {
+                case Direction.LEFT:
+                {
+                    float minX = 0.0f;
+                    if (px < minX)
+                    {
+                        cell.SetPosX(minX);
+                    }
+                    break;
+                }
+
+                case Direction.RIGHT:
+                {
+                    float maxX = Constant.FIELD_WIDTH - Constant.CELL_WIDTH;
+                    if (px > maxX)
+                    {
+                        cell.SetPosX(maxX);
+                    }
+                    break;
+                }
+
+                case Direction.UP:
+                {
+                    float minY = 0.0f;
+                    if (py < minY)
+                    {
+                        cell.SetPosY(minY);
+                    }
+                    break;
+                }
+
+                case Direction.DOWN:
+                {
+                    float maxY = Constant.FIELD_HEIGHT - Constant.CELL_HEIGHT;
+                    if (py > maxY)
+                    {
+                        cell.SetPosY(maxY);
+                    }
+                    break;
+                }
+            }
         }
 
-        public void CellCoordChanged(MovableCell cell, int oldX, int oldY)
-        {
+        public void CellChanged(MovableCell cell, int oldX, int oldY)
+        {   
         }
 
         public static Field Current()

@@ -16,11 +16,6 @@ namespace Bomberman.Game.Scenes
 {
     public class GameScene : Scene
     {
-        private static readonly int FIELD_OFFSET_X = 20;
-        private static readonly int FIELD_OFFSET_Y = 68;
-        private static readonly int FIELD_WIDTH = 600;
-        private static readonly int FIELD_HEIGHT = 396;
-
         private Image fieldBackground;
 
         private Field field;
@@ -42,7 +37,7 @@ namespace Bomberman.Game.Scenes
             AddDrawable(fieldBackground);
 
             // field drawer
-            AddDrawable(new FieldDrawable(field, FIELD_OFFSET_X, FIELD_OFFSET_Y, FIELD_WIDTH, FIELD_HEIGHT));
+            AddDrawable(new FieldDrawable(field, Constant.FIELD_OFFSET_X, Constant.FIELD_OFFSET_Y, Constant.FIELD_WIDTH, Constant.FIELD_HEIGHT));
         }
 
         private Field LoadField()

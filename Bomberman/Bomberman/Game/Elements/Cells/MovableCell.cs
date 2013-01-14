@@ -45,42 +45,56 @@ namespace Bomberman.Game.Elements.Cells
 
         public void Move(float dx, float dy)
         {
-            SetPx(px + dx, py + dy);
+            if (dx != 0.0f || dy != 0.0f)
+            {
+                float oldPx = px;
+                float oldPy = py;
+
+                px += dx;
+                py += dy;
+
+                OnPositionChanged(oldPx, oldPy);
+
+                int oldX = x;
+                int oldY = y;
+
+                x = (int)(px / Constant.CELL_WIDTH + 0.5f);
+                y = (int)(py / Constant.CELL_HEIGHT + 0.5f);
+
+                if (oldX != x || oldY != y)
+                {
+                    OnCellChanged(oldX, oldY);
+                }
+            }
         }
 
-        public void SetPx(float px, float py)
+        public void SetPosX(float px)
         {
-            float oldPx = px;
-            float oldPy = py;
+            SetPos(px, py);
+        }
 
+        public void SetPosY(float py)
+        {
+            SetPos(px, py);
+        }
+
+        public void SetPos(float px, float py)
+        {
             this.px = px;
             this.py = py;
 
-            if (oldPx != px || oldPy != py)
-            {
-                OnPositionChanged(oldPx, oldPy);
-            }
-
-            int oldX = x;
-            int oldY = y;
-
             x = (int)(px / Constant.CELL_WIDTH + 0.5f);
             y = (int)(py / Constant.CELL_HEIGHT + 0.5f);
-
-            if (oldX != x || oldY != y)
-            {
-                OnCellChanged(oldX, oldY);
-            }
         }
 
         protected void OnPositionChanged(float oldPx, float oldPy)
         {
-            Field.Current().CellPointsPosChanged(this, oldPx, oldPy);
+            Field.Current().CellPosChanged(this, oldPx, oldPy);
         }
 
         protected void OnCellChanged(int oldX, int oldY)
         {
-            Field.Current().CellCoordChanged(this, oldX, oldY);
+            Field.Current().CellChanged(this, oldX, oldY);
         }
         
         public float GetPx()
