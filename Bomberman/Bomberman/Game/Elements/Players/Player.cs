@@ -5,6 +5,7 @@ using System.Text;
 using Bomberman.Game.Elements.Cells;
 using Bomberman.Game.Elements.Items;
 using Bomberman.Game.Elements.Players.Input;
+using Bomberman.Game.Elements.Fields;
 
 namespace Bomberman.Game.Elements.Players
 {
@@ -37,43 +38,151 @@ namespace Bomberman.Game.Elements.Players
         {
             if (moving)
             {
+                float oldPx = px;
+                float oldPy = py;
+
                 Direction direction = GetDirection();
                 switch (direction)
                 {
                     case Direction.UP:
-                    {
-                        float xOffset = Util.TargetPxOffset(px);
-                        float dx = xOffset < 0 ? Math.Max(xOffset, -delta * speed) : Math.Min(xOffset, delta * speed);
-                        float dy = -delta * speed;
-                        
-                        Move(dx, dy);
+                    {   
+                        MoveY(-delta * speed);
+
+                        // TODO: разобрать это пиздец
+                        FieldCell blockingCell = null;
+                        if (oldPy == py) // movement forward blocked?
+                        {
+                            blockingCell = GetField().GetCell(cx, cy - 1);
+                            if (blockingCell != null && blockingCell.IsObstacle())
+                            {
+                                float blockingPx = blockingCell.GetPx();
+                                if (px < blockingPx && !GetField().IsObstacleCell(cx - 1, cy - 1))
+                                {
+                                    MoveX(Math.Max(Util.Cx2Px(cx - 1) - px, -speed * delta));
+                                }
+                                else if (px > blockingPx && !GetField().IsObstacleCell(cx + 1, cy - 1))
+                                {
+                                    MoveX(Math.Min(Util.Cx2Px(cx + 1) - px, speed * delta));
+                                }
+                            }
+                            else
+                            {
+                                float xOffset = Util.TargetPxOffset(px);
+                                MoveX(xOffset < 0 ? Math.Max(xOffset, -delta * speed) : Math.Min(xOffset, delta * speed));
+                            }
+                        }
+                        else                        
+                        {
+                            float xOffset = Util.TargetPxOffset(px);
+                            MoveX(xOffset < 0 ? Math.Max(xOffset, -delta * speed) : Math.Min(xOffset, delta * speed));
+                        }
+
                         break;
                     }
 
                     case Direction.DOWN:
                     {
-                        float xOffset = Util.TargetPxOffset(px);
-                        float dx = xOffset < 0 ? Math.Max(xOffset, -delta * speed) : Math.Min(xOffset, delta * speed);
-                        float dy = delta * speed;
-                        Move(dx, dy);
+                        MoveY(delta * speed);
+
+                        // TODO: разобрать это пиздец
+                        FieldCell blockingCell = null;
+                        if (oldPy == py) // movement forward blocked?
+                        {
+                            blockingCell = GetField().GetCell(cx, cy + 1);
+                            if (blockingCell != null && blockingCell.IsObstacle())
+                            {
+                                float blockingPx = blockingCell.GetPx();
+                                if (px < blockingPx && !GetField().IsObstacleCell(cx - 1, cy + 1))
+                                {
+                                    MoveX(Math.Max(Util.Cx2Px(cx - 1) - px, -speed * delta));
+                                }
+                                else if (px > blockingPx && !GetField().IsObstacleCell(cx + 1, cy + 1))
+                                {
+                                    MoveX(Math.Min(Util.Cx2Px(cx + 1) - px, speed * delta));
+                                }
+                            }
+                            else
+                            {
+                                float xOffset = Util.TargetPxOffset(px);
+                                MoveX(xOffset < 0 ? Math.Max(xOffset, -delta * speed) : Math.Min(xOffset, delta * speed));
+                            }
+                        }
+                        else
+                        {
+                            float xOffset = Util.TargetPxOffset(px);
+                            MoveX(xOffset < 0 ? Math.Max(xOffset, -delta * speed) : Math.Min(xOffset, delta * speed));
+                        }
+
                         break;
                     }
 
                     case Direction.LEFT:
                     {
-                        float yOffset = Util.TargetPyOffset(py);
-                        float dx = -delta * speed;
-                        float dy = yOffset < 0 ? Math.Max(yOffset, -delta * speed) : Math.Min(yOffset, delta * speed);
-                        Move(dx, dy);
+                        MoveX(-delta * speed);
+
+                        // TODO: разобрать это пиздец
+                        FieldCell blockingCell = null;
+                        if (oldPx == px) // movement forward blocked?
+                        {
+                            blockingCell = GetField().GetCell(cx - 1, cy);
+                            if (blockingCell != null && blockingCell.IsObstacle())
+                            {
+                                float blockingPy = blockingCell.GetPy();
+                                if (py < blockingPy && !GetField().IsObstacleCell(cx - 1, cy - 1))
+                                {
+                                    MoveY(Math.Max(Util.Cy2Py(cy - 1) - py, -speed * delta));
+                                }
+                                else if (py > blockingPy && !GetField().IsObstacleCell(cx - 1, cy + 1))
+                                {
+                                    MoveY(Math.Min(Util.Cy2Py(cy + 1) - py, speed * delta));
+                                }
+                            }
+                            else
+                            {
+                                float yOffset = Util.TargetPyOffset(py);
+                                MoveY(yOffset < 0 ? Math.Max(yOffset, -delta * speed) : Math.Min(yOffset, delta * speed));
+                            }
+                        }
+                        else
+                        {
+                            float yOffset = Util.TargetPyOffset(py);
+                            MoveY(yOffset < 0 ? Math.Max(yOffset, -delta * speed) : Math.Min(yOffset, delta * speed));
+                        }
                         break;
                     }
 
                     case Direction.RIGHT:
-                    {
-                        float yOffset = Util.TargetPyOffset(py);
-                        float dx = delta * speed;
-                        float dy = yOffset < 0 ? Math.Max(yOffset, -delta * speed) : Math.Min(yOffset, delta * speed);
-                        Move(dx, dy);
+                    {   
+                        MoveX(delta * speed);
+
+                        // TODO: разобрать это пиздец
+                        FieldCell blockingCell = null;
+                        if (oldPx == px) // movement forward blocked?
+                        {
+                            blockingCell = GetField().GetCell(cx + 1, cy);
+                            if (blockingCell != null && blockingCell.IsObstacle())
+                            {
+                                float blockingPy = blockingCell.GetPy();
+                                if (py < blockingPy && !GetField().IsObstacleCell(cx + 1, cy - 1))
+                                {
+                                    MoveY(Math.Max(Util.Cy2Py(cy - 1) - py, -speed * delta));
+                                }
+                                else if (py > blockingPy && !GetField().IsObstacleCell(cx + 1, cy + 1))
+                                {
+                                    MoveY(Math.Min(Util.Cy2Py(cy + 1) - py, speed * delta));
+                                }
+                            }
+                            else
+                            {
+                                float yOffset = Util.TargetPyOffset(py);
+                                MoveY(yOffset < 0 ? Math.Max(yOffset, -delta * speed) : Math.Min(yOffset, delta * speed));
+                            }
+                        }
+                        else
+                        {
+                            float yOffset = Util.TargetPyOffset(py);
+                            MoveY(yOffset < 0 ? Math.Max(yOffset, -delta * speed) : Math.Min(yOffset, delta * speed));
+                        }
                         break;
                     }
                 }

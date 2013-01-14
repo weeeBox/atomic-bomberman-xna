@@ -43,6 +43,17 @@ namespace Bomberman.Game.Elements.Fields
             return players;
         }
 
+        public FieldCell GetCell(int cx, int cy)
+        {
+            return cells.Get(cx, cy);
+        }
+
+        public bool IsObstacleCell(int cx, int cy)
+        {
+            FieldCell cell = GetCell(cx, cy);
+            return cell == null || cell.IsObstacle();
+        }
+
         public FieldCellArray GetCells()
         {
             return cells;

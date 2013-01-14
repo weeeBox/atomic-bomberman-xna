@@ -73,5 +73,10 @@ namespace Bomberman.Game.Elements.Fields
         {
             return py;
         }
+
+        protected Field GetField()
+        {
+            return Field.Current();
+        }
     }
 }

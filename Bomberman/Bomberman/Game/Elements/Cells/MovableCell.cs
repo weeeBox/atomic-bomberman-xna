@@ -88,7 +88,7 @@ namespace Bomberman.Game.Elements.Cells
 
         protected void OnPositionChanged(float oldPx, float oldPy)
         {
-            Field.Current().CellPosChanged(this, oldPx, oldPy);
+            GetField().CellPosChanged(this, oldPx, oldPy);
         }
 
         public void SetSpeed(float speed)
