@@ -139,22 +139,31 @@ namespace Bomberman.Game.Elements.Fields
 
             if (dy > 0)
             {
+                int cx = Util.Px2Cx(px);
+                int cy = Util.Py2Cy(py) + 1;
 
+                ProcessCollision(cell, cx - 1, cy);
+                ProcessCollision(cell, cx, cy);
+                ProcessCollision(cell, cx + 1, cy);
             }
             else if (dy < 0)
             {
+                int cx = Util.Px2Cx(px);
+                int cy = Util.Py2Cy(py) - 1;
 
+                ProcessCollision(cell, cx - 1, cy);
+                ProcessCollision(cell, cx, cy);
+                ProcessCollision(cell, cx + 1, cy);
             }
-
         }
 
-        private void ProcessCollision(MovableCell cell, int x, int y)
+        private void ProcessCollision(MovableCell cell, int cx, int cy)
         {
-            if (x >= 0 && x < GetWidth() && y >=0 && y < GetHeight())
+            if (cx >= 0 && cx < GetWidth() && cy >=0 && cy < GetHeight())
             {
-                FieldCell other = cells.Get(x, y);
+                FieldCell other = cells.Get(cx, cy);
 
-                if (other.IsSolid() || other.IsBreakable())
+                if (other.IsObstacle())
                 {
                     if (Collides(cell, other))
                     {
@@ -162,22 +171,22 @@ namespace Bomberman.Game.Elements.Fields
                         {
                             case Direction.UP:
                             {
-                                cell.SetPosY((y + 1) * Constant.CELL_HEIGHT);
+                                cell.SetPosY(Util.Cy2Py(cy + 1));
                                 break;
                             }
                             case Direction.DOWN:
                             {
-                                cell.SetPosY((y - 1) * Constant.CELL_HEIGHT);
+                                cell.SetPosY(Util.Cy2Py(cy - 1));
                                 break;
                             }
                             case Direction.LEFT:
                             {
-                                cell.SetPosX((x + 1) * Constant.CELL_WIDTH);
+                                cell.SetPosX(Util.Cx2Px(cx + 1));
                                 break;
                             }
                             case Direction.RIGHT:
                             {
-                                cell.SetPosX((x - 1) * Constant.CELL_WIDTH);
+                                cell.SetPosX(Util.Cx2Px(cx - 1));
                                 break;
                             }
                         }
@@ -190,10 +199,10 @@ namespace Bomberman.Game.Elements.Fields
         {
             float acx = a.GetPx();
             float acy = a.GetPy();
-            float bcx = (0.5f + b.GetCx()) * Constant.CELL_WIDTH;
-            float bcy = (0.5f + b.GetCy()) * Constant.CELL_HEIGHT;
+            float bcx = b.GetPx();
+            float bcy = b.GetPy();
 
-            return Math.Abs(acx - bcx) <= Constant.CELL_WIDTH && Math.Abs(acy - bcy) <= Constant.CELL_HEIGHT;
+            return Math.Abs(acx - bcx) < Constant.CELL_WIDTH && Math.Abs(acy - bcy) < Constant.CELL_HEIGHT;
         }
 
         public static Field Current()

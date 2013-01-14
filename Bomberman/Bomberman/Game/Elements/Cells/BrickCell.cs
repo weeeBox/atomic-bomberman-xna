@@ -25,5 +25,10 @@ namespace Bomberman.Game.Elements.Cells
         {
             return solid;
         }
+
+        public override bool IsObstacle()
+        {
+            return true;
+        }
     }
 }

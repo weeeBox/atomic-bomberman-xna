@@ -18,14 +18,14 @@ namespace Bomberman.Game.Elements.Fields
 
         public FieldCell(int cx, int cy)
         {
-            Set(cx, cy);
+            SetCell(cx, cy);
         }
 
         public virtual void Update(float delta)
         {   
         }
 
-        public void Set(int cx, int cy)
+        public void SetCell(int cx, int cy)
         {
             this.cx = cx;
             this.cy = cy;
@@ -45,6 +45,11 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         public virtual bool IsBreakable()
+        {
+            return false;
+        }
+
+        public virtual bool IsObstacle()
         {
             return false;
         }
