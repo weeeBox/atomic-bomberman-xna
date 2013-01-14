@@ -18,7 +18,7 @@ namespace Bomberman.Game.Elements.Items
         private bool bouncing;
         private bool detonated;
 
-        public Bomb(Player player, bool dud) : base(player.GetX(), player.GetY())
+        public Bomb(Player player, bool dud) : base(player.GetCx(), player.GetCy())
         {
             this.player = player;
             this.radius = player.GetBombRadius();

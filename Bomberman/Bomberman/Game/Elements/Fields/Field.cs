@@ -8,11 +8,12 @@ using Assets;
 using BomberEngine.Game;
 using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements.Cells;
+using BomberEngine.Debugging;
 
 namespace Bomberman.Game.Elements.Fields
 {
     public class Field : Updatable
-    {   
+    {
         private FieldCellArray cells;
 
         private PlayerArray players;
@@ -59,16 +60,19 @@ namespace Bomberman.Game.Elements.Fields
 
         public void CellPosChanged(MovableCell cell, float oldPx, float oldPy)
         {
-            float px = cell.GetPx();
-            float py = cell.GetPy();
+            ProcessFieldBounds(cell);
+            ProcessCollisions(cell, oldPx, oldPy);
+        }
 
+        private static void ProcessFieldBounds(MovableCell cell)
+        {
             Direction direction = cell.GetDirection();
             switch (direction)
             {
                 case Direction.LEFT:
                 {
-                    float minX = 0.0f;
-                    if (px < minX)
+                    float minX = 0.5f * Constant.CELL_WIDTH;
+                    if (cell.GetPx() < minX)
                     {
                         cell.SetPosX(minX);
                     }
@@ -77,8 +81,8 @@ namespace Bomberman.Game.Elements.Fields
 
                 case Direction.RIGHT:
                 {
-                    float maxX = Constant.FIELD_WIDTH - Constant.CELL_WIDTH;
-                    if (px > maxX)
+                    float maxX = Constant.FIELD_WIDTH - 0.5f * Constant.CELL_WIDTH;
+                    if (cell.GetPx() > maxX)
                     {
                         cell.SetPosX(maxX);
                     }
@@ -87,8 +91,8 @@ namespace Bomberman.Game.Elements.Fields
 
                 case Direction.UP:
                 {
-                    float minY = 0.0f;
-                    if (py < minY)
+                    float minY = 0.5f * Constant.CELL_HEIGHT;
+                    if (cell.GetPy() < minY)
                     {
                         cell.SetPosY(minY);
                     }
@@ -97,8 +101,8 @@ namespace Bomberman.Game.Elements.Fields
 
                 case Direction.DOWN:
                 {
-                    float maxY = Constant.FIELD_HEIGHT - Constant.CELL_HEIGHT;
-                    if (py > maxY)
+                    float maxY = Constant.FIELD_HEIGHT - 0.5f * Constant.CELL_HEIGHT;
+                    if (cell.GetPy() > maxY)
                     {
                         cell.SetPosY(maxY);
                     }
@@ -107,8 +111,89 @@ namespace Bomberman.Game.Elements.Fields
             }
         }
 
-        public void CellChanged(MovableCell cell, int oldX, int oldY)
-        {   
+        private void ProcessCollisions(MovableCell cell, float oldPx, float oldPy)
+        {
+            float px = cell.GetPx();
+            float py = cell.GetPy();
+            float dx = px - oldPx;
+            float dy = py - oldPy;
+
+            if (dx > 0)
+            {
+                int cx = Util.Px2Cx(px) + 1;
+                int cy = Util.Py2Cy(py);
+
+                ProcessCollision(cell, cx, cy - 1);
+                ProcessCollision(cell, cx, cy);
+                ProcessCollision(cell, cx, cy + 1);
+            }
+            else if (dx < 0)
+            {
+                int cx = Util.Px2Cx(px) - 1;
+                int cy = Util.Py2Cy(py);
+
+                ProcessCollision(cell, cx, cy - 1);
+                ProcessCollision(cell, cx, cy);
+                ProcessCollision(cell, cx, cy + 1);
+            }
+
+            if (dy > 0)
+            {
+
+            }
+            else if (dy < 0)
+            {
+
+            }
+
+        }
+
+        private void ProcessCollision(MovableCell cell, int x, int y)
+        {
+            if (x >= 0 && x < GetWidth() && y >=0 && y < GetHeight())
+            {
+                FieldCell other = cells.Get(x, y);
+
+                if (other.IsSolid() || other.IsBreakable())
+                {
+                    if (Collides(cell, other))
+                    {
+                        switch (cell.GetDirection())
+                        {
+                            case Direction.UP:
+                            {
+                                cell.SetPosY((y + 1) * Constant.CELL_HEIGHT);
+                                break;
+                            }
+                            case Direction.DOWN:
+                            {
+                                cell.SetPosY((y - 1) * Constant.CELL_HEIGHT);
+                                break;
+                            }
+                            case Direction.LEFT:
+                            {
+                                cell.SetPosX((x + 1) * Constant.CELL_WIDTH);
+                                break;
+                            }
+                            case Direction.RIGHT:
+                            {
+                                cell.SetPosX((x - 1) * Constant.CELL_WIDTH);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private bool Collides(MovableCell a, FieldCell b)
+        {
+            float acx = a.GetPx();
+            float acy = a.GetPy();
+            float bcx = (0.5f + b.GetCx()) * Constant.CELL_WIDTH;
+            float bcy = (0.5f + b.GetCy()) * Constant.CELL_HEIGHT;
+
+            return Math.Abs(acx - bcx) <= Constant.CELL_WIDTH && Math.Abs(acy - bcy) <= Constant.CELL_HEIGHT;
         }
 
         public static Field Current()

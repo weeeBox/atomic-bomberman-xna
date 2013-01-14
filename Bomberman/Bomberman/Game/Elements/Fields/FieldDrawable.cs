@@ -49,8 +49,8 @@ namespace Bomberman.Game.Elements.Fields
 
             foreach (FieldCell cell in cells)
             {
-                int x = cell.GetX();
-                int y = cell.GetY();
+                int x = cell.GetCx();
+                int y = cell.GetCy();
 
                 float drawX = x * cellWidth;
                 float drawY = y * cellHeight;
@@ -77,11 +77,13 @@ namespace Bomberman.Game.Elements.Fields
             foreach (Player player in players)
             {
                 TextureImage image = TempFindPlayerImage(player.GetDirection());
-                float drawX = player.GetPx();
-                float drawY = player.GetPy() - image.GetHeight() + cellHeight;
+                float drawX = player.GetPx() - 0.5f * cellWidth;
+                float drawY = player.GetPy() - 0.5f * cellHeight;
 
-                context.DrawRect(player.GetX() * cellWidth, player.GetY() * cellHeight, cellWidth, cellHeight, Color.White);
-                context.DrawImage(image, drawX, drawY);
+                context.DrawRect(player.GetCx() * cellWidth, player.GetCy() * cellHeight, cellWidth, cellHeight, Color.White);
+                context.DrawRect(drawX, drawY, cellWidth, cellHeight, Color.Yellow);
+
+                context.DrawImage(image, drawX, drawY - image.GetHeight() + cellHeight);
             }
         }
 

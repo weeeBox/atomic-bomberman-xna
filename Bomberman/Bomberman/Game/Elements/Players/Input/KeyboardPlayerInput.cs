@@ -32,15 +32,19 @@ namespace Bomberman.Game.Elements.Players.Input
             switch (key)
             {
                 case Keys.W:
+                case Keys.Up:
                     return PlayerAction.Up;
 
                 case Keys.S:
+                case Keys.Down:
                     return PlayerAction.Down;
 
                 case Keys.A:
+                case Keys.Left:
                     return PlayerAction.Left;
 
                 case Keys.D:
+                case Keys.Right:
                     return PlayerAction.Right;
             }
 

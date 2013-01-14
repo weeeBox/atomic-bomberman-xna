@@ -8,23 +8,30 @@ namespace Bomberman.Game.Elements.Fields
 {
     public class FieldCell : Updatable
     {
-        /* Cells coordinates */
-        protected int x;
-        protected int y;
+        /* Coordinates in cells */
+        protected int cx;
+        protected int cy;
 
-        public FieldCell(int x, int y)
+        /* Coordinates in points */
+        protected float px;
+        protected float py;
+
+        public FieldCell(int cx, int cy)
         {
-            Set(x, y);
+            Set(cx, cy);
         }
 
         public virtual void Update(float delta)
         {   
         }
 
-        public void Set(int x, int y)
+        public void Set(int cx, int cy)
         {
-            this.x = x;
-            this.y = y;
+            this.cx = cx;
+            this.cy = cy;
+
+            px = Util.Cx2Px(cx);
+            py = Util.Cy2Py(cy);
         }
 
         public virtual bool IsEmpty()
@@ -42,14 +49,24 @@ namespace Bomberman.Game.Elements.Fields
             return false;
         }
 
-        public int GetX()
+        public int GetCx()
         {
-            return x;
+            return cx;
         }
 
-        public int GetY()
+        public int GetCy()
         {
-            return y;
+            return cy;
+        }
+
+        public float GetPx()
+        {
+            return px;
+        }
+
+        public float GetPy()
+        {
+            return py;
         }
     }
 }

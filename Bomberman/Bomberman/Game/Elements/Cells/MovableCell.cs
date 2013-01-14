@@ -10,15 +10,11 @@ namespace Bomberman.Game.Elements.Cells
     {
         protected Direction direction;
 
-        /* Points coordinates */
-        protected float px;
-        protected float py;
-
         /* Points per second */
         protected float speed;
 
-        public MovableCell(int x, int y)
-            : base(x, y)
+        public MovableCell(int cx, int cy)
+            : base(cx, cy)
         {
             direction = Direction.DOWN;
         }
@@ -54,17 +50,7 @@ namespace Bomberman.Game.Elements.Cells
                 py += dy;
 
                 OnPositionChanged(oldPx, oldPy);
-
-                int oldX = x;
-                int oldY = y;
-
-                x = (int)(px / Constant.CELL_WIDTH + 0.5f);
-                y = (int)(py / Constant.CELL_HEIGHT + 0.5f);
-
-                if (oldX != x || oldY != y)
-                {
-                    OnCellChanged(oldX, oldY);
-                }
+                UpdateCellPos(px, py);
             }
         }
 
@@ -83,28 +69,18 @@ namespace Bomberman.Game.Elements.Cells
             this.px = px;
             this.py = py;
 
-            x = (int)(px / Constant.CELL_WIDTH + 0.5f);
-            y = (int)(py / Constant.CELL_HEIGHT + 0.5f);
+            UpdateCellPos(px, py);
+        }
+
+        private void UpdateCellPos(float px, float py)
+        {
+            cx = Util.Px2Cx(px);
+            cy = Util.Py2Cy(py);
         }
 
         protected void OnPositionChanged(float oldPx, float oldPy)
         {
             Field.Current().CellPosChanged(this, oldPx, oldPy);
-        }
-
-        protected void OnCellChanged(int oldX, int oldY)
-        {
-            Field.Current().CellChanged(this, oldX, oldY);
-        }
-        
-        public float GetPx()
-        {
-            return px;
-        }
-
-        public float GetPy()
-        {
-            return py;
         }
 
         public void SetSpeed(float speed)
