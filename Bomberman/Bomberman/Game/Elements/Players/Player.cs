@@ -31,36 +31,49 @@ namespace Bomberman.Game.Elements.Players
 
             alive = true;
             speed = SPEED_START;
-            direction = Direction.DOWN;
         }
 
         public override void Update(float delta)
         {
             if (moving)
             {
+                Direction direction = GetDirection();
                 switch (direction)
                 {
                     case Direction.UP:
                     {
-                        MoveY(-delta * speed);
+                        float xOffset = Util.TargetPxOffset(px);
+                        float dx = xOffset < 0 ? Math.Max(xOffset, -delta * speed) : Math.Min(xOffset, delta * speed);
+                        float dy = -delta * speed;
+                        
+                        Move(dx, dy);
                         break;
                     }
 
                     case Direction.DOWN:
                     {
-                        MoveY(delta * speed);
+                        float xOffset = Util.TargetPxOffset(px);
+                        float dx = xOffset < 0 ? Math.Max(xOffset, -delta * speed) : Math.Min(xOffset, delta * speed);
+                        float dy = delta * speed;
+                        Move(dx, dy);
                         break;
                     }
 
                     case Direction.LEFT:
                     {
-                        MoveX(-delta * speed);
+                        float yOffset = Util.TargetPyOffset(py);
+                        float dx = -delta * speed;
+                        float dy = yOffset < 0 ? Math.Max(yOffset, -delta * speed) : Math.Min(yOffset, delta * speed);
+                        Move(dx, dy);
                         break;
                     }
 
                     case Direction.RIGHT:
                     {
-                        MoveX(delta * speed);
+                        float yOffset = Util.TargetPyOffset(py);
+                        float dx = delta * speed;
+                        float dy = yOffset < 0 ? Math.Max(yOffset, -delta * speed) : Math.Min(yOffset, delta * speed);
+                        Move(dx, dy);
                         break;
                     }
                 }
@@ -135,7 +148,7 @@ namespace Bomberman.Game.Elements.Players
 
         private void SetMoveDirection(Direction direction)
         {
-            this.direction = direction;
+            SetDirection(direction);
             moving = true;
         }
 

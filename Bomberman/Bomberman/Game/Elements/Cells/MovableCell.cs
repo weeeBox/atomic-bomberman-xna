@@ -8,7 +8,8 @@ namespace Bomberman.Game.Elements.Cells
 {
     public class MovableCell : FieldCell
     {
-        protected Direction direction;
+        private Direction direction;
+        private Direction oldDirection;
 
         /* Points per second */
         protected float speed;
@@ -17,6 +18,7 @@ namespace Bomberman.Game.Elements.Cells
             : base(cx, cy)
         {
             direction = Direction.DOWN;
+            oldDirection = Direction.DOWN;
         }
 
         public Direction GetDirection()
@@ -24,9 +26,15 @@ namespace Bomberman.Game.Elements.Cells
             return direction;
         }
 
-        public void SetDirection(Direction direction)
+        public Direction GetOldDirection()
         {
-            this.direction = direction;
+            return oldDirection;
+        }
+
+        public void SetDirection(Direction newDirection)
+        {   
+            oldDirection = direction;
+            direction = newDirection;
         }
 
         public void MoveX(float dx)
