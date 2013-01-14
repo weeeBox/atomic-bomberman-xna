@@ -67,14 +67,12 @@ namespace Bomberman.Game.Elements.Players
                             }
                             else
                             {
-                                float xOffset = Util.TargetPxOffset(px);
-                                MoveX(xOffset < 0 ? Math.Max(xOffset, -delta * speed) : Math.Min(xOffset, delta * speed));
+                                MoveToTargetPx(delta);
                             }
                         }
                         else                        
                         {
-                            float xOffset = Util.TargetPxOffset(px);
-                            MoveX(xOffset < 0 ? Math.Max(xOffset, -delta * speed) : Math.Min(xOffset, delta * speed));
+                            MoveToTargetPx(delta);
                         }
 
                         break;
@@ -103,14 +101,12 @@ namespace Bomberman.Game.Elements.Players
                             }
                             else
                             {
-                                float xOffset = Util.TargetPxOffset(px);
-                                MoveX(xOffset < 0 ? Math.Max(xOffset, -delta * speed) : Math.Min(xOffset, delta * speed));
+                                MoveToTargetPx(delta);
                             }
                         }
                         else
                         {
-                            float xOffset = Util.TargetPxOffset(px);
-                            MoveX(xOffset < 0 ? Math.Max(xOffset, -delta * speed) : Math.Min(xOffset, delta * speed));
+                            MoveToTargetPx(delta);
                         }
 
                         break;
@@ -139,14 +135,12 @@ namespace Bomberman.Game.Elements.Players
                             }
                             else
                             {
-                                float yOffset = Util.TargetPyOffset(py);
-                                MoveY(yOffset < 0 ? Math.Max(yOffset, -delta * speed) : Math.Min(yOffset, delta * speed));
+                                MoveToTargetPy(delta);
                             }
                         }
                         else
                         {
-                            float yOffset = Util.TargetPyOffset(py);
-                            MoveY(yOffset < 0 ? Math.Max(yOffset, -delta * speed) : Math.Min(yOffset, delta * speed));
+                            MoveToTargetPy(delta);
                         }
                         break;
                     }
@@ -174,19 +168,29 @@ namespace Bomberman.Game.Elements.Players
                             }
                             else
                             {
-                                float yOffset = Util.TargetPyOffset(py);
-                                MoveY(yOffset < 0 ? Math.Max(yOffset, -delta * speed) : Math.Min(yOffset, delta * speed));
+                                MoveToTargetPy(delta);
                             }
                         }
                         else
                         {
-                            float yOffset = Util.TargetPyOffset(py);
-                            MoveY(yOffset < 0 ? Math.Max(yOffset, -delta * speed) : Math.Min(yOffset, delta * speed));
+                            MoveToTargetPy(delta);
                         }
                         break;
                     }
                 }
             }
+        }
+
+        private void MoveToTargetPx(float delta)
+        {
+            float xOffset = Util.TargetPxOffset(px);
+            MoveX(xOffset < 0 ? Math.Max(xOffset, -delta * speed) : Math.Min(xOffset, delta * speed));
+        }
+
+        private void MoveToTargetPy(float delta)
+        {
+            float yOffset = Util.TargetPyOffset(py);
+            MoveY(yOffset < 0 ? Math.Max(yOffset, -delta * speed) : Math.Min(yOffset, delta * speed));
         }
 
         public void OnActionPressed(PlayerInput playerInput, PlayerAction action)
