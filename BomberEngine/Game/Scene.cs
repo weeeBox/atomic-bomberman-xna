@@ -9,7 +9,7 @@ using BomberEngine.Core.Visual;
 
 namespace BomberEngine.Game
 {
-    public class Scene : Updatable, Drawable, InputListener, TimerManagerListener
+    public class Scene : Updatable, Drawable, InputListener
     {
         private TimerManager timerManager;
 
@@ -23,7 +23,7 @@ namespace BomberEngine.Game
 
         public Scene()
         {
-            timerManager = new TimerManager(this);
+            timerManager = new TimerManager();
             updatablesList = new UpdatableList();
             drawableList = new DrawableList();
         }
@@ -141,31 +141,7 @@ namespace BomberEngine.Game
 
         protected Timer ScheduleTimer(TimerCallback callback, float delay, bool repeated)
         {
-            return TimerManager.Schedule(callback, delay, repeated);
-        }
-
-        public void OnTimerAdded(TimerManager manager, Timer timer)
-        {
-            if (manager.TimersCount == 1)
-            {
-                updatablesList.Add(manager);
-            }
-        }
-
-        public void OnTimerRemoved(TimerManager manager, Timer timer)
-        {
-            if (manager.TimersCount == 0)
-            {
-                updatablesList.Remove(manager);
-            }
-        }
-
-        private TimerManager TimerManager
-        {
-            get
-            {
-                return timerManager;
-            }
+            return timerManager.Schedule(callback, delay, repeated);
         }
 
         #endregion

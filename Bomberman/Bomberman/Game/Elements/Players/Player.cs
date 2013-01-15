@@ -32,6 +32,8 @@ namespace Bomberman.Game.Elements.Players
 
             alive = true;
             speed = SPEED_START;
+            bombTimeout = 3.0f;
+            bombRadius = 2;
         }
 
         public override void Update(float delta)
@@ -285,8 +287,7 @@ namespace Bomberman.Game.Elements.Players
 
         private void SetBomb()
         {
-            Bomb bomb = new Bomb(this, false); // TODO: calculate dude
-            GetField().SetBomb(bomb);
+            GetField().SetBomb(new Bomb(this, false));
         }
 
         public float GetBombTimeout()

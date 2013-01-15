@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BomberEngine.Game
 {
-    public abstract class Application : TimerManagerListener
+    public abstract class Application
     {   
         private RootController rootController;
 
@@ -45,7 +45,7 @@ namespace BomberEngine.Game
 
         protected TimerManager CreateTimerManager()
         {
-            return new TimerManager(this);
+            return new TimerManager();
         }
 
         protected InputManager CreateInputManager()
@@ -142,22 +142,6 @@ namespace BomberEngine.Game
         public static Timer ScheduleTimer(TimerCallback callback, float delay, int numRepeats)
         {
             return timerManager.Schedule(callback, delay, numRepeats);
-        }
-
-        public void OnTimerAdded(TimerManager manager, Timer timer)
-        {
-            if (manager.TimersCount == 1)
-            {
-                AddUpdatable(manager);
-            }
-        }
-
-        public void OnTimerRemoved(TimerManager manager, Timer timer)
-        {
-            if (manager.TimersCount == 0)
-            {
-                RemoveUpdatable(manager);
-            }
         }
 
         //////////////////////////////////////////////////////////////////////////////

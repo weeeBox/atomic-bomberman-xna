@@ -5,6 +5,7 @@ using System.Text;
 using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements.Cells;
 using BomberEngine.Util;
+using BomberEngine.Core;
 
 namespace Bomberman.Game.Elements.Items
 {
@@ -17,6 +18,7 @@ namespace Bomberman.Game.Elements.Items
         private bool dud;
         private bool bouncing;
         private bool detonated;
+        private bool exploded;
 
         public Bomb(Player player, bool dud) : base(player.GetCx(), player.GetCy())
         {
@@ -26,6 +28,16 @@ namespace Bomberman.Game.Elements.Items
             this.dud = dud;
             this.bouncing = player.IsBombBouncing();
             this.detonated = player.IsBobmDetonated();
+        }
+
+        public void Start()
+        {
+            GetField().ScheduleTimer(OnBombTimer, timeout);
+        }
+
+        private void OnBombTimer(Timer timer)
+        {
+            GetField().BlowBomb(this);
         }
 
         public Player GetPlayer()

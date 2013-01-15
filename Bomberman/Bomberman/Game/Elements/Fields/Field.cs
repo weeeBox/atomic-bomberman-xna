@@ -13,7 +13,7 @@ using Bomberman.Game.Elements.Items;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class Field : Updatable
+    public class Field : UpdatableContainer
     {
         private FieldCellArray cells;
 
@@ -21,17 +21,19 @@ namespace Bomberman.Game.Elements.Fields
 
         private static Field currentField;
 
+        private TimerManager timerManager;
+
         public Field(int width, int height)
         {
             currentField = this;
 
+            timerManager = new TimerManager();
+
             cells = new FieldCellArray(width, height);
             players = new PlayerArray();
-        }
 
-        public void Update(float delta)
-        {
-            players.Update(delta);
+            AddUpdatable(timerManager);
+            AddUpdatable(players);
         }
 
         public void AddPlayer(Player player)
@@ -42,6 +44,14 @@ namespace Bomberman.Game.Elements.Fields
         public void SetBomb(Bomb bomb)
         {
             cells.Set(bomb.GetCx(), bomb.GetCy(), bomb);
+            bomb.Start();
+        }
+
+        public void BlowBomb(Bomb bomb)
+        {
+            int cx = bomb.GetCx();
+            int cy = bomb.GetCy();
+            cells.Set(cx, cy, new EmptyCell(cx, cy));
         }
 
         public PlayerArray GetPlayers()
@@ -221,6 +231,24 @@ namespace Bomberman.Game.Elements.Fields
 
             return Math.Abs(acx - bcx) < Constant.CELL_WIDTH && Math.Abs(acy - bcy) < Constant.CELL_HEIGHT;
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region TimerManager
+
+        public Timer ScheduleTimer(TimerCallback callback, float delay)
+        {
+            return ScheduleTimer(callback, delay, false);
+        }
+
+        public Timer ScheduleTimer(TimerCallback callback, float delay, bool repeated)
+        {
+            return timerManager.Schedule(callback, delay, repeated);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
 
         public static Field Current()
         {
