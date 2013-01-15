@@ -64,6 +64,16 @@ namespace Bomberman.Game.Elements.Fields
             return false;
         }
 
+        public virtual bool IsExplosion()
+        {
+            return false;
+        }
+
+        public virtual bool IsPowerup()
+        {
+            return false;
+        }
+
         public int GetCx()
         {
             return cx;
