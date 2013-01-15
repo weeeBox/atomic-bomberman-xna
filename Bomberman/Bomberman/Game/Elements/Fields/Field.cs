@@ -59,7 +59,6 @@ namespace Bomberman.Game.Elements.Fields
         public void SetBomb(Bomb bomb)
         {
             cells.Set(bomb.GetCx(), bomb.GetCy(), bomb);
-            bomb.Start();
         }
 
         public void BlowBomb(Bomb bomb)

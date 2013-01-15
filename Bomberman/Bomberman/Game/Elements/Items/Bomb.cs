@@ -14,7 +14,7 @@ namespace Bomberman.Game.Elements.Items
         private Player player;
         
         private int radius;
-        private float timeout;
+        private float remains;
         private bool dud;
         private bool bouncing;
         private bool detonated;
@@ -24,20 +24,19 @@ namespace Bomberman.Game.Elements.Items
         {
             this.player = player;
             this.radius = player.GetBombRadius();
-            this.timeout = player.GetBombTimeout();
+            remains = player.GetBombTimeout();
             this.dud = dud;
             this.bouncing = player.IsBombBouncing();
             this.detonated = player.IsBobmDetonated();
         }
 
-        public void Start()
+        public override void Update(float delta)
         {
-            GetField().ScheduleTimer(OnBombTimer, timeout);
-        }
-
-        private void OnBombTimer(Timer timer)
-        {
-            GetField().BlowBomb(this);
+            remains -= delta;
+            if (remains <= 0)
+            {
+                GetField().BlowBomb(this);
+            }
         }
 
         public Player GetPlayer()
@@ -62,7 +61,7 @@ namespace Bomberman.Game.Elements.Items
 
         public float GetTimeout()
         {
-            return timeout;
+            return remains;
         }
 
         public bool IsDud()
