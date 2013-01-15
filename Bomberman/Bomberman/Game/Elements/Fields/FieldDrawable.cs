@@ -63,6 +63,12 @@ namespace Bomberman.Game.Elements.Fields
                 {
                     image = bombImage;
                 }
+                else if (cell.IsExplosion())
+                {
+                    int x = cell.GetCx() * cellWidth;
+                    int y = cell.GetCy() * cellHeight;
+                    context.FillRect(x, y, cellWidth, cellHeight, Color.Red);
+                }
 
                 if (image != null)
                 {

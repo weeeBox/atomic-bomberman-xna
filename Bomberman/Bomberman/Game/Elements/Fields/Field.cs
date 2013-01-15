@@ -51,7 +51,59 @@ namespace Bomberman.Game.Elements.Fields
         {
             int cx = bomb.GetCx();
             int cy = bomb.GetCy();
-            cells.Set(cx, cy, new EmptyCell(cx, cy));
+
+            SetExplosion(cx, cy);
+            SpreadExplosion(bomb, cx - 1, cy);
+            SpreadExplosion(bomb, cx, cy - 1);
+            SpreadExplosion(bomb, cx + 1, cy);
+            SpreadExplosion(bomb, cx, cy + 1);
+        }
+
+        private void SpreadExplosion(Bomb bomb, int startCx, int startCy)
+        {
+            int dcx = startCx - bomb.GetCx();
+            int dcy = startCy - bomb.GetCy();
+
+            int radius = bomb.GetRadius();
+            int cx = startCx;
+            int cy = startCy;
+
+            for (int i = 0; i < radius; ++i)
+            {
+                bool spreaded = SetExplosion(cx, cy);
+                if (!spreaded)
+                {
+                    break;
+                }
+
+                SetExplosion(cx, cy);
+
+                cx += dcx;
+                cy += dcy;
+            }
+        }
+
+        private bool SetExplosion(int cx, int cy)
+        {
+            FieldCell cell = GetCell(cx, cy);
+            if (cell == null)
+            {
+                return false; // bomb hits the wall
+            }
+
+            if (cell.IsBreakable())
+            {
+                SetCell(new EmptyCell(cx, cy));
+                return false; // bomb destroyed a brick
+            }
+
+            if (cell.IsSolid())
+            {
+                return false; // bomb hits solid block
+            }
+
+            SetCell(new ExplosionCell(cx, cy));
+            return true;
         }
 
         public PlayerArray GetPlayers()
@@ -62,6 +114,11 @@ namespace Bomberman.Game.Elements.Fields
         public FieldCell GetCell(int cx, int cy)
         {
             return cells.Get(cx, cy);
+        }
+
+        public void SetCell(FieldCell cell)
+        {
+            cells.Set(cell.GetCx(), cell.GetCy(), cell);
         }
 
         public bool IsObstacleCell(int cx, int cy)
@@ -230,6 +287,11 @@ namespace Bomberman.Game.Elements.Fields
             float bcy = b.GetPy();
 
             return Math.Abs(acx - bcx) < Constant.CELL_WIDTH && Math.Abs(acy - bcy) < Constant.CELL_HEIGHT;
+        }
+
+        private bool IsInsideField(int cx, int cy)
+        {
+            return cx >= 0 && cx < GetWidth() && cy >= 0 && cy < GetHeight();
         }
 
         //////////////////////////////////////////////////////////////////////////////
