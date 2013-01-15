@@ -13,7 +13,7 @@ using Bomberman.Game.Elements.Items;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class Field : UpdatableContainer
+    public class Field : Updatable
     {
         private FieldCellArray cells;
 
@@ -31,9 +31,24 @@ namespace Bomberman.Game.Elements.Fields
 
             cells = new FieldCellArray(width, height);
             players = new PlayerArray();
+        }
 
-            AddUpdatable(timerManager);
-            AddUpdatable(players);
+        public void Update(float delta)
+        {
+            timerManager.Update(delta);
+
+            UpdateCells(delta);
+
+            players.Update(delta);
+        }
+
+        private void UpdateCells(float delta)
+        {
+            FieldCell[] cellsArray = cells.GetArray();
+            for (int i = 0; i < cellsArray.Length; ++i)
+            {
+                cellsArray[i].Update(delta);
+            }
         }
 
         public void AddPlayer(Player player)
@@ -119,6 +134,11 @@ namespace Bomberman.Game.Elements.Fields
         public void SetCell(FieldCell cell)
         {
             cells.Set(cell.GetCx(), cell.GetCy(), cell);
+        }
+
+        public void ClearCell(int cx, int cy)
+        {
+            SetCell(new EmptyCell(cx, cy));
         }
 
         public bool IsObstacleCell(int cx, int cy)
