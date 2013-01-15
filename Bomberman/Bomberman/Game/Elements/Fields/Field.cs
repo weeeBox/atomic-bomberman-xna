@@ -66,7 +66,7 @@ namespace Bomberman.Game.Elements.Fields
             int cx = bomb.GetCx();
             int cy = bomb.GetCy();
 
-            SetExplosion(cx, cy);
+            SetExplosion(bomb, cx, cy);
             SpreadExplosion(bomb, cx - 1, cy);
             SpreadExplosion(bomb, cx, cy - 1);
             SpreadExplosion(bomb, cx + 1, cy);
@@ -84,20 +84,18 @@ namespace Bomberman.Game.Elements.Fields
 
             for (int i = 0; i < radius; ++i)
             {
-                bool spreaded = SetExplosion(cx, cy);
+                bool spreaded = SetExplosion(bomb, cx, cy);
                 if (!spreaded)
                 {
                     break;
                 }
-
-                SetExplosion(cx, cy);
 
                 cx += dcx;
                 cy += dcy;
             }
         }
 
-        private bool SetExplosion(int cx, int cy)
+        private bool SetExplosion(Bomb bomb, int cx, int cy)
         {
             FieldCell cell = GetCell(cx, cy);
             if (cell == null)
@@ -114,6 +112,12 @@ namespace Bomberman.Game.Elements.Fields
             if (cell.IsSolid())
             {
                 return false; // bomb hits solid block
+            }
+
+            if (cell.IsBomb() && cell != bomb)
+            {
+                BlowBomb((Bomb)cell);
+                return true;
             }
 
             SetCell(new ExplosionCell(cx, cy));
