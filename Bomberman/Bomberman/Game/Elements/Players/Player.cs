@@ -223,7 +223,10 @@ namespace Bomberman.Game.Elements.Players
 
                 case PlayerAction.Bomb:
                 {
-                    SetBomb();
+                    if (CanSetBomb())
+                    {
+                        SetBomb();
+                    }
                     break;
                 }
             }
@@ -275,9 +278,15 @@ namespace Bomberman.Game.Elements.Players
             return alive;
         }
 
-        public Bomb SetBomb()
+        private bool CanSetBomb()
         {
-            return new Bomb(this, false); // TODO: calculate dud
+            return GetField().GetCell(cx, cy).IsEmpty();
+        }
+
+        private void SetBomb()
+        {
+            Bomb bomb = new Bomb(this, false); // TODO: calculate dude
+            GetField().SetBomb(bomb);
         }
 
         public float GetBombTimeout()

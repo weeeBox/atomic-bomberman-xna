@@ -46,22 +46,29 @@ namespace Bomberman.Game.Elements.Fields
             
             TextureImage solidImage = Helper.GetTexture(A.tex_F0SOLID);
             TextureImage breakableImage = Helper.GetTexture(A.tex_F0BRICK);
+            TextureImage bombImage = Helper.GetTexture(A.tex_BMB1001);
 
             foreach (FieldCell cell in cells)
             {
-                int x = cell.GetCx();
-                int y = cell.GetCy();
-
-                float drawX = x * cellWidth;
-                float drawY = y * cellHeight;
-
+                TextureImage image = null;
                 if (cell.IsBreakable())
                 {
-                    context.DrawImage(breakableImage, drawX, drawY);
+                    image = breakableImage;
                 }
                 else if (cell.IsSolid())
                 {
-                    context.DrawImage(solidImage, drawX, drawY);
+                    image = solidImage;
+                }
+                else if (cell.IsBomb())
+                {
+                    image = bombImage;
+                }
+
+                if (image != null)
+                {
+                    float drawX = cell.GetPx() - 0.5f * image.GetWidth();
+                    float drawY = cell.GetPy() - 0.5f * image.GetHeight();
+                    context.DrawImage(image, drawX, drawY);
                 }
             }
         }

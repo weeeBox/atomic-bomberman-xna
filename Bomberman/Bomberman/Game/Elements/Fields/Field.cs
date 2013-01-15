@@ -9,6 +9,7 @@ using BomberEngine.Game;
 using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements.Cells;
 using BomberEngine.Debugging;
+using Bomberman.Game.Elements.Items;
 
 namespace Bomberman.Game.Elements.Fields
 {
@@ -36,6 +37,11 @@ namespace Bomberman.Game.Elements.Fields
         public void AddPlayer(Player player)
         {
             players.Add(player);
+        }
+
+        public void SetBomb(Bomb bomb)
+        {
+            cells.Set(bomb.GetCx(), bomb.GetCy(), bomb);
         }
 
         public PlayerArray GetPlayers()

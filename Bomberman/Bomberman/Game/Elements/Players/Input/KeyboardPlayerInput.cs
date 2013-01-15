@@ -46,6 +46,9 @@ namespace Bomberman.Game.Elements.Players.Input
                 case Keys.D:
                 case Keys.Right:
                     return PlayerAction.Right;
+
+                case Keys.Space:
+                    return PlayerAction.Bomb;
             }
 
             return PlayerAction.Count;

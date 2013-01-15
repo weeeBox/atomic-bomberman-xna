@@ -105,15 +105,5 @@ namespace Bomberman.Game.Elements.Cells
         {
             return speed;
         }
-
-        public virtual bool IsBomb()
-        {
-            return false;
-        }
-
-        public virtual bool IsPlayer()
-        {
-            return false;
-        }
     }
 }
