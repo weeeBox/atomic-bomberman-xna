@@ -16,6 +16,31 @@ namespace Bomberman.Content
             this.info = info;
         }
 
+        public String GetName()
+        {
+            return info.name;
+        }
+
+        public FieldData GetFieldData()
+        {
+            return info.fieldData;
+        }
+
+        public PlayerLocationInfo[] GetPlayerLocations()
+        {
+            return info.playerLocations;
+        }
+
+        public PowerupInfo[] GetPowerupInfo()
+        {
+            return info.powerupInfo;
+        }
+
+        public int GetBrickDensity()
+        {
+            return info.brickDensity;
+        }
+
         protected override void OnDispose()
         {
         }

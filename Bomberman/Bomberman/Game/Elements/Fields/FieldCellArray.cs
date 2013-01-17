@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BomberEngine.Debugging;
+using BombermanCommon.Resources.Scheme;
+using Bomberman.Game.Elements.Cells;
 
 namespace Bomberman.Game.Elements.Fields
 {
@@ -13,15 +15,44 @@ namespace Bomberman.Game.Elements.Fields
 
         private FieldCell[] cells;
 
-        public FieldCellArray(int width, int height)
+        public FieldCellArray(FieldData data)
         {
-            Debug.CheckArgument(width > 0, "Invalid width value: " + width);
-            Debug.CheckArgument(height > 0, "Invalid height value: " + height);
+            width = data.GetWidth();
+            height = data.GetHeight();
 
-            this.width = width;
-            this.height = height;
+            FieldBlocks[] blockData = data.GetDataArray();
+            cells = new FieldCell[blockData.Length];
 
-            cells = new FieldCell[width * height];
+            int index = 0;
+            for (int y = 0; y < height; ++y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    FieldBlocks block = blockData[index];
+                    switch (block)
+                    {
+                        case FieldBlocks.Blank:
+                        {
+                            cells[index] = new EmptyCell(x, y);
+                            break;
+                        }
+
+                        case FieldBlocks.Brick:
+                        {
+                            cells[index] = new BrickCell(x, y, false);
+                            break;
+                        }
+
+                        case FieldBlocks.Solid:
+                        {
+                            cells[index] = new BrickCell(x, y, true);
+                            break;
+                        }
+                    }
+
+                    ++index;
+                }
+            }
         }
 
         public FieldCell[] GetArray()

@@ -6,6 +6,7 @@ using BomberEngine.Core.Assets;
 using Microsoft.Xna.Framework.Content;
 using Assets;
 using BomberEngine.Core.Assets.Loaders;
+using Bomberman.Content;
 
 namespace Bomberman
 {
@@ -24,6 +25,11 @@ namespace Bomberman
             {
                 AddToQueue(info);
             }
+        }
+
+        public Scheme GetScheme(int id)
+        {
+            return (Scheme)GetAsset(id);
         }
     }
 }

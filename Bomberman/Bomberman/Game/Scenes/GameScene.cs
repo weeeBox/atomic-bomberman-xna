@@ -11,6 +11,7 @@ using Bomberman.Game.Elements.Fields;
 using Bomberman.Game.Elements.Cells;
 using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements.Players.Input;
+using Bomberman.Content;
 
 namespace Bomberman.Game.Scenes
 {
@@ -42,57 +43,8 @@ namespace Bomberman.Game.Scenes
 
         private Field LoadField()
         {
-            int fieldWidth = FIELD_DATA[0].Length;
-            int fieldHeight = FIELD_DATA.Length;
-
-            Field field = new Field(fieldWidth, fieldHeight);
-            FieldCellArray cells = field.GetCells();
-
-            for (int y = 0; y < FIELD_DATA.Length; ++y)
-            {
-                String data = FIELD_DATA[y];
-                for (int x = 0; x < data.Length; ++x)
-                {
-                    char chr = data[x];
-                    switch (chr)
-                    {
-                        case '.':
-                        {
-                            cells.Set(x, y, new EmptyCell(x, y));
-                            break;
-                        }
-
-                        case '#':
-                        {
-                            cells.Set(x, y, new BrickCell(x, y, true));
-                            break;
-                        }
-
-                        case ':':
-                        {
-                            cells.Set(x, y, new BrickCell(x, y, false));
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return field;
+            Scheme scheme = Helper.GetScheme(A.sch_X);
+            return new Field(scheme);
         }
-
-        private static String[] FIELD_DATA =
-        {
-            ".....#:::#.....",
-            "#.....#:#.....#",
-            ":#.....:.....#:",
-            "::#.........#::",
-            ":::#.......#:::",
-            "::::.......::::",
-            ":::#.......#:::",
-            "::#.........#::",
-            ":#.....:.....#:",
-            "#.....#:#.....#",
-            ".....#:::#....."
-        };
     }
 }

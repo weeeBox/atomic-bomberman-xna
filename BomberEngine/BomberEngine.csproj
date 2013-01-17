@@ -98,7 +98,6 @@
     <Compile Include="Core\Assets\AssetManagerListener.cs" />
     <Compile Include="Core\Assets\AssetTypeBase.cs" />
     <Compile Include="Core\Assets\Loaders\TextureLoader.cs" />
-    <Compile Include="Core\Assets\Types\Scheme.cs" />
     <Compile Include="Core\Assets\Types\TextureImage.cs" />
     <Compile Include="Core\Visual\Camera.cs" />
     <Compile Include="Core\Visual\DrawableElementComposite.cs" />

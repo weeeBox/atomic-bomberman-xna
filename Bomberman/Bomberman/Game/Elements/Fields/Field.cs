@@ -10,6 +10,7 @@ using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements.Cells;
 using BomberEngine.Debugging;
 using Bomberman.Game.Elements.Items;
+using Bomberman.Content;
 
 namespace Bomberman.Game.Elements.Fields
 {
@@ -22,14 +23,14 @@ namespace Bomberman.Game.Elements.Fields
         private static Field currentField;
 
         private TimerManager timerManager;
-
-        public Field(int width, int height)
+        
+        public Field(Scheme scheme)
         {
             currentField = this;
 
             timerManager = new TimerManager();
 
-            cells = new FieldCellArray(width, height);
+            cells = new FieldCellArray(scheme.GetFieldData());
             players = new PlayerArray();
         }
 
