@@ -18,13 +18,12 @@ namespace Bomberman.Content
     /// be a part of your main game project, and not the Content Pipeline
     /// Extension Library project.
     /// </summary>
-    public class SchemeReader : ContentTypeReader<SchemeResource>
+    public class SchemeReader : ContentTypeReader<SchemeAsset>
     {
-        protected override SchemeResource Read(ContentReader input, SchemeResource existingInstance)
+        protected override SchemeAsset Read(ContentReader input, SchemeAsset existingInstance)
         {
-            SchemeResource scheme = new SchemeResource();
-            scheme.Version = input.ReadInt32();
-            scheme.Name = input.ReadString();
+            SchemeAsset scheme = new SchemeAsset();
+            scheme.name = input.ReadString();
 
             // field
             int fieldWidth = input.ReadInt32();
@@ -36,24 +35,24 @@ namespace Bomberman.Content
                 for (int x = 0; x < fieldWidth; ++x)
                 {
                     int block = input.ReadInt32();
-                    fieldData.Set(x, y, (EnumBlocks)block);
+                    fieldData.Set(x, y, (FieldBlocks)block);
                 }
             }
-            scheme.FieldData = fieldData;
+            scheme.fieldData = fieldData;
 
             // players locations
             int playerInfoCount = input.ReadInt32();
-            PlayerInfo[] playerLocations = new PlayerInfo[playerInfoCount];
+            PlayerLocationInfo[] playerLocations = new PlayerLocationInfo[playerInfoCount];
             for (int i = 0; i < playerInfoCount; ++i)
             {
-                PlayerInfo playerInfo = new PlayerInfo();
+                PlayerLocationInfo playerInfo = new PlayerLocationInfo();
                 playerInfo.x = input.ReadInt32();
                 playerInfo.y = input.ReadInt32();
                 playerInfo.team = input.ReadInt32();
 
                 playerLocations[i] = playerInfo;
             }
-            scheme.PlayerLocations = playerLocations;
+            scheme.playerLocations = playerLocations;
 
             // powerups
             int powerupInfoCount = input.ReadInt32();
@@ -61,14 +60,14 @@ namespace Bomberman.Content
             for (int i = 0; i < powerupInfoCount; ++i)
             {
                 PowerupInfo info = new PowerupInfo();
-                info.bornWith = input.ReadInt32();
+                info.bornWith = input.ReadBoolean();
                 info.hasOverride = input.ReadBoolean();
                 info.overrideValue = input.ReadInt32();
                 info.forbidden = input.ReadBoolean();
 
                 powerupInfo[i] = info;
             }
-            scheme.PowerupInfo = powerupInfo;
+            scheme.powerupInfo = powerupInfo;
 
             return scheme;
         }

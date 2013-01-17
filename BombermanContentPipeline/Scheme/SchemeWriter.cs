@@ -10,32 +10,25 @@ using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using BombermanCommon.Resources.Scheme;
 
 namespace BombermanContentPipeline.Scheme
-{
-    /// <summary>
-    /// This class will be instantiated by the XNA Framework Content Pipeline
-    /// to write the specified data type into binary .xnb format.
-    ///
-    /// This should be part of a Content Pipeline Extension Library project.
-    /// </summary>
+{   
     [ContentTypeWriter]
-    public class SchemeWriter : ContentTypeWriter<SchemeResource>
+    public class SchemeWriter : ContentTypeWriter<SchemeAsset>
     {
-        protected override void Write(ContentWriter output, SchemeResource scheme)
-        {
-            output.Write(scheme.Version);
-            output.Write(scheme.Name);
+        protected override void Write(ContentWriter output, SchemeAsset scheme)
+        {   
+            output.Write(scheme.name);
 
-            FieldData fieldData = scheme.FieldData;
-            output.Write(fieldData.Width);
-            output.Write(fieldData.Height);
+            FieldData fieldData = scheme.fieldData;
+            output.Write(fieldData.GetWidth());
+            output.Write(fieldData.GetHeight());
 
-            EnumBlocks[] blocks = fieldData.Data;
+            FieldBlocks[] blocks = fieldData.GetDataArray();
             for (int i = 0; i < blocks.Length; ++i)
             {
                 output.Write((int)blocks[i]);
             }
 
-            PlayerInfo[] playerInfo = scheme.PlayerLocations;
+            PlayerLocationInfo[] playerInfo = scheme.playerLocations;
             output.Write(playerInfo.Length);
             for (int i = 0; i < playerInfo.Length; ++i)
             {
@@ -44,7 +37,7 @@ namespace BombermanContentPipeline.Scheme
                 output.Write(playerInfo[i].team);
             }
 
-            PowerupInfo[] powerupInfo = scheme.PowerupInfo;
+            PowerupInfo[] powerupInfo = scheme.powerupInfo;
             output.Write(powerupInfo.Length);
             for (int i = 0; i < powerupInfo.Length; ++i)
             {

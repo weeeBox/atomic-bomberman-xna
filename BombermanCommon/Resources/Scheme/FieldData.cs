@@ -7,7 +7,7 @@ namespace BombermanCommon.Resources.Scheme
 {
     public class FieldData
     {
-        private EnumBlocks[] data;
+        private FieldBlocks[] data;
         private int width;
         private int height;
 
@@ -16,32 +16,28 @@ namespace BombermanCommon.Resources.Scheme
             this.width = width;
             this.height = height;
 
-            data = new EnumBlocks[width * height];
-            for (int i = 0; i < data.Length; ++i)
-            {
-                data[i] = EnumBlocks.BLOCK_BLANK;
-            }
+            data = new FieldBlocks[width * height];
         }
 
-        public EnumBlocks[] Data
-        {
-            get { return data; }
-        }
-
-        public int Width
-        {
-            get { return width; }
-        }
-
-        public int Height
-        {
-            get { return height; }
-        }
-
-        public void Set(int x, int y, EnumBlocks block)
+        public void Set(int x, int y, FieldBlocks block)
         {
             int index = y * width + x;
             data[index] = block;
+        }
+
+        public int GetWidth()
+        {
+            return width;
+        }
+
+        public int GetHeight()
+        {
+            return height;
+        }
+
+        public FieldBlocks[] GetDataArray()
+        {
+            return data;
         }
     }
 }

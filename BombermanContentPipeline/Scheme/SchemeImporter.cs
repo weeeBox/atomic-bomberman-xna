@@ -11,42 +11,33 @@ using BombermanCommon.Resources.Scheme;
 namespace BombermanContentPipeline.Scheme
 {
     [ContentImporter(".sch", DisplayName = "Scheme Importer", DefaultProcessor = "SchemeProcessor")]
-    public class SchemeImporter : ContentImporter<SchemeResource>
-    {
-        /// <summary>
-        /// Number of tiles in one line of the field.
-        /// </summary>
+    public class SchemeImporter : ContentImporter<SchemeAsset>
+    {   
         private const int FIELD_WIDTH = 15;
-
-        /// <summary>
-        /// Number of tiles in one column of the field.
-        /// </summary>
         private const int FIELD_HEIGHT = 11;
-
-        /// <summary>
-        /// Maximum number of players playing simultanously
-        /// </summary>
         private const int MAX_PLAYERS = 10;
+        private const int MAX_POWERUPS = 13;
 
-        public override SchemeResource Import(string filename, ContentImporterContext context)
+        public override SchemeAsset Import(string filename, ContentImporterContext context)
         {
-            string[] lines = File.ReadAllLines(filename);
+            String[] lines = File.ReadAllLines(filename);
             return Read(lines);
         }
 
-        private SchemeResource Read(string[] lines)
+        private SchemeAsset Read(String[] lines)
         {
-            SchemeResource scheme = new SchemeResource();
+            NameReader nameReader = new NameReader();
+            BrickDensityReader densityReader = new BrickDensityReader();
+            FieldDataReader dataReader = new FieldDataReader(FIELD_WIDTH, FIELD_HEIGHT);
+            PlayerLocationReader playersReader = new PlayerLocationReader(MAX_PLAYERS);
+            PowerupInfoReader powerupReader = new PowerupInfoReader(MAX_POWERUPS);
 
-            FieldData fieldData = new FieldData(FIELD_WIDTH, FIELD_HEIGHT);
-            PlayerInfo[] playerLocations = new PlayerInfo[MAX_PLAYERS];
-
-            int maxPowerups = (int)EnumPowerups.PU_NUMBER_OF;
-            PowerupInfo[] powerupInfo = new PowerupInfo[maxPowerups];
-
-            scheme.FieldData = fieldData;
-            scheme.PlayerLocations = playerLocations;
-            scheme.PowerupInfo = powerupInfo;
+            Dictionary<char, SchemeSectionReader> lookup = new Dictionary<char, SchemeSectionReader>();
+            lookup['N'] = nameReader;
+            lookup['B'] = densityReader;
+            lookup['R'] = dataReader;
+            lookup['S'] = playersReader;
+            lookup['P'] = powerupReader;
 
             for (int lineIndex = 0; lineIndex < lines.Length; ++lineIndex)
             {
@@ -57,185 +48,200 @@ namespace BombermanContentPipeline.Scheme
                     continue;
                 }
 
+                if (line.StartsWith(";"))
+                {
+                    continue;
+                }
 
                 if (line[0] == '-')
                 {
-                    switch (line[1])
+                    char type = line[1];
+                    SchemeSectionReader reader = null;
+                    lookup.TryGetValue(type, out reader);
+
+                    if (reader != null)
                     {
-                        case 'V':
-                            {
-                                scheme.Version = ParseInt(line.Substring(3, 2), -1);
-                                break;
-                            }
-
-                        case 'N':
-                            {
-                                scheme.Name = line.Substring(3);
-                                break;
-                            }
-
-                        case 'B':
-                            {
-                                int brickDensity = ParseInt(line.Substring(3, 2), -1);
-
-                                if (brickDensity < 0 || brickDensity > 100)
-                                {
-                                    throw new InvalidContentException("Invalid brick density value: " + brickDensity);
-                                }
-
-                                break;
-                            }
-
-                        case 'R':
-                            {
-                                if (line.Length < 21)
-                                {
-                                    throw new InvalidContentException("Invalid line: " + line);
-                                }
-
-                                int y = ParseInt(line.Substring(3, 2), -1);
-
-                                if (y < 0 || y > 10)
-                                {
-                                    throw new InvalidContentException("Invalid y value: " + y);
-                                }
-
-                                for (int x = 0; x < FIELD_WIDTH; ++x)
-                                {
-                                    switch (line[6 + x])
-                                    {
-                                        case '#':
-                                            fieldData.Set(x, y, EnumBlocks.BLOCK_SOLID);
-                                            break;
-                                        case ':':
-                                            fieldData.Set(x, y, EnumBlocks.BLOCK_BREAKABLE);
-                                            break;
-                                        case '.':
-                                            break;
-                                        default:
-                                            throw new InvalidContentException("Invalid block type: '" + line[6 + x] + "'");
-                                    }
-                                }
-                                break;
-                            }
-
-                        case 'S': // PlayerLocations
-                            {
-                                string positionLine = line.Substring(3);
-                                string[] result = positionLine.Split(',');
-
-                                if (result.Length < 3)
-                                {
-                                    throw new InvalidContentException("Invalid player info: " + result);
-                                }
-
-                                int plno = ParseInt(result[0], -1);
-                                int x = ParseInt(result[1], -1);
-                                int y = ParseInt(result[2], -1);
-                                int team = -1;
-
-                                // if team is specified...
-                                if (result.Length == 4)
-                                {
-                                    team = ParseInt(result[3], -1);
-                                }
-
-                                playerLocations[plno].x = x;
-                                playerLocations[plno].y = y;
-                                playerLocations[plno].team = team;
-                                break;
-                            }
-
-                        case 'P': // Powerup Infos
-                            {
-                                String powerupLine = line.Substring(3);
-                                string[] result = powerupLine.Split(',');
-
-                                if (result.Length < 6)
-                                {
-                                    throw new InvalidContentException("Invalid powerups info: " + powerupLine);
-                                }
-
-                                int puno = ParseInt(result[0], -1);
-                                int bw = ParseInt(result[1], -1);
-                                int has_ov = ParseInt(result[2]);
-                                int ov = ParseInt(result[3]);
-                                int fb = ParseInt(result[4]);
-
-                                powerupInfo[puno].bornWith = bw;
-                                powerupInfo[puno].hasOverride = has_ov == 0 ? false : true;
-                                powerupInfo[puno].overrideValue = ov;
-                                powerupInfo[puno].forbidden = fb == 0 ? false : true;
-                                break;
-                            }
-
-                        // version 3:
-
-                        case 'A':      // Arrows
-                            //                    -A,E,1,0
-                            //                    -A,E,1,1
-                            //                    -A,E,1,2
-                            //                    -A,W,1,3
-                            //                    -A,N,1,4
-                            //                    -A,E,1,5
-                            break;
-
-                        case 'C':     // Conveyer Belt
-                            //                    -C,E,1,2
-                            //                    -C,S,2,2
-                            //                    -C,W,3,2
-                            //                    -C,S,4,2
-                            //                    -C,N,5,2
-                            //                    -C,W,6,2
-                            //                    -C,E,7,2
-                            break;
-
-                        case 'T':      // Trampoline
-                            //                   -T,2,2
-                            //                   -T,-3,2
-                            //                   -T,2,-3
-                            //                   -T,-3,-3
-                            //                   -T,H,H
-                            //                   -T,H,H
-                            //                   -T,H,H
-                            //                   -T,H,H
-                            break;
-
-                        case 'W':     // Warp Holes
-                            //-W,1,0, 0, 0,7
-                            //-W,1,1, 0, 5,8
-                            //-W,1,2, 0,10,4
-                            //-W,1,3, 7, 0,5
-                            break;
-
-                        case 'I':     // Ice
-                            //                    -I,1,2
-                            //                    -I,2,2
-                            //                    -I,3,2
-                            //                    -I,4,2
-                            //                    -I,5,2
-                            //                    -I,6,2
-                            //                    -I,7,2
-                            break;
-
+                        String[] tokens = line.Substring(3).Split(',');
+                        reader.Read(tokens);
                     }
-
                 }
             }
 
+            SchemeAsset scheme = new SchemeAsset();
+            scheme.name = nameReader.GetName();
+            scheme.brickDensity = densityReader.GetDensity();
+            scheme.fieldData = dataReader.GetData();
+            scheme.playerLocations = playersReader.GetData();
+            scheme.powerupInfo = powerupReader.GetData();
+
             return scheme;
         }
+    }
 
-        private int ParseInt(String str)
+    abstract class SchemeSectionReader
+    {
+        public abstract void Read(String[] tokens);
+
+        protected int ReadInt(String str)
         {
-            return ParseInt(str, -1);
+            return ReadInt(str, -1);
         }
 
-        private int ParseInt(String str, int defaultValue)
+        protected int ReadInt(String str, int defaultValue)
         {
             int value = defaultValue;
-            int.TryParse(str, out defaultValue);
+            int.TryParse(str.Trim(), out defaultValue);
             return value;
+        }
+
+        protected bool ReadBool(String str)
+        {
+            return ReadBool(str, false);
+        }
+
+        protected bool ReadBool(String str, bool defaultValue)
+        {
+            return ReadInt(str, 0) == 1;
+        }
+    }
+
+    class NameReader : SchemeSectionReader
+    {
+        private String name;
+
+        public override void Read(String[] tokens)
+        {
+            name = tokens[0];
+        }
+
+        public String GetName()
+        {
+            return name;
+        }
+    }
+
+    class BrickDensityReader : SchemeSectionReader
+    {
+        private int density;
+
+        public override void Read(String[] tokens)
+        {
+            density = ReadInt(tokens[0]);
+        }
+
+        public int GetDensity()
+        {
+            return density;
+        }
+    }
+
+    class FieldDataReader : SchemeSectionReader
+    {
+        private const char BLOCK_SOLID = '#';
+        private const char BLOCK_BRICK = ':';
+        private const char BLOCK_BLANK = '.';
+
+        private FieldData data;
+        private int rowIndex;
+
+        public FieldDataReader(int width, int height)
+        {
+            data = new FieldData(width, height);
+        }
+
+        public override void Read(String[] tokens)
+        {
+            String dataString = tokens[1];
+
+            for (int colIndex = 0; colIndex < dataString.Length; ++colIndex)
+            {
+                char chr = dataString[colIndex];
+                switch (chr)
+                {
+                    case BLOCK_SOLID:
+                    {
+                        data.Set(colIndex, rowIndex, FieldBlocks.Solid);
+                        break;
+                    }
+                    case BLOCK_BRICK:
+                    {
+                        data.Set(colIndex, rowIndex, FieldBlocks.Brick);
+                        break;
+                    }
+                    case BLOCK_BLANK:
+                    {
+                        data.Set(colIndex, rowIndex, FieldBlocks.Blank);
+                        break;
+                    }
+                }
+            }
+
+            ++rowIndex;
+        }
+
+        public FieldData GetData()
+        {
+            return data;
+        }
+    }
+
+    class PlayerLocationReader : SchemeSectionReader
+    {
+        private PlayerLocationInfo[] data;
+        
+        private int playerIndex;
+
+        public PlayerLocationReader(int playersCount)
+        {
+            data = new PlayerLocationInfo[playersCount];
+        }
+
+        public override void Read(String[] tokens)
+        {
+            PlayerLocationInfo info = new PlayerLocationInfo();
+
+            info.index = ReadInt(tokens[0]);
+            info.x = ReadInt(tokens[1]);
+            info.y = ReadInt(tokens[2]);
+            info.team = tokens.Length > 3 ? ReadInt(tokens[3]) : -1;
+
+            data[playerIndex] = info;
+            ++playerIndex;
+        }
+
+        public PlayerLocationInfo[] GetData()
+        {
+            return data;
+        }
+    }
+
+    class PowerupInfoReader : SchemeSectionReader
+    {
+        private PowerupInfo[] data;
+        private int powerupIndex;
+
+        public PowerupInfoReader(int dataSize)
+        {
+            data = new PowerupInfo[dataSize];
+        }
+
+        public override void Read(String[] tokens)
+        {
+            PowerupInfo info = new PowerupInfo();
+            info.powerupIndex = ReadInt(tokens[0]);
+            info.bornWith = ReadBool(tokens[1]);
+            info.hasOverride = ReadBool(tokens[2]);
+            info.overrideValue = ReadInt(tokens[3]);
+            info.forbidden = ReadBool(tokens[4]);
+
+            data[powerupIndex] = info;
+
+            ++powerupIndex;
+        }
+
+        public PowerupInfo[] GetData()
+        {
+            return data;
         }
     }
 }
