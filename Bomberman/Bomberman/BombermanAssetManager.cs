@@ -5,6 +5,7 @@ using System.Text;
 using BomberEngine.Core.Assets;
 using Microsoft.Xna.Framework.Content;
 using Assets;
+using BomberEngine.Core.Assets.Loaders;
 
 namespace Bomberman
 {
@@ -12,7 +13,8 @@ namespace Bomberman
     {
         public BombermanAssetManager(ContentManager contentManager)
             : base(contentManager, A.RES_COUNT)
-        {   
+        {
+            AddLoader(AssetType.Scheme, new SchemeLoader());
         }
 
         public void AddPackToLoad(AssetPacks.Packs pack)
