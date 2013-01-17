@@ -9,6 +9,7 @@
 	<property name="dir.res" value="." />
 	<property name="dir.gfx" value="${dir.res}/Gfx" />
 	<property name="dir.sound" value="${dir.res}/Sfx" />
+	<property name="dir.schemes" value="${dir.res}/Data" />
 	
 	<property name="csproject.name" value="Bomberman"/>
 	<property name="csproject.content" value="../${csproject.name}/${csproject.name}Content" />

@@ -96,8 +96,9 @@
     <Compile Include="Core\Assets\AssetLoader.cs" />
     <Compile Include="Core\Assets\AssetLoadInfo.cs" />
     <Compile Include="Core\Assets\AssetManagerListener.cs" />
-    <Compile Include="Core\Assets\AssetType.cs" />
+    <Compile Include="Core\Assets\AssetTypeBase.cs" />
     <Compile Include="Core\Assets\Loaders\TextureLoader.cs" />
+    <Compile Include="Core\Assets\Types\Scheme.cs" />
     <Compile Include="Core\Assets\Types\TextureImage.cs" />
     <Compile Include="Core\Visual\Camera.cs" />
     <Compile Include="Core\Visual\DrawableElementComposite.cs" />
@@ -132,7 +133,12 @@
     <Compile Include="Util\ObjectsList.cs" />
     <Compile Include="Util\StringUtils.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\BombermanCommon\BombermanCommon.csproj">
+      <Project>{08E52DD3-F9C0-4C5A-8F1C-3BB6E9B06396}</Project>
+      <Name>BombermanCommon</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

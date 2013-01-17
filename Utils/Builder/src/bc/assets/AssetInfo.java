@@ -7,6 +7,11 @@ public class AssetInfo
 	private String type;
 	private String typePrefix;
 
+	public AssetInfo(String type, String typePrefix, String importer)
+	{
+		this(type, typePrefix, importer, null);
+	}
+	
 	public AssetInfo(String type, String typePrefix, String importer, String processor)
 	{
 		this.type = type;
@@ -19,7 +24,7 @@ public class AssetInfo
 	{
 		return importer;
 	}
-
+	
 	public String getProcessor()
 	{
 		return processor;

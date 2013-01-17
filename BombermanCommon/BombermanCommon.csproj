@@ -98,7 +98,7 @@
     <Compile Include="Resources\Scheme\FieldData.cs" />
     <Compile Include="Resources\Scheme\PlayerLocationInfo.cs" />
     <Compile Include="Resources\Scheme\PowerupInfo.cs" />
-    <Compile Include="Resources\Scheme\SchemeAsset.cs" />
+    <Compile Include="Resources\Scheme\SchemeInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

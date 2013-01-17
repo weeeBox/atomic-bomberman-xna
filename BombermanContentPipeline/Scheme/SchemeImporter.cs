@@ -11,20 +11,20 @@ using BombermanCommon.Resources.Scheme;
 namespace BombermanContentPipeline.Scheme
 {
     [ContentImporter(".sch", DisplayName = "Scheme Importer", DefaultProcessor = "SchemeProcessor")]
-    public class SchemeImporter : ContentImporter<SchemeAsset>
+    public class SchemeImporter : ContentImporter<SchemeInfo>
     {   
         private const int FIELD_WIDTH = 15;
         private const int FIELD_HEIGHT = 11;
         private const int MAX_PLAYERS = 10;
         private const int MAX_POWERUPS = 13;
 
-        public override SchemeAsset Import(string filename, ContentImporterContext context)
+        public override SchemeInfo Import(string filename, ContentImporterContext context)
         {
             String[] lines = File.ReadAllLines(filename);
             return Read(lines);
         }
 
-        private SchemeAsset Read(String[] lines)
+        private SchemeInfo Read(String[] lines)
         {
             NameReader nameReader = new NameReader();
             BrickDensityReader densityReader = new BrickDensityReader();
@@ -67,7 +67,7 @@ namespace BombermanContentPipeline.Scheme
                 }
             }
 
-            SchemeAsset scheme = new SchemeAsset();
+            SchemeInfo scheme = new SchemeInfo();
             scheme.name = nameReader.GetName();
             scheme.brickDensity = densityReader.GetDensity();
             scheme.fieldData = dataReader.GetData();

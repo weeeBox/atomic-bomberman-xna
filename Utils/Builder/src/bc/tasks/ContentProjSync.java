@@ -107,9 +107,9 @@ public class ContentProjSync
 		element.addAttribute(ELEMENT_INCLUDE, res.getDestFile().getName());
 		element.addElement(ELEMENT_ASSET_NAME).addText(res.getShortName());
 		element.addElement(ELEMENT_IMPORTER).addText(res.getImporter());
-		String processor = res.getProcessor();
-		if (processor != null)
+		if (res.hasProcessor())
 		{
+			String processor = res.getProcessor();
 			element.addElement(ELEMENT_PROCESSOR).addText(processor);
 		}
 		element.addElement(ELEMENT_GENERATED_MARKER).addText("true");

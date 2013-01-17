@@ -12,9 +12,9 @@ using BombermanCommon.Resources.Scheme;
 namespace BombermanContentPipeline.Scheme
 {   
     [ContentTypeWriter]
-    public class SchemeWriter : ContentTypeWriter<SchemeAsset>
+    public class SchemeWriter : ContentTypeWriter<SchemeInfo>
     {
-        protected override void Write(ContentWriter output, SchemeAsset scheme)
+        protected override void Write(ContentWriter output, SchemeInfo scheme)
         {   
             output.Write(scheme.name);
 

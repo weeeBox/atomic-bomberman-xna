@@ -63,6 +63,7 @@
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <Private>False</Private>
     </Reference>
@@ -108,9 +109,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets.cs" />
+    <Compile Include="AssetType.cs" />
     <Compile Include="BombermanApplication.cs" />
     <Compile Include="BombermanAssetManager.cs" />
     <Compile Include="BombermanRootController.cs" />
+    <Compile Include="Content\Scheme.cs" />
+    <Compile Include="Content\SchemeLoader.cs" />
     <Compile Include="Content\SchemeReader.cs" />
     <Compile Include="Game\Constant.cs" />
     <Compile Include="Game\Elements\Cells\BrickCell.cs" />

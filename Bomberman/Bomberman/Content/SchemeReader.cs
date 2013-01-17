@@ -18,11 +18,11 @@ namespace Bomberman.Content
     /// be a part of your main game project, and not the Content Pipeline
     /// Extension Library project.
     /// </summary>
-    public class SchemeReader : ContentTypeReader<SchemeAsset>
+    public class SchemeReader : ContentTypeReader<SchemeInfo>
     {
-        protected override SchemeAsset Read(ContentReader input, SchemeAsset existingInstance)
+        protected override SchemeInfo Read(ContentReader input, SchemeInfo existingInstance)
         {
-            SchemeAsset scheme = new SchemeAsset();
+            SchemeInfo scheme = new SchemeInfo();
             scheme.name = input.ReadString();
 
             // field

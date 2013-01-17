@@ -122,6 +122,11 @@ public abstract class Asset
 		return assetInfo.getProcessor();
 	}
 	
+	public boolean hasProcessor()
+	{
+		return getProcessor() != null;
+	}
+	
 	public String getResourceType()
 	{
 		return assetInfo.getType();

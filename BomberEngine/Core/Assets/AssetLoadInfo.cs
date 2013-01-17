@@ -9,9 +9,9 @@ namespace BomberEngine.Core.Assets
     {
         public String path;
         public int index;
-        public AssetType type;
+        public int type;
 
-        public AssetLoadInfo(String path, int index, AssetType type)
+        public AssetLoadInfo(String path, int index, int type)
         {
             this.path = path;
             this.index = index;

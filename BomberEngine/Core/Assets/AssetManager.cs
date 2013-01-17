@@ -16,7 +16,7 @@ namespace BomberEngine.Core.Assets
 
         private AssetManagerListener listener;
 
-        private Dictionary<AssetType, AssetLoader> loaders;
+        private Dictionary<int, AssetLoader> loaders;
 
         private Asset[] assets;
 
@@ -37,8 +37,8 @@ namespace BomberEngine.Core.Assets
 
         private void InitLoaders()
         {
-            loaders = new Dictionary<AssetType, AssetLoader>();
-            loaders.Add(AssetType.Texture, new TextureLoader());
+            loaders = new Dictionary<int, AssetLoader>();
+            loaders.Add(AssetTypeBase.Texture, new TextureLoader());
         }
 
         public void AddToQueue(AssetLoadInfo info)
@@ -63,7 +63,7 @@ namespace BomberEngine.Core.Assets
             loadingTimer = Application.ScheduleTimer(OnTimer, 0.05f);
         }
 
-        public void AddLoader(AssetType type, AssetLoader loader)
+        protected void AddLoader(int type, AssetLoader loader)
         {
             loaders.Add(type, loader);
         }

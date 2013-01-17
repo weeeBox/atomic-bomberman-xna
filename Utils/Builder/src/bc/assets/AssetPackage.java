@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bc.assets.types.PixelFontRes;
+import bc.assets.types.SchemeAsset;
 import bc.assets.types.TextureAsset;
 import bc.assets.types.MusicAsset;
 import bc.assets.types.SoundAsset;
@@ -76,6 +77,11 @@ public class AssetPackage
 	public void addMusic(MusicAsset music)
 	{
 		addResource(music);
+	}
+	
+	public void addScheme(SchemeAsset scheme)
+	{
+		addResource(scheme);
 	}
 
 	private void addResource(Asset res)

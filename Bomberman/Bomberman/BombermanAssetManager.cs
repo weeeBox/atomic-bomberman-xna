@@ -12,7 +12,7 @@ namespace Bomberman
     {
         public BombermanAssetManager(ContentManager contentManager)
             : base(contentManager, A.RES_COUNT)
-        {
+        {   
         }
 
         public void AddPackToLoad(AssetPacks.Packs pack)
