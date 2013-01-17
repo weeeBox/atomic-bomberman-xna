@@ -7,7 +7,7 @@ using Bomberman.Game.Elements.Cells;
 using BomberEngine.Util;
 using BomberEngine.Core;
 
-namespace Bomberman.Game.Elements.Items
+namespace Bomberman.Game.Elements.Cells
 {
     public class Bomb : MovableCell
     {

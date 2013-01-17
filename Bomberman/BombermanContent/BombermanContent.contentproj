@@ -99,5 +99,77 @@
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
+    <Compile Include="POWBOMB.png">
+      <Name>POWBOMB</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
+    <Compile Include="POWDISEA.png">
+      <Name>POWDISEA</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
+    <Compile Include="POWEBOLA.png">
+      <Name>POWEBOLA</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
+    <Compile Include="POWFLAME.png">
+      <Name>POWFLAME</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
+    <Compile Include="POWGOLD.png">
+      <Name>POWGOLD</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
+    <Compile Include="POWGRAB.png">
+      <Name>POWGRAB</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
+    <Compile Include="POWJELLY.png">
+      <Name>POWJELLY</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
+    <Compile Include="POWKICK.png">
+      <Name>POWKICK</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
+    <Compile Include="POWPUNCH.png">
+      <Name>POWPUNCH</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
+    <Compile Include="POWSKATE.png">
+      <Name>POWSKATE</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
+    <Compile Include="POWTRIG.png">
+      <Name>POWTRIG</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
+    <Compile Include="PWSPOOGE.png">
+      <Name>PWSPOOGE</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
   </ItemGroup>
 </Project>

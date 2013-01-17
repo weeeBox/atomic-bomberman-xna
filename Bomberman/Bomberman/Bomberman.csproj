@@ -118,13 +118,15 @@
     <Compile Include="Game\Elements\Cells\ExplosionCell.cs" />
     <Compile Include="Game\Elements\Cells\MovableCell.cs" />
     <Compile Include="Game\Elements\Cells\PowerupCell.cs" />
+    <Compile Include="Game\Elements\Players\PowerupList.cs" />
+    <Compile Include="Game\Elements\Powerups.cs" />
     <Compile Include="Game\Elements\Direction.cs" />
     <Compile Include="Game\Elements\Fields\Field.cs" />
     <Compile Include="Game\Elements\Fields\FieldCell.cs" />
     <Compile Include="Game\Elements\Fields\FieldCellArray.cs" />
     <Compile Include="Game\Elements\Fields\FieldDrawable.cs" />
-    <Compile Include="Game\Elements\Items\Bomb.cs" />
-    <Compile Include="Game\Elements\Items\BombList.cs" />
+    <Compile Include="Game\Elements\Cells\Bomb.cs" />
+    <Compile Include="Game\Elements\Players\BombList.cs" />
     <Compile Include="Game\Elements\Players\Input\KeyboardPlayerInput.cs" />
     <Compile Include="Game\Elements\Players\Player.cs" />
     <Compile Include="Game\Elements\Players\PlayerAction.cs" />

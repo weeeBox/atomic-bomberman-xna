@@ -24,11 +24,17 @@ namespace Bomberman.Game.Elements.Players
 
         private PlayerInput input;
 
+        private BombList bombs;
+        private PowerupList powerups;
+
         public Player(PlayerInput input, int x, int y)
             : base(x, y)
         {
             this.input = input;
             input.SetListener(this);
+
+            bombs = new BombList();
+            powerups = new PowerupList();
 
             alive = true;
             speed = SPEED_START;
@@ -40,145 +46,150 @@ namespace Bomberman.Game.Elements.Players
         {
             if (moving)
             {
-                float oldPx = px;
-                float oldPy = py;
+                UpdateMoving(delta);
+            }
+        }
 
-                Direction direction = GetDirection();
-                switch (direction)
+        private void UpdateMoving(float delta)
+        {
+            float oldPx = px;
+            float oldPy = py;
+
+            Direction direction = GetDirection();
+            switch (direction)
+            {
+                case Direction.UP:
                 {
-                    case Direction.UP:
-                    {   
-                        MoveY(-delta * speed);
+                    MoveY(-delta * speed);
 
-                        // TODO: разобрать это пиздец
-                        FieldCell blockingCell = null;
-                        if (oldPy == py) // movement forward blocked?
-                        {
-                            blockingCell = GetField().GetCell(cx, cy - 1);
-                            if (blockingCell != null && blockingCell.IsObstacle())
-                            {
-                                float blockingPx = blockingCell.GetPx();
-                                if (px < blockingPx && !GetField().IsObstacleCell(cx - 1, cy - 1))
-                                {
-                                    MoveX(Math.Max(Util.Cx2Px(cx - 1) - px, -speed * delta));
-                                }
-                                else if (px > blockingPx && !GetField().IsObstacleCell(cx + 1, cy - 1))
-                                {
-                                    MoveX(Math.Min(Util.Cx2Px(cx + 1) - px, speed * delta));
-                                }
-                            }
-                            else
-                            {
-                                MoveToTargetPx(delta);
-                            }
-                        }
-                        else                        
-                        {
-                            MoveToTargetPx(delta);
-                        }
-
-                        break;
-                    }
-
-                    case Direction.DOWN:
+                    // TODO: разобрать это пиздец
+                    FieldCell blockingCell = null;
+                    if (oldPy == py) // movement forward blocked?
                     {
-                        MoveY(delta * speed);
-
-                        // TODO: разобрать это пиздец
-                        FieldCell blockingCell = null;
-                        if (oldPy == py) // movement forward blocked?
+                        blockingCell = GetField().GetCell(cx, cy - 1);
+                        if (blockingCell != null && blockingCell.IsObstacle())
                         {
-                            blockingCell = GetField().GetCell(cx, cy + 1);
-                            if (blockingCell != null && blockingCell.IsObstacle())
+                            float blockingPx = blockingCell.GetPx();
+                            if (px < blockingPx && !GetField().IsObstacleCell(cx - 1, cy - 1))
                             {
-                                float blockingPx = blockingCell.GetPx();
-                                if (px < blockingPx && !GetField().IsObstacleCell(cx - 1, cy + 1))
-                                {
-                                    MoveX(Math.Max(Util.Cx2Px(cx - 1) - px, -speed * delta));
-                                }
-                                else if (px > blockingPx && !GetField().IsObstacleCell(cx + 1, cy + 1))
-                                {
-                                    MoveX(Math.Min(Util.Cx2Px(cx + 1) - px, speed * delta));
-                                }
+                                MoveX(Math.Max(Util.Cx2Px(cx - 1) - px, -speed * delta));
                             }
-                            else
+                            else if (px > blockingPx && !GetField().IsObstacleCell(cx + 1, cy - 1))
                             {
-                                MoveToTargetPx(delta);
+                                MoveX(Math.Min(Util.Cx2Px(cx + 1) - px, speed * delta));
                             }
                         }
                         else
                         {
                             MoveToTargetPx(delta);
                         }
-
-                        break;
                     }
-
-                    case Direction.LEFT:
+                    else
                     {
-                        MoveX(-delta * speed);
+                        MoveToTargetPx(delta);
+                    }
 
-                        // TODO: разобрать это пиздец
-                        FieldCell blockingCell = null;
-                        if (oldPx == px) // movement forward blocked?
+                    break;
+                }
+
+                case Direction.DOWN:
+                {
+                    MoveY(delta * speed);
+
+                    // TODO: разобрать это пиздец
+                    FieldCell blockingCell = null;
+                    if (oldPy == py) // movement forward blocked?
+                    {
+                        blockingCell = GetField().GetCell(cx, cy + 1);
+                        if (blockingCell != null && blockingCell.IsObstacle())
                         {
-                            blockingCell = GetField().GetCell(cx - 1, cy);
-                            if (blockingCell != null && blockingCell.IsObstacle())
+                            float blockingPx = blockingCell.GetPx();
+                            if (px < blockingPx && !GetField().IsObstacleCell(cx - 1, cy + 1))
                             {
-                                float blockingPy = blockingCell.GetPy();
-                                if (py < blockingPy && !GetField().IsObstacleCell(cx - 1, cy - 1))
-                                {
-                                    MoveY(Math.Max(Util.Cy2Py(cy - 1) - py, -speed * delta));
-                                }
-                                else if (py > blockingPy && !GetField().IsObstacleCell(cx - 1, cy + 1))
-                                {
-                                    MoveY(Math.Min(Util.Cy2Py(cy + 1) - py, speed * delta));
-                                }
+                                MoveX(Math.Max(Util.Cx2Px(cx - 1) - px, -speed * delta));
                             }
-                            else
+                            else if (px > blockingPx && !GetField().IsObstacleCell(cx + 1, cy + 1))
                             {
-                                MoveToTargetPy(delta);
+                                MoveX(Math.Min(Util.Cx2Px(cx + 1) - px, speed * delta));
+                            }
+                        }
+                        else
+                        {
+                            MoveToTargetPx(delta);
+                        }
+                    }
+                    else
+                    {
+                        MoveToTargetPx(delta);
+                    }
+
+                    break;
+                }
+
+                case Direction.LEFT:
+                {
+                    MoveX(-delta * speed);
+
+                    // TODO: разобрать это пиздец
+                    FieldCell blockingCell = null;
+                    if (oldPx == px) // movement forward blocked?
+                    {
+                        blockingCell = GetField().GetCell(cx - 1, cy);
+                        if (blockingCell != null && blockingCell.IsObstacle())
+                        {
+                            float blockingPy = blockingCell.GetPy();
+                            if (py < blockingPy && !GetField().IsObstacleCell(cx - 1, cy - 1))
+                            {
+                                MoveY(Math.Max(Util.Cy2Py(cy - 1) - py, -speed * delta));
+                            }
+                            else if (py > blockingPy && !GetField().IsObstacleCell(cx - 1, cy + 1))
+                            {
+                                MoveY(Math.Min(Util.Cy2Py(cy + 1) - py, speed * delta));
                             }
                         }
                         else
                         {
                             MoveToTargetPy(delta);
                         }
-                        break;
                     }
+                    else
+                    {
+                        MoveToTargetPy(delta);
+                    }
+                    break;
+                }
 
-                    case Direction.RIGHT:
-                    {   
-                        MoveX(delta * speed);
+                case Direction.RIGHT:
+                {
+                    MoveX(delta * speed);
 
-                        // TODO: разобрать это пиздец
-                        FieldCell blockingCell = null;
-                        if (oldPx == px) // movement forward blocked?
+                    // TODO: разобрать это пиздец
+                    FieldCell blockingCell = null;
+                    if (oldPx == px) // movement forward blocked?
+                    {
+                        blockingCell = GetField().GetCell(cx + 1, cy);
+                        if (blockingCell != null && blockingCell.IsObstacle())
                         {
-                            blockingCell = GetField().GetCell(cx + 1, cy);
-                            if (blockingCell != null && blockingCell.IsObstacle())
+                            float blockingPy = blockingCell.GetPy();
+                            if (py < blockingPy && !GetField().IsObstacleCell(cx + 1, cy - 1))
                             {
-                                float blockingPy = blockingCell.GetPy();
-                                if (py < blockingPy && !GetField().IsObstacleCell(cx + 1, cy - 1))
-                                {
-                                    MoveY(Math.Max(Util.Cy2Py(cy - 1) - py, -speed * delta));
-                                }
-                                else if (py > blockingPy && !GetField().IsObstacleCell(cx + 1, cy + 1))
-                                {
-                                    MoveY(Math.Min(Util.Cy2Py(cy + 1) - py, speed * delta));
-                                }
+                                MoveY(Math.Max(Util.Cy2Py(cy - 1) - py, -speed * delta));
                             }
-                            else
+                            else if (py > blockingPy && !GetField().IsObstacleCell(cx + 1, cy + 1))
                             {
-                                MoveToTargetPy(delta);
+                                MoveY(Math.Min(Util.Cy2Py(cy + 1) - py, speed * delta));
                             }
                         }
                         else
                         {
                             MoveToTargetPy(delta);
                         }
-                        break;
                     }
+                    else
+                    {
+                        MoveToTargetPy(delta);
+                    }
+                    break;
                 }
             }
         }

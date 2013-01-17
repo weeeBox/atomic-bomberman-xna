@@ -7,4 +7,19 @@
 	<image name="BMB1001" file="${dir.gfx}/BMB1001.png" />
 	<image name="F0BRICK" file="${dir.gfx}/F0BRICK.png" />
 	<image name="F0SOLID" file="${dir.gfx}/F0SOLID.png" />
+
+	<!-- Powerups -->
+	<image name="pow_bomb" file="${dir.gfx}/Powerups/POWBOMB.png" />
+	<image name="pow_disea" file="${dir.gfx}/Powerups/POWDISEA.png" />
+	<image name="pow_ebola" file="${dir.gfx}/Powerups/POWEBOLA.png" />
+	<image name="pow_flame" file="${dir.gfx}/Powerups/POWFLAME.png" />
+	<image name="pow_gold" file="${dir.gfx}/Powerups/POWGOLD.png" />
+	<image name="pow_grab" file="${dir.gfx}/Powerups/POWGRAB.png" />
+	<image name="pow_jelly" file="${dir.gfx}/Powerups/POWJELLY.png" />
+	<image name="pow_kick" file="${dir.gfx}/Powerups/POWKICK.png" />
+	<image name="pow_punch" file="${dir.gfx}/Powerups/POWPUNCH.png" />
+	<image name="pow_skate" file="${dir.gfx}/Powerups/POWSKATE.png" />
+	<image name="pow_trig" file="${dir.gfx}/Powerups/POWTRIG.png" />
+	<image name="pow_pooge" file="${dir.gfx}/Powerups/PWSPOOGE.png" />
+
 </package>
