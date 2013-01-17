@@ -43,7 +43,7 @@ namespace Bomberman.Game.Scenes
 
         private Field LoadField()
         {
-            Scheme scheme = Helper.GetScheme(A.sch_X);
+            Scheme scheme = Helper.GetScheme(A.sch_JAIL);
             return new Field(scheme);
         }
     }
