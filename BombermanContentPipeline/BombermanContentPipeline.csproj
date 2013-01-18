@@ -53,8 +53,6 @@
     <Compile Include="Scheme\SchemeWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scheme\SchemeImporter.cs" />
-    <Compile Include="Values\ValuesWriter.cs" />
-    <Compile Include="Values\ValuesImporter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BombermanCommon\BombermanCommon.csproj">

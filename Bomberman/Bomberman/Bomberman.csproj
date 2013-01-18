@@ -113,7 +113,6 @@
     <Compile Include="BombermanApplication.cs" />
     <Compile Include="BombermanAssetManager.cs" />
     <Compile Include="BombermanRootController.cs" />
-    <Compile Include="Content\ValuesReader.cs" />
     <Compile Include="Content\Scheme.cs" />
     <Compile Include="Content\SchemeLoader.cs" />
     <Compile Include="Content\SchemeReader.cs" />
