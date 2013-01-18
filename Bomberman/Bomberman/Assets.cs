@@ -1,7 +1,6 @@
 // This file was generated. Do not modify.
  
 using BomberEngine.Core.Assets;
-using Bomberman;
  
 namespace Assets
 {

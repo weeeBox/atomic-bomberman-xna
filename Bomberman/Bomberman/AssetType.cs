@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Core.Assets;
 
-namespace Bomberman
+namespace Assets
 {
     public class AssetType : AssetTypeBase
     {

@@ -4,7 +4,7 @@
 	<property name="dir.lib" value="lib" />
 	<property name="dir.tmp" value="tmp" />
 	<property name="dir.source" value="src" />
-	<property name="dir.classes" value="${dir.tmp}/classes" />
+	<property name="dir.classes" value="bin" />
 	<property name="dir.restmp" value="${dir.tmp}/res" />
 	
 	<path id="libs">
