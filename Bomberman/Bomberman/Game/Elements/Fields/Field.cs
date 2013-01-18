@@ -11,6 +11,7 @@ using Bomberman.Game.Elements.Cells;
 using BomberEngine.Debugging;
 using Bomberman.Game.Elements.Items;
 using Bomberman.Content;
+using BombermanCommon.Resources.Scheme;
 
 namespace Bomberman.Game.Elements.Fields
 {
@@ -18,20 +19,74 @@ namespace Bomberman.Game.Elements.Fields
     {
         private FieldCellArray cells;
 
-        private PlayerArray players;
+        private PlayerList players;
 
         private static Field currentField;
 
         private TimerManager timerManager;
         
-        public Field(Scheme scheme)
+        public Field(Scheme scheme, PlayerList players)
         {
-            currentField = this;
+            this.players = players;
 
+            currentField = this;
             timerManager = new TimerManager();
 
-            cells = new FieldCellArray(scheme.GetFieldData());
-            players = new PlayerArray();
+            SetupField(scheme.GetFieldData());
+            SetupPlayers(players, scheme.GetPlayerLocations());
+        }
+
+        private void SetupField(FieldData data)
+        {
+            int width = data.GetWidth();
+            int height = data.GetHeight();
+
+            cells = new FieldCellArray(width, height);
+
+            for (int y = 0; y < height; ++y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    FieldBlocks block = data.Get(x, y);
+                    switch (block)
+                    {
+                        case FieldBlocks.Blank:
+                        {
+                            cells.Set(x, y, new EmptyCell(x, y));
+                            break;
+                        }
+
+                        case FieldBlocks.Brick:
+                        {
+                            cells.Set(x, y, new BrickCell(x, y, false));
+                            break;
+                        }
+
+                        case FieldBlocks.Solid:
+                        {
+                            cells.Set(x, y, new BrickCell(x, y, true));
+                            break;
+                        }
+
+                        default:
+                        {
+                            Debug.Assert(false, "Unsupported cell type: " + block);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SetupPlayers(PlayerList players, PlayerLocationInfo[] locations)
+        {
+            List<Player> playerList = players.GetList();
+            foreach (Player player in playerList)
+            {
+                int index = player.GetIndex();
+                PlayerLocationInfo info = locations[index];
+                player.SetCell(info.x, info.y);
+            }
         }
 
         public void Update(float delta)
@@ -125,7 +180,7 @@ namespace Bomberman.Game.Elements.Fields
             return true;
         }
 
-        public PlayerArray GetPlayers()
+        public PlayerList GetPlayers()
         {
             return players;
         }

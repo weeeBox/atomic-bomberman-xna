@@ -9,6 +9,18 @@ namespace Bomberman.Game.Elements.Players.Input
 {
     public class KeyboardPlayerInput : PlayerInput, KeyboardListener
     {
+        private Dictionary<Keys, PlayerAction> keysMap;
+
+        public KeyboardPlayerInput()
+        {
+            keysMap = new Dictionary<Keys, PlayerAction>();
+        }
+
+        public void Map(Keys key, PlayerAction action)
+        {
+            keysMap.Add(key, action);
+        }
+
         public void KeyPressed(Keys key)
         {
             PlayerAction action = GetAction(key);
@@ -29,29 +41,9 @@ namespace Bomberman.Game.Elements.Players.Input
 
         private PlayerAction GetAction(Keys key)
         {
-            switch (key)
-            {
-                case Keys.W:
-                case Keys.Up:
-                    return PlayerAction.Up;
-
-                case Keys.S:
-                case Keys.Down:
-                    return PlayerAction.Down;
-
-                case Keys.A:
-                case Keys.Left:
-                    return PlayerAction.Left;
-
-                case Keys.D:
-                case Keys.Right:
-                    return PlayerAction.Right;
-
-                case Keys.Space:
-                    return PlayerAction.Bomb;
-            }
-
-            return PlayerAction.Count;
+            PlayerAction action = PlayerAction.Count;
+            keysMap.TryGetValue(key, out action);
+            return action;
         }
     }
 }

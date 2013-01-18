@@ -14,6 +14,8 @@ namespace Bomberman.Game.Elements.Players
         private static readonly int SPEED_START = 145;
         private static readonly int SPEED_INCREASE = 25;
 
+        private int index;
+
         private bool alive;
         private bool moving;
 
@@ -27,9 +29,10 @@ namespace Bomberman.Game.Elements.Players
         private BombList bombs;
         private PowerupList powerups;
 
-        public Player(PlayerInput input, int x, int y)
-            : base(x, y)
+        public Player(int index, PlayerInput input)
+            : base(0, 0)
         {
+            this.index = index;
             this.input = input;
             input.SetListener(this);
 
@@ -304,6 +307,11 @@ namespace Bomberman.Game.Elements.Players
         public float GetBombTimeout()
         {
             return bombTimeout;
+        }
+
+        public int GetIndex()
+        {
+            return index;
         }
 
         public int GetBombRadius()

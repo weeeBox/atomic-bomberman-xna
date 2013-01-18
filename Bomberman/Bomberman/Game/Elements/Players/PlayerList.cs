@@ -6,11 +6,11 @@ using BomberEngine.Core;
 
 namespace Bomberman.Game.Elements.Players
 {
-    public class PlayerArray : Updatable
+    public class PlayerList : Updatable
     {
         private List<Player> players;
 
-        public PlayerArray()
+        public PlayerList()
         {
             players = new List<Player>();
         }

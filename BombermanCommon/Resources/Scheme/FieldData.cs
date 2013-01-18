@@ -19,6 +19,12 @@ namespace BombermanCommon.Resources.Scheme
             data = new FieldBlocks[width * height];
         }
 
+        public FieldBlocks Get(int x, int y)
+        {
+            int index = y * width + x;
+            return data[index];
+        }
+
         public void Set(int x, int y, FieldBlocks block)
         {
             int index = y * width + x;

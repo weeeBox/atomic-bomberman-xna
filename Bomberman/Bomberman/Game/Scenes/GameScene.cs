@@ -19,32 +19,14 @@ namespace Bomberman.Game.Scenes
     {
         private Image fieldBackground;
 
-        private Field field;
-
         public GameScene()
         {
-            field = LoadField();
-
-            KeyboardPlayerInput input = new KeyboardPlayerInput();
-            Application.Input().SetKeyboardListener(input);
-
-            Player player = new Player(input, 0, 0);
-            field.AddPlayer(player);
-
-            AddUpdatabled(field);
-
             // field background
             fieldBackground = Helper.CreateImage(A.tex_FIELD7);
             AddDrawable(fieldBackground);
 
             // field drawer
-            AddDrawable(new FieldDrawable(field, Constant.FIELD_OFFSET_X, Constant.FIELD_OFFSET_Y, Constant.FIELD_WIDTH, Constant.FIELD_HEIGHT));
-        }
-
-        private Field LoadField()
-        {
-            Scheme scheme = Helper.GetScheme(A.sch_JAIL);
-            return new Field(scheme);
+            AddDrawable(new FieldDrawable(Game.Field(), Constant.FIELD_OFFSET_X, Constant.FIELD_OFFSET_Y, Constant.FIELD_WIDTH, Constant.FIELD_HEIGHT));
         }
     }
 }

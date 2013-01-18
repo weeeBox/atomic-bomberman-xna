@@ -15,44 +15,12 @@ namespace Bomberman.Game.Elements.Fields
 
         private FieldCell[] cells;
 
-        public FieldCellArray(FieldData data)
+        public FieldCellArray(int width, int height)
         {
-            width = data.GetWidth();
-            height = data.GetHeight();
+            this.width = width;
+            this.height = height;
 
-            FieldBlocks[] blockData = data.GetDataArray();
-            cells = new FieldCell[blockData.Length];
-
-            int index = 0;
-            for (int y = 0; y < height; ++y)
-            {
-                for (int x = 0; x < width; ++x)
-                {
-                    FieldBlocks block = blockData[index];
-                    switch (block)
-                    {
-                        case FieldBlocks.Blank:
-                        {
-                            cells[index] = new EmptyCell(x, y);
-                            break;
-                        }
-
-                        case FieldBlocks.Brick:
-                        {
-                            cells[index] = new BrickCell(x, y, false);
-                            break;
-                        }
-
-                        case FieldBlocks.Solid:
-                        {
-                            cells[index] = new BrickCell(x, y, true);
-                            break;
-                        }
-                    }
-
-                    ++index;
-                }
-            }
+            cells = new FieldCell[width * height];
         }
 
         public FieldCell[] GetArray()
