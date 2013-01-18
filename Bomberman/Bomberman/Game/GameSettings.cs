@@ -90,10 +90,8 @@ namespace Bomberman.Game
         private Object GetObject(Settings setting)
         {
             Debug.CheckArgumentNotNull("setting", setting);
-
-            Object value;
-            bool contains = settings.TryGetValue(setting.GetName(), out value);
-            return contains ? value : null;
+            String name = setting.GetName();
+            return settings.ContainsKey(name) ? settings[name] : null;
         }
 
         private static GameSettings GetInstance()

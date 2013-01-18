@@ -108,8 +108,7 @@ namespace BomberEngine.Core.Assets
 
         protected bool LoadResource(AssetLoadInfo info)
         {
-            AssetLoader loader = null;
-            loaders.TryGetValue(info.type, out loader);
+            AssetLoader loader = loaders.ContainsKey(info.type) ? loaders[info.type] : null;
 
             if (loader == null)
             {

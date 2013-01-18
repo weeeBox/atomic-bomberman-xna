@@ -56,8 +56,7 @@ namespace BombermanContentPipeline.Scheme
                 if (line[0] == '-')
                 {
                     char type = line[1];
-                    SchemeSectionReader reader = null;
-                    lookup.TryGetValue(type, out reader);
+                    SchemeSectionReader reader = lookup.ContainsKey(type) ? lookup[type] : null;
 
                     if (reader != null)
                     {
