@@ -44,7 +44,7 @@ namespace Bomberman.Game.Elements.Fields
             return false;
         }
 
-        public virtual bool IsBreakable()
+        public virtual bool IsBrick()
         {
             return false;
         }

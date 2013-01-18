@@ -51,7 +51,7 @@ namespace Bomberman.Game.Elements.Fields
             foreach (FieldCell cell in cells)
             {
                 TextureImage image = null;
-                if (cell.IsBreakable())
+                if (cell.IsBrick())
                 {
                     image = breakableImage;
                 }
@@ -86,7 +86,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private void DrawPlayers(Context context)
         {
-            List<Player> players = field.GetPlayers().GetList();
+            List<Player> players = field.GetPlayers().list;
             foreach (Player player in players)
             {
                 TextureImage image = TempFindPlayerImage(player.GetDirection());

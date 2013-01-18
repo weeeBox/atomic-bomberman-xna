@@ -34,6 +34,7 @@ namespace Bomberman.Game.Elements.Fields
 
             SetupField(scheme.GetFieldData());
             SetupPlayers(players, scheme.GetPlayerLocations());
+            SetupPowerups(scheme.GetPowerupInfo());
         }
 
         private void SetupField(FieldData data)
@@ -52,19 +53,19 @@ namespace Bomberman.Game.Elements.Fields
                     {
                         case FieldBlocks.Blank:
                         {
-                            cells.Set(x, y, new EmptyCell(x, y));
+                            cells.Set(x, y, new BlankCell(x, y));
                             break;
                         }
 
                         case FieldBlocks.Brick:
                         {
-                            cells.Set(x, y, new BrickCell(x, y, false));
+                            cells.Set(x, y, new BrickCell(x, y));
                             break;
                         }
 
                         case FieldBlocks.Solid:
                         {
-                            cells.Set(x, y, new BrickCell(x, y, true));
+                            cells.Set(x, y, new SolidCell(x, y));
                             break;
                         }
 
@@ -80,7 +81,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private void SetupPlayers(PlayerList players, PlayerLocationInfo[] locations)
         {
-            List<Player> playerList = players.GetList();
+            List<Player> playerList = players.list;
             foreach (Player player in playerList)
             {
                 int index = player.GetIndex();
@@ -88,8 +89,6 @@ namespace Bomberman.Game.Elements.Fields
                 int cx = info.x;
                 int cy = info.y;
                 player.SetCell(info.x, info.y);
-
-
 
                 int fromCx = Math.Max(0, cx - 1);
                 int toCx = Math.Min(cx + 1, GetWidth() - 1);
@@ -103,8 +102,98 @@ namespace Bomberman.Game.Elements.Fields
                         ClearCell(x, y);
                     }
                 }
-
             }
+        }
+
+        private void SetupPowerups(PowerupInfo[] powerupInfo)
+        {
+            BrickCell[] brickCells = new BrickCell[GetWidth() * GetHeight()];
+            int count = GetBrickCells(brickCells);
+            if (count == 0)
+            {
+                return;
+            }
+
+            ShuffleArray(brickCells, count);
+
+            int brickIndex = 0;
+            foreach (PowerupInfo info in powerupInfo)
+            {
+                if (!info.forbidden)
+                {
+                    BrickCell cell = brickCells[brickIndex++];
+                    int cx = cell.GetCx();
+                    int cy = cell.GetCy();
+
+
+                }
+            }
+        }
+
+        private int GetEmptyCells(FieldCell[] array)
+        {
+            int count = 0;
+            FieldCell[] cellArray = cells.GetArray();
+            foreach (FieldCell cell in cellArray)
+            {
+                if (cell.IsEmpty() && !IsPlayerAt(cell.GetCx(), cell.GetCy()))
+                {
+                    cellArray[count++] = cell;
+                }
+            }
+
+            return count;
+        }
+
+        private int GetBrickCells(BrickCell[] array)
+        {
+            int count = 0;
+            FieldCell[] cellArray = cells.GetArray();
+            foreach (FieldCell cell in cellArray)
+            {
+                if (cell.IsBrick() && !IsPlayerAt(cell.GetCx(), cell.GetCy()))
+                {
+                    BrickCell brickCell = (BrickCell)cell;
+                    if (brickCell.powerup == null)
+                    {
+                        array[count++] = (BrickCell)cell;
+                    }
+                }
+            }
+
+            return count;
+        }
+
+        private bool IsPlayerAt(int cx, int cy)
+        {
+            return GetPlayer(cx, cy) != null;
+        }
+
+        private Player GetPlayer(int cx, int cy)
+        {
+            foreach (Player player in players.list)
+            {
+                if (player.GetCx() == cx && player.GetCy() == cy)
+                {
+                    return player;
+                }
+            }
+
+            return null;
+        }
+
+        private void ShuffleArray(FieldCell[] array, int size)
+        {
+            Random rng = new Random();
+            int n = size;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                FieldCell value = array[k];
+                array[k] = array[n];
+                array[n] = value;
+            } 
         }
 
         public void Update(float delta)
@@ -177,9 +266,9 @@ namespace Bomberman.Game.Elements.Fields
                 return false; // bomb hits the wall
             }
 
-            if (cell.IsBreakable())
+            if (cell.IsBrick())
             {
-                SetCell(new EmptyCell(cx, cy));
+                SetCell(new BlankCell(cx, cy));
                 return false; // bomb destroyed a brick
             }
 
@@ -218,7 +307,7 @@ namespace Bomberman.Game.Elements.Fields
             FieldCell cell = GetCell(cx, cy);
             if (cell != null && !cell.IsEmpty() && !cell.IsSolid())
             {
-                SetCell(new EmptyCell(cx, cy));
+                SetCell(new BlankCell(cx, cy));
             }
         }
 

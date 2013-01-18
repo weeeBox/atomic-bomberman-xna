@@ -8,16 +8,16 @@ namespace Bomberman.Game.Elements.Players
 {
     public class PlayerList : Updatable
     {
-        private List<Player> players;
+        public List<Player> list;
 
         public PlayerList()
         {
-            players = new List<Player>();
+            list = new List<Player>();
         }
 
         public void Update(float delta)
         {
-            foreach (Player player in players)
+            foreach (Player player in list)
             {
                 player.Update(delta);
             }
@@ -25,12 +25,7 @@ namespace Bomberman.Game.Elements.Players
 
         public void Add(Player player)
         {
-            players.Add(player);
-        }
-
-        public List<Player> GetList()
-        {
-            return players;
+            list.Add(player);
         }
     }
 }

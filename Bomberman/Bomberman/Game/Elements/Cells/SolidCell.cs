@@ -6,14 +6,19 @@ using Bomberman.Game.Elements.Fields;
 
 namespace Bomberman.Game.Elements.Cells
 {
-    public class EmptyCell : FieldCell
+    public class SolidCell : FieldCell
     {
-        public EmptyCell(int x, int y)
-            : base(x, y)
+        public SolidCell(int cx, int cy)
+            : base(cx, cy)
         {
         }
 
-        public override bool IsEmpty()
+        public override bool IsObstacle()
+        {
+            return true;
+        }
+
+        public override bool IsSolid()
         {
             return true;
         }

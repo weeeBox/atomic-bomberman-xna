@@ -8,22 +8,16 @@ namespace Bomberman.Game.Elements.Cells
 {
     public class BrickCell : FieldCell
     {
-        private bool solid;
+        public PowerupCell powerup;
 
-        public BrickCell(int x, int y, bool solid)
-            : base(x, y)
+        public BrickCell(int cx, int cy)
+            : base(cx, cy)
         {
-            this.solid = solid;
         }
 
-        public override bool IsBreakable()
+        public override bool IsBrick()
         {
-            return !solid;
-        }
-
-        public override bool IsSolid()
-        {
-            return solid;
+            return true;
         }
 
         public override bool IsObstacle()
