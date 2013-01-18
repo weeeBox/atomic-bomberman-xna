@@ -99,6 +99,7 @@
     <Compile Include="Core\Assets\AssetTypeBase.cs" />
     <Compile Include="Core\Assets\Loaders\TextureLoader.cs" />
     <Compile Include="Core\Assets\Types\TextureImage.cs" />
+    <Compile Include="Core\Input\KeyboardListenerList.cs" />
     <Compile Include="Core\Visual\Camera.cs" />
     <Compile Include="Core\Visual\DrawableElementComposite.cs" />
     <Compile Include="Core\Visual\Context.cs" />

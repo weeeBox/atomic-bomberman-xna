@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using BombermanCommon.Resources;
 using Bomberman.Content;
 using Assets;
+using BomberEngine.Core.Input;
 
 namespace Bomberman.Game
 {
@@ -18,9 +19,13 @@ namespace Bomberman.Game
         private GameScene gameScene;
 
         private Game game;
+        private KeyboardListenerList keyboardListeners;
 
         public GameController()
         {
+            keyboardListeners = new KeyboardListenerList();
+            Application.Input().SetKeyboardListener(keyboardListeners);
+
             game = new Game();
             InitPlayers();
             InitField(A.sch_BMAN93);
@@ -37,6 +42,7 @@ namespace Bomberman.Game
             keyboardInput1.Map(Keys.D, PlayerAction.Right);
             keyboardInput1.Map(Keys.OemCloseBrackets, PlayerAction.Bomb);
             keyboardInput1.Map(Keys.OemOpenBrackets, PlayerAction.Special);
+            keyboardListeners.Add(keyboardInput1);
 
             Player player1 = new Player(0, keyboardInput1);
             game.AddPlayer(player1);
@@ -46,6 +52,7 @@ namespace Bomberman.Game
             keyboardInput2.Map(Keys.Left, PlayerAction.Left);
             keyboardInput2.Map(Keys.Down, PlayerAction.Down);
             keyboardInput2.Map(Keys.Right, PlayerAction.Right);
+            keyboardListeners.Add(keyboardInput2);
 
             Player player2 = new Player(1, keyboardInput2);
             game.AddPlayer(player2);

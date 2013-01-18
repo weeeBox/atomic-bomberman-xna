@@ -41,9 +41,11 @@ namespace Bomberman.Game.Elements.Players.Input
 
         private PlayerAction GetAction(Keys key)
         {
-            PlayerAction action = PlayerAction.Count;
-            keysMap.TryGetValue(key, out action);
-            return action;
+            if (keysMap.ContainsKey(key))
+            {
+                return keysMap[key];
+            }
+            return PlayerAction.Count;
         }
     }
 }

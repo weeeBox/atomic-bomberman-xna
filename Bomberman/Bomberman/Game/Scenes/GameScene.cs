@@ -21,12 +21,15 @@ namespace Bomberman.Game.Scenes
 
         public GameScene()
         {
+            Field field = Game.Field();
+            AddUpdatabled(field);
+
             // field background
             fieldBackground = Helper.CreateImage(A.tex_FIELD7);
             AddDrawable(fieldBackground);
 
             // field drawer
-            AddDrawable(new FieldDrawable(Game.Field(), Constant.FIELD_OFFSET_X, Constant.FIELD_OFFSET_Y, Constant.FIELD_WIDTH, Constant.FIELD_HEIGHT));
+            AddDrawable(new FieldDrawable(field, Constant.FIELD_OFFSET_X, Constant.FIELD_OFFSET_Y, Constant.FIELD_WIDTH, Constant.FIELD_HEIGHT));
         }
     }
 }
