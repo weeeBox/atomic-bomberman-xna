@@ -84,7 +84,7 @@ namespace BombermanContentPipeline.Scheme
 
         protected int ReadInt(String str)
         {
-            return ReadInt(str, -1);
+            return int.Parse(str);
         }
 
         protected int ReadInt(String str, int defaultValue)
