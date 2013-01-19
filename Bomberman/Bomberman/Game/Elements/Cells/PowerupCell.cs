@@ -8,9 +8,9 @@ namespace Bomberman.Game.Elements.Cells
 {
     public class PowerupCell : FieldCell
     {
-        public Powerups powerup;
+        public int powerup;
 
-        public PowerupCell(Powerups powerup, int cx, int cy)
+        public PowerupCell(int powerup, int cx, int cy)
             : base(cx, cy)
         {
             this.powerup = powerup;

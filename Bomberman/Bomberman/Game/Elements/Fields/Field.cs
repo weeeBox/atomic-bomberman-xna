@@ -163,9 +163,7 @@ namespace Bomberman.Game.Elements.Fields
                         int cx = cell.GetCx();
                         int cy = cell.GetCy();
 
-                        Powerups powerup = (Powerups)powerupIndex;
-
-                        cell.powerup = new PowerupCell(powerup, cx, cy);
+                        cell.powerup = powerupIndex;
 
                         if (brickIndex == count)
                         {
@@ -205,7 +203,7 @@ namespace Bomberman.Game.Elements.Fields
                 if (cell.IsBrick() && !IsPlayerAt(cell.GetCx(), cell.GetCy()))
                 {
                     BrickCell brickCell = (BrickCell)cell;
-                    if (brickCell.powerup == null)
+                    if (brickCell.powerup == Powerups.None)
                     {
                         array[count++] = (BrickCell)cell;
                     }
@@ -318,7 +316,17 @@ namespace Bomberman.Game.Elements.Fields
 
             if (cell.IsBrick())
             {
-                SetCell(new BlankCell(cx, cy));
+                BrickCell brick = (BrickCell)cell;
+                int powerup = brick.powerup;
+
+                if (powerup != Powerups.None)
+                {
+                    SetCell(new PowerupCell(powerup, brick.GetCx(), brick.GetCy()));
+                }
+                else
+                {
+                    SetCell(new BlankCell(cx, cy));
+                }
                 return false; // bomb destroyed a brick
             }
 

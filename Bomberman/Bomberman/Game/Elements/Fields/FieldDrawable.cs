@@ -65,6 +65,15 @@ namespace Bomberman.Game.Elements.Fields
                 {
                     image = bombImage;
                 }
+                else if (cell.IsPowerup())
+                {
+                    PowerupCell powerupCell = (PowerupCell)cell;
+                    int powerup = powerupCell.powerup;
+                    if (powerup != Powerups.None && powerup != Powerups.Random)
+                    {
+                        image = powerupImages[powerup];
+                    }
+                }
                 else if (cell.IsExplosion())
                 {
                     int x = cell.GetCx() * cellWidth;
@@ -81,18 +90,15 @@ namespace Bomberman.Game.Elements.Fields
                     if (cell.IsBrick())
                     {   
                         BrickCell brick = (BrickCell)cell;
-                        PowerupCell powerupCell = brick.powerup;
-                        if (powerupCell != null)
+                        
+                        int powerup = brick.powerup;
+                        if (powerup != Powerups.None && powerup != Powerups.Random)
                         {
-                            Powerups powerup = powerupCell.powerup;
-                            if (powerup != Powerups.Random)
-                            {
-                                TextureImage powerupImage = powerupImages[(int)powerup];
-                                drawX = cell.GetPx() - 0.5f * powerupImage.GetWidth();
-                                drawY = cell.GetPy() - 0.5f * powerupImage.GetHeight();
-                                context.DrawImage(powerupImage, drawX, drawY);
-                            }
-                        }
+                            TextureImage powerupImage = powerupImages[powerup];
+                            drawX = cell.GetPx() - 0.5f * powerupImage.GetWidth();
+                            drawY = cell.GetPy() - 0.5f * powerupImage.GetHeight();
+                            context.DrawImage(powerupImage, drawX, drawY, 0.25f);
+                        }                        
                     }
                 }
             }

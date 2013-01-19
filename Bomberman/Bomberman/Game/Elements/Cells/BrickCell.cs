@@ -8,11 +8,13 @@ namespace Bomberman.Game.Elements.Cells
 {
     public class BrickCell : FieldCell
     {
-        public PowerupCell powerup;
+        public int powerup;
+        public bool destroyed;
 
         public BrickCell(int cx, int cy)
             : base(cx, cy)
         {
+            powerup = Powerups.None;
         }
 
         public override bool IsBrick()
