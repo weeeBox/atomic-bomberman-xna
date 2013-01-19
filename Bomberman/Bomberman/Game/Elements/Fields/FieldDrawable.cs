@@ -85,10 +85,13 @@ namespace Bomberman.Game.Elements.Fields
                         if (powerupCell != null)
                         {
                             Powerups powerup = powerupCell.powerup;
-                            TextureImage powerupImage = powerupImages[(int)powerup];
-                            drawX = cell.GetPx() - 0.5f * powerupImage.GetWidth();
-                            drawY = cell.GetPy() - 0.5f * powerupImage.GetHeight();
-                            context.DrawImage(powerupImage, drawX, drawY);
+                            if (powerup != Powerups.Random)
+                            {
+                                TextureImage powerupImage = powerupImages[(int)powerup];
+                                drawX = cell.GetPx() - 0.5f * powerupImage.GetWidth();
+                                drawY = cell.GetPy() - 0.5f * powerupImage.GetHeight();
+                                context.DrawImage(powerupImage, drawX, drawY);
+                            }
                         }
                     }
                 }

@@ -42,6 +42,7 @@ namespace BombermanContentPipeline.Scheme
             output.Write(powerupInfo.Length);
             for (int i = 0; i < powerupInfo.Length; ++i)
             {
+                output.Write(powerupInfo[i].powerupIndex);
                 output.Write(powerupInfo[i].bornWith);
                 output.Write(powerupInfo[i].hasOverride);
                 output.Write(powerupInfo[i].overrideValue);

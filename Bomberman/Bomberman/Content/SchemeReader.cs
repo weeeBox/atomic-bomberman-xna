@@ -61,6 +61,7 @@ namespace Bomberman.Content
             for (int i = 0; i < powerupInfoCount; ++i)
             {
                 PowerupInfo info = new PowerupInfo();
+                info.powerupIndex = input.ReadInt32();
                 info.bornWith = input.ReadBoolean();
                 info.hasOverride = input.ReadBoolean();
                 info.overrideValue = input.ReadInt32();
