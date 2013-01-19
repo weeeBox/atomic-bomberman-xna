@@ -21,6 +21,7 @@
 	<image name="pow_skate" file="${dir.gfx}/Powerups/POWSKATE.png" />
 	<image name="pow_trig" file="${dir.gfx}/Powerups/POWTRIG.png" />
 	<image name="pow_pooge" file="${dir.gfx}/Powerups/PWSPOOGE.png" />
+	<image name="pow_rand" file="${dir.gfx}/Powerups/PWRANDOM.png" />
 
 	<!-- Schemes -->
 	<scheme name="4CORNERS" file="${dir.schemes}/4CORNERS.SCH" />

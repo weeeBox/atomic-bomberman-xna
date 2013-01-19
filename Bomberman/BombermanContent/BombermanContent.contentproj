@@ -177,6 +177,12 @@
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
+    <Compile Include="PWRANDOM.png">
+      <Name>PWRANDOM</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
     <Compile Include="4CORNERS.SCH">
       <Name>4CORNERS</Name>
       <Importer>SchemeImporter</Importer>

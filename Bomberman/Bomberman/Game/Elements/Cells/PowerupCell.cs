@@ -9,11 +9,18 @@ namespace Bomberman.Game.Elements.Cells
     public class PowerupCell : FieldCell
     {
         public int powerup;
+        public float elasped;
 
-        public PowerupCell(int powerup, int cx, int cy)
+        public PowerupCell(int
+            powerup, int cx, int cy)
             : base(cx, cy)
         {
             this.powerup = powerup;
+        }
+
+        public override void Update(float delta)
+        {
+            elasped += delta;
         }
 
         public override bool IsPowerup()

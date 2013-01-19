@@ -69,8 +69,13 @@ namespace Bomberman.Game.Elements.Fields
                 {
                     PowerupCell powerupCell = (PowerupCell)cell;
                     int powerup = powerupCell.powerup;
-                    if (powerup != Powerups.None && powerup != Powerups.Random)
+                    if (powerup != Powerups.None)
                     {
+                        if (powerup == Powerups.Random)
+                        {
+                            powerup = ((int)(powerupCell.elasped / 0.05f)) % powerupImages.Length;
+                        }
+
                         image = powerupImages[powerup];
                     }
                 }
@@ -92,7 +97,7 @@ namespace Bomberman.Game.Elements.Fields
                         BrickCell brick = (BrickCell)cell;
                         
                         int powerup = brick.powerup;
-                        if (powerup != Powerups.None && powerup != Powerups.Random)
+                        if (powerup != Powerups.None)
                         {
                             TextureImage powerupImage = powerupImages[powerup];
                             drawX = cell.GetPx() - 0.5f * powerupImage.GetWidth();
@@ -168,6 +173,7 @@ namespace Bomberman.Game.Elements.Fields
                 Helper.GetTexture(A.tex_pow_trig),
                 Helper.GetTexture(A.tex_pow_jelly),
                 Helper.GetTexture(A.tex_pow_ebola),
+                Helper.GetTexture(A.tex_pow_rand),
             };
         }
     }
