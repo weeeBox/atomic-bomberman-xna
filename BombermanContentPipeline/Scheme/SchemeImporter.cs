@@ -63,8 +63,11 @@ namespace BombermanContentPipeline.Scheme
                         SchemeSectionReader reader = lookup[type];
 
                         String[] dataTokens = new String[tokens.Length-1];
-                        Array.Copy(tokens, 1, dataTokens, 0, dataTokens.Length);
-                        
+                        for (int i = 0; i < dataTokens.Length; ++i)
+                        {
+                            dataTokens[i] = tokens[i + 1].Trim();
+                        }
+
                         reader.Read(dataTokens);
                     }
                 }
@@ -87,13 +90,13 @@ namespace BombermanContentPipeline.Scheme
 
         protected int ReadInt(String str)
         {
-            return int.Parse(str.Trim());
+            return int.Parse(str);
         }
 
         protected int ReadInt(String str, int defaultValue)
         {
             int value = defaultValue;
-            int.TryParse(str.Trim(), out defaultValue);
+            int.TryParse(str, out defaultValue);
             return value;
         }
 
