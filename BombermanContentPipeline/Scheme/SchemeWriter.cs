@@ -17,6 +17,7 @@ namespace BombermanContentPipeline.Scheme
         protected override void Write(ContentWriter output, SchemeInfo scheme)
         {   
             output.Write(scheme.name);
+            output.Write(scheme.brickDensity);
 
             FieldData fieldData = scheme.fieldData;
             output.Write(fieldData.GetWidth());

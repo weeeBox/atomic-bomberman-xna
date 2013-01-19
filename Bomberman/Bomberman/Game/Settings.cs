@@ -83,6 +83,7 @@ namespace Bomberman.Game
         public static readonly int VAL_PU_INIT_JELLY = 0;
         public static readonly int VAL_PU_INIT_EBOLA = 0;
         public static readonly int VAL_PU_INIT_RANDOM = 0;
+
         public static readonly int VAL_PU_MAX_BOMB = 8;
         public static readonly int VAL_PU_MAX_FLAME = 8;
         public static readonly int VAL_PU_MAX_DISEASE = 0;
@@ -97,6 +98,7 @@ namespace Bomberman.Game
         public static readonly int VAL_PU_MAX_EBOLA = 0;
         public static readonly int VAL_PU_MAX_RANDOM = 0;
         public static readonly int VAL_PU_MAX_LAST = -2000;
+
         public static readonly int VAL_PU_FIELD_BOMB = 10;
         public static readonly int VAL_PU_FIELD_FLAME = 10;
         public static readonly int VAL_PU_FIELD_DISEASE = 10;
@@ -110,6 +112,7 @@ namespace Bomberman.Game
         public static readonly int VAL_PU_FIELD_JELLY = 1;
         public static readonly int VAL_PU_FIELD_EBOLA = -4;
         public static readonly int VAL_PU_FIELD_RANDOM = -2;
+
         public static readonly int VAL_DSE_TIME_LIMITED = 1;
         public static readonly int VAL_DSE_MULTIPLY = 1;
         public static readonly int VAL_DSE_MIN_KEEP_BEFORE_PASS = 500;

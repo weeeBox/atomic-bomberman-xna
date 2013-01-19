@@ -32,12 +32,12 @@ namespace BombermanContentPipeline.Scheme
             PlayerLocationReader playersReader = new PlayerLocationReader(MAX_PLAYERS);
             PowerupInfoReader powerupReader = new PowerupInfoReader(MAX_POWERUPS);
 
-            Dictionary<char, SchemeSectionReader> lookup = new Dictionary<char, SchemeSectionReader>();
-            lookup['N'] = nameReader;
-            lookup['B'] = densityReader;
-            lookup['R'] = dataReader;
-            lookup['S'] = playersReader;
-            lookup['P'] = powerupReader;
+            Dictionary<String, SchemeSectionReader> lookup = new Dictionary<String, SchemeSectionReader>();
+            lookup["-N"] = nameReader;
+            lookup["-B"] = densityReader;
+            lookup["-R"] = dataReader;
+            lookup["-S"] = playersReader;
+            lookup["-P"] = powerupReader;
 
             for (int lineIndex = 0; lineIndex < lines.Length; ++lineIndex)
             {
@@ -55,13 +55,17 @@ namespace BombermanContentPipeline.Scheme
 
                 if (line[0] == '-')
                 {
-                    char type = line[1];
-                    SchemeSectionReader reader = lookup.ContainsKey(type) ? lookup[type] : null;
+                    String[] tokens = line.Split(',');
+                    String type = tokens[0].Trim();
 
-                    if (reader != null)
+                    if (lookup.ContainsKey(type))
                     {
-                        String[] tokens = line.Substring(3).Split(',');
-                        reader.Read(tokens);
+                        SchemeSectionReader reader = lookup[type];
+
+                        String[] dataTokens = new String[tokens.Length-1];
+                        Array.Copy(tokens, 1, dataTokens, 0, dataTokens.Length);
+                        
+                        reader.Read(dataTokens);
                     }
                 }
             }
@@ -83,7 +87,7 @@ namespace BombermanContentPipeline.Scheme
 
         protected int ReadInt(String str)
         {
-            return int.Parse(str);
+            return int.Parse(str.Trim());
         }
 
         protected int ReadInt(String str, int defaultValue)

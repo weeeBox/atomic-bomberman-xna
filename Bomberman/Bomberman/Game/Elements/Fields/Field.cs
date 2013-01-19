@@ -12,6 +12,7 @@ using BomberEngine.Debugging;
 using Bomberman.Game.Elements.Items;
 using Bomberman.Content;
 using BombermanCommon.Resources.Scheme;
+using BomberEngine.Util;
 
 namespace Bomberman.Game.Elements.Fields
 {
@@ -24,6 +25,23 @@ namespace Bomberman.Game.Elements.Fields
         private static Field currentField;
 
         private TimerManager timerManager;
+
+        private static readonly int[] POWERUPS_COUNT =
+        {
+            Settings.VAL_PU_FIELD_BOMB,
+            Settings.VAL_PU_FIELD_FLAME,
+            Settings.VAL_PU_FIELD_DISEASE,
+            Settings.VAL_PU_FIELD_ABILITY_KICK,
+            Settings.VAL_PU_FIELD_EXTRA_SPEED,
+            Settings.VAL_PU_FIELD_ABLITY_PUNCH,
+            Settings.VAL_PU_FIELD_ABILITY_GRAB,
+            Settings.VAL_PU_FIELD_SPOOGER,
+            Settings.VAL_PU_FIELD_GOLDFLAME,
+            Settings.VAL_PU_FIELD_TRIGGER,
+            Settings.VAL_PU_FIELD_JELLY,
+            Settings.VAL_PU_FIELD_EBOLA,
+            Settings.VAL_PU_FIELD_RANDOM,
+        };
         
         public Field(Scheme scheme, PlayerList players)
         {
@@ -32,12 +50,12 @@ namespace Bomberman.Game.Elements.Fields
             currentField = this;
             timerManager = new TimerManager();
 
-            SetupField(scheme.GetFieldData());
+            SetupField(scheme.GetFieldData(), scheme.GetBrickDensity());
             SetupPlayers(players, scheme.GetPlayerLocations());
             SetupPowerups(scheme.GetPowerupInfo());
         }
 
-        private void SetupField(FieldData data)
+        private void SetupField(FieldData data, int brickDensity)
         {
             int width = data.GetWidth();
             int height = data.GetHeight();
@@ -59,7 +77,14 @@ namespace Bomberman.Game.Elements.Fields
 
                         case FieldBlocks.Brick:
                         {
-                            cells.Set(x, y, new BrickCell(x, y));
+                            if (MathHelper.NextInt(100) <= brickDensity)
+                            {
+                                cells.Set(x, y, new BrickCell(x, y));
+                            }
+                            else
+                            {
+                                cells.Set(x, y, new BlankCell(x, y));
+                            }
                             break;
                         }
 
@@ -121,13 +146,39 @@ namespace Bomberman.Game.Elements.Fields
             {
                 if (!info.forbidden)
                 {
-                    BrickCell cell = brickCells[brickIndex++];
-                    int cx = cell.GetCx();
-                    int cy = cell.GetCy();
+                    int powerupIndex = info.powerupIndex;
+                    int powerupCount = POWERUPS_COUNT[powerupIndex];
+                    if (powerupCount < 0)
+                    {
+                        if (MathHelper.NextInt(10) < -powerupCount)
+                        {
+                            continue;
+                        }
+                        powerupCount = 1;
+                    }
 
+                    for (int i = 0; i < powerupCount; ++i)
+                    {
+                        BrickCell cell = brickCells[brickIndex++];
+                        int cx = cell.GetCx();
+                        int cy = cell.GetCy();
 
+                        Powerups powerup = (Powerups)powerupIndex;
+
+                        cell.powerup = new PowerupCell(powerup, cx, cy);
+
+                        if (brickIndex == count)
+                        {
+                            break;
+                        }
+                    }
+
+                    if (brickIndex == count)
+                    {
+                        break;
+                    }
                 }
-            }
+             }
         }
 
         private int GetEmptyCells(FieldCell[] array)
@@ -183,13 +234,12 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         private void ShuffleArray(FieldCell[] array, int size)
-        {
-            Random rng = new Random();
+        {   
             int n = size;
             while (n > 1)
             {
                 n--;
-                int k = rng.Next(n + 1);
+                int k = MathHelper.NextInt(n + 1);
                 FieldCell value = array[k];
                 array[k] = array[n];
                 array[n] = value;

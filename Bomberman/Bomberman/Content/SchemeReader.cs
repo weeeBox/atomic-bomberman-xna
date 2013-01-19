@@ -24,6 +24,7 @@ namespace Bomberman.Content
         {
             SchemeInfo scheme = new SchemeInfo();
             scheme.name = input.ReadString();
+            scheme.brickDensity = input.ReadInt32();
 
             // field
             int fieldWidth = input.ReadInt32();

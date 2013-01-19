@@ -7,6 +7,7 @@ using Assets;
 using Microsoft.Xna.Framework;
 using BomberEngine.Core.Assets.Types;
 using Bomberman.Game.Elements.Players;
+using Bomberman.Game.Elements.Cells;
 
 namespace Bomberman.Game.Elements.Fields
 {
@@ -51,9 +52,13 @@ namespace Bomberman.Game.Elements.Fields
             foreach (FieldCell cell in cells)
             {
                 TextureImage image = null;
+                bool hasPowerup = false;
+
                 if (cell.IsBrick())
                 {
                     image = breakableImage;
+                    BrickCell brick = (BrickCell)cell;
+                    hasPowerup = brick.powerup != null;
                 }
                 else if (cell.IsSolid())
                 {
@@ -75,6 +80,13 @@ namespace Bomberman.Game.Elements.Fields
                     float drawX = cell.GetPx() - 0.5f * image.GetWidth();
                     float drawY = cell.GetPy() - 0.5f * image.GetHeight();
                     context.DrawImage(image, drawX, drawY);
+                }
+
+                if (hasPowerup)
+                {
+                    float x = (cell.GetCx() + 0.25f) * cellWidth;
+                    float y = (cell.GetCy() + 0.25f) * cellHeight;
+                    context.FillRect(x, y, 0.5f * cellWidth, 0.5f * cellHeight, Color.Blue);
                 }
             }
         }

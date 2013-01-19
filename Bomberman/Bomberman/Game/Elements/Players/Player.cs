@@ -10,10 +10,7 @@ using Bomberman.Game.Elements.Fields;
 namespace Bomberman.Game.Elements.Players
 {
     public class Player : MovableCell, PlayerInputListener
-    {
-        private static readonly int SPEED_START = 145;
-        private static readonly int SPEED_INCREASE = 25;
-
+    {   
         private int index;
 
         private bool alive;
@@ -40,7 +37,7 @@ namespace Bomberman.Game.Elements.Players
             powerups = new PowerupList();
 
             alive = true;
-            speed = SPEED_START;
+            speed = Settings.Get(Settings.VAL_PLAYER_SPEED);
             bombTimeout = 3.0f;
             bombRadius = 2;
         }
