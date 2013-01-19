@@ -26,7 +26,7 @@ namespace Bomberman.Game.Elements.Fields
             cellWidth = width / field.GetWidth();
             cellHeight = height / field.GetHeight();
 
-            TempInitPlayerImages();
+            TempInitImages();
         }
 
         public override void Draw(Context context)
@@ -52,13 +52,10 @@ namespace Bomberman.Game.Elements.Fields
             foreach (FieldCell cell in cells)
             {
                 TextureImage image = null;
-                bool hasPowerup = false;
 
                 if (cell.IsBrick())
                 {
                     image = breakableImage;
-                    BrickCell brick = (BrickCell)cell;
-                    hasPowerup = brick.powerup != null;
                 }
                 else if (cell.IsSolid())
                 {
@@ -80,13 +77,20 @@ namespace Bomberman.Game.Elements.Fields
                     float drawX = cell.GetPx() - 0.5f * image.GetWidth();
                     float drawY = cell.GetPy() - 0.5f * image.GetHeight();
                     context.DrawImage(image, drawX, drawY);
-                }
 
-                if (hasPowerup)
-                {
-                    float x = (cell.GetCx() + 0.25f) * cellWidth;
-                    float y = (cell.GetCy() + 0.25f) * cellHeight;
-                    context.FillRect(x, y, 0.5f * cellWidth, 0.5f * cellHeight, Color.Blue);
+                    if (cell.IsBrick())
+                    {   
+                        BrickCell brick = (BrickCell)cell;
+                        PowerupCell powerupCell = brick.powerup;
+                        if (powerupCell != null)
+                        {
+                            Powerups powerup = powerupCell.powerup;
+                            TextureImage powerupImage = powerupImages[(int)powerup];
+                            drawX = cell.GetPx() - 0.5f * powerupImage.GetWidth();
+                            drawY = cell.GetPy() - 0.5f * powerupImage.GetHeight();
+                            context.DrawImage(powerupImage, drawX, drawY);
+                        }
+                    }
                 }
             }
         }
@@ -126,19 +130,36 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         private Dictionary<Direction, TextureImage> playerImages;
+        private TextureImage[] powerupImages;
 
         private TextureImage TempFindPlayerImage(Direction direction)
         {
             return playerImages[direction];
         }
 
-        private void TempInitPlayerImages()
+        private void TempInitImages()
         {
             playerImages = new Dictionary<Direction, TextureImage>();
             playerImages.Add(Direction.DOWN, Helper.GetTexture(A.tex_WLKS0001));
             playerImages.Add(Direction.UP, Helper.GetTexture(A.tex_WLKN0001));
             playerImages.Add(Direction.LEFT, Helper.GetTexture(A.tex_WLKW0001));
             playerImages.Add(Direction.RIGHT, Helper.GetTexture(A.tex_WLKE0001));
+
+            powerupImages = new TextureImage[]
+            {
+                Helper.GetTexture(A.tex_pow_bomb),
+                Helper.GetTexture(A.tex_pow_flame),
+                Helper.GetTexture(A.tex_pow_disea),
+                Helper.GetTexture(A.tex_pow_kick),
+                Helper.GetTexture(A.tex_pow_skate),
+                Helper.GetTexture(A.tex_pow_punch),
+                Helper.GetTexture(A.tex_pow_grab),
+                Helper.GetTexture(A.tex_pow_pooge),
+                Helper.GetTexture(A.tex_pow_gold),
+                Helper.GetTexture(A.tex_pow_trig),
+                Helper.GetTexture(A.tex_pow_jelly),
+                Helper.GetTexture(A.tex_pow_ebola),
+            };
         }
     }
 }
