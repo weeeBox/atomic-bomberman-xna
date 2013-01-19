@@ -93,21 +93,9 @@ namespace BombermanContentPipeline.Scheme
             return int.Parse(str);
         }
 
-        protected int ReadInt(String str, int defaultValue)
-        {
-            int value = defaultValue;
-            int.TryParse(str, out defaultValue);
-            return value;
-        }
-
         protected bool ReadBool(String str)
         {
-            return ReadBool(str, false);
-        }
-
-        protected bool ReadBool(String str, bool defaultValue)
-        {
-            return ReadInt(str, 0) == 1;
+            return ReadInt(str) == 1;
         }
     }
 
