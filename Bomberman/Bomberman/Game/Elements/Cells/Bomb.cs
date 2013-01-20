@@ -23,10 +23,13 @@ namespace Bomberman.Game.Elements.Cells
         public Bomb(Player player) : base(player.GetCx(), player.GetCy())
         {
             this.player = player;
+            speed = Settings.Get(Settings.VAL_BOMB_ROLL_SPEED);
         }
 
         public override void Update(float delta)
         {
+            base.Update(delta);
+
             remains -= delta;
             if (remains <= 0)
             {
@@ -57,14 +60,7 @@ namespace Bomberman.Game.Elements.Cells
 
         public void Kick(Direction direction)
         {
-            switch (direction)
-            {
-                case Direction.UP:
-                {
-
-                    break;
-                }
-            }
+            SetMoveDirection(direction);
         }
 
         public override bool IsBomb()

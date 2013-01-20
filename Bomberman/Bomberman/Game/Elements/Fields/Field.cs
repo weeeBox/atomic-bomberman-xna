@@ -406,10 +406,10 @@ namespace Bomberman.Game.Elements.Fields
             return cells.GetHeight();
         }
 
-        public void CellPosChanged(MovableCell cell, float oldPx, float oldPy)
+        public void CellPosChanged(MovableCell cell)
         {
             ProcessFieldBounds(cell);
-            ProcessCollisions(cell, oldPx, oldPy);
+            ProcessCollisions(cell);
         }
 
         private static void ProcessFieldBounds(MovableCell cell)
@@ -459,12 +459,12 @@ namespace Bomberman.Game.Elements.Fields
             }
         }
 
-        private void ProcessCollisions(MovableCell cell, float oldPx, float oldPy)
+        private void ProcessCollisions(MovableCell cell)
         {
             float px = cell.GetPx();
             float py = cell.GetPy();
-            float dx = px - oldPx;
-            float dy = py - oldPy;
+            float dx = px - cell.oldPx;
+            float dy = py - cell.oldPy;
 
             if (dx > 0)
             {

@@ -16,6 +16,10 @@ namespace Bomberman.Game.Elements.Cells
 
         protected bool moving;
 
+        /* The last position BEFORE MOVE operation */
+        public float oldPx;
+        public float oldPy;
+
         public MovableCell(int cx, int cy)
             : base(cx, cy)
         {
@@ -228,13 +232,13 @@ namespace Bomberman.Game.Elements.Cells
         {
             if (dx != 0.0f || dy != 0.0f)
             {
-                float oldPx = px;
-                float oldPy = py;
+                oldPx = px;
+                oldPy = py;
 
                 px += dx;
                 py += dy;
 
-                OnPositionChanged(oldPx, oldPy);
+                OnPositionChanged();
                 UpdateCellPos(px, py);
             }
         }
@@ -254,6 +258,9 @@ namespace Bomberman.Game.Elements.Cells
             this.px = px;
             this.py = py;
 
+            oldPx = px;
+            oldPy = py;
+
             UpdateCellPos(px, py);
         }
 
@@ -263,9 +270,9 @@ namespace Bomberman.Game.Elements.Cells
             cy = Util.Py2Cy(py);
         }
 
-        protected void OnPositionChanged(float oldPx, float oldPy)
+        protected void OnPositionChanged()
         {
-            GetField().CellPosChanged(this, oldPx, oldPy);
+            GetField().CellPosChanged(this);
         }
 
         public void SetSpeed(float speed)
