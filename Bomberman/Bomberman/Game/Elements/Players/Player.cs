@@ -71,6 +71,12 @@ namespace Bomberman.Game.Elements.Players
                     TrySetBomb();
                     break;
                 }
+
+                case PlayerAction.Special:
+                {
+                    TrySpecialAction();
+                    break;
+                }
             }
         }
 
@@ -320,6 +326,19 @@ namespace Bomberman.Game.Elements.Players
                 if (bomb != null)
                 {
                     field.SetBomb(bomb);
+                }
+            }
+        }
+
+        private void TrySpecialAction()
+        {
+            if (CanKick())
+            {
+                Bomb kickedBomb = bombs.GetFirstKickedBomb();
+                if (kickedBomb != null)
+                {
+                    kickedBomb.SetCell();
+                    kickedBomb.StopMoving();
                 }
             }
         }

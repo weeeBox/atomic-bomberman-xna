@@ -26,6 +26,11 @@ namespace Bomberman.Game.Elements.Fields
         {   
         }
 
+        public void SetCell()
+        {
+            SetCell(cx, cy);
+        }
+
         public void SetCell(int cx, int cy)
         {
             this.cx = cx;

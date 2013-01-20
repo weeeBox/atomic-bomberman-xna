@@ -15,7 +15,7 @@ namespace Bomberman.Game.Elements.Cells
         public bool active;
         
         private int radius;
-        private float remains;
+        public float remains;
         private bool dud;
         private bool jelly;
         private bool trigger;
@@ -55,6 +55,7 @@ namespace Bomberman.Game.Elements.Cells
 
         public void Blow()
         {
+            SetCell();
             StopMoving();
             active = false;
         }

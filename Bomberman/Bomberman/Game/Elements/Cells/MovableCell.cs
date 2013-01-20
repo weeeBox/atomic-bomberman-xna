@@ -12,9 +12,9 @@ namespace Bomberman.Game.Elements.Cells
         private Direction oldDirection;
 
         /* Points per second */
-        protected float speed;
+        public float speed;
 
-        protected bool moving;
+        public bool moving;
 
         /* The last position BEFORE MOVE operation */
         public float oldPx;
@@ -197,7 +197,7 @@ namespace Bomberman.Game.Elements.Cells
             moving = true;
         }
 
-        protected void StopMoving()
+        public void StopMoving()
         {
             moving = false;
         }
