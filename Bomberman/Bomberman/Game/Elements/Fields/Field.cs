@@ -144,7 +144,18 @@ namespace Bomberman.Game.Elements.Fields
             int brickIndex = 0;
             foreach (PowerupInfo info in powerupInfo)
             {
-                if (!info.forbidden)
+                if (info.forbidden)
+                {   
+                }
+                else if (info.bornWith)
+                {
+                    List<Player> playerList = players.list;
+                    foreach (Player player in playerList)
+                    {
+                        player.TryAddPowerup(info.powerupIndex);
+                    }
+                }
+                else
                 {
                     int powerupIndex = info.powerupIndex;
                     int powerupCount = POWERUPS_COUNT[powerupIndex];
@@ -176,7 +187,7 @@ namespace Bomberman.Game.Elements.Fields
                         break;
                     }
                 }
-             }
+            }
         }
 
         private int GetEmptyCells(FieldCell[] array)
