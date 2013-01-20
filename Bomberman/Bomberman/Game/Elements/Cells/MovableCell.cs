@@ -51,8 +51,13 @@ namespace Bomberman.Game.Elements.Cells
                         FieldCell blockingCell = null;
                         if (oldPy == py) // movement forward blocked?
                         {
-                            blockingCell = GetField().GetCell(cx, cy - 1);
-                            if (blockingCell != null && blockingCell.IsObstacle())
+                            blockingCell = NearCell(0, -1);
+                            if (blockingCell == null)
+                            {
+                                break; // hit the wall
+                            }
+
+                            if (blockingCell.IsObstacle())
                             {
                                 float blockingPx = blockingCell.GetPx();
                                 if (px < blockingPx && !GetField().IsObstacleCell(cx - 1, cy - 1))
@@ -85,8 +90,13 @@ namespace Bomberman.Game.Elements.Cells
                         FieldCell blockingCell = null;
                         if (oldPy == py) // movement forward blocked?
                         {
-                            blockingCell = GetField().GetCell(cx, cy + 1);
-                            if (blockingCell != null && blockingCell.IsObstacle())
+                            blockingCell = NearCell(0, 1);
+                            if (blockingCell == null)
+                            {
+                                break; // hit the wall
+                            }
+
+                            if (blockingCell.IsObstacle())
                             {
                                 float blockingPx = blockingCell.GetPx();
                                 if (px < blockingPx && !GetField().IsObstacleCell(cx - 1, cy + 1))
@@ -119,8 +129,13 @@ namespace Bomberman.Game.Elements.Cells
                         FieldCell blockingCell = null;
                         if (oldPx == px) // movement forward blocked?
                         {
-                            blockingCell = GetField().GetCell(cx - 1, cy);
-                            if (blockingCell != null && blockingCell.IsObstacle())
+                            blockingCell = NearCell(-1, 0);
+                            if (blockingCell == null)
+                            {
+                                break; // hit the wall
+                            }
+
+                            if (blockingCell.IsObstacle())
                             {
                                 float blockingPy = blockingCell.GetPy();
                                 if (py < blockingPy && !GetField().IsObstacleCell(cx - 1, cy - 1))
@@ -152,8 +167,13 @@ namespace Bomberman.Game.Elements.Cells
                         FieldCell blockingCell = null;
                         if (oldPx == px) // movement forward blocked?
                         {
-                            blockingCell = GetField().GetCell(cx + 1, cy);
-                            if (blockingCell != null && blockingCell.IsObstacle())
+                            blockingCell = NearCell(1, 0);
+                            if (blockingCell == null)
+                            {
+                                break; // hit the wall
+                            }
+
+                            if (blockingCell.IsObstacle())
                             {
                                 float blockingPy = blockingCell.GetPy();
                                 if (py < blockingPy && !GetField().IsObstacleCell(cx + 1, cy - 1))
