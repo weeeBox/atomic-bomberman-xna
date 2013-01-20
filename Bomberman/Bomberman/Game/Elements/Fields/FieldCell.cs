@@ -10,12 +10,12 @@ namespace Bomberman.Game.Elements.Fields
     public class FieldCell : Updatable
     {
         /* Coordinates in cells */
-        protected int cx;
-        protected int cy;
+        public int cx;
+        public int cy;
 
         /* Coordinates in points */
-        protected float px;
-        protected float py;
+        public float px;
+        public float py;
 
         public FieldCell(int cx, int cy)
         {

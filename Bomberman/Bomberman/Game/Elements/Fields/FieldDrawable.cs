@@ -64,6 +64,8 @@ namespace Bomberman.Game.Elements.Fields
                 else if (cell.IsBomb())
                 {
                     image = bombImage;
+
+                    context.DrawRect(cell.cx * cellWidth, cell.cy * cellHeight, cellWidth, cellHeight, Color.White);
                 }
                 else if (cell.IsPowerup())
                 {

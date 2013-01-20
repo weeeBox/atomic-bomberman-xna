@@ -557,6 +557,11 @@ namespace Bomberman.Game.Elements.Fields
                     return false;
                 }
 
+                if (Collides(player.oldPx, player.oldPy, cell))
+                {
+                    return false; // we only can kick the bomb if we haven't any collisions with it before
+                }
+
                 Bomb bomb = (Bomb)cell;
                 bomb.Kick(direction);
 
@@ -594,13 +599,13 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         private bool Collides(MovableCell a, FieldCell b)
-        {
-            float acx = a.GetPx();
-            float acy = a.GetPy();
-            float bcx = b.GetPx();
-            float bcy = b.GetPy();
+        {   
+            return Collides(a.px, a.py, b);
+        }
 
-            return Math.Abs(acx - bcx) < Constant.CELL_WIDTH && Math.Abs(acy - bcy) < Constant.CELL_HEIGHT;
+        private static bool Collides(float px, float py, FieldCell b)
+        {   
+            return Math.Abs(px - b.px) < Constant.CELL_WIDTH && Math.Abs(py - b.py) < Constant.CELL_HEIGHT;
         }
 
         private bool IsInsideField(int cx, int cy)

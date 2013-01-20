@@ -55,6 +55,7 @@ namespace Bomberman.Game.Elements.Cells
 
         public void Blow()
         {
+            StopMoving();
             active = false;
         }
 
