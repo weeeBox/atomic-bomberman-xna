@@ -27,7 +27,7 @@ namespace Bomberman.Game.Elements.Cells
             }
         }
 
-        public override bool IsExplosion()
+        public override bool IsFlame()
         {
             return true;
         }

@@ -80,7 +80,7 @@ namespace Bomberman.Game.Elements.Fields
                         image = powerupImages[powerup];
                     }
                 }
-                else if (cell.IsExplosion())
+                else if (cell.IsFlame())
                 {
                     int x = cell.GetCx() * cellWidth;
                     int y = cell.GetCy() * cellHeight;

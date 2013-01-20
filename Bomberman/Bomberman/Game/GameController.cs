@@ -28,7 +28,7 @@ namespace Bomberman.Game
 
             game = new Game();
             InitPlayers();
-            InitField(A.sch_4CORNERS);
+            InitField(A.sch_X);
 
             gameScene = new GameScene();
         }

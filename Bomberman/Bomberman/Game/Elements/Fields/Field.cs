@@ -115,18 +115,10 @@ namespace Bomberman.Game.Elements.Fields
                 int cy = info.y;
                 player.SetCell(info.x, info.y);
 
-                int fromCx = Math.Max(0, cx - 1);
-                int toCx = Math.Min(cx + 1, GetWidth() - 1);
-                int fromCy = Math.Max(0, cy - 1);
-                int toCy = Math.Min(cy + 1, GetHeight() - 1);
-
-                for (int x = fromCx; x <= toCx; ++x)
-                {
-                    for (int y = fromCy; y <= toCy; ++y)
-                    {
-                        ClearCell(x, y);
-                    }
-                }
+                ClearCell(cx - 1, cy);
+                ClearCell(cx, cy - 1);
+                ClearCell(cx + 1, cy);
+                ClearCell(cx, cy + 1);
             }
         }
 
@@ -597,6 +589,14 @@ namespace Bomberman.Game.Elements.Fields
                             player.TryAddPowerup(powerup);
                         }
                         ClearCell(cx, cy);
+                    }
+                }
+                else if (cell.IsFlame())
+                {
+                    if (movable.IsBomb())
+                    {
+                        Bomb bomb = (Bomb)movable;
+                        BlowBomb(bomb);
                     }
                 }
             }

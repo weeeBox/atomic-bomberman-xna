@@ -95,7 +95,7 @@ namespace Bomberman.Game.Elements.Fields
             return false;
         }
 
-        public virtual bool IsExplosion()
+        public virtual bool IsFlame()
         {
             return false;
         }
