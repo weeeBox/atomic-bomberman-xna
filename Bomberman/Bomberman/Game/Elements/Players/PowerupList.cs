@@ -10,8 +10,8 @@ namespace Bomberman.Game.Elements.Players
 {
     public class PowerupList
     {
-        private int[] powerups;
-        private int[] maxCount;
+        public int[] powerups;
+        public int[] maxCount;
 
         public PowerupList(int totalCount)
         {

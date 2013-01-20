@@ -26,7 +26,7 @@ namespace Bomberman.Game.Elements.Players
         private PlayerInput input;
 
         private BombList bombs;
-        private PowerupList powerups;
+        public PowerupList powerups;
         
         public Player(int index, PlayerInput input)
             : base(0, 0)

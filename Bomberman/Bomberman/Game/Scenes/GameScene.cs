@@ -30,6 +30,9 @@ namespace Bomberman.Game.Scenes
 
             // field drawer
             AddDrawable(new FieldDrawable(field, Constant.FIELD_OFFSET_X, Constant.FIELD_OFFSET_Y, Constant.FIELD_WIDTH, Constant.FIELD_HEIGHT));
+
+            // field drawer
+            AddDrawable(new PowerupsDrawable(field, 0, 0, Constant.FIELD_WIDTH, Constant.FIELD_OFFSET_Y));
         }
     }
 }
