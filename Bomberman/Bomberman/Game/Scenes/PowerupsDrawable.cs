@@ -38,15 +38,15 @@ namespace Bomberman.Game.Scenes
             foreach (int count in powerups)
             {
                 TextureImage image = powerupImages[powerup];
+                drawY = 0;
                 for (int i = 0; i < count; ++i)
-                {   
-                    if (drawX + image.GetWidth() > width)
-                    {
-                        drawX = 0;
-                        drawY += image.GetHeight();
-                    }
-
+                {
                     context.DrawImage(image, drawX, drawY);
+                    drawX += 2;
+                    drawY += 2;
+                }
+                if (count > 0)
+                {
                     drawX += image.GetWidth();
                 }
                 ++powerup;
