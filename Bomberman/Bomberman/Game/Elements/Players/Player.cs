@@ -110,6 +110,14 @@ namespace Bomberman.Game.Elements.Players
             StopMoving();
         }
 
+        public override void HitWall()
+        {
+        }
+
+        public override void HitObstacle(FieldCell obstacle)
+        {   
+        }
+
         //////////////////////////////////////////////////////////////////////////////
 
         #region Powerups
@@ -273,7 +281,7 @@ namespace Bomberman.Game.Elements.Players
 
         private float CalcBombTimeout()
         {
-            return Settings.Get(Settings.VAL_PU_INIT_BOMB);
+            return Settings.Get(Settings.VAL_FUZE_TIME_NORMAL) * 0.001f;
         }
 
         #endregion

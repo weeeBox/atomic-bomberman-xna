@@ -408,100 +408,88 @@ namespace Bomberman.Game.Elements.Fields
 
         public void CellPosChanged(MovableCell cell)
         {
-            ProcessFieldBounds(cell);
             ProcessCollisions(cell);
         }
 
-        private static void ProcessFieldBounds(MovableCell cell)
+        private void ProcessCollisions(MovableCell movable)
         {
-            Direction direction = cell.GetDirection();
-            switch (direction)
-            {
-                case Direction.LEFT:
-                {
-                    float minX = 0.5f * Constant.CELL_WIDTH;
-                    if (cell.GetPx() < minX)
-                    {
-                        cell.SetPosX(minX);
-                    }
-                    break;
-                }
-
-                case Direction.RIGHT:
-                {
-                    float maxX = Constant.FIELD_WIDTH - 0.5f * Constant.CELL_WIDTH;
-                    if (cell.GetPx() > maxX)
-                    {
-                        cell.SetPosX(maxX);
-                    }
-                    break;
-                }
-
-                case Direction.UP:
-                {
-                    float minY = 0.5f * Constant.CELL_HEIGHT;
-                    if (cell.GetPy() < minY)
-                    {
-                        cell.SetPosY(minY);
-                    }
-                    break;
-                }
-
-                case Direction.DOWN:
-                {
-                    float maxY = Constant.FIELD_HEIGHT - 0.5f * Constant.CELL_HEIGHT;
-                    if (cell.GetPy() > maxY)
-                    {
-                        cell.SetPosY(maxY);
-                    }
-                    break;
-                }
-            }
-        }
-
-        private void ProcessCollisions(MovableCell cell)
-        {
-            float px = cell.GetPx();
-            float py = cell.GetPy();
-            float dx = px - cell.oldPx;
-            float dy = py - cell.oldPy;
+            float px = movable.GetPx();
+            float py = movable.GetPy();
+            float dx = px - movable.oldPx;
+            float dy = py - movable.oldPy;
 
             if (dx > 0)
             {
-                int cx = Util.Px2Cx(px) + 1;
-                int cy = Util.Py2Cy(py);
+                float maxX = Constant.FIELD_WIDTH - 0.5f * Constant.CELL_WIDTH;
+                if (movable.GetPx() > maxX)
+                {
+                    movable.SetPosX(maxX);
+                    movable.HitWall();
+                }
+                else
+                {
+                    int cx = Util.Px2Cx(px) + 1;
+                    int cy = Util.Py2Cy(py);
 
-                ProcessCollision(cell, cx, cy - 1);
-                ProcessCollision(cell, cx, cy);
-                ProcessCollision(cell, cx, cy + 1);
+                    ProcessCollision(movable, cx, cy - 1);
+                    ProcessCollision(movable, cx, cy);
+                    ProcessCollision(movable, cx, cy + 1);
+                }
             }
             else if (dx < 0)
             {
-                int cx = Util.Px2Cx(px) - 1;
-                int cy = Util.Py2Cy(py);
+                float minX = 0.5f * Constant.CELL_WIDTH;
+                if (movable.GetPx() < minX)
+                {
+                    movable.SetPosX(minX);
+                    movable.HitWall();
+                }
+                else
+                {
+                    int cx = Util.Px2Cx(px) - 1;
+                    int cy = Util.Py2Cy(py);
 
-                ProcessCollision(cell, cx, cy - 1);
-                ProcessCollision(cell, cx, cy);
-                ProcessCollision(cell, cx, cy + 1);
+                    ProcessCollision(movable, cx, cy - 1);
+                    ProcessCollision(movable, cx, cy);
+                    ProcessCollision(movable, cx, cy + 1);
+                }
             }
 
             if (dy > 0)
             {
-                int cx = Util.Px2Cx(px);
-                int cy = Util.Py2Cy(py) + 1;
+                float maxY = Constant.FIELD_HEIGHT - 0.5f * Constant.CELL_HEIGHT;
+                if (movable.GetPy() > maxY)
+                {
+                    movable.SetPosY(maxY);
+                    movable.HitWall();
+                }
+                else
+                {
+                    int cx = Util.Px2Cx(px);
+                    int cy = Util.Py2Cy(py) + 1;
 
-                ProcessCollision(cell, cx - 1, cy);
-                ProcessCollision(cell, cx, cy);
-                ProcessCollision(cell, cx + 1, cy);
+                    ProcessCollision(movable, cx - 1, cy);
+                    ProcessCollision(movable, cx, cy);
+                    ProcessCollision(movable, cx + 1, cy);
+                }
             }
             else if (dy < 0)
             {
-                int cx = Util.Px2Cx(px);
-                int cy = Util.Py2Cy(py) - 1;
+                float minY = 0.5f * Constant.CELL_HEIGHT;
+                if (movable.GetPy() < minY)
+                {
+                    movable.SetPosY(minY);
+                    movable.HitWall();
+                }
+                else
+                {
+                    int cx = Util.Px2Cx(px);
+                    int cy = Util.Py2Cy(py) - 1;
 
-                ProcessCollision(cell, cx - 1, cy);
-                ProcessCollision(cell, cx, cy);
-                ProcessCollision(cell, cx + 1, cy);
+                    ProcessCollision(movable, cx - 1, cy);
+                    ProcessCollision(movable, cx, cy);
+                    ProcessCollision(movable, cx + 1, cy);
+                }
             }
         }
 
@@ -515,10 +503,56 @@ namespace Bomberman.Game.Elements.Fields
                 {
                     if (Collides(movable, cell))
                     {
-                        bool bombKicked = TryKickBomb(movable, cell);
-                        if (!bombKicked)
+                        if (movable.IsPlayer() && cell.IsBomb())
+                        {   
+                            Player player = (Player)movable;
+
+//                             if (!player.CanKick())
+//                             {
+//                                 return false;
+//                             }
+
+                            Direction direction = player.GetDirection();
+
+                            Bomb bomb = (Bomb)cell;
+                            if (bomb.moving)
+                            {
+                                AdjustPosition(movable, bomb);
+                                bomb.Kick(direction);
+                            }
+                            else
+                            {
+                                bool farEnoughForKick = false; // true, if distance between player's center and bomb's center is enough for a kick
+                                switch (direction)
+                                {
+                                    case Direction.UP:
+                                    case Direction.DOWN:
+                                        farEnoughForKick = Math.Abs(player.py - cell.py) > 0.5f * Constant.CELL_HEIGHT;
+                                        break;
+                                    case Direction.LEFT:
+                                    case Direction.RIGHT:
+                                        farEnoughForKick = Math.Abs(player.px - cell.px) > 0.5f * Constant.CELL_WIDTH;
+                                        break;
+                                    default:
+                                        Debug.Assert(false, "Unknown direction: " + direction);
+                                        break;
+                                }
+
+                                if (farEnoughForKick)
+                                {
+                                    FieldCell blockingCell = cell.NearCellDir(direction);
+                                    if (blockingCell != null && !blockingCell.IsObstacle()) // can we kick the bomb here?
+                                    {
+                                        ((Bomb)cell).Kick(direction);
+                                    }
+                                    AdjustPosition(movable, cell);
+                                }
+                            }
+                        }
+                        else
                         {
-                            AdjustPosition(movable, cx, cy);
+                            AdjustPosition(movable, cell);
+                            movable.HitObstacle(cell);
                         }
                     }
                 }
@@ -540,59 +574,28 @@ namespace Bomberman.Game.Elements.Fields
             }
         }
 
-        private bool TryKickBomb(MovableCell movable, FieldCell cell)
-        {
-            if (movable.IsPlayer() && cell.IsBomb())
-            {
-                Player player = (Player)movable;
-                if (!player.CanKick())
-                {
-                    return false;
-                }
-
-                Direction direction = player.GetDirection();
-                FieldCell blockingCell = cell.NearCellDir(direction);
-                if (blockingCell == null || blockingCell.IsObstacle()) // can we kick the bomb here?
-                {
-                    return false;
-                }
-
-                if (Collides(player.oldPx, player.oldPy, cell))
-                {
-                    return false; // we only can kick the bomb if we haven't any collisions with it before
-                }
-
-                Bomb bomb = (Bomb)cell;
-                bomb.Kick(direction);
-
-                return true;
-            }
-
-            return false;
-        }
-
-        private static void AdjustPosition(MovableCell movable, int cx, int cy)
+        private static void AdjustPosition(MovableCell movable, FieldCell obstacle)
         {
             switch (movable.GetDirection())
             {
                 case Direction.UP:
                     {
-                        movable.SetPosY(Util.Cy2Py(cy + 1));
+                        movable.SetPosY(obstacle.py + Constant.CELL_HEIGHT);
                         break;
                     }
                 case Direction.DOWN:
                     {
-                        movable.SetPosY(Util.Cy2Py(cy - 1));
+                        movable.SetPosY(obstacle.py - Constant.CELL_HEIGHT);
                         break;
                     }
                 case Direction.LEFT:
                     {
-                        movable.SetPosX(Util.Cx2Px(cx + 1));
+                        movable.SetPosX(obstacle.px + Constant.CELL_WIDTH);
                         break;
                     }
                 case Direction.RIGHT:
                     {
-                        movable.SetPosX(Util.Cx2Px(cx - 1));
+                        movable.SetPosX(obstacle.px - Constant.CELL_WIDTH);
                         break;
                     }
             }

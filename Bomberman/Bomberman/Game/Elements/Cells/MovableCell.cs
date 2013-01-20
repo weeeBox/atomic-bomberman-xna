@@ -191,6 +191,16 @@ namespace Bomberman.Game.Elements.Cells
             MoveY(yOffset < 0 ? Math.Max(yOffset, -delta * speed) : Math.Min(yOffset, delta * speed));
         }
 
+        public virtual void HitWall()
+        {
+            StopMoving();
+        }
+
+        public virtual void HitObstacle(FieldCell obstacle)
+        {
+            StopMoving();
+        }
+
         protected void SetMoveDirection(Direction direction)
         {
             SetDirection(direction);
