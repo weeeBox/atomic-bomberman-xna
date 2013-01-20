@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BomberEngine.Core;
+using BomberEngine.Debugging;
 
 namespace Bomberman.Game.Elements.Fields
 {
@@ -92,6 +93,31 @@ namespace Bomberman.Game.Elements.Fields
         public float GetPy()
         {
             return py;
+        }
+
+        public FieldCell NearCell(int dcx, int dcy)
+        {
+            return GetField().GetCell(cx + dcx, cy + dcy);
+        }
+
+        public FieldCell NearCellDir(Direction dir)
+        {
+            switch (dir)
+            {
+                case Direction.DOWN:
+                    return NearCell(0, 1);
+                case Direction.UP:
+                    return NearCell(0, -1);
+                case Direction.LEFT:
+                    return NearCell(-1, 0);
+                case Direction.RIGHT:
+                    return NearCell(1, 0);
+                default:
+                    Debug.Assert(false, "Unknown dir: " + dir);
+                    break;
+            }
+
+            return null;
         }
 
         protected Field GetField()

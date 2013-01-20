@@ -515,28 +515,10 @@ namespace Bomberman.Game.Elements.Fields
                 {
                     if (Collides(movable, cell))
                     {
-                        switch (movable.GetDirection())
+                        bool bombKicked = TryKickBomb(movable, cell);
+                        if (!bombKicked)
                         {
-                            case Direction.UP:
-                            {
-                                movable.SetPosY(Util.Cy2Py(cy + 1));
-                                break;
-                            }
-                            case Direction.DOWN:
-                            {
-                                movable.SetPosY(Util.Cy2Py(cy - 1));
-                                break;
-                            }
-                            case Direction.LEFT:
-                            {
-                                movable.SetPosX(Util.Cx2Px(cx + 1));
-                                break;
-                            }
-                            case Direction.RIGHT:
-                            {
-                                movable.SetPosX(Util.Cx2Px(cx - 1));
-                                break;
-                            }
+                            AdjustPosition(movable, cx, cy);
                         }
                     }
                 }
@@ -555,6 +537,59 @@ namespace Bomberman.Game.Elements.Fields
                         ClearCell(cx, cy);
                     }
                 }
+            }
+        }
+
+        private bool TryKickBomb(MovableCell movable, FieldCell cell)
+        {
+            if (movable.IsPlayer() && cell.IsBomb())
+            {
+                Player player = (Player)movable;
+                if (!player.CanKick())
+                {
+                    return false;
+                }
+
+                Direction direction = player.GetDirection();
+                FieldCell blockingCell = cell.NearCellDir(direction);
+                if (blockingCell == null || blockingCell.IsObstacle()) // can we kick the bomb here?
+                {
+                    return false;
+                }
+
+                Bomb bomb = (Bomb)cell;
+                bomb.Kick(direction);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private static void AdjustPosition(MovableCell movable, int cx, int cy)
+        {
+            switch (movable.GetDirection())
+            {
+                case Direction.UP:
+                    {
+                        movable.SetPosY(Util.Cy2Py(cy + 1));
+                        break;
+                    }
+                case Direction.DOWN:
+                    {
+                        movable.SetPosY(Util.Cy2Py(cy - 1));
+                        break;
+                    }
+                case Direction.LEFT:
+                    {
+                        movable.SetPosX(Util.Cx2Px(cx + 1));
+                        break;
+                    }
+                case Direction.RIGHT:
+                    {
+                        movable.SetPosX(Util.Cx2Px(cx - 1));
+                        break;
+                    }
             }
         }
 

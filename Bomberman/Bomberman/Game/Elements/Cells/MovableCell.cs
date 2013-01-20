@@ -14,11 +14,188 @@ namespace Bomberman.Game.Elements.Cells
         /* Points per second */
         protected float speed;
 
+        protected bool moving;
+
         public MovableCell(int cx, int cy)
             : base(cx, cy)
         {
             direction = Direction.DOWN;
             oldDirection = Direction.DOWN;
+        }
+
+        public override void Update(float delta)
+        {
+            if (moving)
+            {
+                UpdateMoving(delta);
+            }
+        }
+
+        private void UpdateMoving(float delta)
+        {
+            float oldPx = px;
+            float oldPy = py;
+
+            Direction direction = GetDirection();
+            switch (direction)
+            {
+                case Direction.UP:
+                    {
+                        MoveY(-delta * speed);
+
+                        // TODO: разобрать это пиздец
+                        FieldCell blockingCell = null;
+                        if (oldPy == py) // movement forward blocked?
+                        {
+                            blockingCell = GetField().GetCell(cx, cy - 1);
+                            if (blockingCell != null && blockingCell.IsObstacle())
+                            {
+                                float blockingPx = blockingCell.GetPx();
+                                if (px < blockingPx && !GetField().IsObstacleCell(cx - 1, cy - 1))
+                                {
+                                    MoveX(Math.Max(Util.Cx2Px(cx - 1) - px, -speed * delta));
+                                }
+                                else if (px > blockingPx && !GetField().IsObstacleCell(cx + 1, cy - 1))
+                                {
+                                    MoveX(Math.Min(Util.Cx2Px(cx + 1) - px, speed * delta));
+                                }
+                            }
+                            else
+                            {
+                                MoveToTargetPx(delta);
+                            }
+                        }
+                        else
+                        {
+                            MoveToTargetPx(delta);
+                        }
+
+                        break;
+                    }
+
+                case Direction.DOWN:
+                    {
+                        MoveY(delta * speed);
+
+                        // TODO: разобрать это пиздец
+                        FieldCell blockingCell = null;
+                        if (oldPy == py) // movement forward blocked?
+                        {
+                            blockingCell = GetField().GetCell(cx, cy + 1);
+                            if (blockingCell != null && blockingCell.IsObstacle())
+                            {
+                                float blockingPx = blockingCell.GetPx();
+                                if (px < blockingPx && !GetField().IsObstacleCell(cx - 1, cy + 1))
+                                {
+                                    MoveX(Math.Max(Util.Cx2Px(cx - 1) - px, -speed * delta));
+                                }
+                                else if (px > blockingPx && !GetField().IsObstacleCell(cx + 1, cy + 1))
+                                {
+                                    MoveX(Math.Min(Util.Cx2Px(cx + 1) - px, speed * delta));
+                                }
+                            }
+                            else
+                            {
+                                MoveToTargetPx(delta);
+                            }
+                        }
+                        else
+                        {
+                            MoveToTargetPx(delta);
+                        }
+
+                        break;
+                    }
+
+                case Direction.LEFT:
+                    {
+                        MoveX(-delta * speed);
+
+                        // TODO: разобрать это пиздец
+                        FieldCell blockingCell = null;
+                        if (oldPx == px) // movement forward blocked?
+                        {
+                            blockingCell = GetField().GetCell(cx - 1, cy);
+                            if (blockingCell != null && blockingCell.IsObstacle())
+                            {
+                                float blockingPy = blockingCell.GetPy();
+                                if (py < blockingPy && !GetField().IsObstacleCell(cx - 1, cy - 1))
+                                {
+                                    MoveY(Math.Max(Util.Cy2Py(cy - 1) - py, -speed * delta));
+                                }
+                                else if (py > blockingPy && !GetField().IsObstacleCell(cx - 1, cy + 1))
+                                {
+                                    MoveY(Math.Min(Util.Cy2Py(cy + 1) - py, speed * delta));
+                                }
+                            }
+                            else
+                            {
+                                MoveToTargetPy(delta);
+                            }
+                        }
+                        else
+                        {
+                            MoveToTargetPy(delta);
+                        }
+                        break;
+                    }
+
+                case Direction.RIGHT:
+                    {
+                        MoveX(delta * speed);
+
+                        // TODO: разобрать это пиздец
+                        FieldCell blockingCell = null;
+                        if (oldPx == px) // movement forward blocked?
+                        {
+                            blockingCell = GetField().GetCell(cx + 1, cy);
+                            if (blockingCell != null && blockingCell.IsObstacle())
+                            {
+                                float blockingPy = blockingCell.GetPy();
+                                if (py < blockingPy && !GetField().IsObstacleCell(cx + 1, cy - 1))
+                                {
+                                    MoveY(Math.Max(Util.Cy2Py(cy - 1) - py, -speed * delta));
+                                }
+                                else if (py > blockingPy && !GetField().IsObstacleCell(cx + 1, cy + 1))
+                                {
+                                    MoveY(Math.Min(Util.Cy2Py(cy + 1) - py, speed * delta));
+                                }
+                            }
+                            else
+                            {
+                                MoveToTargetPy(delta);
+                            }
+                        }
+                        else
+                        {
+                            MoveToTargetPy(delta);
+                        }
+                        break;
+                    }
+            }
+        }
+
+        private void MoveToTargetPx(float delta)
+        {
+            float xOffset = Util.TargetPxOffset(px);
+            MoveX(xOffset < 0 ? Math.Max(xOffset, -delta * speed) : Math.Min(xOffset, delta * speed));
+        }
+
+        private void MoveToTargetPy(float delta)
+        {
+            float yOffset = Util.TargetPyOffset(py);
+            MoveY(yOffset < 0 ? Math.Max(yOffset, -delta * speed) : Math.Min(yOffset, delta * speed));
+        }
+
+        protected void SetMoveDirection(Direction direction)
+        {
+            SetDirection(direction);
+            moving = true;
+        }
+
+        protected void StopMoving()
+        {
+            moving = false;
         }
 
         public Direction GetDirection()

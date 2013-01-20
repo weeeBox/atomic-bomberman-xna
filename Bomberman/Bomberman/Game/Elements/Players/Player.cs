@@ -15,13 +15,9 @@ namespace Bomberman.Game.Elements.Players
         private int index;
 
         private bool alive;
-        private bool moving;
 
         private int bombRadius;
         private float bombTimeout;
-
-        private bool bombBouncing;
-        private bool bombDetonated;
 
         private PlayerInput input;
 
@@ -40,170 +36,6 @@ namespace Bomberman.Game.Elements.Players
             InitPowerups();
             InitBombs();
             InitPlayer();
-        }
-
-        public override void Update(float delta)
-        {
-            if (moving)
-            {
-                UpdateMoving(delta);
-            }
-        }
-
-        private void UpdateMoving(float delta)
-        {
-            float oldPx = px;
-            float oldPy = py;
-
-            Direction direction = GetDirection();
-            switch (direction)
-            {
-                case Direction.UP:
-                {
-                    MoveY(-delta * speed);
-
-                    // TODO: разобрать это пиздец
-                    FieldCell blockingCell = null;
-                    if (oldPy == py) // movement forward blocked?
-                    {
-                        blockingCell = GetField().GetCell(cx, cy - 1);
-                        if (blockingCell != null && blockingCell.IsObstacle())
-                        {
-                            float blockingPx = blockingCell.GetPx();
-                            if (px < blockingPx && !GetField().IsObstacleCell(cx - 1, cy - 1))
-                            {
-                                MoveX(Math.Max(Util.Cx2Px(cx - 1) - px, -speed * delta));
-                            }
-                            else if (px > blockingPx && !GetField().IsObstacleCell(cx + 1, cy - 1))
-                            {
-                                MoveX(Math.Min(Util.Cx2Px(cx + 1) - px, speed * delta));
-                            }
-                        }
-                        else
-                        {
-                            MoveToTargetPx(delta);
-                        }
-                    }
-                    else
-                    {
-                        MoveToTargetPx(delta);
-                    }
-
-                    break;
-                }
-
-                case Direction.DOWN:
-                {
-                    MoveY(delta * speed);
-
-                    // TODO: разобрать это пиздец
-                    FieldCell blockingCell = null;
-                    if (oldPy == py) // movement forward blocked?
-                    {
-                        blockingCell = GetField().GetCell(cx, cy + 1);
-                        if (blockingCell != null && blockingCell.IsObstacle())
-                        {
-                            float blockingPx = blockingCell.GetPx();
-                            if (px < blockingPx && !GetField().IsObstacleCell(cx - 1, cy + 1))
-                            {
-                                MoveX(Math.Max(Util.Cx2Px(cx - 1) - px, -speed * delta));
-                            }
-                            else if (px > blockingPx && !GetField().IsObstacleCell(cx + 1, cy + 1))
-                            {
-                                MoveX(Math.Min(Util.Cx2Px(cx + 1) - px, speed * delta));
-                            }
-                        }
-                        else
-                        {
-                            MoveToTargetPx(delta);
-                        }
-                    }
-                    else
-                    {
-                        MoveToTargetPx(delta);
-                    }
-
-                    break;
-                }
-
-                case Direction.LEFT:
-                {
-                    MoveX(-delta * speed);
-
-                    // TODO: разобрать это пиздец
-                    FieldCell blockingCell = null;
-                    if (oldPx == px) // movement forward blocked?
-                    {
-                        blockingCell = GetField().GetCell(cx - 1, cy);
-                        if (blockingCell != null && blockingCell.IsObstacle())
-                        {
-                            float blockingPy = blockingCell.GetPy();
-                            if (py < blockingPy && !GetField().IsObstacleCell(cx - 1, cy - 1))
-                            {
-                                MoveY(Math.Max(Util.Cy2Py(cy - 1) - py, -speed * delta));
-                            }
-                            else if (py > blockingPy && !GetField().IsObstacleCell(cx - 1, cy + 1))
-                            {
-                                MoveY(Math.Min(Util.Cy2Py(cy + 1) - py, speed * delta));
-                            }
-                        }
-                        else
-                        {
-                            MoveToTargetPy(delta);
-                        }
-                    }
-                    else
-                    {
-                        MoveToTargetPy(delta);
-                    }
-                    break;
-                }
-
-                case Direction.RIGHT:
-                {
-                    MoveX(delta * speed);
-
-                    // TODO: разобрать это пиздец
-                    FieldCell blockingCell = null;
-                    if (oldPx == px) // movement forward blocked?
-                    {
-                        blockingCell = GetField().GetCell(cx + 1, cy);
-                        if (blockingCell != null && blockingCell.IsObstacle())
-                        {
-                            float blockingPy = blockingCell.GetPy();
-                            if (py < blockingPy && !GetField().IsObstacleCell(cx + 1, cy - 1))
-                            {
-                                MoveY(Math.Max(Util.Cy2Py(cy - 1) - py, -speed * delta));
-                            }
-                            else if (py > blockingPy && !GetField().IsObstacleCell(cx + 1, cy + 1))
-                            {
-                                MoveY(Math.Min(Util.Cy2Py(cy + 1) - py, speed * delta));
-                            }
-                        }
-                        else
-                        {
-                            MoveToTargetPy(delta);
-                        }
-                    }
-                    else
-                    {
-                        MoveToTargetPy(delta);
-                    }
-                    break;
-                }
-            }
-        }
-
-        private void MoveToTargetPx(float delta)
-        {
-            float xOffset = Util.TargetPxOffset(px);
-            MoveX(xOffset < 0 ? Math.Max(xOffset, -delta * speed) : Math.Min(xOffset, delta * speed));
-        }
-
-        private void MoveToTargetPy(float delta)
-        {
-            float yOffset = Util.TargetPyOffset(py);
-            MoveY(yOffset < 0 ? Math.Max(yOffset, -delta * speed) : Math.Min(yOffset, delta * speed));
         }
 
         public void OnActionPressed(PlayerInput playerInput, PlayerAction action)
@@ -244,7 +76,7 @@ namespace Bomberman.Game.Elements.Players
 
         public void OnActionReleased(PlayerInput playerInput, PlayerAction action)
         {
-            moving = false;
+            StopMoving();
 
             if (playerInput.GetPressedActionCount() > 0)
             {
@@ -269,13 +101,7 @@ namespace Bomberman.Game.Elements.Players
 
         public void OnActonsReleased(PlayerInput playerInput)
         {
-            moving = false;
-        }
-
-        private void SetMoveDirection(Direction direction)
-        {
-            SetDirection(direction);
-            moving = true;
+            StopMoving();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -392,6 +218,11 @@ namespace Bomberman.Game.Elements.Players
             return true;
         }
 
+        public bool CanKick()
+        {
+            return HasPowerup(Powerups.Kick);
+        }
+
         private bool HasPowerup(int powerupIndex)
         {
             return powerups.HasPowerup(powerupIndex);
@@ -468,7 +299,7 @@ namespace Bomberman.Game.Elements.Players
 
         #endregion
 
-        
+        //////////////////////////////////////////////////////////////////////////////
 
         public override bool IsPlayer()
         {
@@ -508,14 +339,14 @@ namespace Bomberman.Game.Elements.Players
             return bombRadius;
         }
 
-        public bool IsBombBouncing()
+        public bool IsJelly()
         {
-            return bombBouncing;
+            return HasPowerup(Powerups.Jelly);
         }
 
-        public bool IsBobmDetonated()
+        public bool IsTrigger()
         {
-            return bombDetonated;
+            return HasPowerup(Powerups.Trigger);
         }
     }
 }

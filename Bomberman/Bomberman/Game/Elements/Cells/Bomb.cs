@@ -17,8 +17,8 @@ namespace Bomberman.Game.Elements.Cells
         private int radius;
         private float remains;
         private bool dud;
-        private bool bouncing;
-        private bool detonated;
+        private bool jelly;
+        private bool trigger;
 
         public Bomb(Player player) : base(player.GetCx(), player.GetCy())
         {
@@ -45,14 +45,26 @@ namespace Bomberman.Game.Elements.Cells
             SetCell(player.GetCx(), player.GetCy());
             radius = player.GetBombRadius();
             remains = player.GetBombTimeout();
-            bouncing = player.IsBombBouncing();
-            detonated = player.IsBobmDetonated();
+            jelly = player.IsJelly();
+            trigger = player.IsTrigger();
             dud = false;
         }
 
         public void Blow()
         {
             active = false;
+        }
+
+        public void Kick(Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.UP:
+                {
+
+                    break;
+                }
+            }
         }
 
         public override bool IsBomb()
@@ -80,14 +92,14 @@ namespace Bomberman.Game.Elements.Cells
             return dud;
         }
 
-        public bool IsBouncing()
+        public bool IsJelly()
         {
-            return bouncing;
+            return jelly;
         }
 
-        public bool IsDetonated()
+        public bool IsTrigger()
         {
-            return detonated;
+            return trigger;
         }
     }
 }
