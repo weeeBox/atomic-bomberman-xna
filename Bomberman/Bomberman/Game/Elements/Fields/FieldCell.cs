@@ -10,12 +10,12 @@ namespace Bomberman.Game.Elements.Fields
     public class FieldCell : Updatable
     {
         /* Coordinates in cells */
-        public int cx;
-        public int cy;
+        private int m_cx;
+        private int m_cy;
 
         /* Coordinates in points */
-        public float px;
-        public float py;
+        private float m_px;
+        private float m_py;
 
         public FieldCell(int cx, int cy)
         {
@@ -33,11 +33,36 @@ namespace Bomberman.Game.Elements.Fields
 
         public void SetCell(int cx, int cy)
         {
-            this.cx = cx;
-            this.cy = cy;
+            SetCellCoords(cx, cy);
+            SetPixelCoords();
+        }
 
-            px = Util.Cx2Px(cx);
-            py = Util.Cy2Py(cy);
+        /* For internal use only */
+        protected void SetCellCoords(int cx, int cy)
+        {
+            this.m_cx = cx;
+            this.m_cy = cy;
+        }
+
+        /* For internal use only */
+        protected void SetCellCoords()
+        {
+            this.m_cx = Util.Px2Cx(m_px);
+            this.m_cy = Util.Py2Cy(m_py);
+        }
+
+        /* For internal use only */
+        protected void SetPixelCoords(float px, float py)
+        {
+            this.m_px = px;
+            this.m_py = py;
+        }
+
+        /* For internal use only */
+        protected void SetPixelCoords()
+        {
+            this.m_px = Util.Cx2Px(m_cx);
+            this.m_py = Util.Cy2Py(m_cy);
         }
 
         public virtual bool IsEmpty()
@@ -128,6 +153,30 @@ namespace Bomberman.Game.Elements.Fields
         protected Field GetField()
         {
             return Field.Current();
+        }
+
+        /* This is a bit tricky: I'm not gonna use properties or any other C# specific
+           stuff. Just keep them to check if some code is trying to assing "readonly" public
+           field.
+         */
+        public int cx
+        {
+            get { return m_cx; }
+        }
+
+        public int cy
+        {
+            get { return m_cy; }
+        }
+
+        public float px
+        {
+            get { return m_px; }
+        }
+
+        public float py
+        {
+            get { return m_py; }
         }
     }
 }

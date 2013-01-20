@@ -260,16 +260,18 @@ namespace Bomberman.Game.Elements.Cells
             {
                 float oldPx = px;
                 float oldPy = py;
+                
+                // update pixel coords without updating cell coords
+                SetPixelCoords(px + dx, py + dy);
 
-                px += dx;
-                py += dy;
-
+                // check collisions and all the stuff
                 OnPositionChanged(oldPx, oldPy);
 
                 int oldCx = cx;
                 int oldCy = cy;
 
-                UpdateCellPos(px, py);
+                // update cell coords
+                SetCellCoords();
 
                 if (cx != oldCx && cy != oldCy)
                 {
@@ -290,16 +292,8 @@ namespace Bomberman.Game.Elements.Cells
 
         public void SetPos(float px, float py)
         {
-            this.px = px;
-            this.py = py;
-
-            UpdateCellPos(px, py);
-        }
-
-        private void UpdateCellPos(float px, float py)
-        {
-            cx = Util.Px2Cx(px);
-            cy = Util.Py2Cy(py);
+            SetPixelCoords(px, py);
+            SetCellCoords();
         }
 
         protected void OnPositionChanged(float oldPx, float oldPy)
