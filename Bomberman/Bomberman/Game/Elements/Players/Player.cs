@@ -17,7 +17,6 @@ namespace Bomberman.Game.Elements.Players
         private bool alive;
         private bool moving;
 
-        private int bombsCount;
         private int bombRadius;
         private float bombTimeout;
 
@@ -39,7 +38,8 @@ namespace Bomberman.Game.Elements.Players
             alive = true;
 
             InitPowerups();
-            ApplyPowerups();
+            InitBombs();
+            InitPlayer();
         }
 
         public override void Update(float delta)
@@ -235,11 +235,8 @@ namespace Bomberman.Game.Elements.Players
                 }
 
                 case PlayerAction.Bomb:
-                {
-                    if (CanSetBomb())
-                    {
-                        SetBomb();
-                    }
+                {   
+                    TrySetBomb();
                     break;
                 }
             }
@@ -341,6 +338,25 @@ namespace Bomberman.Game.Elements.Players
 
             switch (powerupIndex)
             {
+                case Powerups.Bomb:
+                {
+                    bombs.IncMaxActiveCount();
+                    break;
+                }
+
+                case Powerups.Speed:
+                {
+                    speed = CalcPlayerSpeed();
+                    break;
+                }
+
+                case Powerups.Flame:
+                case Powerups.GoldFlame:
+                {
+                    bombRadius = CalcBombRadius();
+                    break;
+                }
+
                 // Trigger will drop Jelly and Boxing Glove
                 case Powerups.Trigger:
                 {
@@ -373,8 +389,6 @@ namespace Bomberman.Game.Elements.Players
                 }
             }
 
-            ApplyPowerups();
-
             return true;
         }
 
@@ -399,15 +413,6 @@ namespace Bomberman.Game.Elements.Players
             GetField().PlacePowerup(powerupIndex);
         }
 
-        private void ApplyPowerups()
-        {
-            speed = CalcPlayerSpeed();
-
-            bombsCount = CalculateBombsCount();
-            bombRadius = CalculateBombRadius();
-            bombTimeout = CalculateBombTimeout();
-        }
-
         private int CalcPlayerSpeed()
         {
             int speedBase = Settings.Get(Settings.VAL_PLAYER_SPEED);
@@ -415,12 +420,12 @@ namespace Bomberman.Game.Elements.Players
             return speedBase  + speedAdd * powerups.GetCount(Powerups.Speed);
         }
 
-        private int CalculateBombsCount()
+        private int CalcBombsCount()
         {
             return powerups.GetCount(Powerups.Bomb);
         }
 
-        private int CalculateBombRadius()
+        private int CalcBombRadius()
         {
             if (powerups.HasPowerup(Powerups.GoldFlame))
             {
@@ -429,7 +434,7 @@ namespace Bomberman.Game.Elements.Players
             return powerups.GetCount(Powerups.Flame);
         }
 
-        private float CalculateBombTimeout()
+        private float CalcBombTimeout()
         {
             return Settings.Get(Settings.VAL_PU_INIT_BOMB);
         }
@@ -437,6 +442,33 @@ namespace Bomberman.Game.Elements.Players
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
+
+        #region Bombs
+
+        private void InitBombs()
+        {
+            int maxBombs = Settings.Get(Settings.VAL_PU_MAX_BOMB);
+            bombs = new BombList(this, maxBombs);
+            bombs.SetMaxActiveCount(CalcBombsCount());
+
+            bombTimeout = CalcBombTimeout();
+            bombRadius = CalcBombRadius();
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Player init
+
+        private void InitPlayer()
+        {
+            speed = CalcPlayerSpeed();
+        }
+
+        #endregion
+
+        
 
         public override bool IsPlayer()
         {
@@ -447,15 +479,18 @@ namespace Bomberman.Game.Elements.Players
         {
             return alive;
         }
-
-        private bool CanSetBomb()
+        
+        public void TrySetBomb()
         {
-            return GetField().GetCell(cx, cy).IsEmpty();
-        }
-
-        private void SetBomb()
-        {
-            GetField().SetBomb(new Bomb(this, false));
+            Field field = GetField();
+            if (field.GetCell(cx, cy).IsEmpty())
+            {
+                Bomb bomb = bombs.GetBomb();
+                if (bomb != null)
+                {
+                    field.SetBomb(bomb);
+                }
+            }
         }
 
         public float GetBombTimeout()

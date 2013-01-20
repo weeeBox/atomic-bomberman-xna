@@ -289,13 +289,15 @@ namespace Bomberman.Game.Elements.Fields
 
         public void PlacePowerup(int powerupIndex)
         {
-            // TODO
+            
         }
 
         public void BlowBomb(Bomb bomb)
         {
             int cx = bomb.GetCx();
             int cy = bomb.GetCy();
+
+            bomb.Blow();
 
             SetExplosion(bomb, cx, cy);
             SpreadExplosion(bomb, cx - 1, cy);

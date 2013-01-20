@@ -12,22 +12,17 @@ namespace Bomberman.Game.Elements.Cells
     public class Bomb : MovableCell
     {
         private Player player;
+        public bool active;
         
         private int radius;
         private float remains;
         private bool dud;
         private bool bouncing;
         private bool detonated;
-        private bool exploded;
 
-        public Bomb(Player player, bool dud) : base(player.GetCx(), player.GetCy())
+        public Bomb(Player player) : base(player.GetCx(), player.GetCy())
         {
             this.player = player;
-            this.radius = player.GetBombRadius();
-            remains = player.GetBombTimeout();
-            this.dud = dud;
-            this.bouncing = player.IsBombBouncing();
-            this.detonated = player.IsBobmDetonated();
         }
 
         public override void Update(float delta)
@@ -42,6 +37,22 @@ namespace Bomberman.Game.Elements.Cells
         public Player GetPlayer()
         {
             return player;
+        }
+
+        public void Activate()
+        {
+            active = true;
+            SetCell(player.GetCx(), player.GetCy());
+            radius = player.GetBombRadius();
+            remains = player.GetBombTimeout();
+            bouncing = player.IsBombBouncing();
+            detonated = player.IsBobmDetonated();
+            dud = false;
+        }
+
+        public void Blow()
+        {
+            active = false;
         }
 
         public override bool IsBomb()

@@ -4,26 +4,72 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Core;
 using Bomberman.Game.Elements.Cells;
+using Bomberman.Game.Elements.Players;
+using BomberEngine;
+using BomberEngine.Debugging;
 
 namespace Bomberman.Game.Elements.Items
 {
-    public class BombList : Updatable
+    public class BombList
     {
-        private List<Bomb> bombs;
+        private Bomb[] bombs;
 
-        private int capacity;
-        private int maxCapacity;
+        private int maxActiveCount;
 
-        public BombList(int capacity, int maxCapacity)
-        {   
-            bombs = new List<Bomb>(maxCapacity);
-            this.capacity = capacity;
-            this.maxCapacity = maxCapacity;
+        public BombList(Player player, int capacity)
+        {
+            bombs = new Bomb[capacity];
+            for (int i = 0; i < capacity; ++i)
+            {
+                bombs[i] = new Bomb(player);
+            }
         }
 
-        public void Update(float delta)
+        public void SetMaxActiveCount(int count)
         {
+            Debug.CheckArgumentRange("count", count, 0, bombs.Length + 1);
+            this.maxActiveCount = count;
+        }
+
+        public bool IncMaxActiveCount()
+        {
+            if (maxActiveCount < bombs.Length)
+            {
+                ++maxActiveCount;
+                return true;
+            }
+
+            return false;
+        }
+
+        public Bomb GetBomb()
+        {
+            Bomb nextBomb = null;
             
+            int activeCount = 0;
+            for (int i = 0; i < bombs.Length; ++i)
+            {
+                Bomb bomb = bombs[i];
+                if (bomb.active)
+                {   
+                    if (++activeCount == maxActiveCount)
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    nextBomb = bomb;
+                }
+            }
+
+            if (nextBomb != null)
+            {
+                nextBomb.Activate();
+                return nextBomb;
+            }
+
+            return null;
         }
     }
 }
