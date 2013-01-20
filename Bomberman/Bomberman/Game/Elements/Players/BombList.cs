@@ -11,9 +11,14 @@ namespace Bomberman.Game.Elements.Items
     {
         private List<Bomb> bombs;
 
-        public BombList()
-        {
-            bombs = new List<Bomb>();
+        private int capacity;
+        private int maxCapacity;
+
+        public BombList(int capacity, int maxCapacity)
+        {   
+            bombs = new List<Bomb>(maxCapacity);
+            this.capacity = capacity;
+            this.maxCapacity = maxCapacity;
         }
 
         public void Update(float delta)

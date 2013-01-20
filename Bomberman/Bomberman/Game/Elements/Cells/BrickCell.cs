@@ -34,7 +34,7 @@ namespace Bomberman.Game.Elements.Cells
                 remains -= delta;
                 if (remains <= 0)
                 {
-                    GetField().BrickDestroyed(this);
+                    GetField().DestroyBrick(this);
                 }
             }
         }

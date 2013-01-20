@@ -272,7 +272,7 @@ namespace Bomberman.Game.Elements.Fields
             cells.Set(bomb.GetCx(), bomb.GetCy(), bomb);
         }
 
-        public void BrickDestroyed(BrickCell brick)
+        public void DestroyBrick(BrickCell brick)
         {
             int cx = brick.GetCx();
             int cy = brick.GetCy();
@@ -285,6 +285,11 @@ namespace Bomberman.Game.Elements.Fields
             {
                 ClearCell(cx, cy);
             }
+        }
+
+        public void PlacePowerup(int powerupIndex)
+        {
+            // TODO
         }
 
         public void BlowBomb(Bomb bomb)
@@ -498,39 +503,54 @@ namespace Bomberman.Game.Elements.Fields
             }
         }
 
-        private void ProcessCollision(MovableCell cell, int cx, int cy)
+        private void ProcessCollision(MovableCell movable, int cx, int cy)
         {
             if (cx >= 0 && cx < GetWidth() && cy >=0 && cy < GetHeight())
             {
-                FieldCell other = cells.Get(cx, cy);
+                FieldCell cell = cells.Get(cx, cy);
 
-                if (other.IsObstacle())
+                if (cell.IsObstacle())
                 {
-                    if (Collides(cell, other))
+                    if (Collides(movable, cell))
                     {
-                        switch (cell.GetDirection())
+                        switch (movable.GetDirection())
                         {
                             case Direction.UP:
                             {
-                                cell.SetPosY(Util.Cy2Py(cy + 1));
+                                movable.SetPosY(Util.Cy2Py(cy + 1));
                                 break;
                             }
                             case Direction.DOWN:
                             {
-                                cell.SetPosY(Util.Cy2Py(cy - 1));
+                                movable.SetPosY(Util.Cy2Py(cy - 1));
                                 break;
                             }
                             case Direction.LEFT:
                             {
-                                cell.SetPosX(Util.Cx2Px(cx + 1));
+                                movable.SetPosX(Util.Cx2Px(cx + 1));
                                 break;
                             }
                             case Direction.RIGHT:
                             {
-                                cell.SetPosX(Util.Cx2Px(cx - 1));
+                                movable.SetPosX(Util.Cx2Px(cx - 1));
                                 break;
                             }
                         }
+                    }
+                }
+                else if (cell.IsPowerup())
+                {
+                    if (Collides(movable, cell))
+                    {
+                        if (movable.IsPlayer())
+                        {
+                            PowerupCell powerupCell = (PowerupCell)cell;
+                            int powerup = powerupCell.powerup;
+
+                            Player player = (Player)movable;
+                            player.TryAddPowerup(powerup);
+                        }
+                        ClearCell(cx, cy);
                     }
                 }
             }

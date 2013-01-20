@@ -6,6 +6,7 @@ using Bomberman.Game.Elements.Cells;
 using Bomberman.Game.Elements.Items;
 using Bomberman.Game.Elements.Players.Input;
 using Bomberman.Game.Elements.Fields;
+using BomberEngine.Debugging;
 
 namespace Bomberman.Game.Elements.Players
 {
@@ -16,8 +17,10 @@ namespace Bomberman.Game.Elements.Players
         private bool alive;
         private bool moving;
 
+        private int bombsCount;
         private int bombRadius;
         private float bombTimeout;
+
         private bool bombBouncing;
         private bool bombDetonated;
 
@@ -25,7 +28,7 @@ namespace Bomberman.Game.Elements.Players
 
         private BombList bombs;
         private PowerupList powerups;
-
+        
         public Player(int index, PlayerInput input)
             : base(0, 0)
         {
@@ -33,13 +36,10 @@ namespace Bomberman.Game.Elements.Players
             this.input = input;
             input.SetListener(this);
 
-            bombs = new BombList();
-            powerups = new PowerupList();
-
             alive = true;
-            speed = Settings.Get(Settings.VAL_PLAYER_SPEED);
-            bombTimeout = 3.0f;
-            bombRadius = 2;
+
+            InitPowerups();
+            ApplyPowerups();
         }
 
         public override void Update(float delta)
@@ -280,6 +280,163 @@ namespace Bomberman.Game.Elements.Players
             SetDirection(direction);
             moving = true;
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Powerups
+
+        private static readonly int[] POWERUPS_INITIALS =
+        {
+            Settings.VAL_PU_INIT_BOMB,
+            Settings.VAL_PU_INIT_FLAME,
+            Settings.VAL_PU_INIT_DISEASE,
+            Settings.VAL_PU_INIT_ABILITY_KICK,
+            Settings.VAL_PU_INIT_EXTRA_SPEED,
+            Settings.VAL_PU_INIT_ABLITY_PUNCH,
+            Settings.VAL_PU_INIT_ABILITY_GRAB,
+            Settings.VAL_PU_INIT_SPOOGER,
+            Settings.VAL_PU_INIT_GOLDFLAME,
+            Settings.VAL_PU_INIT_TRIGGER,
+            Settings.VAL_PU_INIT_JELLY,
+            Settings.VAL_PU_INIT_EBOLA,
+            Settings.VAL_PU_INIT_RANDOM,
+        };
+
+        private static readonly int[] POWERUPS_MAX =
+        {
+            Settings.VAL_PU_MAX_BOMB,
+            Settings.VAL_PU_MAX_FLAME,
+            Settings.VAL_PU_MAX_DISEASE,
+            Settings.VAL_PU_MAX_ABILITY_KICK,
+            Settings.VAL_PU_MAX_EXTRA_SPEED,
+            Settings.VAL_PU_MAX_ABILITY_PUNCH,
+            Settings.VAL_PU_MAX_ABILITY_GRAB,
+            Settings.VAL_PU_MAX_SPOOGER,
+            Settings.VAL_PU_MAX_GOLDFLAME,
+            Settings.VAL_PU_MAX_TRIGGER,
+            Settings.VAL_PU_MAX_JELLY,
+            Settings.VAL_PU_MAX_EBOLA,
+            Settings.VAL_PU_MAX_RANDOM,
+        };
+
+        private void InitPowerups()
+        {
+            int totalCount = POWERUPS_INITIALS.Length;
+            powerups = new PowerupList(totalCount);
+            for (int powerupIndex = 0; powerupIndex < totalCount; ++powerupIndex)
+            {
+                int initialCount = Settings.Get(POWERUPS_INITIALS[powerupIndex]);
+                int maxCount = Settings.Get(POWERUPS_MAX[powerupIndex]);
+                powerups.Init(powerupIndex, initialCount, maxCount);
+            }
+        }
+
+        public bool TryAddPowerup(int powerupIndex)
+        {
+            bool added = powerups.Inc(powerupIndex);
+            if (!added)
+            {
+                return false;
+            }
+
+            switch (powerupIndex)
+            {
+                // Trigger will drop Jelly and Boxing Glove
+                case Powerups.Trigger:
+                {
+                    TryGivePowerupBack(Powerups.Jelly);
+                    TryGivePowerupBack(Powerups.Punch);
+                    break;
+                }
+
+                // Jelly will drop Trigger
+                // Boxing Glove will drop Trigger
+                case Powerups.Jelly:
+                case Powerups.Punch:
+                {
+                    TryGivePowerupBack(Powerups.Trigger);
+                    break;
+                }
+
+                // Blue Hand will drop Spooge
+                case Powerups.Grab:
+                {
+                    TryGivePowerupBack(Powerups.Spooger);
+                    break;
+                }
+
+                // Spooge will drop Blue Hand
+                case Powerups.Spooger:
+                {
+                    TryGivePowerupBack(Powerups.Grab);
+                    break;
+                }
+            }
+
+            ApplyPowerups();
+
+            return true;
+        }
+
+        private bool HasPowerup(int powerupIndex)
+        {
+            return powerups.HasPowerup(powerupIndex);
+        }
+
+        private void TryGivePowerupBack(int powerupIndex)
+        {
+            if (powerups.HasPowerup(powerupIndex))
+            {
+                GivePowerupBack(powerupIndex);
+            }
+        }
+
+        private void GivePowerupBack(int powerupIndex)
+        {
+            Debug.Assert(powerups.GetCount(powerupIndex) == 1);
+            powerups.SetCount(powerupIndex, 0);
+
+            GetField().PlacePowerup(powerupIndex);
+        }
+
+        private void ApplyPowerups()
+        {
+            speed = CalcPlayerSpeed();
+
+            bombsCount = CalculateBombsCount();
+            bombRadius = CalculateBombRadius();
+            bombTimeout = CalculateBombTimeout();
+        }
+
+        private int CalcPlayerSpeed()
+        {
+            int speedBase = Settings.Get(Settings.VAL_PLAYER_SPEED);
+            int speedAdd = Settings.Get(Settings.VAL_PLAYER_SPEED_ADD);
+            return speedBase  + speedAdd * powerups.GetCount(Powerups.Speed);
+        }
+
+        private int CalculateBombsCount()
+        {
+            return powerups.GetCount(Powerups.Bomb);
+        }
+
+        private int CalculateBombRadius()
+        {
+            if (powerups.HasPowerup(Powerups.GoldFlame))
+            {
+                return int.MaxValue;
+            }
+            return powerups.GetCount(Powerups.Flame);
+        }
+
+        private float CalculateBombTimeout()
+        {
+            return Settings.Get(Settings.VAL_PU_INIT_BOMB);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
 
         public override bool IsPlayer()
         {

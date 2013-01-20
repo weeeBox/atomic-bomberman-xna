@@ -10,20 +10,29 @@ namespace Bomberman.Game
     {
         public static readonly int VAL_RES_W = 1024;
         public static readonly int VAL_RES_H = 768;
+
         public static readonly int VAL_CELL_W = 64;
         public static readonly int VAL_CELL_H = 58;
+
         public static readonly int VAL_FIELD_OFFSET_X = 32;
         public static readonly int VAL_FIELD_OFFSET_Y = 103;
+
         public static readonly int VAL_SHOVE_W = 20;
         public static readonly int VAL_SHOVE_H = 18;
+
         public static readonly int VAL_FIELD_WIDTH = 15;
         public static readonly int VAL_FIELD_HEIGHT = 11;
+
         public static readonly int VAL_MAX_MAPS = 11;
         public static readonly int VAL_MAX_PLAYERS = 10;
+
         public static readonly int VAL_NUM_TO_WIN_MATCH = 3;
         public static readonly int VAL_WIN_ON_WINS = 1;
+
         public static readonly int VAL_ENCLOSEMENT_DEPTH = 3;
+
         public static readonly int VAL_STOMPED_BOMBS_DETONATE = 1;
+
         public static readonly int VAL_TEAMPLAY = 0;
         public static readonly int VAL_GAME_MUSIC = 1;
         public static readonly int VAL_MENU_MUSIC = 1;
@@ -36,19 +45,25 @@ namespace Bomberman.Game
         public static readonly int VAL_LOST_NET_REVERT_AI = 0;
         public static readonly int VAL_INTRO_TIME_LOGO = 5;
         public static readonly int VAL_INTRO_TIME_TITLE = 20;
+
         public static readonly int VAL_PLAYER_SPEED = 290;
         public static readonly int VAL_PLAYER_SPEED_ADD = 50;
         public static readonly int VAL_PLAYER_SPEED_MOLASSES = 100;
         public static readonly int VAL_PLAYER_SPEED_CRACK = 400;
         public static readonly int VAL_PLAYER_SPEED_CRACK_ADD = 200;
+
         public static readonly int VAL_BOMB_ROLL_SPEED = 250;
         public static readonly int VAL_BOMB_PUNCH_SPEED = 300;
+
         public static readonly int VAL_MAINMENU_FONT_COLOR_R = 255;
         public static readonly int VAL_MAINMENU_FONT_COLOR_G = 255;
         public static readonly int VAL_MAINMENU_FONT_COLOR_B = 255;
+
         public static readonly int VAL_MENU_KEYREPEAT_DELAY = 250;
         public static readonly int VAL_MENU_KEYREPEAT_INTERVAL = 100;
+
         public static readonly int VAL_DOUBLECLICK_TIME = 100;
+
         public static readonly int VAL_FUZE_TIME_NORMAL = 2000;
         public static readonly int VAL_FUZE_TIME_SHORT = 1000;
         public static readonly int VAL_FUZE_TIME_DUD_MIN = 6000;
@@ -70,7 +85,8 @@ namespace Bomberman.Game
         public static readonly int VAL_TRY_HIDING_DEAD_PLAYER_PUS = 0;
         public static readonly int VAL_TRY_HIDING_EXCLUSION_PUS = 0;
         public static readonly int VAL_TRY_HIDING_OTHER_RECYCLED_PUS = 1;
-        public static readonly int VAL_PU_INIT_BOMB = 3;
+
+        public static readonly int VAL_PU_INIT_BOMB = 1;
         public static readonly int VAL_PU_INIT_FLAME = 2;
         public static readonly int VAL_PU_INIT_DISEASE = 0;
         public static readonly int VAL_PU_INIT_ABILITY_KICK = 0;
@@ -144,6 +160,7 @@ namespace Bomberman.Game
         public static readonly int VAL_DSE_PROB_INVISIBLE = 10;
         public static readonly int VAL_DSE_PROB_DUDS = 10;
         public static readonly int VAL_DSE_PROB_HYPERSWAP = 10;
+
         public static readonly int VAL_COLOR_PLAYER_0R = 255;
         public static readonly int VAL_COLOR_PLAYER_0G = 255;
         public static readonly int VAL_COLOR_PLAYER_0B = 255;
