@@ -357,7 +357,7 @@ namespace Bomberman.Game.Elements.Fields
                 return true;
             }
 
-            SetCell(new ExplosionCell(cx, cy));
+            SetCell(new FlameCell(cx, cy));
             return true;
         }
 
