@@ -406,17 +406,21 @@ namespace Bomberman.Game.Elements.Fields
             return cells.GetHeight();
         }
 
-        public void CellPosChanged(MovableCell cell)
+        public void MoveablePosChanged(MovableCell movable, float oldPx, float oldPy)
         {
-            ProcessCollisions(cell);
+            ProcessCollisions(movable, oldPx, oldPy);
         }
 
-        private void ProcessCollisions(MovableCell movable)
+        public void MovableCellChanged(MovableCell movable, int oldCx, int oldCy)
+        {
+        }
+
+        private void ProcessCollisions(MovableCell movable, float oldPx, float oldPy)
         {
             float px = movable.GetPx();
             float py = movable.GetPy();
-            float dx = px - movable.oldPx;
-            float dy = py - movable.oldPy;
+            float dx = px - oldPx;
+            float dy = py - oldPy;
 
             if (dx > 0)
             {
