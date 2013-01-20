@@ -521,46 +521,49 @@ namespace Bomberman.Game.Elements.Fields
                         {   
                             Player player = (Player)movable;
 
-//                             if (!player.CanKick())
-//                             {
-//                                 return false;
-//                             }
-
-                            Direction direction = player.GetDirection();
-
-                            Bomb bomb = (Bomb)cell;
-                            if (bomb.moving)
+                            if (player.CanKick())
                             {
-                                AdjustPosition(movable, bomb);
-                                bomb.Kick(direction);
+                                Direction direction = player.GetDirection();
+
+                                Bomb bomb = (Bomb)cell;
+                                if (bomb.moving)
+                                {
+                                    AdjustPosition(movable, bomb);
+                                    bomb.Kick(direction);
+                                }
+                                else
+                                {
+                                    bool farEnoughForKick = false; // true, if distance between player's center and bomb's center is enough for a kick
+                                    switch (direction)
+                                    {
+                                        case Direction.UP:
+                                        case Direction.DOWN:
+                                            farEnoughForKick = Math.Abs(player.py - cell.py) > 0.5f * Constant.CELL_HEIGHT;
+                                            break;
+                                        case Direction.LEFT:
+                                        case Direction.RIGHT:
+                                            farEnoughForKick = Math.Abs(player.px - cell.px) > 0.5f * Constant.CELL_WIDTH;
+                                            break;
+                                        default:
+                                            Debug.Assert(false, "Unknown direction: " + direction);
+                                            break;
+                                    }
+
+                                    if (farEnoughForKick)
+                                    {
+                                        FieldCell blockingCell = cell.NearCellDir(direction);
+                                        if (blockingCell != null && !blockingCell.IsObstacle()) // can we kick the bomb here?
+                                        {
+                                            ((Bomb)cell).Kick(direction);
+                                        }
+                                        AdjustPosition(movable, cell);
+                                    }
+                                }
                             }
                             else
                             {
-                                bool farEnoughForKick = false; // true, if distance between player's center and bomb's center is enough for a kick
-                                switch (direction)
-                                {
-                                    case Direction.UP:
-                                    case Direction.DOWN:
-                                        farEnoughForKick = Math.Abs(player.py - cell.py) > 0.5f * Constant.CELL_HEIGHT;
-                                        break;
-                                    case Direction.LEFT:
-                                    case Direction.RIGHT:
-                                        farEnoughForKick = Math.Abs(player.px - cell.px) > 0.5f * Constant.CELL_WIDTH;
-                                        break;
-                                    default:
-                                        Debug.Assert(false, "Unknown direction: " + direction);
-                                        break;
-                                }
-
-                                if (farEnoughForKick)
-                                {
-                                    FieldCell blockingCell = cell.NearCellDir(direction);
-                                    if (blockingCell != null && !blockingCell.IsObstacle()) // can we kick the bomb here?
-                                    {
-                                        ((Bomb)cell).Kick(direction);
-                                    }
-                                    AdjustPosition(movable, cell);
-                                }
+                                AdjustPosition(movable, cell);
+                                movable.HitObstacle(cell);
                             }
                         }
                         else
