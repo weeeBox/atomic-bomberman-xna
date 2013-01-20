@@ -273,7 +273,7 @@ namespace Bomberman.Game.Elements.Cells
                 // update cell cords
                 SetCellCords();
 
-                if (cx != oldCx && cy != oldCy)
+                if (cx != oldCx || cy != oldCy)
                 {
                     OnCellChanged(oldCx, oldCy);
                 }

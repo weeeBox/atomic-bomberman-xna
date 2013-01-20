@@ -258,7 +258,9 @@ namespace Bomberman.Game.Elements.Fields
             FieldCell[] cellsArray = cells.GetArray();
             for (int i = 0; i < cellsArray.Length; ++i)
             {
-                cellsArray[i].Update(delta);
+                FieldCell cell = cellsArray[i];
+                CheckCell(cell);
+                cell.Update(delta);
             }
         }
 
@@ -391,6 +393,12 @@ namespace Bomberman.Game.Elements.Fields
             return cell == null || cell.IsObstacle();
         }
 
+        public void CheckCell(FieldCell expectedCell)
+        {
+            FieldCell actualCell = GetCell(expectedCell.cx, expectedCell.cy); 
+            Debug.Assert(actualCell == expectedCell);
+        }
+
         public FieldCellArray GetCells()
         {
             return cells;
@@ -413,6 +421,8 @@ namespace Bomberman.Game.Elements.Fields
 
         public void MovableCellChanged(MovableCell movable, int oldCx, int oldCy)
         {
+            ClearCell(oldCx, oldCy);
+            SetCell(movable);
         }
 
         private void ProcessCollisions(MovableCell movable, float oldPx, float oldPy)
