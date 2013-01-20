@@ -33,33 +33,33 @@ namespace Bomberman.Game.Elements.Fields
 
         public void SetCell(int cx, int cy)
         {
-            SetCellCoords(cx, cy);
-            SetPixelCoords();
+            SetCellCords(cx, cy);
+            SetPixelCords();
         }
 
         /* For internal use only */
-        protected void SetCellCoords(int cx, int cy)
+        protected void SetCellCords(int cx, int cy)
         {
             this.m_cx = cx;
             this.m_cy = cy;
         }
 
         /* For internal use only */
-        protected void SetCellCoords()
+        protected void SetCellCords()
         {
             this.m_cx = Util.Px2Cx(m_px);
             this.m_cy = Util.Py2Cy(m_py);
         }
 
         /* For internal use only */
-        protected void SetPixelCoords(float px, float py)
+        protected void SetPixelCords(float px, float py)
         {
             this.m_px = px;
             this.m_py = py;
         }
 
         /* For internal use only */
-        protected void SetPixelCoords()
+        protected void SetPixelCords()
         {
             this.m_px = Util.Cx2Px(m_cx);
             this.m_py = Util.Cy2Py(m_cy);

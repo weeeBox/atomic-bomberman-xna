@@ -118,6 +118,10 @@ namespace Bomberman.Game.Elements.Players
         {   
         }
 
+        protected override void OnCellChanged(int oldCx, int oldCy)
+        {   
+        }
+
         //////////////////////////////////////////////////////////////////////////////
 
         #region Powerups
