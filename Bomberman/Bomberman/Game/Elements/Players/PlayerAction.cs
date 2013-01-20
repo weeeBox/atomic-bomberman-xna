@@ -14,6 +14,9 @@ namespace Bomberman.Game.Elements.Players
         Bomb,
         Special,
 
+        // cheats
+        CheatAddBomb,
+
         // total count
         Count
     }

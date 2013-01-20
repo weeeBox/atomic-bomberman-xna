@@ -77,6 +77,12 @@ namespace Bomberman.Game.Elements.Players
                     TrySpecialAction();
                     break;
                 }
+
+                case PlayerAction.CheatAddBomb:
+                {
+                    TryAddPowerup(Powerups.Bomb);
+                    break;
+                }
             }
         }
 
@@ -426,7 +432,7 @@ namespace Bomberman.Game.Elements.Players
                     return TrySpooger(-1, 0);
 
                 case Direction.RIGHT:
-                    return TrySpooger(0, 1);
+                    return TrySpooger(1, 0);
 
                 default:
                     Debug.Assert(false, "Unknown direction: " + direction);
