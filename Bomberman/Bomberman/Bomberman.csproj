@@ -119,7 +119,7 @@
     <Compile Include="Game\Constant.cs" />
     <Compile Include="Game\Elements\Cells\BrickCell.cs" />
     <Compile Include="Game\Elements\Cells\BlankCell.cs" />
-    <Compile Include="Game\Elements\Cells\ExplosionCell.cs" />
+    <Compile Include="Game\Elements\Cells\FlameCell.cs" />
     <Compile Include="Game\Elements\Cells\MovableCell.cs" />
     <Compile Include="Game\Elements\Cells\PowerupCell.cs" />
     <Compile Include="Game\Elements\Cells\SolidCell.cs" />
