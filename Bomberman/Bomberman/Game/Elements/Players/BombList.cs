@@ -61,7 +61,7 @@ namespace Bomberman.Game.Elements.Items
             return kickedBomb;
         }
 
-        public Bomb GetBomb()
+        public Bomb GetNextBomb()
         {
             Bomb nextBomb = null;
             

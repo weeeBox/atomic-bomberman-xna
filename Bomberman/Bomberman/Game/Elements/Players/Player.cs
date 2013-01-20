@@ -68,7 +68,7 @@ namespace Bomberman.Game.Elements.Players
 
                 case PlayerAction.Bomb:
                 {   
-                    TrySetBomb();
+                    TryAction();
                     break;
                 }
 
@@ -236,9 +236,14 @@ namespace Bomberman.Game.Elements.Players
             return true;
         }
 
-        public bool CanKick()
+        public bool HasKick()
         {
             return HasPowerup(Powerups.Kick);
+        }
+
+        public bool HasSpooger()
+        {
+            return HasPowerup(Powerups.Spooger);
         }
 
         private bool HasPowerup(int powerupIndex)
@@ -329,29 +334,29 @@ namespace Bomberman.Game.Elements.Players
             return alive;
         }
         
-        public void TrySetBomb()
+        public void TryAction()
         {
             Field field = GetField();
-            if (field.GetCell(cx, cy).IsEmpty())
+            FieldCell underlyingCell = field.GetCell(cx, cy);
+            if (underlyingCell.IsEmpty())
             {
-                Bomb bomb = bombs.GetBomb();
+                Bomb bomb = bombs.GetNextBomb();
                 if (bomb != null)
                 {
                     field.SetBomb(bomb);
                 }
             }
+            else if (HasSpooger())
+            {
+                TrySpooger();
+            }
         }
 
         private void TrySpecialAction()
         {
-            if (CanKick())
+            if (HasKick())
             {
-                Bomb kickedBomb = bombs.GetFirstKickedBomb();
-                if (kickedBomb != null)
-                {
-                    kickedBomb.SetCell();
-                    kickedBomb.StopMoving();
-                }
+                TryStopBomb();
             }
         }
 
@@ -379,5 +384,86 @@ namespace Bomberman.Game.Elements.Players
         {
             return HasPowerup(Powerups.Trigger);
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Special actions
+
+        private void TryStopBomb()
+        {
+            Bomb kickedBomb = bombs.GetFirstKickedBomb();
+            if (kickedBomb != null)
+            {
+                kickedBomb.SetCell();
+                kickedBomb.StopMoving();
+            }
+        }
+
+        private bool TrySpooger()
+        {
+            FieldCell underlyingCell = GetField().GetCell(cx, cy);
+            if (!underlyingCell.IsBomb())
+            {
+                return false; // you can use spooger only when standing on the bomb
+            }
+
+            Bomb underlyingBomb = (Bomb)underlyingCell;
+            if (underlyingBomb.GetPlayer() != this)
+            {
+                return false; // you only can use spooger when standing at your own bomb
+            }
+
+            Direction direction = GetDirection();
+            switch (direction)
+            {
+                case Direction.UP:
+                    return TrySpooger(0, -1);
+
+                case Direction.DOWN:
+                    return TrySpooger(0, 1);
+
+                case Direction.LEFT:
+                    return TrySpooger(-1, 0);
+
+                case Direction.RIGHT:
+                    return TrySpooger(0, 1);
+
+                default:
+                    Debug.Assert(false, "Unknown direction: " + direction);
+                    break;
+            }
+
+            return false;
+        }
+
+        private bool TrySpooger(int dcx, int dcy)
+        {
+            int uCx = cx + dcx;
+            int uCy = cy + dcy;
+
+            int numBombs = 0;
+            Field field = GetField();
+
+            FieldCell underlyingCell;
+            while ((underlyingCell = field.GetCell(uCx, uCy)) != null && !underlyingCell.IsObstacle())
+            {
+                Bomb nextBomb = bombs.GetNextBomb();
+                if (nextBomb == null)
+                {
+                    break; // no bombs to apply
+                }
+
+                nextBomb.SetCell(uCx, uCy);
+                field.SetBomb(nextBomb);
+
+                uCx += dcx;
+                uCy += dcy;
+                ++numBombs;
+            }
+
+            return numBombs > 0;
+        }
+
+        #endregion
     }
 }

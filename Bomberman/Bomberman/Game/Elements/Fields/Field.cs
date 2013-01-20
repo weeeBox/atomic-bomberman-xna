@@ -124,6 +124,18 @@ namespace Bomberman.Game.Elements.Fields
 
         private void SetupPowerups(PowerupInfo[] powerupInfo)
         {
+            foreach (PowerupInfo info in powerupInfo)
+            {   
+                if (info.bornWith)
+                {
+                    List<Player> playerList = players.list;
+                    foreach (Player player in playerList)
+                    {
+                        player.TryAddPowerup(info.powerupIndex);
+                    }
+                }
+            }
+
             BrickCell[] brickCells = new BrickCell[GetWidth() * GetHeight()];
             int count = GetBrickCells(brickCells);
             if (count == 0)
@@ -136,48 +148,39 @@ namespace Bomberman.Game.Elements.Fields
             int brickIndex = 0;
             foreach (PowerupInfo info in powerupInfo)
             {
-                if (info.forbidden)
-                {   
-                }
-                else if (info.bornWith)
+                if (info.forbidden || info.bornWith)
                 {
-                    List<Player> playerList = players.list;
-                    foreach (Player player in playerList)
-                    {
-                        player.TryAddPowerup(info.powerupIndex);
-                    }
+                    continue;
                 }
-                else
+
+                int powerupIndex = info.powerupIndex;
+                int powerupCount = POWERUPS_COUNT[powerupIndex];
+                if (powerupCount < 0)
                 {
-                    int powerupIndex = info.powerupIndex;
-                    int powerupCount = POWERUPS_COUNT[powerupIndex];
-                    if (powerupCount < 0)
+                    if (MathHelper.NextInt(10) < -powerupCount)
                     {
-                        if (MathHelper.NextInt(10) < -powerupCount)
-                        {
-                            continue;
-                        }
-                        powerupCount = 1;
+                        continue;
                     }
+                    powerupCount = 1;
+                }
 
-                    for (int i = 0; i < powerupCount; ++i)
-                    {
-                        BrickCell cell = brickCells[brickIndex++];
-                        int cx = cell.GetCx();
-                        int cy = cell.GetCy();
+                for (int i = 0; i < powerupCount; ++i)
+                {
+                    BrickCell cell = brickCells[brickIndex++];
+                    int cx = cell.GetCx();
+                    int cy = cell.GetCy();
 
-                        cell.powerup = powerupIndex;
-
-                        if (brickIndex == count)
-                        {
-                            break;
-                        }
-                    }
+                    cell.powerup = powerupIndex;
 
                     if (brickIndex == count)
                     {
                         break;
                     }
+                }
+
+                if (brickIndex == count)
+                {
+                    break;
                 }
             }
         }
@@ -524,7 +527,7 @@ namespace Bomberman.Game.Elements.Fields
                         {   
                             Player player = (Player)movable;
 
-                            if (player.CanKick())
+                            if (player.HasKick())
                             {
                                 Direction direction = player.GetDirection();
 
