@@ -39,6 +39,11 @@ namespace Bomberman.Game.Elements.Cells
             }
         }
 
+        public override BrickCell AsBrick()
+        {
+            return this;
+        }
+
         public override bool IsBrick()
         {
             return true;

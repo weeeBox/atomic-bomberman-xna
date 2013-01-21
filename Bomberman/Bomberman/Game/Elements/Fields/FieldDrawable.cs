@@ -64,13 +64,13 @@ namespace Bomberman.Game.Elements.Fields
                 }
                 else if (cell.IsBomb())
                 {
-                    Bomb bomb = (Bomb)cell;
+                    Bomb bomb = cell.AsBomb();
                     image = bomb.IsJelly() ? bombJellyImage : bombImage;
                     context.DrawRect(cell.cx * cellWidth, cell.cy * cellHeight, cellWidth, cellHeight, Color.White);
                 }
                 else if (cell.IsPowerup())
                 {
-                    PowerupCell powerupCell = (PowerupCell)cell;
+                    PowerupCell powerupCell = cell.AsPowerup();
                     int powerup = powerupCell.powerup;
                     if (powerup != Powerups.None)
                     {

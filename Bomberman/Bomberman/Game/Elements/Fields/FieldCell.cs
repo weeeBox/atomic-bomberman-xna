@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Core;
 using BomberEngine.Debugging;
+using Bomberman.Game.Elements.Cells;
+using Bomberman.Game.Elements.Players;
 
 namespace Bomberman.Game.Elements.Fields
 {
@@ -80,6 +82,11 @@ namespace Bomberman.Game.Elements.Fields
             return false;
         }
 
+        public virtual BrickCell AsBrick()
+        {
+            return null;
+        }
+
         public virtual bool IsObstacle()
         {
             return false;
@@ -90,9 +97,19 @@ namespace Bomberman.Game.Elements.Fields
             return false;
         }
 
+        public virtual Bomb AsBomb()
+        {
+            return null;
+        }
+
         public virtual bool IsPlayer()
         {
             return false;
+        }
+
+        public virtual Player AsPlayer()
+        {
+            return null;
         }
 
         public virtual bool IsFlame()
@@ -103,6 +120,11 @@ namespace Bomberman.Game.Elements.Fields
         public virtual bool IsPowerup()
         {
             return false;
+        }
+
+        public virtual PowerupCell AsPowerup()
+        {
+            return null;
         }
 
         public int GetCx()

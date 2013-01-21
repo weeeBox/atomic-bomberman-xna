@@ -65,6 +65,11 @@ namespace Bomberman.Game.Elements.Cells
             SetMoveDirection(direction);
         }
 
+        public override Bomb AsBomb()
+        {
+            return this;
+        }
+
         public override bool IsBomb()
         {
             return true;

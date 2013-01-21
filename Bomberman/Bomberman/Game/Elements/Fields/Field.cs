@@ -361,7 +361,7 @@ namespace Bomberman.Game.Elements.Fields
 
             if (cell.IsBomb() && cell != bomb)
             {
-                BlowBomb((Bomb)cell);
+                BlowBomb(cell.AsBomb());
                 return true;
             }
 
@@ -525,7 +525,7 @@ namespace Bomberman.Game.Elements.Fields
                     {
                         if (movable.IsPlayer() && cell.IsBomb())
                         {
-                            ProcessCollision((Player)movable, (Bomb)cell);
+                            ProcessCollision(movable.AsPlayer(), cell.AsBomb());
                         }
                         else
                         {
@@ -538,7 +538,7 @@ namespace Bomberman.Game.Elements.Fields
                 {
                     if (Collides(movable, cell))
                     {
-                        ProcessCollision(movable, (PowerupCell)cell);
+                        ProcessCollision(movable, cell.AsPowerup());
                     }
                 }
                 else if (cell.IsFlame())
@@ -546,9 +546,8 @@ namespace Bomberman.Game.Elements.Fields
                     if (Collides(movable, cell))
                     {
                         if (movable.IsBomb())
-                        {
-                            Bomb bomb = (Bomb)movable;
-                            BlowBomb(bomb);
+                        {   
+                            BlowBomb(movable.AsBomb());
                         }
                     }
                 }
@@ -589,7 +588,7 @@ namespace Bomberman.Game.Elements.Fields
                         FieldCell blockingCell = bomb.NearCellDir(direction);
                         if (blockingCell != null && !blockingCell.IsObstacle()) // can we kick the bomb here?
                         {
-                            ((Bomb)bomb).Kick(direction);
+                            bomb.Kick(direction);
                         }
                         AdjustPosition(player, bomb);
                     }
@@ -607,9 +606,7 @@ namespace Bomberman.Game.Elements.Fields
             if (movable.IsPlayer())
             {
                 int powerup = powerupCell.powerup;
-
-                Player player = (Player)movable;
-                player.TryAddPowerup(powerup);
+                movable.AsPlayer().TryAddPowerup(powerup);
             }
             ClearCell(powerupCell.cx, powerupCell.cy);
         }

@@ -23,6 +23,11 @@ namespace Bomberman.Game.Elements.Cells
             elasped += delta;
         }
 
+        public override PowerupCell AsPowerup()
+        {
+            return this;
+        }
+
         public override bool IsPowerup()
         {
             return true;

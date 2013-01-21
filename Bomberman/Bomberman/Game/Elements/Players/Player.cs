@@ -330,6 +330,11 @@ namespace Bomberman.Game.Elements.Players
 
         //////////////////////////////////////////////////////////////////////////////
 
+        public override Player AsPlayer()
+        {
+            return this;
+        }
+
         public override bool IsPlayer()
         {
             return true;
@@ -413,7 +418,7 @@ namespace Bomberman.Game.Elements.Players
                 return false; // you can use spooger only when standing on the bomb
             }
 
-            Bomb underlyingBomb = (Bomb)underlyingCell;
+            Bomb underlyingBomb = underlyingCell.AsBomb();
             if (underlyingBomb.GetPlayer() != this)
             {
                 return false; // you only can use spooger when standing at your own bomb
