@@ -23,7 +23,7 @@ namespace Bomberman.Game.Elements.Cells
         public Bomb(Player player) : base(player.GetCx(), player.GetCy())
         {
             this.player = player;
-            speed = Settings.Get(Settings.VAL_BOMB_ROLL_SPEED);
+            SetSpeed(Settings.Get(Settings.VAL_BOMB_ROLL_SPEED));
         }
 
         public override void Update(float delta)
@@ -78,6 +78,26 @@ namespace Bomberman.Game.Elements.Cells
         public override bool IsObstacle()
         {
             return true;
+        }
+
+        public override void HitObstacle(Fields.FieldCell obstacle)
+        {
+            base.HitObstacle(obstacle);
+            TryJellyOnObstacle();
+        }
+
+        public override void HitWall()
+        {
+            base.HitWall();
+            TryJellyOnObstacle();
+        }
+
+        private void TryJellyOnObstacle()
+        {
+            if (IsJelly())
+            {
+                SetMoveDirection(Util.Opposite(direction));
+            }
         }
 
         public int GetRadius()

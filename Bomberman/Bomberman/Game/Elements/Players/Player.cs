@@ -196,7 +196,7 @@ namespace Bomberman.Game.Elements.Players
 
                 case Powerups.Speed:
                 {
-                    speed = CalcPlayerSpeed();
+                    SetSpeed(CalcPlayerSpeed());
                     break;
                 }
 
@@ -323,7 +323,7 @@ namespace Bomberman.Game.Elements.Players
 
         private void InitPlayer()
         {
-            speed = CalcPlayerSpeed();
+            SetSpeed(CalcPlayerSpeed());
         }
 
         #endregion

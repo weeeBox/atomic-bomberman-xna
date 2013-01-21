@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Bomberman.Game.Elements;
+using BomberEngine.Debugging;
 
 namespace Bomberman.Game
 {
@@ -43,6 +44,26 @@ namespace Bomberman.Game
             float prevPy = Cy2Py(Py2Cy(py));
             float dy = py - prevPy;
             return dy < 0.5f * ch ? -dy : (ch - dy);
+        }
+
+        public static Direction Opposite(Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.DOWN:
+                    return Direction.UP;
+                case Direction.UP:
+                    return Direction.DOWN;
+                case Direction.LEFT:
+                    return Direction.RIGHT;
+                case Direction.RIGHT:
+                    return Direction.LEFT;
+                default:
+                    Debug.Assert(false, "Unknown direction: " + direction);
+                    break;
+            }
+
+            return Direction.DOWN;
         }
     }
 }

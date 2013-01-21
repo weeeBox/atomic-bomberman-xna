@@ -8,24 +8,24 @@ namespace Bomberman.Game.Elements.Cells
 {
     public class MovableCell : FieldCell
     {
-        private Direction direction;
-        private Direction oldDirection;
+        private Direction m_direction;
+        private Direction m_oldDirection;
 
         /* Points per second */
-        public float speed;
+        private float m_speed;
 
-        public bool moving;
+        private bool m_moving;
 
         public MovableCell(int cx, int cy)
             : base(cx, cy)
         {
-            direction = Direction.DOWN;
-            oldDirection = Direction.DOWN;
+            m_direction = Direction.DOWN;
+            m_oldDirection = Direction.DOWN;
         }
 
         public override void Update(float delta)
         {
-            if (moving)
+            if (m_moving)
             {
                 UpdateMoving(delta);
             }
@@ -41,7 +41,7 @@ namespace Bomberman.Game.Elements.Cells
             {
                 case Direction.UP:
                     {
-                        MoveY(-delta * speed);
+                        MoveY(-delta * m_speed);
 
                         // TODO: разобрать это пиздец
                         FieldCell blockingCell = null;
@@ -58,11 +58,11 @@ namespace Bomberman.Game.Elements.Cells
                                 float blockingPx = blockingCell.GetPx();
                                 if (px < blockingPx && !GetField().IsObstacleCell(cx - 1, cy - 1))
                                 {
-                                    MoveX(Math.Max(Util.Cx2Px(cx - 1) - px, -speed * delta));
+                                    MoveX(Math.Max(Util.Cx2Px(cx - 1) - px, -m_speed * delta));
                                 }
                                 else if (px > blockingPx && !GetField().IsObstacleCell(cx + 1, cy - 1))
                                 {
-                                    MoveX(Math.Min(Util.Cx2Px(cx + 1) - px, speed * delta));
+                                    MoveX(Math.Min(Util.Cx2Px(cx + 1) - px, m_speed * delta));
                                 }
                             }
                             else
@@ -80,7 +80,7 @@ namespace Bomberman.Game.Elements.Cells
 
                 case Direction.DOWN:
                     {
-                        MoveY(delta * speed);
+                        MoveY(delta * m_speed);
 
                         // TODO: разобрать это пиздец
                         FieldCell blockingCell = null;
@@ -97,11 +97,11 @@ namespace Bomberman.Game.Elements.Cells
                                 float blockingPx = blockingCell.GetPx();
                                 if (px < blockingPx && !GetField().IsObstacleCell(cx - 1, cy + 1))
                                 {
-                                    MoveX(Math.Max(Util.Cx2Px(cx - 1) - px, -speed * delta));
+                                    MoveX(Math.Max(Util.Cx2Px(cx - 1) - px, -m_speed * delta));
                                 }
                                 else if (px > blockingPx && !GetField().IsObstacleCell(cx + 1, cy + 1))
                                 {
-                                    MoveX(Math.Min(Util.Cx2Px(cx + 1) - px, speed * delta));
+                                    MoveX(Math.Min(Util.Cx2Px(cx + 1) - px, m_speed * delta));
                                 }
                             }
                             else
@@ -119,7 +119,7 @@ namespace Bomberman.Game.Elements.Cells
 
                 case Direction.LEFT:
                     {
-                        MoveX(-delta * speed);
+                        MoveX(-delta * m_speed);
 
                         // TODO: разобрать это пиздец
                         FieldCell blockingCell = null;
@@ -136,11 +136,11 @@ namespace Bomberman.Game.Elements.Cells
                                 float blockingPy = blockingCell.GetPy();
                                 if (py < blockingPy && !GetField().IsObstacleCell(cx - 1, cy - 1))
                                 {
-                                    MoveY(Math.Max(Util.Cy2Py(cy - 1) - py, -speed * delta));
+                                    MoveY(Math.Max(Util.Cy2Py(cy - 1) - py, -m_speed * delta));
                                 }
                                 else if (py > blockingPy && !GetField().IsObstacleCell(cx - 1, cy + 1))
                                 {
-                                    MoveY(Math.Min(Util.Cy2Py(cy + 1) - py, speed * delta));
+                                    MoveY(Math.Min(Util.Cy2Py(cy + 1) - py, m_speed * delta));
                                 }
                             }
                             else
@@ -157,7 +157,7 @@ namespace Bomberman.Game.Elements.Cells
 
                 case Direction.RIGHT:
                     {
-                        MoveX(delta * speed);
+                        MoveX(delta * m_speed);
 
                         // TODO: разобрать это пиздец
                         FieldCell blockingCell = null;
@@ -174,11 +174,11 @@ namespace Bomberman.Game.Elements.Cells
                                 float blockingPy = blockingCell.GetPy();
                                 if (py < blockingPy && !GetField().IsObstacleCell(cx + 1, cy - 1))
                                 {
-                                    MoveY(Math.Max(Util.Cy2Py(cy - 1) - py, -speed * delta));
+                                    MoveY(Math.Max(Util.Cy2Py(cy - 1) - py, -m_speed * delta));
                                 }
                                 else if (py > blockingPy && !GetField().IsObstacleCell(cx + 1, cy + 1))
                                 {
-                                    MoveY(Math.Min(Util.Cy2Py(cy + 1) - py, speed * delta));
+                                    MoveY(Math.Min(Util.Cy2Py(cy + 1) - py, m_speed * delta));
                                 }
                             }
                             else
@@ -198,13 +198,13 @@ namespace Bomberman.Game.Elements.Cells
         private void MoveToTargetPx(float delta)
         {
             float xOffset = Util.TargetPxOffset(px);
-            MoveX(xOffset < 0 ? Math.Max(xOffset, -delta * speed) : Math.Min(xOffset, delta * speed));
+            MoveX(xOffset < 0 ? Math.Max(xOffset, -delta * m_speed) : Math.Min(xOffset, delta * m_speed));
         }
 
         private void MoveToTargetPy(float delta)
         {
             float yOffset = Util.TargetPyOffset(py);
-            MoveY(yOffset < 0 ? Math.Max(yOffset, -delta * speed) : Math.Min(yOffset, delta * speed));
+            MoveY(yOffset < 0 ? Math.Max(yOffset, -delta * m_speed) : Math.Min(yOffset, delta * m_speed));
         }
 
         public virtual void HitWall()
@@ -220,28 +220,28 @@ namespace Bomberman.Game.Elements.Cells
         protected void SetMoveDirection(Direction direction)
         {
             SetDirection(direction);
-            moving = true;
+            m_moving = true;
         }
 
         public void StopMoving()
         {
-            moving = false;
+            m_moving = false;
         }
 
         public Direction GetDirection()
         {
-            return direction;
+            return m_direction;
         }
 
         public Direction GetOldDirection()
         {
-            return oldDirection;
+            return m_oldDirection;
         }
 
         public void SetDirection(Direction newDirection)
         {   
-            oldDirection = direction;
-            direction = newDirection;
+            m_oldDirection = m_direction;
+            m_direction = newDirection;
         }
 
         public void MoveX(float dx)
@@ -308,17 +308,32 @@ namespace Bomberman.Game.Elements.Cells
 
         public void SetSpeed(float speed)
         {
-            this.speed = speed;
+            this.m_speed = speed;
         }
 
         public void IncSpeed(float amount)
         {
-            SetSpeed(speed + amount);
+            SetSpeed(m_speed + amount);
         }
 
         public float GetSpeed()
         {
-            return speed;
+            return m_speed;
+        }
+
+        public bool moving
+        {
+            get { return m_moving; }
+        }
+
+        public Direction direction
+        {
+            get { return m_direction; }
+        }
+
+        public float speed
+        {
+            get { return m_speed; }
         }
     }
 }
