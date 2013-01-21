@@ -524,53 +524,8 @@ namespace Bomberman.Game.Elements.Fields
                     if (Collides(movable, cell))
                     {
                         if (movable.IsPlayer() && cell.IsBomb())
-                        {   
-                            Player player = (Player)movable;
-
-                            if (player.HasKick())
-                            {
-                                Direction direction = player.GetDirection();
-
-                                Bomb bomb = (Bomb)cell;
-                                if (bomb.moving)
-                                {
-                                    AdjustPosition(movable, bomb);
-                                    bomb.Kick(direction);
-                                }
-                                else
-                                {
-                                    bool farEnoughForKick = false; // true, if distance between player's center and bomb's center is enough for a kick
-                                    switch (direction)
-                                    {
-                                        case Direction.UP:
-                                        case Direction.DOWN:
-                                            farEnoughForKick = Math.Abs(player.py - cell.py) > 0.5f * Constant.CELL_HEIGHT;
-                                            break;
-                                        case Direction.LEFT:
-                                        case Direction.RIGHT:
-                                            farEnoughForKick = Math.Abs(player.px - cell.px) > 0.5f * Constant.CELL_WIDTH;
-                                            break;
-                                        default:
-                                            Debug.Assert(false, "Unknown direction: " + direction);
-                                            break;
-                                    }
-
-                                    if (farEnoughForKick)
-                                    {
-                                        FieldCell blockingCell = cell.NearCellDir(direction);
-                                        if (blockingCell != null && !blockingCell.IsObstacle()) // can we kick the bomb here?
-                                        {
-                                            ((Bomb)cell).Kick(direction);
-                                        }
-                                        AdjustPosition(movable, cell);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                AdjustPosition(movable, cell);
-                                movable.HitObstacle(cell);
-                            }
+                        {
+                            ProcessCollision((Player)movable, (Bomb)cell);
                         }
                         else
                         {
@@ -583,26 +538,80 @@ namespace Bomberman.Game.Elements.Fields
                 {
                     if (Collides(movable, cell))
                     {
-                        if (movable.IsPlayer())
-                        {
-                            PowerupCell powerupCell = (PowerupCell)cell;
-                            int powerup = powerupCell.powerup;
-
-                            Player player = (Player)movable;
-                            player.TryAddPowerup(powerup);
-                        }
-                        ClearCell(cx, cy);
+                        ProcessCollision(movable, (PowerupCell)cell);
                     }
                 }
                 else if (cell.IsFlame())
                 {
-                    if (movable.IsBomb())
+                    if (Collides(movable, cell))
                     {
-                        Bomb bomb = (Bomb)movable;
-                        BlowBomb(bomb);
+                        if (movable.IsBomb())
+                        {
+                            Bomb bomb = (Bomb)movable;
+                            BlowBomb(bomb);
+                        }
                     }
                 }
             }
+        }
+
+        private void ProcessCollision(Player player, Bomb bomb)
+        {
+            if (player.HasKick())
+            {
+                Direction direction = player.GetDirection();
+
+                if (bomb.moving)
+                {
+                    AdjustPosition(player, bomb);
+                    bomb.Kick(direction);
+                }
+                else
+                {
+                    bool farEnoughForKick = false; // true, if distance between player's center and bomb's center is enough for a kick
+                    switch (direction)
+                    {
+                        case Direction.UP:
+                        case Direction.DOWN:
+                            farEnoughForKick = Math.Abs(player.py - bomb.py) > 0.5f * Constant.CELL_HEIGHT;
+                            break;
+                        case Direction.LEFT:
+                        case Direction.RIGHT:
+                            farEnoughForKick = Math.Abs(player.px - bomb.px) > 0.5f * Constant.CELL_WIDTH;
+                            break;
+                        default:
+                            Debug.Assert(false, "Unknown direction: " + direction);
+                            break;
+                    }
+
+                    if (farEnoughForKick)
+                    {
+                        FieldCell blockingCell = bomb.NearCellDir(direction);
+                        if (blockingCell != null && !blockingCell.IsObstacle()) // can we kick the bomb here?
+                        {
+                            ((Bomb)bomb).Kick(direction);
+                        }
+                        AdjustPosition(player, bomb);
+                    }
+                }
+            }
+            else
+            {
+                AdjustPosition(player, bomb);
+                player.HitObstacle(bomb);
+            }
+        }
+
+        private void ProcessCollision(MovableCell movable, PowerupCell powerupCell)
+        {
+            if (movable.IsPlayer())
+            {
+                int powerup = powerupCell.powerup;
+
+                Player player = (Player)movable;
+                player.TryAddPowerup(powerup);
+            }
+            ClearCell(powerupCell.cx, powerupCell.cy);
         }
 
         private static void AdjustPosition(MovableCell movable, FieldCell obstacle)

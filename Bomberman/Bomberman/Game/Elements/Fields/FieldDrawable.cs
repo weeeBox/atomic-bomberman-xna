@@ -48,6 +48,7 @@ namespace Bomberman.Game.Elements.Fields
             TextureImage solidImage = Helper.GetTexture(A.tex_F0SOLID);
             TextureImage breakableImage = Helper.GetTexture(A.tex_F0BRICK);
             TextureImage bombImage = Helper.GetTexture(A.tex_BMB1001);
+            TextureImage bombJellyImage = Helper.GetTexture(A.tex_BMBC1);
 
             foreach (FieldCell cell in cells)
             {
@@ -63,7 +64,8 @@ namespace Bomberman.Game.Elements.Fields
                 }
                 else if (cell.IsBomb())
                 {
-                    image = bombImage;
+                    Bomb bomb = (Bomb)cell;
+                    image = bomb.IsJelly() ? bombJellyImage : bombImage;
                     context.DrawRect(cell.cx * cellWidth, cell.cy * cellHeight, cellWidth, cellHeight, Color.White);
                 }
                 else if (cell.IsPowerup())

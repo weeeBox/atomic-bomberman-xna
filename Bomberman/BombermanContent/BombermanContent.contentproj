@@ -93,6 +93,12 @@
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
+    <Compile Include="BMBC1.png">
+      <Name>BMBC1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
     <Compile Include="F0BRICK.png">
       <Name>F0BRICK</Name>
       <Importer>TextureImporter</Importer>
