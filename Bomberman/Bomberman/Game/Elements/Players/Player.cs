@@ -18,6 +18,7 @@ namespace Bomberman.Game.Elements.Players
 
         private int bombRadius;
         private float bombTimeout;
+        private int triggerBombsCount;
 
         private PlayerInput input;
 
@@ -191,6 +192,12 @@ namespace Bomberman.Game.Elements.Players
                 case Powerups.Bomb:
                 {
                     bombs.IncMaxActiveCount();
+
+                    if (HasTrigger())
+                    {
+                        ++triggerBombsCount;
+                    }
+
                     break;
                 }
 
@@ -210,6 +217,8 @@ namespace Bomberman.Game.Elements.Players
                 // Trigger will drop Jelly and Boxing Glove
                 case Powerups.Trigger:
                 {
+                    triggerBombsCount = bombs.GetMaxActiveCount();
+
                     TryGivePowerupBack(Powerups.Jelly);
                     TryGivePowerupBack(Powerups.Punch);
                     break;
@@ -252,6 +261,11 @@ namespace Bomberman.Game.Elements.Players
             return HasPowerup(Powerups.Spooger);
         }
 
+        public bool HasTrigger()
+        {
+            return HasPowerup(Powerups.Trigger);
+        }
+
         private bool HasPowerup(int powerupIndex)
         {
             return powerups.HasPowerup(powerupIndex);
@@ -261,6 +275,13 @@ namespace Bomberman.Game.Elements.Players
         {
             if (powerups.HasPowerup(powerupIndex))
             {
+                switch (powerupIndex)
+                {
+                    case Powerups.Trigger:
+                        triggerBombsCount = 0;
+                        break;
+                }
+
                 GivePowerupBack(powerupIndex);
             }
         }
@@ -355,6 +376,10 @@ namespace Bomberman.Game.Elements.Players
                 if (bomb != null)
                 {
                     field.SetBomb(bomb);
+                    if (HasTrigger() && triggerBombsCount > 0)
+                    {
+                        --triggerBombsCount;
+                    }
                 }
             }
             else if (HasSpooger())
@@ -393,7 +418,7 @@ namespace Bomberman.Game.Elements.Players
 
         public bool IsTrigger()
         {
-            return HasPowerup(Powerups.Trigger);
+            return HasTrigger() && triggerBombsCount > 0;
         }
 
         //////////////////////////////////////////////////////////////////////////////

@@ -6,6 +6,7 @@
 	<image name="FIELD7" file="${dir.gfx}/FIELD7.png" />
 	<image name="BMB1001" file="${dir.gfx}/BMB1001.png" />
 	<image name="BMBC1" file="${dir.gfx}/BMBC1.png" />
+	<image name="DIGIB001" file="${dir.gfx}/DIGIB001.png" />
 	<image name="F0BRICK" file="${dir.gfx}/F0BRICK.png" />
 	<image name="F0SOLID" file="${dir.gfx}/F0SOLID.png" />
 

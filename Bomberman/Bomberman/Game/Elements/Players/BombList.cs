@@ -42,6 +42,11 @@ namespace Bomberman.Game.Elements.Items
             return false;
         }
 
+        public int GetMaxActiveCount()
+        {
+            return maxActiveCount;
+        }
+
         public Bomb GetFirstKickedBomb()
         {
             Bomb kickedBomb = null;

@@ -30,10 +30,13 @@ namespace Bomberman.Game.Elements.Cells
         {
             base.Update(delta);
 
-            remains -= delta;
-            if (remains <= 0)
+            if (!trigger)
             {
-                GetField().BlowBomb(this);
+                remains -= delta;
+                if (remains <= 0)
+                {
+                    GetField().BlowBomb(this);
+                }
             }
         }
 
