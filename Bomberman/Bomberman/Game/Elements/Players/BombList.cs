@@ -66,6 +66,25 @@ namespace Bomberman.Game.Elements.Items
             return kickedBomb;
         }
 
+        public Bomb GetFirstTriggerBomb()
+        {
+            Bomb triggerBomb = null;
+
+            for (int i = 0; i < bombs.Length; ++i)
+            {
+                Bomb bomb = bombs[i];
+                if (bomb.active)
+                {
+                    if (bomb.trigger && (triggerBomb == null || triggerBomb.triggerIndex > bomb.triggerIndex))
+                    {
+                        triggerBomb = bomb;
+                    }
+                }
+            }
+
+            return triggerBomb;
+        }
+
         public Bomb GetNextBomb()
         {
             Bomb nextBomb = null;

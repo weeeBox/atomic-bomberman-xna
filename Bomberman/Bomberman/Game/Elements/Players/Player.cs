@@ -394,6 +394,10 @@ namespace Bomberman.Game.Elements.Players
             {
                 TryStopBomb();
             }
+            else if (HasTrigger())
+            {
+                TryTriggerBomb();
+            }
         }
 
         public float GetBombTimeout()
@@ -498,6 +502,18 @@ namespace Bomberman.Game.Elements.Players
             }
 
             return numBombs > 0;
+        }
+
+        private bool TryTriggerBomb()
+        {
+            Bomb triggerBomb = bombs.GetFirstTriggerBomb();
+            if (triggerBomb != null)
+            {
+                GetField().BlowBomb(triggerBomb);
+                return true;
+            }
+
+            return false;
         }
 
         #endregion

@@ -11,6 +11,8 @@ namespace Bomberman.Game.Elements.Cells
 {
     public class Bomb : MovableCell
     {
+        private static int nextTriggerIndex;
+
         private Player player;
         public bool active;
         
@@ -18,7 +20,9 @@ namespace Bomberman.Game.Elements.Cells
         public float remains;
         private bool dud;
         private bool jelly;
-        private bool trigger;
+
+        private bool m_trigger;
+        private int m_triggerIndex;
 
         public Bomb(Player player) : base(player.GetCx(), player.GetCy())
         {
@@ -30,7 +34,7 @@ namespace Bomberman.Game.Elements.Cells
         {
             base.Update(delta);
 
-            if (!trigger)
+            if (!m_trigger)
             {
                 remains -= delta;
                 if (remains <= 0)
@@ -52,7 +56,12 @@ namespace Bomberman.Game.Elements.Cells
             radius = player.GetBombRadius();
             remains = player.GetBombTimeout();
             jelly = player.IsJelly();
-            trigger = player.IsTrigger();
+            m_trigger = player.IsTrigger();
+            if (m_trigger)
+            {
+                m_triggerIndex = nextTriggerIndex++;
+            }
+
             dud = false;
         }
 
@@ -125,7 +134,17 @@ namespace Bomberman.Game.Elements.Cells
 
         public bool IsTrigger()
         {
-            return trigger;
+            return m_trigger;
+        }
+
+        public bool trigger
+        {
+            get { return m_trigger; }
+        }
+
+        public int triggerIndex
+        {
+            get { return m_triggerIndex; }
         }
     }
 }
