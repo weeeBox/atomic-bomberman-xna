@@ -3,6 +3,12 @@
 	<image name="WLKN0001" file="${dir.gfx}/WLKN0001.png" />
 	<image name="WLKS0001" file="${dir.gfx}/WLKS0001.png" />
 	<image name="WLKW0001" file="${dir.gfx}/WLKW0001.png" />
+	
+	<image name="PUD" file="${dir.gfx}/BMF0010.png" />
+	<image name="PUL" file="${dir.gfx}/PUL0010.png" />
+	<image name="PUR" file="${dir.gfx}/PUR0010.png" />
+	<image name="PUP" file="${dir.gfx}/PUBN010.png" />
+	
 	<image name="FIELD7" file="${dir.gfx}/FIELD7.png" />
 	<image name="BMB1001" file="${dir.gfx}/BMB1001.png" />
 	<image name="BMBC1" file="${dir.gfx}/BMBC1.png" />

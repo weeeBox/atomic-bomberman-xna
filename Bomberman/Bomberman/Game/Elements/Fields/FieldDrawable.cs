@@ -44,12 +44,6 @@ namespace Bomberman.Game.Elements.Fields
         private void DrawBlocks(Context context)
         {
             FieldCell[] cells = field.GetCells().GetArray();
-            
-            TextureImage solidImage = Helper.GetTexture(A.tex_F0SOLID);
-            TextureImage breakableImage = Helper.GetTexture(A.tex_F0BRICK);
-            TextureImage bombImage = Helper.GetTexture(A.tex_BMB1001);
-            TextureImage bombJellyImage = Helper.GetTexture(A.tex_BMBC1);
-            TextureImage bombTriggerImage = Helper.GetTexture(A.tex_DIGIB001);
 
             foreach (FieldCell cell in cells)
             {
@@ -131,7 +125,7 @@ namespace Bomberman.Game.Elements.Fields
             List<Player> players = field.GetPlayers().list;
             foreach (Player player in players)
             {
-                TextureImage image = TempFindPlayerImage(player.GetDirection());
+                TextureImage image = TempFindPlayerImage(player);
                 float drawX = player.GetPx() - 0.5f * cellWidth;
                 float drawY = player.GetPy() - 0.5f * cellHeight;
 
@@ -156,10 +150,23 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         private Dictionary<Direction, TextureImage> playerImages;
-        private TextureImage[] powerupImages;
+        private Dictionary<Direction, TextureImage> playerGrabImages;
 
-        private TextureImage TempFindPlayerImage(Direction direction)
+        private TextureImage[] powerupImages;
+        private TextureImage solidImage;
+        private TextureImage breakableImage;
+        private TextureImage bombImage;
+        private TextureImage bombJellyImage;
+        private TextureImage bombTriggerImage;
+
+        private TextureImage TempFindPlayerImage(Player player)
         {
+            Direction direction = player.GetDirection();
+            if (player.IsHoldingBomb())
+            {
+                return playerGrabImages[direction];
+            }
+
             return playerImages[direction];
         }
 
@@ -170,6 +177,18 @@ namespace Bomberman.Game.Elements.Fields
             playerImages.Add(Direction.UP, Helper.GetTexture(A.tex_WLKN0001));
             playerImages.Add(Direction.LEFT, Helper.GetTexture(A.tex_WLKW0001));
             playerImages.Add(Direction.RIGHT, Helper.GetTexture(A.tex_WLKE0001));
+
+            playerGrabImages = new Dictionary<Direction, TextureImage>();
+            playerGrabImages.Add(Direction.DOWN, Helper.GetTexture(A.tex_PUD));
+            playerGrabImages.Add(Direction.UP, Helper.GetTexture(A.tex_PUP));
+            playerGrabImages.Add(Direction.LEFT, Helper.GetTexture(A.tex_PUL));
+            playerGrabImages.Add(Direction.RIGHT, Helper.GetTexture(A.tex_PUR));
+
+            solidImage = Helper.GetTexture(A.tex_F0SOLID);
+            breakableImage = Helper.GetTexture(A.tex_F0BRICK);
+            bombImage = Helper.GetTexture(A.tex_BMB1001);
+            bombJellyImage = Helper.GetTexture(A.tex_BMBC1);
+            bombTriggerImage = Helper.GetTexture(A.tex_DIGIB001);
 
             powerupImages = new TextureImage[]
             {

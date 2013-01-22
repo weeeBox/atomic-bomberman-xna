@@ -6,6 +6,9 @@ using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements.Cells;
 using BomberEngine.Util;
 using BomberEngine.Core;
+using BomberEngine;
+using BomberEngine.Debugging;
+using Bomberman.Game.Elements.Fields;
 
 namespace Bomberman.Game.Elements.Cells
 {
@@ -84,11 +87,58 @@ namespace Bomberman.Game.Elements.Cells
         public void Grab()
         {
             m_grabbed = true;
+            GetField().ClearCell(cx, cy);
         }
 
-        public void Throw(Direction direction)
+        public void Throw(Direction direction, int fromCx, int fromCy)
         {
-            m_grabbed = true;
+            int mulX = 0;
+            int mulY = 0;
+
+            switch (direction)
+            {
+                case Direction.DOWN:
+                    {
+                        mulY = 1;
+                        break;
+                    }
+                case Direction.UP:
+                    {
+                        mulY = -1;
+                        break;
+                    }
+                case Direction.LEFT:
+                    {
+                        mulX = -1;
+                        break;
+                    }
+                case Direction.RIGHT:
+                    {
+                        mulX = 1;
+                        break;
+                    }
+                default:
+                    Debug.Assert(false, "Unexpected direction: " + direction);
+                    break;
+
+            }
+
+            int throwDistance = Settings.Get(Settings.VAL_BOMB_THROW_DISTANCE);
+            int destCx = fromCx + mulX * throwDistance;
+            int destCy = fromCy + mulY * throwDistance;
+
+            Field field = GetField();
+            if (field.IsObstacleCell(destCx, destCy))
+            {
+
+            }
+            else
+            {
+                SetCell(destCx, destCy);
+                field.SetBomb(this);
+            }
+
+            m_grabbed = false;
         }
 
         public override Bomb AsBomb()

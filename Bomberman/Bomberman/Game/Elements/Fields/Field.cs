@@ -280,12 +280,6 @@ namespace Bomberman.Game.Elements.Fields
             cells.Set(bomb.GetCx(), bomb.GetCy(), bomb);
         }
 
-        public void GrabBomb(Bomb bomb)
-        {
-            CheckCell(bomb);
-            ClearCell(bomb.cx, bomb.cy);
-        }
-
         public void DestroyBrick(BrickCell brick)
         {
             int cx = brick.GetCx();

@@ -81,6 +81,30 @@
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
+    <Compile Include="BMF0010.png">
+      <Name>BMF0010</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
+    <Compile Include="PUL0010.png">
+      <Name>PUL0010</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
+    <Compile Include="PUR0010.png">
+      <Name>PUR0010</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
+    <Compile Include="PUBN010.png">
+      <Name>PUBN010</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
     <Compile Include="FIELD7.png">
       <Name>FIELD7</Name>
       <Importer>TextureImporter</Importer>

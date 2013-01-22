@@ -112,6 +112,11 @@ namespace Bomberman.Game.Elements.Players
                     SetMoveDirection(Direction.RIGHT);
                 }
             }
+
+            if (action == PlayerAction.Bomb)
+            {
+                TryThrowBomb();
+            }
         }
 
         public void OnActonsReleased(PlayerInput playerInput)
@@ -436,6 +441,11 @@ namespace Bomberman.Game.Elements.Players
             return HasTrigger() && triggerBombsCount > 0;
         }
 
+        public bool IsHoldingBomb()
+        {
+            return bombInHands != null;
+        }
+
         //////////////////////////////////////////////////////////////////////////////
 
         #region Special actions
@@ -532,7 +542,19 @@ namespace Bomberman.Game.Elements.Players
             Bomb underlyingBomb = GetField().GetCell(cx, cy).AsBomb();
             if (underlyingBomb != null)
             {
-                GetField().GrabBomb(underlyingBomb);
+                underlyingBomb.Grab();
+                bombInHands = underlyingBomb;
+                return true;
+            }
+            return false;
+        }
+
+        private bool TryThrowBomb()
+        {
+            if (IsHoldingBomb())
+            {   
+                bombInHands.Throw(GetDirection(), cx, cy);
+                bombInHands = null;
                 return true;
             }
             return false;
