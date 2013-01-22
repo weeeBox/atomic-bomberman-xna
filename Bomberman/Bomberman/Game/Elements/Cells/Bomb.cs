@@ -22,6 +22,8 @@ namespace Bomberman.Game.Elements.Cells
         private bool jelly;
 
         private bool m_trigger;
+        private bool m_grabbed;
+
         private int m_triggerIndex;
 
         public Bomb(Player player) : base(player.GetCx(), player.GetCy())
@@ -34,12 +36,12 @@ namespace Bomberman.Game.Elements.Cells
         {
             base.Update(delta);
 
-            if (!m_trigger)
+            if (IsUpdatable())
             {
                 remains -= delta;
                 if (remains <= 0)
                 {
-                    GetField().BlowBomb(this);
+                    Blow();
                 }
             }
         }
@@ -61,7 +63,7 @@ namespace Bomberman.Game.Elements.Cells
             {
                 m_triggerIndex = nextTriggerIndex++;
             }
-
+            
             dud = false;
         }
 
@@ -70,11 +72,23 @@ namespace Bomberman.Game.Elements.Cells
             SetCell();
             StopMoving();
             active = false;
+
+            GetField().BlowBomb(this);
         }
 
         public void Kick(Direction direction)
         {
             SetMoveDirection(direction);
+        }
+
+        public void Grab()
+        {
+            m_grabbed = true;
+        }
+
+        public void Throw(Direction direction)
+        {
+            m_grabbed = true;
         }
 
         public override Bomb AsBomb()
@@ -135,6 +149,11 @@ namespace Bomberman.Game.Elements.Cells
         public bool IsTrigger()
         {
             return m_trigger;
+        }
+
+        private bool IsUpdatable()
+        {
+            return !m_trigger && !m_grabbed;
         }
 
         public bool trigger

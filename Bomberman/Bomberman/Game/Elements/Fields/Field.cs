@@ -280,6 +280,12 @@ namespace Bomberman.Game.Elements.Fields
             cells.Set(bomb.GetCx(), bomb.GetCy(), bomb);
         }
 
+        public void GrabBomb(Bomb bomb)
+        {
+            CheckCell(bomb);
+            ClearCell(bomb.cx, bomb.cy);
+        }
+
         public void DestroyBrick(BrickCell brick)
         {
             int cx = brick.GetCx();
@@ -300,12 +306,11 @@ namespace Bomberman.Game.Elements.Fields
             
         }
 
+        /** Should only be called from Bomb.Blow() */
         public void BlowBomb(Bomb bomb)
         {
             int cx = bomb.GetCx();
             int cy = bomb.GetCy();
-
-            bomb.Blow();
 
             SetExplosion(bomb, cx, cy);
             SpreadExplosion(bomb, cx - 1, cy);
@@ -361,7 +366,7 @@ namespace Bomberman.Game.Elements.Fields
 
             if (cell.IsBomb() && cell != bomb)
             {
-                BlowBomb(cell.AsBomb());
+                cell.AsBomb().Blow();
                 return true;
             }
 
@@ -547,7 +552,7 @@ namespace Bomberman.Game.Elements.Fields
                     {
                         if (movable.IsBomb())
                         {   
-                            BlowBomb(movable.AsBomb());
+                            movable.AsBomb().Blow();
                         }
                     }
                 }

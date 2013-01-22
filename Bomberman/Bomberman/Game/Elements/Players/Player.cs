@@ -24,6 +24,8 @@ namespace Bomberman.Game.Elements.Players
 
         private BombList bombs;
         public PowerupList powerups;
+
+        private Bomb bombInHands;
         
         public Player(int index, PlayerInput input)
             : base(0, 0)
@@ -266,6 +268,11 @@ namespace Bomberman.Game.Elements.Players
             return HasPowerup(Powerups.Trigger);
         }
 
+        public bool HasGrab()
+        {
+            return HasPowerup(Powerups.Grab);
+        }
+
         private bool HasPowerup(int powerupIndex)
         {
             return powerups.HasPowerup(powerupIndex);
@@ -386,6 +393,10 @@ namespace Bomberman.Game.Elements.Players
             {
                 TrySpooger();
             }
+            else if (HasGrab())
+            {
+                TryGrab();
+            }
         }
 
         private void TrySpecialAction()
@@ -394,7 +405,7 @@ namespace Bomberman.Game.Elements.Players
             {
                 TryStopBomb();
             }
-            else if (HasTrigger())
+            if (HasTrigger())
             {
                 TryTriggerBomb();
             }
@@ -509,10 +520,21 @@ namespace Bomberman.Game.Elements.Players
             Bomb triggerBomb = bombs.GetFirstTriggerBomb();
             if (triggerBomb != null)
             {
-                GetField().BlowBomb(triggerBomb);
+                triggerBomb.Blow();
                 return true;
             }
 
+            return false;
+        }
+
+        private bool TryGrab()
+        {
+            Bomb underlyingBomb = GetField().GetCell(cx, cy).AsBomb();
+            if (underlyingBomb != null)
+            {
+                GetField().GrabBomb(underlyingBomb);
+                return true;
+            }
             return false;
         }
 
