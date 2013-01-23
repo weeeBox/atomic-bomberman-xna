@@ -14,18 +14,29 @@ namespace Bomberman.Game.Elements.Cells
 {
     public class Bomb : MovableCell
     {
+        private const byte STATE_NORMAL = 0;
+        private const byte STATE_GRABBED = 1;
+        private const byte STATE_THROWN = 2;
+        private const byte STATE_JUMPING = 3;
+
         private static int nextTriggerIndex;
 
         private Player player;
+        private UpdatableDelegate updater;
+
         public bool active;
-        
+
+        private float flySpeed;
+        private float flyDistance;
+
         private int radius;
         public float remains;
+
         private bool dud;
         private bool jelly;
 
         private bool m_trigger;
-        private bool m_grabbed;
+        private byte m_state;
 
         private int m_triggerIndex;
 
@@ -39,13 +50,85 @@ namespace Bomberman.Game.Elements.Cells
         {
             base.Update(delta);
 
-            if (IsUpdatable())
+            updater(delta);            
+        }
+
+        private void UpdateNormal(float delta)
+        {
+            if (!IsTrigger())
             {
                 remains -= delta;
                 if (remains <= 0)
                 {
                     Blow();
                 }
+            }
+        }
+
+        private void UpdateGrabbed(float delta)
+        {
+        }
+
+        private void UpdateThrown(float delta)
+        {
+            float shift = flyDistance;
+
+            switch (direction)
+            {
+                case Direction.UP:
+                {
+                    shift = Math.Max(flySpeed * delta, shift);
+                    MoveY(shift);
+                    break;
+                }
+
+                case Direction.DOWN:
+                {
+                    shift = Math.Min(flySpeed * delta, shift);
+                    MoveY(shift);
+                    break;
+                }
+
+                case Direction.LEFT:
+                {
+                    shift = Math.Max(flySpeed * delta, shift);
+                    MoveX(shift);
+                    break;
+                }
+
+                case Direction.RIGHT:
+                {
+                    shift = Math.Min(flySpeed * delta, shift);
+                    MoveX(shift);
+                    break;
+                }
+            }
+
+            flyDistance -= shift;
+            if (flyDistance == 0)
+            {
+                EndThrow();
+            }
+        }
+
+        private void UpdateJumping(float delta)
+        {
+
+        }
+
+        protected override void OnPositionChanged(float oldPx, float oldPy)
+        {
+            if (IsNormal())
+            {
+                base.OnPositionChanged(oldPx, oldPy);
+            }
+        }
+
+        protected override void OnCellChanged(int oldCx, int oldCy)
+        {
+            if (IsNormal())
+            {
+                base.OnCellChanged(oldCx, oldCy);
             }
         }
 
@@ -60,14 +143,14 @@ namespace Bomberman.Game.Elements.Cells
             SetCell(player.GetCx(), player.GetCy());
             radius = player.GetBombRadius();
             remains = player.GetBombTimeout();
+            SetState(STATE_NORMAL);
+            dud = false;
             jelly = player.IsJelly();
             m_trigger = player.IsTrigger();
             if (m_trigger)
             {
                 m_triggerIndex = nextTriggerIndex++;
             }
-            
-            dud = false;
         }
 
         public void Blow()
@@ -86,59 +169,56 @@ namespace Bomberman.Game.Elements.Cells
 
         public void Grab()
         {
-            m_grabbed = true;
+            SetState(STATE_GRABBED);
             GetField().ClearCell(cx, cy);
         }
 
-        public void Throw(Direction direction, int fromCx, int fromCy)
+        public void Throw(Direction direction, float fromPx, float fromPy)
         {
-            int mulX = 0;
-            int mulY = 0;
+            int fromCx = Util.Px2Cx(fromPx);
+            int fromCy = Util.Py2Cy(fromPy);
+
+            int throwCells = Settings.Get(Settings.VAL_BOMB_THROW_DISTANCE);
+            flySpeed = Settings.Get(Settings.VAL_BOMB_FLY_SPEED);
 
             switch (direction)
             {
-                case Direction.DOWN:
-                    {
-                        mulY = 1;
-                        break;
-                    }
-                case Direction.UP:
-                    {
-                        mulY = -1;
-                        break;
-                    }
                 case Direction.LEFT:
-                    {
-                        mulX = -1;
-                        break;
-                    }
-                case Direction.RIGHT:
-                    {
-                        mulX = 1;
-                        break;
-                    }
-                default:
-                    Debug.Assert(false, "Unexpected direction: " + direction);
+                    flySpeed = -flySpeed;
+                    flyDistance = Util.TravelDistanceX(fromPx, fromCx - throwCells);
                     break;
 
+                case Direction.RIGHT:
+                    flyDistance = Util.TravelDistanceX(fromPx, fromCx + throwCells);
+                    break;
+
+                case Direction.UP:
+                    flySpeed = -flySpeed;
+                    flyDistance = Util.TravelDistanceY(fromPy, fromCy - throwCells);
+                    break;
+
+                case Direction.DOWN:
+                    flyDistance = Util.TravelDistanceY(fromPy, fromCy + throwCells);
+                    break;
             }
 
-            int throwDistance = Settings.Get(Settings.VAL_BOMB_THROW_DISTANCE);
-            int destCx = fromCx + mulX * throwDistance;
-            int destCy = fromCy + mulY * throwDistance;
+            SetDirection(direction);
+            SetState(STATE_THROWN);
+        }
 
+        private void EndThrow()
+        {
             Field field = GetField();
-            if (field.IsObstacleCell(destCx, destCy))
+            if (field.IsObstacleCell(cx, cy))
             {
-
+                throw new NotImplementedException();
             }
             else
             {
-                SetCell(destCx, destCy);
-                field.SetBomb(this);
+                remains = player.GetBombTimeout();
+                SetState(STATE_NORMAL);
+                player.BombLanded(this);
             }
-
-            m_grabbed = false;
         }
 
         public override Bomb AsBomb()
@@ -176,6 +256,33 @@ namespace Bomberman.Game.Elements.Cells
             }
         }
 
+        private void SetState(byte state)
+        {
+            switch (state)
+            {
+                case STATE_NORMAL:
+                    updater = UpdateNormal;
+                    break;
+
+                case STATE_GRABBED:
+                    Debug.Assert(m_state == STATE_NORMAL);
+                    updater = UpdateGrabbed;
+                    break;
+
+                case STATE_THROWN:
+                    Debug.Assert(m_state == STATE_GRABBED);
+                    updater = UpdateThrown;
+                    break;
+
+                case STATE_JUMPING:
+                    Debug.Assert(m_state == STATE_THROWN);
+                    updater = UpdateJumping;
+                    break;
+            }
+
+            m_state = state;
+        }
+
         public int GetRadius()
         {
             return radius;
@@ -201,9 +308,24 @@ namespace Bomberman.Game.Elements.Cells
             return m_trigger;
         }
 
-        private bool IsUpdatable()
+        public bool IsNormal()
         {
-            return !m_trigger && !m_grabbed;
+            return m_state == STATE_NORMAL;
+        }
+
+        public bool IsGrabbed()
+        {
+            return m_state == STATE_GRABBED;
+        }
+
+        public bool IsThrown()
+        {
+            return m_state == STATE_THROWN;
+        }
+
+        public bool IsJumping()
+        {
+            return m_state == STATE_JUMPING;
         }
 
         public bool trigger

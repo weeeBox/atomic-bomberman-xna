@@ -25,7 +25,10 @@ namespace Bomberman.Game.Elements.Players
         private BombList bombs;
         public PowerupList powerups;
 
-        private Bomb bombInHands;
+        private Bomb m_bombInHands;
+
+        /* Kicked/Punched bombs */
+        private List<Bomb> m_thrownBombs;
         
         public Player(int index, PlayerInput input)
             : base(0, 0)
@@ -39,6 +42,23 @@ namespace Bomberman.Game.Elements.Players
             InitPowerups();
             InitBombs();
             InitPlayer();
+
+            m_thrownBombs = new List<Bomb>();
+        }
+
+        public override void Update(float delta)
+        {
+            base.Update(delta);
+
+            if (m_bombInHands != null)
+            {
+                m_bombInHands.Update(delta);
+            }
+
+            for (int bombIndex = 0; bombIndex < m_thrownBombs.Count; ++bombIndex)
+            {
+                m_thrownBombs[bombIndex].Update(delta);
+            }
         }
 
         public void OnActionPressed(PlayerInput playerInput, PlayerAction action)
@@ -443,8 +463,42 @@ namespace Bomberman.Game.Elements.Players
 
         public bool IsHoldingBomb()
         {
-            return bombInHands != null;
+            return m_bombInHands != null;
         }
+
+        public Bomb bombInHands
+        {
+            get { return m_bombInHands; }
+        }
+
+        public List<Bomb> thrownBombs
+        {
+            get { return m_thrownBombs; }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Kicked/Punched bombs
+
+        private void AddThrownBomb(Bomb bomb)
+        {
+            Debug.AssertNotContains(m_thrownBombs, bomb);
+            m_thrownBombs.Add(bomb);
+        }
+
+        private void RemoveThrownBomb(Bomb bomb)
+        {   
+            bool removed = m_thrownBombs.Remove(bomb);
+            Debug.Assert(removed);
+        }
+
+        public void BombLanded(Bomb bomb)
+        {
+            RemoveThrownBomb(bomb);
+            GetField().SetBomb(bomb);
+        }
+
+        #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 
@@ -543,7 +597,7 @@ namespace Bomberman.Game.Elements.Players
             if (underlyingBomb != null)
             {
                 underlyingBomb.Grab();
-                bombInHands = underlyingBomb;
+                m_bombInHands = underlyingBomb;
                 return true;
             }
             return false;
@@ -552,9 +606,10 @@ namespace Bomberman.Game.Elements.Players
         private bool TryThrowBomb()
         {
             if (IsHoldingBomb())
-            {   
-                bombInHands.Throw(GetDirection(), cx, cy);
-                bombInHands = null;
+            {
+                AddThrownBomb(m_bombInHands);
+                m_bombInHands.Throw(GetDirection(), px, py);
+                m_bombInHands = null;
                 return true;
             }
             return false;

@@ -133,6 +133,26 @@ namespace Bomberman.Game.Elements.Fields
                 context.DrawRect(drawX, drawY, cellWidth, cellHeight, Color.Yellow);
 
                 context.DrawImage(image, drawX, drawY - image.GetHeight() + cellHeight);
+
+                Bomb bomb = player.bombInHands;
+                if (bomb != null)
+                {
+                    image = Helper.GetTexture(A.tex_BMB1001);
+
+                    drawX = bomb.GetPx() - 0.5f * image.GetWidth();
+                    drawY = bomb.GetPy() - 0.5f * image.GetHeight();
+                    context.DrawImage(image, drawX, drawY);
+                }
+
+                List<Bomb> thrownBombs = player.thrownBombs;
+                foreach (Bomb b in thrownBombs)
+                {
+                    image = Helper.GetTexture(A.tex_BMB1001);
+
+                    drawX = b.GetPx() - 0.5f * image.GetWidth();
+                    drawY = b.GetPy() - 0.5f * image.GetHeight();
+                    context.DrawImage(image, drawX, drawY);
+                }
             }
         }
 

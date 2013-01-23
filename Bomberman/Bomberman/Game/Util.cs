@@ -32,6 +32,16 @@ namespace Bomberman.Game
             return (cy + 0.5f) * ch;
         }
 
+        public static float NormalizePx(float px)
+        {
+            return Cx2Px(Px2Cx(px));
+        }
+        
+        public static float NormalizePy(float py)
+        {
+            return Cy2Py(Py2Cy(py));
+        }
+
         public static float TargetPxOffset(float px)
         {
             float prevPx = Cx2Px(Px2Cx(px));
@@ -44,6 +54,27 @@ namespace Bomberman.Game
             float prevPy = Cy2Py(Py2Cy(py));
             float dy = py - prevPy;
             return dy < 0.5f * ch ? -dy : (ch - dy);
+        }
+
+        public static float TravelDistanceX(float fromPx, int toCx)
+        {
+            int fromCx = Px2Cx(fromPx);
+            if (fromCx != toCx)
+            {
+                return cw * (toCx - fromCx) + (NormalizePx(fromPx) - fromPx);
+            }
+            return 0;
+        }
+
+        public static float TravelDistanceY(float fromPy, int toCy)
+        {   
+            int fromCy = Py2Cy(fromPy);
+            if (fromCy != toCy)
+            {
+                return ch * (toCy - fromCy) + (NormalizePy(fromPy) - fromPy);
+            }
+
+            return 0;
         }
 
         public static Direction Opposite(Direction direction)
