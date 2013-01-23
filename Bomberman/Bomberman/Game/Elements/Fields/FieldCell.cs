@@ -39,6 +39,12 @@ namespace Bomberman.Game.Elements.Fields
             SetPixelCords();
         }
 
+        public void SetPixels(float px, float py)
+        {
+            SetPixelCords(px, py);
+            SetCellCords();
+        }
+
         /* For internal use only */
         protected void SetCellCords(int cx, int cy)
         {

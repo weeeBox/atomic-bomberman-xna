@@ -608,7 +608,7 @@ namespace Bomberman.Game.Elements.Players
             if (IsHoldingBomb())
             {
                 AddThrownBomb(m_bombInHands);
-                m_bombInHands.Throw(GetDirection(), px, py);
+                m_bombInHands.Throw();
                 m_bombInHands = null;
                 return true;
             }

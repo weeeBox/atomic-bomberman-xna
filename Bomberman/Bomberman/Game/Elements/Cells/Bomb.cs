@@ -173,8 +173,14 @@ namespace Bomberman.Game.Elements.Cells
             GetField().ClearCell(cx, cy);
         }
 
-        public void Throw(Direction direction, float fromPx, float fromPy)
+        public void Throw()
         {
+            float fromPx = player.px;
+            float fromPy = player.py;
+            Direction direction = player.direction;
+
+            SetPixels(fromPx, fromPy);
+
             int fromCx = Util.Px2Cx(fromPx);
             int fromCy = Util.Py2Cy(fromPy);
 
