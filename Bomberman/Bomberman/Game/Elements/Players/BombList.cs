@@ -75,7 +75,7 @@ namespace Bomberman.Game.Elements.Items
                 Bomb bomb = bombs[i];
                 if (bomb.active)
                 {
-                    if (bomb.trigger && (triggerBomb == null || triggerBomb.triggerIndex > bomb.triggerIndex))
+                    if (bomb.CanTrigger() && (triggerBomb == null || triggerBomb.triggerIndex > bomb.triggerIndex))
                     {
                         triggerBomb = bomb;
                     }

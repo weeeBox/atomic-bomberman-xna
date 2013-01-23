@@ -308,6 +308,11 @@ namespace Bomberman.Game.Elements.Cells
             return m_trigger;
         }
 
+        public bool CanTrigger()
+        {
+            return IsTrigger() && IsNormal();
+        }
+
         public bool IsNormal()
         {
             return m_state == STATE_NORMAL;
