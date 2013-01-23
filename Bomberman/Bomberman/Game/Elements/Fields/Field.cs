@@ -571,11 +571,11 @@ namespace Bomberman.Game.Elements.Fields
                     {
                         case Direction.UP:
                         case Direction.DOWN:
-                            farEnoughForKick = Math.Abs(player.py - bomb.py) > 0.5f * Constant.CELL_HEIGHT;
+                            farEnoughForKick = Math.Abs(player.py - bomb.py) > Constant.CELL_HEIGHT_2;
                             break;
                         case Direction.LEFT:
                         case Direction.RIGHT:
-                            farEnoughForKick = Math.Abs(player.px - bomb.px) > 0.5f * Constant.CELL_WIDTH;
+                            farEnoughForKick = Math.Abs(player.px - bomb.px) > Constant.CELL_WIDTH_2;
                             break;
                         default:
                             Debug.Assert(false, "Unknown direction: " + direction);
@@ -654,22 +654,22 @@ namespace Bomberman.Game.Elements.Fields
 
         public float GetMinPx()
         {
-            return 0.5f * Constant.CELL_WIDTH;
+            return Constant.CELL_WIDTH_2;
         }
 
         public float GetMinPy()
         {
-            return 0.5f * Constant.CELL_HEIGHT;
+            return Constant.CELL_HEIGHT_2;
         }
 
         public float GetMaxPx()
         {
-            return Constant.FIELD_WIDTH - 0.5f * Constant.CELL_WIDTH;
+            return Constant.FIELD_WIDTH - Constant.CELL_WIDTH_2;
         }
 
         public float GetMaxPy()
         {
-            return Constant.FIELD_HEIGHT - 0.5f * Constant.CELL_HEIGHT;
+            return Constant.FIELD_HEIGHT - Constant.CELL_HEIGHT_2;
         }
 
         //////////////////////////////////////////////////////////////////////////////
