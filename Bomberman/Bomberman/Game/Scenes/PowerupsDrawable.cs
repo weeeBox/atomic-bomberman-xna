@@ -9,6 +9,7 @@ using Assets;
 using Bomberman.Game.Elements.Fields;
 using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements;
+using Microsoft.Xna.Framework;
 
 namespace Bomberman.Game.Scenes
 {
@@ -16,11 +17,15 @@ namespace Bomberman.Game.Scenes
     {   
         private TextureImage[] powerupImages;
         private Field field;
-        
+
+        private Color innactiveColor;
+
         public PowerupsDrawable(Field field, int x, int y, int width, int height)
             : base(x, y, width, height)
         {
             this.field = field;
+            innactiveColor = new Color(0, 0, 0, 0.5f);
+
             InitPowerupImages();
         }
 
@@ -39,16 +44,22 @@ namespace Bomberman.Game.Scenes
             {
                 TextureImage image = powerupImages[powerup];
                 drawY = 0;
-                for (int i = 0; i < count; ++i)
+
+                context.DrawImage(image, drawX, drawY);
+
+                for (int i = 1; i < count; ++i)
                 {
                     context.DrawImage(image, drawX, drawY);
                     drawX += 2;
                     drawY += 2;
                 }
-                if (count > 0)
+
+                if (count == 0)
                 {
-                    drawX += image.GetWidth();
+                    context.FillRect(drawX, drawY, image.GetWidth(), image.GetHeight(), innactiveColor);
                 }
+
+                drawX += image.GetWidth();
                 ++powerup;
             }
 

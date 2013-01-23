@@ -100,12 +100,6 @@ namespace Bomberman.Game.Elements.Players
                     TrySpecialAction();
                     break;
                 }
-
-                case PlayerAction.CheatAddBomb:
-                {
-                    TryAddPowerup(Powerups.Bomb);
-                    break;
-                }
             }
         }
 

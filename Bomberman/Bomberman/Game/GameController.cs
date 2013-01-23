@@ -42,7 +42,6 @@ namespace Bomberman.Game
             keyboardInput1.Map(Keys.D, PlayerAction.Right);
             keyboardInput1.Map(Keys.OemCloseBrackets, PlayerAction.Bomb);
             keyboardInput1.Map(Keys.OemOpenBrackets, PlayerAction.Special);
-            keyboardInput1.Map(Keys.OemPlus, PlayerAction.CheatAddBomb);
             keyboardListeners.Add(keyboardInput1);
 
             Player player1 = new Player(0, keyboardInput1);
