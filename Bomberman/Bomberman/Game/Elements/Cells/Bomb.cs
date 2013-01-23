@@ -16,9 +16,7 @@ namespace Bomberman.Game.Elements.Cells
     {
         private const byte STATE_NORMAL = 0;
         private const byte STATE_GRABBED = 1;
-        private const byte STATE_THROWN = 2;
-        private const byte STATE_PUNCHED = 3;
-        private const byte STATE_JUMPING = 4;
+        private const byte STATE_FLYING = 2;
 
         private static int nextTriggerIndex;
 
@@ -120,11 +118,6 @@ namespace Bomberman.Game.Elements.Cells
             }
         }
 
-        private void UpdateJumping(float delta)
-        {
-
-        }
-
         protected override void OnPositionChanged(float oldPx, float oldPy)
         {
             if (IsNormal())
@@ -191,7 +184,7 @@ namespace Bomberman.Game.Elements.Cells
             SetPixels(fromPx, fromPy);
 
             Fly(fromPx, fromPy, direction);
-            SetState(STATE_THROWN);
+            remains = player.GetBombTimeout();
         }
 
         private void Fly(float fromPx, float fromPy, Direction direction)
@@ -237,6 +230,7 @@ namespace Bomberman.Game.Elements.Cells
             fallSpeed = 0.5f * fallGravity * flyDistance / flySpeed;
 
             SetDirection(direction);
+            SetState(STATE_FLYING);
         }
 
         private void EndFlying()
@@ -245,15 +239,9 @@ namespace Bomberman.Game.Elements.Cells
             if (field.IsObstacleCell(cx, cy))
             {
                 Jump(px, py, direction);
-                SetState(STATE_JUMPING);
             }
             else
-            {
-                if (IsThrown())
-                {
-                    remains = player.GetBombTimeout();
-                }
-                
+            {   
                 SetState(STATE_NORMAL);
                 player.BombLanded(this);
             }
@@ -263,7 +251,6 @@ namespace Bomberman.Game.Elements.Cells
         {
             RemoveFromField();
             Fly(px, py, player.direction);
-            SetState(STATE_PUNCHED);
         }
 
         public override Bomb AsBomb()
@@ -314,18 +301,7 @@ namespace Bomberman.Game.Elements.Cells
                     updater = UpdateGrabbed;
                     break;
 
-                case STATE_THROWN:
-                    Debug.Assert(m_state == STATE_GRABBED);
-                    updater = UpdateFlying;
-                    break;
-
-                case STATE_PUNCHED:
-                    Debug.Assert(m_state == STATE_NORMAL);
-                    updater = UpdateFlying;
-                    break;
-
-                case STATE_JUMPING:
-                    Debug.Assert(m_state == STATE_JUMPING || m_state == STATE_THROWN || m_state == STATE_PUNCHED);
+                case STATE_FLYING:
                     updater = UpdateFlying;
                     break;
             }
@@ -373,14 +349,9 @@ namespace Bomberman.Game.Elements.Cells
             return m_state == STATE_GRABBED;
         }
 
-        public bool IsThrown()
+        public bool IsFlying()
         {
-            return m_state == STATE_THROWN;
-        }
-
-        public bool IsJumping()
-        {
-            return m_state == STATE_JUMPING;
+            return m_state == STATE_FLYING;
         }
 
         public bool trigger
