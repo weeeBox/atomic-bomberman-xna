@@ -124,6 +124,43 @@ namespace Bomberman.Game.Elements.Cells
             {
                 base.OnPositionChanged(oldPx, oldPy);
             }
+            else if (IsFlying())
+            {
+                NormalizeFlyingPos(oldPx, oldPy);
+            }
+        }
+
+        private void NormalizeFlyingPos(float oldPx, float oldPy)
+        {
+            if (px > oldPx) // moving right
+            {
+                if (px > GetField().GetMaxPx() + Constant.CELL_WIDTH_2)
+                {
+                    SetPosX(GetField().GetMinPx() - Constant.CELL_WIDTH_2);
+                }
+            }
+            else if (px < oldPx) // moving left
+            {
+                if (px < GetField().GetMinPx() - Constant.CELL_WIDTH_2)
+                {
+                    SetPosX(GetField().GetMaxPx() + Constant.CELL_WIDTH_2);
+                }
+            }
+
+            if (py > oldPy) // moving down
+            {
+                if (py > GetField().GetMaxPy() + Constant.CELL_HEIGHT_2)
+                {
+                    SetPosY(GetField().GetMinPy() - Constant.CELL_HEIGHT_2);
+                }
+            }
+            else if (py < oldPy) // moving up
+            {
+                if (py < GetField().GetMinPy() - Constant.CELL_HEIGHT_2)
+                {
+                    SetPosY(GetField().GetMaxPy() + Constant.CELL_HEIGHT_2);
+                }
+            }
         }
 
         protected override void OnCellChanged(int oldCx, int oldCy)
