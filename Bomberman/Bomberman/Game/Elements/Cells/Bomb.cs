@@ -29,6 +29,10 @@ namespace Bomberman.Game.Elements.Cells
         private float flySpeed;
         private float flyDistance;
 
+        private float fallSpeed;
+        public float fallHeight;
+        private float fallGravity;
+
         private int radius;
         public float remains;
 
@@ -104,9 +108,13 @@ namespace Bomberman.Game.Elements.Cells
                 }
             }
 
+            fallHeight += fallSpeed * delta;
+            fallSpeed -= fallGravity * delta;
+
             flyDistance -= shift;
             if (flyDistance == 0)
             {
+                fallHeight = 0;
                 EndThrow();
             }
         }
@@ -207,6 +215,10 @@ namespace Bomberman.Game.Elements.Cells
                     flyDistance = Util.TravelDistanceY(fromPy, fromCy + throwCells);
                     break;
             }
+
+            fallHeight = 0;
+            fallGravity = Settings.Get(Settings.VAL_BOMB_DROP_GRAVITY);
+            fallSpeed = 0.5f * fallGravity * flyDistance / flySpeed;
 
             SetDirection(direction);
             SetState(STATE_THROWN);

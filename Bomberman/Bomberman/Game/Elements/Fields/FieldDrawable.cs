@@ -150,7 +150,7 @@ namespace Bomberman.Game.Elements.Fields
                     image = Helper.GetTexture(A.tex_BMB1001);
 
                     drawX = b.GetPx() - 0.5f * image.GetWidth();
-                    drawY = b.GetPy() - 0.5f * image.GetHeight();
+                    drawY = b.GetPy() - 0.5f * image.GetHeight() - b.fallHeight;
                     context.DrawImage(image, drawX, drawY);
                 }
             }
