@@ -196,30 +196,39 @@ namespace Bomberman.Game.Elements.Cells
 
         private void Fly(float fromPx, float fromPy, Direction direction)
         {
+            Fly(fromPx, fromPy, direction, Settings.Get(Settings.VAL_BOMB_FLY_DISTANCE));
+        }
+
+        private void Jump(float fromPx, float fromPy, Direction direction)
+        {
+            Fly(fromPx, fromPy, direction, Settings.Get(Settings.VAL_BOMB_JUMP_DISTANCE));
+        }
+
+        private void Fly(float fromPx, float fromPy, Direction direction, int numCells)
+        {
             int fromCx = Util.Px2Cx(fromPx);
             int fromCy = Util.Py2Cy(fromPy);
 
-            int throwCells = Settings.Get(Settings.VAL_BOMB_THROW_DISTANCE);
             flySpeed = Settings.Get(Settings.VAL_BOMB_FLY_SPEED);
 
             switch (direction)
             {
                 case Direction.LEFT:
                     flySpeed = -flySpeed;
-                    flyDistance = Util.TravelDistanceX(fromPx, fromCx - throwCells);
+                    flyDistance = Util.TravelDistanceX(fromPx, fromCx - numCells);
                     break;
 
                 case Direction.RIGHT:
-                    flyDistance = Util.TravelDistanceX(fromPx, fromCx + throwCells);
+                    flyDistance = Util.TravelDistanceX(fromPx, fromCx + numCells);
                     break;
 
                 case Direction.UP:
                     flySpeed = -flySpeed;
-                    flyDistance = Util.TravelDistanceY(fromPy, fromCy - throwCells);
+                    flyDistance = Util.TravelDistanceY(fromPy, fromCy - numCells);
                     break;
 
                 case Direction.DOWN:
-                    flyDistance = Util.TravelDistanceY(fromPy, fromCy + throwCells);
+                    flyDistance = Util.TravelDistanceY(fromPy, fromCy + numCells);
                     break;
             }
 
@@ -235,7 +244,8 @@ namespace Bomberman.Game.Elements.Cells
             Field field = GetField();
             if (field.IsObstacleCell(cx, cy))
             {
-                throw new NotImplementedException();
+                Jump(px, py, direction);
+                SetState(STATE_JUMPING);
             }
             else
             {
@@ -315,8 +325,8 @@ namespace Bomberman.Game.Elements.Cells
                     break;
 
                 case STATE_JUMPING:
-                    Debug.Assert(m_state == STATE_THROWN);
-                    updater = UpdateJumping;
+                    Debug.Assert(m_state == STATE_JUMPING || m_state == STATE_THROWN || m_state == STATE_PUNCHED);
+                    updater = UpdateFlying;
                     break;
             }
 

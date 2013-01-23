@@ -32,7 +32,8 @@ namespace Bomberman.Game
         public static readonly int VAL_ENCLOSEMENT_DEPTH = 3;
 
         public static readonly int VAL_STOMPED_BOMBS_DETONATE = 1;
-        public static readonly int VAL_BOMB_THROW_DISTANCE = 3;
+        public static readonly int VAL_BOMB_FLY_DISTANCE = 3;
+        public static readonly int VAL_BOMB_JUMP_DISTANCE = 1;
 
         public static readonly int VAL_TEAMPLAY = 0;
         public static readonly int VAL_GAME_MUSIC = 1;
