@@ -439,7 +439,7 @@ namespace Bomberman.Game.Elements.Fields
 
             if (dx > 0)
             {
-                float maxX = Constant.FIELD_WIDTH - 0.5f * Constant.CELL_WIDTH;
+                float maxX = GetMaxPx();
                 if (movable.GetPx() > maxX)
                 {
                     movable.SetPosX(maxX);
@@ -457,7 +457,7 @@ namespace Bomberman.Game.Elements.Fields
             }
             else if (dx < 0)
             {
-                float minX = 0.5f * Constant.CELL_WIDTH;
+                float minX = GetMinPx();
                 if (movable.GetPx() < minX)
                 {
                     movable.SetPosX(minX);
@@ -476,7 +476,7 @@ namespace Bomberman.Game.Elements.Fields
 
             if (dy > 0)
             {
-                float maxY = Constant.FIELD_HEIGHT - 0.5f * Constant.CELL_HEIGHT;
+                float maxY = GetMaxPy();
                 if (movable.GetPy() > maxY)
                 {
                     movable.SetPosY(maxY);
@@ -494,7 +494,7 @@ namespace Bomberman.Game.Elements.Fields
             }
             else if (dy < 0)
             {
-                float minY = 0.5f * Constant.CELL_HEIGHT;
+                float minY = GetMinPy();
                 if (movable.GetPy() < minY)
                 {
                     movable.SetPosY(minY);
@@ -650,6 +650,26 @@ namespace Bomberman.Game.Elements.Fields
         private bool IsInsideField(int cx, int cy)
         {
             return cx >= 0 && cx < GetWidth() && cy >= 0 && cy < GetHeight();
+        }
+
+        public float GetMinPx()
+        {
+            return 0.5f * Constant.CELL_WIDTH;
+        }
+
+        public float GetMinPy()
+        {
+            return 0.5f * Constant.CELL_HEIGHT;
+        }
+
+        public float GetMaxPx()
+        {
+            return Constant.FIELD_WIDTH - 0.5f * Constant.CELL_WIDTH;
+        }
+
+        public float GetMaxPy()
+        {
+            return Constant.FIELD_HEIGHT - 0.5f * Constant.CELL_HEIGHT;
         }
 
         //////////////////////////////////////////////////////////////////////////////
