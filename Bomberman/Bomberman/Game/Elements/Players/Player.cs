@@ -283,6 +283,11 @@ namespace Bomberman.Game.Elements.Players
             return HasPowerup(Powerups.Kick);
         }
 
+        public bool HasPunch()
+        {
+            return HasPowerup(Powerups.Punch);
+        }
+
         public bool HasSpooger()
         {
             return HasPowerup(Powerups.Spooger);
@@ -433,6 +438,10 @@ namespace Bomberman.Game.Elements.Players
             if (HasTrigger())
             {
                 TryTriggerBomb();
+            }
+            if (HasPunch())
+            {
+                TryPunchBomb();
             }
         }
 
@@ -612,6 +621,20 @@ namespace Bomberman.Game.Elements.Players
                 m_bombInHands = null;
                 return true;
             }
+            return false;
+        }
+
+        private bool TryPunchBomb()
+        {
+            FieldCell cell = NearCellDir(direction);
+            if (cell != null && cell.IsBomb())
+            {
+                Bomb bomb = cell.AsBomb();
+                AddThrownBomb(bomb);
+                bomb.Punch();
+                return true;
+            }
+
             return false;
         }
 

@@ -178,6 +178,11 @@ namespace Bomberman.Game.Elements.Fields
             return null;
         }
 
+        public void RemoveFromField()
+        {
+            GetField().ClearCell(cx, cy);
+        }
+
         protected Field GetField()
         {
             return Field.Current();
