@@ -17,6 +17,7 @@ namespace Bomberman.Game
     public class GameController : Controller
     {
         private GameScene gameScene;
+        private GameCheats cheats;
 
         private Game game;
         private KeyboardListenerList keyboardListeners;
@@ -56,6 +57,9 @@ namespace Bomberman.Game
 
             Player player2 = new Player(1, keyboardInput2);
             game.AddPlayer(player2);
+
+            cheats = new GameCheats(game);
+            keyboardListeners.Add(cheats);
         }
 
         private void InitField(int schemeId)

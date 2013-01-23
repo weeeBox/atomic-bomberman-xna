@@ -29,6 +29,11 @@ namespace Bomberman.Game
             players.Add(player);
         }
 
+        public List<Player> GetPlayers()
+        {
+            return players.list;
+        }
+
         public void LoadField(Scheme scheme)
         {
             field = new Field(scheme, players);
