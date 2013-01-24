@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using BomberEngine.Core.Assets;
+using BomberEngine.Debugging;
 using BomberEngine.Game;
-using Microsoft.Xna.Framework;
-using Bomberman.Game;
 using Microsoft.Xna.Framework.Content;
-using BomberEngine.Core.Assets;
-using Assets;
+using Microsoft.Xna.Framework.Graphics;
+using BomberEngine.Core.Input;
+using Microsoft.Xna.Framework.Input;
 
 namespace Bomberman
 {
-    public class BombermanApplication : Application
+    public class BombermanApplication : Application, KeyboardListener
     {
         private ContentManager contentManager;
 
@@ -28,6 +25,22 @@ namespace Bomberman
         protected override RootController CreateRootController()
         {
             return new BombermanRootController();
+        }
+
+        protected override GameConsole CreateConsole()
+        {
+            SpriteFont consoleFont = contentManager.Load<SpriteFont>("ConsoleFont");
+            return new GameConsole(consoleFont);
+        }
+
+        public void KeyPressed(Keys key)
+        {
+            
+        }
+
+        public void KeyReleased(Keys key)
+        {
+            
         }
     }
 }

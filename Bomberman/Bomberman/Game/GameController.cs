@@ -25,7 +25,6 @@ namespace Bomberman.Game
         public GameController()
         {
             keyboardListeners = new KeyboardListenerList();
-            Application.Input().SetKeyboardListener(keyboardListeners);
 
             game = new Game();
             InitPlayers();

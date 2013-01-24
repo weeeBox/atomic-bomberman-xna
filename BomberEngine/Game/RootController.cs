@@ -13,8 +13,7 @@ namespace BomberEngine.Game
         private Controller currentController;
 
         public RootController()
-        {
-            
+        {   
         }
 
         public void Start()

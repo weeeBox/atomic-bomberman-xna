@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using BomberEngine.Core;
-using Microsoft.Xna.Framework;
-using BomberEngine.Core.Input;
-using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core.Assets;
+using BomberEngine.Core.Input;
 using BomberEngine.Core.Visual;
+using BomberEngine.Debugging;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace BomberEngine.Game
@@ -24,6 +20,7 @@ namespace BomberEngine.Game
         private static TimerManager timerManager;
         private static InputManager inputManager;
         private static AssetManager assetManager;
+        private static GameConsole console;
 
         private UpdatableList updatables;
         private DrawableList drawables;
@@ -53,6 +50,7 @@ namespace BomberEngine.Game
             return new InputManager();
         }
 
+        protected abstract GameConsole CreateConsole();
         protected abstract AssetManager CreateAssetManager();
         protected abstract RootController CreateRootController();
         
@@ -165,6 +163,24 @@ namespace BomberEngine.Game
         {
             drawables.Remove(drawable);
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Console
+
+        public void ShowConsole()
+        {
+            AddUpdatable(console);
+            AddDrawable(console);
+        }
+
+        public void HideConsole()
+        {
+            RemoveUpdatable(console);
+            RemoveDrawable(console);
+        }
+
+        #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 
