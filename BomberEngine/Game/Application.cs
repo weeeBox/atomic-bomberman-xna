@@ -202,6 +202,7 @@ namespace BomberEngine.Game
             if (console != null)
             {
                 AddGameObject(console);
+                Input().AddKeyboardListener(console);
             }
         }
 
@@ -210,6 +211,7 @@ namespace BomberEngine.Game
             if (console != null)
             {
                 RemoveGameObject(console);
+                Input().RemoveKeyboardListener(console);
             }
         }
 

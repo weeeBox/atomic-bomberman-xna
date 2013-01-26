@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using BomberEngine.Util;
 
 namespace BomberEngine.Core.Input
 {
@@ -49,7 +50,7 @@ namespace BomberEngine.Core.Input
         private GamePadState[] currentGamepadStates;
         private KeyboardState currentKeyboardState;
 
-        private List<KeyboardListener> keyboardListeners;
+        private ConcurrentList<KeyboardListener> keyboardListeners;
         private List<GamePadListener> gamePadListeners;
         private List<GamePadStateListener> gamePadStateListeners;
         private List<TouchListener> touchListeners;
@@ -66,7 +67,7 @@ namespace BomberEngine.Core.Input
                 currentGamepadStates[i] = GamePad.GetState(PLAYERS_INDICES[i], deadZone);
             }
 
-            keyboardListeners = new List<KeyboardListener>();
+            keyboardListeners = new ConcurrentList<KeyboardListener>();
             gamePadListeners = new List<GamePadListener>();
             gamePadStateListeners = new List<GamePadStateListener>();
             touchListeners = new List<TouchListener>();
@@ -225,7 +226,7 @@ namespace BomberEngine.Core.Input
             KeyboardState oldState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
 
-            if (keyboardListeners.Count > 0)
+            if (keyboardListeners.Count() > 0)
             {
                 Keys[] oldKeys = oldState.GetPressedKeys();
                 Keys[] newKeys = currentKeyboardState.GetPressedKeys();
@@ -253,7 +254,7 @@ namespace BomberEngine.Core.Input
         }
 
         private void NotifyKeyPressed(Keys key)
-        {
+        {   
             foreach (KeyboardListener l in keyboardListeners)
             {
                 l.KeyPressed(key);

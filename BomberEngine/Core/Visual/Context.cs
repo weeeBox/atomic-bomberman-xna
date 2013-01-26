@@ -213,6 +213,11 @@ namespace BomberEngine.Core.Visual
             GetSpriteBatch(BatchMode.Sprite).DrawString(font, text, new Vector2((float)x, (float)y), drawColor);
         }
 
+        public void DrawString(SpriteFont font, float x, float y, StringBuilder text)
+        {
+            GetSpriteBatch(BatchMode.Sprite).DrawString(font, text, new Vector2((float)x, (float)y), drawColor);
+        }
+
         public void DrawImage(TextureImage tex, float x, float y)
         {
             GetSpriteBatch(BatchMode.Sprite).Draw(tex.GetTexture(), new Vector2(x, y), drawColor);

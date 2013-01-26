@@ -10,17 +10,17 @@ namespace BomberEngine.Core
     {
         private static Updatable NULL_UPDATABLE = new NullUpdatable();
 
-        private ObjectsList<Updatable> list;
+        private List<Updatable> list;
         private int removedCount;
 
         public UpdatableList()
         {
-            list = new ObjectsList<Updatable>();
+            list = new List<Updatable>();
         }
 
         public UpdatableList(int capacity)
         {
-            list = new ObjectsList<Updatable>(capacity);
+            list = new List<Updatable>(capacity);
         }
 
         public void Update(float delta)
