@@ -172,11 +172,11 @@ namespace BomberEngine.Debugging
                         String[] args = new String[tokens.Length - 1];
                         Array.Copy(tokens, 1, args, 0, args.Length);
 
-                        command.Execute(args);
+                        command.Execute(this, args);
                     }
                     else
                     {
-                        command.Execute();
+                        command.Execute(this);
                     }
                 }
                 else

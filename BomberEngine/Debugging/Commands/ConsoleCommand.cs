@@ -14,7 +14,7 @@ namespace BomberEngine.Debugging.Commands
             this.name = name;
         }
 
-        public abstract void Execute(params String[] args);
+        public abstract void Execute(GameConsole console, params String[] args);
 
         public String GetName()
         {
