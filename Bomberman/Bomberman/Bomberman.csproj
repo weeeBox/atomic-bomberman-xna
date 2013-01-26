@@ -116,6 +116,8 @@
     <Compile Include="Content\Scheme.cs" />
     <Compile Include="Content\SchemeLoader.cs" />
     <Compile Include="Content\SchemeReader.cs" />
+    <Compile Include="Game\Commands\Gameplay\Powerups\PowerupAddCommand.cs" />
+    <Compile Include="Game\Commands\Gameplay\Powerups\PowerupRemoveCommand.cs" />
     <Compile Include="Game\Constant.cs" />
     <Compile Include="Game\Elements\Cells\BrickCell.cs" />
     <Compile Include="Game\Elements\Cells\BlankCell.cs" />

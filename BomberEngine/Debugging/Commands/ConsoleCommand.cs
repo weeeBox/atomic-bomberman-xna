@@ -5,13 +5,20 @@ using System.Text;
 
 namespace BomberEngine.Debugging.Commands
 {
-    public class ConsoleCommand
+    public abstract class ConsoleCommand
     {
-        private Dictionary<String, String> paramsDictionary;
+        private String name;
 
-        public ConsoleCommand()
+        protected ConsoleCommand(String name)
         {
-            
+            this.name = name;
+        }
+
+        public abstract void Execute(Dictionary<String, String> prms);
+
+        public String GetName()
+        {
+            return name;
         }
     }
 }

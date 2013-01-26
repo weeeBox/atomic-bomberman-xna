@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using BomberEngine.Core.Input;
 using Microsoft.Xna.Framework.Input;
+using BomberEngine.Debugging.Commands;
 
 namespace BomberEngine.Debugging
 {
@@ -29,13 +30,19 @@ namespace BomberEngine.Debugging
 
         private HashSet<Keys> additionalInputKeys;
 
+        private ConsoleCommandRegister commands;
+        private LinkedList<ConsoleCommand> suggestedCommands;
+
         public GameConsole(SpriteFont font)
             : base(640, 320)
         {
             this.font = font;
 
             m_lines = new List<String>();
+            commands = new ConsoleCommandRegister();
+
             commandBuffer = new StringBuilder();
+            suggestedCommands = new LinkedList<ConsoleCommand>();
 
             Vector2 charSize = font.MeasureString("W");
             charWidth = charSize.X;
@@ -64,6 +71,11 @@ namespace BomberEngine.Debugging
             additionalInputKeys.Add(Keys.OemCloseBrackets);
             additionalInputKeys.Add(Keys.OemQuotes);
             additionalInputKeys.Add(Keys.OemBackslash);
+        }
+
+        public bool RegisterCommand(ConsoleCommand command)
+        {
+            return commands.RegisterCommand(command);
         }
 
         public override void Draw(Context context)
@@ -119,12 +131,71 @@ namespace BomberEngine.Debugging
             commandBuffer.Insert(cursorPos++, chr);
         }
 
+        private void SetCommandText(String text, bool addSpace)
+        {
+            commandBuffer.Clear();
+            commandBuffer.Append(text);
+            if (addSpace)
+            {
+                commandBuffer.Append(" ");
+            }
+
+            cursorPos = commandBuffer.Length;
+        }
+
         private void DeleteChar()
         {
             if (cursorPos > 0)
             {
                 commandBuffer.Remove(--cursorPos, 1);
             }
+        }
+
+        private void DoAutoComplete()
+        {
+            String token = commandBuffer.ToString();
+
+            suggestedCommands.Clear();
+            commands.GetSuggested(token, suggestedCommands);
+
+            if (suggestedCommands.Count == 1)
+            {
+                ConsoleCommand command = suggestedCommands.First.Value;
+                SetCommandText(command.GetName(), true);
+            }
+            else if (suggestedCommands.Count > 1)
+            {
+                String suggestedText = GetSuggestedText(token, suggestedCommands);
+                SetCommandText(suggestedText, false);
+            }
+        }
+
+        private String GetSuggestedText(String token, LinkedList<ConsoleCommand> commandList)
+        {
+            LinkedListNode<ConsoleCommand> firstNode = commandList.First;
+            String firstCommandName = firstNode.Value.GetName();
+
+            if (firstCommandName.Length > token.Length)
+            {
+                StringBuilder suggestedToken = new StringBuilder(token);
+                for (int i = token.Length; i < firstCommandName.Length; ++i)
+                {
+                    char chr = firstCommandName[i];
+                    for (LinkedListNode<ConsoleCommand> nextNode = firstNode.Next; nextNode != null; nextNode = nextNode.Next)
+                    {
+                        String otherCommandName = nextNode.Value.GetName();
+                        if (otherCommandName[i] != chr)
+                        {
+                            return suggestedToken.ToString();
+                        }
+                    }
+                    suggestedToken.Append(chr);
+                }
+
+                return suggestedToken.ToString();
+            }
+
+            return token;
         }
 
         private void Clear()
@@ -147,11 +218,6 @@ namespace BomberEngine.Debugging
             {
                 ++cursorPos;
             }
-        }
-
-        private void UpdateCursorDrawPos()
-        {
-            
         }
 
         public List<String> lines
@@ -198,6 +264,10 @@ namespace BomberEngine.Debugging
                     AddLine(commandBuffer.ToString());
                     Clear();
                 }
+            }
+            else if (key == Keys.Tab)
+            {
+                DoAutoComplete();
             }
             else if (key == Keys.LeftShift || key == Keys.RightShift)
             {
