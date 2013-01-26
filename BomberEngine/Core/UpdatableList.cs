@@ -8,7 +8,10 @@ namespace BomberEngine.Core
 {
     public class UpdatableList : Updatable, Collection<Updatable>
     {
+        private static Updatable NULL_UPDATABLE = new NullUpdatable();
+
         private ObjectsList<Updatable> list;
+        private int removedCount;
 
         public UpdatableList()
         {
@@ -22,9 +25,15 @@ namespace BomberEngine.Core
 
         public void Update(float delta)
         {
-            foreach (Updatable updatable in list)
+            int elementsCount = list.Count;
+            for (int i = 0; i < elementsCount; ++i) // do not update added items on that tick
             {
-                updatable.Update(delta);
+                list[i].Update(delta);
+            }
+
+            if (removedCount > 0)
+            {
+                ClearRemoved();
             }
         }
 
@@ -36,7 +45,16 @@ namespace BomberEngine.Core
 
         public bool Remove(Updatable updatable)
         {
-            return list.Remove(updatable);
+            int index = list.IndexOf(updatable);
+            if (index != -1)
+            {
+                ++removedCount;
+
+                list[index] = NULL_UPDATABLE;
+                return true;
+            }
+
+            return false;
         }
 
         public void Clear()
@@ -46,7 +64,29 @@ namespace BomberEngine.Core
 
         public int Count()
         {
-            return list.Count;
+            return list.Count - removedCount;
+        }
+
+        public bool Contains(Updatable updatable)
+        {
+            return list.Contains(updatable);
+        }
+
+        private void ClearRemoved()
+        {   
+            for (int i = 0; i < list.Count; ++i)
+            {
+                if (list[i] == NULL_UPDATABLE)
+                {
+                    list.RemoveAt(i);
+                    --removedCount;
+
+                    if (removedCount == 0)
+                    {
+                        break;
+                    }
+                }
+            }
         }
     }
 }

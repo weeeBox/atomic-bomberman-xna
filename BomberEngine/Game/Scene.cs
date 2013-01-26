@@ -132,6 +132,24 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Game Objects
+
+        protected void AddGameObject(GameObject obj)
+        {
+            AddUpdatabled(obj);
+            AddDrawable(obj);
+        }
+
+        protected void RemoveGameObject(GameObject obj)
+        {
+            RemoveUpdatable(obj);
+            RemoveDrawable(obj);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
         #region TimerManager
 
         protected Timer ScheduleTimer(TimerCallback callback, float delay)

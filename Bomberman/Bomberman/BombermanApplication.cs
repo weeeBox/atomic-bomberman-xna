@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Bomberman
 {
-    public class BombermanApplication : Application
+    public class BombermanApplication : Application, KeyboardListener
     {
         private ContentManager contentManager;
 
@@ -32,5 +32,30 @@ namespace Bomberman
             SpriteFont consoleFont = contentManager.Load<SpriteFont>("ConsoleFont");
             return new GameConsole(consoleFont);
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        protected override void OnStart()
+        {
+            Input().AddKeyboardListener(this);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region KeyboardListener
+
+        public void KeyPressed(Keys key)
+        {
+            if (key == Keys.Oem8)
+            {
+                ToggleConsole();
+            }
+        }
+
+        public void KeyReleased(Keys key)
+        {   
+        }
+
+        #endregion
     }
 }

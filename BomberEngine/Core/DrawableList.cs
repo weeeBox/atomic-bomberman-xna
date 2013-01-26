@@ -49,5 +49,10 @@ namespace BomberEngine.Core
         {
             return list.Count;
         }
+
+        public bool Contains(Drawable drawable)
+        {
+            return list.Contains(drawable);
+        }
     }
 }

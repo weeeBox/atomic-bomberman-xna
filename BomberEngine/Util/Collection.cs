@@ -9,6 +9,7 @@ namespace BomberEngine.Util
     {
         bool Add(T t);
         bool Remove(T t);
+        bool Contains(T t);
         void Clear();
         int Count();
     }

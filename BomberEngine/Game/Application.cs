@@ -66,18 +66,19 @@ namespace BomberEngine.Game
             }
 
             timerManager = CreateTimerManager();
+
             inputManager = CreateInputManager();
+            AddUpdatable(inputManager);
+
             assetManager = CreateAssetManager();
+
             rootController = CreateRootController();
+            AddGameObject(rootController);
+
             console = CreateConsole();
             
             started = true;
             rootController.Start();
-
-            AddUpdatable(inputManager);
-            AddUpdatable(rootController);
-
-            AddDrawable(rootController);
 
             OnStart();
         }
@@ -165,20 +166,51 @@ namespace BomberEngine.Game
             drawables.Remove(drawable);
         }
 
+        protected void AddGameObject(GameObject obj)
+        {
+            AddUpdatable(obj);
+            AddDrawable(obj);
+        }
+
+        protected void RemoveGameObject(GameObject obj)
+        {
+            RemoveUpdatable(obj);
+            RemoveDrawable(obj);
+        }
+
         //////////////////////////////////////////////////////////////////////////////
 
         #region Console
 
-        public void ShowConsole()
+        protected void ToggleConsole()
         {
-            AddUpdatable(console);
-            AddDrawable(console);
+            if (console != null)
+            {
+                if (updatables.Contains(console))
+                {
+                    HideConsole();
+                }
+                else
+                {
+                    ShowConsole();
+                }
+            }
         }
 
-        public void HideConsole()
+        protected void ShowConsole()
         {
-            RemoveUpdatable(console);
-            RemoveDrawable(console);
+            if (console != null)
+            {
+                AddGameObject(console);
+            }
+        }
+
+        protected void HideConsole()
+        {
+            if (console != null)
+            {
+                RemoveGameObject(console);
+            }
         }
 
         #endregion
