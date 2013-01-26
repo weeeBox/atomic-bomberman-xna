@@ -69,6 +69,7 @@ namespace BomberEngine.Game
             inputManager = CreateInputManager();
             assetManager = CreateAssetManager();
             rootController = CreateRootController();
+            console = CreateConsole();
             
             started = true;
             rootController.Start();

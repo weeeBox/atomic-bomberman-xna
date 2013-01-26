@@ -8,7 +8,7 @@ using BomberEngine.Core.Visual;
 
 namespace BomberEngine.Game
 {
-    public class RootController : Updatable, Drawable
+    public class RootController : GameObject
     {   
         private Controller currentController;
 
