@@ -13,8 +13,9 @@ namespace Bomberman.Game.Commands.Gameplay.Powerups
         {
         }
 
-        public override void Execute(Dictionary<string, string> prms)
-        {   
+        public override void Execute(params string[] args)
+        {
+            throw new NotImplementedException();
         }
     }
 }

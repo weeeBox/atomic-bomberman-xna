@@ -20,6 +20,20 @@ namespace BomberEngine.Debugging.Commands
             return AddCommand(commandList, command);
         }
 
+        public ConsoleCommand FindCommand(String name)
+        {
+            LinkedList<ConsoleCommand> list = FindList(name);
+            foreach (ConsoleCommand command in list)
+            {
+                if (command.GetName().Equals(name))
+                {
+                    return command;
+                }
+            }
+
+            return null;
+        }
+
         public void GetSuggested(String token, LinkedList<ConsoleCommand> outList)
         {
             LinkedList<ConsoleCommand> list = FindList(token);

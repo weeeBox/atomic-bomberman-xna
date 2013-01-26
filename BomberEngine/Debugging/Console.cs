@@ -131,6 +131,11 @@ namespace BomberEngine.Debugging
             commandBuffer.Insert(cursorPos++, chr);
         }
 
+        private void SetCommandText(String text)
+        {
+            SetCommandText(text, false);
+        }
+
         private void SetCommandText(String text, bool addSpace)
         {
             commandBuffer.Clear();
@@ -149,6 +154,38 @@ namespace BomberEngine.Debugging
             {
                 commandBuffer.Remove(--cursorPos, 1);
             }
+        }
+
+        private void TryExecuteCommand()
+        {
+            String commandString = commandBuffer.ToString();
+            String[] tokens = commandString.Split(' ');
+
+            if (tokens.Length > 0)
+            {
+                String name = tokens[0];
+                ConsoleCommand command = commands.FindCommand(name);
+                if (command != null)
+                {
+                    if (tokens.Length > 1)
+                    {
+                        String[] args = new String[tokens.Length - 1];
+                        Array.Copy(tokens, 1, args, 0, args.Length);
+
+                        command.Execute(args);
+                    }
+                    else
+                    {
+                        command.Execute();
+                    }
+                }
+                else
+                {
+                    AddLine("Nicht verstehen: '" + commandString + "'");
+                }
+            }
+
+            SetCommandText("");
         }
 
         private void DoAutoComplete()
@@ -259,11 +296,7 @@ namespace BomberEngine.Debugging
             }
             else if (key == Keys.Enter)
             {
-                if (commandBuffer.Length > 0)
-                {
-                    AddLine(commandBuffer.ToString());
-                    Clear();
-                }
+                TryExecuteCommand();
             }
             else if (key == Keys.Tab)
             {

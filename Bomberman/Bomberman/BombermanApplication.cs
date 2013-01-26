@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using BomberEngine.Core.Input;
 using Microsoft.Xna.Framework.Input;
 using Bomberman.Game.Commands.Gameplay.Powerups;
+using Bomberman.Game.Commands.Gameplay.Players;
 
 namespace Bomberman
 {
@@ -35,6 +36,8 @@ namespace Bomberman
 
             console.RegisterCommand(new PowerupAddCommand());
             console.RegisterCommand(new PowerupRemoveCommand());
+            console.RegisterCommand(new PlayerAddCommand());
+            console.RegisterCommand(new PlayerRemoveCommand());
 
             return console;
         }

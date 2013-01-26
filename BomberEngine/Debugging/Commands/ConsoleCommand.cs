@@ -14,7 +14,7 @@ namespace BomberEngine.Debugging.Commands
             this.name = name;
         }
 
-        public abstract void Execute(Dictionary<String, String> prms);
+        public abstract void Execute(params String[] args);
 
         public String GetName()
         {

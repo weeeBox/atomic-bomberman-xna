@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Debugging.Commands;
 
-namespace Bomberman.Game.Commands.Gameplay.Powerups
+namespace Bomberman.Game.Commands.Gameplay.Players
 {
-    public class PowerupAddCommand : ConsoleCommand
+    public class PlayerRemoveCommand : ConsoleCommand
     {
-        public PowerupAddCommand()
-            : base("powerup_add")
+        public PlayerRemoveCommand()
+            : base("player_remove")
         {
         }
 
