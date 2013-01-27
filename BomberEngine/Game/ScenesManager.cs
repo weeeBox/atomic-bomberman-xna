@@ -10,7 +10,7 @@ using BomberEngine.Core.Visual;
 
 namespace BomberEngine.Game
 {
-    public class ScenesManager : ScenesContainer, GameObject, InputListener
+    public class ScenesManager : GameObject, ScenesContainer
     {   
         private List<Scene> scenes;
 
@@ -25,7 +25,7 @@ namespace BomberEngine.Game
 
         #region Updatable
 
-        public void Update(float delta)
+        public override void Update(float delta)
         {
             currentScene.Update(delta);
         }
@@ -36,7 +36,7 @@ namespace BomberEngine.Game
 
         #region Drawable
 
-        public void Draw(Context context)
+        public override void Draw(Context context)
         {
             currentScene.Draw(context);
         }
@@ -47,52 +47,52 @@ namespace BomberEngine.Game
 
         #region InputListener methods
 
-        public void KeyPressed(Keys key)
+        public override void KeyPressed(Keys key)
         {
             currentScene.KeyPressed(key);
         }
 
-        public void KeyReleased(Keys key)
+        public override void KeyReleased(Keys key)
         {
             currentScene.KeyReleased(key);
         }
 
-        public void ButtonPressed(ButtonEvent e)
+        public override void ButtonPressed(ButtonEvent e)
         {
             currentScene.ButtonPressed(e);
         }
 
-        public void ButtonReleased(ButtonEvent e)
+        public override void ButtonReleased(ButtonEvent e)
         {
             currentScene.ButtonReleased(e);
         }
 
-        public void GamePadConnected(int playerIndex)
+        public override void GamePadConnected(int playerIndex)
         {
             currentScene.GamePadConnected(playerIndex);
         }
 
-        public void GamePadDisconnected(int playerIndex)
+        public override void GamePadDisconnected(int playerIndex)
         {
             currentScene.GamePadDisconnected(playerIndex);
         }
 
-        public void PointerMoved(int x, int y, int fingerId)
+        public override void PointerMoved(int x, int y, int fingerId)
         {
             currentScene.PointerMoved(x, y, fingerId);
         }
 
-        public void PointerPressed(int x, int y, int fingerId)
+        public override void PointerPressed(int x, int y, int fingerId)
         {
             currentScene.PointerPressed(x, y, fingerId);
         }
 
-        public void PointerDragged(int x, int y, int fingerId)
+        public override void PointerDragged(int x, int y, int fingerId)
         {
             currentScene.PointerDragged(x, y, fingerId);
         }
 
-        public void PointerReleased(int x, int y, int fingerId)
+        public override void PointerReleased(int x, int y, int fingerId)
         {
             currentScene.PointerReleased(x, y, fingerId);
         }
@@ -162,6 +162,16 @@ namespace BomberEngine.Game
                     currentScene = null;
                 }
             }
+        }
+
+        public Scene CurrentScene()
+        {
+            return currentScene;
+        }
+
+        public bool IsCurrent(Scene scene)
+        {
+            return CurrentScene() == scene;
         }
 
         #endregion

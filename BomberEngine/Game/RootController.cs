@@ -5,12 +5,14 @@ using System.Text;
 using BomberEngine.Core;
 using BomberEngine.Core.Input;
 using BomberEngine.Core.Visual;
+using BomberEngine.Debugging;
 
 namespace BomberEngine.Game
 {
-    public class RootController : GameObject
+    public abstract class RootController : GameObject
     {   
         private Controller currentController;
+        private GameConsole console;
 
         public RootController()
         {   
@@ -18,6 +20,7 @@ namespace BomberEngine.Game
 
         public void Start()
         {
+            console = CreateConsole();
             OnStart();
         }
 
@@ -34,12 +37,12 @@ namespace BomberEngine.Game
         {
         }
 
-        public void Update(float delta)
+        public override void Update(float delta)
         {
             currentController.Update(delta);
         }
 
-        public void Draw(Context context)
+        public override void Draw(Context context)
         {
             currentController.Draw(context);
         }
@@ -62,7 +65,32 @@ namespace BomberEngine.Game
             }
 
             currentController = controller;
+
+            Application.Input().SetInputListener(controller);
             controller.Start();
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Console
+
+        protected abstract GameConsole CreateConsole();
+
+        protected void ToggleConsole()
+        {
+            if (console != null)
+            {
+                if (currentController.IsCurrentScene(console))
+                {
+                    console.Finish();
+                }
+                else
+                {
+                    currentController.StartNextScene(console);
+                }
+            }
+        }
+
+        #endregion
     }
 }

@@ -71,5 +71,17 @@ namespace Bomberman.Game
         {
             StartScene(gameScene);
         }
+
+        public override void KeyPressed(Keys key)
+        {
+            base.KeyPressed(key);
+            keyboardListeners.KeyPressed(key);
+        }
+
+        public override void KeyReleased(Keys key)
+        {
+            base.KeyReleased(key);
+            keyboardListeners.KeyReleased(key);
+        }
     }
 }

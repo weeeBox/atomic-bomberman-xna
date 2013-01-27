@@ -9,10 +9,11 @@ using Microsoft.Xna.Framework;
 using BomberEngine.Core.Input;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Debugging.Commands;
+using BomberEngine.Game;
 
 namespace BomberEngine.Debugging
 {
-    public class GameConsole : DrawableElement, KeyboardListener
+    public class GameConsole : Scene
     {
         private List<String> m_lines;
 
@@ -262,7 +263,7 @@ namespace BomberEngine.Debugging
             get { return m_lines; }
         }
 
-        public void KeyPressed(Keys key)
+        public override void KeyPressed(Keys key)
         {
             if (key >= Keys.A && key <= Keys.Z)
             {
@@ -308,7 +309,7 @@ namespace BomberEngine.Debugging
             }
         }
 
-        public void KeyReleased(Keys key)
+        public override void KeyReleased(Keys key)
         {   
             if (key == Keys.LeftShift || key == Keys.RightShift)
             {

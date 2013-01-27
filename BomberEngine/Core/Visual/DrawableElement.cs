@@ -70,10 +70,6 @@ namespace BomberEngine.Core.Visual
             parent = null;
         }
 
-        public virtual void Update(float delta)
-        {   
-        }
-
         public void RestoreTransformations(Context context)
         {
             if (color != Color.White)
@@ -145,7 +141,7 @@ namespace BomberEngine.Core.Visual
             RestoreTransformations(context);
         }
 
-        public virtual void Draw(Context context)
+        public override void Draw(Context context)
         {
             PreDraw(context);
             PostDraw(context);

@@ -9,7 +9,7 @@ using BomberEngine.Core.Visual;
 
 namespace BomberEngine.Game
 {
-    public class Scene : GameObject, InputListener
+    public class Scene : DrawableElement
     {
         private TimerManager timerManager;
 
@@ -22,6 +22,12 @@ namespace BomberEngine.Game
         private SceneListener listener;
 
         public Scene()
+            : this(Application.GetWidth(), Application.GetHeight())
+        {
+        }
+
+        public Scene(int width, int height)
+            : base(width, height)
         {
             timerManager = new TimerManager();
             updatablesList = new UpdatableList();
@@ -33,7 +39,7 @@ namespace BomberEngine.Game
         #region Lifecycle
 
         internal void Start()
-        {   
+        {
             OnStart();
             NotifyStarted();
         }
@@ -51,13 +57,13 @@ namespace BomberEngine.Game
         }
 
         internal void Stop()
-        {   
+        {
             OnStop();
             NotifyStoped();
             RemoveFromContainer();
         }
 
-        protected void Finish()
+        public void Finish()
         {
             Stop();
         }
@@ -92,7 +98,7 @@ namespace BomberEngine.Game
 
         #region Updatable
 
-        public void Update(float delta)
+        public override void Update(float delta)
         {
             updatablesList.Update(delta);
         }
@@ -113,9 +119,11 @@ namespace BomberEngine.Game
 
         #region Drawable
 
-        public void Draw(Context context)
+        public override void Draw(Context context)
         {
+            PreDraw(context);
             drawableList.Draw(context);
+            PostDraw(context);
         }
 
         protected void AddDrawable(Drawable drawable)
@@ -160,52 +168,6 @@ namespace BomberEngine.Game
         protected Timer ScheduleTimer(TimerCallback callback, float delay, bool repeated)
         {
             return timerManager.Schedule(callback, delay, repeated);
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region InputListener methods
-
-        public void KeyPressed(Keys key)
-        {
-        }
-
-        public void KeyReleased(Keys key)
-        {
-        }
-
-        public void ButtonPressed(ButtonEvent e)
-        {
-        }
-
-        public void ButtonReleased(ButtonEvent e)
-        {
-        }
-
-        public void GamePadConnected(int playerIndex)
-        {
-        }
-
-        public void GamePadDisconnected(int playerIndex)
-        {
-        }
-
-        public void PointerMoved(int x, int y, int fingerId)
-        {
-        }
-
-        public void PointerPressed(int x, int y, int fingerId)
-        {
-        }
-
-        public void PointerDragged(int x, int y, int fingerId)
-        {
-        }
-
-        public void PointerReleased(int x, int y, int fingerId)
-        {
         }
 
         #endregion

@@ -5,6 +5,7 @@ using System.Text;
 using BomberEngine.Core;
 using BomberEngine.Core.Input;
 using BomberEngine.Core.Visual;
+using Microsoft.Xna.Framework.Input;
 
 namespace BomberEngine.Game
 {
@@ -27,12 +28,12 @@ namespace BomberEngine.Game
             OnStop();
         }
 
-        public void Update(float delta)
+        public override void Update(float delta)
         {
             sceneManager.Update(delta);
         }
 
-        public void Draw(Context context)
+        public override void Draw(Context context)
         {
             sceneManager.Draw(context);
         }
@@ -45,19 +46,74 @@ namespace BomberEngine.Game
         {
         }
 
-        protected void StartScene(Scene scene)
+        public Scene CurrentScene()
+        {
+            return sceneManager.CurrentScene();
+        }
+
+        public bool IsCurrentScene(Scene scene)
+        {
+            return sceneManager.IsCurrent(scene);
+        }
+
+        public void StartScene(Scene scene)
         {
             sceneManager.StartScene(scene, true);
         }
 
-        protected void StartNextScene(Scene scene)
+        public void StartNextScene(Scene scene)
         {
             sceneManager.StartScene(scene, false);
         }
 
-        public InputListener InputListener
+        public override void KeyPressed(Keys key)
         {
-            get { return sceneManager; }
+            sceneManager.KeyPressed(key);
+        }
+
+        public override void KeyReleased(Keys key)
+        {
+            sceneManager.KeyReleased(key);
+        }
+
+        public override void ButtonPressed(ButtonEvent e)
+        {
+            sceneManager.ButtonPressed(e);
+        }
+
+        public override void ButtonReleased(ButtonEvent e)
+        {
+            sceneManager.ButtonReleased(e);
+        }
+
+        public override void GamePadConnected(int playerIndex)
+        {
+            sceneManager.GamePadConnected(playerIndex);
+        }
+
+        public override void GamePadDisconnected(int playerIndex)
+        {
+            sceneManager.GamePadDisconnected(playerIndex);
+        }
+
+        public override void PointerMoved(int x, int y, int fingerId)
+        {
+            sceneManager.PointerMoved(x, y, fingerId);
+        }
+
+        public override void PointerPressed(int x, int y, int fingerId)
+        {
+            sceneManager.PointerPressed(x, y, fingerId);
+        }
+
+        public override void PointerDragged(int x, int y, int fingerId)
+        {
+            sceneManager.PointerDragged(x, y, fingerId);
+        }
+
+        public override void PointerReleased(int x, int y, int fingerId)
+        {
+            sceneManager.PointerReleased(x, y, fingerId);
         }
     }
 }

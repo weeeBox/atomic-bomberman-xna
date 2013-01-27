@@ -2,7 +2,6 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using BomberEngine.Util;
 
 namespace BomberEngine.Core.Input
 {
@@ -50,10 +49,10 @@ namespace BomberEngine.Core.Input
         private GamePadState[] currentGamepadStates;
         private KeyboardState currentKeyboardState;
 
-        private ConcurrentList<KeyboardListener> keyboardListeners;
-        private List<GamePadListener> gamePadListeners;
-        private List<GamePadStateListener> gamePadStateListeners;
-        private List<TouchListener> touchListeners;
+        private KeyboardListener keyboardListener;
+        private GamePadListener gamePadListener;
+        private GamePadStateListener gamePadStateListener;
+        private TouchListener touchListener;
 
         private GamePadDeadZone deadZone;
 
@@ -67,21 +66,16 @@ namespace BomberEngine.Core.Input
                 currentGamepadStates[i] = GamePad.GetState(PLAYERS_INDICES[i], deadZone);
             }
 
-            keyboardListeners = new ConcurrentList<KeyboardListener>();
-            gamePadListeners = new List<GamePadListener>();
-            gamePadStateListeners = new List<GamePadStateListener>();
-            touchListeners = new List<TouchListener>();
-
             currentKeyboardState = Keyboard.GetState();
         }
 
         public void Update(float delta)
         {
             UpdateGamepads();
-            
-            #if WINDOWS
+
+#if WINDOWS
             UpdateKeyboard();
-            #endif
+#endif
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -103,64 +97,26 @@ namespace BomberEngine.Core.Input
 
             bool connected = currentGamepadStates[gamePadIndex].IsConnected;
 
-            if (gamePadStateListeners.Count > 0)
+            if (IsControllerConnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
             {
-                if (IsControllerConnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
+                gamePadStateListener.GamePadConnected(gamePadIndex);
+            }
+            else if (IsControllerDisconnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
+            {
+                gamePadStateListener.GamePadConnected(gamePadIndex);
+            }
+
+            for (int buttonIndex = 0; buttonIndex < CHECK_BUTTONS.Length; ++buttonIndex)
+            {
+                Buttons button = CHECK_BUTTONS[buttonIndex];
+                if (IsButtonDown(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
                 {
-                    NotifyGamePadConnected(gamePadIndex);
+                    gamePadListener.ButtonPressed(new ButtonEvent(gamePadIndex, button));
                 }
-                else if (IsControllerDisconnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
+                else if (IsButtonUp(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
                 {
-                    NotifyGamePadDisconnected(gamePadIndex);
+                    gamePadListener.ButtonReleased(new ButtonEvent(gamePadIndex, button));
                 }
-            }
-
-            if (gamePadListeners.Count > 0)
-            {
-                for (int buttonIndex = 0; buttonIndex < CHECK_BUTTONS.Length; ++buttonIndex)
-                {
-                    Buttons button = CHECK_BUTTONS[buttonIndex];
-                    if (IsButtonDown(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
-                    {
-                        NotifyButtonPressed(new ButtonEvent(gamePadIndex, button));
-                    }
-                    else if (IsButtonUp(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
-                    {
-                        NotifyButtonReleased(new ButtonEvent(gamePadIndex, button));
-                    }
-                }
-            }
-        }
-
-        private void NotifyGamePadConnected(int gamePadIndex)
-        {
-            foreach (GamePadStateListener l in gamePadStateListeners)
-            {
-                l.GamePadConnected(gamePadIndex);
-            }
-        }
-
-        private void NotifyGamePadDisconnected(int gamePadIndex)
-        {
-            foreach (GamePadStateListener l in gamePadStateListeners)
-            {
-                l.GamePadDisconnected(gamePadIndex);
-            }
-        }
-
-        private void NotifyButtonReleased(ButtonEvent buttonEvent)
-        {
-            foreach (GamePadListener l in gamePadListeners)
-            {
-                l.ButtonReleased(buttonEvent);
-            }
-        }
-
-        private void NotifyButtonPressed(ButtonEvent buttonEvent)
-        {
-            foreach (GamePadListener l in gamePadListeners)
-            {
-                l.ButtonPressed(buttonEvent);
             }
         }
 
@@ -226,7 +182,7 @@ namespace BomberEngine.Core.Input
             KeyboardState oldState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
 
-            if (keyboardListeners.Count() > 0)
+            if (keyboardListener != null)
             {
                 Keys[] oldKeys = oldState.GetPressedKeys();
                 Keys[] newKeys = currentKeyboardState.GetPressedKeys();
@@ -235,14 +191,14 @@ namespace BomberEngine.Core.Input
                 {
                     if (!oldKeys.Contains(newKeys[i]))
                     {
-                        NotifyKeyPressed(newKeys[i]);
+                        keyboardListener.KeyPressed(newKeys[i]);
                     }
                 }
                 for (int i = 0; i < oldKeys.Length; ++i)
                 {
                     if (!newKeys.Contains(oldKeys[i]))
                     {
-                        NotifyKeyReleased(oldKeys[i]);
+                        keyboardListener.KeyReleased(oldKeys[i]);
                     }
                 }
             }
@@ -253,78 +209,58 @@ namespace BomberEngine.Core.Input
             return currentKeyboardState.IsKeyDown(key);
         }
 
-        private void NotifyKeyPressed(Keys key)
-        {   
-            foreach (KeyboardListener l in keyboardListeners)
-            {
-                l.KeyPressed(key);
-            }
-        }
-
-        private void NotifyKeyReleased(Keys key)
-        {
-            foreach (KeyboardListener l in keyboardListeners)
-            {
-                l.KeyReleased(key);
-            }
-        }
-
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 
         #region Properties
 
-        public void AddKeyboardListener(KeyboardListener listener)
+        public void SetInputListener(InputListener listener)
         {
-            if (!keyboardListeners.Contains(listener))
-            {
-                keyboardListeners.Add(listener);
-            }
+            SetKeyboardListener(listener);
+            SetGamePadListener(listener);
+            SetGamePadStateListener(listener);
+            SetTouchListener(listener);
         }
 
-        public void RemoveKeyboardListener(KeyboardListener listener)
+        public KeyboardListener GetKeyboardListener()
         {
-            keyboardListeners.Remove(listener);
+            return keyboardListener;
         }
 
-        public void AddGamePadListener(GamePadListener listener)
+        public void SetKeyboardListener(KeyboardListener listener)
         {
-            if (!gamePadListeners.Contains(listener))
-            {
-                gamePadListeners.Add(listener);
-            }
+            keyboardListener = listener;
         }
 
-        public void RemoveGamePadListener(GamePadListener listener)
+        public GamePadListener GamePadListener()
         {
-            gamePadListeners.Remove(listener);
+            return gamePadListener;
         }
 
-        public void AddGamePadStateListener(GamePadStateListener listener)
+        public void SetGamePadListener(GamePadListener listener)
         {
-            if (!gamePadStateListeners.Contains(listener))
-            {
-                gamePadStateListeners.Add(listener);
-            }
+            gamePadListener = listener;
         }
 
-        public void RemoveGamePadStateListener(GamePadStateListener listener)
+        public GamePadStateListener GetGamePadStateListener()
         {
-            gamePadStateListeners.Remove(listener);
+            return gamePadStateListener;
         }
 
-        public void AddTouchListener(TouchListener listener)
+        private void SetGamePadStateListener(GamePadListener listener)
         {
-            if (!touchListeners.Contains(listener))
-            {
-                touchListeners.Add(listener);
-            }
+            this.gamePadListener = listener;
         }
 
-        public void RemoveTouchListener(TouchListener listener)
+        public TouchListener GetTouchListener()
         {
-            touchListeners.Remove(listener);
+            return touchListener;
+        }
+
+        public void SetTouchListener(TouchListener listener)
+        {
+            this.touchListener = listener;
         }
 
         #endregion

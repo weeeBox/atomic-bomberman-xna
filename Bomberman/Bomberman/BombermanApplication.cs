@@ -10,7 +10,7 @@ using Bomberman.Game.Commands.Gameplay.Players;
 
 namespace Bomberman
 {
-    public class BombermanApplication : Application, KeyboardListener
+    public class BombermanApplication : Application
     {
         private ContentManager contentManager;
 
@@ -26,46 +26,7 @@ namespace Bomberman
 
         protected override RootController CreateRootController()
         {
-            return new BombermanRootController();
+            return new BombermanRootController(contentManager);
         }
-
-        protected override GameConsole CreateConsole()
-        {
-            SpriteFont consoleFont = contentManager.Load<SpriteFont>("ConsoleFont");
-            GameConsole console = new GameConsole(consoleFont);
-
-            console.RegisterCommand(new PowerupAddCommand());
-            console.RegisterCommand(new PowerupRemoveCommand());
-            console.RegisterCommand(new PowerupListCommand());
-            console.RegisterCommand(new PlayerAddCommand());
-            console.RegisterCommand(new PlayerRemoveCommand());
-
-            return console;
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        protected override void OnStart()
-        {
-            Input().AddKeyboardListener(this);
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region KeyboardListener
-
-        public void KeyPressed(Keys key)
-        {
-            if (key == Keys.Oem8)
-            {
-                ToggleConsole();
-            }
-        }
-
-        public void KeyReleased(Keys key)
-        {   
-        }
-
-        #endregion
     }
 }

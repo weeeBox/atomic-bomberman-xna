@@ -9,7 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 namespace BomberEngine.Game
 {
     public abstract class Application
-    {   
+    {
+        private static Application sharedApplication;
+
         private RootController rootController;
 
         private Context context;
@@ -17,10 +19,9 @@ namespace BomberEngine.Game
         private bool started;
         private bool stoped;
 
-        private static TimerManager timerManager;
-        private static InputManager inputManager;
-        private static AssetManager assetManager;
-        private static GameConsole console;
+        private TimerManager timerManager;
+        private InputManager inputManager;
+        private AssetManager assetManager;
 
         private UpdatableList updatables;
         private DrawableList drawables;
@@ -32,6 +33,8 @@ namespace BomberEngine.Game
         {
             this.width = width;
             this.height = height;
+
+            sharedApplication = this;
 
             context = new Context();
             updatables = new UpdatableList();
@@ -49,8 +52,7 @@ namespace BomberEngine.Game
         {
             return new InputManager();
         }
-
-        protected abstract GameConsole CreateConsole();
+        
         protected abstract AssetManager CreateAssetManager();
         protected abstract RootController CreateRootController();
         
@@ -74,8 +76,6 @@ namespace BomberEngine.Game
 
             rootController = CreateRootController();
             AddGameObject(rootController);
-
-            console = CreateConsole();
             
             started = true;
             rootController.Start();
@@ -141,7 +141,7 @@ namespace BomberEngine.Game
 
         public static Timer ScheduleTimer(TimerCallback callback, float delay, int numRepeats)
         {
-            return timerManager.Schedule(callback, delay, numRepeats);
+            return sharedApplication.timerManager.Schedule(callback, delay, numRepeats);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -180,60 +180,31 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Console
-
-        protected void ToggleConsole()
-        {
-            if (console != null)
-            {
-                if (updatables.Contains(console))
-                {
-                    HideConsole();
-                }
-                else
-                {
-                    ShowConsole();
-                }
-            }
-        }
-
-        protected void ShowConsole()
-        {
-            if (console != null)
-            {
-                AddGameObject(console);
-                Input().AddKeyboardListener(console);
-            }
-        }
-
-        protected void HideConsole()
-        {
-            if (console != null)
-            {
-                RemoveGameObject(console);
-                Input().RemoveKeyboardListener(console);
-            }
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
         #region Getters/Setters
 
         public static AssetManager Assets()
         {
-            return assetManager;
+            return sharedApplication.assetManager;
         }
 
         public static InputManager Input()
         {
-            return inputManager;
+            return sharedApplication.inputManager;
         }
 
         public bool IsRunning()
         {
             return !stoped;
+        }
+
+        public static int GetWidth()
+        {
+            return sharedApplication.width;
+        }
+
+        public static int GetHeight()
+        {
+            return sharedApplication.height;
         }
 
         #endregion
