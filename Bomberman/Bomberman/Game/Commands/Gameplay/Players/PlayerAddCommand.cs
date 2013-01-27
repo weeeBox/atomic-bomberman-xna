@@ -7,7 +7,7 @@ using BomberEngine.Debugging;
 
 namespace Bomberman.Game.Commands.Gameplay.Players
 {
-    public class PlayerAddCommand : ConsoleCommand
+    public class PlayerAddCommand : BombermanConsoleCommand
     {
         public PlayerAddCommand()
             : base("player_add")

@@ -36,6 +36,7 @@ namespace Bomberman
 
             console.RegisterCommand(new PowerupAddCommand());
             console.RegisterCommand(new PowerupRemoveCommand());
+            console.RegisterCommand(new PowerupListCommand());
             console.RegisterCommand(new PlayerAddCommand());
             console.RegisterCommand(new PlayerRemoveCommand());
 

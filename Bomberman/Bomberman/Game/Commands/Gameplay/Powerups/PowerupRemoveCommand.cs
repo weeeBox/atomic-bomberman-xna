@@ -7,7 +7,7 @@ using BomberEngine.Debugging;
 
 namespace Bomberman.Game.Commands.Gameplay.Powerups
 {
-    public class PowerupRemoveCommand : ConsoleCommand
+    public class PowerupRemoveCommand : BombermanConsoleCommand
     {
         public PowerupRemoveCommand()
             : base("powerup_remove")
@@ -15,8 +15,7 @@ namespace Bomberman.Game.Commands.Gameplay.Powerups
         }
 
         public override void Execute(GameConsole console, params String[] args)
-        {
-            throw new NotImplementedException();
+        {   
         }
     }
 }

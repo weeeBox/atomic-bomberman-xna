@@ -7,7 +7,7 @@ using BomberEngine.Debugging;
 
 namespace Bomberman.Game.Commands.Gameplay.Players
 {
-    public class PlayerRemoveCommand : ConsoleCommand
+    public class PlayerRemoveCommand : BombermanConsoleCommand
     {
         public PlayerRemoveCommand()
             : base("player_remove")
