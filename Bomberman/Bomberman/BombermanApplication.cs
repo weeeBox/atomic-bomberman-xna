@@ -5,8 +5,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using BomberEngine.Core.Input;
 using Microsoft.Xna.Framework.Input;
-using Bomberman.Game.Commands.Gameplay.Powerups;
-using Bomberman.Game.Commands.Gameplay.Players;
 
 namespace Bomberman
 {

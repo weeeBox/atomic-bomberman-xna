@@ -5,18 +5,17 @@ using System.Text;
 using BomberEngine.Debugging.Commands;
 using BomberEngine.Debugging;
 
-namespace Bomberman.Game.Commands.Gameplay.Players
+namespace Bomberman.Game.Commands
 {
-    public class PlayerAddCommand : BombermanConsoleCommand
+    public class PowerupRemoveCommand : BombermanConsoleCommand
     {
-        public PlayerAddCommand()
-            : base("player_add")
+        public PowerupRemoveCommand()
+            : base("powerup_remove")
         {
         }
 
         public override void Execute(GameConsole console, params String[] args)
-        {
-            throw new NotImplementedException();
+        {   
         }
     }
 }

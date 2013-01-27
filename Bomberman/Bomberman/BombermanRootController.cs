@@ -2,10 +2,10 @@
 using BomberEngine.Debugging;
 using BomberEngine.Game;
 using Bomberman.Game;
-using Bomberman.Game.Commands.Gameplay.Players;
-using Bomberman.Game.Commands.Gameplay.Powerups;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Input;
+using Bomberman.Game.Commands;
 
 namespace Bomberman
 {
@@ -39,8 +39,21 @@ namespace Bomberman
             console.RegisterCommand(new PowerupListCommand());
             console.RegisterCommand(new PlayerAddCommand());
             console.RegisterCommand(new PlayerRemoveCommand());
+            console.RegisterCommand(new DiseaseInfectCommand());
+            console.RegisterCommand(new DiseaseListCommand());
 
             return console;
+        }
+
+        public override void KeyPressed(Keys key)
+        {
+            if (key == Keys.Oem8)
+            {
+                ToggleConsole();
+                return;
+            }
+
+            base.KeyPressed(key);
         }
     }
 }

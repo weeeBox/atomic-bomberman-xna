@@ -5,6 +5,7 @@ using BomberEngine.Core.Input;
 using BomberEngine.Core.Visual;
 using BomberEngine.Debugging;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace BomberEngine.Game
 {
@@ -78,6 +79,8 @@ namespace BomberEngine.Game
             AddGameObject(rootController);
             
             started = true;
+
+            inputManager.SetInputListener(rootController);
             rootController.Start();
 
             OnStart();

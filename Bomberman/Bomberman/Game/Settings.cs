@@ -137,6 +137,7 @@ namespace Bomberman.Game
         public static readonly int VAL_DSE_MIN_KEEP_BEFORE_PASS = 500;
         public static readonly int VAL_DSE_ARE_CUREABLE = 1;
         public static readonly int VAL_DSE_CURE_CHANCE = 10;
+
         public static readonly int VAL_DSE_TIME_MOLASSES = 15;
         public static readonly int VAL_DSE_TIME_CRACK = 15;
         public static readonly int VAL_DSE_TIME_CONSTIPATION = 15;
@@ -150,6 +151,7 @@ namespace Bomberman.Game
         public static readonly int VAL_DSE_TIME_INVISIBLE = 15;
         public static readonly int VAL_DSE_TIME_DUDS = 15;
         public static readonly int VAL_DSE_TIME_HYPERSWAP = 0;
+
         public static readonly int VAL_DSE_PROB_MOLASSES = 10;
         public static readonly int VAL_DSE_PROB_CRACK = 10;
         public static readonly int VAL_DSE_PROB_CONSTIPATION = 10;

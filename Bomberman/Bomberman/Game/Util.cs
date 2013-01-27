@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Bomberman.Game.Elements;
 using BomberEngine.Debugging;
+using BomberEngine.Util;
 
 namespace Bomberman.Game
 {
@@ -95,6 +96,24 @@ namespace Bomberman.Game
             }
 
             return Direction.DOWN;
+        }
+
+        public static void ShuffleArray<T>(T[] array)
+        {
+            ShuffleArray(array, array.Length);
+        }
+
+        public static void ShuffleArray<T>(T[] array, int size)
+        {  
+            int n = size;
+            while (n > 1)
+            {
+                n--;
+                int k = MathHelper.NextInt(n + 1);
+                T value = array[k];
+                array[k] = array[n];
+                array[n] = value;
+            }
         }
     }
 }

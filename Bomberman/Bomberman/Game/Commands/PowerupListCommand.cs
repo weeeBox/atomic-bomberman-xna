@@ -5,7 +5,7 @@ using System.Text;
 using BomberEngine.Debugging.Commands;
 using BomberEngine.Debugging;
 
-namespace Bomberman.Game.Commands.Gameplay.Powerups
+namespace Bomberman.Game.Commands
 {
     public class PowerupListCommand : ConsoleCommand
     {

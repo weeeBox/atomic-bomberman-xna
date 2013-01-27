@@ -5,7 +5,7 @@ using System.Text;
 using BomberEngine.Debugging.Commands;
 using BomberEngine.Debugging;
 
-namespace Bomberman.Game.Commands.Gameplay.Players
+namespace Bomberman.Game.Commands
 {
     public class PlayerRemoveCommand : BombermanConsoleCommand
     {

@@ -117,11 +117,13 @@
     <Compile Include="Content\SchemeLoader.cs" />
     <Compile Include="Content\SchemeReader.cs" />
     <Compile Include="Game\Commands\BombermanConsoleCommand.cs" />
-    <Compile Include="Game\Commands\Gameplay\Players\PlayerAddCommand.cs" />
-    <Compile Include="Game\Commands\Gameplay\Players\PlayerRemoveCommand.cs" />
-    <Compile Include="Game\Commands\Gameplay\Powerups\PowerupAddCommand.cs" />
-    <Compile Include="Game\Commands\Gameplay\Powerups\PowerupListCommand.cs" />
-    <Compile Include="Game\Commands\Gameplay\Powerups\PowerupRemoveCommand.cs" />
+    <Compile Include="Game\Commands\DiseaseInfectCommand.cs" />
+    <Compile Include="Game\Commands\DiseaseListCommand.cs" />
+    <Compile Include="Game\Commands\PlayerAddCommand.cs" />
+    <Compile Include="Game\Commands\PlayerRemoveCommand.cs" />
+    <Compile Include="Game\Commands\PowerupAddCommand.cs" />
+    <Compile Include="Game\Commands\PowerupListCommand.cs" />
+    <Compile Include="Game\Commands\PowerupRemoveCommand.cs" />
     <Compile Include="Game\Constant.cs" />
     <Compile Include="Game\Elements\Cells\BrickCell.cs" />
     <Compile Include="Game\Elements\Cells\BlankCell.cs" />
@@ -129,6 +131,8 @@
     <Compile Include="Game\Elements\Cells\MovableCell.cs" />
     <Compile Include="Game\Elements\Cells\PowerupCell.cs" />
     <Compile Include="Game\Elements\Cells\SolidCell.cs" />
+    <Compile Include="Game\Elements\Diseases.cs" />
+    <Compile Include="Game\Elements\Players\DiseaseList.cs" />
     <Compile Include="Game\Elements\Players\PowerupList.cs" />
     <Compile Include="Game\Elements\Powerups.cs" />
     <Compile Include="Game\Elements\Direction.cs" />

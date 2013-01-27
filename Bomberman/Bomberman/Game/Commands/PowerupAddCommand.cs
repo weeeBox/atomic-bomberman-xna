@@ -6,7 +6,7 @@ using BomberEngine.Debugging.Commands;
 using BomberEngine.Debugging;
 using Bomberman.Game.Elements.Players;
 
-namespace Bomberman.Game.Commands.Gameplay.Powerups
+namespace Bomberman.Game.Commands
 {
     public class PowerupAddCommand : BombermanConsoleCommand
     {
@@ -18,15 +18,16 @@ namespace Bomberman.Game.Commands.Gameplay.Powerups
         public override void Execute(GameConsole console, params String[] args)
         {
             List<Player> players = GetPlayers();
-            int playerIndex = GetInt(args, "-p");
+            Player player = players[0];
 
-            if (playerIndex < players.Count)
+            int index = GetInt(args, 0, -1);
+            if (index != -1)
             {
-                Player player = players[playerIndex];
+                player.TryAddPowerup(index);
             }
             else
             {
-                Log(console, "Player index out of bounds: " + playerIndex);
+                Log(console, "Wrong powerup index");
             }
         }
     }

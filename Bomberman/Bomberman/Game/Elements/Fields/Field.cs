@@ -143,7 +143,7 @@ namespace Bomberman.Game.Elements.Fields
                 return;
             }
 
-            ShuffleArray(brickCells, count);
+            ShuffleCells(brickCells, count);
 
             int brickIndex = 0;
             foreach (PowerupInfo info in powerupInfo)
@@ -237,17 +237,9 @@ namespace Bomberman.Game.Elements.Fields
             return null;
         }
 
-        private void ShuffleArray(FieldCell[] array, int size)
-        {   
-            int n = size;
-            while (n > 1)
-            {
-                n--;
-                int k = MathHelper.NextInt(n + 1);
-                FieldCell value = array[k];
-                array[k] = array[n];
-                array[n] = value;
-            } 
+        private void ShuffleCells(FieldCell[] array, int size)
+        {
+            Util.ShuffleArray(array, size); 
         }
 
         public void Update(float delta)
@@ -305,6 +297,8 @@ namespace Bomberman.Game.Elements.Fields
         {
             int cx = bomb.GetCx();
             int cy = bomb.GetCy();
+
+            bomb.player.OnBombBlown(bomb);
 
             SetExplosion(bomb, cx, cy);
             SpreadExplosion(bomb, cx - 1, cy);
@@ -373,6 +367,11 @@ namespace Bomberman.Game.Elements.Fields
             return players;
         }
 
+        public Player GetPlayer(int index)
+        {
+            return players.TryGet(index);
+        }
+
         public FieldCell GetCell(int cx, int cy)
         {
             return cells.Get(cx, cy);
@@ -430,6 +429,11 @@ namespace Bomberman.Game.Elements.Fields
             SetCell(movable);
         }
 
+        public void PlayerCellChanged(Player player, int oldCx, int oldCy)
+        {
+
+        }
+
         private void ProcessCollisions(MovableCell movable, float oldPx, float oldPy)
         {
             float px = movable.GetPx();
@@ -443,7 +447,7 @@ namespace Bomberman.Game.Elements.Fields
                 if (movable.GetPx() > maxX)
                 {
                     movable.SetPosX(maxX);
-                    movable.HitWall();
+                    movable.OnHitWall();
                 }
                 else
                 {
@@ -461,7 +465,7 @@ namespace Bomberman.Game.Elements.Fields
                 if (movable.GetPx() < minX)
                 {
                     movable.SetPosX(minX);
-                    movable.HitWall();
+                    movable.OnHitWall();
                 }
                 else
                 {
@@ -480,7 +484,7 @@ namespace Bomberman.Game.Elements.Fields
                 if (movable.GetPy() > maxY)
                 {
                     movable.SetPosY(maxY);
-                    movable.HitWall();
+                    movable.OnHitWall();
                 }
                 else
                 {
@@ -498,7 +502,7 @@ namespace Bomberman.Game.Elements.Fields
                 if (movable.GetPy() < minY)
                 {
                     movable.SetPosY(minY);
-                    movable.HitWall();
+                    movable.OnHitWall();
                 }
                 else
                 {
@@ -529,7 +533,7 @@ namespace Bomberman.Game.Elements.Fields
                         else
                         {
                             AdjustPosition(movable, cell);
-                            movable.HitObstacle(cell);
+                            movable.OnHitObstacle(cell);
                         }
                     }
                 }
@@ -596,7 +600,7 @@ namespace Bomberman.Game.Elements.Fields
             else
             {
                 AdjustPosition(player, bomb);
-                player.HitObstacle(bomb);
+                player.OnHitObstacle(bomb);
             }
         }
 

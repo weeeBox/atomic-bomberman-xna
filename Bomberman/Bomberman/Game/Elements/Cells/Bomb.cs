@@ -20,7 +20,7 @@ namespace Bomberman.Game.Elements.Cells
 
         private static int nextTriggerIndex;
 
-        private Player player;
+        private Player m_player;
         private UpdatableDelegate updater;
 
         public bool active;
@@ -45,7 +45,7 @@ namespace Bomberman.Game.Elements.Cells
 
         public Bomb(Player player) : base(player.GetCx(), player.GetCy())
         {
-            this.player = player;
+            m_player = player;
             SetSpeed(Settings.Get(Settings.VAL_BOMB_ROLL_SPEED));
         }
 
@@ -171,21 +171,16 @@ namespace Bomberman.Game.Elements.Cells
             }
         }
 
-        public Player GetPlayer()
-        {
-            return player;
-        }
-
         public void Activate()
         {
             active = true;
-            SetCell(player.GetCx(), player.GetCy());
-            radius = player.GetBombRadius();
-            remains = player.GetBombTimeout();
+            SetCell(m_player.GetCx(), m_player.GetCy());
+            radius = m_player.GetBombRadius();
+            remains = m_player.GetBombTimeout();
             SetState(STATE_NORMAL);
             dud = false;
-            jelly = player.IsJelly();
-            m_trigger = player.IsTrigger();
+            jelly = m_player.IsJelly();
+            m_trigger = m_player.IsTrigger();
             if (m_trigger)
             {
                 m_triggerIndex = nextTriggerIndex++;
@@ -214,14 +209,14 @@ namespace Bomberman.Game.Elements.Cells
 
         public void Throw()
         {
-            float fromPx = player.px;
-            float fromPy = player.py;
-            Direction direction = player.direction;
+            float fromPx = m_player.px;
+            float fromPy = m_player.py;
+            Direction direction = m_player.direction;
 
             SetPixels(fromPx, fromPy);
 
             Fly(fromPx, fromPy, direction);
-            remains = player.GetBombTimeout();
+            remains = m_player.GetBombTimeout();
         }
 
         private void Fly(float fromPx, float fromPy, Direction direction)
@@ -280,14 +275,14 @@ namespace Bomberman.Game.Elements.Cells
             else
             {   
                 SetState(STATE_NORMAL);
-                player.BombLanded(this);
+                m_player.OnBombLanded(this);
             }
         }
 
         public void Punch()
         {
             RemoveFromField();
-            Fly(px, py, player.direction);
+            Fly(px, py, m_player.direction);
         }
 
         public override Bomb AsBomb()
@@ -305,15 +300,15 @@ namespace Bomberman.Game.Elements.Cells
             return true;
         }
 
-        public override void HitObstacle(Fields.FieldCell obstacle)
+        public override void OnHitObstacle(Fields.FieldCell obstacle)
         {
-            base.HitObstacle(obstacle);
+            base.OnHitObstacle(obstacle);
             TryJellyOnObstacle();
         }
 
-        public override void HitWall()
+        public override void OnHitWall()
         {
-            base.HitWall();
+            base.OnHitWall();
             TryJellyOnObstacle();
         }
 
@@ -389,6 +384,11 @@ namespace Bomberman.Game.Elements.Cells
         public bool IsFlying()
         {
             return m_state == STATE_FLYING;
+        }
+
+        public Player player
+        {
+            get { return m_player; }
         }
 
         public bool trigger

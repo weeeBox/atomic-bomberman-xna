@@ -7,6 +7,7 @@ using Bomberman.Game.Elements.Items;
 using Bomberman.Game.Elements.Players.Input;
 using Bomberman.Game.Elements.Fields;
 using BomberEngine.Debugging;
+using BomberEngine.Util;
 
 namespace Bomberman.Game.Elements.Players
 {
@@ -24,6 +25,7 @@ namespace Bomberman.Game.Elements.Players
 
         private BombList bombs;
         public PowerupList powerups;
+        public DiseaseList diseases;
 
         private Bomb m_bombInHands;
 
@@ -41,6 +43,7 @@ namespace Bomberman.Game.Elements.Players
 
             InitPowerups();
             InitBombs();
+            InitDiseases();
             InitPlayer();
 
             m_thrownBombs = new List<Bomb>();
@@ -138,16 +141,22 @@ namespace Bomberman.Game.Elements.Players
             StopMoving();
         }
 
-        public override void HitWall()
+        public override void OnHitWall()
         {
         }
 
-        public override void HitObstacle(FieldCell obstacle)
+        public override void OnHitObstacle(FieldCell obstacle)
         {   
         }
 
         protected override void OnCellChanged(int oldCx, int oldCy)
-        {   
+        {
+            TryPoops();
+        }
+
+        public void OnBombBlown(Bomb bomb)
+        {
+            TryPoops();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -267,9 +276,31 @@ namespace Bomberman.Game.Elements.Players
                     TryGivePowerupBack(Powerups.Grab);
                     break;
                 }
+
+                case Powerups.Disease:
+                {
+                    diseases.InfectRandom(1);
+                    break;
+                }
+
+                case Powerups.Ebola:
+                {
+                    diseases.InfectRandom(3);
+                    break;
+                }
             }
 
             return true;
+        }
+
+        public bool TryInfect(int diseaseIndex)
+        {
+            return diseases.TryInfect(diseaseIndex);
+        }
+
+        public bool TryInfect(Diseases disease)
+        {
+            return diseases.TryInfect(disease);
         }
 
         public bool HasKick()
@@ -325,6 +356,11 @@ namespace Bomberman.Game.Elements.Players
             GetField().PlacePowerup(powerupIndex);
         }
 
+        private bool IsInfectedPoops()
+        {
+            return diseases.IsInfected(Diseases.POOPS);
+        }
+
         private int CalcPlayerSpeed()
         {
             int speedBase = Settings.Get(Settings.VAL_PLAYER_SPEED);
@@ -371,6 +407,17 @@ namespace Bomberman.Game.Elements.Players
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Disease
+
+        private void InitDiseases()
+        {
+            diseases = new DiseaseList();
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
         #region Player init
 
         private void InitPlayer()
@@ -399,27 +446,17 @@ namespace Bomberman.Game.Elements.Players
         
         public void TryAction()
         {
-            Field field = GetField();
-            FieldCell underlyingCell = field.GetCell(cx, cy);
-            if (underlyingCell.IsEmpty())
-            {
-                Bomb bomb = bombs.GetNextBomb();
-                if (bomb != null)
+            bool bombSet = TryBomb();
+            if (!bombSet)
+            {   
+                if (HasSpooger())
                 {
-                    field.SetBomb(bomb);
-                    if (HasTrigger() && triggerBombsCount > 0)
-                    {
-                        --triggerBombsCount;
-                    }
+                    TrySpooger();
                 }
-            }
-            else if (HasSpooger())
-            {
-                TrySpooger();
-            }
-            else if (HasGrab())
-            {
-                TryGrab();
+                else if (HasGrab())
+                {
+                    TryGrab();
+                }
             }
         }
 
@@ -495,7 +532,7 @@ namespace Bomberman.Game.Elements.Players
             Debug.Assert(removed);
         }
 
-        public void BombLanded(Bomb bomb)
+        public void OnBombLanded(Bomb bomb)
         {
             RemoveThrownBomb(bomb);
             GetField().SetBomb(bomb);
@@ -526,7 +563,7 @@ namespace Bomberman.Game.Elements.Players
             }
 
             Bomb underlyingBomb = underlyingCell.AsBomb();
-            if (underlyingBomb.GetPlayer() != this)
+            if (underlyingBomb.player != this)
             {
                 return false; // you only can use spooger when standing at your own bomb
             }
@@ -594,6 +631,25 @@ namespace Bomberman.Game.Elements.Players
             return false;
         }
 
+        private bool TryBomb()
+        {
+            FieldCell cell = GetField().GetCell(cx, cy);
+            if (!cell.IsObstacle())
+            {
+                Bomb bomb = bombs.GetNextBomb();
+                if (bomb != null)
+                {
+                    GetField().SetBomb(bomb);
+                    if (HasTrigger() && triggerBombsCount > 0)
+                    {
+                        --triggerBombsCount;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private bool TryGrab()
         {
             Bomb underlyingBomb = GetField().GetCell(cx, cy).AsBomb();
@@ -627,6 +683,16 @@ namespace Bomberman.Game.Elements.Players
                 AddThrownBomb(bomb);
                 bomb.Punch();
                 return true;
+            }
+
+            return false;
+        }
+
+        private bool TryPoops()
+        {
+            if (IsInfectedPoops())
+            {
+                return TryBomb();
             }
 
             return false;
