@@ -174,13 +174,13 @@ namespace Bomberman.Game.Elements.Cells
         public void Activate()
         {
             active = true;
-            SetCell(m_player.GetCx(), m_player.GetCy());
-            radius = m_player.GetBombRadius();
-            remains = m_player.GetBombTimeout();
+            SetCell(player.cx, player.cy);
+            radius = player.GetBombRadius();
+            remains = player.GetBombTimeout();
             SetState(STATE_NORMAL);
             dud = false;
-            jelly = m_player.IsJelly();
-            m_trigger = m_player.IsTrigger();
+            jelly = player.IsJelly();
+            m_trigger = player.IsTrigger();
             if (m_trigger)
             {
                 m_triggerIndex = nextTriggerIndex++;

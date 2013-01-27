@@ -159,6 +159,11 @@ namespace Bomberman.Game.Elements.Players
             TryPoops();
         }
 
+        private void OnDiseasesChanged()
+        {
+            TryPoops();
+        }
+
         //////////////////////////////////////////////////////////////////////////////
 
         #region Powerups
@@ -279,13 +284,13 @@ namespace Bomberman.Game.Elements.Players
 
                 case Powerups.Disease:
                 {
-                    diseases.InfectRandom(1);
+                    InfectRandom(1);
                     break;
                 }
 
                 case Powerups.Ebola:
                 {
-                    diseases.InfectRandom(3);
+                    InfectRandom(3);
                     break;
                 }
             }
@@ -293,14 +298,32 @@ namespace Bomberman.Game.Elements.Players
             return true;
         }
 
+        public void InfectRandom(int count)
+        {
+            diseases.InfectRandom(count);
+            OnDiseasesChanged();
+        }
+
         public bool TryInfect(int diseaseIndex)
         {
-            return diseases.TryInfect(diseaseIndex);
+            bool succeed = diseases.TryInfect(diseaseIndex);
+            if (succeed)
+            {
+                OnDiseasesChanged();
+            }
+
+            return succeed;
         }
 
         public bool TryInfect(Diseases disease)
         {
-            return diseases.TryInfect(disease);
+            bool succeed = diseases.TryInfect(disease);
+            if (succeed)
+            {
+                OnDiseasesChanged();
+            }
+
+            return succeed;
         }
 
         public bool HasKick()

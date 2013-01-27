@@ -42,7 +42,7 @@ namespace Bomberman.Game.Elements.Fields
             Settings.VAL_PU_FIELD_EBOLA,
             Settings.VAL_PU_FIELD_RANDOM,
         };
-        
+
         public Field(Scheme scheme, PlayerList players)
         {
             this.players = players;
@@ -125,7 +125,7 @@ namespace Bomberman.Game.Elements.Fields
         private void SetupPowerups(PowerupInfo[] powerupInfo)
         {
             foreach (PowerupInfo info in powerupInfo)
-            {   
+            {
                 if (info.bornWith)
                 {
                     List<Player> playerList = players.list;
@@ -239,7 +239,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private void ShuffleCells(FieldCell[] array, int size)
         {
-            Util.ShuffleArray(array, size); 
+            Util.ShuffleArray(array, size);
         }
 
         public void Update(float delta)
@@ -289,43 +289,27 @@ namespace Bomberman.Game.Elements.Fields
 
         public void PlacePowerup(int powerupIndex)
         {
-            
+
         }
 
         /** Should only be called from Bomb.Blow() */
         public void BlowBomb(Bomb bomb)
-        {
+        {   
             int cx = bomb.GetCx();
             int cy = bomb.GetCy();
+            SetExplosion(bomb, cx, cy);
 
             bomb.player.OnBombBlown(bomb);
 
-            SetExplosion(bomb, cx, cy);
-            SpreadExplosion(bomb, cx - 1, cy);
-            SpreadExplosion(bomb, cx, cy - 1);
-            SpreadExplosion(bomb, cx + 1, cy);
-            SpreadExplosion(bomb, cx, cy + 1);
-        }
-
-        private void SpreadExplosion(Bomb bomb, int startCx, int startCy)
-        {
-            int dcx = startCx - bomb.GetCx();
-            int dcy = startCy - bomb.GetCy();
-
+            bool up = true, down = true, left = true, right = true;
             int radius = bomb.GetRadius();
-            int cx = startCx;
-            int cy = startCy;
 
-            for (int i = 0; i < radius; ++i)
+            for (int i = 1; i <= radius && (up || down || left || right); ++i)
             {
-                bool spreaded = SetExplosion(bomb, cx, cy);
-                if (!spreaded)
-                {
-                    break;
-                }
-
-                cx += dcx;
-                cy += dcy;
+                left = left && SetExplosion(bomb, cx - i, cy);
+                up = up && SetExplosion(bomb, cx, cy - i);
+                down = down && SetExplosion(bomb, cx, cy + i);
+                right = right && SetExplosion(bomb, cx + i, cy);
             }
         }
 
@@ -399,7 +383,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public void CheckCell(FieldCell expectedCell)
         {
-            FieldCell actualCell = GetCell(expectedCell.cx, expectedCell.cy); 
+            FieldCell actualCell = GetCell(expectedCell.cx, expectedCell.cy);
             Debug.Assert(actualCell == expectedCell);
         }
 
@@ -518,7 +502,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private void ProcessCollision(MovableCell movable, int cx, int cy)
         {
-            if (cx >= 0 && cx < GetWidth() && cy >=0 && cy < GetHeight())
+            if (cx >= 0 && cx < GetWidth() && cy >= 0 && cy < GetHeight())
             {
                 FieldCell cell = cells.Get(cx, cy);
 
@@ -549,7 +533,7 @@ namespace Bomberman.Game.Elements.Fields
                     if (Collides(movable, cell))
                     {
                         if (movable.IsBomb())
-                        {   
+                        {
                             movable.AsBomb().Blow();
                         }
                     }
@@ -642,12 +626,12 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         private bool Collides(MovableCell a, FieldCell b)
-        {   
+        {
             return Collides(a.px, a.py, b);
         }
 
         private static bool Collides(float px, float py, FieldCell b)
-        {   
+        {
             return Math.Abs(px - b.px) < Constant.CELL_WIDTH && Math.Abs(py - b.py) < Constant.CELL_HEIGHT;
         }
 
