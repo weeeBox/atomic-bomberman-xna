@@ -342,6 +342,12 @@ namespace Bomberman.Game.Elements.Fields
                 return true;
             }
 
+            if (cell.IsPowerup())
+            {
+                ClearCell(cx, cy);
+                return false;
+            }
+
             SetCell(new FlameCell(cx, cy));
             return true;
         }
