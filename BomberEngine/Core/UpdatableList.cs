@@ -48,13 +48,37 @@ namespace BomberEngine.Core
             int index = list.IndexOf(updatable);
             if (index != -1)
             {
-                ++removedCount;
-
-                list[index] = NULL_UPDATABLE;
+                Remove(index);
                 return true;
             }
 
             return false;
+        }
+
+        public void Remove(int index)
+        {
+            ++removedCount;
+            list[index] = NULL_UPDATABLE;
+        }
+
+        public void RemoveLast()
+        {
+            if (list.Count > 0)
+            {
+                Remove(list.Count - 1);
+            }
+        }
+
+        public void SetLast(Updatable updatable)
+        {
+            if (list.Count > 0)
+            {
+                list[list.Count - 1] = updatable;
+            }
+            else
+            {
+                Add(updatable);
+            }
         }
 
         public void Clear()

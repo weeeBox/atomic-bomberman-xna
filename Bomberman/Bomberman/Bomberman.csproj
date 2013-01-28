@@ -151,6 +151,7 @@
     <Compile Include="Game\GameCheats.cs" />
     <Compile Include="Game\GameController.cs" />
     <Compile Include="Game\Game.cs" />
+    <Compile Include="Game\Scenes\PauseScene.cs" />
     <Compile Include="Game\Scenes\PowerupsDrawable.cs" />
     <Compile Include="Game\Settings.cs" />
     <Compile Include="Game\Helper.cs" />

@@ -12,6 +12,7 @@ using Bomberman.Game.Elements.Cells;
 using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements.Players.Input;
 using Bomberman.Content;
+using Microsoft.Xna.Framework.Input;
 
 namespace Bomberman.Game.Scenes
 {
@@ -33,6 +34,17 @@ namespace Bomberman.Game.Scenes
 
             // field drawer
             AddDrawable(new PowerupsDrawable(field, 0, 0, Constant.FIELD_WIDTH, Constant.FIELD_OFFSET_Y));
+        }
+
+        public override void KeyPressed(Keys key)
+        {
+            base.KeyPressed(key);
+
+            if (key == Keys.Escape)
+            {
+                PauseScene pauseScene = new PauseScene();
+                StartNextScene(pauseScene);
+            }
         }
     }
 }

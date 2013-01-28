@@ -17,9 +17,13 @@ namespace BomberEngine.Game
 
         private DrawableList drawableList;
 
-        private ScenesContainer sceneContainer;
+        public ScenesManager sceneManager;
 
-        private SceneListener listener;
+        public SceneListener listener;
+
+        protected bool m_allowsDrawPrevious;
+
+        protected bool m_allowsUpdatePrevious;
 
         public Scene()
             : this(Application.GetWidth(), Application.GetHeight())
@@ -212,15 +216,25 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Scene container
+        #region Scenes management
+
+        protected void StartScene(Scene scene)
+        {
+            sceneManager.StartScene(scene);
+        }
+
+        protected void StartNextScene(Scene scene)
+        {
+            sceneManager.StartScene(scene, false);
+        }
 
         private void RemoveFromContainer()
         {
-            if (sceneContainer == null)
+            if (sceneManager == null)
             {
                 throw new InvalidOperationException("Scene container is not set");
             }
-            sceneContainer.RemoveScene(this);
+            sceneManager.RemoveScene(this);
         }
 
         #endregion
@@ -229,16 +243,16 @@ namespace BomberEngine.Game
 
         #region Properties
 
-        public SceneListener Listener
+        public bool allowsDrawPrevious
         {
-            get { return listener; }
-            set { listener = value; }
+            get { return m_allowsDrawPrevious; }
+            protected set { m_allowsDrawPrevious = value; }
         }
 
-        public ScenesContainer SceneContainer
+        public bool allowsUpdatePrevious
         {
-            get { return sceneContainer; }
-            set { sceneContainer = value; }
+            get { return m_allowsUpdatePrevious; }
+            protected set { m_allowsUpdatePrevious = value; }
         }
 
         #endregion

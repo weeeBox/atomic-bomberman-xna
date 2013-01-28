@@ -34,10 +34,15 @@ namespace BomberEngine.Debugging
         private ConsoleCommandRegister commands;
         private LinkedList<ConsoleCommand> suggestedCommands;
 
+        private Color backColor;
+
         public GameConsole(SpriteFont font)
             : base(640, 320)
         {
             this.font = font;
+
+            allowsDrawPrevious = true;
+            allowsUpdatePrevious = true;
 
             m_lines = new List<String>();
             commands = new ConsoleCommandRegister();
@@ -49,6 +54,8 @@ namespace BomberEngine.Debugging
             charWidth = charSize.X;
             lineHeight = charSize.Y;
             InitAdditionalInputKeys();
+
+            backColor = new Color(0.0f, 0.0f, 0.0f, 0.75f);
         }
 
         private void InitAdditionalInputKeys()
@@ -83,7 +90,7 @@ namespace BomberEngine.Debugging
         {
             PreDraw(context);
 
-            context.FillRect(0, 0, width, height, Color.Black);
+            context.FillRect(0, 0, width, height, backColor);
 
             DrawLines(context);
             DrawPrompt(context);

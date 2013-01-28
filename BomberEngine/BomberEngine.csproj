@@ -131,7 +131,6 @@
     <Compile Include="Game\RootController.cs" />
     <Compile Include="Game\Scene.cs" />
     <Compile Include="Game\SceneListener.cs" />
-    <Compile Include="Game\ScenesContainer.cs" />
     <Compile Include="Game\ScenesManager.cs" />
     <Compile Include="Game\UpdatableContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

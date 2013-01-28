@@ -10,15 +10,19 @@ using BomberEngine.Core.Visual;
 
 namespace BomberEngine.Game
 {
-    public class ScenesManager : GameObject, ScenesContainer
+    public class ScenesManager : GameObject
     {   
         private List<Scene> scenes;
+        private UpdatableList updatables;
+        private DrawableList drawables;
 
         private Scene currentScene;
 
         public ScenesManager()
         {
             scenes = new List<Scene>();
+            updatables = new UpdatableList();
+            drawables = new DrawableList();
         }
         
         //////////////////////////////////////////////////////////////////////////////
@@ -27,7 +31,7 @@ namespace BomberEngine.Game
 
         public override void Update(float delta)
         {
-            currentScene.Update(delta);
+            updatables.Update(delta);
         }
 
         #endregion
@@ -38,7 +42,7 @@ namespace BomberEngine.Game
 
         public override void Draw(Context context)
         {
-            currentScene.Draw(context);
+            drawables.Draw(context);
         }
 
         #endregion
@@ -120,24 +124,36 @@ namespace BomberEngine.Game
                 if (replaceCurrent)
                 {
                     currentScene.Stop();
-                    currentScene.SceneContainer = null;
+                    currentScene.sceneManager = null;
                 }
                 else
                 {
-                    currentScene.Suspend();
+                    if (!scene.allowsUpdatePrevious)
+                    {
+                        currentScene.Suspend();
+                        updatables.Remove(currentScene);
+                    }
+
+                    if (!scene.allowsDrawPrevious)
+                    {
+                        drawables.Remove(currentScene);
+                    }
                 }
             }
 
             currentScene = scene;
 
             scenes.Add(scene);
-            scene.SceneContainer = this;
+            scene.sceneManager = this;
             scene.Start();
+
+            updatables.Add(scene);
+            drawables.Add(scene);
         }
 
         public void RemoveScene(Scene scene)
         {
-            if (scene.SceneContainer != this)
+            if (scene.sceneManager != this)
             {
                 throw new InvalidOperationException("Scene doesn't belong to this container: " + scene);
             }
@@ -147,15 +163,27 @@ namespace BomberEngine.Game
                 throw new InvalidOperationException("Scene manager doesn't contain the scene: " + scene);   
             }
 
-            scene.SceneContainer = null;
+            scene.sceneManager = null;
+            
             scenes.Remove(scene);
+            updatables.Remove(scene);
+            drawables.Remove(scene);
 
             if (scene == currentScene)
             {
                 if (scenes.Count > 0)
                 {
                     currentScene = scenes[scenes.Count - 1];
-                    currentScene.Resume();
+                    if (!scene.allowsDrawPrevious)
+                    {
+                        drawables.Add(currentScene);
+                    }
+
+                    if (!scene.allowsUpdatePrevious)
+                    {
+                        currentScene.Resume();
+                        updatables.Add(currentScene);
+                    }
                 }
                 else
                 {
