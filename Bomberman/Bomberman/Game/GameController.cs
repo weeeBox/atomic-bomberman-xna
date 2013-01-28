@@ -20,17 +20,14 @@ namespace Bomberman.Game
         private GameCheats cheats;
 
         private Game game;
-        private KeyboardListenerList keyboardListeners;
 
         public GameController()
         {
-            keyboardListeners = new KeyboardListenerList();
-
             game = new Game();
-            InitPlayers();
             InitField(A.sch_X);
 
             gameScene = new GameScene();
+            InitPlayers();
         }
 
         private void InitPlayers()
@@ -42,7 +39,7 @@ namespace Bomberman.Game
             keyboardInput1.Map(Keys.D, PlayerAction.Right);
             keyboardInput1.Map(Keys.OemCloseBrackets, PlayerAction.Bomb);
             keyboardInput1.Map(Keys.OemOpenBrackets, PlayerAction.Special);
-            keyboardListeners.Add(keyboardInput1);
+            gameScene.AddKeyboardListener(keyboardInput1);
 
             Player player1 = new Player(0, keyboardInput1);
             game.AddPlayer(player1);
@@ -52,13 +49,13 @@ namespace Bomberman.Game
             keyboardInput2.Map(Keys.Left, PlayerAction.Left);
             keyboardInput2.Map(Keys.Down, PlayerAction.Down);
             keyboardInput2.Map(Keys.Right, PlayerAction.Right);
-            keyboardListeners.Add(keyboardInput2);
+            gameScene.AddKeyboardListener(keyboardInput2);
 
             Player player2 = new Player(1, keyboardInput2);
             game.AddPlayer(player2);
 
             cheats = new GameCheats(game);
-            keyboardListeners.Add(cheats);
+            gameScene.AddKeyboardListener(cheats);
         }
 
         private void InitField(int schemeId)

@@ -9,21 +9,26 @@ namespace BomberEngine.Core.Input
 {
     public class KeyboardListenerList : KeyboardListener
     {
-        private ObjectsList<KeyboardListener> listeners;
+        private ConcurrentList<KeyboardListener> listeners;
 
         public KeyboardListenerList()
         {
-            listeners = new ObjectsList<KeyboardListener>();
+            listeners = new ConcurrentList<KeyboardListener>();
         }
 
-        public void Add(KeyboardListener listener)
+        public bool Add(KeyboardListener listener)
         {
-            listeners.Add(listener);
+            if (!listeners.Contains(listener))
+            {
+                listeners.Add(listener);
+                return true;
+            }
+            return false;
         }
 
-        public void Remove(KeyboardListener listener)
+        public bool Remove(KeyboardListener listener)
         {
-            listeners.Remove(listener);
+            return listeners.Remove(listener);
         }
 
         public void KeyPressed(Keys key)

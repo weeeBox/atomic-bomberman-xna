@@ -44,7 +44,6 @@ namespace BomberEngine.Util
             return list.Count;
         }
 
-
         public void Clear()
         {
             list.Clear();
@@ -55,7 +54,7 @@ namespace BomberEngine.Util
             return list.Contains(T);
         }
 
-        #region Enumerator
+        //////////////////////////////////////////////////////////////////////////////
 
         public T Current
         {
@@ -98,7 +97,7 @@ namespace BomberEngine.Util
             isFirstNode = true;
         }
 
-        #endregion
+        //////////////////////////////////////////////////////////////////////////////
 
         public IEnumerator<T> GetEnumerator()
         {

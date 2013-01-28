@@ -17,6 +17,8 @@ namespace BomberEngine.Game
 
         private DrawableList drawableList;
 
+        private KeyboardListenerList keyboardListeners;
+
         public ScenesManager sceneManager;
 
         public SceneListener listener;
@@ -36,6 +38,7 @@ namespace BomberEngine.Game
             timerManager = new TimerManager();
             updatablesList = new UpdatableList();
             drawableList = new DrawableList();
+            keyboardListeners = new KeyboardListenerList();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -210,6 +213,32 @@ namespace BomberEngine.Game
             {
                 listener.OnSceneStoped(this);
             }
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region KeyboardListener
+
+        public override void KeyPressed(Keys key)
+        {
+            keyboardListeners.KeyPressed(key);
+        }
+
+        public override void KeyReleased(Keys key)
+        {
+            keyboardListeners.KeyReleased(key);
+        }
+
+        public bool AddKeyboardListener(KeyboardListener listener)
+        {
+            return keyboardListeners.Add(listener);
+        }
+
+        public bool RemoveKeyboardListener(KeyboardListener listener)
+        {
+            return keyboardListeners.Remove(listener);
         }
 
         #endregion
