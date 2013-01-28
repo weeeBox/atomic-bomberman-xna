@@ -16,8 +16,6 @@ namespace Bomberman.Game.Elements.Players
         private int index;
 
         private bool alive;
-
-        private int bombRadius;
         private int triggerBombsCount;
 
         private PlayerInput input;
@@ -243,8 +241,7 @@ namespace Bomberman.Game.Elements.Players
 
                 case Powerups.Flame:
                 case Powerups.GoldFlame:
-                    {
-                        bombRadius = CalcBombRadius();
+                    {   
                         break;
                     }
 
@@ -405,15 +402,6 @@ namespace Bomberman.Game.Elements.Players
             return powerups.GetCount(Powerups.Bomb);
         }
 
-        private int CalcBombRadius()
-        {
-            if (powerups.HasPowerup(Powerups.GoldFlame))
-            {
-                return int.MaxValue;
-            }
-            return powerups.GetCount(Powerups.Flame);
-        }
-
         private float CalcBombTimeout()
         {
             return Settings.Get(Settings.VAL_FUZE_TIME_NORMAL) * 0.001f;
@@ -430,8 +418,6 @@ namespace Bomberman.Game.Elements.Players
             int maxBombs = Settings.Get(Settings.VAL_PU_MAX_BOMB);
             bombs = new BombList(this, maxBombs);
             bombs.SetMaxActiveCount(CalcBombsCount());
-
-            bombRadius = CalcBombRadius();
         }
 
         #endregion
@@ -521,7 +507,15 @@ namespace Bomberman.Game.Elements.Players
 
         public int GetBombRadius()
         {
-            return bombRadius;
+            if (IsInfectedShortFlame())
+            {
+                return Settings.Get(Settings.VAL_BOMB_SHORT_FLAME);
+            }
+            if (powerups.HasPowerup(Powerups.GoldFlame))
+            {
+                return int.MaxValue;
+            }
+            return powerups.GetCount(Powerups.Flame);
         }
 
         public bool IsJelly()

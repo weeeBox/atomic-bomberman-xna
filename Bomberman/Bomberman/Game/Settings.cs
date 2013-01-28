@@ -57,6 +57,7 @@ namespace Bomberman.Game
         public static readonly int VAL_BOMB_ROLL_SPEED = 250;
         public static readonly int VAL_BOMB_FLY_SPEED = 300;
         public static readonly int VAL_BOMB_DROP_GRAVITY = 4000;
+        public static readonly int VAL_BOMB_SHORT_FLAME = 1;
 
         public static readonly int VAL_MAINMENU_FONT_COLOR_R = 255;
         public static readonly int VAL_MAINMENU_FONT_COLOR_G = 255;

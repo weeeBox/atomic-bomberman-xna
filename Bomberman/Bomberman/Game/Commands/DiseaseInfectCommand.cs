@@ -23,7 +23,11 @@ namespace Bomberman.Game.Commands
             if (disease != null)
             {
                 Player player = GetPlayer(0);
-                player.TryInfect(diseaseIndex);
+                bool infected = player.TryInfect(diseaseIndex);
+                if (infected)
+                {
+                    console.AddLine("Infected: " + Diseases.FromIndex(diseaseIndex).name);
+                }
             }
         }
     }
