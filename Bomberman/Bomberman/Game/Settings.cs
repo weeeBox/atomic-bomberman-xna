@@ -48,8 +48,8 @@ namespace Bomberman.Game
         public static readonly int VAL_INTRO_TIME_LOGO = 5;
         public static readonly int VAL_INTRO_TIME_TITLE = 20;
 
-        public static readonly int VAL_PLAYER_SPEED = 290;
-        public static readonly int VAL_PLAYER_SPEED_ADD = 50;
+        public static readonly int VAL_PLAYER_SPEED = 200;
+        public static readonly int VAL_PLAYER_SPEED_ADD = 30;
         public static readonly int VAL_PLAYER_SPEED_MOLASSES = 100;
         public static readonly int VAL_PLAYER_SPEED_CRACK = 400;
         public static readonly int VAL_PLAYER_SPEED_CRACK_ADD = 200;
@@ -68,7 +68,7 @@ namespace Bomberman.Game
         public static readonly int VAL_DOUBLECLICK_TIME = 100;
 
         public static readonly int VAL_FUZE_TIME_NORMAL = 2000;
-        public static readonly int VAL_FUZE_TIME_SHORT = 1000;
+        public static readonly int VAL_FUZE_TIME_SHORT = 500;
         public static readonly int VAL_FUZE_TIME_DUD_MIN = 6000;
         public static readonly int VAL_FUZE_TIME_DUD_ADD = 10000;
         public static readonly int VAL_TIME_FLAME_TRIGGER = 20;

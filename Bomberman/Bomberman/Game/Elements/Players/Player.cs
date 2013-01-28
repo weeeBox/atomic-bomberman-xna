@@ -12,13 +12,12 @@ using BomberEngine.Util;
 namespace Bomberman.Game.Elements.Players
 {
     public class Player : MovableCell, PlayerInputListener
-    {   
+    {
         private int index;
 
         private bool alive;
 
         private int bombRadius;
-        private float bombTimeout;
         private int triggerBombsCount;
 
         private PlayerInput input;
@@ -31,7 +30,7 @@ namespace Bomberman.Game.Elements.Players
 
         /* Kicked/Punched bombs */
         private List<Bomb> m_thrownBombs;
-        
+
         public Player(int index, PlayerInput input)
             : base(0, 0)
         {
@@ -69,40 +68,40 @@ namespace Bomberman.Game.Elements.Players
             switch (action)
             {
                 case PlayerAction.Up:
-                {
-                    SetMoveDirection(Direction.UP);
-                    break;
-                }
+                    {
+                        SetMoveDirection(Direction.UP);
+                        break;
+                    }
 
                 case PlayerAction.Down:
-                {
-                    SetMoveDirection(Direction.DOWN);
-                    break;
-                }
+                    {
+                        SetMoveDirection(Direction.DOWN);
+                        break;
+                    }
 
                 case PlayerAction.Left:
-                {
-                    SetMoveDirection(Direction.LEFT);
-                    break;
-                }
+                    {
+                        SetMoveDirection(Direction.LEFT);
+                        break;
+                    }
 
                 case PlayerAction.Right:
-                {
-                    SetMoveDirection(Direction.RIGHT);
-                    break;
-                }
+                    {
+                        SetMoveDirection(Direction.RIGHT);
+                        break;
+                    }
 
                 case PlayerAction.Bomb:
-                {   
-                    TryAction();
-                    break;
-                }
+                    {
+                        TryAction();
+                        break;
+                    }
 
                 case PlayerAction.Special:
-                {
-                    TrySpecialAction();
-                    break;
-                }
+                    {
+                        TrySpecialAction();
+                        break;
+                    }
             }
         }
 
@@ -146,7 +145,7 @@ namespace Bomberman.Game.Elements.Players
         }
 
         public override void OnHitObstacle(FieldCell obstacle)
-        {   
+        {
         }
 
         protected override void OnCellChanged(int oldCx, int oldCy)
@@ -225,74 +224,74 @@ namespace Bomberman.Game.Elements.Players
             switch (powerupIndex)
             {
                 case Powerups.Bomb:
-                {
-                    bombs.IncMaxActiveCount();
-
-                    if (HasTrigger())
                     {
-                        ++triggerBombsCount;
+                        bombs.IncMaxActiveCount();
+
+                        if (HasTrigger())
+                        {
+                            ++triggerBombsCount;
+                        }
+
+                        break;
                     }
 
-                    break;
-                }
-
                 case Powerups.Speed:
-                {
-                    SetSpeed(CalcPlayerSpeed());
-                    break;
-                }
+                    {
+                        SetSpeed(CalcPlayerSpeed());
+                        break;
+                    }
 
                 case Powerups.Flame:
                 case Powerups.GoldFlame:
-                {
-                    bombRadius = CalcBombRadius();
-                    break;
-                }
+                    {
+                        bombRadius = CalcBombRadius();
+                        break;
+                    }
 
                 // Trigger will drop Jelly and Boxing Glove
                 case Powerups.Trigger:
-                {
-                    triggerBombsCount = bombs.GetMaxActiveCount();
+                    {
+                        triggerBombsCount = bombs.GetMaxActiveCount();
 
-                    TryGivePowerupBack(Powerups.Jelly);
-                    TryGivePowerupBack(Powerups.Punch);
-                    break;
-                }
+                        TryGivePowerupBack(Powerups.Jelly);
+                        TryGivePowerupBack(Powerups.Punch);
+                        break;
+                    }
 
                 // Jelly will drop Trigger
                 // Boxing Glove will drop Trigger
                 case Powerups.Jelly:
                 case Powerups.Punch:
-                {
-                    TryGivePowerupBack(Powerups.Trigger);
-                    break;
-                }
+                    {
+                        TryGivePowerupBack(Powerups.Trigger);
+                        break;
+                    }
 
                 // Blue Hand will drop Spooge
                 case Powerups.Grab:
-                {
-                    TryGivePowerupBack(Powerups.Spooger);
-                    break;
-                }
+                    {
+                        TryGivePowerupBack(Powerups.Spooger);
+                        break;
+                    }
 
                 // Spooge will drop Blue Hand
                 case Powerups.Spooger:
-                {
-                    TryGivePowerupBack(Powerups.Grab);
-                    break;
-                }
+                    {
+                        TryGivePowerupBack(Powerups.Grab);
+                        break;
+                    }
 
                 case Powerups.Disease:
-                {
-                    InfectRandom(1);
-                    break;
-                }
+                    {
+                        InfectRandom(1);
+                        break;
+                    }
 
                 case Powerups.Ebola:
-                {
-                    InfectRandom(3);
-                    break;
-                }
+                    {
+                        InfectRandom(3);
+                        break;
+                    }
             }
 
             return true;
@@ -384,11 +383,21 @@ namespace Bomberman.Game.Elements.Players
             return diseases.IsInfected(Diseases.POOPS);
         }
 
+        private bool IsInfectedShortFuze()
+        {
+            return diseases.IsInfected(Diseases.SHORTFUZE);
+        }
+
+        private bool IsInfectedShortFlame()
+        {
+            return diseases.IsInfected(Diseases.SHORTFLAME);
+        }
+
         private int CalcPlayerSpeed()
         {
             int speedBase = Settings.Get(Settings.VAL_PLAYER_SPEED);
             int speedAdd = Settings.Get(Settings.VAL_PLAYER_SPEED_ADD);
-            return speedBase  + speedAdd * powerups.GetCount(Powerups.Speed);
+            return speedBase + speedAdd * powerups.GetCount(Powerups.Speed);
         }
 
         private int CalcBombsCount()
@@ -422,7 +431,6 @@ namespace Bomberman.Game.Elements.Players
             bombs = new BombList(this, maxBombs);
             bombs.SetMaxActiveCount(CalcBombsCount());
 
-            bombTimeout = CalcBombTimeout();
             bombRadius = CalcBombRadius();
         }
 
@@ -466,12 +474,12 @@ namespace Bomberman.Game.Elements.Players
         {
             return alive;
         }
-        
+
         public void TryAction()
         {
             bool bombSet = TryBomb();
             if (!bombSet)
-            {   
+            {
                 if (HasSpooger())
                 {
                     TrySpooger();
@@ -501,7 +509,9 @@ namespace Bomberman.Game.Elements.Players
 
         public float GetBombTimeout()
         {
-            return bombTimeout;
+            int timeout = IsInfectedShortFuze() ? Settings.Get(Settings.VAL_FUZE_TIME_SHORT) :
+                                                  Settings.Get(Settings.VAL_FUZE_TIME_NORMAL);
+            return timeout * 0.001f;
         }
 
         public int GetIndex()
@@ -550,7 +560,7 @@ namespace Bomberman.Game.Elements.Players
         }
 
         private void RemoveThrownBomb(Bomb bomb)
-        {   
+        {
             bool removed = m_thrownBombs.Remove(bomb);
             Debug.Assert(removed);
         }
