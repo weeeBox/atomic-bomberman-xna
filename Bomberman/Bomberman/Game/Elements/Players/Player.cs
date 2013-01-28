@@ -377,17 +377,27 @@ namespace Bomberman.Game.Elements.Players
 
         private bool IsInfectedPoops()
         {
-            return diseases.IsInfected(Diseases.POOPS);
+            return IsInfected(Diseases.POOPS);
         }
 
         private bool IsInfectedShortFuze()
         {
-            return diseases.IsInfected(Diseases.SHORTFUZE);
+            return IsInfected(Diseases.SHORTFUZE);
         }
 
         private bool IsInfectedShortFlame()
         {
-            return diseases.IsInfected(Diseases.SHORTFLAME);
+            return IsInfected(Diseases.SHORTFLAME);
+        }
+
+        private bool IsInfectedConstipation()
+        {
+            return IsInfected(Diseases.CONSTIPATION);
+        }
+
+        private bool IsInfected(Diseases disease)
+        {
+            return diseases.IsInfected(disease);
         }
 
         private int CalcPlayerSpeed()
@@ -491,6 +501,16 @@ namespace Bomberman.Game.Elements.Players
             {
                 TryPunchBomb();
             }
+        }
+
+        private Bomb GetNextBomb()
+        {
+            if (IsInfectedConstipation())
+            {
+                return null;
+            }
+
+            return bombs.GetNextBomb();
         }
 
         public float GetBombTimeout()
@@ -629,7 +649,7 @@ namespace Bomberman.Game.Elements.Players
             FieldCell underlyingCell;
             while ((underlyingCell = field.GetCell(uCx, uCy)) != null && !underlyingCell.IsObstacle())
             {
-                Bomb nextBomb = bombs.GetNextBomb();
+                Bomb nextBomb = GetNextBomb();
                 if (nextBomb == null)
                 {
                     break; // no bombs to apply
@@ -663,7 +683,7 @@ namespace Bomberman.Game.Elements.Players
             FieldCell cell = GetField().GetCell(cx, cy);
             if (!cell.IsObstacle())
             {
-                Bomb bomb = bombs.GetNextBomb();
+                Bomb bomb = GetNextBomb();
                 if (bomb != null)
                 {
                     GetField().SetBomb(bomb);
@@ -701,6 +721,20 @@ namespace Bomberman.Game.Elements.Players
             return false;
         }
 
+        private bool TryThrowAllBombs()
+        {
+            int bombsCount = 0;
+
+            Bomb nextBomb;
+            while ((nextBomb = GetNextBomb()) != null)
+            {
+                AddThrownBomb(nextBomb);
+                nextBomb.Throw();
+            }
+
+            return bombsCount > 0;
+        }
+        
         private bool TryPunchBomb()
         {
             FieldCell cell = NearCellDir(direction);
@@ -719,6 +753,11 @@ namespace Bomberman.Game.Elements.Players
         {
             if (IsInfectedPoops())
             {
+                if (HasGrab())
+                {
+                    return TryThrowAllBombs();
+                }
+
                 return TryBomb();
             }
 
