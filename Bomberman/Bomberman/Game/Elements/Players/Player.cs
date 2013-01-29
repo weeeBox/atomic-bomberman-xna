@@ -11,7 +11,7 @@ using BomberEngine.Util;
 
 namespace Bomberman.Game.Elements.Players
 {
-    public class Player : MovableCell, PlayerInputListener
+    public class Player : MovableCell
     {
         private int index;
 
@@ -36,7 +36,7 @@ namespace Bomberman.Game.Elements.Players
         {
             this.index = index;
             this.input = input;
-            input.SetListener(this);
+            input.player = this;
 
             alive = true;
 

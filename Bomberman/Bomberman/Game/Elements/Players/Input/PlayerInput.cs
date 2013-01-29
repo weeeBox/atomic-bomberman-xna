@@ -9,7 +9,7 @@ namespace Bomberman.Game.Elements.Players.Input
 {
     public abstract class PlayerInput
     {
-        private PlayerInputListener listener;
+        public Player player;
 
         private bool[] actionsPressedState;
         private int pressedCount;
@@ -27,9 +27,9 @@ namespace Bomberman.Game.Elements.Players.Input
             actionsPressedState[index] = true;
             ++pressedCount;
 
-            if (listener != null)
+            if (player != null)
             {
-                listener.OnActionPressed(this, action);
+                player.OnActionPressed(this, action);
             }
         }
 
@@ -42,9 +42,9 @@ namespace Bomberman.Game.Elements.Players.Input
             actionsPressedState[index] = false;
             --pressedCount;
 
-            if (listener != null)
+            if (player != null)
             {
-                listener.OnActionReleased(this, action);
+                player.OnActionReleased(this, action);
             }
         }
 
@@ -59,9 +59,9 @@ namespace Bomberman.Game.Elements.Players.Input
                         Debug.Assert(pressedCount > 0, "Invalid pressed counter: " + pressedCount);
                         --pressedCount;
 
-                        if (listener != null)
+                        if (player != null)
                         {
-                            listener.OnActionReleased(this, GetAction(i));
+                            player.OnActionReleased(this, GetAction(i));
                         }
                         actionsPressedState[i] = false;
                     }
@@ -79,16 +79,6 @@ namespace Bomberman.Game.Elements.Players.Input
         public int GetPressedActionCount()
         {
             return pressedCount;
-        }
-
-        public PlayerInputListener GetListener()
-        {
-            return listener;
-        }
-
-        public void SetListener(PlayerInputListener listener)
-        {
-            this.listener = listener;
         }
 
         private int GetIndex(PlayerAction action)
