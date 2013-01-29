@@ -7,11 +7,11 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Bomberman.Game.Elements.Players.Input
 {
-    public class KeyboardPlayerInput : PlayerInput, KeyboardListener
+    public class PlayerKeyboardInput : PlayerInput, KeyboardListener
     {
         private Dictionary<Keys, PlayerAction> keysMap;
 
-        public KeyboardPlayerInput()
+        public PlayerKeyboardInput()
         {
             keysMap = new Dictionary<Keys, PlayerAction>();
         }

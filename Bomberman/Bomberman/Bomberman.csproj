@@ -142,7 +142,7 @@
     <Compile Include="Game\Elements\Fields\FieldDrawable.cs" />
     <Compile Include="Game\Elements\Cells\Bomb.cs" />
     <Compile Include="Game\Elements\Players\BombList.cs" />
-    <Compile Include="Game\Elements\Players\Input\KeyboardPlayerInput.cs" />
+    <Compile Include="Game\Elements\Players\Input\PlayerKeyboardInput.cs" />
     <Compile Include="Game\Elements\Players\Player.cs" />
     <Compile Include="Game\Elements\Players\PlayerAction.cs" />
     <Compile Include="Game\Elements\Players\PlayerList.cs" />

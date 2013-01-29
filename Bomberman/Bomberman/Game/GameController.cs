@@ -32,7 +32,7 @@ namespace Bomberman.Game
 
         private void InitPlayers()
         {
-            KeyboardPlayerInput keyboardInput1 = new KeyboardPlayerInput();
+            PlayerKeyboardInput keyboardInput1 = new PlayerKeyboardInput();
             keyboardInput1.Map(Keys.W, PlayerAction.Up);
             keyboardInput1.Map(Keys.A, PlayerAction.Left);
             keyboardInput1.Map(Keys.S, PlayerAction.Down);
@@ -44,7 +44,7 @@ namespace Bomberman.Game
             Player player1 = new Player(0, keyboardInput1);
             game.AddPlayer(player1);
 
-            KeyboardPlayerInput keyboardInput2 = new KeyboardPlayerInput();
+            PlayerKeyboardInput keyboardInput2 = new PlayerKeyboardInput();
             keyboardInput2.Map(Keys.Up, PlayerAction.Up);
             keyboardInput2.Map(Keys.Left, PlayerAction.Left);
             keyboardInput2.Map(Keys.Down, PlayerAction.Down);
