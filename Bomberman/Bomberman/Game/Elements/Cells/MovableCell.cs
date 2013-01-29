@@ -31,7 +31,7 @@ namespace Bomberman.Game.Elements.Cells
             }
         }
 
-        protected virtual void UpdateMoving(float delta)
+        private void UpdateMoving(float delta)
         {
             float oldPx = px;
             float oldPy = py;
@@ -195,13 +195,13 @@ namespace Bomberman.Game.Elements.Cells
             }
         }
 
-        protected void MoveToTargetPx(float delta)
+        private void MoveToTargetPx(float delta)
         {
             float xOffset = Util.TargetPxOffset(px);
             MoveX(xOffset < 0 ? Math.Max(xOffset, -delta * m_speed) : Math.Min(xOffset, delta * m_speed));
         }
 
-        protected void MoveToTargetPy(float delta)
+        private void MoveToTargetPy(float delta)
         {
             float yOffset = Util.TargetPyOffset(py);
             MoveY(yOffset < 0 ? Math.Max(yOffset, -delta * m_speed) : Math.Min(yOffset, delta * m_speed));
