@@ -44,14 +44,16 @@ namespace Bomberman.Game
             Player player1 = new Player(0, keyboardInput1);
             game.AddPlayer(player1);
 
-            PlayerKeyboardInput keyboardInput2 = new PlayerKeyboardInput();
-            keyboardInput2.Map(Keys.Up, PlayerAction.Up);
-            keyboardInput2.Map(Keys.Left, PlayerAction.Left);
-            keyboardInput2.Map(Keys.Down, PlayerAction.Down);
-            keyboardInput2.Map(Keys.Right, PlayerAction.Right);
-            gameScene.AddKeyboardListener(keyboardInput2);
+            PlayerGamePadInput gamePadInput = new PlayerGamePadInput(0);
+            gamePadInput.Map(Buttons.LeftThumbstickUp, PlayerAction.Up);
+            gamePadInput.Map(Buttons.LeftThumbstickLeft, PlayerAction.Left);
+            gamePadInput.Map(Buttons.LeftThumbstickDown, PlayerAction.Down);
+            gamePadInput.Map(Buttons.LeftThumbstickRight, PlayerAction.Right);
+            gamePadInput.Map(Buttons.A, PlayerAction.Bomb);
+            gamePadInput.Map(Buttons.B, PlayerAction.Special);
+            gameScene.AddGamePadListener(gamePadInput);
 
-            Player player2 = new Player(1, keyboardInput2);
+            Player player2 = new Player(1, gamePadInput);
             game.AddPlayer(player2);
 
             cheats = new GameCheats(game);

@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\GameObject.cs" />
+    <Compile Include="Core\Input\GamePadListenerList.cs" />
     <Compile Include="Core\NullUpdatable.cs" />
     <Compile Include="Debugging\Commands\ConsoleCommand.cs" />
     <Compile Include="Debugging\Commands\ConsoleCommandRegister.cs" />

@@ -9,16 +9,16 @@ namespace Bomberman.Game.Elements.Players.Input
 {
     public class PlayerKeyboardInput : PlayerInput, KeyboardListener
     {
-        private Dictionary<Keys, PlayerAction> keysMap;
+        private Dictionary<Keys, PlayerAction> actionLookup;
 
         public PlayerKeyboardInput()
         {
-            keysMap = new Dictionary<Keys, PlayerAction>();
+            actionLookup = new Dictionary<Keys, PlayerAction>();
         }
 
         public void Map(Keys key, PlayerAction action)
         {
-            keysMap.Add(key, action);
+            actionLookup.Add(key, action);
         }
 
         public void KeyPressed(Keys key)
@@ -41,9 +41,9 @@ namespace Bomberman.Game.Elements.Players.Input
 
         private PlayerAction GetAction(Keys key)
         {
-            if (keysMap.ContainsKey(key))
+            if (actionLookup.ContainsKey(key))
             {
-                return keysMap[key];
+                return actionLookup[key];
             }
             return PlayerAction.Count;
         }

@@ -18,6 +18,7 @@ namespace BomberEngine.Game
         private DrawableList drawableList;
 
         private KeyboardListenerList keyboardListeners;
+        private GamePadListenerList gamePadListeners;
 
         public ScenesManager sceneManager;
 
@@ -39,6 +40,7 @@ namespace BomberEngine.Game
             updatablesList = new UpdatableList();
             drawableList = new DrawableList();
             keyboardListeners = new KeyboardListenerList();
+            gamePadListeners = new GamePadListenerList();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -239,6 +241,32 @@ namespace BomberEngine.Game
         public bool RemoveKeyboardListener(KeyboardListener listener)
         {
             return keyboardListeners.Remove(listener);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region GamePadListeners
+
+        public bool AddGamePadListener(GamePadListener listener)
+        {
+            return gamePadListeners.Add(listener);
+        }
+
+        public bool RemoveGamePadListener(GamePadListener listener)
+        {
+            return gamePadListeners.Remove(listener);
+        }
+
+        public override void ButtonPressed(ButtonEvent e)
+        {
+            gamePadListeners.ButtonPressed(e);
+        }
+
+        public override void ButtonReleased(ButtonEvent e)
+        {
+            gamePadListeners.ButtonReleased(e);
         }
 
         #endregion
