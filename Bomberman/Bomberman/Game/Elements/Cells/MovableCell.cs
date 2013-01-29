@@ -35,8 +35,7 @@ namespace Bomberman.Game.Elements.Cells
         {
             float oldPx = px;
             float oldPy = py;
-
-            Direction direction = GetDirection();
+            
             switch (direction)
             {
                 case Direction.UP:
@@ -228,16 +227,6 @@ namespace Bomberman.Game.Elements.Cells
             m_moving = false;
         }
 
-        public Direction GetDirection()
-        {
-            return m_direction;
-        }
-
-        public Direction GetOldDirection()
-        {
-            return m_oldDirection;
-        }
-
         public void SetDirection(Direction newDirection)
         {   
             m_oldDirection = m_direction;
@@ -329,6 +318,11 @@ namespace Bomberman.Game.Elements.Cells
         public Direction direction
         {
             get { return m_direction; }
+        }
+
+        public Direction oldDirection
+        {
+            get { return m_oldDirection; }
         }
 
         public float speed

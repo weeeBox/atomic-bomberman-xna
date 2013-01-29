@@ -551,7 +551,7 @@ namespace Bomberman.Game.Elements.Fields
         {
             if (player.HasKick())
             {
-                Direction direction = player.GetDirection();
+                Direction direction = player.direction;
 
                 if (bomb.moving)
                 {
@@ -606,7 +606,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private static void AdjustPosition(MovableCell movable, FieldCell obstacle)
         {
-            switch (movable.GetDirection())
+            switch (movable.direction)
             {
                 case Direction.UP:
                     {

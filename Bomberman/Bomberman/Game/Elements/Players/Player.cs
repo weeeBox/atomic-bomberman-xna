@@ -609,7 +609,6 @@ namespace Bomberman.Game.Elements.Players
                 return false; // you only can use spooger when standing at your own bomb
             }
 
-            Direction direction = GetDirection();
             switch (direction)
             {
                 case Direction.UP:

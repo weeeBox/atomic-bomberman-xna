@@ -195,7 +195,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private TextureImage TempFindPlayerImage(Player player)
         {
-            Direction direction = player.GetDirection();
+            Direction direction = player.direction;
             if (player.IsHoldingBomb())
             {
                 return playerGrabImages[direction];
