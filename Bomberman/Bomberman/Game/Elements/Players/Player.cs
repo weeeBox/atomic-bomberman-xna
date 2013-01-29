@@ -59,6 +59,8 @@ namespace Bomberman.Game.Elements.Players
             {
                 m_thrownBombs[bombIndex].Update(delta);
             }
+
+            diseases.Update(delta);
         }
 
         public void OnActionPressed(PlayerInput playerInput, PlayerAction action)
@@ -156,9 +158,17 @@ namespace Bomberman.Game.Elements.Players
             TryPoops();
         }
 
-        private void OnDiseasesChanged()
+        public void OnInfected(Diseases desease)
         {
-            TryPoops();
+            if (desease == Diseases.POOPS)
+            {
+                TryPoops();
+            }
+        }
+
+        public void OnCured(Diseases desease)
+        {
+
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -297,29 +307,6 @@ namespace Bomberman.Game.Elements.Players
         public void InfectRandom(int count)
         {
             diseases.InfectRandom(count);
-            OnDiseasesChanged();
-        }
-
-        public bool TryInfect(int diseaseIndex)
-        {
-            bool succeed = diseases.TryInfect(diseaseIndex);
-            if (succeed)
-            {
-                OnDiseasesChanged();
-            }
-
-            return succeed;
-        }
-
-        public bool TryInfect(Diseases disease)
-        {
-            bool succeed = diseases.TryInfect(disease);
-            if (succeed)
-            {
-                OnDiseasesChanged();
-            }
-
-            return succeed;
         }
 
         public bool HasKick()
@@ -438,7 +425,7 @@ namespace Bomberman.Game.Elements.Players
 
         private void InitDiseases()
         {
-            diseases = new DiseaseList();
+            diseases = new DiseaseList(this);
         }
 
         #endregion
@@ -762,6 +749,11 @@ namespace Bomberman.Game.Elements.Players
             }
 
             return false;
+        }
+
+        public bool TryInfect(int diseaseIndex)
+        {
+            return diseases.TryInfect(diseaseIndex);
         }
 
         #endregion

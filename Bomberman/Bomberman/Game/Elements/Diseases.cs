@@ -7,13 +7,15 @@ namespace Bomberman.Game.Elements
 {
     public class Diseases
     {
-        public int m_index;
-        public String m_name;
+        private int m_index;
+        private String m_name;
+        private float m_duration;
 
-        private Diseases(String name, int index)
+        private Diseases(String name, int index, float duration)
         {
             this.m_index = index;
             this.m_name = name;
+            this.m_duration = duration;
         }
 
         public int index
@@ -26,19 +28,24 @@ namespace Bomberman.Game.Elements
             get { return m_name; }
         }
 
-        public static readonly Diseases MOLASSES = new Diseases("Molasses", 0);         // speed down
-        public static readonly Diseases CRACK = new Diseases("Crack", 1);               // speed up
-        public static readonly Diseases CONSTIPATION = new Diseases("Constipation", 2); // player can't drop bombs
-        public static readonly Diseases POOPS = new Diseases("Poops", 3);               // player drops all bombs he has got
-        public static readonly Diseases SHORTFLAME = new Diseases("Short Flame", 4);    // flame length = 1
-        public static readonly Diseases CRACKPOOPS = new Diseases("Crack Poops", 5);    // CRACK + POOPS
-        public static readonly Diseases SHORTFUZE = new Diseases("Short Fuze", 6);      // shorter fuze time
-        public static readonly Diseases SWAP = new Diseases("Swap", 7);                 // two players swap
-        public static readonly Diseases REVERSED = new Diseases("Reversed", 8);         // reversed controls
-        public static readonly Diseases LEPROSY = new Diseases("Leprosy", 9);           // Lepra ???
-        public static readonly Diseases INVISIBLE = new Diseases("Invisible", 10);      // player is invisible
-        public static readonly Diseases DUDS = new Diseases("Duds", 11);                // player drops only duds
-        public static readonly Diseases HYPERSWAP = new Diseases("Hyperswap", 12);      // all players swap
+        public float duration
+        {
+            get { return m_duration; }
+        }
+
+        public static readonly Diseases MOLASSES = new Diseases("Molasses", 0, 15.0f);         // speed down
+        public static readonly Diseases CRACK = new Diseases("Crack", 1, 15.0f);               // speed up
+        public static readonly Diseases CONSTIPATION = new Diseases("Constipation", 2, 15.0f); // player can't drop bombs
+        public static readonly Diseases POOPS = new Diseases("Poops", 3, 15.0f);               // player drops all bombs he has got
+        public static readonly Diseases SHORTFLAME = new Diseases("Short Flame", 4, 15.0f);    // flame length = 1
+        public static readonly Diseases CRACKPOOPS = new Diseases("Crack Poops", 5, 15.0f);    // CRACK + POOPS
+        public static readonly Diseases SHORTFUZE = new Diseases("Short Fuze", 6, 15.0f);      // shorter fuze time
+        public static readonly Diseases SWAP = new Diseases("Swap", 7, 0.0f);                  // two players swap
+        public static readonly Diseases REVERSED = new Diseases("Reversed", 8, 15.0f);         // reversed controls
+        public static readonly Diseases LEPROSY = new Diseases("Leprosy", 9, 15.0f);           // Lepra ???
+        public static readonly Diseases INVISIBLE = new Diseases("Invisible", 10, 15.0f);      // player is invisible
+        public static readonly Diseases DUDS = new Diseases("Duds", 11, 15.0f);                // player drops only duds
+        public static readonly Diseases HYPERSWAP = new Diseases("Hyperswap", 12, 0.0f);       // all players swap
 
         public static readonly int Count = 13;
 
