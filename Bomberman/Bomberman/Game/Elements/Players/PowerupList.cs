@@ -52,6 +52,11 @@ namespace Bomberman.Game.Elements.Players
                 return true;
             }
 
+            if (count == 0)
+            {
+                return true;
+            }
+
             return false;
         }
     }

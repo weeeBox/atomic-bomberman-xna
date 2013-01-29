@@ -18,6 +18,8 @@ namespace Bomberman.Game.Elements.Fields
         private int cellWidth;
         private int cellHeight;
 
+        private bool blink;
+
         public FieldDrawable(Field field, int x, int y, int width, int height)
             : base(x, y, width, height)
         {
@@ -132,7 +134,19 @@ namespace Bomberman.Game.Elements.Fields
                 context.DrawRect(player.GetCx() * cellWidth, player.GetCy() * cellHeight, cellWidth, cellHeight, Color.White);
                 context.DrawRect(drawX, drawY, cellWidth, cellHeight, Color.Yellow);
 
-                context.DrawImage(image, drawX, drawY - image.GetHeight() + cellHeight);
+                if (player.IsInfected())
+                {
+                    blink = !blink;
+                    if (blink)
+                    {
+                        context.DrawImage(image, drawX, drawY - image.GetHeight() + cellHeight);
+                    }
+                }
+                else
+                {
+                    context.DrawImage(image, drawX, drawY - image.GetHeight() + cellHeight);
+                }
+
 
                 Bomb bomb = player.bombInHands;
                 if (bomb != null)

@@ -15,6 +15,7 @@ namespace Bomberman.Game.Elements.Players
         private bool[] oldFlags;
 
         private float[] remains;
+        private int m_activeCount;
 
         private int[] randomIndices;
 
@@ -117,7 +118,13 @@ namespace Bomberman.Game.Elements.Players
                 TryInfect(Diseases.POOPS);
             }
 
-            return !wasInfected && flags[index];
+            if (!wasInfected && flags[index])
+            {
+                ++m_activeCount;
+                return true;
+            }
+
+            return false;
         }
 
         public bool TryInfect(int diseaseIndex)
@@ -134,7 +141,13 @@ namespace Bomberman.Game.Elements.Players
             int index = disease.index;
             bool wasInfected = flags[index];
             flags[index] = false;
-            return wasInfected;
+            if (wasInfected)
+            {
+                --m_activeCount;
+                return true;
+            }
+
+            return false;
         }
 
         public bool IsInfected(Diseases disease)
@@ -165,6 +178,11 @@ namespace Bomberman.Game.Elements.Players
 
                 oldFlags[i] = flag;
             }
+        }
+
+        public int activeCount
+        {
+            get { return m_activeCount; }
         }
     }
 }

@@ -540,6 +540,11 @@ namespace Bomberman.Game.Elements.Players
             return m_bombInHands != null;
         }
 
+        public bool IsInfected()
+        {
+            return diseases.activeCount > 0;
+        }
+
         public Bomb bombInHands
         {
             get { return m_bombInHands; }
