@@ -408,9 +408,9 @@ namespace Bomberman.Game.Elements.Fields
             return cells.GetHeight();
         }
 
-        public void MoveablePosChanged(MovableCell movable, float oldPx, float oldPy)
+        public void MoveablePosChanged(MovableCell movable)
         {
-            ProcessCollisions(movable, oldPx, oldPy);
+            ProcessCollisions(movable);
         }
 
         public void MovableCellChanged(MovableCell movable, int oldCx, int oldCy)
@@ -424,12 +424,12 @@ namespace Bomberman.Game.Elements.Fields
 
         }
 
-        private void ProcessCollisions(MovableCell movable, float oldPx, float oldPy)
-        {
+        private void ProcessCollisions(MovableCell movable)
+        {   
             float px = movable.GetPx();
             float py = movable.GetPy();
-            float dx = px - oldPx;
-            float dy = py - oldPy;
+            float dx = movable.moveDx;
+            float dy = movable.moveDy;
 
             if (dx > 0)
             {
@@ -444,9 +444,9 @@ namespace Bomberman.Game.Elements.Fields
                     int cx = Util.Px2Cx(px) + 1;
                     int cy = Util.Py2Cy(py);
 
-                    ProcessCollision(movable, cx, cy - 1);
-                    ProcessCollision(movable, cx, cy);
-                    ProcessCollision(movable, cx, cy + 1);
+                    CheckCollision(movable, cx, cy - 1);
+                    CheckCollision(movable, cx, cy);
+                    CheckCollision(movable, cx, cy + 1);
                 }
             }
             else if (dx < 0)
@@ -462,9 +462,9 @@ namespace Bomberman.Game.Elements.Fields
                     int cx = Util.Px2Cx(px) - 1;
                     int cy = Util.Py2Cy(py);
 
-                    ProcessCollision(movable, cx, cy - 1);
-                    ProcessCollision(movable, cx, cy);
-                    ProcessCollision(movable, cx, cy + 1);
+                    CheckCollision(movable, cx, cy - 1);
+                    CheckCollision(movable, cx, cy);
+                    CheckCollision(movable, cx, cy + 1);
                 }
             }
 
@@ -481,9 +481,9 @@ namespace Bomberman.Game.Elements.Fields
                     int cx = Util.Px2Cx(px);
                     int cy = Util.Py2Cy(py) + 1;
 
-                    ProcessCollision(movable, cx - 1, cy);
-                    ProcessCollision(movable, cx, cy);
-                    ProcessCollision(movable, cx + 1, cy);
+                    CheckCollision(movable, cx - 1, cy);
+                    CheckCollision(movable, cx, cy);
+                    CheckCollision(movable, cx + 1, cy);
                 }
             }
             else if (dy < 0)
@@ -499,52 +499,61 @@ namespace Bomberman.Game.Elements.Fields
                     int cx = Util.Px2Cx(px);
                     int cy = Util.Py2Cy(py) - 1;
 
-                    ProcessCollision(movable, cx - 1, cy);
-                    ProcessCollision(movable, cx, cy);
-                    ProcessCollision(movable, cx + 1, cy);
+                    CheckCollision(movable, cx - 1, cy);
+                    CheckCollision(movable, cx, cy);
+                    CheckCollision(movable, cx + 1, cy);
                 }
             }
         }
 
-        private void ProcessCollision(MovableCell movable, int cx, int cy)
-        {
-            if (cx >= 0 && cx < GetWidth() && cy >= 0 && cy < GetHeight())
+        private bool CheckCollision(MovableCell movable, int cx, int cy)
+        {   
+            FieldCell cell = cells.Get(cx, cy);
+            if (cell == null)
             {
-                FieldCell cell = cells.Get(cx, cy);
+                return false; // wall
+            }
 
-                if (cell.IsObstacle())
+            if (cell.IsEmpty())
+            {
+                return false; // do not collide with empty cells
+            }
+
+            if (Collides(movable, cell))
+            {
+                return ProcessCollision(movable, cell);
+            }
+
+            return false;
+        }
+
+        private bool ProcessCollision(MovableCell movable, FieldCell cell)
+        {
+            if (cell.IsObstacle())
+            {   
+                if (movable.IsPlayer() && cell.IsBomb())
                 {
-                    if (Collides(movable, cell))
-                    {
-                        if (movable.IsPlayer() && cell.IsBomb())
-                        {
-                            ProcessCollision(movable.AsPlayer(), cell.AsBomb());
-                        }
-                        else
-                        {
-                            AdjustPosition(movable, cell);
-                            movable.OnHitObstacle(cell);
-                        }
-                    }
+                    ProcessCollision(movable.AsPlayer(), cell.AsBomb());
                 }
-                else if (cell.IsPowerup())
+                else
                 {
-                    if (Collides(movable, cell))
-                    {
-                        ProcessCollision(movable, cell.AsPowerup());
-                    }
-                }
-                else if (cell.IsFlame())
-                {
-                    if (Collides(movable, cell))
-                    {
-                        if (movable.IsBomb())
-                        {
-                            movable.AsBomb().Blow();
-                        }
-                    }
+                    MoveOutOfCollision(movable, cell);
+                    movable.OnHitObstacle(cell);
                 }
             }
+            else if (cell.IsPowerup())
+            {
+                ProcessCollision(movable, cell.AsPowerup());
+            }
+            else if (cell.IsFlame())
+            {
+                if (movable.IsBomb())
+                {
+                    movable.AsBomb().Blow();
+                }                
+            }
+
+            return false;
         }
 
         private void ProcessCollision(Player player, Bomb bomb)
@@ -555,7 +564,7 @@ namespace Bomberman.Game.Elements.Fields
 
                 if (bomb.moving)
                 {
-                    AdjustPosition(player, bomb);
+                    MoveOutOfCollision(player, bomb);
                     bomb.Kick(direction);
                 }
                 else
@@ -583,13 +592,13 @@ namespace Bomberman.Game.Elements.Fields
                         {
                             bomb.Kick(direction);
                         }
-                        AdjustPosition(player, bomb);
+                        MoveOutOfCollision(player, bomb);
                     }
                 }
             }
             else
             {
-                AdjustPosition(player, bomb);
+                MoveOutOfCollision(player, bomb);
                 player.OnHitObstacle(bomb);
             }
         }
@@ -604,31 +613,51 @@ namespace Bomberman.Game.Elements.Fields
             ClearCell(powerupCell.cx, powerupCell.cy);
         }
 
-        private static void AdjustPosition(MovableCell movable, FieldCell obstacle)
+        private bool MoveOutOfCollision(FieldCell a, FieldCell b)
         {
-            switch (movable.direction)
+            bool hadCollisiton = false;
+
+            float aMoveDx = a.moveDx;
+            float bMoveDx = b.moveDx;
+
+            float overlapX = Constant.CELL_WIDTH - MathHelper.Abs(a.px - b.px);
+            if (overlapX > 0 && (aMoveDx != 0 || bMoveDx != 0))
             {
-                case Direction.UP:
-                    {
-                        movable.SetPosY(obstacle.py + Constant.CELL_HEIGHT);
-                        break;
-                    }
-                case Direction.DOWN:
-                    {
-                        movable.SetPosY(obstacle.py - Constant.CELL_HEIGHT);
-                        break;
-                    }
-                case Direction.LEFT:
-                    {
-                        movable.SetPosX(obstacle.px + Constant.CELL_WIDTH);
-                        break;
-                    }
-                case Direction.RIGHT:
-                    {
-                        movable.SetPosX(obstacle.px - Constant.CELL_WIDTH);
-                        break;
-                    }
+                MovableCell ma = a.AsMovable();
+                MovableCell mb = b.AsMovable();
+
+                float moveA = Math.Abs(a.moveDx);
+                float moveB = Math.Abs(b.moveDx);
+                float kA = moveA / (moveA + moveB);
+                float kB = 1 - kA;
+
+                if (ma != null) ma.MoveBackX(kA * overlapX);
+                if (mb != null) mb.MoveBackX(kB * overlapX);
+
+                hadCollisiton = true;
             }
+
+            float aMoveDy = a.moveDy;
+            float bMoveDy = b.moveDy;
+
+            float overlapY = Constant.CELL_HEIGHT - MathHelper.Abs(a.py - b.py);
+            if (overlapY > 0 && (aMoveDy != 0 || bMoveDy != 0))
+            {
+                MovableCell ma = a.AsMovable();
+                MovableCell mb = b.AsMovable();
+
+                float moveA = Math.Abs(a.moveDy);
+                float moveB = Math.Abs(b.moveDy);
+                float kA = moveA / (moveA + moveB);
+                float kB = 1 - kA;
+
+                if (ma != null) ma.MoveBackY(kA * overlapY);
+                if (mb != null) mb.MoveBackY(kB * overlapY);
+
+                hadCollisiton = true;
+            }
+
+            return hadCollisiton;
         }
 
         private bool Collides(MovableCell a, FieldCell b)

@@ -118,28 +118,31 @@ namespace Bomberman.Game.Elements.Cells
             }
         }
 
-        protected override void OnPositionChanged(float oldPx, float oldPy)
+        protected override void OnPositionChanged()
         {
             if (IsNormal())
             {
-                base.OnPositionChanged(oldPx, oldPy);
+                base.OnPositionChanged();
             }
             else if (IsFlying())
             {
-                NormalizeFlyingPos(oldPx, oldPy);
+                NormalizeFlyingPos();
             }
         }
 
-        private void NormalizeFlyingPos(float oldPx, float oldPy)
+        private void NormalizeFlyingPos()
         {
-            if (px > oldPx) // moving right
+            float dx = moveDx;
+            float dy = moveDy;
+
+            if (dx > 0) // moving right
             {
                 if (px > GetField().GetMaxPx() + Constant.CELL_WIDTH_2)
                 {
                     SetPosX(GetField().GetMinPx() - Constant.CELL_WIDTH_2);
                 }
             }
-            else if (px < oldPx) // moving left
+            else if (dx < 0) // moving left
             {
                 if (px < GetField().GetMinPx() - Constant.CELL_WIDTH_2)
                 {
@@ -147,14 +150,14 @@ namespace Bomberman.Game.Elements.Cells
                 }
             }
 
-            if (py > oldPy) // moving down
+            if (dy > 0) // moving down
             {
                 if (py > GetField().GetMaxPy() + Constant.CELL_HEIGHT_2)
                 {
                     SetPosY(GetField().GetMinPy() - Constant.CELL_HEIGHT_2);
                 }
             }
-            else if (py < oldPy) // moving up
+            else if (dy < 0) // moving up
             {
                 if (py < GetField().GetMinPy() - Constant.CELL_HEIGHT_2)
                 {

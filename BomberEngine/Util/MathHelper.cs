@@ -5,9 +5,29 @@ using System.Text;
 
 namespace BomberEngine.Util
 {
-    public class MathHelper
+    public sealed class MathHelper
     {
         private static Random random;
+
+        public static int Sign(float value)
+        {
+            return value > 0 ? 1 : (value < 0 ? -1 : 0);
+        }
+
+        public static int Sign(int value)
+        {
+            return value > 0 ? 1 : (value < 0 ? -1 : 0);
+        }
+
+        public static float Abs(float value)
+        {
+            return value < 0 ? -value : value;
+        }
+
+        public static int Abs(int value)
+        {
+            return value < 0 ? -value : value;
+        }
 
         public static int NextInt(int maxValue)
         {

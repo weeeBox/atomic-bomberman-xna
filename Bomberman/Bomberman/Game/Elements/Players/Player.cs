@@ -71,25 +71,25 @@ namespace Bomberman.Game.Elements.Players
             {
                 case PlayerAction.Up:
                     {
-                        SetMoveDirection(Direction.UP);
+                        StartMovingToDirection(Direction.UP);
                         break;
                     }
 
                 case PlayerAction.Down:
                     {
-                        SetMoveDirection(Direction.DOWN);
+                        StartMovingToDirection(Direction.DOWN);
                         break;
                     }
 
                 case PlayerAction.Left:
                     {
-                        SetMoveDirection(Direction.LEFT);
+                        StartMovingToDirection(Direction.LEFT);
                         break;
                     }
 
                 case PlayerAction.Right:
                     {
-                        SetMoveDirection(Direction.RIGHT);
+                        StartMovingToDirection(Direction.RIGHT);
                         break;
                     }
 
@@ -109,25 +109,40 @@ namespace Bomberman.Game.Elements.Players
 
         public void OnActionReleased(PlayerInput playerInput, PlayerAction action)
         {
-            StopMoving();
+            switch (action)
+            {
+                case PlayerAction.Left:
+                    StopMovingToDirection(Direction.LEFT);
+                    break;
+                case PlayerAction.Right:
+                    StopMovingToDirection(Direction.RIGHT);
+                    break;
+                case PlayerAction.Up:
+                    StopMovingToDirection(Direction.UP);
+                    break;
+                case PlayerAction.Down:
+                    StopMovingToDirection(Direction.DOWN);
+                    break;
+            }
 
             if (playerInput.GetPressedActionCount() > 0)
             {
                 if (playerInput.IsActionPressed(PlayerAction.Up))
                 {
-                    SetMoveDirection(Direction.UP);
+                    StartMovingToDirection(Direction.UP);
                 }
                 else if (playerInput.IsActionPressed(PlayerAction.Down))
                 {
-                    SetMoveDirection(Direction.DOWN);
+                    StartMovingToDirection(Direction.DOWN);
                 }
-                else if (playerInput.IsActionPressed(PlayerAction.Left))
+
+                if (playerInput.IsActionPressed(PlayerAction.Left))
                 {
-                    SetMoveDirection(Direction.LEFT);
+                    StartMovingToDirection(Direction.LEFT);
                 }
                 else if (playerInput.IsActionPressed(PlayerAction.Right))
                 {
-                    SetMoveDirection(Direction.RIGHT);
+                    StartMovingToDirection(Direction.RIGHT);
                 }
             }
 
@@ -135,6 +150,16 @@ namespace Bomberman.Game.Elements.Players
             {
                 TryThrowBomb();
             }
+        }
+
+        private void StartMovingToDirection(Direction dir)
+        {
+            SetMoveDirection(dir);
+        }
+
+        private void StopMovingToDirection(Direction dir)
+        {
+            StopMoving();
         }
 
         public void OnActonsReleased(PlayerInput playerInput)

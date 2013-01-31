@@ -19,6 +19,10 @@ namespace Bomberman.Game.Elements.Fields
         private float m_px;
         private float m_py;
 
+        /* Last move distance */
+        private float m_moveDx;
+        private float m_moveDy;
+
         public FieldCell(int cx, int cy)
         {
             SetCell(cx, cy);
@@ -98,6 +102,16 @@ namespace Bomberman.Game.Elements.Fields
             return false;
         }
 
+        public virtual bool IsMovable()
+        {
+            return false;
+        }
+
+        public virtual MovableCell AsMovable()
+        {
+            return null;
+        }
+
         public virtual bool IsBomb()
         {
             return false;
@@ -151,6 +165,26 @@ namespace Bomberman.Game.Elements.Fields
         public float GetPy()
         {
             return py;
+        }
+
+        public float CellCenterPx()
+        {
+            return Util.Cx2Px(cx);
+        }
+
+        public float CellCenterPy()
+        {
+            return Util.Cy2Py(cy);
+        }
+
+        public float CenterOffsetX()
+        {
+            return px - CellCenterPx();
+        }
+
+        public float CenterOffsetY()
+        {
+            return py - CellCenterPy();
         }
 
         public FieldCell NearCell(int dcx, int dcy)
@@ -210,6 +244,28 @@ namespace Bomberman.Game.Elements.Fields
         public float py
         {
             get { return m_py; }
+        }
+
+        public float oldPx
+        {
+            get { return px - m_moveDx; }
+        }
+
+        public float oldPy
+        {
+            get { return py - m_moveDy; }
+        }
+
+        public float moveDx
+        {
+            get { return m_moveDx; }
+            protected set { m_moveDx = value; }
+        }
+
+        public float moveDy
+        {
+            get { return m_moveDy; }
+            protected set { m_moveDy = value; }
         }
     }
 }

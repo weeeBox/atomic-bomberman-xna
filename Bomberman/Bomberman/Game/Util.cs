@@ -33,12 +33,12 @@ namespace Bomberman.Game
             return (cy + 0.5f) * ch;
         }
 
-        public static float NormalizePx(float px)
+        public static float CellCenterPx(float px)
         {
             return Cx2Px(Px2Cx(px));
         }
         
-        public static float NormalizePy(float py)
+        public static float CellCenterPy(float py)
         {
             return Cy2Py(Py2Cy(py));
         }
@@ -62,7 +62,7 @@ namespace Bomberman.Game
             int fromCx = Px2Cx(fromPx);
             if (fromCx != toCx)
             {
-                return cw * (toCx - fromCx) + (NormalizePx(fromPx) - fromPx);
+                return cw * (toCx - fromCx) + (CellCenterPx(fromPx) - fromPx);
             }
             return 0;
         }
@@ -72,7 +72,7 @@ namespace Bomberman.Game
             int fromCy = Py2Cy(fromPy);
             if (fromCy != toCy)
             {
-                return ch * (toCy - fromCy) + (NormalizePy(fromPy) - fromPy);
+                return ch * (toCy - fromCy) + (CellCenterPy(fromPy) - fromPy);
             }
 
             return 0;
