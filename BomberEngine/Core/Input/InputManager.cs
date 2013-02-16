@@ -248,9 +248,9 @@ namespace BomberEngine.Core.Input
             return gamePadStateListener;
         }
 
-        private void SetGamePadStateListener(GamePadListener listener)
+        private void SetGamePadStateListener(GamePadStateListener listener)
         {
-            this.gamePadListener = listener;
+            this.gamePadStateListener = listener;
         }
 
         public TouchListener GetTouchListener()
