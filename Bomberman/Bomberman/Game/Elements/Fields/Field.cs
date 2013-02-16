@@ -426,8 +426,8 @@ namespace Bomberman.Game.Elements.Fields
 
         private void ProcessCollisions(MovableCell movable)
         {   
-            float px = movable.GetPx();
-            float py = movable.GetPy();
+            float px = movable.px;
+            float py = movable.py;
             float dx = movable.moveDx;
             float dy = movable.moveDy;
 
@@ -617,11 +617,8 @@ namespace Bomberman.Game.Elements.Fields
         {
             bool hadCollisiton = false;
 
-            float aMoveDx = a.moveDx;
-            float bMoveDx = b.moveDx;
-
             float overlapX = Constant.CELL_WIDTH - MathHelper.Abs(a.px - b.px);
-            if (overlapX > 0 && (aMoveDx != 0 || bMoveDx != 0))
+            if (overlapX > 0 && MathHelper.Abs(a.oldPx - b.oldPx) >= Constant.CELL_WIDTH)
             {
                 MovableCell ma = a.AsMovable();
                 MovableCell mb = b.AsMovable();
@@ -637,11 +634,8 @@ namespace Bomberman.Game.Elements.Fields
                 hadCollisiton = true;
             }
 
-            float aMoveDy = a.moveDy;
-            float bMoveDy = b.moveDy;
-
             float overlapY = Constant.CELL_HEIGHT - MathHelper.Abs(a.py - b.py);
-            if (overlapY > 0 && (aMoveDy != 0 || bMoveDy != 0))
+            if (overlapY > 0 && MathHelper.Abs(a.oldPy - b.oldPy) >= Constant.CELL_HEIGHT)
             {
                 MovableCell ma = a.AsMovable();
                 MovableCell mb = b.AsMovable();

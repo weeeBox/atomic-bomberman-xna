@@ -98,8 +98,10 @@ namespace Bomberman.Game.Elements.Cells
         public void StopMoving()
         {
             m_moving = false;
-            m_moveKx = 0.0f;
-            m_moveKy = 0.0f;
+            m_moveKx = 0;
+            m_moveKy = 0;
+            moveDx = 0;
+            moveDy = 0;
         }
 
         public void SetDirection(Direction newDirection)
