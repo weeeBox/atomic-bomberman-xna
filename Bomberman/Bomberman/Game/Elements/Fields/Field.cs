@@ -77,7 +77,7 @@ namespace Bomberman.Game.Elements.Fields
 
                         case FieldBlocks.Brick:
                         {
-                            if (MathHelper.NextInt(100) <= brickDensity)
+                            if (MathHelp.NextInt(100) <= brickDensity)
                             {
                                 cells.Set(x, y, new BrickCell(x, y));
                             }
@@ -157,7 +157,7 @@ namespace Bomberman.Game.Elements.Fields
                 int powerupCount = POWERUPS_COUNT[powerupIndex];
                 if (powerupCount < 0)
                 {
-                    if (MathHelper.NextInt(10) < -powerupCount)
+                    if (MathHelp.NextInt(10) < -powerupCount)
                     {
                         continue;
                     }
@@ -617,8 +617,8 @@ namespace Bomberman.Game.Elements.Fields
         {
             bool hadCollisiton = false;
 
-            float overlapX = Constant.CELL_WIDTH - MathHelper.Abs(a.px - b.px);
-            if (overlapX > 0 && MathHelper.Abs(a.oldPx - b.oldPx) >= Constant.CELL_WIDTH)
+            float overlapX = Constant.CELL_WIDTH - MathHelp.Abs(a.px - b.px);
+            if (overlapX > 0 && MathHelp.Abs(a.oldPx - b.oldPx) >= Constant.CELL_WIDTH)
             {
                 MovableCell ma = a.AsMovable();
                 MovableCell mb = b.AsMovable();
@@ -634,8 +634,8 @@ namespace Bomberman.Game.Elements.Fields
                 hadCollisiton = true;
             }
 
-            float overlapY = Constant.CELL_HEIGHT - MathHelper.Abs(a.py - b.py);
-            if (overlapY > 0 && MathHelper.Abs(a.oldPy - b.oldPy) >= Constant.CELL_HEIGHT)
+            float overlapY = Constant.CELL_HEIGHT - MathHelp.Abs(a.py - b.py);
+            if (overlapY > 0 && MathHelp.Abs(a.oldPy - b.oldPy) >= Constant.CELL_HEIGHT)
             {
                 MovableCell ma = a.AsMovable();
                 MovableCell mb = b.AsMovable();

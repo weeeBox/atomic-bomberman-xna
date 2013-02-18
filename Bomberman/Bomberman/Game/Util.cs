@@ -109,7 +109,7 @@ namespace Bomberman.Game
             while (n > 1)
             {
                 n--;
-                int k = MathHelper.NextInt(n + 1);
+                int k = MathHelp.NextInt(n + 1);
                 T value = array[k];
                 array[k] = array[n];
                 array[n] = value;

@@ -68,7 +68,7 @@ namespace Bomberman.Game.Elements.Players
             {
                 if (count == 1)
                 {
-                    int index = MathHelper.NextInt(Diseases.Count);
+                    int index = MathHelp.NextInt(Diseases.Count);
                     Diseases disease = Diseases.FromIndex(index);
                     TryInfect(disease);
                 }

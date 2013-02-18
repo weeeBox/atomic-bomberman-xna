@@ -45,13 +45,10 @@ namespace Bomberman.Game
             game.AddPlayer(player1);
 
             PlayerGamePadInput gamePadInput = new PlayerGamePadInput(0);
-            gamePadInput.Map(Buttons.LeftThumbstickUp, PlayerAction.Up);
-            gamePadInput.Map(Buttons.LeftThumbstickLeft, PlayerAction.Left);
-            gamePadInput.Map(Buttons.LeftThumbstickDown, PlayerAction.Down);
-            gamePadInput.Map(Buttons.LeftThumbstickRight, PlayerAction.Right);
             gamePadInput.Map(Buttons.A, PlayerAction.Bomb);
             gamePadInput.Map(Buttons.B, PlayerAction.Special);
             gameScene.AddGamePadListener(gamePadInput);
+            gameScene.AddUpdatabled(gamePadInput);
 
             Player player2 = new Player(1, gamePadInput);
             game.AddPlayer(player2);

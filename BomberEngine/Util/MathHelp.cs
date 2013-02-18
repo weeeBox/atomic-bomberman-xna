@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BomberEngine.Util
 {
-    public sealed class MathHelper
+    public sealed class MathHelp
     {
         private static Random random;
 

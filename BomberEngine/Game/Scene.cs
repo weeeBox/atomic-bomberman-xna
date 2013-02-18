@@ -112,12 +112,12 @@ namespace BomberEngine.Game
             updatablesList.Update(delta);
         }
 
-        protected void AddUpdatabled(Updatable updatable)
+        public void AddUpdatabled(Updatable updatable)
         {
             updatablesList.Add(updatable);
         }
 
-        protected void RemoveUpdatable(Updatable updatable)
+        public void RemoveUpdatable(Updatable updatable)
         {
             updatablesList.Remove(updatable);
         }
@@ -135,12 +135,12 @@ namespace BomberEngine.Game
             PostDraw(context);
         }
 
-        protected void AddDrawable(Drawable drawable)
+        public void AddDrawable(Drawable drawable)
         {
             drawableList.Add(drawable);
         }
 
-        protected void RemoveDrawable(Drawable drawable)
+        public void RemoveDrawable(Drawable drawable)
         {
             drawableList.Remove(drawable);
         }

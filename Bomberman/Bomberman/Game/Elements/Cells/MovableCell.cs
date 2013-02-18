@@ -112,12 +112,12 @@ namespace Bomberman.Game.Elements.Cells
 
         public void MoveBackX(float distance)
         {
-            SetPosX(px - MathHelper.Sign(moveDx) * distance);
+            SetPosX(px - MathHelp.Sign(moveDx) * distance);
         }
 
         public void MoveBackY(float distance)
         {
-            SetPosY(py - MathHelper.Sign(moveDy) * distance);
+            SetPosY(py - MathHelp.Sign(moveDy) * distance);
         }
 
         public void MoveX(float dx)
