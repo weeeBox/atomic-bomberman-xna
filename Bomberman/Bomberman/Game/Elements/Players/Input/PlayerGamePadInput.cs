@@ -49,13 +49,11 @@ namespace Bomberman.Game.Elements.Players.Input
                 bool oldLeft = left;
                 bool oldRight = right;
 
+                up = down = left = right = false;
+
                 float len2 = dx * dx + dy * dy;
-                if (len2 < STICK_DEAD_ZONE_2)
-                {
-                    up = down = left = right = false;
-                }
-                else
-                {
+                if (len2 > STICK_DEAD_ZONE_2)
+                {   
                     float lenOver1 = (float)(1.0 / Math.Sqrt(len2));
                     float ndx = dx * lenOver1;
                     float ndy = dy * lenOver1;
