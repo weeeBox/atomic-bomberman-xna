@@ -56,25 +56,16 @@ namespace Bomberman.Game.Elements.Cells
                 {
                     int step = Math.Sign(dx);
 
-                    FieldCell blockingCell = NearCell(step, 0);
-                    if (blockingCell != null)
+                    bool cameAroundObstacle = TryComeRoundObstacleX(delta, step, 0);
+                    if (!cameAroundObstacle)
                     {
-                        if (blockingCell.IsObstacle())
-                        {
-                            float blockingPy = blockingCell.GetPy();
-                            if (py < blockingPy && !GetField().IsObstacleCell(cx + step, cy - 1))
-                            {
-                                MoveY(Math.Max(Util.Cy2Py(cy - 1) - py, -m_speed * delta));
-                            }
-                            else if (py > blockingPy && !GetField().IsObstacleCell(cx + step, cy + 1))
-                            {
-                                MoveY(Math.Min(Util.Cy2Py(cy + 1) - py, m_speed * delta));
-                            }
-                        }
-                        else
-                        {
-                            MoveToTargetPy(delta);
-                        }
+                        int cellOffset = Math.Sign(py - CellCenterPy());
+                        cameAroundObstacle = TryComeRoundObstacleX(delta, step, cellOffset);
+                    }
+
+                    if (!cameAroundObstacle)
+                    {
+                        MoveToTargetPy(delta);
                     }
                 }
             }
@@ -85,29 +76,20 @@ namespace Bomberman.Game.Elements.Cells
 
             if (py == oldPy)
             {
-                if (dy != 0)
+                if (dy != 0) // blocking vertical movement
                 {
                     int step = Math.Sign(dy);
 
-                    FieldCell blockingCell = NearCell(0, step);
-                    if (blockingCell != null)
+                    bool cameAroundObstacle = TryComeRoundObstacleY(delta, step, 0);
+                    if (!cameAroundObstacle)
                     {
-                        if (blockingCell.IsObstacle())
-                        {
-                            float blockingPx = blockingCell.GetPx();
-                            if (px < blockingPx && !GetField().IsObstacleCell(cx - 1, cy + step))
-                            {
-                                MoveX(Math.Max(Util.Cx2Px(cx - 1) - px, -m_speed * delta));
-                            }
-                            else if (px > blockingPx && !GetField().IsObstacleCell(cx + 1, cy + step))
-                            {
-                                MoveX(Math.Min(Util.Cx2Px(cx + 1) - px, m_speed * delta));
-                            }
-                        }
-                        else
-                        {
-                            MoveToTargetPx(delta);
-                        }
+                        int cellOffset = Math.Sign(px - CellCenterPx());
+                        cameAroundObstacle = TryComeRoundObstacleY(delta, step, cellOffset);
+                    }
+
+                    if (!cameAroundObstacle)
+                    {
+                        MoveToTargetPx(delta);
                     }
                 }
             }
@@ -118,6 +100,56 @@ namespace Bomberman.Game.Elements.Cells
 
             moveDx = 0;
             moveDy = 0;
+        }
+
+        private bool TryComeRoundObstacleX(float delta, int step, int offset)
+        {
+            FieldCell blockingCell = NearCell(step, offset);
+            if (blockingCell != null)
+            {
+                if (blockingCell.IsObstacle())
+                {
+                    float blockingPy = blockingCell.GetPy();
+
+                    int targetCy = cy + offset;
+                    if (py < blockingPy && !GetField().IsObstacleCell(cx + step, targetCy - 1))
+                    {
+                        MoveY(Math.Max(Util.Cy2Py(targetCy - 1) - py, -m_speed * delta));
+                        return true;
+                    }
+                    if (py > blockingPy && !GetField().IsObstacleCell(cx + step, targetCy + 1))
+                    {
+                        MoveY(Math.Min(Util.Cy2Py(targetCy + 1) - py, m_speed * delta));
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private bool TryComeRoundObstacleY(float delta, int step, int offset)
+        {
+            FieldCell blockingCell = NearCell(offset, step);
+            if (blockingCell != null)
+            {
+                if (blockingCell.IsObstacle())
+                {
+                    float blockingPx = blockingCell.GetPx();
+                    int targetCx = cx + offset;
+                    if (px < blockingPx && !GetField().IsObstacleCell(targetCx - 1, cy + step))
+                    {
+                        MoveX(Math.Max(Util.Cx2Px(targetCx - 1) - px, -m_speed * delta));
+                        return true;
+                    }
+                    if (px > blockingPx && !GetField().IsObstacleCell(targetCx + 1, cy + step))
+                    {
+                        MoveX(Math.Min(Util.Cx2Px(targetCx + 1) - px, m_speed * delta));
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         protected virtual void MoveToTargetPx(float delta)
