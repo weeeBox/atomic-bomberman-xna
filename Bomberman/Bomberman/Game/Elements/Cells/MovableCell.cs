@@ -49,13 +49,69 @@ namespace Bomberman.Game.Elements.Cells
             float oldPy = py;
 
             Move(dx, dy);
-            
-            if (px != oldPx && dy == 0)
+
+            if (px == oldPx)
+            {
+                if (dx != 0) // blocking horizontal movement
+                {
+                    int step = Math.Sign(dx);
+
+                    FieldCell blockingCell = NearCell(step, 0);
+                    if (blockingCell != null)
+                    {
+                        if (blockingCell.IsObstacle())
+                        {
+                            float blockingPy = blockingCell.GetPy();
+                            if (py < blockingPy && !GetField().IsObstacleCell(cx + step, cy - 1))
+                            {
+                                MoveY(Math.Max(Util.Cy2Py(cy - 1) - py, -m_speed * delta));
+                            }
+                            else if (py > blockingPy && !GetField().IsObstacleCell(cx + step, cy + 1))
+                            {
+                                MoveY(Math.Min(Util.Cy2Py(cy + 1) - py, m_speed * delta));
+                            }
+                        }
+                        else
+                        {
+                            MoveToTargetPy(delta);
+                        }
+                    }
+                }
+            }
+            else if (dy == 0)
             {
                 MoveToTargetPy(delta);
             }
 
-            if (py != oldPy && dx == 0)
+            if (py == oldPy)
+            {
+                if (dy != 0)
+                {
+                    int step = Math.Sign(dy);
+
+                    FieldCell blockingCell = NearCell(0, step);
+                    if (blockingCell != null)
+                    {
+                        if (blockingCell.IsObstacle())
+                        {
+                            float blockingPx = blockingCell.GetPx();
+                            if (px < blockingPx && !GetField().IsObstacleCell(cx - 1, cy + step))
+                            {
+                                MoveX(Math.Max(Util.Cx2Px(cx - 1) - px, -m_speed * delta));
+                            }
+                            else if (px > blockingPx && !GetField().IsObstacleCell(cx + 1, cy + step))
+                            {
+                                MoveX(Math.Min(Util.Cx2Px(cx + 1) - px, m_speed * delta));
+                            }
+                        }
+                        else
+                        {
+                            MoveToTargetPx(delta);
+                        }
+                    }
+                }
+            }
+            else if (dx == 0)
             {
                 MoveToTargetPx(delta);
             }
