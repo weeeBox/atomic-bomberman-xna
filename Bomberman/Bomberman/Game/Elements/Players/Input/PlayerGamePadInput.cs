@@ -16,13 +16,11 @@ namespace Bomberman.Game.Elements.Players.Input
         private const float STICK_DEAD_ZONE = 0.125f;
         private const float STICK_DEAD_ZONE_2 = STICK_DEAD_ZONE * STICK_DEAD_ZONE;
 
-        private const float STICK_LIMIT_MIN = 0.70710678f;
-        private const float STICK_LIMIT_MAX = 0.70710678f;
+        private const float STICK_LIMIT_MIN = 0.75f;
+        private const float STICK_LIMIT_MAX = 0.75f;
 
         private Dictionary<Buttons, PlayerAction> actionLookup;
         private int playerIndex;
-
-        private bool[] directionStates;
 
         private float m_dx;
         private float m_dy;
@@ -36,9 +34,6 @@ namespace Bomberman.Game.Elements.Players.Input
         {
             this.playerIndex = playerIndex;
             actionLookup = new Dictionary<Buttons, PlayerAction>();
-
-            int directionsCount = GetIndex(Direction.Count);
-            directionStates = new bool[directionsCount];
         }
 
         public void Update(float delta)
@@ -135,11 +130,6 @@ namespace Bomberman.Game.Elements.Players.Input
                 return actionLookup[button];
             }
             return PlayerAction.Count;
-        }
-
-        private int GetIndex(Direction direction)
-        {
-            return (int)direction;
         }
     }
 }
