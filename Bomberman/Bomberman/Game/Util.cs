@@ -43,18 +43,21 @@ namespace Bomberman.Game
             return Cy2Py(Py2Cy(py));
         }
 
-        public static float TargetPxOffset(float px)
+        public static float TargetPxOffset(float px, Direction oldDir)
         {
             float prevPx = Cx2Px(Px2Cx(px));
             float dx = px - prevPx;
-            return dx < 0.5f * cw ? -dx : (cw - dx);
+            float k = oldDir == Direction.RIGHT ? 0.15f : oldDir == Direction.LEFT ? 0.85f : 0.5f;
+            return dx < k * cw ? -dx : (cw - dx);
         }
 
-        public static float TargetPyOffset(float py)
+        public static float TargetPyOffset(float py, Direction oldDir)
         {
             float prevPy = Cy2Py(Py2Cy(py));
             float dy = py - prevPy;
-            return dy < 0.5f * ch ? -dy : (ch - dy);
+            float k = oldDir == Direction.DOWN ? 0.15f : oldDir == Direction.UP ? 0.85f : 0.5f;
+
+            return dy < k * ch ? -dy : (ch - dy);
         }
 
         public static float TravelDistanceX(float fromPx, int toCx)

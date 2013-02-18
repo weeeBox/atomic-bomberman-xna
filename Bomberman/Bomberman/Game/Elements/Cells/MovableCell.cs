@@ -45,7 +45,20 @@ namespace Bomberman.Game.Elements.Cells
             moveDx = dx;
             moveDy = dy;
 
+            float oldPx = px;
+            float oldPy = py;
+
             Move(dx, dy);
+            
+            if (px != oldPx && dy == 0)
+            {
+                MoveToTargetPy(delta);
+            }
+
+            if (py != oldPy && dx == 0)
+            {
+                MoveToTargetPx(delta);
+            }
 
             moveDx = 0;
             moveDy = 0;
@@ -53,13 +66,13 @@ namespace Bomberman.Game.Elements.Cells
 
         protected virtual void MoveToTargetPx(float delta)
         {
-            float xOffset = Util.TargetPxOffset(px);
+            float xOffset = Util.TargetPxOffset(px, m_oldDirection);
             MoveX(xOffset < 0 ? Math.Max(xOffset, -delta * m_speed) : Math.Min(xOffset, delta * m_speed));
         }
 
         protected virtual void MoveToTargetPy(float delta)
         {
-            float yOffset = Util.TargetPyOffset(py);
+            float yOffset = Util.TargetPyOffset(py, m_oldDirection);
             MoveY(yOffset < 0 ? Math.Max(yOffset, -delta * m_speed) : Math.Min(yOffset, delta * m_speed));
         }
 
