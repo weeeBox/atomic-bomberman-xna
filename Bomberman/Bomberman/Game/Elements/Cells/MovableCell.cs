@@ -15,7 +15,7 @@ namespace Bomberman.Game.Elements.Cells
         /* Points per second */
         private float m_speed;
 
-        /* from 0..1 */
+        /* from -1..1 */
         private float m_moveKx;
         private float m_moveKy;
 
@@ -39,87 +39,78 @@ namespace Bomberman.Game.Elements.Cells
         protected virtual void UpdateMoving(float delta)
         {   
             float offset = m_speed * delta;
-            float dx = m_moveKx * offset;
-            float dy = m_moveKy * offset;
-
-            moveDx = dx;
-            moveDy = dy;
-
-            float oldPx = px;
-            float oldPy = py;
-
-            Move(dx, dy);
-
-            if (px == oldPx)
+            
+            switch (direction)
             {
-                if (dx != 0) // blocking horizontal movement
-                {
-                    int step = Math.Sign(dx);
-
-                    bool cameAroundObstacle = TryComeRoundObstacleX(delta, step, 0);
-                    if (!cameAroundObstacle)
+                case Direction.LEFT:
+                case Direction.RIGHT:
                     {
-                        int cellOffset = Math.Sign(py - CellCenterPy());
-                        cameAroundObstacle = TryComeRoundObstacleX(delta, step, cellOffset);
+                        float oldPx = px;
+                        float dx = m_moveKx * offset;
+
+                        MoveX(dx);
+
+                        if (oldPx == px) // blocking horizontal movement
+                        {
+                            int step = Math.Sign(dx);
+
+                            bool cameAroundObstacle = TryComeRoundObstacleX(delta, step);
+                            if (!cameAroundObstacle)
+                            {
+                                MoveToTargetPy(delta);
+                            }
+                        }
+                        else
+                        {
+                            MoveToTargetPy(delta);
+                        }
+
+                        break;
                     }
 
-                    if (!cameAroundObstacle)
+                case Direction.UP:
+                case Direction.DOWN:
                     {
-                        MoveToTargetPy(delta);
+                        float oldPy = py;
+                        float dy = m_moveKy * offset;
+                        MoveY(dy);
+
+                        if (py == oldPy) // blocking vertical movement
+                        {
+                            int step = Math.Sign(dy);
+
+                            bool cameAroundObstacle = TryComeRoundObstacleY(delta, step);
+                            if (!cameAroundObstacle)
+                            {
+                                MoveToTargetPx(delta);
+                            }
+                        }
+                        else
+                        {
+                            MoveToTargetPx(delta);
+                        }
+
+                        break;
                     }
-                }
             }
-            else if (dy == 0)
-            {
-                MoveToTargetPy(delta);
-            }
-
-            if (py == oldPy)
-            {
-                if (dy != 0) // blocking vertical movement
-                {
-                    int step = Math.Sign(dy);
-
-                    bool cameAroundObstacle = TryComeRoundObstacleY(delta, step, 0);
-                    if (!cameAroundObstacle)
-                    {
-                        int cellOffset = Math.Sign(px - CellCenterPx());
-                        cameAroundObstacle = TryComeRoundObstacleY(delta, step, cellOffset);
-                    }
-
-                    if (!cameAroundObstacle)
-                    {
-                        MoveToTargetPx(delta);
-                    }
-                }
-            }
-            else if (dx == 0)
-            {
-                MoveToTargetPx(delta);
-            }
-
-            moveDx = 0;
-            moveDy = 0;
         }
 
-        private bool TryComeRoundObstacleX(float delta, int step, int offset)
+        private bool TryComeRoundObstacleX(float delta, int step)
         {
-            FieldCell blockingCell = NearCell(step, offset);
+            FieldCell blockingCell = NearCell(step, 0);
             if (blockingCell != null)
             {
                 if (blockingCell.IsObstacle())
                 {
                     float blockingPy = blockingCell.GetPy();
-
-                    int targetCy = cy + offset;
-                    if (py < blockingPy && !GetField().IsObstacleCell(cx + step, targetCy - 1))
+                    if (py < blockingPy && !GetField().IsObstacleCell(cx + step, cy - 1))
                     {
-                        MoveY(Math.Max(Util.Cy2Py(targetCy - 1) - py, -m_speed * delta));
+                        MoveY(Math.Max(Util.Cy2Py(cy - 1) - py, -m_speed * delta));
                         return true;
                     }
-                    if (py > blockingPy && !GetField().IsObstacleCell(cx + step, targetCy + 1))
+                    if (py > blockingPy && !GetField().IsObstacleCell(cx + step, cy + 1))
                     {
-                        MoveY(Math.Min(Util.Cy2Py(targetCy + 1) - py, m_speed * delta));
+                        MoveY(Math.Min(Util.Cy2Py(cy + 1) - py, m_speed * delta));
                         return true;
                     }
                 }
@@ -128,23 +119,22 @@ namespace Bomberman.Game.Elements.Cells
             return false;
         }
 
-        private bool TryComeRoundObstacleY(float delta, int step, int offset)
+        private bool TryComeRoundObstacleY(float delta, int step)
         {
-            FieldCell blockingCell = NearCell(offset, step);
+            FieldCell blockingCell = NearCell(0, step);
             if (blockingCell != null)
             {
                 if (blockingCell.IsObstacle())
                 {
                     float blockingPx = blockingCell.GetPx();
-                    int targetCx = cx + offset;
-                    if (px < blockingPx && !GetField().IsObstacleCell(targetCx - 1, cy + step))
+                    if (px < blockingPx && !GetField().IsObstacleCell(cx - 1, cy + step))
                     {
-                        MoveX(Math.Max(Util.Cx2Px(targetCx - 1) - px, -m_speed * delta));
+                        MoveX(Math.Max(Util.Cx2Px(cx - 1) - px, -m_speed * delta));
                         return true;
                     }
-                    if (px > blockingPx && !GetField().IsObstacleCell(targetCx + 1, cy + step))
+                    if (px > blockingPx && !GetField().IsObstacleCell(cx + 1, cy + step))
                     {
-                        MoveX(Math.Min(Util.Cx2Px(targetCx + 1) - px, m_speed * delta));
+                        MoveX(Math.Min(Util.Cx2Px(cx + 1) - px, m_speed * delta));
                         return true;
                     }
                 }
@@ -201,8 +191,6 @@ namespace Bomberman.Game.Elements.Cells
             m_moving = false;
             m_moveKx = 0;
             m_moveKy = 0;
-            moveDx = 0;
-            moveDy = 0;
         }
 
         public void SetDirection(Direction newDirection)
@@ -234,12 +222,17 @@ namespace Bomberman.Game.Elements.Cells
         public void Move(float dx, float dy)
         {
             if (dx != 0.0f || dy != 0.0f)
-            {   
+            {
                 // update pixel cords without updating cell cords
                 SetPixelCords(px + dx, py + dy);
 
+                moveDx = dx;
+                moveDy = dy;
+
                 // check collisions and all the stuff
                 OnPositionChanged();
+
+                moveDx = moveDy = 0.0f;
 
                 int oldCx = cx;
                 int oldCy = cy;
