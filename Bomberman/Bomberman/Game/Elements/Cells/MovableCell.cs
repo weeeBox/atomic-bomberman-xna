@@ -231,8 +231,6 @@ namespace Bomberman.Game.Elements.Cells
                     m_moveKx = 1.0f;
                     break;
             }
-
-            GetField().MovableCellStartMoving(this);
         }
 
         public void StopMoving()
@@ -241,7 +239,8 @@ namespace Bomberman.Game.Elements.Cells
             m_moveKx = 0;
             m_moveKy = 0;
 
-            GetField().MovableCellStopMoving(this);
+            moveDx = 0;
+            moveDy = 0;
         }
 
         public bool TryStopKicked()
@@ -295,8 +294,6 @@ namespace Bomberman.Game.Elements.Cells
 
                 // check collisions and all the stuff
                 OnPositionChanged();
-
-                moveDx = moveDy = 0.0f;
 
                 int oldCx = cx;
                 int oldCy = cy;

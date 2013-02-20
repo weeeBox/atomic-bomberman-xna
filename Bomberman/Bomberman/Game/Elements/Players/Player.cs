@@ -230,6 +230,10 @@ namespace Bomberman.Game.Elements.Players
                     {
                         KickBomb(bomb);
                     }
+                    else
+                    {
+                        MoveOutOfCollision(this, bomb);
+                    }
                 }
                 else
                 {

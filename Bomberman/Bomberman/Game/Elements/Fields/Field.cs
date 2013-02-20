@@ -26,8 +26,6 @@ namespace Bomberman.Game.Elements.Fields
 
         private TimerManager timerManager;
 
-        private List<MovableCell> movingCells;
-
         private static readonly int[] POWERUPS_COUNT =
         {
             Settings.VAL_PU_FIELD_BOMB,
@@ -51,8 +49,6 @@ namespace Bomberman.Game.Elements.Fields
 
             currentField = this;
             timerManager = new TimerManager();
-
-            movingCells = new List<MovableCell>();
 
             SetupField(scheme.GetFieldData(), scheme.GetBrickDensity());
             SetupPlayers(players, scheme.GetPlayerLocations());
@@ -252,8 +248,6 @@ namespace Bomberman.Game.Elements.Fields
 
             UpdateCells(delta);
             UpdatePlayers(delta);
-
-            CheckMovableCollisions(delta);
         }
 
         private void UpdateCells(float delta)
@@ -270,17 +264,6 @@ namespace Bomberman.Game.Elements.Fields
         private void UpdatePlayers(float delta)
         {
             players.Update(delta);
-        }
-
-        private void CheckMovableCollisions(float delta)
-        {
-            if (movingCells.Count > 0)
-            {
-                foreach (MovableCell cell in movingCells)
-                {
-                    CheckMovingCollisions(cell);
-                }                
-            }
         }
 
         public void AddPlayer(Player player)
@@ -429,22 +412,9 @@ namespace Bomberman.Game.Elements.Fields
             return cells.GetHeight();
         }
 
-        public void MovableCellStartMoving(MovableCell movable)
-        {
-            if (!movingCells.Contains(movable))
-            {
-                movingCells.Add(movable);
-            }
-        }
-
-        public void MovableCellStopMoving(MovableCell movable)
-        {
-            movingCells.Remove(movable);
-        }
-
         public void MoveablePosChanged(MovableCell movable)
         {
-            HandleStaticCollisions(movable);
+            HandleCollisions(movable);
         }
 
         public void MovableCellChanged(MovableCell movable, int oldCx, int oldCy)
@@ -461,7 +431,7 @@ namespace Bomberman.Game.Elements.Fields
 
         }
 
-        private void HandleStaticCollisions(MovableCell movable)
+        private void HandleCollisions(MovableCell movable)
         {   
             float dx = movable.moveDx;
             float dy = movable.moveDy;
@@ -476,7 +446,7 @@ namespace Bomberman.Game.Elements.Fields
                 }
                 else
                 {
-                    CheckStaticCollisions(movable);
+                    CheckCollisionsX(movable, 1);
                 }
             }
             else if (dx < 0)
@@ -489,7 +459,7 @@ namespace Bomberman.Game.Elements.Fields
                 }
                 else
                 {
-                    CheckStaticCollisions(movable);
+                    CheckCollisionsX(movable, -1);
                 }
             }
 
@@ -503,7 +473,7 @@ namespace Bomberman.Game.Elements.Fields
                 }
                 else
                 {
-                    CheckStaticCollisions(movable);
+                    CheckCollisionsY(movable, 1);
                 }
             }
             else if (dy < 0)
@@ -516,61 +486,38 @@ namespace Bomberman.Game.Elements.Fields
                 }
                 else
                 {
-                    CheckStaticCollisions(movable);
+                    CheckCollisionsY(movable, -1);
                 }
             }
         }
 
-        private void CheckStaticCollisions(MovableCell movable)
-        {
-            CheckCollisions(movable, true);
-        }
-
-        private void CheckMovingCollisions(MovableCell movable)
-        {
-            CheckCollisions(movable, false);
-        }
-
-        private void CheckCollisions(MovableCell movable, bool skipMoving)
-        {
-            switch (movable.direction)
+        private void CheckCollisionsX(MovableCell movable, int step)
+        {   
+            if (step != 0)
             {
-                case Direction.LEFT:
-                case Direction.RIGHT:
-                    {
-                        int step = Math.Sign(movable.moveDx);
-                        if (step != 0)
-                        {
-                            int cx = Util.Px2Cx(movable.px) + step;
-                            int cy = Util.Py2Cy(movable.py);
+                int cx = Util.Px2Cx(movable.px) + step;
+                int cy = Util.Py2Cy(movable.py);
 
-                            CheckCollision(movable, cx, cy - 1, skipMoving);
-                            CheckCollision(movable, cx, cy, skipMoving);
-                            CheckCollision(movable, cx, cy + 1, skipMoving);
-                        }
-                        break;
-                    }
-                case Direction.UP:
-                case Direction.DOWN:
-                    {
-                        int step = Math.Sign(movable.moveDy);
-
-                        if (step != 0)
-                        {
-                            int cx = Util.Px2Cx(movable.px);
-                            int cy = Util.Py2Cy(movable.py) + step;
-
-                            CheckCollision(movable, cx - 1, cy, skipMoving);
-                            CheckCollision(movable, cx, cy, skipMoving);
-                            CheckCollision(movable, cx + 1, cy, skipMoving);
-                        }
-
-                        break;
-                    }
+                CheckCollision(movable, cx, cy - 1);
+                CheckCollision(movable, cx, cy);
+                CheckCollision(movable, cx, cy + 1);
             }
         }
 
-        private bool CheckCollision(MovableCell movable, int cx, int cy, bool skipMoving)
+        private void CheckCollisionsY(MovableCell movable, int step)
+        {
+            if (step != 0)
+            {
+                int cx = Util.Px2Cx(movable.px);
+                int cy = Util.Py2Cy(movable.py) + step;
+
+                CheckCollision(movable, cx - 1, cy);
+                CheckCollision(movable, cx, cy);
+                CheckCollision(movable, cx + 1, cy);
+            }
+        }
+
+        private bool CheckCollision(MovableCell movable, int cx, int cy)
         {   
             FieldCell cell = cells.Get(cx, cy);
             if (cell == null)
@@ -581,11 +528,6 @@ namespace Bomberman.Game.Elements.Fields
             if (cell.IsEmpty())
             {
                 return false; // do not collide with empty cells
-            }
-
-            if (cell.IsMovable() && cell.AsMovable().moving && skipMoving)
-            {
-                return false; // check moving-to-moving collision after all objects are moved
             }
 
             if (Collides(movable, cell))
