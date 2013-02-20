@@ -204,7 +204,7 @@ namespace Bomberman.Game.Elements.Players
                 if (bomb.moving)
                 {
                     MoveOutOfCollision(this, bomb);
-                    bomb.Kick(direction);
+                    KickBomb(bomb);
 
                     return true;
                 }
@@ -230,8 +230,11 @@ namespace Bomberman.Game.Elements.Players
                     FieldCell blockingCell = bomb.NearCellDir(direction);
                     if (blockingCell != null && !blockingCell.IsObstacle()) // can we kick the bomb here?
                     {
-                        bomb.Kick(direction);
+                        KickBomb(bomb);
                     }
+                }
+                else
+                {
                     MoveOutOfCollision(this, bomb);
                 }
 
@@ -257,6 +260,35 @@ namespace Bomberman.Game.Elements.Players
         private bool HandleCollision(FlameCell flame)
         {
             return false;
+        }
+
+        private void KickBomb(Bomb bomb)
+        {
+            if (bomb.moving)
+            {
+                float posX = bomb.px;
+                float posY = bomb.py;
+
+                switch (direction)
+                {
+                    case Direction.UP:
+                        posY = py - Constant.CELL_HEIGHT;
+                        break;
+                    case Direction.DOWN:
+                        posY = py + Constant.CELL_HEIGHT;
+                        break;
+                    case Direction.LEFT:
+                        posX = px - Constant.CELL_WIDTH;
+                        break;
+                    case Direction.RIGHT:
+                        posX = px + Constant.CELL_WIDTH;
+                        break;
+                }
+
+                bomb.SetPos(posX, posY);
+            }
+
+            bomb.Kick(direction);
         }
 
         protected override void OnCellChanged(int oldCx, int oldCy)
