@@ -295,16 +295,8 @@ namespace Bomberman.Game.Elements.Cells
                 // check collisions and all the stuff
                 OnPositionChanged();
 
-                int oldCx = cx;
-                int oldCy = cy;
-
                 // update cell cords
                 SetCellCords();
-
-                if (cx != oldCx || cy != oldCy)
-                {
-                    OnCellChanged(oldCx, oldCy);
-                }
             }
         }
 
@@ -322,6 +314,19 @@ namespace Bomberman.Game.Elements.Cells
         {
             SetPixelCords(px, py);
             SetCellCords();
+        }
+
+        protected override void SetCellCords()
+        {
+            int oldCx = cx;
+            int oldCy = cy;
+
+            base.SetCellCords();
+
+            if (cx != oldCx || cy != oldCy)
+            {
+                OnCellChanged(oldCx, oldCy);
+            }
         }
 
         protected virtual void OnPositionChanged()

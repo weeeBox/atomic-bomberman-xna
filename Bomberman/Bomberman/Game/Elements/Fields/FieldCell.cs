@@ -57,7 +57,7 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         /* For internal use only */
-        protected void SetCellCords()
+        protected virtual void SetCellCords()
         {
             this.m_cx = Util.Px2Cx(m_px);
             this.m_cy = Util.Py2Cy(m_py);

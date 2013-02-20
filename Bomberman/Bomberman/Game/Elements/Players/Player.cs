@@ -296,6 +296,7 @@ namespace Bomberman.Game.Elements.Players
         protected override void OnCellChanged(int oldCx, int oldCy)
         {
             TryPoops();
+            GetField().PlayerCellChanged(this, oldCx, oldCy);
         }
 
         public void OnBombBlown(Bomb bomb)
