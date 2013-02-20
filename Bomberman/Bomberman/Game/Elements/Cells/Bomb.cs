@@ -182,6 +182,12 @@ namespace Bomberman.Game.Elements.Cells
         {
             if (cell.IsObstacle())
             {
+                Bomb other = cell.AsBomb();
+                if (other != null && other.moving)
+                {
+                    other.HandleObstacleCollision(cell);
+                }
+
                 return HandleObstacleCollision(cell);
             }
             if (cell.IsPowerup())

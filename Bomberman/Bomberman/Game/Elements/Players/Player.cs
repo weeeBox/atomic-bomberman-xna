@@ -26,8 +26,6 @@ namespace Bomberman.Game.Elements.Players
 
         private Bomb m_bombInHands;
 
-        private Direction secondaryDirection;
-
         /* Kicked/Punched bombs */
         private List<Bomb> m_thrownBombs;
 

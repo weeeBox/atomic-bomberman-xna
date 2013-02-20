@@ -231,6 +231,8 @@ namespace Bomberman.Game.Elements.Cells
                     m_moveKx = 1.0f;
                     break;
             }
+
+            GetField().MovableCellStartMoving(this);
         }
 
         public void StopMoving()
@@ -238,6 +240,8 @@ namespace Bomberman.Game.Elements.Cells
             m_moving = false;
             m_moveKx = 0;
             m_moveKy = 0;
+
+            GetField().MovableCellStopMoving(this);
         }
 
         public bool TryStopKicked()
