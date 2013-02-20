@@ -444,8 +444,9 @@ namespace Bomberman.Game.Elements.Fields
                     int cx = Util.Px2Cx(px) + 1;
                     int cy = Util.Py2Cy(py);
 
+                    CheckCollision(movable, cx, cy - 1);
                     CheckCollision(movable, cx, cy);
-                    CheckCollision(movable, cx, cy + Math.Sign(px - movable.CellCenterPx()));
+                    CheckCollision(movable, cx, cy + 1);
                 }
             }
             else if (dx < 0)
@@ -461,8 +462,9 @@ namespace Bomberman.Game.Elements.Fields
                     int cx = Util.Px2Cx(px) - 1;
                     int cy = Util.Py2Cy(py);
 
+                    CheckCollision(movable, cx, cy - 1);
                     CheckCollision(movable, cx, cy);
-                    CheckCollision(movable, cx, cy + Math.Sign(px - movable.CellCenterPx()));
+                    CheckCollision(movable, cx, cy + 1);
                 }
             }
 
@@ -479,8 +481,9 @@ namespace Bomberman.Game.Elements.Fields
                     int cx = Util.Px2Cx(px);
                     int cy = Util.Py2Cy(py) + 1;
 
+                    CheckCollision(movable, cx - 1, cy);
                     CheckCollision(movable, cx, cy);
-                    CheckCollision(movable, cx + Math.Sign(py - movable.CellCenterPy()), cy);
+                    CheckCollision(movable, cx + 1, cy);
                 }
             }
             else if (dy < 0)
@@ -496,8 +499,9 @@ namespace Bomberman.Game.Elements.Fields
                     int cx = Util.Px2Cx(px);
                     int cy = Util.Py2Cy(py) - 1;
 
+                    CheckCollision(movable, cx - 1, cy);
                     CheckCollision(movable, cx, cy);
-                    CheckCollision(movable, cx + Math.Sign(py - movable.CellCenterPy()), cy);
+                    CheckCollision(movable, cx + 1, cy);
                 }
             }
         }
