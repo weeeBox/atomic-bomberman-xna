@@ -240,6 +240,19 @@ namespace Bomberman.Game.Elements.Cells
             m_moveKy = 0;
         }
 
+        public bool TryStopKicked()
+        {
+            if (m_moving)
+            {
+                SetCell();
+                StopMoving();
+
+                return true;
+            }
+
+            return false;
+        }
+
         public void SetDirection(Direction newDirection)
         {   
             m_oldDirection = m_direction;

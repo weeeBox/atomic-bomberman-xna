@@ -238,6 +238,11 @@ namespace Bomberman.Game.Elements.Players
                 return true;
             }
 
+            if (MoveOutOfCollision(this, bomb))
+            {
+                return bomb.TryStopKicked();
+            }
+            
             return HandleObstacleCollision(bomb);
         }
 
@@ -691,8 +696,7 @@ namespace Bomberman.Game.Elements.Players
             Bomb kickedBomb = bombs.GetFirstKickedBomb();
             if (kickedBomb != null)
             {
-                kickedBomb.SetCell();
-                kickedBomb.StopMoving();
+                kickedBomb.TryStopKicked();
             }
         }
 

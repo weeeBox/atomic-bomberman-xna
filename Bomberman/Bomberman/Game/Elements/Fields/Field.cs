@@ -247,9 +247,7 @@ namespace Bomberman.Game.Elements.Fields
             timerManager.Update(delta);
 
             UpdateCells(delta);
-            CheckPlayersCollisions(delta);
-
-            players.Update(delta);
+            UpdatePlayers(delta);
         }
 
         private void UpdateCells(float delta)
@@ -261,6 +259,12 @@ namespace Bomberman.Game.Elements.Fields
                 CheckCell(cell);
                 cell.Update(delta);
             }
+        }
+
+        private void UpdatePlayers(float delta)
+        {
+            players.Update(delta);
+            CheckPlayersCollisions(delta);
         }
 
         private void CheckPlayersCollisions(float delta)
