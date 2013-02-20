@@ -274,30 +274,30 @@ namespace Bomberman.Game.Elements.Fields
             for (int i = 0; i < playersCount; ++i)
             {
                 Player player = playerList[i];
-//                 switch (player.direction)
-//                 {
-//                     case Direction.LEFT:
-//                         {
-//                             CheckCollisionsHor(player, -1, false);
-//                             break;
-//                         }
-//                     case Direction.RIGHT:
-//                         {
-//                             CheckCollisionsHor(player, 1, false);
-//                             break;
-//                         }
-// 
-//                     case Direction.UP:
-//                         {
-//                             CheckCollisionsVert(player, -1, false);
-//                             break;
-//                         }
-//                     case Direction.DOWN:
-//                         {
-//                             CheckCollisionsVert(player, 1, false);
-//                             break;
-//                         }
-//                 }
+                switch (player.direction)
+                {
+                    case Direction.LEFT:
+                        {
+                            CheckMovingCollisionsHor(player, -1);
+                            break;
+                        }
+                    case Direction.RIGHT:
+                        {
+                            CheckMovingCollisionsHor(player, 1);
+                            break;
+                        }
+
+                    case Direction.UP:
+                        {
+                            CheckMovingCollisionsVert(player, -1);
+                            break;
+                        }
+                    case Direction.DOWN:
+                        {
+                            CheckMovingCollisionsVert(player, 1);
+                            break;
+                        }
+                }
 
                 for (int j = i + 1; j < playersCount; ++j)
                 {
@@ -538,22 +538,42 @@ namespace Bomberman.Game.Elements.Fields
 
         private void CheckStaticCollisionsHor(MovableCell movable, int step)
         {
-            int cx = Util.Px2Cx(movable.px) + step;
-            int cy = Util.Py2Cy(movable.py);
-
-            CheckCollision(movable, cx, cy - 1, true);
-            CheckCollision(movable, cx, cy, true);
-            CheckCollision(movable, cx, cy + 1, true);
+            CheckCollisionsHor(movable, step, true);
         }
 
         private void CheckStaticCollisionsVert(MovableCell movable, int step)
         {
+            CheckCollisionsVert(movable, step, true);
+        }
+
+        private void CheckMovingCollisionsHor(MovableCell movable, int step)
+        {
+            CheckCollisionsHor(movable, step, false);
+        }
+
+        private void CheckMovingCollisionsVert(MovableCell movable, int step)
+        {
+            CheckCollisionsVert(movable, step, false);
+        }
+
+        private void CheckCollisionsHor(MovableCell movable, int step, bool skipMoving)
+        {
+            int cx = Util.Px2Cx(movable.px) + step;
+            int cy = Util.Py2Cy(movable.py);
+
+            CheckCollision(movable, cx, cy - 1, skipMoving);
+            CheckCollision(movable, cx, cy, skipMoving);
+            CheckCollision(movable, cx, cy + 1, skipMoving);
+        }
+
+        private void CheckCollisionsVert(MovableCell movable, int step, bool skipMoving)
+        {
             int cx = Util.Px2Cx(movable.px);
             int cy = Util.Py2Cy(movable.py) + step;
 
-            CheckCollision(movable, cx - 1, cy, true);
-            CheckCollision(movable, cx, cy, true);
-            CheckCollision(movable, cx + 1, cy, true);
+            CheckCollision(movable, cx - 1, cy, skipMoving);
+            CheckCollision(movable, cx, cy, skipMoving);
+            CheckCollision(movable, cx + 1, cy, skipMoving);
         }
 
         private bool CheckCollision(MovableCell movable, int cx, int cy, bool skipMoving)
