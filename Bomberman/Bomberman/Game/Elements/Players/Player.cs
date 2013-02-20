@@ -248,7 +248,10 @@ namespace Bomberman.Game.Elements.Players
 
         private bool HandleCollision(PowerupCell powerup)
         {
-            return false;
+            int powerupIndex = powerup.powerup;
+            TryAddPowerup(powerupIndex);
+            GetField().ClearCell(powerup.cx, powerup.cy);
+            return true;
         }
 
         private bool HandleCollision(FlameCell flame)

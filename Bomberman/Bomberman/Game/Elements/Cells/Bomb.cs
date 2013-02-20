@@ -207,11 +207,9 @@ namespace Bomberman.Game.Elements.Cells
 
         protected override bool HandleObstacleCollision(FieldCell cell)
         {
-            if (MoveOutOfCollision(this, cell))
-            {
-                TryJellyOnObstacle();
-                return true;
-            }
+            base.HandleObstacleCollision(cell);
+            StopMoving();
+            TryJellyOnObstacle();
 
             return false;
         }

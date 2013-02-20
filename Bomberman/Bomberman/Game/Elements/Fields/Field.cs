@@ -274,30 +274,30 @@ namespace Bomberman.Game.Elements.Fields
             for (int i = 0; i < playersCount; ++i)
             {
                 Player player = playerList[i];
-                switch (player.direction)
-                {
-                    case Direction.LEFT:
-                        {
-                            CheckCollisionsHor(player, -1, false);
-                            break;
-                        }
-                    case Direction.RIGHT:
-                        {
-                            CheckCollisionsHor(player, 1, false);
-                            break;
-                        }
-
-                    case Direction.UP:
-                        {
-                            CheckCollisionsVert(player, -1, false);
-                            break;
-                        }
-                    case Direction.DOWN:
-                        {
-                            CheckCollisionsVert(player, 1, false);
-                            break;
-                        }
-                }
+//                 switch (player.direction)
+//                 {
+//                     case Direction.LEFT:
+//                         {
+//                             CheckCollisionsHor(player, -1, false);
+//                             break;
+//                         }
+//                     case Direction.RIGHT:
+//                         {
+//                             CheckCollisionsHor(player, 1, false);
+//                             break;
+//                         }
+// 
+//                     case Direction.UP:
+//                         {
+//                             CheckCollisionsVert(player, -1, false);
+//                             break;
+//                         }
+//                     case Direction.DOWN:
+//                         {
+//                             CheckCollisionsVert(player, 1, false);
+//                             break;
+//                         }
+//                 }
 
                 for (int j = i + 1; j < playersCount; ++j)
                 {
@@ -460,7 +460,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public void MoveablePosChanged(MovableCell movable)
         {
-            ProcessStaticCollisions(movable);
+            CheckStaticCollisions(movable);
         }
 
         public void MovableCellChanged(MovableCell movable, int oldCx, int oldCy)
@@ -474,7 +474,7 @@ namespace Bomberman.Game.Elements.Fields
 
         }
 
-        private void ProcessStaticCollisions(MovableCell movable)
+        private void CheckStaticCollisions(MovableCell movable)
         {   
             float px = movable.px;
             float py = movable.py;
@@ -491,7 +491,7 @@ namespace Bomberman.Game.Elements.Fields
                 }
                 else
                 {
-                    CheckCollisionsHor(movable, 1, true);
+                    CheckStaticCollisionsHor(movable, 1);
                 }
             }
             else if (dx < 0)
@@ -504,7 +504,7 @@ namespace Bomberman.Game.Elements.Fields
                 }
                 else
                 {
-                    CheckCollisionsHor(movable, -1, true);
+                    CheckStaticCollisionsHor(movable, -1);
                 }
             }
 
@@ -518,7 +518,7 @@ namespace Bomberman.Game.Elements.Fields
                 }
                 else
                 {
-                    CheckCollisionsVert(movable, 1, true);
+                    CheckStaticCollisionsVert(movable, 1);
                 }
             }
             else if (dy < 0)
@@ -531,32 +531,32 @@ namespace Bomberman.Game.Elements.Fields
                 }
                 else
                 {
-                    CheckCollisionsVert(movable, -1, true);
+                    CheckStaticCollisionsVert(movable, -1);
                 }
             }
         }
 
-        private void CheckCollisionsHor(MovableCell movable, int step, bool checkStatic)
+        private void CheckStaticCollisionsHor(MovableCell movable, int step)
         {
             int cx = Util.Px2Cx(movable.px) + step;
             int cy = Util.Py2Cy(movable.py);
 
-            CheckCollision(movable, cx, cy - 1, checkStatic);
-            CheckCollision(movable, cx, cy, checkStatic);
-            CheckCollision(movable, cx, cy + 1, checkStatic);
+            CheckCollision(movable, cx, cy - 1, true);
+            CheckCollision(movable, cx, cy, true);
+            CheckCollision(movable, cx, cy + 1, true);
         }
 
-        private void CheckCollisionsVert(MovableCell movable, int step, bool checkStatic)
+        private void CheckStaticCollisionsVert(MovableCell movable, int step)
         {
             int cx = Util.Px2Cx(movable.px);
             int cy = Util.Py2Cy(movable.py) + step;
 
-            CheckCollision(movable, cx - 1, cy, checkStatic);
-            CheckCollision(movable, cx, cy, checkStatic);
-            CheckCollision(movable, cx + 1, cy, checkStatic);
+            CheckCollision(movable, cx - 1, cy, true);
+            CheckCollision(movable, cx, cy, true);
+            CheckCollision(movable, cx + 1, cy, true);
         }
 
-        private bool CheckCollision(MovableCell movable, int cx, int cy, bool checkStatic)
+        private bool CheckCollision(MovableCell movable, int cx, int cy, bool skipMoving)
         {   
             FieldCell cell = cells.Get(cx, cy);
             if (cell == null)
@@ -569,7 +569,7 @@ namespace Bomberman.Game.Elements.Fields
                 return false; // do not collide with empty cells
             }
 
-            if (cell.IsMovable() && cell.AsMovable().moving && !checkStatic)
+            if (cell.IsMovable() && cell.AsMovable().moving && skipMoving)
             {
                 return false; // check moving-to-moving collision after all objects are moved
             }
