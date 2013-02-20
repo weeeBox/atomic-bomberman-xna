@@ -174,6 +174,64 @@ namespace Bomberman.Game.Elements.Cells
             }
         }
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Collisions
+
+        public override bool HandleCollision(FieldCell cell)
+        {
+            if (cell.IsObstacle())
+            {
+                return HandleObstacleCollision(cell);
+            }
+            if (cell.IsPowerup())
+            {
+                return HandleCollision(cell.AsPowerup());
+            }
+            if (cell.IsFlame())
+            {
+                return HandleCollision(cell.AsFlame());
+            }
+
+            return base.HandleCollision(cell);
+        }
+
+        public override bool HandleWallCollision()
+        {
+            if (TryJellyOnObstacle())
+            {
+                return true;
+            }
+            return base.HandleWallCollision();
+        }
+
+        protected override bool HandleObstacleCollision(FieldCell cell)
+        {
+            if (MoveOutOfCollision(this, cell))
+            {
+                TryJellyOnObstacle();
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool HandleCollision(FlameCell flame)
+        {
+            Blow();
+            return true;
+        }
+
+        private bool HandleCollision(PowerupCell powerupCell)
+        {   
+            GetField().ClearCell(powerupCell.cx, powerupCell.cy);
+            return true;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
         public void Activate()
         {
             active = true;
@@ -303,24 +361,15 @@ namespace Bomberman.Game.Elements.Cells
             return true;
         }
 
-        public override void OnHitObstacle(Fields.FieldCell obstacle)
-        {
-            base.OnHitObstacle(obstacle);
-            TryJellyOnObstacle();
-        }
-
-        public override void OnHitWall()
-        {
-            base.OnHitWall();
-            TryJellyOnObstacle();
-        }
-
-        private void TryJellyOnObstacle()
+        private bool TryJellyOnObstacle()
         {
             if (IsJelly())
             {
                 SetMoveDirection(Util.Opposite(direction));
+                return true;
             }
+
+            return false;
         }
 
         private void SetState(byte state)

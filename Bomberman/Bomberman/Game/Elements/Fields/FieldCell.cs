@@ -137,6 +137,11 @@ namespace Bomberman.Game.Elements.Fields
             return false;
         }
 
+        public virtual FlameCell AsFlame()
+        {
+            return null;
+        }
+
         public virtual bool IsPowerup()
         {
             return false;

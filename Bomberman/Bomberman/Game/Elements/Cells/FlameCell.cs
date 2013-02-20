@@ -31,5 +31,10 @@ namespace Bomberman.Game.Elements.Cells
         {
             return true;
         }
+
+        public override FlameCell AsFlame()
+        {
+            return this;
+        }
     }
 }

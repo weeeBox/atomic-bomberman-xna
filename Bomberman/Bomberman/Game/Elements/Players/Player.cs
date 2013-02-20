@@ -167,12 +167,88 @@ namespace Bomberman.Game.Elements.Players
             StopMoving();
         }
 
-        public override void OnHitWall()
+        public override bool HandleWallCollision()
         {
+            return false;
         }
 
-        public override void OnHitObstacle(FieldCell obstacle)
+        public override bool HandleCollision(FieldCell cell)
         {
+            if (cell.IsObstacle())
+            {
+                if (cell.IsBomb())
+                {
+                    return HandleCollision(cell.AsBomb());
+                }
+
+                return HandleObstacleCollision(cell);
+            }
+
+            if (cell.IsPowerup())
+            {
+                return HandleCollision(cell.AsPowerup());
+            }
+
+            if (cell.IsFlame())
+            {
+                return HandleCollision(cell.AsFlame());
+            }
+
+            return base.HandleCollision(cell);
+        }
+
+        private bool HandleCollision(Bomb bomb)
+        {
+            if (HasKick())
+            {
+                if (bomb.moving)
+                {
+                    MoveOutOfCollision(this, bomb);
+                    bomb.Kick(direction);
+
+                    return true;
+                }
+                
+                bool farEnoughForKick = false; // true, if distance between player's center and bomb's center is enough for a kick
+                switch (direction)
+                {
+                    case Direction.UP:
+                    case Direction.DOWN:
+                        farEnoughForKick = Math.Abs(py - bomb.py) > Constant.CELL_HEIGHT_2;
+                        break;
+                    case Direction.LEFT:
+                    case Direction.RIGHT:
+                        farEnoughForKick = Math.Abs(px - bomb.px) > Constant.CELL_WIDTH_2;
+                        break;
+                    default:
+                        Debug.Assert(false, "Unknown direction: " + direction);
+                        break;
+                }
+
+                if (farEnoughForKick)
+                {
+                    FieldCell blockingCell = bomb.NearCellDir(direction);
+                    if (blockingCell != null && !blockingCell.IsObstacle()) // can we kick the bomb here?
+                    {
+                        bomb.Kick(direction);
+                    }
+                    MoveOutOfCollision(this, bomb);
+                }
+
+                return true;
+            }
+
+            return HandleObstacleCollision(bomb);
+        }
+
+        private bool HandleCollision(PowerupCell powerup)
+        {
+            return false;
+        }
+
+        private bool HandleCollision(FlameCell flame)
+        {
+            return false;
         }
 
         protected override void OnCellChanged(int oldCx, int oldCy)

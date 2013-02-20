@@ -264,21 +264,43 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         private void CheckPlayersCollisions(float delta)
-        {
-            // check player to player collisions
+        {   
             List<Player> playerList = players.list;
             int playersCount = playerList.Count;
-            for (int i = 0; i < playersCount - 1; ++i)
+            for (int i = 0; i < playersCount; ++i)
             {
                 Player player = playerList[i];
+                switch (player.direction)
+                {
+                    case Direction.LEFT:
+                        {
+                            CheckCollisionsHor(player, -1, false);
+                            break;
+                        }
+                    case Direction.RIGHT:
+                        {
+                            CheckCollisionsHor(player, 1, false);
+                            break;
+                        }
+
+                    case Direction.UP:
+                        {
+                            CheckCollisionsVert(player, -1, false);
+                            break;
+                        }
+                    case Direction.DOWN:
+                        {
+                            CheckCollisionsVert(player, 1, false);
+                            break;
+                        }
+                }
+
                 for (int j = i + 1; j < playersCount; ++j)
                 {
                     Player other = playerList[j];
                     CheckPlayersCollistions(player, other);
                 }
             }
-
-
         }
 
         private void CheckPlayersCollistions(Player player, Player other)
@@ -461,7 +483,7 @@ namespace Bomberman.Game.Elements.Fields
                 if (movable.GetPx() > maxX)
                 {
                     movable.SetPosX(maxX);
-                    movable.OnHitWall();
+                    movable.HandleWallCollision();
                 }
                 else
                 {
@@ -474,7 +496,7 @@ namespace Bomberman.Game.Elements.Fields
                 if (movable.GetPx() < minX)
                 {
                     movable.SetPosX(minX);
-                    movable.OnHitWall();
+                    movable.HandleWallCollision();
                 }
                 else
                 {
@@ -488,7 +510,7 @@ namespace Bomberman.Game.Elements.Fields
                 if (movable.GetPy() > maxY)
                 {
                     movable.SetPosY(maxY);
-                    movable.OnHitWall();
+                    movable.HandleWallCollision();
                 }
                 else
                 {
@@ -501,7 +523,7 @@ namespace Bomberman.Game.Elements.Fields
                 if (movable.GetPy() < minY)
                 {
                     movable.SetPosY(minY);
-                    movable.OnHitWall();
+                    movable.HandleWallCollision();
                 }
                 else
                 {
@@ -550,137 +572,10 @@ namespace Bomberman.Game.Elements.Fields
 
             if (Collides(movable, cell))
             {
-                return ProcessCollision(movable, cell);
+                return movable.HandleCollision(cell);
             }
 
             return false;
-        }
-
-        private bool ProcessCollision(MovableCell movable, FieldCell cell)
-        {
-            if (cell.IsObstacle())
-            {   
-                if (movable.IsPlayer() && cell.IsBomb())
-                {
-                    ProcessCollision(movable.AsPlayer(), cell.AsBomb());
-                }
-                else
-                {
-                    MoveOutOfCollision(movable, cell);
-                    movable.OnHitObstacle(cell);
-                }
-            }
-            else if (cell.IsPowerup())
-            {
-                ProcessCollision(movable, cell.AsPowerup());
-            }
-            else if (cell.IsFlame())
-            {
-                if (movable.IsBomb())
-                {
-                    movable.AsBomb().Blow();
-                }                
-            }
-
-            return false;
-        }
-
-        private void ProcessCollision(Player player, Bomb bomb)
-        {
-            if (player.HasKick())
-            {
-                Direction direction = player.direction;
-
-                if (bomb.moving)
-                {
-                    MoveOutOfCollision(player, bomb);
-                    bomb.Kick(direction);
-                }
-                else
-                {
-                    bool farEnoughForKick = false; // true, if distance between player's center and bomb's center is enough for a kick
-                    switch (direction)
-                    {
-                        case Direction.UP:
-                        case Direction.DOWN:
-                            farEnoughForKick = Math.Abs(player.py - bomb.py) > Constant.CELL_HEIGHT_2;
-                            break;
-                        case Direction.LEFT:
-                        case Direction.RIGHT:
-                            farEnoughForKick = Math.Abs(player.px - bomb.px) > Constant.CELL_WIDTH_2;
-                            break;
-                        default:
-                            Debug.Assert(false, "Unknown direction: " + direction);
-                            break;
-                    }
-
-                    if (farEnoughForKick)
-                    {
-                        FieldCell blockingCell = bomb.NearCellDir(direction);
-                        if (blockingCell != null && !blockingCell.IsObstacle()) // can we kick the bomb here?
-                        {
-                            bomb.Kick(direction);
-                        }
-                        MoveOutOfCollision(player, bomb);
-                    }
-                }
-            }
-            else
-            {
-                MoveOutOfCollision(player, bomb);
-                player.OnHitObstacle(bomb);
-            }
-        }
-
-        private void ProcessCollision(MovableCell movable, PowerupCell powerupCell)
-        {
-            if (movable.IsPlayer())
-            {
-                int powerup = powerupCell.powerup;
-                movable.AsPlayer().TryAddPowerup(powerup);
-            }
-            ClearCell(powerupCell.cx, powerupCell.cy);
-        }
-
-        private bool MoveOutOfCollision(FieldCell a, FieldCell b)
-        {
-            bool hadCollisiton = false;
-
-            float overlapX = Constant.CELL_WIDTH - MathHelp.Abs(a.px - b.px);
-            if (overlapX > 0 && MathHelp.Abs(a.oldPx - b.oldPx) >= Constant.CELL_WIDTH)
-            {
-                MovableCell ma = a.AsMovable();
-                MovableCell mb = b.AsMovable();
-
-                float moveA = Math.Abs(a.moveDx);
-                float moveB = Math.Abs(b.moveDx);
-                float kA = moveA / (moveA + moveB);
-                float kB = 1 - kA;
-
-                if (ma != null) ma.MoveBackX(kA * overlapX);
-                if (mb != null) mb.MoveBackX(kB * overlapX);
-
-                hadCollisiton = true;
-            }
-
-            float overlapY = Constant.CELL_HEIGHT - MathHelp.Abs(a.py - b.py);
-            if (overlapY > 0 && MathHelp.Abs(a.oldPy - b.oldPy) >= Constant.CELL_HEIGHT)
-            {
-                MovableCell ma = a.AsMovable();
-                MovableCell mb = b.AsMovable();
-
-                float moveA = Math.Abs(a.moveDy);
-                float moveB = Math.Abs(b.moveDy);
-                float kA = moveA / (moveA + moveB);
-                float kB = 1 - kA;
-
-                if (ma != null) ma.MoveBackY(kA * overlapY);
-                if (mb != null) mb.MoveBackY(kB * overlapY);
-
-                hadCollisiton = true;
-            }
-
-            return hadCollisiton;
         }
 
         private bool Collides(MovableCell a, FieldCell b)

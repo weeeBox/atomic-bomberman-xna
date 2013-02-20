@@ -154,14 +154,61 @@ namespace Bomberman.Game.Elements.Cells
             MoveY(yOffset < 0 ? Math.Max(yOffset, -delta * m_speed) : Math.Min(yOffset, delta * m_speed));
         }
 
-        public virtual void OnHitWall()
+        public virtual bool HandleWallCollision()
         {
             StopMoving();
+            return true;
         }
 
-        public virtual void OnHitObstacle(FieldCell obstacle)
+        public virtual bool HandleCollision(FieldCell cell)
         {
-            StopMoving();
+            return false;
+        }
+
+        protected virtual bool HandleObstacleCollision(FieldCell cell)
+        {
+            return MoveOutOfCollision(this, cell);
+        }
+
+        protected bool MoveOutOfCollision(FieldCell a, FieldCell b)
+        {
+            bool hadCollisiton = false;
+
+            float overlapX = Constant.CELL_WIDTH - MathHelp.Abs(a.px - b.px);
+            if (overlapX > 0 && MathHelp.Abs(a.oldPx - b.oldPx) >= Constant.CELL_WIDTH)
+            {
+                MovableCell ma = a.AsMovable();
+                MovableCell mb = b.AsMovable();
+
+                float moveA = Math.Abs(a.moveDx);
+                float moveB = Math.Abs(b.moveDx);
+                float kA = moveA / (moveA + moveB);
+                float kB = 1 - kA;
+
+                if (ma != null) ma.MoveBackX(kA * overlapX);
+                if (mb != null) mb.MoveBackX(kB * overlapX);
+
+                hadCollisiton = true;
+            }
+
+            float overlapY = Constant.CELL_HEIGHT - MathHelp.Abs(a.py - b.py);
+            if (overlapY > 0 && MathHelp.Abs(a.oldPy - b.oldPy) >= Constant.CELL_HEIGHT)
+            {
+                MovableCell ma = a.AsMovable();
+                MovableCell mb = b.AsMovable();
+
+                float moveA = Math.Abs(a.moveDy);
+                float moveB = Math.Abs(b.moveDy);
+                float kA = moveA / (moveA + moveB);
+                float kB = 1 - kA;
+
+                if (ma != null) ma.MoveBackY(kA * overlapY);
+                if (mb != null) mb.MoveBackY(kB * overlapY);
+
+                hadCollisiton = true;
+            }
+
+            return hadCollisiton;
         }
 
         protected void SetMoveDirection(Direction direction)
