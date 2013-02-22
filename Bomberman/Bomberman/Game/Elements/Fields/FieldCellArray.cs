@@ -34,11 +34,48 @@ namespace Bomberman.Game.Elements.Fields
             return index != -1 ? cells[index] : null;
         }
 
-        public void Set(int x, int y, FieldCell cell)
+        public void Add(int x, int y, FieldCell cell)
         {
             int index = GetIndex(x, y);
             Debug.Assert(index != -1, "Trying to set a cell outside of a field: x=" + x + " y=" + y);
-            cells[index] = cell;
+            cells[index] = Add(index, cell);
+        }
+
+        public void Remove(int x, int y, FieldCell cell)
+        {
+            int index = GetIndex(x, y);
+            Debug.Assert(index != -1, "Trying to set a cell outside of a field: x=" + x + " y=" + y);
+            cells[index] = Remove(index, cell);
+        }
+
+        private FieldCell Add(int index, FieldCell cell)
+        {
+            FieldCell root = cells[index];
+            if (root != null)
+            {
+                root.listNext = cell;
+                cell.listPrev = root;
+            }
+
+            return cell;
+        }
+
+        private FieldCell Remove(int index, FieldCell cell)
+        {
+            FieldCell root = cells[index];
+            if (cell == root)
+            {
+                Debug.Assert(cell.listPrev == null);
+                return cell.listNext;
+            }
+
+            FieldCell prev = cell.listPrev;
+            FieldCell next = cell.listNext;
+
+            prev.listNext = next;
+            next.listPrev = prev;
+
+            return root;
         }
 
         public int GetWidth()

@@ -71,7 +71,7 @@ namespace Bomberman.Game.Elements.Fields
                     {
                         case FieldBlocks.Blank:
                         {
-                            cells.Set(x, y, new BlankCell(x, y));
+                            cells.Add(x, y, new BlankCell(x, y));
                             break;
                         }
 
@@ -79,18 +79,18 @@ namespace Bomberman.Game.Elements.Fields
                         {
                             if (MathHelp.NextInt(100) <= brickDensity)
                             {
-                                cells.Set(x, y, new BrickCell(x, y));
+                                cells.Add(x, y, new BrickCell(x, y));
                             }
                             else
                             {
-                                cells.Set(x, y, new BlankCell(x, y));
+                                cells.Add(x, y, new BlankCell(x, y));
                             }
                             break;
                         }
 
                         case FieldBlocks.Solid:
                         {
-                            cells.Set(x, y, new SolidCell(x, y));
+                            cells.Add(x, y, new SolidCell(x, y));
                             break;
                         }
 
@@ -273,7 +273,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public void SetBomb(Bomb bomb)
         {
-            cells.Set(bomb.GetCx(), bomb.GetCy(), bomb);
+            SetCell(bomb);
         }
 
         public void DestroyBrick(BrickCell brick)
@@ -373,7 +373,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public void SetCell(FieldCell cell)
         {
-            cells.Set(cell.GetCx(), cell.GetCy(), cell);
+            cells.Add(cell.GetCx(), cell.GetCy(), cell);
         }
 
         public void ClearCell(int cx, int cy)

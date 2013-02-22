@@ -19,6 +19,10 @@ namespace Bomberman.Game.Elements.Fields
         private float m_moveDx;
         private float m_moveDy;
 
+        /* Linked list stuff */
+        public FieldCell listNext;
+        public FieldCell listPrev;
+
         public FieldCell(int cx, int cy)
         {
             SetCell(cx, cy);
