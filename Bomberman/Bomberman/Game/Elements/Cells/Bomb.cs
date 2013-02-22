@@ -278,7 +278,7 @@ namespace Bomberman.Game.Elements.Cells
             float fromPy = m_player.py;
             Direction direction = m_player.direction;
 
-            SetPixels(fromPx, fromPy);
+            SetPos(fromPx, fromPy);
 
             Fly(fromPx, fromPy, direction);
             remains = m_player.GetBombTimeout();

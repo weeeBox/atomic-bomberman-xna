@@ -11,10 +11,6 @@ namespace Bomberman.Game.Elements.Fields
 {
     public class FieldCell : Updatable
     {
-        /* Coordinates in cells */
-        private int m_cx;
-        private int m_cy;
-
         /* Coordinates in points */
         private float m_px;
         private float m_py;
@@ -39,42 +35,13 @@ namespace Bomberman.Game.Elements.Fields
 
         public void SetCell(int cx, int cy)
         {
-            SetCellCords(cx, cy);
-            SetPixelCords();
+            SetPos(Util.Cx2Px(cx), Util.Cy2Py(cy));
         }
-
-        public void SetPixels(float px, float py)
-        {
-            SetPixelCords(px, py);
-            SetCellCords();
-        }
-
-        /* For internal use only */
-        protected void SetCellCords(int cx, int cy)
-        {
-            this.m_cx = cx;
-            this.m_cy = cy;
-        }
-
-        /* For internal use only */
-        protected virtual void SetCellCords()
-        {
-            this.m_cx = Util.Px2Cx(m_px);
-            this.m_cy = Util.Py2Cy(m_py);
-        }
-
-        /* For internal use only */
-        protected void SetPixelCords(float px, float py)
+        
+        public void SetPos(float px, float py)
         {
             this.m_px = px;
             this.m_py = py;
-        }
-
-        /* For internal use only */
-        protected void SetPixelCords()
-        {
-            this.m_px = Util.Cx2Px(m_cx);
-            this.m_py = Util.Cy2Py(m_cy);
         }
 
         public virtual bool IsEmpty()
@@ -228,17 +195,17 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         /* This is a bit tricky: I'm not gonna use properties or any other C# specific
-           stuff. Just keep them to check if some code is trying to assing "readonly" public
+           stuff. Just keep them to check if some code is trying to assign "readonly" public
            field.
          */
         public int cx
         {
-            get { return m_cx; }
+            get { return Util.Px2Cx(px); }
         }
 
         public int cy
         {
-            get { return m_cy; }
+            get { return Util.Py2Cy(py); }
         }
 
         public float px
