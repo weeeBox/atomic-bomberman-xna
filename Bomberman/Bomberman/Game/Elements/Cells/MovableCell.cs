@@ -39,60 +39,30 @@ namespace Bomberman.Game.Elements.Cells
         protected virtual void UpdateMoving(float delta)
         {   
             float offset = m_speed * delta;
-            
+
+            float dx = 0;
+            float dy = 0;
+
             switch (direction)
             {
                 case Direction.LEFT:
                 case Direction.RIGHT:
-                    {
-                        float oldPx = px;
-                        float dx = m_moveKx * offset;
-
-                        MoveX(dx);
-
-                        if (oldPx == px) // blocking horizontal movement
-                        {
-                            int step = Math.Sign(dx);
-
-                            bool cameAroundObstacle = TryComeRoundObstacleX(delta, step);
-                            if (!cameAroundObstacle)
-                            {
-                                MoveToTargetPy(delta);
-                            }
-                        }
-                        else
-                        {
-                            MoveToTargetPy(delta);
-                        }
-
+                    {   
+                        dx = m_moveKx * offset;
+                        dy = GetTargetDy(delta);
                         break;
                     }
 
                 case Direction.UP:
                 case Direction.DOWN:
                     {
-                        float oldPy = py;
-                        float dy = m_moveKy * offset;
-                        MoveY(dy);
-
-                        if (py == oldPy) // blocking vertical movement
-                        {
-                            int step = Math.Sign(dy);
-
-                            bool cameAroundObstacle = TryComeRoundObstacleY(delta, step);
-                            if (!cameAroundObstacle)
-                            {
-                                MoveToTargetPx(delta);
-                            }
-                        }
-                        else
-                        {
-                            MoveToTargetPx(delta);
-                        }
-
+                        dx = GetTargetDx(delta);
+                        dy = m_moveKy * offset;
                         break;
                     }
             }
+
+            Move(dx, dy);
         }
 
         private bool TryComeRoundObstacleX(float delta, int step)
@@ -142,16 +112,16 @@ namespace Bomberman.Game.Elements.Cells
             return false;
         }
 
-        protected virtual void MoveToTargetPx(float delta)
+        private float GetTargetDx(float delta)
         {
             float xOffset = Util.TargetPxOffset(px, m_oldDirection);
-            MoveX(xOffset < 0 ? Math.Max(xOffset, -delta * m_speed) : Math.Min(xOffset, delta * m_speed));
+            return xOffset < 0 ? Math.Max(xOffset, -delta * m_speed) : Math.Min(xOffset, delta * m_speed);
         }
 
-        protected virtual void MoveToTargetPy(float delta)
+        private float GetTargetDy(float delta)
         {
             float yOffset = Util.TargetPyOffset(py, m_oldDirection);
-            MoveY(yOffset < 0 ? Math.Max(yOffset, -delta * m_speed) : Math.Min(yOffset, delta * m_speed));
+            return yOffset < 0 ? Math.Max(yOffset, -delta * m_speed) : Math.Min(yOffset, delta * m_speed);
         }
 
         public virtual bool HandleWallCollision()
