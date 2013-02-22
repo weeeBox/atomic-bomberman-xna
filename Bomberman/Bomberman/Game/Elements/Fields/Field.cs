@@ -43,13 +43,15 @@ namespace Bomberman.Game.Elements.Fields
             Settings.VAL_PU_FIELD_RANDOM,
         };
 
-        public Field(Scheme scheme, PlayerList players)
+        public Field()
         {
-            this.players = players;
-
             currentField = this;
             timerManager = new TimerManager();
+            players = new PlayerList();
+        }
 
+        public void Setup(Scheme scheme)
+        {
             SetupField(scheme.GetFieldData(), scheme.GetBrickDensity());
             SetupPlayers(players, scheme.GetPlayerLocations());
             SetupPowerups(scheme.GetPowerupInfo());
@@ -245,9 +247,7 @@ namespace Bomberman.Game.Elements.Fields
         public void Update(float delta)
         {
             timerManager.Update(delta);
-
             UpdateCells(delta);
-            UpdatePlayers(delta);
         }
 
         private void UpdateCells(float delta)
@@ -256,9 +256,20 @@ namespace Bomberman.Game.Elements.Fields
             for (int i = 0; i < cellsArray.Length; ++i)
             {
                 FieldCell cell = cellsArray[i];
+                UpdateCell(delta, cell);
+            }
+        }
+
+        private void UpdateCell(float delta, FieldCell cell)
+        {
+            do 
+            {
                 CheckCell(cell);
                 cell.Update(delta);
-            }
+
+                cell = cell.listNext;
+            } 
+            while (cell != null);
         }
 
         private void UpdatePlayers(float delta)
@@ -376,12 +387,23 @@ namespace Bomberman.Game.Elements.Fields
             cells.Add(cell.GetCx(), cell.GetCy(), cell);
         }
 
+        public void RemoveCell(FieldCell cell)
+        {
+            int cx = cell.GetCx();
+            int cy = cell.GetCy();
+            cells.Remove(cx, cy, cell);
+            if (!cells.HasCell(cx, cy))
+            {
+                SetCell(new BlankCell(cx, cy));
+            }
+        }
+
         public void ClearCell(int cx, int cy)
         {
             FieldCell cell = GetCell(cx, cy);
             if (cell != null && !cell.IsEmpty() && !cell.IsSolid())
             {
-                SetCell(new BlankCell(cx, cy));
+                RemoveCell(cell);
             }
         }
 

@@ -23,6 +23,9 @@ namespace Bomberman.Game.Elements.Fields
         public FieldCell listNext;
         public FieldCell listPrev;
 
+        /* Priority inside the list. Cells with higher priority come first */
+        public int listPriority;
+
         public FieldCell(int cx, int cy)
         {
             SetCell(cx, cy);
@@ -42,7 +45,7 @@ namespace Bomberman.Game.Elements.Fields
             SetPos(Util.Cx2Px(cx), Util.Cy2Py(cy));
         }
         
-        public void SetPos(float px, float py)
+        public virtual void SetPos(float px, float py)
         {
             this.m_px = px;
             this.m_py = py;
@@ -190,7 +193,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public void RemoveFromField()
         {
-            GetField().ClearCell(cx, cy);
+            GetField().RemoveCell(this);
         }
 
         protected Field GetField()

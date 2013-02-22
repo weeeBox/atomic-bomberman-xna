@@ -11,8 +11,7 @@ using Bomberman.Content;
 namespace Bomberman.Game
 {
     public class Game
-    {
-        private PlayerList players;
+    {   
         private Match match;
         private Field field;
 
@@ -21,27 +20,27 @@ namespace Bomberman.Game
         public Game()
         {
             current = this;
-            players = new PlayerList();
+            field = new Field();
         }
 
         public void AddPlayer(Player player)
         {
-            players.Add(player);
+            field.AddPlayer(player);
         }
 
-        public List<Player> GetPlayers()
+        public PlayerList GetPlayers()
         {
-            return players.list;
+            return field.GetPlayers();
         }
 
         public void LoadField(Scheme scheme)
         {
-            field = new Field(scheme, players);
+            field.Setup(scheme);
         }
 
         public static PlayerList Players()
         {
-            return current.players;
+            return current.GetPlayers();
         }
 
         public static Match Match()

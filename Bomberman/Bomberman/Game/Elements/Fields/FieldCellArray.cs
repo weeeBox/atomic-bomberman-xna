@@ -38,44 +38,91 @@ namespace Bomberman.Game.Elements.Fields
         {
             int index = GetIndex(x, y);
             Debug.Assert(index != -1, "Trying to set a cell outside of a field: x=" + x + " y=" + y);
-            cells[index] = Add(index, cell);
+            Add(index, cell);
         }
 
         public void Remove(int x, int y, FieldCell cell)
         {
             int index = GetIndex(x, y);
             Debug.Assert(index != -1, "Trying to set a cell outside of a field: x=" + x + " y=" + y);
-            cells[index] = Remove(index, cell);
+            Remove(index, cell);
         }
 
-        private FieldCell Add(int index, FieldCell cell)
+        public bool HasCell(int x, int y)
         {
-            FieldCell root = cells[index];
-            if (root != null)
-            {
-                root.listNext = cell;
-                cell.listPrev = root;
-            }
-
-            return cell;
+            int index = GetIndex(x, y);
+            return index != -1 && cells[index] != null;
         }
 
-        private FieldCell Remove(int index, FieldCell cell)
-        {
-            FieldCell root = cells[index];
-            if (cell == root)
+        private void Add(int index, FieldCell cell)
+        {   
+            FieldCell nextCell = cells[index];
+            if (nextCell == null)
             {
-                Debug.Assert(cell.listPrev == null);
-                return cell.listNext;
+                cells[index] = cell;
+                cell.listNext = null;
+                cell.listPrev = null;
+            }
+            else
+            {
+                // find insertion point
+                FieldCell lastCell = null;
+                for (; nextCell != null; nextCell = nextCell.listNext)
+                {
+                    if (nextCell.listPriority <= cell.listPriority)
+                    {
+                        break;
+                    }
+
+                    lastCell = nextCell; // save last cell to insert at the end
+                }
+
+                if (nextCell == null) // insert at the end
+                {
+                    Debug.Assert(lastCell.listNext == null);
+                    lastCell.listNext = cell;
+                    cell.listPrev = lastCell;
+                    cell.listNext = null;
+                }
+                else
+                {
+                    FieldCell prevCell = nextCell.listPrev;
+                    if (prevCell != null)
+                    {
+                        prevCell.listNext = cell;
+                    }
+                    else
+                    {
+                        cells[index] = cell;
+                    }
+                    
+                    cell.listPrev = prevCell;
+                    cell.listNext = nextCell;
+                    nextCell.listPrev = cell;
+                }
+            }
+        }
+
+        private void Remove(int index, FieldCell cell)
+        {
+            FieldCell prevCell = cell.listPrev;
+            FieldCell nextCell = cell.listNext;
+
+            cell.listNext = cell.listPrev = null;
+
+            if (prevCell != null)
+            {
+                prevCell.listNext = nextCell;
+            }
+            else
+            {
+                cells[index] = nextCell;
             }
 
-            FieldCell prev = cell.listPrev;
-            FieldCell next = cell.listNext;
-
-            prev.listNext = next;
-            next.listPrev = prev;
-
-            return root;
+            if (nextCell != null)
+            {
+                nextCell.listPrev = prevCell;
+            }
         }
 
         public int GetWidth()

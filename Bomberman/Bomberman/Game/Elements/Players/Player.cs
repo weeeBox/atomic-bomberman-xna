@@ -29,13 +29,10 @@ namespace Bomberman.Game.Elements.Players
         /* Kicked/Punched bombs */
         private List<Bomb> m_thrownBombs;
 
-        public Player(int index, PlayerInput input)
+        public Player(int index)
             : base(0, 0)
         {
             this.index = index;
-            this.input = input;
-            input.player = this;
-
             alive = true;
 
             InitPowerups();
@@ -255,7 +252,7 @@ namespace Bomberman.Game.Elements.Players
         {
             int powerupIndex = powerup.powerup;
             TryAddPowerup(powerupIndex);
-            GetField().ClearCell(powerup.cx, powerup.cy);
+            GetField().RemoveCell(powerup);
             return true;
         }
 
@@ -583,6 +580,18 @@ namespace Bomberman.Game.Elements.Players
         private void InitPlayer()
         {
             SetSpeed(CalcPlayerSpeed());
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Player input
+
+        public void SetPlayerInput(PlayerInput input)
+        {
+            this.input = input;
+            input.player = this;
         }
 
         #endregion

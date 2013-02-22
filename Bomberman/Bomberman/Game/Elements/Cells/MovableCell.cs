@@ -277,6 +277,19 @@ namespace Bomberman.Game.Elements.Cells
             SetPos(px, py);
         }
 
+        public override void SetPos(float px, float py)
+        {
+            int oldCx = cx;
+            int oldCy = cy;
+
+            base.SetPos(px, py);
+
+            if (oldCx != cx || oldCy != cy)
+            {
+                GetField().MovableCellChanged(this, oldCx, oldCy);
+            }
+        }
+
         protected virtual void OnPositionChanged()
         {
             GetField().MoveablePosChanged(this);

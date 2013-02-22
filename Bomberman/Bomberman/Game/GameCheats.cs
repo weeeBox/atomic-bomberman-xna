@@ -35,7 +35,7 @@ namespace Bomberman.Game
 
         public void KeyPressed(Keys key)
         {
-            List<Player> players = game.GetPlayers();
+            List<Player> players = game.GetPlayers().list;
             Player player = players[0];
 
             if (lookup.ContainsKey(key))

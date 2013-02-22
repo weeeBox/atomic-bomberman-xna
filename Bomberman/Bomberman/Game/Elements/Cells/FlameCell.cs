@@ -23,7 +23,7 @@ namespace Bomberman.Game.Elements.Cells
             remains -= delta;
             if (remains <= 0)
             {
-                GetField().ClearCell(cx, cy);
+                GetField().RemoveCell(this);
             }
         }
 

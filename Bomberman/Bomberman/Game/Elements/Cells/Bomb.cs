@@ -227,8 +227,8 @@ namespace Bomberman.Game.Elements.Cells
         }
 
         private bool HandleCollision(PowerupCell powerupCell)
-        {   
-            GetField().ClearCell(powerupCell.cx, powerupCell.cy);
+        {
+            GetField().RemoveCell(powerupCell);
             return true;
         }
 
