@@ -22,6 +22,7 @@ namespace Bomberman.Game.Elements.Fields
         /* Linked list stuff */
         public FieldCell listNext;
         public FieldCell listPrev;
+        public bool inList;
 
         /* Priority inside the list. Cells with higher priority come first */
         public int listPriority;

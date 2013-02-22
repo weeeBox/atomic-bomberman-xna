@@ -115,7 +115,15 @@ namespace Bomberman.Game.Elements.Fields
                 PlayerLocationInfo info = locations[index];
                 int cx = info.x;
                 int cy = info.y;
-                player.SetCell(info.x, info.y);
+
+                if (cx == 0 && cy == 0)
+                {
+                    SetCell(player);
+                }
+                else
+                {
+                    player.SetCell(info.x, info.y);
+                }
 
                 ClearCell(cx - 1, cy);
                 ClearCell(cx, cy - 1);
@@ -264,7 +272,7 @@ namespace Bomberman.Game.Elements.Fields
         {
             do 
             {
-                CheckCell(cell);
+                Debug.Assert(Debug.flag && CheckCell(cell));
                 cell.Update(delta);
 
                 cell = cell.listNext;
@@ -391,6 +399,11 @@ namespace Bomberman.Game.Elements.Fields
         {
             int cx = cell.GetCx();
             int cy = cell.GetCy();
+            RemoveCell(cell, cx, cy);
+        }
+
+        private void RemoveCell(FieldCell cell, int cx, int cy)
+        {
             cells.Remove(cx, cy, cell);
             if (!cells.HasCell(cx, cy))
             {
@@ -413,10 +426,9 @@ namespace Bomberman.Game.Elements.Fields
             return cell == null || cell.IsObstacle();
         }
 
-        public void CheckCell(FieldCell expectedCell)
+        private bool CheckCell(FieldCell cell)
         {
-            FieldCell actualCell = GetCell(expectedCell.cx, expectedCell.cy);
-            Debug.Assert(actualCell == expectedCell);
+            return cells.Contains(cell);
         }
 
         public FieldCellArray GetCells()
@@ -441,10 +453,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public void MovableCellChanged(MovableCell movable, int oldCx, int oldCy)
         {
-            FieldCell existingCell = GetCell(movable.cx, movable.cy);
-            Debug.Assert(existingCell.IsEmpty());
-
-            ClearCell(oldCx, oldCy);
+            RemoveCell(movable, oldCx, oldCy);
             SetCell(movable);
         }
 

@@ -55,7 +55,10 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         private void Add(int index, FieldCell cell)
-        {   
+        {
+            Debug.Assert(!cell.inList);
+            cell.inList = true;
+
             FieldCell nextCell = cells[index];
             if (nextCell == null)
             {
@@ -103,26 +106,59 @@ namespace Bomberman.Game.Elements.Fields
             }
         }
 
-        private void Remove(int index, FieldCell cell)
+        private bool Remove(int index, FieldCell cell)
         {
-            FieldCell prevCell = cell.listPrev;
-            FieldCell nextCell = cell.listNext;
-
-            cell.listNext = cell.listPrev = null;
-
-            if (prevCell != null)
+            if (cell.inList)
             {
-                prevCell.listNext = nextCell;
-            }
-            else
-            {
-                cells[index] = nextCell;
+                FieldCell prevCell = cell.listPrev;
+                FieldCell nextCell = cell.listNext;
+
+                cell.listNext = cell.listPrev = null;
+                cell.inList = false;
+
+                if (prevCell != null)
+                {
+                    prevCell.listNext = nextCell;
+                }
+                else
+                {
+                    cells[index] = nextCell;
+                }
+
+                if (nextCell != null)
+                {
+                    nextCell.listPrev = prevCell;
+                }
+
+                return true;
             }
 
-            if (nextCell != null)
+            return false;
+        }
+
+        public bool Contains(FieldCell cell)
+        {
+            int index = GetIndex(cell.cx, cell.cy);
+            return Contains(index, cell);
+        }
+
+        public bool Contains(int index, FieldCell cell)
+        {
+            FieldCell root = cells[index];
+            return Contains(root, cell);
+        }
+
+        public bool Contains(FieldCell root, FieldCell cell)
+        {
+            for (FieldCell c = root; c != null; c = c.listNext)
             {
-                nextCell.listPrev = prevCell;
+                if (c == cell)
+                {
+                    return true;
+                }
             }
+
+            return false;
         }
 
         public int GetWidth()

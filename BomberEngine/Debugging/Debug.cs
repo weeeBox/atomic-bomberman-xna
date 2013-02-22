@@ -8,6 +8,12 @@ namespace BomberEngine.Debugging
 {
     public class Debug
     {
+#if DEBUG
+        public static readonly bool flag = true;
+#else
+        public static readonly bool flag = false;
+#endif
+
         public static void CheckArgument(bool condition, String format, params Object[] args)
         {
             if (!condition)
