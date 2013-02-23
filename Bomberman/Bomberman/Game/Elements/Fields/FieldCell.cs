@@ -27,6 +27,9 @@ namespace Bomberman.Game.Elements.Fields
         /* Priority inside the list. Cells with higher priority come first */
         public int listPriority;
 
+        /* Debug flag indicating if collisions was checked on the current tick */
+        public bool collisionChecked;
+
         public FieldCell(int cx, int cy)
         {
             listIndex = -1;
@@ -35,6 +38,11 @@ namespace Bomberman.Game.Elements.Fields
 
         public virtual void Update(float delta)
         {   
+        }
+
+        public virtual bool HandleCollision(FieldCell other)
+        {
+            return false;
         }
 
         public void SetCell()

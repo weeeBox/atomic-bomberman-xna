@@ -231,6 +231,7 @@ namespace Bomberman.Game.Elements.Fields
         {
             timerManager.Update(delta);
             UpdateCells(delta);
+            HandleCollisions();
         }
 
         private void UpdateCells(float delta)
@@ -442,6 +443,53 @@ namespace Bomberman.Game.Elements.Fields
         //////////////////////////////////////////////////////////////////////////////
 
         #region Collisions
+
+        private void HandleCollisions()
+        {
+            FieldCell[] cellsArray = cells.GetArray();
+            for (int i = 0; i < cellsArray.Length; ++i)
+            {
+                FieldCell cell = cellsArray[i];
+                HandleCollisions(cell);
+            }
+        }
+
+        private void HandleCollisions(FieldCell cell)
+        {
+            for (FieldCell c1 = cell; c1 != null; c1 = c1.listNext)
+            {
+                // check collisions with everyone from the same cell
+                for (FieldCell c2 = c1.listNext; c2 != null; c2 = c2.listNext)
+                {
+                    HandleCollisions(c1, c2);
+                }
+
+                // collision optimization: check only for right and down
+                int cx = c1.cx;
+                int cy = c1.cy;
+
+                HandleCollisions(c1, cx + 1, cy);
+                HandleCollisions(c1, cx, cy + 1);
+                HandleCollisions(c1, cx + 1, cy + 1);
+            }
+        }
+
+        private void HandleCollisions(FieldCell cell, int neighborCx, int neighborCy)
+        {
+            FieldCell neighborCell = GetCell(neighborCx, neighborCy);
+            for (FieldCell c = neighborCell; c != null; c = c.listNext)
+            {
+                HandleCollisions(cell, c);
+            }
+        }
+
+        private void HandleCollisions(FieldCell c1, FieldCell c2)
+        {
+            if (!c1.HandleCollision(c2))
+            {
+                c2.HandleCollision(c1);
+            }
+        }
 
         private void HandleWallCollisions(MovableCell movable)
         {   
