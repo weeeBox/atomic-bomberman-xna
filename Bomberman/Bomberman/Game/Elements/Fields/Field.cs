@@ -346,10 +346,8 @@ namespace Bomberman.Game.Elements.Fields
             return true;
         }
 
-        #endregion
-
         public void DestroyBrick(BrickCell brick)
-        {   
+        {
             brick.RemoveFromField();
 
             int powerup = brick.powerup;
@@ -361,9 +359,35 @@ namespace Bomberman.Game.Elements.Fields
             }
         }
 
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Powerups
+
         public void PlacePowerup(int powerupIndex)
         {
 
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Cells
+
+        public void MoveablePosChanged(MovableCell movable)
+        {
+            HandleWallCollisions(movable);
+        }
+
+        public void MovableCellChanged(MovableCell movable, int oldCx, int oldCy)
+        {
+            SetCell(movable);
+        }
+
+        public void PlayerCellChanged(Player player, int oldCx, int oldCy)
+        {
         }
 
         public FieldCell GetCell(int cx, int cy)
@@ -413,30 +437,11 @@ namespace Bomberman.Game.Elements.Fields
             return cells;
         }
 
-        public int GetWidth()
-        {
-            return cells.GetWidth();
-        }
+        #endregion
 
-        public int GetHeight()
-        {
-            return cells.GetHeight();
-        }
+        //////////////////////////////////////////////////////////////////////////////
 
-        public void MoveablePosChanged(MovableCell movable)
-        {
-            HandleWallCollisions(movable);
-        }
-
-        public void MovableCellChanged(MovableCell movable, int oldCx, int oldCy)
-        {   
-            SetCell(movable);
-        }
-
-        public void PlayerCellChanged(Player player, int oldCx, int oldCy)
-        {
-
-        }
+        #region Collisions
 
         private void HandleWallCollisions(MovableCell movable)
         {   
@@ -539,9 +544,25 @@ namespace Bomberman.Game.Elements.Fields
             return Math.Abs(px - b.px) < Constant.CELL_WIDTH && Math.Abs(py - b.py) < Constant.CELL_HEIGHT;
         }
 
-        private bool IsInsideField(int cx, int cy)
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Getters/Setters
+
+        public static Field Current()
         {
-            return cx >= 0 && cx < GetWidth() && cy >= 0 && cy < GetHeight();
+            return currentField;
+        }
+
+        public int GetWidth()
+        {
+            return cells.GetWidth();
+        }
+
+        public int GetHeight()
+        {
+            return cells.GetHeight();
         }
 
         public float GetMinPx()
@@ -564,6 +585,8 @@ namespace Bomberman.Game.Elements.Fields
             return Constant.FIELD_HEIGHT - Constant.CELL_HEIGHT_2;
         }
 
+        #endregion
+
         //////////////////////////////////////////////////////////////////////////////
 
         #region TimerManager
@@ -579,12 +602,5 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        public static Field Current()
-        {
-            return currentField;
-        }
     }
 }
