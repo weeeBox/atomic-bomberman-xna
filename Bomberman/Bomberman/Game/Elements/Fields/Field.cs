@@ -73,7 +73,7 @@ namespace Bomberman.Game.Elements.Fields
                     {
                         case FieldBlocks.Blank:
                         {
-                            cells.Add(x, y, new BlankCell(x, y));
+                            SetCell(new BlankCell(x, y));
                             break;
                         }
 
@@ -81,18 +81,18 @@ namespace Bomberman.Game.Elements.Fields
                         {
                             if (MathHelp.NextInt(100) <= brickDensity)
                             {
-                                cells.Add(x, y, new BrickCell(x, y));
+                                SetCell(new BrickCell(x, y));
                             }
                             else
                             {
-                                cells.Add(x, y, new BlankCell(x, y));
+                                SetCell(new BlankCell(x, y));
                             }
                             break;
                         }
 
                         case FieldBlocks.Solid:
                         {
-                            cells.Add(x, y, new SolidCell(x, y));
+                            SetCell(new SolidCell(x, y));
                             break;
                         }
 
@@ -399,12 +399,8 @@ namespace Bomberman.Game.Elements.Fields
         {
             int cx = cell.GetCx();
             int cy = cell.GetCy();
-            RemoveCell(cell, cx, cy);
-        }
 
-        private void RemoveCell(FieldCell cell, int cx, int cy)
-        {
-            cells.Remove(cx, cy, cell);
+            cells.Remove(cell);
             if (!cells.HasCell(cx, cy))
             {
                 SetCell(new BlankCell(cx, cy));
@@ -452,8 +448,7 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         public void MovableCellChanged(MovableCell movable, int oldCx, int oldCy)
-        {
-            RemoveCell(movable, oldCx, oldCy);
+        {   
             SetCell(movable);
         }
 

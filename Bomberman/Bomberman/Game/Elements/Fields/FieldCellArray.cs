@@ -41,11 +41,12 @@ namespace Bomberman.Game.Elements.Fields
             Add(index, cell);
         }
 
-        public void Remove(int x, int y, FieldCell cell)
+        public void Remove(FieldCell cell)
         {
-            int index = GetIndex(x, y);
-            Debug.Assert(index != -1, "Trying to set a cell outside of a field: x=" + x + " y=" + y);
-            Remove(index, cell);
+            if (cell.listIndex != -1)
+            {
+                Remove(cell.listIndex, cell);
+            }
         }
 
         public bool HasCell(int x, int y)
@@ -56,8 +57,8 @@ namespace Bomberman.Game.Elements.Fields
 
         private void Add(int index, FieldCell cell)
         {
-            Debug.Assert(!cell.inList);
-            cell.inList = true;
+            Remove(cell.listIndex, cell);
+            cell.listIndex = index;
 
             FieldCell nextCell = cells[index];
             if (nextCell == null)
@@ -108,13 +109,13 @@ namespace Bomberman.Game.Elements.Fields
 
         private bool Remove(int index, FieldCell cell)
         {
-            if (cell.inList)
+            if (cell.listIndex != -1)
             {
                 FieldCell prevCell = cell.listPrev;
                 FieldCell nextCell = cell.listNext;
 
                 cell.listNext = cell.listPrev = null;
-                cell.inList = false;
+                cell.listIndex = -1;
 
                 if (prevCell != null)
                 {
