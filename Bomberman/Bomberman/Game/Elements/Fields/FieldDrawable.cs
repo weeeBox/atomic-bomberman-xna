@@ -125,6 +125,7 @@ namespace Bomberman.Game.Elements.Fields
             {
                 image = bombTriggerImage;
             }
+            DrawCellImage(context, bomb, image);
             context.DrawRect(bomb.cx * cellWidth, bomb.cy * cellHeight, cellWidth, cellHeight, Color.White);
         }
 

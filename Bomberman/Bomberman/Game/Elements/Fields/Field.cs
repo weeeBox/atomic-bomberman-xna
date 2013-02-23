@@ -306,7 +306,7 @@ namespace Bomberman.Game.Elements.Fields
             }
             else
             {
-                ClearCell(cx, cy);
+                brick.RemoveFromField();
             }
         }
 
@@ -367,10 +367,14 @@ namespace Bomberman.Game.Elements.Fields
 
             if (cell.IsPowerup())
             {
-                ClearCell(cx, cy);
+                cell.RemoveFromField();
                 return false;
             }
 
+            if (cell.IsBomb())
+            {
+                cell.RemoveFromField();
+            }
             SetCell(new FlameCell(cx, cy));
             return true;
         }
