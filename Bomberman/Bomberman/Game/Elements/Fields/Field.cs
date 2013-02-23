@@ -409,7 +409,7 @@ namespace Bomberman.Game.Elements.Fields
             }
         }
 
-        public void ClearCell(int cx, int cy)
+        private void ClearCell(int cx, int cy)
         {
             FieldCell cell = GetCell(cx, cy);
             if (cell != null && !cell.IsEmpty() && !cell.IsSolid())
@@ -446,7 +446,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public void MoveablePosChanged(MovableCell movable)
         {
-            HandleCollisions(movable);
+            HandleWallCollisions(movable);
         }
 
         public void MovableCellChanged(MovableCell movable, int oldCx, int oldCy)
@@ -459,7 +459,7 @@ namespace Bomberman.Game.Elements.Fields
 
         }
 
-        private void HandleCollisions(MovableCell movable)
+        private void HandleWallCollisions(MovableCell movable)
         {   
             float dx = movable.moveDx;
             float dy = movable.moveDy;
@@ -472,10 +472,6 @@ namespace Bomberman.Game.Elements.Fields
                     movable.SetPosX(maxX);
                     movable.HandleWallCollision();
                 }
-                else
-                {
-                    CheckCollisionsX(movable, 1);
-                }
             }
             else if (dx < 0)
             {
@@ -484,10 +480,6 @@ namespace Bomberman.Game.Elements.Fields
                 {
                     movable.SetPosX(minX);
                     movable.HandleWallCollision();
-                }
-                else
-                {
-                    CheckCollisionsX(movable, -1);
                 }
             }
 
@@ -499,10 +491,6 @@ namespace Bomberman.Game.Elements.Fields
                     movable.SetPosY(maxY);
                     movable.HandleWallCollision();
                 }
-                else
-                {
-                    CheckCollisionsY(movable, 1);
-                }
             }
             else if (dy < 0)
             {
@@ -511,10 +499,6 @@ namespace Bomberman.Game.Elements.Fields
                 {
                     movable.SetPosY(minY);
                     movable.HandleWallCollision();
-                }
-                else
-                {
-                    CheckCollisionsY(movable, -1);
                 }
             }
         }
