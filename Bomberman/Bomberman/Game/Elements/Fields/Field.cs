@@ -223,6 +223,10 @@ namespace Bomberman.Game.Elements.Fields
 
         #endregion
 
+        //////////////////////////////////////////////////////////////////////////////
+        
+        #region Updatable
+
         public void Update(float delta)
         {
             timerManager.Update(delta);
@@ -251,10 +255,7 @@ namespace Bomberman.Game.Elements.Fields
             while (cell != null);
         }
 
-        private void UpdatePlayers(float delta)
-        {
-            players.Update(delta);
-        }
+        #endregion
 
         public void AddPlayer(Player player)
         {
