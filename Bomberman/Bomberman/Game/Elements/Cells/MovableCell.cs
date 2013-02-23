@@ -132,11 +132,6 @@ namespace Bomberman.Game.Elements.Cells
             return true;
         }
 
-        public virtual bool HandleCollision(FieldCell cell)
-        {
-            return false;
-        }
-
         protected virtual bool HandleObstacleCollision(FieldCell cell)
         {
             return MoveOutOfCollision(this, cell);

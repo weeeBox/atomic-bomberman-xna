@@ -485,9 +485,12 @@ namespace Bomberman.Game.Elements.Fields
 
         private void HandleCollisions(FieldCell c1, FieldCell c2)
         {
-            if (!c1.HandleCollision(c2))
+            if (Collides(c1, c2))
             {
-                c2.HandleCollision(c1);
+                if (!c1.HandleCollision(c2))
+                {
+                    c2.HandleCollision(c1);
+                }
             }
         }
 
@@ -535,61 +538,9 @@ namespace Bomberman.Game.Elements.Fields
             }
         }
 
-        private void CheckCollisionsX(MovableCell movable, int step)
-        {   
-            if (step != 0)
-            {
-                int cx = Util.Px2Cx(movable.px) + step;
-                int cy = Util.Py2Cy(movable.py);
-
-                CheckCollision(movable, cx, cy - 1);
-                CheckCollision(movable, cx, cy);
-                CheckCollision(movable, cx, cy + 1);
-            }
-        }
-
-        private void CheckCollisionsY(MovableCell movable, int step)
+        private bool Collides(FieldCell a, FieldCell b)
         {
-            if (step != 0)
-            {
-                int cx = Util.Px2Cx(movable.px);
-                int cy = Util.Py2Cy(movable.py) + step;
-
-                CheckCollision(movable, cx - 1, cy);
-                CheckCollision(movable, cx, cy);
-                CheckCollision(movable, cx + 1, cy);
-            }
-        }
-
-        private bool CheckCollision(MovableCell movable, int cx, int cy)
-        {   
-            FieldCell cell = cells.Get(cx, cy);
-            if (cell == null)
-            {
-                return false; // wall
-            }
-
-            if (cell.IsEmpty())
-            {
-                return false; // do not collide with empty cells
-            }
-
-            if (Collides(movable, cell))
-            {
-                return movable.HandleCollision(cell);
-            }
-
-            return false;
-        }
-
-        private bool Collides(MovableCell a, FieldCell b)
-        {
-            return Collides(a.px, a.py, b);
-        }
-
-        private static bool Collides(float px, float py, FieldCell b)
-        {
-            return Math.Abs(px - b.px) < Constant.CELL_WIDTH && Math.Abs(py - b.py) < Constant.CELL_HEIGHT;
+            return Math.Abs(a.px - b.px) < Constant.CELL_WIDTH && Math.Abs(a.py - b.py) < Constant.CELL_HEIGHT;
         }
 
         #endregion
