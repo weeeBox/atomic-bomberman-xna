@@ -18,13 +18,7 @@ namespace Bomberman.Game.Elements.Fields
 {
     public class Field : Updatable
     {
-        private FieldCellArray cells;
-
-        private PlayerList players;
-
         private static Field currentField;
-
-        private TimerManager timerManager;
 
         private static readonly int[] POWERUPS_COUNT =
         {
@@ -43,12 +37,20 @@ namespace Bomberman.Game.Elements.Fields
             Settings.VAL_PU_FIELD_RANDOM,
         };
 
+        private FieldCellArray cells;
+        private PlayerList players;
+        private TimerManager timerManager;
+
         public Field()
         {
             currentField = this;
             timerManager = new TimerManager();
             players = new PlayerList();
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Setup
 
         public void Setup(Scheme scheme)
         {
@@ -195,33 +197,18 @@ namespace Bomberman.Game.Elements.Fields
             }
         }
 
-        private int GetEmptyCells(FieldCell[] array)
-        {
-            int count = 0;
-            FieldCell[] cellArray = cells.GetArray();
-            foreach (FieldCell cell in cellArray)
-            {
-                if (cell.IsEmpty() && !IsPlayerAt(cell.GetCx(), cell.GetCy()))
-                {
-                    cellArray[count++] = cell;
-                }
-            }
-
-            return count;
-        }
-
         private int GetBrickCells(BrickCell[] array)
         {
             int count = 0;
             FieldCell[] cellArray = cells.GetArray();
             foreach (FieldCell cell in cellArray)
             {
-                if (cell.IsBrick() && !IsPlayerAt(cell.GetCx(), cell.GetCy()))
-                {
-                    BrickCell brickCell = (BrickCell)cell;
+                BrickCell brickCell = cell.AsBrick();
+                if (brickCell != null)
+                {   
                     if (brickCell.powerup == Powerups.None)
                     {
-                        array[count++] = (BrickCell)cell;
+                        array[count++] = brickCell;
                     }
                 }
             }
@@ -229,28 +216,12 @@ namespace Bomberman.Game.Elements.Fields
             return count;
         }
 
-        private bool IsPlayerAt(int cx, int cy)
-        {
-            return GetPlayer(cx, cy) != null;
-        }
-
-        private Player GetPlayer(int cx, int cy)
-        {
-            foreach (Player player in players.list)
-            {
-                if (player.GetCx() == cx && player.GetCy() == cy)
-                {
-                    return player;
-                }
-            }
-
-            return null;
-        }
-
         private void ShuffleCells(FieldCell[] array, int size)
         {
             Util.ShuffleArray(array, size);
         }
+
+        #endregion
 
         public void Update(float delta)
         {
@@ -380,11 +351,6 @@ namespace Bomberman.Game.Elements.Fields
         public PlayerList GetPlayers()
         {
             return players;
-        }
-
-        public Player GetPlayer(int index)
-        {
-            return players.TryGet(index);
         }
 
         public FieldCell GetCell(int cx, int cy)
