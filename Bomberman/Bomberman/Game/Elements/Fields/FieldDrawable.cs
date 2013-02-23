@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework;
 using BomberEngine.Core.Assets.Types;
 using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements.Cells;
+using Microsoft.Xna.Framework.Graphics;
+using BomberEngine.Game;
 
 namespace Bomberman.Game.Elements.Fields
 {
@@ -36,140 +38,168 @@ namespace Bomberman.Game.Elements.Fields
             PreDraw(context);
 
             DrawGrid(context);
-            DrawBlocks(context);
-            DrawPowerups(context);
-            DrawPlayers(context);
+            DrawCells(context);
 
             PostDraw(context);
         }
 
-        private void DrawBlocks(Context context)
+        private void DrawCells(Context context)
         {
             FieldCell[] cells = field.GetCells().GetArray();
 
             foreach (FieldCell cell in cells)
             {
-                TextureImage image = null;
-
-                if (cell.IsBrick())
-                {
-                    image = breakableImage;
-                }
-                else if (cell.IsSolid())
-                {
-                    image = solidImage;
-                }
-                else if (cell.IsBomb())
-                {
-                    Bomb bomb = cell.AsBomb();
-                    image = bombImage;
-                    if (bomb.IsJelly())
-                    {
-                        image = bombJellyImage;
-                    }
-                    else if (bomb.IsTrigger())
-                    {
-                        image = bombTriggerImage;
-                    }
-                    context.DrawRect(cell.cx * cellWidth, cell.cy * cellHeight, cellWidth, cellHeight, Color.White);
-                }
-                else if (cell.IsPowerup())
-                {
-                    PowerupCell powerupCell = cell.AsPowerup();
-                    int powerup = powerupCell.powerup;
-                    if (powerup != Powerups.None)
-                    {
-                        if (powerup == Powerups.Random)
-                        {
-                            powerup = ((int)(powerupCell.elasped / 0.05f)) % powerupImages.Length;
-                        }
-
-                        image = powerupImages[powerup];
-                    }
-                }
-                else if (cell.IsFlame())
-                {
-                    int x = cell.GetCx() * cellWidth;
-                    int y = cell.GetCy() * cellHeight;
-                    context.FillRect(x, y, cellWidth, cellHeight, Color.Red);
-                }
-
-                if (image != null)
-                {
-                    float drawX = cell.GetPx() - 0.5f * image.GetWidth();
-                    float drawY = cell.GetPy() - 0.5f * image.GetHeight();
-                    context.DrawImage(image, drawX, drawY);
-
-                    if (cell.IsBrick())
-                    {   
-                        BrickCell brick = (BrickCell)cell;
-                        
-                        int powerup = brick.powerup;
-                        if (powerup != Powerups.None)
-                        {
-                            TextureImage powerupImage = powerupImages[powerup];
-                            drawX = cell.GetPx() - 0.5f * powerupImage.GetWidth();
-                            drawY = cell.GetPy() - 0.5f * powerupImage.GetHeight();
-                            context.DrawImage(powerupImage, drawX, drawY, 0.25f);
-                        }                        
-                    }
-                }
+                DrawCells(context, cell);
             }
         }
 
-        private void DrawPowerups(Context context)
+        private void DrawCells(Context context, FieldCell cell)
         {
+            int cellsCount = 0;
+            for (FieldCell c = cell; c != null; c = c.listNext)
+            {
+                DrawCell(context, c);
+                ++cellsCount;
+            }
 
+            float drawX = Util.Cx2Px(cell.cx) - 0.5f * cellWidth;
+            float drawY = Util.Cy2Py(cell.cy) - 0.5f * cellHeight;
+            context.DrawString(drawX, drawY, "" + cellsCount);
         }
 
-        private void DrawPlayers(Context context)
+        private void DrawCell(Context context, FieldCell cell)
         {
-            List<Player> players = field.GetPlayers().list;
-            foreach (Player player in players)
+            if (cell.IsBrick())
             {
-                TextureImage image = TempFindPlayerImage(player);
-                float drawX = player.GetPx() - 0.5f * cellWidth;
-                float drawY = player.GetPy() - 0.5f * cellHeight;
+                DrawBrick(context, cell.AsBrick());
+            }
+            else if (cell.IsSolid())
+            {
+                DrawSolid(context, cell);
+            }
+            else if (cell.IsBomb())
+            {
+                DrawBomb(context, cell.AsBomb());
+            }
+            else if (cell.IsFlame())
+            {
+                DrawFlame(context, cell.AsFlame());
+            }
+            else if (cell.IsPowerup())
+            {
+                DrawPowerup(context, cell.AsPowerup());
+            }
+            else if (cell.IsPlayer())
+            {
+                DrawPlayer(context, cell.AsPlayer());
+            }
+        }   
 
-                context.DrawRect(player.GetCx() * cellWidth, player.GetCy() * cellHeight, cellWidth, cellHeight, Color.White);
-                context.DrawRect(drawX, drawY, cellWidth, cellHeight, Color.Yellow);
+        private void DrawBrick(Context context, BrickCell cell)
+        {
+            DrawCellImage(context, cell, breakableImage);
 
-                if (player.IsInfected())
+            int powerup = cell.powerup;
+            if (powerup != Powerups.None)
+            {
+                TextureImage powerupImage = powerupImages[powerup];
+                float drawX = cell.GetPx() - 0.5f * powerupImage.GetWidth();
+                float drawY = cell.GetPy() - 0.5f * powerupImage.GetHeight();
+                context.DrawImage(powerupImage, drawX, drawY, 0.25f);
+            }
+        }
+
+        private void DrawSolid(Context context, FieldCell cell)
+        {
+            DrawCellImage(context, cell, solidImage);
+        }
+
+        private void DrawBomb(Context context, Bomb bomb)
+        {
+            TextureImage image = bombImage;
+            if (bomb.IsJelly())
+            {
+                image = bombJellyImage;
+            }
+            else if (bomb.IsTrigger())
+            {
+                image = bombTriggerImage;
+            }
+            context.DrawRect(bomb.cx * cellWidth, bomb.cy * cellHeight, cellWidth, cellHeight, Color.White);
+        }
+
+        private void DrawFlame(Context context, FieldCell cell)
+        {
+            int x = cell.GetCx() * cellWidth;
+            int y = cell.GetCy() * cellHeight;
+            context.FillRect(x, y, cellWidth, cellHeight, Color.Red);
+        }
+
+        private void DrawPowerup(Context context, PowerupCell powerupCell)
+        {   
+            int powerup = powerupCell.powerup;
+            if (powerup != Powerups.None)
+            {
+                if (powerup == Powerups.Random)
                 {
-                    blink = !blink;
-                    if (blink)
-                    {
-                        context.DrawImage(image, drawX, drawY - image.GetHeight() + cellHeight);
-                    }
+                    powerup = ((int)(powerupCell.elasped / 0.05f)) % powerupImages.Length;
                 }
-                else
+
+                TextureImage image = powerupImages[powerup];
+                DrawCellImage(context, powerupCell, image);
+            }
+        }
+
+        private void DrawPlayer(Context context, Player player)
+        {
+            TextureImage image = TempFindPlayerImage(player);
+            float drawX = player.GetPx() - 0.5f * cellWidth;
+            float drawY = player.GetPy() - 0.5f * cellHeight;
+
+            context.DrawRect(player.GetCx() * cellWidth, player.GetCy() * cellHeight, cellWidth, cellHeight, Color.White);
+            context.DrawRect(drawX, drawY, cellWidth, cellHeight, Color.Yellow);
+
+            if (player.IsInfected())
+            {
+                blink = !blink;
+                if (blink)
                 {
                     context.DrawImage(image, drawX, drawY - image.GetHeight() + cellHeight);
                 }
+            }
+            else
+            {
+                context.DrawImage(image, drawX, drawY - image.GetHeight() + cellHeight);
+            }
 
+            Bomb bomb = player.bombInHands;
+            if (bomb != null)
+            {
+                image = Helper.GetTexture(A.tex_BMB1001);
 
-                Bomb bomb = player.bombInHands;
-                if (bomb != null)
-                {
-                    image = Helper.GetTexture(A.tex_BMB1001);
+                drawX = bomb.GetPx() - 0.5f * image.GetWidth();
+                drawY = bomb.GetPy() - 0.5f * image.GetHeight();
+                context.DrawImage(image, drawX, drawY);
+            }
 
-                    drawX = bomb.GetPx() - 0.5f * image.GetWidth();
-                    drawY = bomb.GetPy() - 0.5f * image.GetHeight();
-                    context.DrawImage(image, drawX, drawY);
-                }
+            List<Bomb> thrownBombs = player.thrownBombs;
+            foreach (Bomb b in thrownBombs)
+            {
+                image = Helper.GetTexture(A.tex_BMB1001);
 
-                List<Bomb> thrownBombs = player.thrownBombs;
-                foreach (Bomb b in thrownBombs)
-                {
-                    image = Helper.GetTexture(A.tex_BMB1001);
-
-                    drawX = b.GetPx() - 0.5f * image.GetWidth();
-                    drawY = b.GetPy() - 0.5f * image.GetHeight() - b.fallHeight;
-                    context.DrawImage(image, drawX, drawY);
-                }
+                drawX = b.GetPx() - 0.5f * image.GetWidth();
+                drawY = b.GetPy() - 0.5f * image.GetHeight() - b.fallHeight;
+                context.DrawImage(image, drawX, drawY);
             }
         }
 
+        private void DrawCellImage(Context context, FieldCell cell, TextureImage image)
+        {
+            float drawX = cell.GetPx() - 0.5f * image.GetWidth();
+            float drawY = cell.GetPy() - 0.5f * image.GetHeight();
+            context.DrawImage(image, drawX, drawY);
+        }
+        
         private void DrawGrid(Context context)
         {
             for (int i = 0; i <= field.GetWidth(); ++i)

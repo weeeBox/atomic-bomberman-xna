@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Assets;
 using BomberEngine.Core.Assets.Loaders;
 using Bomberman.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Bomberman
 {
@@ -30,6 +31,11 @@ namespace Bomberman
         public Scheme GetScheme(int id)
         {
             return (Scheme)GetAsset(id);
+        }
+
+        protected override SpriteFont LoadSystemFont(ContentManager contentManager)
+        {
+            return contentManager.Load<SpriteFont>("SystemFont");
         }
     }
 }

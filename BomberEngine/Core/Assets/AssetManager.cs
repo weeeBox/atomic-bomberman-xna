@@ -7,10 +7,11 @@ using BomberEngine.Debugging;
 using BomberEngine.Game;
 using BomberEngine.Core.Assets.Loaders;
 using BomberEngine.Core.Assets.Types;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace BomberEngine.Core.Assets
 {
-    public class AssetManager
+    public abstract class AssetManager
     {
         private ContentManager contentManager;
 
@@ -25,6 +26,8 @@ namespace BomberEngine.Core.Assets
         private int loadedCount;
         
         private Timer loadingTimer;
+
+        private SpriteFont systemFont;
 
         public AssetManager(ContentManager contentManager, int resourcesCount)
         {
@@ -127,5 +130,16 @@ namespace BomberEngine.Core.Assets
         {
             return assets[id] != null;
         }
+
+        public virtual SpriteFont GetSystemFont()
+        {
+            if (systemFont == null)
+            {
+                systemFont = LoadSystemFont(contentManager);
+            }
+            return systemFont;
+        }
+
+        protected abstract SpriteFont LoadSystemFont(ContentManager contentManager);
     }
 }

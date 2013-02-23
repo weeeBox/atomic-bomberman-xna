@@ -6,6 +6,7 @@ using BomberEngine.Core.Assets.Types;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using BomberEngine.Debugging;
+using BomberEngine.Game;
 
 namespace BomberEngine.Core.Visual
 {
@@ -206,6 +207,12 @@ namespace BomberEngine.Core.Visual
         {
             Matrix r = Matrix.CreateScale(sx, sy, sz);
             AddTransform(r);
+        }
+
+        public void DrawString(float x, float y, String text)
+        {
+            SpriteFont font = Application.Assets().GetSystemFont();
+            DrawString(font, x, y, text);
         }
 
         public void DrawString(SpriteFont font, float x, float y, String text)
