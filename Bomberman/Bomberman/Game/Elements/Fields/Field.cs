@@ -296,17 +296,15 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         public void DestroyBrick(BrickCell brick)
-        {
-            int cx = brick.GetCx();
-            int cy = brick.GetCy();
+        {   
+            brick.RemoveFromField();
+
             int powerup = brick.powerup;
             if (powerup != Powerups.None)
             {
+                int cx = brick.GetCx();
+                int cy = brick.GetCy();
                 SetCell(new PowerupCell(powerup, cx, cy));
-            }
-            else
-            {
-                brick.RemoveFromField();
             }
         }
 
