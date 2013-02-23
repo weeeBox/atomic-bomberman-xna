@@ -257,37 +257,34 @@ namespace Bomberman.Game.Elements.Fields
 
         #endregion
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Players
+
         public void AddPlayer(Player player)
         {
             players.Add(player);
         }
+
+        public PlayerList GetPlayers()
+        {
+            return players;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Bombs
 
         public void SetBomb(Bomb bomb)
         {
             SetCell(bomb);
         }
 
-        public void DestroyBrick(BrickCell brick)
-        {   
-            brick.RemoveFromField();
-
-            int powerup = brick.powerup;
-            if (powerup != Powerups.None)
-            {
-                int cx = brick.GetCx();
-                int cy = brick.GetCy();
-                SetCell(new PowerupCell(powerup, cx, cy));
-            }
-        }
-
-        public void PlacePowerup(int powerupIndex)
-        {
-
-        }
-
         /** Should only be called from Bomb.Blow() */
         public void BlowBomb(Bomb bomb)
-        {   
+        {
             int cx = bomb.GetCx();
             int cy = bomb.GetCy();
             SetExplosion(bomb, cx, cy);
@@ -349,9 +346,24 @@ namespace Bomberman.Game.Elements.Fields
             return true;
         }
 
-        public PlayerList GetPlayers()
+        #endregion
+
+        public void DestroyBrick(BrickCell brick)
+        {   
+            brick.RemoveFromField();
+
+            int powerup = brick.powerup;
+            if (powerup != Powerups.None)
+            {
+                int cx = brick.GetCx();
+                int cy = brick.GetCy();
+                SetCell(new PowerupCell(powerup, cx, cy));
+            }
+        }
+
+        public void PlacePowerup(int powerupIndex)
         {
-            return players;
+
         }
 
         public FieldCell GetCell(int cx, int cy)
