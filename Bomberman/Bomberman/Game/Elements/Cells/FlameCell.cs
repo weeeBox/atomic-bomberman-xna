@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Bomberman.Game.Elements.Fields;
+using Bomberman.Game.Elements.Players;
 
 namespace Bomberman.Game.Elements.Cells
 {
@@ -12,9 +13,12 @@ namespace Bomberman.Game.Elements.Cells
 
         private float remains;
 
-        public FlameCell(int cx, int cy)
+        public Player player;
+
+        public FlameCell(Player player, int cx, int cy)
             : base(FieldCellType.Flame, cx, cy)
         {
+            this.player = player;
             remains = TIMEOUT;
         }
 
