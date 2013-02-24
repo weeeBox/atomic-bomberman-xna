@@ -7,11 +7,12 @@ namespace Bomberman.Game.Elements.Fields
 {
     public enum FieldCellType
     {
-        Solid,
+        Solid = 0,
         Brick,
+        Powerup,
         Flame,
         Bomb,
-        Powerup,
-        Player
+        Player,
+        Count
     }
 }
