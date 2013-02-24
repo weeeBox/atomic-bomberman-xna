@@ -366,9 +366,12 @@ namespace Bomberman.Game.Elements.Fields
             }
 
             bool canSetFlame = CanSetFlame(bomb.player, cell);
-            
-            for (FieldCell c = cell; c != null; c = c.listNext)
-            {   
+
+            CellIterator iter = CellIterator.Create(cell);
+            while (iter.HasNext())
+            {
+                FieldCell c = iter.Next();
+
                 if(c.IsBomb())
                 {
                     c.AsBomb().Blow();
@@ -378,6 +381,7 @@ namespace Bomberman.Game.Elements.Fields
                     Console.WriteLine("Kill player: " + c.AsPlayer().GetIndex());
                 }
             }
+            iter.Destroy();
 
             if (canSetFlame)
             {
