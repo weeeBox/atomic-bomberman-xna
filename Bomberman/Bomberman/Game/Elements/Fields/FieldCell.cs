@@ -24,7 +24,7 @@ namespace Bomberman.Game.Elements.Fields
         /* Linked list stuff */
         public FieldCell listNext;
         public FieldCell listPrev;
-        public int listIndex;
+        public int slotIndex;
 
         /* Priority inside the list. Cells with higher priority come first */
         public int listPriority;
@@ -36,7 +36,7 @@ namespace Bomberman.Game.Elements.Fields
         {
             this.type = type;
 
-            listIndex = -1;
+            slotIndex = -1;
             SetCell(cx, cy);
         }
 

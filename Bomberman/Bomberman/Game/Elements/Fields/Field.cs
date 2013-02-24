@@ -578,17 +578,17 @@ namespace Bomberman.Game.Elements.Fields
                 }
                 iter2.Destroy();
 
-                if (c.listIndex != -1)
+                if (c.slotIndex != -1)
                 {
                     // collision optimization: check only for right and down
                     int cx = c.cx;
                     int cy = c.cy;
 
                     HandleCollisions(c, cx + 1, cy);
-                    if (c.listIndex == -1) continue;
+                    if (c.slotIndex == -1) continue;
 
                     HandleCollisions(c, cx, cy + 1);
-                    if (c.listIndex == -1) continue;
+                    if (c.slotIndex == -1) continue;
 
                     HandleCollisions(c, cx + 1, cy + 1);
                 }

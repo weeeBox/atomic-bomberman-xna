@@ -42,9 +42,9 @@ namespace Bomberman.Game.Elements.Fields
 
         public void Remove(FieldCell cell)
         {
-            if (cell.listIndex != -1)
+            if (cell.slotIndex != -1)
             {
-                Remove(cell.listIndex, cell);
+                Remove(cell.slotIndex, cell);
             }
         }
 
@@ -56,8 +56,8 @@ namespace Bomberman.Game.Elements.Fields
 
         private void Add(int index, FieldCell cell)
         {
-            Remove(cell.listIndex, cell);
-            cell.listIndex = index;
+            Remove(cell.slotIndex, cell);
+            cell.slotIndex = index;
 
             FieldCell nextCell = cells[index];
             if (nextCell == null)
@@ -108,7 +108,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private bool Remove(int index, FieldCell cell)
         {
-            if (cell.listIndex != -1)
+            if (cell.slotIndex != -1)
             {
                 FieldCell prevCell = cell.listPrev;
                 FieldCell nextCell = cell.listNext;
@@ -116,7 +116,7 @@ namespace Bomberman.Game.Elements.Fields
                 CellIterator.CellRemoved(cell);
 
                 cell.listNext = cell.listPrev = null;
-                cell.listIndex = -1;
+                cell.slotIndex = -1;
 
                 if (prevCell != null)
                 {
