@@ -256,14 +256,13 @@ namespace Bomberman.Game.Elements.Fields
 
         private void UpdateCell(float delta, FieldCell cell)
         {
-            do 
+            CopyToList(cell, helperList1);
+            foreach (FieldCell c in helperList1)
             {
-                Debug.Assert(Debug.flag && CheckCell(cell));
-                cell.Update(delta);
-
-                cell = cell.listNext;
+                Debug.Assert(Debug.flag && CheckCell(c));
+                c.Update(delta);
             } 
-            while (cell != null);
+            helperList1.Clear();
         }
 
         #endregion
