@@ -21,8 +21,8 @@ namespace Bomberman.Game.Elements.Cells
 
         private bool m_moving;
 
-        public MovableCell(int cx, int cy)
-            : base(cx, cy)
+        public MovableCell(FieldCellType type, int cx, int cy)
+            : base(type, cx, cy)
         {
             listPriority = 1;
 
@@ -30,15 +30,7 @@ namespace Bomberman.Game.Elements.Cells
             m_oldDirection = Direction.DOWN;
         }
 
-        public override void Update(float delta)
-        {
-            if (m_moving)
-            {
-                UpdateMoving(delta);
-            }
-        }
-
-        protected virtual void UpdateMoving(float delta)
+        public virtual void UpdateMoving(float delta)
         {   
             float offset = m_speed * delta;
 

@@ -41,11 +41,19 @@ namespace Bomberman.Game.Elements.Fields
         private PlayerList players;
         private TimerManager timerManager;
 
+        private List<FieldCell> helperList1;
+        private List<FieldCell> helperList2;
+
+        private List<MovableCell> movingCells;
+
         public Field()
         {
             currentField = this;
             timerManager = new TimerManager();
             players = new PlayerList();
+
+            helperList1 = new List<FieldCell>(16);
+            helperList2 = new List<FieldCell>(16);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -65,6 +73,7 @@ namespace Bomberman.Game.Elements.Fields
             int height = data.GetHeight();
 
             cells = new FieldCellArray(width, height);
+            movingCells = new List<MovableCell>(width * height); // more than enough
 
             for (int y = 0; y < height; ++y)
             {
@@ -229,7 +238,7 @@ namespace Bomberman.Game.Elements.Fields
         {
             timerManager.Update(delta);
             UpdateCells(delta);
-            HandleCollisions();
+            UpdatePhysics(delta);
         }
 
         private void UpdateCells(float delta)
@@ -255,6 +264,29 @@ namespace Bomberman.Game.Elements.Fields
                 cell = cell.listNext;
             } 
             while (cell != null);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Physics
+
+        private void UpdatePhysics(float delta)
+        {
+            UpdateMoving(delta);
+            HandleCollisions();
+        }
+
+        private void UpdateMoving(float delta)
+        {
+            foreach (MovableCell cell in movingCells)
+            {
+                if (cell.moving)
+                {
+                    cell.UpdateMoving(delta);
+                }
+            }
         }
 
         #endregion
@@ -289,7 +321,9 @@ namespace Bomberman.Game.Elements.Fields
         {
             int cx = bomb.GetCx();
             int cy = bomb.GetCy();
-            SetExplosion(bomb, cx, cy);
+
+            bomb.RemoveFromField();
+            SetFlame(bomb, cx, cy);
 
             bomb.player.OnBombBlown(bomb);
 
@@ -298,52 +332,54 @@ namespace Bomberman.Game.Elements.Fields
 
             for (int i = 1; i <= radius && (up || down || left || right); ++i)
             {
-                left = left && SetExplosion(bomb, cx - i, cy);
-                up = up && SetExplosion(bomb, cx, cy - i);
-                down = down && SetExplosion(bomb, cx, cy + i);
-                right = right && SetExplosion(bomb, cx + i, cy);
+                left = left && SetFlame(bomb, cx - i, cy);
+                up = up && SetFlame(bomb, cx, cy - i);
+                down = down && SetFlame(bomb, cx, cy + i);
+                right = right && SetFlame(bomb, cx + i, cy);
             }
         }
 
-        private bool SetExplosion(Bomb bomb, int cx, int cy)
+        /* Returns true if can be spread more */
+        private bool SetFlame(Bomb bomb, int cx, int cy)
         {
-            FieldCell cell = GetCell(cx, cy);
-            if (cell == null)
+            if (!IsInsideField(cx, cy))
             {
-                return false; // bomb hits the wall
-            }
-
-            if (cell.IsBrick())
-            {
-                BrickCell brick = (BrickCell)cell;
-                if (!brick.destroyed)
-                {
-                    brick.Destroy();
-                }
-                return false; // bomb destroyed a brick
-            }
-
-            if (cell.IsSolid())
-            {
-                return false; // bomb hits solid block
-            }
-
-            if (cell.IsBomb() && cell != bomb)
-            {
-                cell.AsBomb().Blow();
-                return true;
-            }
-
-            if (cell.IsPowerup())
-            {
-                cell.RemoveFromField();
                 return false;
             }
 
-            if (cell.IsBomb())
+            FieldCell cell = GetCell(cx, cy);
+            if (ContainsCell(cell, FieldCellType.Solid))
             {
-                cell.RemoveFromField();
+                return false;
             }
+
+            BrickCell brickCell = (BrickCell)FindCell(cell, FieldCellType.Brick);
+            if (brickCell != null)
+            {   
+                if (!brickCell.destroyed)
+                {
+                    brickCell.Destroy();
+                }
+
+                return false;
+            }
+
+            PowerupCell powerup = (PowerupCell)FindCell(cell, FieldCellType.Powerup);
+            if (powerup != null)
+            {
+                powerup.RemoveFromField();
+                return false;
+            }
+
+            for (FieldCell c = cell; c != null; c = c.listNext)
+            {   
+                if(c.IsBomb())
+                {
+                    c.AsBomb().Blow();
+                }
+            }
+
+            
             SetCell(new FlameCell(cx, cy));
             return true;
         }
@@ -400,6 +436,10 @@ namespace Bomberman.Game.Elements.Fields
         public void SetCell(FieldCell cell)
         {
             cells.Add(cell.GetCx(), cell.GetCy(), cell);
+            if (cell.IsMovable())
+            {
+                AddMovable(cell.AsMovable());
+            }
         }
 
         public void RemoveCell(FieldCell cell)
@@ -408,6 +448,10 @@ namespace Bomberman.Game.Elements.Fields
             int cy = cell.GetCy();
 
             cells.Remove(cell);
+            if (cell.IsMovable())
+            {
+                RemoveMovable(cell.AsMovable());
+            }
         }
 
         private void ClearCell(int cx, int cy)
@@ -422,15 +466,71 @@ namespace Bomberman.Game.Elements.Fields
             }
         }
 
+        private void AddMovable(MovableCell movableCell)
+        {
+            if (!movingCells.Contains(movableCell))
+            {
+                movingCells.Add(movableCell);
+            }
+        }
+
+        private void RemoveMovable(MovableCell movableCell)
+        {   
+            movingCells.Remove(movableCell);
+        }
+
         public bool IsObstacleCell(int cx, int cy)
         {
-            if (!IsInsideField(cx, cy))
+            if (IsInsideField(cx, cy))
             {
-                return true;
+                FieldCell cell = GetCell(cx, cy);
+                for (FieldCell c = cell; c != null; c = c.listNext)
+                {
+                    if (c != null && c.IsObstacle())
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
             }
 
-            FieldCell cell = GetCell(cx, cy);
-            return cell != null && cell.IsObstacle();
+            return true;
+        }
+
+        private bool ContainsCell(FieldCell root, FieldCellType type)
+        {
+            return FindCell(root, type) != null;
+        }
+
+        private FieldCell FindCell(FieldCell root, FieldCellType type)
+        {
+            for (FieldCell c = root; c != null; c = c.listNext)
+            {
+                if (c.type == type)
+                {
+                    return c;
+                }
+            }
+            return null;
+        }
+
+        private int CellsCount(FieldCell root)
+        {
+            int count = 0;
+            for (FieldCell c = root; c != null; c = c.listNext)
+            {
+                ++count;
+            }
+            return count;
+        }
+
+        private void CopyToList(FieldCell root, List<FieldCell> list)
+        {
+            for (FieldCell c = root; c != null; c = c.listNext)
+            {
+                list.Add(c);
+            }
         }
 
         public bool IsInsideField(int cx, int cy)
@@ -466,13 +566,18 @@ namespace Bomberman.Game.Elements.Fields
 
         private void HandleCollisions(FieldCell cell)
         {
-            for (FieldCell c1 = cell; c1 != null; c1 = c1.listNext)
+            CopyToList(cell, helperList1);
+
+            foreach (FieldCell c1 in helperList1)
             {
+                CopyToList(c1.listNext, helperList2);
+
                 // check collisions with everyone from the same cell
-                for (FieldCell c2 = c1.listNext; c2 != null; c2 = c2.listNext)
+                foreach (FieldCell c2 in helperList2)
                 {
                     HandleCollisions(c1, c2);
                 }
+                helperList2.Clear();
 
                 // collision optimization: check only for right and down
                 int cx = c1.cx;
@@ -482,6 +587,8 @@ namespace Bomberman.Game.Elements.Fields
                 HandleCollisions(c1, cx, cy + 1);
                 HandleCollisions(c1, cx + 1, cy + 1);
             }
+
+            helperList1.Clear();
         }
 
         private void HandleCollisions(FieldCell cell, int neighborCx, int neighborCy)
@@ -489,10 +596,13 @@ namespace Bomberman.Game.Elements.Fields
             if (IsInsideField(neighborCx, neighborCy))
             {
                 FieldCell neighborCell = GetCell(neighborCx, neighborCy);
-                for (FieldCell c = neighborCell; c != null; c = c.listNext)
+
+                CopyToList(neighborCell, helperList2);
+                foreach (FieldCell c in helperList2)
                 {
                     HandleCollisions(cell, c);
                 }
+                helperList2.Clear();
             }
         }
 

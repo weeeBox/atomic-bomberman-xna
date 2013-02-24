@@ -9,7 +9,7 @@ namespace Bomberman.Game.Elements.Cells
     public class SolidCell : FieldCell
     {
         public SolidCell(int cx, int cy)
-            : base(cx, cy)
+            : base(FieldCellType.Solid, cx, cy)
         {
         }
 

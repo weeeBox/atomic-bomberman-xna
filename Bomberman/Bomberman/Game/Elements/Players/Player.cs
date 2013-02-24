@@ -30,7 +30,7 @@ namespace Bomberman.Game.Elements.Players
         private List<Bomb> m_thrownBombs;
 
         public Player(int index)
-            : base(0, 0)
+            : base(FieldCellType.Player, 0, 0)
         {
             this.index = index;
             alive = true;

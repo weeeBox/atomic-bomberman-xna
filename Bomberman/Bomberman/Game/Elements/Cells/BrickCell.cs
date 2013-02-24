@@ -13,7 +13,7 @@ namespace Bomberman.Game.Elements.Cells
         public float remains;
 
         public BrickCell(int cx, int cy)
-            : base(cx, cy)
+            : base(FieldCellType.Brick, cx, cy)
         {
             powerup = Powerups.None;
         }

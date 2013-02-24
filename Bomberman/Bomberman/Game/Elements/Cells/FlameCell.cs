@@ -13,7 +13,7 @@ namespace Bomberman.Game.Elements.Cells
         private float remains;
 
         public FlameCell(int cx, int cy)
-            : base(cx, cy)
+            : base(FieldCellType.Flame, cx, cy)
         {
             remains = TIMEOUT;
         }

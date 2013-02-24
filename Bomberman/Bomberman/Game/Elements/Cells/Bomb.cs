@@ -43,7 +43,8 @@ namespace Bomberman.Game.Elements.Cells
 
         private int m_triggerIndex;
 
-        public Bomb(Player player) : base(player.GetCx(), player.GetCy())
+        public Bomb(Player player)
+           : base(FieldCellType.Bomb, player.GetCx(), player.GetCy())
         {
             m_player = player;
             listPriority = 2;

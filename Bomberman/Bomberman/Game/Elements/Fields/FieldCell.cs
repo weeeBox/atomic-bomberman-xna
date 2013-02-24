@@ -11,6 +11,8 @@ namespace Bomberman.Game.Elements.Fields
 {
     public class FieldCell : Updatable
     {
+        public FieldCellType type;
+
         /* Coordinates in points */
         private float m_px;
         private float m_py;
@@ -30,8 +32,10 @@ namespace Bomberman.Game.Elements.Fields
         /* Debug flag indicating if collisions was checked on the current tick */
         public bool collisionChecked;
 
-        public FieldCell(int cx, int cy)
+        public FieldCell(FieldCellType type, int cx, int cy)
         {
+            this.type = type;
+
             listIndex = -1;
             SetCell(cx, cy);
         }

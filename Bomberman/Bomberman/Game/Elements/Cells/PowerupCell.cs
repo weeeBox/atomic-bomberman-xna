@@ -13,7 +13,7 @@ namespace Bomberman.Game.Elements.Cells
 
         public PowerupCell(int
             powerup, int cx, int cy)
-            : base(cx, cy)
+            : base(FieldCellType.Powerup, cx, cy)
         {
             this.powerup = powerup;
         }

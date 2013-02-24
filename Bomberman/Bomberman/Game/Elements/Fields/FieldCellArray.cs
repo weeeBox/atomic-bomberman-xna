@@ -161,6 +161,17 @@ namespace Bomberman.Game.Elements.Fields
             return false;
         }
 
+        public int CellsCount(FieldCell root)
+        {
+            int count = 0;
+            for (FieldCell c = root; c != null; c = c.listNext)
+            {
+                ++count;
+            }
+
+            return count;
+        }
+
         public int GetWidth()
         {
             return width;
