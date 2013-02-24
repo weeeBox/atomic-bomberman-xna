@@ -41,9 +41,6 @@ namespace Bomberman.Game.Elements.Fields
         private PlayerList players;
         private TimerManager timerManager;
 
-        private List<FieldCell> helperList1;
-        private List<FieldCell> helperList2;
-
         private List<MovableCell> movingCells;
 
         public Field()
@@ -51,9 +48,6 @@ namespace Bomberman.Game.Elements.Fields
             currentField = this;
             timerManager = new TimerManager();
             players = new PlayerList();
-
-            helperList1 = new List<FieldCell>(16);
-            helperList2 = new List<FieldCell>(16);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -256,13 +250,14 @@ namespace Bomberman.Game.Elements.Fields
 
         private void UpdateCell(float delta, FieldCell cell)
         {
-            CopyToList(cell, helperList1);
-            foreach (FieldCell c in helperList1)
+            CellIterator iter = CellIterator.Create(cell);
+            while (iter.HasNext())
             {
+                FieldCell c = iter.Next();
                 Debug.Assert(Debug.flag && CheckCell(c));
                 c.Update(delta);
-            } 
-            helperList1.Clear();
+            }
+            iter.Destroy();
         }
 
         #endregion
@@ -569,29 +564,35 @@ namespace Bomberman.Game.Elements.Fields
 
         private void HandleCollisions(FieldCell cell)
         {
-            CopyToList(cell, helperList1);
-
-            foreach (FieldCell c1 in helperList1)
+            CellIterator iter1 = CellIterator.Create(cell);
+            while (iter1.HasNext())
             {
-                CopyToList(c1.listNext, helperList2);
+                FieldCell c = iter1.Next();
 
                 // check collisions with everyone from the same cell
-                foreach (FieldCell c2 in helperList2)
+                CellIterator iter2 = CellIterator.Create(c.listNext);
+                while (iter2.HasNext())
                 {
-                    HandleCollisions(c1, c2);
+                    HandleCollisions(c, iter2.Next());
                 }
-                helperList2.Clear();
+                iter2.Destroy();
 
-                // collision optimization: check only for right and down
-                int cx = c1.cx;
-                int cy = c1.cy;
+                if (c.listIndex != -1)
+                {
+                    // collision optimization: check only for right and down
+                    int cx = c.cx;
+                    int cy = c.cy;
 
-                HandleCollisions(c1, cx + 1, cy);
-                HandleCollisions(c1, cx, cy + 1);
-                HandleCollisions(c1, cx + 1, cy + 1);
+                    HandleCollisions(c, cx + 1, cy);
+                    if (c.listIndex == -1) continue;
+
+                    HandleCollisions(c, cx, cy + 1);
+                    if (c.listIndex == -1) continue;
+
+                    HandleCollisions(c, cx + 1, cy + 1);
+                }
             }
-
-            helperList1.Clear();
+            iter1.Destroy();
         }
 
         private void HandleCollisions(FieldCell cell, int neighborCx, int neighborCy)
@@ -600,12 +601,12 @@ namespace Bomberman.Game.Elements.Fields
             {
                 FieldCell neighborCell = GetCell(neighborCx, neighborCy);
 
-                CopyToList(neighborCell, helperList2);
-                foreach (FieldCell c in helperList2)
+                CellIterator iter = CellIterator.Create(neighborCell);
+                while (iter.HasNext())
                 {
-                    HandleCollisions(cell, c);
+                    HandleCollisions(cell, iter.Next());
                 }
-                helperList2.Clear();
+                iter.Destroy();
             }
         }
 

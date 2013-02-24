@@ -127,6 +127,7 @@
     <Compile Include="Game\Constant.cs" />
     <Compile Include="Game\Elements\Cells\BrickCell.cs" />
     <Compile Include="Game\Elements\Cells\CellHelper.cs" />
+    <Compile Include="Game\Elements\Cells\CellIterator.cs" />
     <Compile Include="Game\Elements\Cells\FlameCell.cs" />
     <Compile Include="Game\Elements\Cells\MovableCell.cs" />
     <Compile Include="Game\Elements\Cells\PowerupCell.cs" />
