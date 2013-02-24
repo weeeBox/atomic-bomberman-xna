@@ -61,11 +61,6 @@ namespace Bomberman.Game.Elements.Fields
             this.m_py = py;
         }
 
-        public virtual bool IsEmpty()
-        {
-            return false;
-        }
-
         public virtual bool IsSolid()
         {
             return false;

@@ -229,7 +229,7 @@ namespace Bomberman.Game.Elements.Players
                 if (canKick)
                 {
                     FieldCell blockingCell = bomb.NearCellDir(direction);
-                    if (blockingCell != null && !blockingCell.IsObstacle()) // can we kick the bomb here?
+                    if (blockingCell == null || !blockingCell.IsObstacle()) // can we kick the bomb here?
                     {
                         KickBomb(bomb);
                     }

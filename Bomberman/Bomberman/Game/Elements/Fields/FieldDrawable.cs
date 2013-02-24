@@ -49,7 +49,10 @@ namespace Bomberman.Game.Elements.Fields
 
             foreach (FieldCell cell in cells)
             {
-                DrawCells(context, cell);
+                if (cell != null)
+                {
+                    DrawCells(context, cell);
+                }
             }
         }
 

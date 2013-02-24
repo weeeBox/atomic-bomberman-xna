@@ -31,13 +31,12 @@ namespace Bomberman.Game.Elements.Fields
         public FieldCell Get(int x, int y)
         {
             int index = GetIndex(x, y);
-            return index != -1 ? cells[index] : null;
+            return cells[index];
         }
 
         public void Add(int x, int y, FieldCell cell)
         {
             int index = GetIndex(x, y);
-            Debug.Assert(index != -1, "Trying to set a cell outside of a field: x=" + x + " y=" + y);
             Add(index, cell);
         }
 
@@ -52,7 +51,7 @@ namespace Bomberman.Game.Elements.Fields
         public bool HasCell(int x, int y)
         {
             int index = GetIndex(x, y);
-            return index != -1 && cells[index] != null;
+            return cells[index] != null;
         }
 
         private void Add(int index, FieldCell cell)
@@ -174,11 +173,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private int GetIndex(int x, int y)
         {
-            if (x >= 0 && x < width && y >= 0 && y < height)
-            {
-                return y * width + x;
-            }
-            return -1;
+            return y * width + x;
         }
     }
 }

@@ -74,8 +74,7 @@ namespace Bomberman.Game.Elements.Fields
                     switch (block)
                     {
                         case FieldBlocks.Blank:
-                        {
-                            SetCell(new BlankCell(x, y));
+                        {   
                             break;
                         }
 
@@ -84,10 +83,6 @@ namespace Bomberman.Game.Elements.Fields
                             if (MathHelp.NextInt(100) <= brickDensity)
                             {
                                 SetCell(new BrickCell(x, y));
-                            }
-                            else
-                            {
-                                SetCell(new BlankCell(x, y));
                             }
                             break;
                         }
@@ -203,12 +198,15 @@ namespace Bomberman.Game.Elements.Fields
             FieldCell[] cellArray = cells.GetArray();
             foreach (FieldCell cell in cellArray)
             {
-                BrickCell brickCell = cell.AsBrick();
-                if (brickCell != null)
-                {   
-                    if (brickCell.powerup == Powerups.None)
+                if (cell != null)
+                {
+                    BrickCell brickCell = cell.AsBrick();
+                    if (brickCell != null)
                     {
-                        array[count++] = brickCell;
+                        if (brickCell.powerup == Powerups.None)
+                        {
+                            array[count++] = brickCell;
+                        }
                     }
                 }
             }
@@ -240,7 +238,10 @@ namespace Bomberman.Game.Elements.Fields
             for (int i = 0; i < cellsArray.Length; ++i)
             {
                 FieldCell cell = cellsArray[i];
-                UpdateCell(delta, cell);
+                if (cell != null)
+                {
+                    UpdateCell(delta, cell);
+                }
             }
         }
 
@@ -407,25 +408,34 @@ namespace Bomberman.Game.Elements.Fields
             int cy = cell.GetCy();
 
             cells.Remove(cell);
-            if (!cells.HasCell(cx, cy))
-            {
-                SetCell(new BlankCell(cx, cy));
-            }
         }
 
         private void ClearCell(int cx, int cy)
         {
-            FieldCell cell = GetCell(cx, cy);
-            if (cell != null && !cell.IsEmpty() && !cell.IsSolid())
+            if (IsInsideField(cx, cy))
             {
-                RemoveCell(cell);
+                FieldCell cell = GetCell(cx, cy);
+                if (cell != null && !cell.IsSolid())
+                {
+                    RemoveCell(cell);
+                }
             }
         }
 
         public bool IsObstacleCell(int cx, int cy)
         {
+            if (!IsInsideField(cx, cy))
+            {
+                return true;
+            }
+
             FieldCell cell = GetCell(cx, cy);
-            return cell == null || cell.IsObstacle();
+            return cell != null && cell.IsObstacle();
+        }
+
+        public bool IsInsideField(int cx, int cy)
+        {
+            return cx >= 0 && cy >= 0 && cx < GetWidth() && cy < GetHeight();
         }
 
         private bool CheckCell(FieldCell cell)
@@ -476,10 +486,13 @@ namespace Bomberman.Game.Elements.Fields
 
         private void HandleCollisions(FieldCell cell, int neighborCx, int neighborCy)
         {
-            FieldCell neighborCell = GetCell(neighborCx, neighborCy);
-            for (FieldCell c = neighborCell; c != null; c = c.listNext)
+            if (IsInsideField(neighborCx, neighborCy))
             {
-                HandleCollisions(cell, c);
+                FieldCell neighborCell = GetCell(neighborCx, neighborCy);
+                for (FieldCell c = neighborCell; c != null; c = c.listNext)
+                {
+                    HandleCollisions(cell, c);
+                }
             }
         }
 
