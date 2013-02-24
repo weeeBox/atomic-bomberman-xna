@@ -484,53 +484,35 @@ namespace Bomberman.Game.Elements.Fields
             if (IsInsideField(cx, cy))
             {
                 FieldCell cell = GetCell(cx, cy);
-                for (FieldCell c = cell; c != null; c = c.listNext)
-                {
-                    if (c != null && c.IsObstacle())
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
+                return cell != null && IsObstacleCell(cell);
             }
 
             return true;
         }
 
+        public bool IsObstacleCell(FieldCell cell)
+        {
+            return CellHelper.IsObstacleCell(cell);
+        }
+
         private bool ContainsCell(FieldCell root, FieldCellType type)
         {
-            return FindCell(root, type) != null;
+            return CellHelper.ContainsCell(root, type);
         }
 
         private FieldCell FindCell(FieldCell root, FieldCellType type)
         {
-            for (FieldCell c = root; c != null; c = c.listNext)
-            {
-                if (c.type == type)
-                {
-                    return c;
-                }
-            }
-            return null;
+            return CellHelper.FindCell(root, type);
         }
 
         private int CellsCount(FieldCell root)
         {
-            int count = 0;
-            for (FieldCell c = root; c != null; c = c.listNext)
-            {
-                ++count;
-            }
-            return count;
+            return CellHelper.CellsCount(root);
         }
 
         private void CopyToList(FieldCell root, List<FieldCell> list)
         {
-            for (FieldCell c = root; c != null; c = c.listNext)
-            {
-                list.Add(c);
-            }
+            CellHelper.CopyToList(root, list);
         }
 
         public bool IsInsideField(int cx, int cy)

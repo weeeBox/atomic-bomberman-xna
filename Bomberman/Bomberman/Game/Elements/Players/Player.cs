@@ -832,7 +832,7 @@ namespace Bomberman.Game.Elements.Players
         private bool TryBomb()
         {
             FieldCell cell = GetField().GetCell(cx, cy);
-            if (!cell.IsObstacle())
+            if (!IsObstacleCell(cell))
             {
                 Bomb bomb = GetNextBomb();
                 if (bomb != null)
@@ -921,5 +921,12 @@ namespace Bomberman.Game.Elements.Players
         }
 
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        private bool IsObstacleCell(FieldCell cell)
+        {
+            return CellHelper.IsObstacleCell(cell);
+        }
     }
 }
