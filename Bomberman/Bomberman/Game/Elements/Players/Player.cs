@@ -206,23 +206,27 @@ namespace Bomberman.Game.Elements.Players
                     return true;
                 }
                 
-                bool farEnoughForKick = false; // true, if distance between player's center and bomb's center is enough for a kick
+                bool canKick = false; // true, if distance between player's center and bomb's center is enough for a kick
                 switch (direction)
                 {
                     case Direction.UP:
+                        canKick = py - bomb.py > Constant.CELL_HEIGHT_2;
+                        break;
                     case Direction.DOWN:
-                        farEnoughForKick = Math.Abs(py - bomb.py) > Constant.CELL_HEIGHT_2;
+                        canKick = bomb.py - py > Constant.CELL_HEIGHT_2;
                         break;
                     case Direction.LEFT:
+                        canKick = px - bomb.px > Constant.CELL_WIDTH_2;
+                        break;
                     case Direction.RIGHT:
-                        farEnoughForKick = Math.Abs(px - bomb.px) > Constant.CELL_WIDTH_2;
+                        canKick = bomb.px - px > Constant.CELL_WIDTH_2;
                         break;
                     default:
                         Debug.Assert(false, "Unknown direction: " + direction);
                         break;
                 }
 
-                if (farEnoughForKick)
+                if (canKick)
                 {
                     FieldCell blockingCell = bomb.NearCellDir(direction);
                     if (blockingCell != null && !blockingCell.IsObstacle()) // can we kick the bomb here?
