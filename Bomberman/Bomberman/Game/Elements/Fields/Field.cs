@@ -365,8 +365,6 @@ namespace Bomberman.Game.Elements.Fields
                 return false;
             }
 
-            bool canSetFlame = CanSetFlame(bomb.player, cell);
-
             CellIterator iter = CellIterator.Create(cell);
             while (iter.HasNext())
             {
@@ -383,11 +381,24 @@ namespace Bomberman.Game.Elements.Fields
             }
             iter.Destroy();
 
-            if (canSetFlame)
-            {
-                SetCell(new FlameCell(bomb.player, cx, cy));
-            }
+            SetFlame(bomb.player, cx, cy);
             return true;
+        }
+
+        private void SetFlame(Player player, int cx, int cy)
+        {
+            FieldCell cell = GetCell(cx, cy);
+            for (FieldCell c = cell; c != null; c = c.listNext)
+            {
+                FlameCell flame = c.AsFlame();
+                if (flame != null && flame.player == player)
+                {
+                    flame.RemoveFromField();
+                    break;
+                }
+            }
+
+            SetCell(new FlameCell(player, cx, cy));
         }
 
         public void DestroyBrick(BrickCell brick)
@@ -401,20 +412,6 @@ namespace Bomberman.Game.Elements.Fields
                 int cy = brick.GetCy();
                 SetCell(new PowerupCell(powerup, cx, cy));
             }
-        }
-
-        private bool CanSetFlame(Player player, FieldCell cell)
-        {
-            for (FieldCell c = cell; c != null; c = c.listNext)
-            {
-                FlameCell flame = c.AsFlame();
-                if (flame != null && flame.player == player)
-                {
-                    return false;
-                }
-            }
-
-            return true;
         }
 
         #endregion
