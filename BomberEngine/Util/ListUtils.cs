@@ -19,7 +19,7 @@ namespace BomberEngine.Util
             item.listNext = head;
             head = item;
 
-            return item;
+            return head;
         }
 
         /* Returns new head */

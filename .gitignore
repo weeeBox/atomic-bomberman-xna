@@ -109,3 +109,5 @@ UpgradeLog*.XML
 *.cachefile
 /Utils/Builder/tmp
 /Bomberman/BombermanContent
+
+/Bomberman.vsmdi
