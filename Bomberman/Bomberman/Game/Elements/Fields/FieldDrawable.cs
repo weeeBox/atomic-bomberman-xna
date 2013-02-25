@@ -45,13 +45,17 @@ namespace Bomberman.Game.Elements.Fields
 
         private void DrawCells(Context context)
         {
-            FieldCell[] cells = field.GetCells().GetArray();
+            FieldCellSlot[] slots = field.GetSlots();
 
-            foreach (FieldCell cell in cells)
+            foreach (FieldCellSlot slot in slots)
             {
-                if (cell != null)
+                FieldCell[] cells = slot.GetCells();
+                foreach (FieldCell cell in cells)
                 {
-                    DrawCells(context, cell);
+                    if (cell != null)
+                    {
+                        DrawCells(context, cell);
+                    }
                 }
             }
         }

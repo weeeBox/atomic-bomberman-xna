@@ -228,8 +228,8 @@ namespace Bomberman.Game.Elements.Players
 
                 if (canKick)
                 {
-                    FieldCell blockingCell = bomb.NearCellDir(direction);
-                    if (blockingCell == null || !blockingCell.IsObstacle()) // can we kick the bomb here?
+                    FieldCellSlot blockingSlot = bomb.NearSlotDir(direction);
+                    if (blockingSlot != null && !blockingSlot.ContainsObstacle()) // can we kick the bomb here?
                     {
                         KickBomb(bomb);
                     }
@@ -294,6 +294,11 @@ namespace Bomberman.Game.Elements.Players
             }
 
             bomb.Kick(direction);
+        }
+
+        public void Kill()
+        {
+
         }
 
         protected override void OnCellChanged(int oldCx, int oldCy)
@@ -755,13 +760,12 @@ namespace Bomberman.Game.Elements.Players
 
         private bool TrySpooger()
         {
-            FieldCell underlyingCell = GetField().GetCell(cx, cy);
-            if (!underlyingCell.IsBomb())
+            Bomb underlyingBomb = GetField().GetSlot(cx, cy).GetBomb();
+            if (underlyingBomb == null)
             {
                 return false; // you can use spooger only when standing on the bomb
             }
 
-            Bomb underlyingBomb = underlyingCell.AsBomb();
             if (underlyingBomb.player != this)
             {
                 return false; // you only can use spooger when standing at your own bomb
@@ -797,8 +801,7 @@ namespace Bomberman.Game.Elements.Players
             int numBombs = 0;
             Field field = GetField();
 
-            FieldCell underlyingCell;
-            while ((underlyingCell = field.GetCell(uCx, uCy)) != null && !underlyingCell.IsObstacle())
+            while (field.ContainsNoObstacle(uCx, uCy))
             {
                 Bomb nextBomb = GetNextBomb();
                 if (nextBomb == null)
@@ -830,9 +833,8 @@ namespace Bomberman.Game.Elements.Players
         }
 
         private bool TryBomb()
-        {
-            FieldCell cell = GetField().GetCell(cx, cy);
-            if (!IsObstacleCell(cell))
+        {   
+            if (GetField().ContainsNoObstacle(cx, cy))
             {
                 Bomb bomb = GetNextBomb();
                 if (bomb != null)
@@ -850,7 +852,7 @@ namespace Bomberman.Game.Elements.Players
 
         private bool TryGrab()
         {
-            Bomb underlyingBomb = GetField().GetCell(cx, cy).AsBomb();
+            Bomb underlyingBomb = GetField().GetBomb(cx, cy);
             if (underlyingBomb != null)
             {
                 underlyingBomb.Grab();
@@ -888,10 +890,10 @@ namespace Bomberman.Game.Elements.Players
         
         private bool TryPunchBomb()
         {
-            FieldCell cell = NearCellDir(direction);
-            if (cell != null && cell.IsBomb())
-            {
-                Bomb bomb = cell.AsBomb();
+            FieldCellSlot slot = NearSlotDir(direction);
+            Bomb bomb = slot != null ? slot.GetBomb() : null;
+            if (bomb != null)
+            {   
                 AddThrownBomb(bomb);
                 bomb.Punch();
                 return true;

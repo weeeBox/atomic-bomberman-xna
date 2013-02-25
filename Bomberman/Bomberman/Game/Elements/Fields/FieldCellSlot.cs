@@ -17,6 +17,10 @@ namespace Bomberman.Game.Elements.Fields
             cells = new FieldCell[size];
         }
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Add/Remove
+
         public void AddCell(FieldCell cell)
         {
             int index = GetIndex(cell);
@@ -70,6 +74,34 @@ namespace Bomberman.Game.Elements.Fields
                 nextCell.listPrev = prevCell;
             }
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Getters/Setters
+
+        public FieldCell[] GetCells()
+        {
+            return cells;
+        }
+
+        public FieldCell Get(FieldCellType type)
+        {
+            int index = GetIndex(type);
+            return cells[index];
+        }
+
+        public int Size()
+        {
+            return cells.Length;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Helpers
 
         public bool ContainsSolid()
         {
@@ -144,15 +176,22 @@ namespace Bomberman.Game.Elements.Fields
             return false;
         }
 
+        public bool Contains(FieldCell cell)
+        {
+            int index = GetIndex(cell);
+            for (FieldCell c = cells[index]; c != null; c = c.listNext)
+            {
+                if (c == cell)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public bool Contains(FieldCellType type)
         {
             return Get(type) != null;
-        }
-
-        public FieldCell Get(FieldCellType type)
-        {
-            int index = GetIndex(type);
-            return cells[index];
         }
 
         private int GetIndex(FieldCell cell)
@@ -164,5 +203,7 @@ namespace Bomberman.Game.Elements.Fields
         {
             return (int)type;
         }
+
+        #endregion
     }
 }

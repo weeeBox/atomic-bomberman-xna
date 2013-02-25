@@ -175,23 +175,23 @@ namespace Bomberman.Game.Elements.Fields
             return py - CellCenterPy();
         }
 
-        public FieldCell NearCell(int dcx, int dcy)
+        public FieldCellSlot NearSlot(int dcx, int dcy)
         {
-            return GetField().GetCell(cx + dcx, cy + dcy);
+            return GetField().GetSlot(cx + dcx, cy + dcy);
         }
 
-        public FieldCell NearCellDir(Direction dir)
+        public FieldCellSlot NearSlotDir(Direction dir)
         {
             switch (dir)
             {
                 case Direction.DOWN:
-                    return NearCell(0, 1);
+                    return NearSlot(0, 1);
                 case Direction.UP:
-                    return NearCell(0, -1);
+                    return NearSlot(0, -1);
                 case Direction.LEFT:
-                    return NearCell(-1, 0);
+                    return NearSlot(-1, 0);
                 case Direction.RIGHT:
-                    return NearCell(1, 0);
+                    return NearSlot(1, 0);
                 default:
                     Debug.Assert(false, "Unknown dir: " + dir);
                     break;
@@ -208,6 +208,11 @@ namespace Bomberman.Game.Elements.Fields
         protected Field GetField()
         {
             return Field.Current();
+        }
+
+        protected FieldCellSlot GetSlot(int cx, int cy)
+        {
+            return GetField().GetSlot(cx, cy);
         }
 
         /* This is a bit tricky: I'm not gonna use properties or any other C# specific

@@ -13,124 +13,38 @@ namespace Bomberman.Game.Elements.Fields
         private int width;
         private int height;
 
-        private FieldCell[] cells;
+        private FieldCellSlot[] slots;
 
         public FieldCellArray(int width, int height)
         {
             this.width = width;
             this.height = height;
 
-            cells = new FieldCell[width * height];
-        }
-
-        public FieldCell[] GetArray()
-        {
-            return cells;
-        }
-
-        public FieldCell Get(int x, int y)
-        {
-            int index = GetIndex(x, y);
-            return cells[index];
-        }
-
-        public void Add(int x, int y, FieldCell cell)
-        {
-            int index = GetIndex(x, y);
-            Add(index, cell);
-        }
-
-        public void Remove(FieldCell cell)
-        {
-            if (cell.slotIndex != -1)
+            slots = new FieldCellSlot[width * height];
+            for (int i = 0; i < slots.Length; ++i)
             {
-                Remove(cell.slotIndex, cell);
+                slots[i] = new FieldCellSlot();
             }
         }
 
-        public bool HasCell(int x, int y)
+        public FieldCellSlot[] GetSlots()
         {
-            int index = GetIndex(x, y);
-            return cells[index] != null;
+            return slots;
         }
 
-        private void Add(int index, FieldCell cell)
+        public FieldCellSlot Get(int x, int y)
         {
-            Remove(cell.slotIndex, cell);
-            cell.slotIndex = index;
-
-            FieldCell nextCell = cells[index];
-            if (nextCell == null)
-            {
-                cells[index] = cell;
-                cell.listNext = null;
-                cell.listPrev = null;
-            }
-            else
-            {
-                // find insertion point
-                FieldCell lastCell = null;
-                for (; nextCell != null; nextCell = nextCell.listNext)
-                {
-                    if (nextCell.listPriority <= cell.listPriority)
-                    {
-                        break;
-                    }
-
-                    lastCell = nextCell; // save last cell to insert at the end
-                }
-
-                if (nextCell == null) // insert at the end
-                {
-                    Debug.Assert(lastCell.listNext == null);
-                    lastCell.listNext = cell;
-                    cell.listPrev = lastCell;
-                    cell.listNext = null;
-                }
-                else
-                {
-                    FieldCell prevCell = nextCell.listPrev;
-                    if (prevCell != null)
-                    {
-                        prevCell.listNext = cell;
-                    }
-                    else
-                    {
-                        cells[index] = cell;
-                    }
-                    
-                    cell.listPrev = prevCell;
-                    cell.listNext = nextCell;
-                    nextCell.listPrev = cell;
-                }
-            }
+            int index = GetSlotIndex(x, y);
+            return slots[index];
         }
 
-        private bool Remove(int index, FieldCell cell)
+        public bool Remove(FieldCell cell)
         {
-            if (cell.slotIndex != -1)
+            int slotIndex = cell.slotIndex;
+            if (slotIndex != -1)
             {
-                FieldCell prevCell = cell.listPrev;
-                FieldCell nextCell = cell.listNext;
-
-                CellIterator.CellRemoved(cell);
-
-                cell.listNext = cell.listPrev = null;
+                slots[slotIndex].RemoveCell(cell);
                 cell.slotIndex = -1;
-
-                if (prevCell != null)
-                {
-                    prevCell.listNext = nextCell;
-                }
-                else
-                {
-                    cells[index] = nextCell;
-                }
-
-                if (nextCell != null)
-                {
-                    nextCell.listPrev = prevCell;
-                }
 
                 return true;
             }
@@ -138,29 +52,19 @@ namespace Bomberman.Game.Elements.Fields
             return false;
         }
 
+        public void Add(int x, int y, FieldCell cell)
+        {
+            Remove(cell);
+
+            int slotIndex = GetSlotIndex(x, y);
+            slots[slotIndex].AddCell(cell);
+            cell.slotIndex = slotIndex;
+        }
+
         public bool Contains(FieldCell cell)
         {
-            int index = GetIndex(cell.cx, cell.cy);
-            return Contains(index, cell);
-        }
-
-        public bool Contains(int index, FieldCell cell)
-        {
-            FieldCell root = cells[index];
-            return Contains(root, cell);
-        }
-
-        public bool Contains(FieldCell root, FieldCell cell)
-        {
-            for (FieldCell c = root; c != null; c = c.listNext)
-            {
-                if (c == cell)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            int slotIndex = GetSlotIndex(cell.cx, cell.cy);
+            return slots[slotIndex].Contains(cell);
         }
 
         public int CellsCount(FieldCell root)
@@ -184,7 +88,7 @@ namespace Bomberman.Game.Elements.Fields
             return height;
         }
 
-        private int GetIndex(int x, int y)
+        private int GetSlotIndex(int x, int y)
         {
             return y * width + x;
         }
