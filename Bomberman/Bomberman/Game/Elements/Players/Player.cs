@@ -738,6 +738,7 @@ namespace Bomberman.Game.Elements.Players
         public void OnBombLanded(Bomb bomb)
         {
             RemoveThrownBomb(bomb);
+            bomb.SetCell();
             GetField().SetBomb(bomb);
         }
 
