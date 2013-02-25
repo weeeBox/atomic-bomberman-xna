@@ -18,9 +18,9 @@ namespace Bomberman.Game.Elements.Fields
         private float m_px;
         private float m_py;
 
-        /* Last move distance */
-        private float m_moveDx;
-        private float m_moveDy;
+        /* Position on previous tick */
+        private float m_oldPx;
+        private float m_oldPy;
 
         /* Linked list stuff */
         public int slotIndex;
@@ -50,6 +50,8 @@ namespace Bomberman.Game.Elements.Fields
         public void SetCell(int cx, int cy)
         {
             SetPos(Util.Cx2Px(cx), Util.Cy2Py(cy));
+            oldPx = px;
+            oldPy = py;
         }
         
         public virtual void SetPos(float px, float py)
@@ -234,24 +236,24 @@ namespace Bomberman.Game.Elements.Fields
 
         public float oldPx
         {
-            get { return px - m_moveDx; }
+            get { return m_oldPx; }
+            protected set { m_oldPx = value; }
         }
 
         public float oldPy
         {
-            get { return py - m_moveDy; }
+            get { return m_oldPy; }
+            protected set { m_oldPy = value; }
         }
 
         public float moveDx
         {
-            get { return m_moveDx; }
-            protected set { m_moveDx = value; }
+            get { return m_px - m_oldPx; }
         }
 
         public float moveDy
         {
-            get { return m_moveDy; }
-            protected set { m_moveDy = value; }
+            get { return m_py - m_oldPy; }
         }
     }
 }

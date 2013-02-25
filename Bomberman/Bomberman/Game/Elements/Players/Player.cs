@@ -194,6 +194,11 @@ namespace Bomberman.Game.Elements.Players
 
         private bool HandleCollision(Bomb bomb)
         {
+            if (!moving)
+            {
+                return false;
+            }
+
             if (HasKick())
             {
                 if (bomb.moving)
@@ -235,13 +240,11 @@ namespace Bomberman.Game.Elements.Players
                     {
                         MoveOutOfCollision(this, bomb);
                     }
-                }
-                else
-                {
-                    MoveOutOfCollision(this, bomb);
+
+                    return true;
                 }
 
-                return true;
+                return false;
             }
 
             if (MoveOutOfCollision(this, bomb))
@@ -262,12 +265,18 @@ namespace Bomberman.Game.Elements.Players
 
         private bool HandleCollision(FlameCell flame)
         {
+            if (IsAlive())
+            {
+                Kill();
+                return true;
+            }
+
             return false;
         }
 
         private void KickBomb(Bomb bomb)
         {
-            if (bomb.moving)
+            if (!bomb.moving)
             {
                 float posX = bomb.px;
                 float posY = bomb.py;

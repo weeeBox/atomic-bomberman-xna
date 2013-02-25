@@ -167,6 +167,7 @@ namespace Bomberman.Game.Elements.Fields
             }
             DrawCellImage(context, bomb, image);
             context.DrawRect(bomb.cx * cellWidth, bomb.cy * cellHeight, cellWidth, cellHeight, Color.White);
+            context.DrawRect(bomb.px - 0.5f * cellWidth, bomb.py - 0.5f * cellHeight, cellWidth, cellHeight, Color.Red);
         }
 
         private void DrawFlame(Context context, FieldCell cell)

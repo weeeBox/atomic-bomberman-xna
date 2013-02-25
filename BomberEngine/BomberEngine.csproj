@@ -140,6 +140,7 @@
     <Compile Include="Util\ListNode.cs" />
     <Compile Include="Util\ListUtils.cs" />
     <Compile Include="Util\MathHelp.cs" />
+    <Compile Include="Util\LinkedListMutableIterator.cs" />
     <Compile Include="Util\ObjectsList.cs" />
     <Compile Include="Util\StringUtils.cs" />
   </ItemGroup>

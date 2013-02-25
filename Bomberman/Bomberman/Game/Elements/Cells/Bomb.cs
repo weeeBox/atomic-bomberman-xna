@@ -53,7 +53,6 @@ namespace Bomberman.Game.Elements.Cells
         public override void Update(float delta)
         {
             base.Update(delta);
-
             updater(delta);            
         }
 
@@ -183,10 +182,9 @@ namespace Bomberman.Game.Elements.Cells
         {
             if (cell.IsObstacle())
             {
-                Bomb other = cell.AsBomb();
-                if (other != null && other.moving)
+                if (cell.IsBomb())
                 {
-                    other.HandleObstacleCollision(cell);
+                    return HandleCollision(cell.AsBomb());
                 }
 
                 return HandleObstacleCollision(cell);
@@ -199,6 +197,11 @@ namespace Bomberman.Game.Elements.Cells
             {
                 return HandleCollision(cell.AsFlame());
             }
+            if (cell.IsPlayer())
+            {
+                return false;
+            }
+
 
             return base.HandleCollision(cell);
         }
@@ -219,6 +222,12 @@ namespace Bomberman.Game.Elements.Cells
             TryJellyOnObstacle();
 
             return false;
+        }
+
+        private bool HandleCollision(Bomb bomb)
+        {
+            MoveOutOfCollision(this, bomb);
+            return true;
         }
 
         private bool HandleCollision(FlameCell flame)

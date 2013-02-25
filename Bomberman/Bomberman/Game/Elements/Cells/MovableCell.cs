@@ -28,6 +28,12 @@ namespace Bomberman.Game.Elements.Cells
             m_oldDirection = Direction.DOWN;
         }
 
+        public override void Update(float delta)
+        {
+            oldPx = px;
+            oldPy = py;
+        }
+
         public virtual void UpdateMoving(float delta)
         {   
             float offset = m_speed * delta;
@@ -195,9 +201,6 @@ namespace Bomberman.Game.Elements.Cells
             m_moving = false;
             m_moveKx = 0;
             m_moveKy = 0;
-
-            moveDx = 0;
-            moveDy = 0;
         }
 
         public bool TryStopKicked()
@@ -221,12 +224,12 @@ namespace Bomberman.Game.Elements.Cells
 
         public void MoveBackX(float distance)
         {
-            SetPosX(px - MathHelp.Sign(moveDx) * distance);
+            MoveX(-MathHelp.Sign(moveDx) * distance);
         }
 
         public void MoveBackY(float distance)
         {
-            SetPosY(py - MathHelp.Sign(moveDy) * distance);
+            MoveY(-MathHelp.Sign(moveDy) * distance);
         }
 
         public void MoveX(float dx)
@@ -245,9 +248,6 @@ namespace Bomberman.Game.Elements.Cells
             {
                 // update pixel cords without updating cell cords
                 SetPos(px + dx, py + dy);
-
-                moveDx = dx;
-                moveDy = dy;
 
                 // check collisions and all the stuff
                 OnPositionChanged();
