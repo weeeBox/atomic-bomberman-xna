@@ -8,51 +8,23 @@ namespace Bomberman.Game.Elements.Fields
 {
     public class FieldCellIterator
     {
-        public FieldCell currentCell;
+        private FieldCellSlot slot;
+        private FieldCell currentCell;
 
         private static FieldCellIterator freeRoot;
 
-        private FieldCellIterator prev;
-        private FieldCellIterator next;
+        internal FieldCellIterator prev;
+        internal FieldCellIterator next;
 
-        private bool used;
-
-        private FieldCellIterator(FieldCell cell)
+        public FieldCellIterator(FieldCellSlot slot, FieldCell cell)
         {
-            Init(cell);
+            Init(slot, cell);
         }
 
-        private void Init(FieldCell cell)
+        private void Init(FieldCellSlot slot, FieldCell cell)
         {
+            this.slot = slot;
             currentCell = cell;
-            used = true;
-        }
-
-        public static FieldCellIterator Create(FieldCell cell)
-        {
-            if (freeRoot == null) // create the first element
-            {
-                freeRoot = new FieldCellIterator(cell);
-                return freeRoot;
-            }
-
-            // try to find an invalid iterator
-            for (FieldCellIterator iter = freeRoot; iter != null; iter = iter.next)
-            {
-                if (!iter.used)
-                {
-                    iter.Init(cell);
-                    return iter;
-                }
-            }
-
-            // create new iterator
-            FieldCellIterator newIter = new FieldCellIterator(cell);
-            newIter.next = freeRoot;
-            freeRoot.prev = newIter;
-            freeRoot = newIter;
-
-            return newIter;
         }
 
         public bool HasNext()
@@ -67,30 +39,61 @@ namespace Bomberman.Game.Elements.Fields
             return cell;
         }
 
+        public static FieldCellIterator Create(FieldCellSlot slot, FieldCell cell)
+        {
+            if (freeRoot == null) // create the first element
+            {
+                freeRoot = new FieldCellIterator(slot, cell);
+                return freeRoot;
+            }
+
+            // try to get a free iterator
+            FieldCellIterator iter = RemoveFromFreeList();
+            if (iter != null)
+            {
+                iter.Init(slot, cell);
+                return iter;
+            }
+
+            // create new iterator
+            iter = new FieldCellIterator(slot, cell);
+            iter.next = freeRoot;
+            freeRoot.prev = iter;
+            freeRoot = iter;
+
+            return iter;
+        }
+
         public void Destroy()
         {
+            slot.RemoveIterator(this);
+            slot = null;
             currentCell = null;
-            used = false;
 
-            if (this != freeRoot)
+            AddToFreeList(this);
+        }
+
+        private static FieldCellIterator RemoveFromFreeList()
+        {   
+            FieldCellIterator iter = freeRoot;
+            freeRoot = freeRoot.next;
+            if (freeRoot != null)
             {
-                // move from the current pos
-                if (prev != null)
-                {
-                    prev.next = next;
-                }
-
-                if (next != null)
-                {
-                    next.prev = prev;
-                }
-
-                // insert in the beggining
-                prev = null;
-                next = freeRoot;
-                freeRoot.prev = this;
-                freeRoot = this;
+                freeRoot.prev = null;
             }
+            iter.prev = iter.next = null;
+            return iter;
+        }
+
+        private void AddToFreeList(FieldCellIterator iter)
+        {
+            if (freeRoot != null)
+            {
+                freeRoot.prev = iter;
+            }
+            iter.prev = null;
+            iter.next = freeRoot;
+            freeRoot = iter;
         }
 
         internal static void CellRemoved(FieldCell cell)

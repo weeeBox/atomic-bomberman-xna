@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Bomberman.Game.Elements.Cells;
 using Bomberman.Game.Elements.Players;
+using BomberEngine;
+using BomberEngine.Debugging;
 
 namespace Bomberman.Game.Elements.Fields
 {
@@ -202,6 +204,58 @@ namespace Bomberman.Game.Elements.Fields
         private int GetIndex(FieldCellType type)
         {
             return (int)type;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Iterators
+
+        private FieldCellIterator iteratorRoot;
+
+        internal void AddIterator(FieldCellIterator iterator)
+        {
+            if (iteratorRoot != null)
+            {
+                iteratorRoot.prev = iterator;
+            }
+            iterator.prev = null;
+            iterator.next = iteratorRoot;
+            iteratorRoot = iterator;
+        }
+
+        internal void RemoveIterator(FieldCellIterator iterator)
+        {
+            Debug.Assert(iteratorRoot != null);
+
+            FieldCellIterator prev = iterator.prev;
+            FieldCellIterator next = iterator.next;
+            if (prev != null)
+            {
+                prev.next = next;
+            }
+            else
+            {
+                iteratorRoot = next;
+            }
+
+            if (next != null)
+            {
+                next.prev = prev;
+            }
+        }
+
+        public FieldCellIterator CreateIterator(FieldCell cell)
+        {
+            FieldCellIterator iter = FieldCellIterator.GetFree(this, cell);
+            if (iteratorRoot != null)
+            {
+                iteratorRoot.prev = iter;
+            }
+            iter.next = iteratorRoot;
+            iteratorRoot = iter;
+            return iter;
         }
 
         #endregion
