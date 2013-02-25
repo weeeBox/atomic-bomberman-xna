@@ -10,11 +10,12 @@ namespace Bomberman.Game.Elements.Fields
     {
         public FieldCell currentCell;
 
-        private static FieldCellIterator root;
+        private static FieldCellIterator freeRoot;
+
         private FieldCellIterator prev;
         private FieldCellIterator next;
 
-        private bool valid;
+        private bool used;
 
         private FieldCellIterator(FieldCell cell)
         {
@@ -24,21 +25,21 @@ namespace Bomberman.Game.Elements.Fields
         private void Init(FieldCell cell)
         {
             currentCell = cell;
-            valid = true;
+            used = true;
         }
 
         public static FieldCellIterator Create(FieldCell cell)
         {
-            if (root == null) // create the first element
+            if (freeRoot == null) // create the first element
             {
-                root = new FieldCellIterator(cell);
-                return root;
+                freeRoot = new FieldCellIterator(cell);
+                return freeRoot;
             }
 
             // try to find an invalid iterator
-            for (FieldCellIterator iter = root; iter != null; iter = iter.next)
+            for (FieldCellIterator iter = freeRoot; iter != null; iter = iter.next)
             {
-                if (!iter.valid)
+                if (!iter.used)
                 {
                     iter.Init(cell);
                     return iter;
@@ -47,9 +48,9 @@ namespace Bomberman.Game.Elements.Fields
 
             // create new iterator
             FieldCellIterator newIter = new FieldCellIterator(cell);
-            newIter.next = root;
-            root.prev = newIter;
-            root = newIter;
+            newIter.next = freeRoot;
+            freeRoot.prev = newIter;
+            freeRoot = newIter;
 
             return newIter;
         }
@@ -69,9 +70,9 @@ namespace Bomberman.Game.Elements.Fields
         public void Destroy()
         {
             currentCell = null;
-            valid = false;
+            used = false;
 
-            if (this != root)
+            if (this != freeRoot)
             {
                 // move from the current pos
                 if (prev != null)
@@ -86,15 +87,15 @@ namespace Bomberman.Game.Elements.Fields
 
                 // insert in the beggining
                 prev = null;
-                next = root;
-                root.prev = this;
-                root = this;
+                next = freeRoot;
+                freeRoot.prev = this;
+                freeRoot = this;
             }
         }
 
         internal static void CellRemoved(FieldCell cell)
         {
-            for (FieldCellIterator iter = root; iter != null; iter = iter.next)
+            for (FieldCellIterator iter = freeRoot; iter != null; iter = iter.next)
             {
                 if (iter.currentCell == cell)
                 {
