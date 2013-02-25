@@ -9,8 +9,6 @@ namespace Bomberman.Game.Elements.Cells
 {
     public class FlameCell : FieldCell
     {
-        private static readonly float TIMEOUT = 0.5f;
-
         private float remains;
 
         public Player player;
@@ -19,7 +17,7 @@ namespace Bomberman.Game.Elements.Cells
             : base(FieldCellType.Flame, cx, cy)
         {
             this.player = player;
-            remains = TIMEOUT;
+            remains = Settings.Get(Settings.VAL_TIME_FLAME) * 0.001f;
         }
 
         public override void Update(float delta)

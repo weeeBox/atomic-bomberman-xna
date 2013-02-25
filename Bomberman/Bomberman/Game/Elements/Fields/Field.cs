@@ -85,14 +85,14 @@ namespace Bomberman.Game.Elements.Fields
                         {
                             if (MathHelp.NextInt(100) <= brickDensity)
                             {
-                                SetCell(new BrickCell(x, y));
+                                AddCell(new BrickCell(x, y));
                             }
                             break;
                         }
 
                         case FieldBlocks.Solid:
                         {
-                            SetCell(new SolidCell(x, y));
+                            AddCell(new SolidCell(x, y));
                             break;
                         }
 
@@ -118,7 +118,7 @@ namespace Bomberman.Game.Elements.Fields
 
                 if (cx == 0 && cy == 0)
                 {
-                    SetCell(player);
+                    AddCell(player);
                 }
                 else
                 {
@@ -312,7 +312,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public void SetBomb(Bomb bomb)
         {
-            SetCell(bomb);
+            AddCell(bomb);
 
             FieldCellSlot slot = GetSlot(bomb);
             PowerupCell powerup = slot.GetPowerup();
@@ -406,7 +406,7 @@ namespace Bomberman.Game.Elements.Fields
                 }
             }
 
-            SetCell(new FlameCell(player, cx, cy));
+            AddCell(new FlameCell(player, cx, cy));
         }
 
         public void DestroyBrick(BrickCell brick)
@@ -418,7 +418,7 @@ namespace Bomberman.Game.Elements.Fields
             {
                 int cx = brick.GetCx();
                 int cy = brick.GetCy();
-                SetCell(new PowerupCell(powerup, cx, cy));
+                AddCell(new PowerupCell(powerup, cx, cy));
             }
         }
 
@@ -446,7 +446,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public void MovableCellChanged(MovableCell movable, int oldCx, int oldCy)
         {
-            SetCell(movable);
+            AddCell(movable);
         }
 
         public FieldCellSlot GetSlot(int index)
@@ -470,7 +470,7 @@ namespace Bomberman.Game.Elements.Fields
             return GetSlot(cx, cy).GetCells();
         }
 
-        public void SetCell(FieldCell cell)
+        public void AddCell(FieldCell cell)
         {
             cells.Add(cell.GetCx(), cell.GetCy(), cell);
             if (cell.IsMovable())
