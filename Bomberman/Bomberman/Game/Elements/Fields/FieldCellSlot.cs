@@ -55,7 +55,7 @@ namespace Bomberman.Game.Elements.Fields
             FieldCell prevCell = cell.listPrev;
             FieldCell nextCell = cell.listNext;
 
-            CellIterator.CellRemoved(cell);
+            FieldCellIterator.CellRemoved(cell);
 
             cell.listNext = cell.listPrev = null;
 

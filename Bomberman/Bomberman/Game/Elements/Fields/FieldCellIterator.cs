@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using Bomberman.Game.Elements.Fields;
 
-namespace Bomberman.Game.Elements.Cells
+namespace Bomberman.Game.Elements.Fields
 {
-    public class CellIterator
+    public class FieldCellIterator
     {
         public FieldCell currentCell;
 
-        private static CellIterator root;
-        private CellIterator prev;
-        private CellIterator next;
+        private static FieldCellIterator root;
+        private FieldCellIterator prev;
+        private FieldCellIterator next;
 
         private bool valid;
 
-        private CellIterator(FieldCell cell)
+        private FieldCellIterator(FieldCell cell)
         {
             Init(cell);
         }
@@ -27,16 +27,16 @@ namespace Bomberman.Game.Elements.Cells
             valid = true;
         }
 
-        public static CellIterator Create(FieldCell cell)
+        public static FieldCellIterator Create(FieldCell cell)
         {
             if (root == null) // create the first element
             {
-                root = new CellIterator(cell);
+                root = new FieldCellIterator(cell);
                 return root;
             }
 
             // try to find an invalid iterator
-            for (CellIterator iter = root; iter != null; iter = iter.next)
+            for (FieldCellIterator iter = root; iter != null; iter = iter.next)
             {
                 if (!iter.valid)
                 {
@@ -46,7 +46,7 @@ namespace Bomberman.Game.Elements.Cells
             }
 
             // create new iterator
-            CellIterator newIter = new CellIterator(cell);
+            FieldCellIterator newIter = new FieldCellIterator(cell);
             newIter.next = root;
             root.prev = newIter;
             root = newIter;
@@ -94,7 +94,7 @@ namespace Bomberman.Game.Elements.Cells
 
         internal static void CellRemoved(FieldCell cell)
         {
-            for (CellIterator iter = root; iter != null; iter = iter.next)
+            for (FieldCellIterator iter = root; iter != null; iter = iter.next)
             {
                 if (iter.currentCell == cell)
                 {

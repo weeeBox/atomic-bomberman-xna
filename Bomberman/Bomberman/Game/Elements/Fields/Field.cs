@@ -252,7 +252,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private void UpdateCell(float delta, FieldCell cell)
         {
-            CellIterator iter = CellIterator.Create(cell);
+            FieldCellIterator iter = FieldCellIterator.Create(cell);
             while (iter.HasNext())
             {
                 FieldCell c = iter.Next();
@@ -628,13 +628,13 @@ namespace Bomberman.Game.Elements.Fields
 
         private void HandleCollisions(FieldCell cell)
         {
-            CellIterator iter1 = CellIterator.Create(cell);
+            FieldCellIterator iter1 = FieldCellIterator.Create(cell);
             while (iter1.HasNext())
             {
                 FieldCell c = iter1.Next();
 
                 // check collisions with everyone from the same cell
-                CellIterator iter2 = CellIterator.Create(c.listNext);
+                FieldCellIterator iter2 = FieldCellIterator.Create(c.listNext);
                 while (iter2.HasNext())
                 {
                     HandleCollisions(c, iter2.Next());
@@ -669,7 +669,7 @@ namespace Bomberman.Game.Elements.Fields
                     FieldCell neighborCell = neighborCells[i];
                     if (neighborCell != null)
                     {
-                        CellIterator iter = CellIterator.Create(neighborCell);
+                        FieldCellIterator iter = FieldCellIterator.Create(neighborCell);
                         while (iter.HasNext())
                         {
                             HandleCollisions(cell, iter.Next());
