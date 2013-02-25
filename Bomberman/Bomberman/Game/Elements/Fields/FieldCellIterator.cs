@@ -70,10 +70,7 @@ namespace Bomberman.Game.Elements.Fields
             }
 
             // create new iterator
-            iter = new FieldCellIterator(slot, cell);
-            freeRoot = ListUtils.Add(freeRoot, iter);
-
-            return iter;
+            return new FieldCellIterator(slot, cell);
         }
 
         private static FieldCellIterator RemoveFromFreeList()
