@@ -449,10 +449,6 @@ namespace Bomberman.Game.Elements.Fields
             SetCell(movable);
         }
 
-        public void PlayerCellChanged(Player player, int oldCx, int oldCy)
-        {
-        }
-
         public FieldCellSlot GetSlot(int index)
         {
             FieldCellSlot[] slots = cells.GetSlots();

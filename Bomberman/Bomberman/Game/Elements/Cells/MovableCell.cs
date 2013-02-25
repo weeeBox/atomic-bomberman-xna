@@ -273,7 +273,7 @@ namespace Bomberman.Game.Elements.Cells
 
             if (oldCx != cx || oldCy != cy)
             {
-                GetField().MovableCellChanged(this, oldCx, oldCy);
+                OnCellChanged(oldCx, oldCy);
             }
         }
 
