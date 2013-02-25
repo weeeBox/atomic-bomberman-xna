@@ -313,6 +313,13 @@ namespace Bomberman.Game.Elements.Fields
         public void SetBomb(Bomb bomb)
         {
             SetCell(bomb);
+
+            FieldCellSlot slot = GetSlot(bomb);
+            PowerupCell powerup = slot.GetPowerup();
+            if (powerup != null)
+            {
+                powerup.RemoveFromField();
+            }
         }
 
         /** Should only be called from Bomb.Blow() */
@@ -450,6 +457,11 @@ namespace Bomberman.Game.Elements.Fields
         {
             FieldCellSlot[] slots = cells.GetSlots();
             return slots[index];
+        }
+
+        public FieldCellSlot GetSlot(FieldCell cell)
+        {   
+            return GetSlot(cell.cx, cell.cy);
         }
 
         public FieldCellSlot GetSlot(int cx, int cy)
