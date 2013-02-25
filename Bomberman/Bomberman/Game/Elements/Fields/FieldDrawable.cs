@@ -39,8 +39,41 @@ namespace Bomberman.Game.Elements.Fields
 
             DrawGrid(context);
             DrawCells(context);
+            DrawSpecial(context);
 
             PostDraw(context);
+        }
+
+        private void DrawSpecial(Context context)
+        {
+            List<Player> players = field.GetPlayers().list;
+            foreach (Player player in players)
+            {
+                DrawSpecial(context, player);
+            }
+        }
+
+        private void DrawSpecial(Context context, Player player)
+        {
+            Bomb bomb = player.bombInHands;
+            if (bomb != null)
+            {
+                TextureImage image = Helper.GetTexture(A.tex_BMB1001);
+
+                float drawX = player.GetPx() - 0.5f * image.GetWidth();
+                float drawY = player.GetPy() - 1.5f * image.GetHeight();
+                context.DrawImage(image, drawX, drawY);
+            }
+
+            List<Bomb> thrownBombs = player.thrownBombs;
+            foreach (Bomb b in thrownBombs)
+            {
+                TextureImage image = Helper.GetTexture(A.tex_BMB1001);
+
+                float drawX = b.GetPx() - 0.5f * image.GetWidth();
+                float drawY = b.GetPy() - 0.5f * image.GetHeight() - b.fallHeight;
+                context.DrawImage(image, drawX, drawY);
+            }
         }
 
         private void DrawCells(Context context)
@@ -178,26 +211,6 @@ namespace Bomberman.Game.Elements.Fields
             else
             {
                 context.DrawImage(image, drawX, drawY - image.GetHeight() + cellHeight);
-            }
-
-            Bomb bomb = player.bombInHands;
-            if (bomb != null)
-            {
-                image = Helper.GetTexture(A.tex_BMB1001);
-
-                drawX = bomb.GetPx() - 0.5f * image.GetWidth();
-                drawY = bomb.GetPy() - 0.5f * image.GetHeight();
-                context.DrawImage(image, drawX, drawY);
-            }
-
-            List<Bomb> thrownBombs = player.thrownBombs;
-            foreach (Bomb b in thrownBombs)
-            {
-                image = Helper.GetTexture(A.tex_BMB1001);
-
-                drawX = b.GetPx() - 0.5f * image.GetWidth();
-                drawY = b.GetPy() - 0.5f * image.GetHeight() - b.fallHeight;
-                context.DrawImage(image, drawX, drawY);
             }
         }
 
