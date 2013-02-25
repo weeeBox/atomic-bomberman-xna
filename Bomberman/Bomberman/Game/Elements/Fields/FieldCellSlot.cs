@@ -32,7 +32,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public void RemoveCell(FieldCell cell)
         {
-            FieldCellIterator.CellRemoved(cell);
+            UpdateIterators(cell);
 
             int index = GetIndex(cell);
             cells[index] = ListUtils.Remove(cells[index], cell);
@@ -175,6 +175,13 @@ namespace Bomberman.Game.Elements.Fields
 
         private FieldCellIterator iteratorRoot;
 
+        public FieldCellIterator CreateIterator(FieldCell cell)
+        {
+            FieldCellIterator iter = FieldCellIterator.Create(this, cell);
+            AddIterator(iter);
+            return iter;
+        }
+
         internal void AddIterator(FieldCellIterator iterator)
         {   
             iteratorRoot = ListUtils.Add(iteratorRoot, iterator);
@@ -186,11 +193,12 @@ namespace Bomberman.Game.Elements.Fields
             iteratorRoot = ListUtils.Remove(iteratorRoot, iterator);
         }
 
-        public FieldCellIterator CreateIterator(FieldCell cell)
+        private void UpdateIterators(FieldCell cell)
         {
-            FieldCellIterator iter = FieldCellIterator.Create(this, cell);
-            AddIterator(iter);
-            return iter;
+            for (FieldCellIterator iter = iteratorRoot; iter != null; iter = iter.listNext)
+            {
+                iter.CellRemoved(cell);
+            }
         }
 
         #endregion

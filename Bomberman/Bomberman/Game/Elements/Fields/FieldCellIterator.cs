@@ -21,6 +21,11 @@ namespace Bomberman.Game.Elements.Fields
 
         private void Init(FieldCellSlot slot, FieldCell cell)
         {
+            if (slot == null)
+            {
+                throw new ArgumentException("Slot is null");
+            }
+
             this.slot = slot;
             currentCell = cell;
         }
@@ -37,7 +42,24 @@ namespace Bomberman.Game.Elements.Fields
             return cell;
         }
 
-        public static FieldCellIterator Create(FieldCellSlot slot, FieldCell cell)
+        public void Destroy()
+        {
+            slot.RemoveIterator(this);
+            slot = null;
+            currentCell = null;
+
+            AddToFreeList(this);
+        }
+
+        internal void CellRemoved(FieldCell cell)
+        {
+            if (currentCell == cell)
+            {
+                currentCell = cell.listNext;
+            }
+        }
+
+        internal static FieldCellIterator Create(FieldCellSlot slot, FieldCell cell)
         {
             // try to get a free iterator
             FieldCellIterator iter = RemoveFromFreeList();
@@ -54,20 +76,15 @@ namespace Bomberman.Game.Elements.Fields
             return iter;
         }
 
-        public void Destroy()
-        {
-            slot.RemoveIterator(this);
-            slot = null;
-            currentCell = null;
-
-            AddToFreeList(this);
-        }
-
         private static FieldCellIterator RemoveFromFreeList()
-        {   
-            FieldCellIterator iter = freeRoot;
-            freeRoot = ListUtils.Remove(freeRoot, iter);
-            return iter;
+        {
+            if (freeRoot != null)
+            {
+                FieldCellIterator iter = freeRoot;
+                freeRoot = ListUtils.Remove(freeRoot, iter);
+                return iter;
+            }
+            return null;
         }
 
         private void AddToFreeList(FieldCellIterator iter)
