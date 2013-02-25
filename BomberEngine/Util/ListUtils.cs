@@ -28,6 +28,8 @@ namespace BomberEngine.Util
             T prev = item.listPrev;
             T next = item.listNext;
 
+            item.listPrev = item.listNext = null;
+
             if (prev != null)
             {
                 prev.listNext = next;

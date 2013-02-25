@@ -176,46 +176,20 @@ namespace Bomberman.Game.Elements.Fields
         private FieldCellIterator iteratorRoot;
 
         internal void AddIterator(FieldCellIterator iterator)
-        {
-            if (iteratorRoot != null)
-            {
-                iteratorRoot.prev = iterator;
-            }
-            iterator.prev = null;
-            iterator.next = iteratorRoot;
-            iteratorRoot = iterator;
+        {   
+            iteratorRoot = ListUtils.Add(iteratorRoot, iterator);
         }
 
         internal void RemoveIterator(FieldCellIterator iterator)
         {
             Debug.Assert(iteratorRoot != null);
-
-            FieldCellIterator prev = iterator.prev;
-            FieldCellIterator next = iterator.next;
-            if (prev != null)
-            {
-                prev.next = next;
-            }
-            else
-            {
-                iteratorRoot = next;
-            }
-
-            if (next != null)
-            {
-                next.prev = prev;
-            }
+            iteratorRoot = ListUtils.Remove(iteratorRoot, iterator);
         }
 
         public FieldCellIterator CreateIterator(FieldCell cell)
         {
-            FieldCellIterator iter = FieldCellIterator.GetFree(this, cell);
-            if (iteratorRoot != null)
-            {
-                iteratorRoot.prev = iter;
-            }
-            iter.next = iteratorRoot;
-            iteratorRoot = iter;
+            FieldCellIterator iter = FieldCellIterator.Create(this, cell);
+            AddIterator(iter);
             return iter;
         }
 
