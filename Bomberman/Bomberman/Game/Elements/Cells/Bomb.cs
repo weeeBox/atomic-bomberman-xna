@@ -47,7 +47,6 @@ namespace Bomberman.Game.Elements.Cells
            : base(FieldCellType.Bomb, player.GetCx(), player.GetCy())
         {
             m_player = player;
-            listPriority = 2;
             SetSpeed(Settings.Get(Settings.VAL_BOMB_ROLL_SPEED));
         }
 

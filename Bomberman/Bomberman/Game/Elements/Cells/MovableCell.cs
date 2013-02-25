@@ -24,8 +24,6 @@ namespace Bomberman.Game.Elements.Cells
         public MovableCell(FieldCellType type, int cx, int cy)
             : base(type, cx, cy)
         {
-            listPriority = 1;
-
             m_direction = Direction.DOWN;
             m_oldDirection = Direction.DOWN;
         }

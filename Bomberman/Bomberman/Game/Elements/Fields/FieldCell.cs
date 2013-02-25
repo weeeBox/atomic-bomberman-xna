@@ -6,10 +6,11 @@ using BomberEngine.Core;
 using BomberEngine.Debugging;
 using Bomberman.Game.Elements.Cells;
 using Bomberman.Game.Elements.Players;
+using BomberEngine.Util;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class FieldCell : Updatable
+    public class FieldCell : ListNode<FieldCell>, Updatable
     {
         public FieldCellType type;
 
@@ -22,15 +23,7 @@ namespace Bomberman.Game.Elements.Fields
         private float m_moveDy;
 
         /* Linked list stuff */
-        public FieldCell listNext;
-        public FieldCell listPrev;
         public int slotIndex;
-
-        /* Priority inside the list. Cells with higher priority come first */
-        public int listPriority;
-
-        /* Debug flag indicating if collisions was checked on the current tick */
-        public bool collisionChecked;
 
         public FieldCell(FieldCellType type, int cx, int cy)
         {

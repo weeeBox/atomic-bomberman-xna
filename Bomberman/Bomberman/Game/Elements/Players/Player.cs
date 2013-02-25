@@ -35,8 +35,6 @@ namespace Bomberman.Game.Elements.Players
             this.index = index;
             alive = true;
 
-            listPriority = 3;
-
             InitPowerups();
             InitBombs();
             InitDiseases();
