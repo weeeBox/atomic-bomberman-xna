@@ -6,6 +6,7 @@ using Bomberman.Game.Elements.Cells;
 using Bomberman.Game.Elements.Players;
 using BomberEngine;
 using BomberEngine.Debugging;
+using BomberEngine.Util;
 
 namespace Bomberman.Game.Elements.Fields
 {
@@ -26,55 +27,15 @@ namespace Bomberman.Game.Elements.Fields
         public void AddCell(FieldCell cell)
         {
             int index = GetIndex(cell);
-
-            FieldCell nextCell = cells[index];
-            if (nextCell == null)
-            {
-                cells[index] = cell;
-                cell.listNext = null;
-                cell.listPrev = null;
-            }
-            else
-            {
-                FieldCell prevCell = nextCell.listPrev;
-                if (prevCell != null)
-                {
-                    prevCell.listNext = cell;
-                }
-                else
-                {
-                    cells[index] = cell;
-                }
-
-                cell.listPrev = prevCell;
-                cell.listNext = nextCell;
-                nextCell.listPrev = cell;
-            }
+            cells[index] = ListUtils.Add(cells[index], cell);
         }
 
         public void RemoveCell(FieldCell cell)
-        {   
-            FieldCell prevCell = cell.listPrev;
-            FieldCell nextCell = cell.listNext;
-
+        {
             FieldCellIterator.CellRemoved(cell);
 
-            cell.listNext = cell.listPrev = null;
-
-            if (prevCell != null)
-            {
-                prevCell.listNext = nextCell;
-            }
-            else
-            {
-                int index = GetIndex(cell);
-                cells[index] = nextCell;
-            }
-
-            if (nextCell != null)
-            {
-                nextCell.listPrev = prevCell;
-            }
+            int index = GetIndex(cell);
+            cells[index] = ListUtils.Remove(cells[index], cell);
         }
 
         #endregion
