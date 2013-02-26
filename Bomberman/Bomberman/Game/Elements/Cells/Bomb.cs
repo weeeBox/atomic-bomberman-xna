@@ -215,13 +215,12 @@ namespace Bomberman.Game.Elements.Cells
             return base.HandleWallCollision();
         }
 
-        protected override bool HandleObstacleCollision(FieldCell cell)
+        public override bool HandleObstacleCollision(FieldCell cell)
         {
-            base.HandleObstacleCollision(cell);
-            StopMoving();
+            MoveOutOfCollision(this, cell);
             TryJellyOnObstacle();
 
-            return false;
+            return true;
         }
 
         private bool HandleCollision(Bomb bomb)

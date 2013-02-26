@@ -128,7 +128,7 @@ namespace Bomberman.Game.Elements.Cells
             return true;
         }
 
-        protected virtual bool HandleObstacleCollision(FieldCell cell)
+        public virtual bool HandleObstacleCollision(FieldCell cell)
         {
             return MoveOutOfCollision(this, cell);
         }
@@ -143,13 +143,23 @@ namespace Bomberman.Game.Elements.Cells
                 MovableCell ma = a.AsMovable();
                 MovableCell mb = b.AsMovable();
 
-                float moveA = Math.Abs(a.moveDx);
-                float moveB = Math.Abs(b.moveDx);
-                float kA = moveA / (moveA + moveB);
-                float kB = 1 - kA;
-
-                if (ma != null) ma.MoveBackX(kA * overlapX);
-                if (mb != null) mb.MoveBackX(kB * overlapX);
+                if (ma == null)
+                {
+                    mb.MoveBackX(overlapX);
+                }
+                else if (mb == null)
+                {
+                    ma.MoveBackX(overlapX);
+                }
+                else
+                {
+                    float speedA = ma.GetSpeedX();
+                    float speedB = mb.GetSpeedX();
+                    float speedDiff = Math.Abs(speedA - speedB);
+                    float time = 100.0f * overlapX / speedDiff;
+                    ma.MoveX(-speedA * time * 0.01f);
+                    mb.MoveX(-speedB * time * 0.01f);
+                }
 
                 hadCollisiton = true;
             }
@@ -160,13 +170,23 @@ namespace Bomberman.Game.Elements.Cells
                 MovableCell ma = a.AsMovable();
                 MovableCell mb = b.AsMovable();
 
-                float moveA = Math.Abs(a.moveDy);
-                float moveB = Math.Abs(b.moveDy);
-                float kA = moveA / (moveA + moveB);
-                float kB = 1 - kA;
-
-                if (ma != null) ma.MoveBackY(kA * overlapY);
-                if (mb != null) mb.MoveBackY(kB * overlapY);
+                if (ma == null)
+                {
+                    mb.MoveBackY(overlapY);
+                }
+                else if (mb == null)
+                {
+                    ma.MoveBackY(overlapY);
+                }
+                else
+                {
+                    float speedA = ma.GetSpeedY();
+                    float speedB = mb.GetSpeedY();
+                    float speedDiff = Math.Abs(speedA - speedB);
+                    float time = 100.0f * overlapY / speedDiff;
+                    ma.MoveY(-speedA * time * 0.01f);
+                    mb.MoveY(-speedB * time * 0.01f);
+                }
 
                 hadCollisiton = true;
             }
@@ -224,12 +244,12 @@ namespace Bomberman.Game.Elements.Cells
 
         public void MoveBackX(float distance)
         {
-            MoveX(-MathHelp.Sign(moveDx) * distance);
+            MoveX(-m_moveKx * distance);
         }
 
         public void MoveBackY(float distance)
         {
-            MoveY(-MathHelp.Sign(moveDy) * distance);
+            MoveY(-m_moveKy * distance);
         }
 
         public void MoveX(float dx)
@@ -300,6 +320,16 @@ namespace Bomberman.Game.Elements.Cells
         public float GetSpeed()
         {
             return m_speed;
+        }
+
+        public float GetSpeedX()
+        {
+            return m_speed * m_moveKx;
+        }
+
+        public float GetSpeedY()
+        {
+            return m_speed * m_moveKy;
         }
 
         public override bool IsMovable()

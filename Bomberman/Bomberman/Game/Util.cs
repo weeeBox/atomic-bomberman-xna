@@ -80,6 +80,11 @@ namespace Bomberman.Game
             return 0;
         }
 
+        public static bool AreOpposite(Direction d1, Direction d2)
+        {
+            return d1 == Opposite(d2);
+        }
+
         public static Direction Opposite(Direction direction)
         {
             switch (direction)
