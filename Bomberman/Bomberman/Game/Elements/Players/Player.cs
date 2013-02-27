@@ -26,6 +26,8 @@ namespace Bomberman.Game.Elements.Players
 
         private Bomb m_bombInHands;
 
+        private float kickStopRemains;
+
         /* Kicked/Punched bombs */
         private List<Bomb> m_thrownBombs;
 
@@ -57,7 +59,17 @@ namespace Bomberman.Game.Elements.Players
                 m_thrownBombs[bombIndex].Update(delta);
             }
 
+            if (kickStopRemains > 0)
+            {
+                kickStopRemains -= delta;
+            }
+
             diseases.Update(delta);
+        }
+
+        public override bool IsMoving()
+        {
+            return base.IsMoving() && kickStopRemains <= 0.0f;
         }
 
         public void OnActionPressed(PlayerInput playerInput, PlayerAction action)
@@ -194,12 +206,12 @@ namespace Bomberman.Game.Elements.Players
 
         private bool HandleCollision(Bomb bomb)
         {
-            if (!moving)
+            if (!IsMoving())
             {
                 return HandleStillPlayerCollision(bomb);
             }
 
-            if (bomb.moving)
+            if (bomb.IsMoving())
             {
                 return HandleMovingBombCollision(bomb);
             }
@@ -210,7 +222,7 @@ namespace Bomberman.Game.Elements.Players
         /* Player is not moving */
         private bool HandleStillPlayerCollision(Bomb bomb)
         {
-            if (bomb.moving)
+            if (bomb.IsMoving())
             {
                 return bomb.HandleObstacleCollision(this);
             }
@@ -316,6 +328,25 @@ namespace Bomberman.Game.Elements.Players
             {
                 if (TryKick(bomb, 0.5f))
                 {
+                    switch (direction)
+                    {
+                        case Direction.RIGHT:
+                             SetRelativeTo(bomb, -1, 0);
+                             break;
+
+                        case Direction.LEFT:
+                            SetRelativeTo(bomb, 1, 0);
+                            break;
+                            
+                        case Direction.UP:
+                            bomb.SetRelativeTo(this, 0, 1);
+                            break;
+
+                        case Direction.DOWN:
+                            bomb.SetRelativeTo(this, 0, -1);
+                            break;
+                    }
+
                     return true;
                 }
             }
@@ -325,7 +356,7 @@ namespace Bomberman.Game.Elements.Players
 
         private bool HandleKickCollision(Bomb bomb)
         {
-            if (bomb.moving)
+            if (bomb.IsMoving())
             {
                 if (Util.AreOpposite(direction, bomb.direction))
                 {
@@ -408,16 +439,16 @@ namespace Bomberman.Game.Elements.Players
             switch (direction)
             {
                 case Direction.UP:
-                    canKick = py - bomb.py > k * Constant.CELL_HEIGHT_2;
+                    canKick = py - bomb.py > k * Constant.CELL_HEIGHT;
                     break;
                 case Direction.DOWN:
-                    canKick = bomb.py - py > k * Constant.CELL_HEIGHT_2;
+                    canKick = bomb.py - py > k * Constant.CELL_HEIGHT;
                     break;
                 case Direction.LEFT:
-                    canKick = px - bomb.px > k * Constant.CELL_WIDTH_2;
+                    canKick = px - bomb.px > k * Constant.CELL_WIDTH;
                     break;
                 case Direction.RIGHT:
-                    canKick = bomb.px - px > k * Constant.CELL_WIDTH_2;
+                    canKick = bomb.px - px > k * Constant.CELL_WIDTH;
                     break;
                 default:
                     Debug.Assert(false, "Unknown direction: " + direction);
@@ -459,6 +490,7 @@ namespace Bomberman.Game.Elements.Players
         private void KickBomb(Bomb bomb)
         {
             bomb.Kick(direction);
+            kickStopRemains = 0.1f;
         }
 
         public void Kill()

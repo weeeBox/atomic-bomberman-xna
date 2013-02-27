@@ -283,7 +283,7 @@ namespace Bomberman.Game.Elements.Fields
             while (movingCellsIterator.HasNext())
             {
                 MovableCell cell = movingCellsIterator.Next();
-                if (cell.moving)
+                if (cell.IsMoving())
                 {
                     cell.UpdateMoving(delta);
                 }

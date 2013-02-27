@@ -350,9 +350,9 @@ namespace Bomberman.Game.Elements.Cells
             return this;
         }
 
-        public bool moving
+        public virtual bool IsMoving()
         {
-            get { return m_moving; }
+            return m_moving;
         }
 
         public Direction direction
