@@ -285,8 +285,11 @@ namespace Bomberman.Game.Elements.Players
                 {
                     if (canKick) 
                     {
-                        TryKick(bomb);
-                        return true;
+                        if (TryKick(bomb))
+                        {
+                            return true;
+                        }
+                        return HandleObstacleCollision(bomb);
                     }
                 }
             }
@@ -295,8 +298,11 @@ namespace Bomberman.Game.Elements.Players
                 MoveOutOfCollision(this, bomb);
                 if (HasKick())
                 {
-                    TryKick(bomb);
-                    return true;
+                    if (TryKick(bomb))
+                    {
+                        return true;
+                    }
+                    return HandleObstacleCollision(bomb);
                 }
             }
 
@@ -308,7 +314,10 @@ namespace Bomberman.Game.Elements.Players
         {
             if (HasKick())
             {
-                return TryKick(bomb, 0.5f);
+                if (TryKick(bomb, 0.5f))
+                {
+                    return true;
+                }
             }
 
             return bomb.HandleObstacleCollision(this);
