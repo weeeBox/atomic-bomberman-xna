@@ -297,6 +297,14 @@ namespace Bomberman.Game.Elements.Cells
             }
         }
 
+        public void SetRelativeTo(FieldCell cell, int stepX, int stepY)
+        {
+            float posX = stepX != 0 ? (cell.px + stepX * Constant.CELL_WIDTH) : px;
+            float posY = stepY != 0 ? (cell.py + stepY * Constant.CELL_HEIGHT) : py;
+
+            SetPos(posX, posY);
+        }
+
         protected virtual void OnPositionChanged()
         {
             GetField().MoveablePosChanged(this);

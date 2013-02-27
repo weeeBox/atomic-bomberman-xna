@@ -196,23 +196,19 @@ namespace Bomberman.Game.Elements.Players
         {
             if (!moving)
             {
-                return HandleStillCollision(bomb);
+                return HandleStillPlayerCollision(bomb);
             }
 
-            if (HasKick())
+            if (bomb.moving)
             {
-                return HandleKickCollision(bomb);
+                return HandleMovingBombCollision(bomb);
             }
 
-            if (MoveOutOfCollision(this, bomb))
-            {
-                return bomb.TryStopKicked();
-            }
-            
-            return HandleObstacleCollision(bomb);
+            return HandleStillBombCollision(bomb);
         }
 
-        private bool HandleStillCollision(Bomb bomb)
+        /* Player is not moving */
+        private bool HandleStillPlayerCollision(Bomb bomb)
         {
             if (bomb.moving)
             {
@@ -220,6 +216,102 @@ namespace Bomberman.Game.Elements.Players
             }
 
             return false;
+        }
+
+        /* Player and bomb are moving */
+        private bool HandleMovingBombCollision(Bomb bomb)
+        {
+            if (direction == bomb.direction)
+            {
+                bool canKick = false;
+
+                switch (direction)
+                {
+                    case Direction.RIGHT:
+                        {
+                            if (px - bomb.px > 0)
+                            {
+                                bomb.SetRelativeTo(this, -1, 0);
+                            }
+                            else
+                            {
+                                SetRelativeTo(bomb, -1, 0);
+                                canKick = true;
+                            }
+                            break;
+                        }
+                    case Direction.LEFT:
+                        {
+                            if (px - bomb.px < 0)
+                            {
+                                bomb.SetRelativeTo(this, 1, 0);
+                            }
+                            else
+                            {
+                                SetRelativeTo(bomb, 1, 0);
+                                canKick = true;
+                            }
+                            break;
+                        }
+                    case Direction.UP:
+                        {
+                            if (py - bomb.py < 0)
+                            {
+                                bomb.SetRelativeTo(this, 0, 1);
+                            }
+                            else
+                            {
+                                SetRelativeTo(bomb, 0, 1);
+                                canKick = true;
+                            }
+                            break;
+                        }
+                    case Direction.DOWN:
+                        {
+                            if (py - bomb.py > 0)
+                            {
+                                bomb.SetRelativeTo(this, 0, -1);
+                            }
+                            else
+                            {
+                                SetRelativeTo(bomb, 0, -1);
+                                canKick = true;
+                            }
+                            break;
+                        }
+                }
+
+                if (HasKick())
+                {
+                    if (canKick) 
+                    {
+                        TryKick(bomb);
+                        return true;
+                    }
+                }
+            }
+            else // moving in different directions
+            {
+                MoveOutOfCollision(this, bomb);
+                if (HasKick())
+                {
+                    TryKick(bomb);
+                    return true;
+                }
+            }
+
+            return bomb.HandleObstacleCollision(this);
+        }
+
+        /* Player is moving, bomb is still */
+        private bool HandleStillBombCollision(Bomb bomb)
+        {
+            if (HasKick())
+            {
+                return TryKick(bomb, 0.5f);
+            }
+
+            return bomb.HandleObstacleCollision(this);
         }
 
         private bool HandleKickCollision(Bomb bomb)
@@ -296,6 +388,46 @@ namespace Bomberman.Game.Elements.Players
             return false;
         }
 
+        private bool TryKick(Bomb bomb)
+        {
+            return TryKick(bomb, 1.0f);
+        }
+
+        private bool TryKick(Bomb bomb, float k)
+        {
+            bool canKick = false;
+            switch (direction)
+            {
+                case Direction.UP:
+                    canKick = py - bomb.py > k * Constant.CELL_HEIGHT_2;
+                    break;
+                case Direction.DOWN:
+                    canKick = bomb.py - py > k * Constant.CELL_HEIGHT_2;
+                    break;
+                case Direction.LEFT:
+                    canKick = px - bomb.px > k * Constant.CELL_WIDTH_2;
+                    break;
+                case Direction.RIGHT:
+                    canKick = bomb.px - px > k * Constant.CELL_WIDTH_2;
+                    break;
+                default:
+                    Debug.Assert(false, "Unknown direction: " + direction);
+                    break;
+            }
+
+            if (canKick)
+            {
+                FieldCellSlot blockingSlot = bomb.NearSlotDir(direction);
+                if (blockingSlot != null && !blockingSlot.ContainsObstacle())
+                {
+                    KickBomb(bomb);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private bool HandleCollision(PowerupCell powerup)
         {
             int powerupIndex = powerup.powerup;
@@ -317,30 +449,6 @@ namespace Bomberman.Game.Elements.Players
 
         private void KickBomb(Bomb bomb)
         {
-            if (!bomb.moving)
-            {
-                float posX = bomb.px;
-                float posY = bomb.py;
-
-                switch (direction)
-                {
-                    case Direction.UP:
-                        posY = py - Constant.CELL_HEIGHT;
-                        break;
-                    case Direction.DOWN:
-                        posY = py + Constant.CELL_HEIGHT;
-                        break;
-                    case Direction.LEFT:
-                        posX = px - Constant.CELL_WIDTH;
-                        break;
-                    case Direction.RIGHT:
-                        posX = px + Constant.CELL_WIDTH;
-                        break;
-                }
-
-                bomb.SetPos(posX, posY);
-            }
-
             bomb.Kick(direction);
         }
 
