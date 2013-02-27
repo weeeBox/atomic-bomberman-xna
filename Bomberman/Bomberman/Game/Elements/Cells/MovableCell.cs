@@ -137,7 +137,7 @@ namespace Bomberman.Game.Elements.Cells
         {
             bool hadCollisiton = false;
 
-            float overlapX = Constant.CELL_WIDTH - MathHelp.Abs(a.px - b.px);
+            float overlapX = OverlapX(a, b);
             if (overlapX > 0 && MathHelp.Abs(a.oldPx - b.oldPx) >= Constant.CELL_WIDTH)
             {
                 MovableCell ma = a.AsMovable();
@@ -164,7 +164,7 @@ namespace Bomberman.Game.Elements.Cells
                 hadCollisiton = true;
             }
 
-            float overlapY = Constant.CELL_HEIGHT - MathHelp.Abs(a.py - b.py);
+            float overlapY = OverlapY(a, b);
             if (overlapY > 0 && MathHelp.Abs(a.oldPy - b.oldPy) >= Constant.CELL_HEIGHT)
             {
                 MovableCell ma = a.AsMovable();

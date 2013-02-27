@@ -255,5 +255,17 @@ namespace Bomberman.Game.Elements.Fields
         {
             get { return m_py - m_oldPy; }
         }
+
+        public static float OverlapX(FieldCell a, FieldCell b)
+        {
+            float overlapX = Constant.CELL_WIDTH - MathHelp.Abs(a.px - b.px);
+            return overlapX > 0 ? overlapX : 0;
+        }
+
+        public static float OverlapY(FieldCell a, FieldCell b)
+        {
+            float overlapY = Constant.CELL_HEIGHT - MathHelp.Abs(a.py - b.py);
+            return overlapY > 0 ? overlapY : 0;
+        }
     }
 }

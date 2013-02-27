@@ -235,74 +235,31 @@ namespace Bomberman.Game.Elements.Players
         {
             if (direction == bomb.direction)
             {
-                bool canKick = false;
-
-                switch (direction)
-                {
-                    case Direction.RIGHT:
-                        {
-                            if (px - bomb.px > 0)
-                            {
-                                bomb.SetRelativeTo(this, -1, 0);
-                            }
-                            else
-                            {
-                                SetRelativeTo(bomb, -1, 0);
-                                canKick = true;
-                            }
-                            break;
-                        }
-                    case Direction.LEFT:
-                        {
-                            if (px - bomb.px < 0)
-                            {
-                                bomb.SetRelativeTo(this, 1, 0);
-                            }
-                            else
-                            {
-                                SetRelativeTo(bomb, 1, 0);
-                                canKick = true;
-                            }
-                            break;
-                        }
-                    case Direction.UP:
-                        {
-                            if (py - bomb.py < 0)
-                            {
-                                bomb.SetRelativeTo(this, 0, 1);
-                            }
-                            else
-                            {
-                                SetRelativeTo(bomb, 0, 1);
-                                canKick = true;
-                            }
-                            break;
-                        }
-                    case Direction.DOWN:
-                        {
-                            if (py - bomb.py > 0)
-                            {
-                                bomb.SetRelativeTo(this, 0, -1);
-                            }
-                            else
-                            {
-                                SetRelativeTo(bomb, 0, -1);
-                                canKick = true;
-                            }
-                            break;
-                        }
-                }
-
                 if (HasKick())
                 {
-                    if (canKick) 
+                    bool canKick = false;
+                    switch (direction)
                     {
-                        if (TryKick(bomb))
-                        {
-                            return true;
-                        }
-                        return HandleObstacleCollision(bomb);
+                        case Direction.LEFT:
+                            canKick = px - bomb.px > 0;
+                            break;
+                        case Direction.RIGHT:
+                            canKick = px - bomb.px < 0;
+                            break;
+                        case Direction.UP:
+                            canKick = py - bomb.py > 0;
+                            break;
+                        case Direction.DOWN:
+                            canKick = py - bomb.py < 0;
+                            break;
                     }
+
+                    if (canKick && TryKick(bomb))
+                    {
+                        return true;
+                    }
+                    
+                    return HandleObstacleCollision(bomb);
                 }
             }
             else // moving in different directions
@@ -326,27 +283,25 @@ namespace Bomberman.Game.Elements.Players
         {
             if (HasKick())
             {
-                if (TryKick(bomb, 0.5f))
+                bool canKick = false;
+                switch (direction)
                 {
-                    switch (direction)
-                    {
-                        case Direction.RIGHT:
-                             SetRelativeTo(bomb, -1, 0);
-                             break;
+                    case Direction.LEFT:
+                        canKick = px - bomb.px > Constant.CELL_WIDTH_2;
+                        break;
+                    case Direction.RIGHT:
+                        canKick = bomb.px - px > Constant.CELL_WIDTH_2;
+                        break;
+                    case Direction.UP:
+                        canKick = py - bomb.py > Constant.CELL_HEIGHT_2;
+                        break;
+                    case Direction.DOWN:
+                        canKick = bomb.py - py > Constant.CELL_HEIGHT_2;
+                        break;
+                }
 
-                        case Direction.LEFT:
-                            SetRelativeTo(bomb, 1, 0);
-                            break;
-                            
-                        case Direction.UP:
-                            bomb.SetRelativeTo(this, 0, 1);
-                            break;
-
-                        case Direction.DOWN:
-                            bomb.SetRelativeTo(this, 0, -1);
-                            break;
-                    }
-
+                if (canKick && TryKick(bomb))
+                {
                     return true;
                 }
             }
@@ -430,39 +385,11 @@ namespace Bomberman.Game.Elements.Players
 
         private bool TryKick(Bomb bomb)
         {
-            return TryKick(bomb, 1.0f);
-        }
-
-        private bool TryKick(Bomb bomb, float k)
-        {
-            bool canKick = false;
-            switch (direction)
+            FieldCellSlot blockingSlot = bomb.NearSlotDir(direction);
+            if (blockingSlot != null && !blockingSlot.ContainsObstacle())
             {
-                case Direction.UP:
-                    canKick = py - bomb.py > k * Constant.CELL_HEIGHT;
-                    break;
-                case Direction.DOWN:
-                    canKick = bomb.py - py > k * Constant.CELL_HEIGHT;
-                    break;
-                case Direction.LEFT:
-                    canKick = px - bomb.px > k * Constant.CELL_WIDTH;
-                    break;
-                case Direction.RIGHT:
-                    canKick = bomb.px - px > k * Constant.CELL_WIDTH;
-                    break;
-                default:
-                    Debug.Assert(false, "Unknown direction: " + direction);
-                    break;
-            }
-
-            if (canKick)
-            {
-                FieldCellSlot blockingSlot = bomb.NearSlotDir(direction);
-                if (blockingSlot != null && !blockingSlot.ContainsObstacle())
-                {
-                    KickBomb(bomb);
-                    return true;
-                }
+                KickBomb(bomb);
+                return true;
             }
 
             return false;
@@ -490,6 +417,28 @@ namespace Bomberman.Game.Elements.Players
         private void KickBomb(Bomb bomb)
         {
             bomb.Kick(direction);
+
+            switch (direction)
+            {
+                case Direction.RIGHT:
+                case Direction.LEFT:
+                    float overlapX = OverlapX(this, bomb);
+                    if (overlapX > 0)
+                    {
+                        MoveBackX(overlapX);
+                    }
+                    break;
+
+                case Direction.UP:
+                case Direction.DOWN:
+                    float overlapY = OverlapY(this, bomb);
+                    if (overlapY > 0)
+                    {
+                        MoveBackY(overlapY);
+                    }
+                    break;
+            }
+
             kickStopRemains = 0.1f;
         }
 
