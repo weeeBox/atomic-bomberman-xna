@@ -199,9 +199,8 @@ namespace Bomberman.Game.Elements.Cells
             }
             if (cell.IsPlayer())
             {
-                return false;
+                return HandleCollision(cell.AsPlayer());
             }
-
 
             return base.HandleCollision(cell);
         }
@@ -218,15 +217,21 @@ namespace Bomberman.Game.Elements.Cells
         public override bool HandleObstacleCollision(FieldCell cell)
         {
             MoveOutOfCollision(this, cell);
-            TryJellyOnObstacle();
+            if (!TryJellyOnObstacle())
+            {
+                StopMoving();
+            }
 
             return true;
         }
 
         private bool HandleCollision(Bomb bomb)
         {
-            MoveOutOfCollision(this, bomb);
-            return true;
+            if (bomb.IsJelly())
+            {
+                bomb.HandleObstacleCollision(this);
+            }
+            return HandleObstacleCollision(bomb);
         }
 
         private bool HandleCollision(FlameCell flame)
@@ -239,6 +244,15 @@ namespace Bomberman.Game.Elements.Cells
         {
             GetField().RemoveCell(powerupCell);
             return true;
+        }
+
+        private bool HandleCollision(Player player)
+        {
+            if (!player.IsMoving() && IsMoving())
+            {
+                return HandleObstacleCollision(player);
+            }
+            return false;
         }
 
         #endregion

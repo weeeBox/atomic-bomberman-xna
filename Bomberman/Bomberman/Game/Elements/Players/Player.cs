@@ -208,7 +208,7 @@ namespace Bomberman.Game.Elements.Players
         {
             if (!IsMoving())
             {
-                return HandleStillPlayerCollision(bomb);
+                return false;
             }
 
             if (bomb.IsMoving())
@@ -306,7 +306,7 @@ namespace Bomberman.Game.Elements.Players
                 }
             }
 
-            return bomb.HandleObstacleCollision(this);
+            return MoveOutOfCollision(this, bomb);
         }
 
         private bool HandleKickCollision(Bomb bomb)
@@ -416,29 +416,31 @@ namespace Bomberman.Game.Elements.Players
 
         private void KickBomb(Bomb bomb)
         {
-            bomb.Kick(direction);
-
-            switch (direction)
+            if (!bomb.IsMoving())
             {
-                case Direction.RIGHT:
-                case Direction.LEFT:
-                    float overlapX = OverlapX(this, bomb);
-                    if (overlapX > 0)
-                    {
-                        MoveBackX(overlapX);
-                    }
-                    break;
+                switch (direction)
+                {
+                    case Direction.RIGHT:
+                    case Direction.LEFT:
+                        float overlapX = OverlapX(this, bomb);
+                        if (overlapX > 0)
+                        {
+                            MoveBackX(overlapX);
+                        }
+                        break;
 
-                case Direction.UP:
-                case Direction.DOWN:
-                    float overlapY = OverlapY(this, bomb);
-                    if (overlapY > 0)
-                    {
-                        MoveBackY(overlapY);
-                    }
-                    break;
+                    case Direction.UP:
+                    case Direction.DOWN:
+                        float overlapY = OverlapY(this, bomb);
+                        if (overlapY > 0)
+                        {
+                            MoveBackY(overlapY);
+                        }
+                        break;
+                }
             }
 
+            bomb.Kick(direction);
             kickStopRemains = 0.1f;
         }
 
