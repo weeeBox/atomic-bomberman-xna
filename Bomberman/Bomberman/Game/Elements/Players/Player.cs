@@ -216,7 +216,7 @@ namespace Bomberman.Game.Elements.Players
                 return HandleStillBombCollision(bomb);
             }
 
-            return HandleMovingBombCollision(bomb);
+            return HandleBombCollision(bomb);
         }
 
         /* Player is not moving */
@@ -231,7 +231,7 @@ namespace Bomberman.Game.Elements.Players
         }
 
         /* Player and bomb are moving */
-        private bool HandleMovingBombCollision(Bomb bomb)
+        private bool HandleBombCollision(Bomb bomb)
         {
             if (direction == bomb.direction)
             {
@@ -254,12 +254,18 @@ namespace Bomberman.Game.Elements.Players
                             break;
                     }
 
-                    if (canKick && TryKick(bomb))
+                    if (canKick)
                     {
-                        return true;
+                        if (TryKick(bomb))
+                        {
+                            return true;
+                        }
+
+                        return MoveOutOfCollision(bomb);
                     }
 
-                    return MoveOutOfCollision(bomb);
+                    bomb.MoveOutOfCollision(this);
+                    return bomb.HandleObstacleCollision(this);
                 }
             }
             else // moving in different directions
