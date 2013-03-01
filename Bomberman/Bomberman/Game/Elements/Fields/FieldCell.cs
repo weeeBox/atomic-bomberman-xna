@@ -25,11 +25,15 @@ namespace Bomberman.Game.Elements.Fields
         /* Linked list stuff */
         public int slotIndex;
 
+        /* Indicates if can be used */
+        public bool valid;
+
         public FieldCell(FieldCellType type, int cx, int cy)
         {
             this.type = type;
 
             slotIndex = -1;
+            valid = true;
             SetCell(cx, cy);
         }
 

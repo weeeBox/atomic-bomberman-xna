@@ -270,7 +270,7 @@ namespace Bomberman.Game.Elements.Cells
                 SetPos(px + dx, py + dy);
 
                 // check collisions and all the stuff
-                OnPositionChanged();
+                OnCellMoved();
             }
         }
 
@@ -305,9 +305,8 @@ namespace Bomberman.Game.Elements.Cells
             SetPos(posX, posY);
         }
 
-        protected virtual void OnPositionChanged()
-        {
-            GetField().MoveablePosChanged(this);
+        protected virtual void OnCellMoved()
+        {   
         }
 
         protected virtual void OnCellChanged(int oldCx, int oldCy)

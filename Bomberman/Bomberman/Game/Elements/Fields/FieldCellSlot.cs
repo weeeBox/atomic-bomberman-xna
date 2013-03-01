@@ -12,10 +12,23 @@ namespace Bomberman.Game.Elements.Fields
 {
     public class FieldCellSlot
     {
+        private static FieldCellType[] STATIC_CELL_TYPES = 
+        {
+            FieldCellType.Solid,
+            FieldCellType.Brick,
+            FieldCellType.Powerup,
+        };
+
         public FieldCell[] cells;
 
-        public FieldCellSlot()
+        public int cx;
+        public int cy;
+
+        public FieldCellSlot(int cx, int cy)
         {
+            this.cx = cx;
+            this.cy = cy;
+
             int size = (int)FieldCellType.Count;
             cells = new FieldCell[size];
         }
@@ -32,8 +45,6 @@ namespace Bomberman.Game.Elements.Fields
 
         public void RemoveCell(FieldCell cell)
         {
-            UpdateIterators(cell);
-
             int index = GetIndex(cell);
             cells[index] = ListUtils.Remove(cells[index], cell);
         }
@@ -152,6 +163,20 @@ namespace Bomberman.Game.Elements.Fields
             return false;
         }
 
+        public FieldCell GetStaticCell()
+        {
+            for (int i = 0; i < STATIC_CELL_TYPES.Length; ++i)
+            {
+                FieldCell cell = Get(STATIC_CELL_TYPES[i]);
+                if (cell != null)
+                {
+                    return cell;
+                }
+            }
+
+            return null;
+        }
+
         public bool Contains(FieldCellType type)
         {
             return Get(type) != null;
@@ -165,40 +190,6 @@ namespace Bomberman.Game.Elements.Fields
         private int GetIndex(FieldCellType type)
         {
             return (int)type;
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Iterators
-
-        private FieldCellIterator iteratorRoot;
-
-        public FieldCellIterator CreateIterator(FieldCell cell)
-        {
-            FieldCellIterator iter = FieldCellIterator.Create(this, cell);
-            AddIterator(iter);
-            return iter;
-        }
-
-        internal void AddIterator(FieldCellIterator iterator)
-        {   
-            iteratorRoot = ListUtils.Add(iteratorRoot, iterator);
-        }
-
-        internal void RemoveIterator(FieldCellIterator iterator)
-        {
-            Debug.Assert(iteratorRoot != null);
-            iteratorRoot = ListUtils.Remove(iteratorRoot, iterator);
-        }
-
-        private void UpdateIterators(FieldCell cell)
-        {
-            for (FieldCellIterator iter = iteratorRoot; iter != null; iter = iter.listNext)
-            {
-                iter.CellRemoved(cell);
-            }
         }
 
         #endregion

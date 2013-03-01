@@ -118,13 +118,9 @@ namespace Bomberman.Game.Elements.Cells
             }
         }
 
-        protected override void OnPositionChanged()
+        protected override void OnCellMoved()
         {
-            if (IsNormal())
-            {
-                base.OnPositionChanged();
-            }
-            else if (IsFlying())
+            if (IsFlying())
             {
                 NormalizeFlyingPos();
             }
@@ -261,6 +257,7 @@ namespace Bomberman.Game.Elements.Cells
 
         public void Activate()
         {
+            valid = true;
             active = true;
             SetCell(player.cx, player.cy);
             radius = player.GetBombRadius();

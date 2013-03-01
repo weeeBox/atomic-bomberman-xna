@@ -41,13 +41,17 @@ namespace Bomberman.Game.Elements.Fields
         private PlayerList players;
         private TimerManager timerManager;
 
-        private LinkedListMutableIterator<MovableCell> movingCellsIterator;
+        private LinkedList<MovableCell> movableCells;
+        private LinkedList<FieldCell> invalidCells;
 
         public Field()
         {
             currentField = this;
             timerManager = new TimerManager();
             players = new PlayerList();
+
+            movableCells = new LinkedList<MovableCell>();
+            invalidCells = new LinkedList<FieldCell>();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -67,7 +71,8 @@ namespace Bomberman.Game.Elements.Fields
             int height = data.GetHeight();
 
             cells = new FieldCellArray(width, height);
-            movingCellsIterator = new LinkedListMutableIterator<MovableCell>();
+
+            movableCells = new LinkedList<MovableCell>();
 
             for (int y = 0; y < height; ++y)
             {
@@ -228,6 +233,7 @@ namespace Bomberman.Game.Elements.Fields
         public void Update(float delta)
         {
             timerManager.Update(delta);
+
             UpdateCells(delta);
             UpdatePhysics(delta);
         }
@@ -239,6 +245,7 @@ namespace Bomberman.Game.Elements.Fields
             {
                 UpdateSlot(delta, slot);
             }
+            RemoveInvalidCells();
         }
 
         public void UpdateSlot(float delta, FieldCellSlot slot)
@@ -246,7 +253,7 @@ namespace Bomberman.Game.Elements.Fields
             FieldCell[] cells = slot.GetCells();
             foreach (FieldCell cell in cells)
             {
-                if (cell != null)
+                if (cell != null && cell.valid)
                 {
                     UpdateCell(delta, cell);
                 }
@@ -255,14 +262,11 @@ namespace Bomberman.Game.Elements.Fields
 
         private void UpdateCell(float delta, FieldCell cell)
         {
-            FieldCellIterator iter = CreateIterator(cell);
-            while (iter.HasNext())
+            for (FieldCell c = cell; c != null; c = c.listNext)
             {
-                FieldCell c = iter.Next();
                 Debug.Assert(Debug.flag && CheckCell(c));
                 c.Update(delta);
             }
-            iter.Destroy();
         }
 
         #endregion
@@ -274,20 +278,27 @@ namespace Bomberman.Game.Elements.Fields
         private void UpdatePhysics(float delta)
         {
             UpdateMoving(delta);
-            CheckCollisions();
+            CheckMovingCollisions();
         }
 
         private void UpdateMoving(float delta)
         {
-            movingCellsIterator.Reset();
-            while (movingCellsIterator.HasNext())
-            {
-                MovableCell cell = movingCellsIterator.Next();
-                if (cell.IsMoving())
+            foreach (MovableCell movable in movableCells)
+            {   
+                if (movable.IsMoving())
                 {
-                    cell.UpdateMoving(delta);
+                    UpdateMoving(delta, movable);
                 }
             }
+            RemoveInvalidCells();
+        }
+
+        private void UpdateMoving(float delta, MovableCell cell)
+        {
+            cell.UpdateMoving(delta);
+
+            CheckWallCollisions(cell);
+            CheckStaticCollisions(cell);
         }
 
         #endregion
@@ -380,7 +391,7 @@ namespace Bomberman.Game.Elements.Fields
             }
 
             Bomb anotherBomb = slot.GetBomb();
-            if (anotherBomb != null)
+            if (anotherBomb != null && anotherBomb.valid)
             {
                 anotherBomb.Blow();
             }
@@ -441,11 +452,6 @@ namespace Bomberman.Game.Elements.Fields
 
         #region Cells
 
-        public void MoveablePosChanged(MovableCell movable)
-        {
-            CheckWallCollisions(movable);
-        }
-
         public void MovableCellChanged(MovableCell movable, int oldCx, int oldCy)
         {
             AddCell(movable);
@@ -483,14 +489,10 @@ namespace Bomberman.Game.Elements.Fields
 
         public void RemoveCell(FieldCell cell)
         {
-            int cx = cell.GetCx();
-            int cy = cell.GetCy();
+            Debug.Assert(cell.valid);
 
-            cells.Remove(cell);
-            if (cell.IsMovable())
-            {
-                RemoveMovable(cell.AsMovable());
-            }
+            cell.valid = false;
+            invalidCells.AddLast(cell);
         }
 
         private void ClearBrick(int cx, int cy)
@@ -505,23 +507,33 @@ namespace Bomberman.Game.Elements.Fields
             }
         }
 
-        private void AddMovable(MovableCell movableCell)
+        private void AddMovable(MovableCell cell)
         {
-            if (!movingCellsIterator.Contains(movableCell))
+            if (!movableCells.Contains(cell))
             {
-                movingCellsIterator.Add(movableCell);
+                movableCells.AddLast(cell);
             }
         }
 
-        private void RemoveMovable(MovableCell movableCell)
-        {   
-            movingCellsIterator.Remove(movableCell);
+        private void RemoveMovable(MovableCell cell)
+        {
+            movableCells.Remove(cell);
         }
 
-        private FieldCellIterator CreateIterator(FieldCell cell)
+        private void RemoveInvalidCells()
         {
-            FieldCellSlot slot = GetSlot(cell.slotIndex);
-            return slot.CreateIterator(cell);
+            if (invalidCells.Count > 0)
+            {
+                foreach (FieldCell cell in invalidCells)
+                {
+                    cells.Remove(cell);
+                    if (cell.IsMovable())
+                    {
+                        RemoveMovable(cell.AsMovable());
+                    }
+                }
+                invalidCells.Clear();
+            }
         }
 
         public bool IsObstacleCell(int cx, int cy)
@@ -629,16 +641,20 @@ namespace Bomberman.Game.Elements.Fields
 
         #region Collisions
 
-        private void CheckCollisions()
+        private void CheckMovingCollisions()
         {
-            movingCellsIterator.Reset();
-            while (movingCellsIterator.HasNext())
-            {   
-                CheckCollisions(movingCellsIterator.Next());
+            for (LinkedListNode<MovableCell> n1 = movableCells.First; n1 != null; n1 = n1.Next)
+            {
+                MovableCell c1 = n1.Value;
+                for (LinkedListNode<MovableCell> n2 = n1.Next; n2 != null; n2 = n2.Next)
+                {
+                    MovableCell c2 = n2.Value;
+                    CheckCollision(c1, c2);
+                }
             }
         }
 
-        private void CheckCollisions(MovableCell movable)
+        private void CheckStaticCollisions(MovableCell movable)
         {
             int cx = movable.cx;
             int cy = movable.cy;
@@ -649,51 +665,47 @@ namespace Bomberman.Game.Elements.Fields
             bool hasStepX = stepX != 0;
             bool hasStepY = stepY != 0;
 
-            CheckCollisions(movable, GetSlot(cx, cy));
+            CheckStaticCollisions(movable, GetSlot(cx, cy));
 
             if (hasStepX && hasStepY)
             {
-                CheckCollisions(movable, GetSlot(cx + stepX, cy));
-                CheckCollisions(movable, GetSlot(cx, cy + stepY));
-                CheckCollisions(movable, GetSlot(cx + stepX, cy + stepY));
+                CheckStaticCollisions(movable, GetSlot(cx + stepX, cy));
+                CheckStaticCollisions(movable, GetSlot(cx, cy + stepY));
+                CheckStaticCollisions(movable, GetSlot(cx + stepX, cy + stepY));
             }
             else if (hasStepX)
             {
-                CheckCollisions(movable, GetSlot(cx + stepX, cy));
+                CheckStaticCollisions(movable, GetSlot(cx + stepX, cy));
             }
             else if (hasStepY)
             {
-                CheckCollisions(movable, GetSlot(cx, cy + stepY));
+                CheckStaticCollisions(movable, GetSlot(cx, cy + stepY));
             }
         }
 
-        private void CheckCollisions(MovableCell movable, FieldCellSlot slot)
+        private void CheckStaticCollisions(MovableCell movable, FieldCellSlot slot)
         {
             if (slot != null)
-            {   
-                CheckCollisions(movable, slot.GetBrick());
-                CheckCollisions(movable, slot.GetSolid());
-                CheckCollisions(movable, slot.GetPowerup());
-                CheckCollisions(movable, slot.GetFlame());
-                CheckCollisions(movable, slot.GetBomb());
-                CheckCollisions(movable, slot.GetPlayer());
-            }
-        }
-
-        private void CheckCollisions(FieldCell target, FieldCell cell)
-        {      
-            for (FieldCell c = cell; c != null; c = c.listNext)
             {
-                if (CheckCollision(target, c))
+                FieldCell staticCell = slot.GetStaticCell();
+                if (staticCell != null)
                 {
-                    break;
+                    CheckCollision(movable, staticCell);
+                }
+                else
+                {
+                    FlameCell flame = slot.GetFlame();
+                    if (flame != null && flame.GetCx() == slot.cx && flame.GetCy() == slot.cy)
+                    {
+                        movable.HandleCollision(flame);
+                    }
                 }
             }
         }
 
         private bool CheckCollision(FieldCell c1, FieldCell c2)
         {
-            return Collides(c1, c2) && c1.HandleCollision(c2);
+            return c1.valid && c2.valid && Collides(c1, c2) && c1.HandleCollision(c2);
         }
 
         private void CheckWallCollisions(MovableCell movable)
@@ -742,7 +754,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private bool Collides(FieldCell a, FieldCell b)
         {
-            return Math.Abs(a.px - b.px) < Constant.CELL_WIDTH && Math.Abs(a.py - b.py) < Constant.CELL_HEIGHT && a != b;
+            return Math.Abs(a.px - b.px) < Constant.CELL_WIDTH && Math.Abs(a.py - b.py) < Constant.CELL_HEIGHT;
         }
 
         #endregion

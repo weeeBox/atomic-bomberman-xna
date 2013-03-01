@@ -21,9 +21,14 @@ namespace Bomberman.Game.Elements.Fields
             this.height = height;
 
             slots = new FieldCellSlot[width * height];
-            for (int i = 0; i < slots.Length; ++i)
+
+            int index = 0;
+            for (int cy = 0; cy < height; ++cy)
             {
-                slots[i] = new FieldCellSlot();
+                for (int cx = 0; cx < width; ++cx)
+                {
+                    slots[index++] = new FieldCellSlot(cx, cy);
+                }
             }
         }
 
