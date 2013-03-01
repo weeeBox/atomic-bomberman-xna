@@ -378,10 +378,10 @@ namespace Bomberman.Game.Elements.Fields
             BrickCell brickCell = slot.GetBrick();
             if (brickCell != null)
             {   
-                //if (!brickCell.destroyed)
-                //{
-                //    brickCell.Destroy();
-                //}
+                if (!brickCell.destroyed)
+                {
+                    brickCell.Destroy();
+                }
 
                 return false;
             }

@@ -271,7 +271,6 @@ namespace Bomberman.Game.Elements.Players
                     {
                         return true;
                     }
-                    return HandleObstacleCollision(bomb);
                 }
             }
 

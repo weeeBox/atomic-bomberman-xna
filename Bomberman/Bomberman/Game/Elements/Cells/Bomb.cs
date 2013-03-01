@@ -43,6 +43,9 @@ namespace Bomberman.Game.Elements.Cells
 
         private int m_triggerIndex;
 
+        private float jellyBlockRemains;
+        private bool jellyBlocked;
+
         public Bomb(Player player)
            : base(FieldCellType.Bomb, player.GetCx(), player.GetCy())
         {
@@ -64,6 +67,16 @@ namespace Bomberman.Game.Elements.Cells
                 if (remains <= 0)
                 {
                     Blow();
+                }
+            }
+
+            if (jellyBlockRemains > 0)
+            {
+                jellyBlockRemains -= delta;
+                if (jellyBlockRemains <= 0 && jellyBlocked)
+                {
+                    jellyBlocked = false;
+                    TryJellyOnObstacle();
                 }
             }
         }
@@ -383,8 +396,15 @@ namespace Bomberman.Game.Elements.Cells
 
         private bool TryJellyOnObstacle()
         {
+            if (jellyBlockRemains > 0)
+            {
+                jellyBlocked = true;
+                return true;
+            }
+
             if (IsJelly())
             {
+                jellyBlockRemains = 0.1f;
                 SetMoveDirection(Util.Opposite(direction));
                 return true;
             }
