@@ -41,11 +41,6 @@ namespace Bomberman.Game.Elements.Fields
         {   
         }
 
-        public virtual bool HandleCollision(FieldCell other)
-        {
-            return false;
-        }
-
         public void SetCell()
         {
             SetCell(cx, cy);

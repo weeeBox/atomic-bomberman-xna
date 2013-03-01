@@ -122,6 +122,11 @@ namespace Bomberman.Game.Elements.Cells
             return yOffset < 0 ? Math.Max(yOffset, -delta * m_speed) : Math.Min(yOffset, delta * m_speed);
         }
 
+        public virtual bool HandleCollision(FieldCell other)
+        {
+            return false;
+        }
+
         public virtual bool HandleWallCollision()
         {
             StopMoving();

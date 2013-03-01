@@ -208,6 +208,11 @@ namespace Bomberman.Game.Elements.Players
         {
             if (!IsMoving())
             {
+                if (bomb.IsMoving())
+                {
+                    return bomb.HandleObstacleCollision(this);
+                }
+
                 return false;
             }
 

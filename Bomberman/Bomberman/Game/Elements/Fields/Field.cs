@@ -712,7 +712,7 @@ namespace Bomberman.Game.Elements.Fields
             }
         }
 
-        private bool CheckCollision(FieldCell c1, FieldCell c2)
+        private bool CheckCollision(MovableCell c1, FieldCell c2)
         {
             return Collides(c1, c2) && c1.HandleCollision(c2);
         }

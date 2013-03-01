@@ -64,7 +64,7 @@ namespace Bomberman.Game.Elements.Fields
         {
             int index = GetIndex(type);
             FieldCell cell = cells[index];
-            return cell.valid ? cell : null;
+            return cell != null && cell.valid ? cell : null;
         }
 
         public int Size()

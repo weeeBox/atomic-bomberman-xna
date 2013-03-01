@@ -244,11 +244,7 @@ namespace Bomberman.Game.Elements.Cells
 
         private bool HandleCollision(Player player)
         {
-            if (!player.IsMoving() && IsMoving())
-            {
-                return HandleObstacleCollision(player);
-            }
-            return false;
+            return player.HandleCollision(this);
         }
 
         #endregion
