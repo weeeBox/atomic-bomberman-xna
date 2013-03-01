@@ -63,7 +63,8 @@ namespace Bomberman.Game.Elements.Fields
         public FieldCell Get(FieldCellType type)
         {
             int index = GetIndex(type);
-            return cells[index];
+            FieldCell cell = cells[index];
+            return cell.valid ? cell : null;
         }
 
         public int Size()

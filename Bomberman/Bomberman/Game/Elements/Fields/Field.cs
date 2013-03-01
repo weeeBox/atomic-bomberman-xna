@@ -394,7 +394,7 @@ namespace Bomberman.Game.Elements.Fields
             }
 
             Bomb anotherBomb = slot.GetBomb();
-            if (anotherBomb != null && anotherBomb.valid)
+            if (anotherBomb != null)
             {
                 anotherBomb.Blow();
             }
@@ -699,10 +699,7 @@ namespace Bomberman.Game.Elements.Fields
                 FieldCell staticCell = slot.GetStaticCell();
                 if (staticCell != null)
                 {
-                    if (staticCell.valid)
-                    {
-                        CheckCollision(movable, staticCell);
-                    }
+                    CheckCollision(movable, staticCell);
                 }
                 else
                 {
