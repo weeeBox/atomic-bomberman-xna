@@ -140,6 +140,7 @@ namespace Bomberman.Game.Elements.Cells
             return MoveOutOfCollision(this, cell);
         }
 
+        /* Move both cells out of collision */
         public static bool MoveOutOfCollision(FieldCell a, FieldCell b)
         {
             bool hadCollisiton = false;
@@ -195,6 +196,27 @@ namespace Bomberman.Game.Elements.Cells
                     mb.MoveY(-speedB * time * 0.01f);
                 }
 
+                hadCollisiton = true;
+            }
+
+            return hadCollisiton;
+        }
+
+        public bool MoveOutOfCollision(FieldCell cell)
+        {
+            bool hadCollisiton = false;
+
+            float overlapX = OverlapX(this, cell);
+            if (overlapX > 0 && MathHelp.Abs(oldPx - cell.oldPx) >= Constant.CELL_WIDTH)
+            {
+                MoveBackX(overlapX);
+                hadCollisiton = true;
+            }
+
+            float overlapY = OverlapY(this, cell);
+            if (overlapY > 0 && MathHelp.Abs(oldPy - cell.oldPy) >= Constant.CELL_HEIGHT)
+            {
+                MoveBackY(overlapY);
                 hadCollisiton = true;
             }
 

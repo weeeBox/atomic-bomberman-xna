@@ -208,20 +208,15 @@ namespace Bomberman.Game.Elements.Players
         {
             if (!IsMoving())
             {
-                if (bomb.IsMoving())
-                {
-                    return bomb.HandleObstacleCollision(this);
-                }
-
-                return false;
+                return HandleStillPlayerCollision(bomb);
             }
 
-            if (bomb.IsMoving())
+            if (!bomb.IsMoving())
             {
-                return HandleMovingBombCollision(bomb);
+                return HandleStillBombCollision(bomb);
             }
 
-            return HandleStillBombCollision(bomb);
+            return HandleMovingBombCollision(bomb);
         }
 
         /* Player is not moving */
@@ -263,8 +258,8 @@ namespace Bomberman.Game.Elements.Players
                     {
                         return true;
                     }
-                    
-                    return HandleObstacleCollision(bomb);
+
+                    return MoveOutOfCollision(bomb);
                 }
             }
             else // moving in different directions
@@ -351,29 +346,26 @@ namespace Bomberman.Game.Elements.Players
         }
 
         private void KickBomb(Bomb bomb)
-        {
-            if (!bomb.IsMoving())
+        {   
+            switch (direction)
             {
-                switch (direction)
-                {
-                    case Direction.RIGHT:
-                    case Direction.LEFT:
-                        float overlapX = OverlapX(this, bomb);
-                        if (overlapX > 0)
-                        {
-                            MoveBackX(overlapX);
-                        }
-                        break;
+                case Direction.RIGHT:
+                case Direction.LEFT:
+                    float overlapX = OverlapX(this, bomb);
+                    if (overlapX > 0)
+                    {
+                        MoveBackX(overlapX);
+                    }
+                    break;
 
-                    case Direction.UP:
-                    case Direction.DOWN:
-                        float overlapY = OverlapY(this, bomb);
-                        if (overlapY > 0)
-                        {
-                            MoveBackY(overlapY);
-                        }
-                        break;
-                }
+                case Direction.UP:
+                case Direction.DOWN:
+                    float overlapY = OverlapY(this, bomb);
+                    if (overlapY > 0)
+                    {
+                        MoveBackY(overlapY);
+                    }
+                    break;
             }
 
             bomb.Kick(direction);
