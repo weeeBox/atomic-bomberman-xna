@@ -253,7 +253,7 @@ namespace Bomberman.Game.Elements.Fields
             FieldCell[] cells = slot.GetCells();
             foreach (FieldCell cell in cells)
             {
-                if (cell != null && cell.valid)
+                if (cell != null)
                 {
                     UpdateCell(delta, cell);
                 }
@@ -264,8 +264,11 @@ namespace Bomberman.Game.Elements.Fields
         {
             for (FieldCell c = cell; c != null; c = c.listNext)
             {
-                Debug.Assert(Debug.flag && CheckCell(c));
-                c.Update(delta);
+                if (c.valid)
+                {
+                    Debug.Assert(Debug.flag && CheckCell(c));
+                    c.Update(delta);
+                }
             }
         }
 
@@ -285,7 +288,7 @@ namespace Bomberman.Game.Elements.Fields
         {
             foreach (MovableCell movable in movableCells)
             {   
-                if (movable.IsMoving())
+                if (movable.valid && movable.IsMoving())
                 {
                     UpdateMoving(delta, movable);
                 }
@@ -646,10 +649,16 @@ namespace Bomberman.Game.Elements.Fields
             for (LinkedListNode<MovableCell> n1 = movableCells.First; n1 != null; n1 = n1.Next)
             {
                 MovableCell c1 = n1.Value;
-                for (LinkedListNode<MovableCell> n2 = n1.Next; n2 != null; n2 = n2.Next)
+                if (c1.valid)
                 {
-                    MovableCell c2 = n2.Value;
-                    CheckCollision(c1, c2);
+                    for (LinkedListNode<MovableCell> n2 = n1.Next; n2 != null; n2 = n2.Next)
+                    {
+                        MovableCell c2 = n2.Value;
+                        if (c2.valid)
+                        {
+                            CheckCollision(c1, c2);
+                        }
+                    }
                 }
             }
         }
@@ -690,12 +699,15 @@ namespace Bomberman.Game.Elements.Fields
                 FieldCell staticCell = slot.GetStaticCell();
                 if (staticCell != null)
                 {
-                    CheckCollision(movable, staticCell);
+                    if (staticCell.valid)
+                    {
+                        CheckCollision(movable, staticCell);
+                    }
                 }
                 else
                 {
                     FlameCell flame = slot.GetFlame();
-                    if (flame != null && flame.GetCx() == slot.cx && flame.GetCy() == slot.cy)
+                    if (flame != null && flame.valid && flame.GetCx() == slot.cx && flame.GetCy() == slot.cy)
                     {
                         movable.HandleCollision(flame);
                     }
@@ -705,7 +717,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private bool CheckCollision(FieldCell c1, FieldCell c2)
         {
-            return c1.valid && c2.valid && Collides(c1, c2) && c1.HandleCollision(c2);
+            return Collides(c1, c2) && c1.HandleCollision(c2);
         }
 
         private void CheckWallCollisions(MovableCell movable)
