@@ -512,15 +512,30 @@ namespace Bomberman.Game.Elements.Fields
 
         private void AddMovable(MovableCell cell)
         {
-            if (!movableCells.Contains(cell))
+            if (!cell.addedToList)
             {
+                cell.addedToList = true;
+
+                // added into the list sorted bombs first, players next
+                for (LinkedListNode<MovableCell> node = movableCells.First; node != null; node = node.Next)
+                {
+                    if (cell.type <= node.Value.type)
+                    {
+                        movableCells.AddBefore(node, cell);
+                        return;
+                    }
+                }
                 movableCells.AddLast(cell);
             }
         }
 
         private void RemoveMovable(MovableCell cell)
         {
-            movableCells.Remove(cell);
+            if (cell.addedToList)
+            {
+                movableCells.Remove(cell);
+                cell.addedToList = false;
+            }
         }
 
         private void RemoveInvalidCells()
@@ -651,6 +666,12 @@ namespace Bomberman.Game.Elements.Fields
                 MovableCell c1 = n1.Value;
                 if (c1.valid)
                 {
+                    Bomb bomb = c1.AsBomb();
+                    if (bomb != null && bomb.IsMoving())
+                    {
+                        AdjustBombPosition(bomb);
+                    }
+
                     for (LinkedListNode<MovableCell> n2 = n1.Next; n2 != null; n2 = n2.Next)
                     {
                         MovableCell c2 = n2.Value;
@@ -659,6 +680,33 @@ namespace Bomberman.Game.Elements.Fields
                             CheckCollision(c1, c2);
                         }
                     }
+                }
+            }
+        }
+
+        private void AdjustBombPosition(Bomb bomb)
+        {
+            for (int cy = -1; cy <= 1; ++cy)
+            {
+                for (int cx = -1; cx <= 1; ++cx)
+                {
+                    FieldCellSlot slot = GetSlot(cx, cy);
+                    if (slot != null)
+                    {
+                        AdjustBombPosition(bomb, slot);
+                    }
+                }
+            }
+        }
+
+        private void AdjustBombPosition(Bomb bomb, FieldCellSlot slot)
+        {   
+            for (FieldCell p = slot.GetPlayer(); p != null; p = p.listNext)
+            {
+                Player player = p.AsPlayer();
+                if (!player.IsMoving() || Util.AreOpposite(player.direction, bomb.direction))
+                {
+                    MovableCell.MoveOutOfCollision(bomb, player);
                 }
             }
         }

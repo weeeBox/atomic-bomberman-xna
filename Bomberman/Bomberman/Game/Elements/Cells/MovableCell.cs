@@ -21,6 +21,8 @@ namespace Bomberman.Game.Elements.Cells
 
         private bool m_moving;
 
+        public bool addedToList;
+
         public MovableCell(FieldCellType type, int cx, int cy)
             : base(type, cx, cy)
         {
@@ -138,7 +140,7 @@ namespace Bomberman.Game.Elements.Cells
             return MoveOutOfCollision(this, cell);
         }
 
-        protected bool MoveOutOfCollision(FieldCell a, FieldCell b)
+        public static bool MoveOutOfCollision(FieldCell a, FieldCell b)
         {
             bool hadCollisiton = false;
 

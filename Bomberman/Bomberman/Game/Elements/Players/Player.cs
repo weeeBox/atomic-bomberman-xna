@@ -314,82 +314,13 @@ namespace Bomberman.Game.Elements.Players
             return MoveOutOfCollision(this, bomb);
         }
 
-        private bool HandleKickCollision(Bomb bomb)
-        {
-            if (bomb.IsMoving())
-            {
-                if (Util.AreOpposite(direction, bomb.direction))
-                {
-                    MoveOutOfCollision(this, bomb);
-                }
-                else
-                {
-                    float posX = px;
-                    float posY = py;
-
-                    switch (direction)
-                    {
-                        case Direction.UP:
-                            posY = bomb.py + Constant.CELL_HEIGHT;
-                            break;
-                        case Direction.DOWN:
-                            posY = bomb.py - Constant.CELL_HEIGHT;
-                            break;
-                        case Direction.LEFT:
-                            posX = bomb.px + Constant.CELL_WIDTH;
-                            break;
-                        case Direction.RIGHT:
-                            posX = bomb.px - Constant.CELL_WIDTH;
-                            break;
-                    }
-                    SetPos(posX, posY);
-                }
-
-                KickBomb(bomb);
-
-                return true;
-            }
-
-            bool canKick = false; // true, if distance between player's center and bomb's center is enough for a kick
-            switch (direction)
-            {
-                case Direction.UP:
-                    canKick = py - bomb.py > Constant.CELL_HEIGHT_2;
-                    break;
-                case Direction.DOWN:
-                    canKick = bomb.py - py > Constant.CELL_HEIGHT_2;
-                    break;
-                case Direction.LEFT:
-                    canKick = px - bomb.px > Constant.CELL_WIDTH_2;
-                    break;
-                case Direction.RIGHT:
-                    canKick = bomb.px - px > Constant.CELL_WIDTH_2;
-                    break;
-                default:
-                    Debug.Assert(false, "Unknown direction: " + direction);
-                    break;
-            }
-
-            if (canKick)
-            {
-                FieldCellSlot blockingSlot = bomb.NearSlotDir(direction);
-                if (blockingSlot != null && !blockingSlot.ContainsObstacle()) // can we kick the bomb here?
-                {
-                    KickBomb(bomb);
-                }
-                else
-                {
-                    MoveOutOfCollision(this, bomb);
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
         private bool TryKick(Bomb bomb)
         {
+            if (kickStopRemains > 0)
+            {
+                return false;
+            }
+
             FieldCellSlot blockingSlot = bomb.NearSlotDir(direction);
             if (blockingSlot != null && !blockingSlot.ContainsObstacle())
             {
