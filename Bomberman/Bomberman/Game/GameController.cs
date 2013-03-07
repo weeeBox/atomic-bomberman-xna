@@ -51,13 +51,22 @@ namespace Bomberman.Game
 
             players[0].SetPlayerInput(keyboardInput1);
 
+            PlayerKeyboardInput keyboardInput2 = new PlayerKeyboardInput();
+            keyboardInput2.Map(Keys.Up, PlayerAction.Up);
+            keyboardInput2.Map(Keys.Left, PlayerAction.Left);
+            keyboardInput2.Map(Keys.Down, PlayerAction.Down);
+            keyboardInput2.Map(Keys.Right, PlayerAction.Right);
+            gameScene.AddKeyboardListener(keyboardInput2);
+
+            players[1].SetPlayerInput(keyboardInput2);
+
             PlayerGamePadInput gamePadInput = new PlayerGamePadInput(0);
             gamePadInput.Map(Buttons.A, PlayerAction.Bomb);
             gamePadInput.Map(Buttons.B, PlayerAction.Special);
             gameScene.AddGamePadListener(gamePadInput);
             gameScene.AddUpdatabled(gamePadInput);
 
-            players[1].SetPlayerInput(gamePadInput);
+            players[2].SetPlayerInput(gamePadInput);
         }
 
         private void InitCheats()

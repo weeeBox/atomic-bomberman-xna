@@ -270,13 +270,22 @@ namespace Bomberman.Game.Elements.Players
             }
             else // moving in different directions
             {
-                MoveOutOfCollision(this, bomb);
-                if (HasKick())
+                if (!bomb.jellyBlocked)
                 {
-                    if (TryKick(bomb))
+                    
+                    MoveOutOfCollision(this, bomb);
+
+                    if (HasKick())
                     {
-                        return true;
+                        if (TryKick(bomb))
+                        {                            
+                            return true;
+                        }
                     }
+                }
+                else
+                {
+                    return MoveOutOfCollision(bomb);
                 }
             }
 

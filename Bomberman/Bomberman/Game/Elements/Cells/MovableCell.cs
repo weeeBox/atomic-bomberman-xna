@@ -170,7 +170,18 @@ namespace Bomberman.Game.Elements.Cells
                     float speedDiff = Math.Abs(speedA - speedB);
                     float time = overlapX / speedDiff;
                     float overlapA = time * ma.GetSpeed();
-                    float overlapB = overlapX - overlapA;
+                    float overlapB = time * mb.GetSpeed();
+                    if (overlapA > Math.Abs(ma.moveDx))
+                    {
+                        overlapA = Math.Abs(ma.moveDx);
+                        overlapB = overlapX - overlapA;
+                    }
+                    else if (overlapB > Math.Abs(mb.moveDx))
+                    {
+                        overlapB = Math.Abs(mb.moveDx);
+                        overlapA = overlapX - overlapB;
+                    }
+
                     ma.MoveBackX(overlapA);
                     mb.MoveBackX(overlapB);
                 }
@@ -199,7 +210,17 @@ namespace Bomberman.Game.Elements.Cells
                     float speedDiff = Math.Abs(speedA - speedB);
                     float time = overlapY / speedDiff;
                     float overlapA = time * ma.GetSpeed();
-                    float overlapB = overlapY - overlapA;
+                    float overlapB = time * mb.GetSpeed();
+                    if (overlapA > Math.Abs(ma.moveDy))
+                    {
+                        overlapA = Math.Abs(ma.moveDy);
+                        overlapB = overlapY - overlapA;
+                    }
+                    else if (overlapB > Math.Abs(mb.moveDy))
+                    {
+                        overlapB = Math.Abs(mb.moveDy);
+                        overlapA = overlapY - overlapB;
+                    }
                     ma.MoveBackY(overlapA);
                     mb.MoveBackY(overlapB);
                 }
