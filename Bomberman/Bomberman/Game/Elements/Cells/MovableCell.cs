@@ -23,11 +23,15 @@ namespace Bomberman.Game.Elements.Cells
 
         public bool addedToList;
 
+        public CellContactList contactList;
+
         public MovableCell(FieldCellType type, int cx, int cy)
             : base(type, cx, cy)
         {
             m_direction = Direction.DOWN;
             m_oldDirection = Direction.DOWN;
+
+            contactList = new CellContactList(this);
         }
 
         public override void Update(float delta)
@@ -151,11 +155,11 @@ namespace Bomberman.Game.Elements.Cells
                 MovableCell ma = a.AsMovable();
                 MovableCell mb = b.AsMovable();
 
-                if (ma == null)
+                if (ma == null || !ma.IsMoving())
                 {
                     mb.MoveBackX(overlapX);
                 }
-                else if (mb == null)
+                else if (mb == null || !mb.IsMoving())
                 {
                     ma.MoveBackX(overlapX);
                 }
@@ -164,9 +168,11 @@ namespace Bomberman.Game.Elements.Cells
                     float speedA = ma.GetSpeedX();
                     float speedB = mb.GetSpeedX();
                     float speedDiff = Math.Abs(speedA - speedB);
-                    float time = 100.0f * overlapX / speedDiff;
-                    ma.MoveX(-speedA * time * 0.01f);
-                    mb.MoveX(-speedB * time * 0.01f);
+                    float time = overlapX / speedDiff;
+                    float overlapA = time * ma.GetSpeed();
+                    float overlapB = overlapX - overlapA;
+                    ma.MoveBackX(overlapA);
+                    mb.MoveBackX(overlapB);
                 }
 
                 hadCollisiton = true;
@@ -178,11 +184,11 @@ namespace Bomberman.Game.Elements.Cells
                 MovableCell ma = a.AsMovable();
                 MovableCell mb = b.AsMovable();
 
-                if (ma == null)
+                if (ma == null || !ma.IsMoving())
                 {
                     mb.MoveBackY(overlapY);
                 }
-                else if (mb == null)
+                else if (mb == null || !mb.IsMoving())
                 {
                     ma.MoveBackY(overlapY);
                 }
@@ -191,9 +197,11 @@ namespace Bomberman.Game.Elements.Cells
                     float speedA = ma.GetSpeedY();
                     float speedB = mb.GetSpeedY();
                     float speedDiff = Math.Abs(speedA - speedB);
-                    float time = 100.0f * overlapY / speedDiff;
-                    ma.MoveY(-speedA * time * 0.01f);
-                    mb.MoveY(-speedB * time * 0.01f);
+                    float time = overlapY / speedDiff;
+                    float overlapA = time * ma.GetSpeed();
+                    float overlapB = overlapY - overlapA;
+                    ma.MoveBackY(overlapA);
+                    mb.MoveBackY(overlapB);
                 }
 
                 hadCollisiton = true;
