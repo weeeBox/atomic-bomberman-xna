@@ -8,9 +8,146 @@ using BomberEngine.Util;
 namespace BomberEngineTests
 {
     [TestClass]
-    public class ListUtilsTests
+    public class FastLinkedListTests
     {
         [TestMethod]
+        public void TestAddFirst()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            Node node = new Node(1);
+            list.AddFirst(node);
+
+            Assert.AreEqual(list.GetListSize(), 1);
+
+            Assert.AreEqual(list.listFirst, node);
+            Assert.AreEqual(list.listLast, node);
+
+            Assert.IsNull(list.listFirst.listPrev);
+            Assert.IsNull(list.listFirst.listNext);
+
+            Assert.IsNull(list.listLast.listPrev);
+            Assert.IsNull(list.listLast.listNext);
+        }
+
+        [TestMethod]
+        public void TestAddLast()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            Node node = new Node(1);
+            list.AddLast(node);
+
+            Assert.AreEqual(list.GetListSize(), 1);
+
+            Assert.AreEqual(list.listFirst, node);
+            Assert.AreEqual(list.listLast, node);
+
+            Assert.IsNull(list.listFirst.listPrev);
+            Assert.IsNull(list.listFirst.listNext);
+
+            Assert.IsNull(list.listLast.listPrev);
+            Assert.IsNull(list.listLast.listNext);
+        }
+
+        [TestMethod]
+        public void TestAdd1()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            Node node1 = new Node(1);
+            list.AddLast(node1);
+
+            Node node2 = new Node(2);
+            list.AddLast(node2);
+
+            Assert.AreEqual(list.GetListSize(), 2);
+
+            Assert.AreEqual(list.listFirst, node1);
+            Assert.AreEqual(list.listLast, node2);
+
+            Assert.IsNull(list.listFirst.listPrev);
+            Assert.AreEqual(list.listFirst.listNext, node2);
+
+            Assert.AreEqual(list.listLast.listPrev, node1);
+            Assert.IsNull(list.listLast.listNext);
+        }
+
+        [TestMethod]
+        public void TestAdd2()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            Node node1 = new Node(1);
+            list.AddFirst(node1);
+
+            Node node2 = new Node(2);
+            list.AddFirst(node2);
+
+            Assert.AreEqual(list.GetListSize(), 2);
+
+            Assert.AreEqual(list.listFirst, node2);
+            Assert.AreEqual(list.listLast, node1);
+
+            Assert.IsNull(list.listFirst.listPrev);
+            Assert.AreEqual(list.listFirst.listNext, node1);
+
+            Assert.AreEqual(list.listLast.listPrev, node2);
+            Assert.IsNull(list.listLast.listNext);
+        }
+
+        [TestMethod]
+        public void TestAdd3()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            Assert.AreEqual(list.GetListSize(), 3);
+
+            Node node = list.listFirst;
+            for (int i = 0; i < values.Length; ++i)
+            {
+                Assert.AreEqual(values[i], node.value);
+                node = node.listNext;
+            }
+
+            Assert.IsNull(node);
+        }
+
+        [TestMethod]
+        public void TestAdd4()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddFirst(new Node(values[i]));
+            }
+
+            Assert.AreEqual(list.GetListSize(), 3);
+
+            Node node = list.listLast;
+            for (int i = 0; i < values.Length; ++i)
+            {
+                Assert.AreEqual(values[i], node.value);
+                node = node.listPrev;
+            }
+
+            Assert.IsNull(node);
+        }
+
+    }
+
+    /*
+      [TestMethod]
         public void TestAdd()
         {
             int[] values = { 1, 2, 3 };
@@ -169,6 +306,17 @@ namespace BomberEngineTests
     }
 
     public class Node : ListNode<Node>
+    {
+        public int value;
+
+        public Node(int value)
+        {
+            this.value = value;
+        }
+    }   
+     */
+
+    class Node : ListNode<Node>
     {
         public int value;
 
