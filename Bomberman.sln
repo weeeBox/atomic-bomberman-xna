@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BombermanContentPipeline", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BombermanCommon", "BombermanCommon\BombermanCommon.csproj", "{08E52DD3-F9C0-4C5A-8F1C-3BB6E9B06396}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BombermanTests", "BombermanTests\BombermanTests.csproj", "{2B9065EE-F6CD-454F-A03F-D60BDE76848D}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Bomberman.vsmdi
@@ -91,6 +93,16 @@ Global
 		{08E52DD3-F9C0-4C5A-8F1C-3BB6E9B06396}.Release|Mixed Platforms.Build.0 = Release|x86
 		{08E52DD3-F9C0-4C5A-8F1C-3BB6E9B06396}.Release|x86.ActiveCfg = Release|x86
 		{08E52DD3-F9C0-4C5A-8F1C-3BB6E9B06396}.Release|x86.Build.0 = Release|x86
+		{2B9065EE-F6CD-454F-A03F-D60BDE76848D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B9065EE-F6CD-454F-A03F-D60BDE76848D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B9065EE-F6CD-454F-A03F-D60BDE76848D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2B9065EE-F6CD-454F-A03F-D60BDE76848D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2B9065EE-F6CD-454F-A03F-D60BDE76848D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2B9065EE-F6CD-454F-A03F-D60BDE76848D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B9065EE-F6CD-454F-A03F-D60BDE76848D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B9065EE-F6CD-454F-A03F-D60BDE76848D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2B9065EE-F6CD-454F-A03F-D60BDE76848D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2B9065EE-F6CD-454F-A03F-D60BDE76848D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

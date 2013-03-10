@@ -255,6 +255,11 @@ namespace Bomberman.Game.Elements.Fields
             get { return m_py - m_oldPy; }
         }
 
+        public int GetPriority()
+        {
+            return (int)type;
+        }
+
         public static float OverlapX(FieldCell a, FieldCell b)
         {
             float overlapX = Constant.CELL_WIDTH - MathHelp.Abs(a.px - b.px);

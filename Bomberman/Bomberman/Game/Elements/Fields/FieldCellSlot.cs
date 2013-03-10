@@ -10,7 +10,7 @@ using BomberEngine.Util;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class FieldCellSlot
+    public class FieldCellSlot : FastLinkedList<FieldCell>
     {
         private static FieldCellType[] STATIC_CELL_TYPES = 
         {
@@ -39,14 +39,34 @@ namespace Bomberman.Game.Elements.Fields
 
         public void AddCell(FieldCell cell)
         {
-            int index = GetIndex(cell);
-            cells[index] = ListUtils.Add(cells[index], cell);
+            FieldCell node = FindInsertionNode(cell);
+            if (node != null)
+            {
+                InsertAfterItem(node, cell);
+            }
+            else
+            {
+                AddFirstItem(cell);
+            }
         }
 
         public void RemoveCell(FieldCell cell)
         {
-            int index = GetIndex(cell);
-            cells[index] = ListUtils.Remove(cells[index], cell);
+            RemoveItem(cell);
+        }
+
+        private FieldCell FindInsertionNode(FieldCell cell)
+        {
+            int priority = cell.GetPriority();
+            for (FieldCell c = listLast; c != null; c = c.listPrev)
+            {
+                if (c.GetPriority() <= priority)
+                {
+                    return c;
+                }
+            }
+
+            return null;
         }
 
         #endregion

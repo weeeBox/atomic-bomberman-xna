@@ -213,6 +213,30 @@ namespace Bomberman.Game.Elements.Fields
             {
                 context.DrawImage(image, drawX, drawY - image.GetHeight() + cellHeight);
             }
+
+            int stepX = Math.Sign(player.px - player.CellCenterPx());
+            int stepY = Math.Sign(player.py - player.CellCenterPy());
+
+            bool hasStepX = stepX != 0;
+            bool hasStepY = stepY != 0;
+
+            int cx = player.GetCx();
+            int cy = player.GetCy();
+
+            if (hasStepX && hasStepY)
+            {
+                DrawCellRect(context, cx + stepX, cy, Color.Yellow);
+                DrawCellRect(context, cx, cy + stepY, Color.Yellow);
+                DrawCellRect(context, cx + stepX, cy + stepY, Color.Yellow);
+            }
+            else if (hasStepX)
+            {
+                DrawCellRect(context, cx + stepX, cy, Color.Yellow);
+            }
+            else if (hasStepY)
+            {
+                DrawCellRect(context, cx, cy + stepY, Color.Yellow);
+            }
         }
 
         private void DrawCellImage(Context context, FieldCell cell, TextureImage image)
@@ -220,6 +244,16 @@ namespace Bomberman.Game.Elements.Fields
             float drawX = cell.GetPx() - 0.5f * image.GetWidth();
             float drawY = cell.GetPy() - 0.5f * image.GetHeight();
             context.DrawImage(image, drawX, drawY);
+        }
+
+        private void DrawCellRect(Context context, int cx, int cy, Color color)
+        {
+            context.DrawRect(cx * cellWidth, cy * cellHeight, cellWidth, cellHeight, color);
+        }
+
+        private void DrawCellRect(Context context, FieldCell cell, Color color)
+        {
+            DrawCellRect(context, cell.GetCx(), cell.GetCy(), color);
         }
         
         private void DrawGrid(Context context)
