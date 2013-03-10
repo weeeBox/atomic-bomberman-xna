@@ -14,37 +14,59 @@ namespace BomberEngine.Util
 
         public void AddFirst(T item)
         {
-            item.listPrev = null;
-            item.listNext = listFirst;
+            Insert(item, null, listFirst);
+        }
 
-            if (listFirst != null)
+        public void AddLast(T item)
+        {
+            Insert(item, listLast, null);
+        }
+
+        public void InsertBefore(T node, T item)
+        {
+            Insert(item, node != null ? node.listPrev : null, node);
+        }
+
+        public void InsertAfter(T node, T item)
+        {
+            Insert(item, node, node != null ? node.listNext : null);
+        }
+
+        public bool Contains(T item)
+        {
+            for (T t = listFirst; t != null; t = t.listNext)
             {
-                listFirst.listPrev = item;
+                if (t == item)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void Insert(T item, T prev, T next)
+        {
+            if (next != null)
+            {
+                next.listPrev = item;
             }
             else
             {
                 listLast = item;
             }
 
-            listFirst = item;
-            ++size;
-        }
-
-        public void AddLast(T item)
-        {
-            item.listPrev = listLast;
-            item.listNext = null;
-
-            if (listLast != null)
+            if (prev != null)
             {
-                listLast.listNext = item;
+                prev.listNext = item;
             }
             else
             {
                 listFirst = item;
             }
 
-            listLast = item;
+            item.listPrev = prev;
+            item.listNext = next;
             ++size;
         }
 

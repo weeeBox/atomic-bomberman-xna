@@ -144,24 +144,263 @@ namespace BomberEngineTests
             Assert.IsNull(node);
         }
 
-    }
-
-    /*
-      [TestMethod]
-        public void TestAdd()
+        [TestMethod]
+        public void TestInsert1()
         {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            Node node = new Node(1);
+            list.InsertBefore(list.listFirst, node);
+
+            Assert.AreEqual(list.GetListSize(), 1);
+
+            Assert.AreEqual(list.listFirst, node);
+            Assert.AreEqual(list.listLast, node);
+
+            Assert.IsNull(list.listFirst.listPrev);
+            Assert.IsNull(list.listFirst.listNext);
+
+            Assert.IsNull(list.listLast.listPrev);
+            Assert.IsNull(list.listLast.listNext);
+        }
+
+        [TestMethod]
+        public void TestInsert2()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            Node node = new Node(1);
+            list.InsertAfter(list.listFirst, node);
+
+            Assert.AreEqual(list.GetListSize(), 1);
+
+            Assert.AreEqual(list.listFirst, node);
+            Assert.AreEqual(list.listLast, node);
+
+            Assert.IsNull(list.listFirst.listPrev);
+            Assert.IsNull(list.listFirst.listNext);
+
+            Assert.IsNull(list.listLast.listPrev);
+            Assert.IsNull(list.listLast.listNext);
+        }
+
+        [TestMethod]
+        public void TestInsert3()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            Node node = new Node(1);
+            list.InsertBefore(list.listLast, node);
+
+            Assert.AreEqual(list.GetListSize(), 1);
+
+            Assert.AreEqual(list.listFirst, node);
+            Assert.AreEqual(list.listLast, node);
+
+            Assert.IsNull(list.listFirst.listPrev);
+            Assert.IsNull(list.listFirst.listNext);
+
+            Assert.IsNull(list.listLast.listPrev);
+            Assert.IsNull(list.listLast.listNext);
+        }
+
+        [TestMethod]
+        public void TestInsert4()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            Node node = new Node(1);
+            list.InsertAfter(list.listLast, node);
+
+            Assert.AreEqual(list.GetListSize(), 1);
+
+            Assert.AreEqual(list.listFirst, node);
+            Assert.AreEqual(list.listLast, node);
+
+            Assert.IsNull(list.listFirst.listPrev);
+            Assert.IsNull(list.listFirst.listNext);
+
+            Assert.IsNull(list.listLast.listPrev);
+            Assert.IsNull(list.listLast.listNext);
+        }
+
+        [TestMethod]
+        public void TestInsert5()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
             int[] values = { 1, 2, 3 };
 
-            Node root = null;
             for (int i = 0; i < values.Length; ++i)
             {
-                root = ListUtils.Add(root, new Node(values[i]));
+                list.AddLast(new Node(values[i]));
             }
 
-            Node node = root;
-            for (int i = values.Length - 1; i >= 0; --i)
+            Node node = new Node(4);
+            list.InsertBefore(list.listFirst, node);
+
+            AssertValues(list, 4, 1, 2, 3);
+        }
+
+        [TestMethod]
+        public void TestInsert6()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
             {
-                Assert.IsNotNull(node);
+                list.AddLast(new Node(values[i]));
+            }
+
+            Node node = new Node(4);
+            list.InsertAfter(list.listFirst, node);
+
+            AssertValues(list, 1, 4, 2, 3);
+        }
+
+        [TestMethod]
+        public void TestInsert7()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            Node node = new Node(4);
+            list.InsertAfter(list.listFirst, node);
+
+            AssertValues(list, 1, 4, 2, 3);
+        }
+
+        [TestMethod]
+        public void TestInsert8()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            Node insertNode = Find(list, 2);
+
+            Node node = new Node(4);
+            list.InsertBefore(insertNode, node);
+
+            AssertValues(list, 1, 4, 2, 3);
+        }
+
+        [TestMethod]
+        public void TestInsert9()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            Node insertNode = Find(list, 2);
+
+            Node node = new Node(4);
+            list.InsertAfter(insertNode, node);
+
+            AssertValues(list, 1, 2, 4, 3);
+        }
+
+        [TestMethod]
+        public void TestInsert10()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            Node insertNode = Find(list, 3);
+
+            Node node = new Node(4);
+            list.InsertBefore(insertNode, node);
+
+            AssertValues(list, 1, 2, 4, 3);
+        }
+
+        [TestMethod]
+        public void TestInsert11()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            Node insertNode = Find(list, 3);
+
+            Node node = new Node(4);
+            list.InsertAfter(insertNode, node);
+
+            AssertValues(list, 1, 2, 3, 4);
+        }
+
+        [TestMethod]
+        public void TestInsert12()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            Node node = new Node(4);
+            list.InsertBefore(list.listLast, node);
+
+            AssertValues(list, 1, 2, 4, 3);
+        }
+
+        [TestMethod]
+        public void TestInsert13()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            Node node = new Node(4);
+            list.InsertAfter(list.listLast, node);
+
+            AssertValues(list, 1, 2, 3, 4);
+        }
+
+        private void AssertValues(FastLinkedList<Node> list, params int[] values)
+        {
+            Assert.AreEqual(list.GetListSize(), values.Length);
+
+            Node node = list.listFirst;
+            for (int i = 0; i < values.Length; ++i)
+            {
                 Assert.AreEqual(node.value, values[i]);
                 node = node.listNext;
             }
@@ -169,103 +408,9 @@ namespace BomberEngineTests
             Assert.IsNull(node);
         }
 
-        [TestMethod]
-        public void TestFind()
+        private Node Find(FastLinkedList<Node> list, int value)
         {
-            int[] values = { 1, 2, 3 };
-
-            Node root = null;
-            for (int i = 0; i < values.Length; ++i)
-            {
-                root = ListUtils.Add(root, new Node(values[i]));
-            }
-
-            for (int i = 0; i < values.Length; ++i)
-            {
-                int value = values[i];
-                Assert.AreEqual(value, Find(root, value).value);
-            }
-
-            Assert.IsNull(Find(root, 4));
-        }
-
-        [TestMethod]
-        public void TestRemove1()
-        {
-            int[] values = { 1, 2, 3 };
-
-            Node root = null;
-            for (int i = 0; i < values.Length; ++i)
-            {
-                root = ListUtils.Add(root, new Node(values[i]));
-            }
-
-            Node node = Find(root, 1);
-            root = ListUtils.Remove(root, node);
-
-            ArraysEqual(GetValues(root), 3, 2);
-        }
-
-        [TestMethod]
-        public void TestRemove2()
-        {
-            int[] values = { 1, 2, 3 };
-
-            Node root = null;
-            for (int i = 0; i < values.Length; ++i)
-            {
-                root = ListUtils.Add(root, new Node(values[i]));
-            }
-
-            Node node = Find(root, 2);
-            root = ListUtils.Remove(root, node);
-
-            ArraysEqual(GetValues(root), 3, 1);
-        }
-
-        [TestMethod]
-        public void TestRemove3()
-        {
-            int[] values = { 1, 2, 3 };
-
-            Node root = null;
-            for (int i = 0; i < values.Length; ++i)
-            {
-                root = ListUtils.Add(root, new Node(values[i]));
-            }
-
-            Node node = Find(root, 3);
-            root = ListUtils.Remove(root, node);
-
-            ArraysEqual(GetValues(root), 2, 1);
-        }
-
-        [TestMethod]
-        public void TestRemove4()
-        {
-            int[] values = { 1, 2, 3 };
-
-            Node root = null;
-            for (int i = 0; i < values.Length; ++i)
-            {
-                root = ListUtils.Add(root, new Node(values[i]));
-            }
-
-            Node node = Find(root, 1);
-            root = ListUtils.Remove(root, node);
-
-            node = Find(root, 2);
-            root = ListUtils.Remove(root, node);
-
-            node = Find(root, 3);
-            root = ListUtils.Remove(root, node);
-
-            Assert.IsNull(root);
-        }
-
-        private Node Find(Node root, int value)
-        {
-            for (Node node = root; node != null; node = node.listNext)
+            for (Node node = list.listFirst; node != null; node = node.listNext)
             {
                 if (node.value == value)
                 {
@@ -275,46 +420,7 @@ namespace BomberEngineTests
 
             return null;
         }
-
-        private int[] GetValues(Node root)
-        {
-            int count = 0;
-            for (Node node = root; node != null; node = node.listNext)
-            {
-                ++count;
-            }
-
-            int[] values = new int[count];
-            int index = 0;
-
-            for (Node node = root; node != null; node = node.listNext)
-            {
-                values[index++] = node.value;
-            }
-
-            return values;
-        }
-
-        private void ArraysEqual(int[] a, params int[] b)
-        {
-            Assert.AreEqual(a.Length, b.Length);
-            for (int i = 0; i < a.Length; ++i)
-            {
-                Assert.AreEqual(a[i], b[i]);
-            }
-        }
     }
-
-    public class Node : ListNode<Node>
-    {
-        public int value;
-
-        public Node(int value)
-        {
-            this.value = value;
-        }
-    }   
-     */
 
     class Node : ListNode<Node>
     {
