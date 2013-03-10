@@ -16,7 +16,7 @@ namespace BomberEngineTests
             FastLinkedList<Node> list = new FastLinkedList<Node>();
 
             Node node = new Node(1);
-            list.AddFirst(node);
+            list.AddFirstItem(node);
 
             Assert.AreEqual(list.GetListSize(), 1);
 
@@ -36,7 +36,7 @@ namespace BomberEngineTests
             FastLinkedList<Node> list = new FastLinkedList<Node>();
 
             Node node = new Node(1);
-            list.AddLast(node);
+            list.AddLastItem(node);
 
             Assert.AreEqual(list.GetListSize(), 1);
 
@@ -56,10 +56,10 @@ namespace BomberEngineTests
             FastLinkedList<Node> list = new FastLinkedList<Node>();
 
             Node node1 = new Node(1);
-            list.AddLast(node1);
+            list.AddLastItem(node1);
 
             Node node2 = new Node(2);
-            list.AddLast(node2);
+            list.AddLastItem(node2);
 
             Assert.AreEqual(list.GetListSize(), 2);
 
@@ -79,10 +79,10 @@ namespace BomberEngineTests
             FastLinkedList<Node> list = new FastLinkedList<Node>();
 
             Node node1 = new Node(1);
-            list.AddFirst(node1);
+            list.AddFirstItem(node1);
 
             Node node2 = new Node(2);
-            list.AddFirst(node2);
+            list.AddFirstItem(node2);
 
             Assert.AreEqual(list.GetListSize(), 2);
 
@@ -105,7 +105,7 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
             Assert.AreEqual(list.GetListSize(), 3);
@@ -129,7 +129,7 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddFirst(new Node(values[i]));
+                list.AddFirstItem(new Node(values[i]));
             }
 
             Assert.AreEqual(list.GetListSize(), 3);
@@ -150,7 +150,7 @@ namespace BomberEngineTests
             FastLinkedList<Node> list = new FastLinkedList<Node>();
 
             Node node = new Node(1);
-            list.InsertBefore(list.listFirst, node);
+            list.InsertBeforeItem(list.listFirst, node);
 
             Assert.AreEqual(list.GetListSize(), 1);
 
@@ -170,7 +170,7 @@ namespace BomberEngineTests
             FastLinkedList<Node> list = new FastLinkedList<Node>();
 
             Node node = new Node(1);
-            list.InsertAfter(list.listFirst, node);
+            list.InsertAfterItem(list.listFirst, node);
 
             Assert.AreEqual(list.GetListSize(), 1);
 
@@ -190,7 +190,7 @@ namespace BomberEngineTests
             FastLinkedList<Node> list = new FastLinkedList<Node>();
 
             Node node = new Node(1);
-            list.InsertBefore(list.listLast, node);
+            list.InsertBeforeItem(list.listLast, node);
 
             Assert.AreEqual(list.GetListSize(), 1);
 
@@ -210,7 +210,7 @@ namespace BomberEngineTests
             FastLinkedList<Node> list = new FastLinkedList<Node>();
 
             Node node = new Node(1);
-            list.InsertAfter(list.listLast, node);
+            list.InsertAfterItem(list.listLast, node);
 
             Assert.AreEqual(list.GetListSize(), 1);
 
@@ -233,11 +233,11 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
             Node node = new Node(4);
-            list.InsertBefore(list.listFirst, node);
+            list.InsertBeforeItem(list.listFirst, node);
 
             AssertValues(list, 4, 1, 2, 3);
         }
@@ -251,11 +251,11 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
             Node node = new Node(4);
-            list.InsertAfter(list.listFirst, node);
+            list.InsertAfterItem(list.listFirst, node);
 
             AssertValues(list, 1, 4, 2, 3);
         }
@@ -269,11 +269,11 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
             Node node = new Node(4);
-            list.InsertAfter(list.listFirst, node);
+            list.InsertAfterItem(list.listFirst, node);
 
             AssertValues(list, 1, 4, 2, 3);
         }
@@ -287,13 +287,13 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
             Node insertNode = Find(list, 2);
 
             Node node = new Node(4);
-            list.InsertBefore(insertNode, node);
+            list.InsertBeforeItem(insertNode, node);
 
             AssertValues(list, 1, 4, 2, 3);
         }
@@ -307,13 +307,13 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
             Node insertNode = Find(list, 2);
 
             Node node = new Node(4);
-            list.InsertAfter(insertNode, node);
+            list.InsertAfterItem(insertNode, node);
 
             AssertValues(list, 1, 2, 4, 3);
         }
@@ -327,13 +327,13 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
             Node insertNode = Find(list, 3);
 
             Node node = new Node(4);
-            list.InsertBefore(insertNode, node);
+            list.InsertBeforeItem(insertNode, node);
 
             AssertValues(list, 1, 2, 4, 3);
         }
@@ -347,13 +347,13 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
             Node insertNode = Find(list, 3);
 
             Node node = new Node(4);
-            list.InsertAfter(insertNode, node);
+            list.InsertAfterItem(insertNode, node);
 
             AssertValues(list, 1, 2, 3, 4);
         }
@@ -367,11 +367,11 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
             Node node = new Node(4);
-            list.InsertBefore(list.listLast, node);
+            list.InsertBeforeItem(list.listLast, node);
 
             AssertValues(list, 1, 2, 4, 3);
         }
@@ -385,11 +385,11 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
             Node node = new Node(4);
-            list.InsertAfter(list.listLast, node);
+            list.InsertAfterItem(list.listLast, node);
 
             AssertValues(list, 1, 2, 3, 4);
         }
@@ -403,11 +403,11 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
             Node node = Find(list, 1);
-            list.Remove(node);
+            list.RemoveItem(node);
 
             AssertValues(list, 2, 3);
         }
@@ -421,11 +421,11 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
             Node node = Find(list, 2);
-            list.Remove(node);
+            list.RemoveItem(node);
 
             AssertValues(list, 1, 3);
         }
@@ -439,21 +439,21 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
             Node node = Find(list, 1);
-            list.Remove(node);
+            list.RemoveItem(node);
 
             AssertValues(list, 2, 3);
 
             node = Find(list, 2);
-            list.Remove(node);
+            list.RemoveItem(node);
 
             AssertValues(list, 3);
 
             node = Find(list, 3);
-            list.Remove(node);
+            list.RemoveItem(node);
 
             AssertValues(list);
         }
@@ -467,11 +467,11 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
             Node node = Find(list, 3);
-            list.Remove(node);
+            list.RemoveItem(node);
 
             AssertValues(list, 1, 2);
         }
@@ -485,10 +485,10 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
-            list.RemoveFirst();
+            list.RemoveFirstItem();
 
             AssertValues(list, 2, 3);
         }
@@ -502,10 +502,10 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
-            list.RemoveFirst();
+            list.RemoveFirstItem();
 
             AssertValues(list, 2, 3);
         }
@@ -519,10 +519,10 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
-            list.RemoveLast();
+            list.RemoveLastItem();
 
             AssertValues(list, 1, 2);
         }
@@ -536,12 +536,12 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
-            list.RemoveFirst();
-            list.RemoveFirst();
-            list.RemoveFirst();
+            list.RemoveFirstItem();
+            list.RemoveFirstItem();
+            list.RemoveFirstItem();
 
             AssertValues(list);
         }
@@ -555,11 +555,11 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
             Node node = Find(list, 2);
-            list.Remove(node);
+            list.RemoveItem(node);
 
             Assert.IsNull(node.listPrev);
             Assert.IsNull(node.listNext);
@@ -574,12 +574,12 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
             Node node = Find(list, 2);
-            list.InsertBefore(node, new Node(4));
-            list.Remove(node);
+            list.InsertBeforeItem(node, new Node(4));
+            list.RemoveItem(node);
 
             AssertValues(list, 1, 4, 3);
         }
@@ -593,14 +593,14 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
-            list.RemoveFirst();
-            list.RemoveLast();
+            list.RemoveFirstItem();
+            list.RemoveLastItem();
 
-            list.AddFirst(new Node(4));
-            list.AddLast(new Node(5));
+            list.AddFirstItem(new Node(4));
+            list.AddLastItem(new Node(5));
 
             AssertValues(list, 4, 2, 5);
         }
@@ -614,12 +614,12 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
             while (list.GetListSize() > 0)
             {
-                list.RemoveFirst();
+                list.RemoveFirstItem();
             }
 
             AssertValues(list);
@@ -634,12 +634,12 @@ namespace BomberEngineTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                list.AddLast(new Node(values[i]));
+                list.AddLastItem(new Node(values[i]));
             }
 
             while (list.GetListSize() > 0)
             {
-                list.RemoveLast();
+                list.RemoveLastItem();
             }
 
             AssertValues(list);
