@@ -82,13 +82,10 @@ namespace Bomberman.Game.Elements.Fields
 
             foreach (FieldCellSlot slot in slots)
             {
-                FieldCell[] cells = slot.GetCells();
-                foreach (FieldCell cell in cells)
-                {
-                    if (cell != null)
-                    {
-                        DrawCells(context, cell);
-                    }
+                FieldCell cell = slot.Cell();
+                for (FieldCell c = cell; c != null; c = c.listNext)
+                {   
+                    DrawCells(context, c);
                 }
             }
         }

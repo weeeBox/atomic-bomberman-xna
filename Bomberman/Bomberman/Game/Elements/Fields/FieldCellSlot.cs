@@ -19,8 +19,6 @@ namespace Bomberman.Game.Elements.Fields
             FieldCellType.Powerup,
         };
 
-        public FieldCell[] cells;
-
         public int cx;
         public int cy;
 
@@ -28,9 +26,6 @@ namespace Bomberman.Game.Elements.Fields
         {
             this.cx = cx;
             this.cy = cy;
-
-            int size = (int)FieldCellType.Count;
-            cells = new FieldCell[size];
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -75,21 +70,35 @@ namespace Bomberman.Game.Elements.Fields
 
         #region Getters/Setters
 
-        public FieldCell[] GetCells()
+        public FieldCell Cell()
         {
-            return cells;
+            return listFirst;
         }
 
         public FieldCell Get(FieldCellType type)
         {
-            int index = GetIndex(type);
-            FieldCell cell = cells[index];
-            return cell != null && cell.valid ? cell : null;
+            if (!IsEmpty())
+            {
+                for (FieldCell cell = listFirst; cell != null; cell = cell.listNext)
+                {
+                    if (cell.type == type)
+                    {
+                        return cell;
+                    }
+                }
+            }
+
+            return null;
         }
 
         public int Size()
         {
-            return cells.Length;
+            return GetListSize();
+        }
+
+        public bool IsEmpty()
+        {
+            return GetListSize() == 0;
         }
 
         #endregion
@@ -160,11 +169,14 @@ namespace Bomberman.Game.Elements.Fields
 
         public bool ContainsObstacle()
         {
-            foreach (FieldCell cell in cells)
+            if (!IsEmpty())
             {
-                if (cell != null && cell.IsObstacle())
+                for (FieldCell c = listLast; c != null; c = c.listPrev)
                 {
-                    return true;
+                    if (c.IsObstacle())
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -173,15 +185,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public bool Contains(FieldCell cell)
         {
-            int index = GetIndex(cell);
-            for (FieldCell c = cells[index]; c != null; c = c.listNext)
-            {
-                if (c == cell)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return !IsEmpty() && ContainsItem(cell);
         }
 
         public FieldCell GetStaticCell()
@@ -213,6 +217,11 @@ namespace Bomberman.Game.Elements.Fields
             return (int)type;
         }
 
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Iterators
         #endregion
     }
 }

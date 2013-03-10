@@ -138,8 +138,8 @@
     <Compile Include="Util\Collection.cs" />
     <Compile Include="Util\ConcurrentList.cs" />
     <Compile Include="Util\FastLinkedList.cs" />
+    <Compile Include="Util\FastLinkedListIterator.cs" />
     <Compile Include="Util\ListNode.cs" />
-    <Compile Include="Util\ListUtils.cs" />
     <Compile Include="Util\MathHelp.cs" />
     <Compile Include="Util\ObjectsList.cs" />
     <Compile Include="Util\StringUtils.cs" />

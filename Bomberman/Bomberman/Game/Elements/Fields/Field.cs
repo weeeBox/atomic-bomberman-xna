@@ -253,13 +253,10 @@ namespace Bomberman.Game.Elements.Fields
 
         public void UpdateSlot(float delta, FieldCellSlot slot)
         {
-            FieldCell[] cells = slot.GetCells();
-            foreach (FieldCell cell in cells)
-            {
-                if (cell != null)
-                {
-                    UpdateCell(delta, cell);
-                }
+            FieldCell cell = slot.Cell();
+            for (FieldCell c = cell; c != null; c = c.listNext)
+            {   
+                UpdateCell(delta, c);
             }
         }
 
@@ -477,11 +474,6 @@ namespace Bomberman.Game.Elements.Fields
         public FieldCellSlot GetSlot(int cx, int cy)
         {
             return IsInsideField(cx, cy) ? cells.Get(cx, cy) : null;
-        }
-
-        public FieldCell[] GetCells(int cx, int cy)
-        {
-            return GetSlot(cx, cy).GetCells();
         }
 
         public void AddCell(FieldCell cell)
