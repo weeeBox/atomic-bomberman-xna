@@ -394,6 +394,257 @@ namespace BomberEngineTests
             AssertValues(list, 1, 2, 3, 4);
         }
 
+        [TestMethod]
+        public void TestRemove1()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            Node node = Find(list, 1);
+            list.Remove(node);
+
+            AssertValues(list, 2, 3);
+        }
+
+        [TestMethod]
+        public void TestRemove2()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            Node node = Find(list, 2);
+            list.Remove(node);
+
+            AssertValues(list, 1, 3);
+        }
+
+        [TestMethod]
+        public void TestRemove3()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            Node node = Find(list, 1);
+            list.Remove(node);
+
+            AssertValues(list, 2, 3);
+
+            node = Find(list, 2);
+            list.Remove(node);
+
+            AssertValues(list, 3);
+
+            node = Find(list, 3);
+            list.Remove(node);
+
+            AssertValues(list);
+        }
+
+        [TestMethod]
+        public void TestRemove4()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            Node node = Find(list, 3);
+            list.Remove(node);
+
+            AssertValues(list, 1, 2);
+        }
+
+        [TestMethod]
+        public void TestRemove5()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            list.RemoveFirst();
+
+            AssertValues(list, 2, 3);
+        }
+
+        [TestMethod]
+        public void TestRemove6()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            list.RemoveFirst();
+
+            AssertValues(list, 2, 3);
+        }
+
+        [TestMethod]
+        public void TestRemove7()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            list.RemoveLast();
+
+            AssertValues(list, 1, 2);
+        }
+
+        [TestMethod]
+        public void TestRemove8()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            list.RemoveFirst();
+            list.RemoveFirst();
+            list.RemoveFirst();
+
+            AssertValues(list);
+        }
+
+        [TestMethod]
+        public void TestRemove9()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            Node node = Find(list, 2);
+            list.Remove(node);
+
+            Assert.IsNull(node.listPrev);
+            Assert.IsNull(node.listNext);
+        }
+
+        [TestMethod]
+        public void TestMix1()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            Node node = Find(list, 2);
+            list.InsertBefore(node, new Node(4));
+            list.Remove(node);
+
+            AssertValues(list, 1, 4, 3);
+        }
+
+        [TestMethod]
+        public void TestMix2()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            list.RemoveFirst();
+            list.RemoveLast();
+
+            list.AddFirst(new Node(4));
+            list.AddLast(new Node(5));
+
+            AssertValues(list, 4, 2, 5);
+        }
+
+        [TestMethod]
+        public void TestMix3()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            while (list.GetListSize() > 0)
+            {
+                list.RemoveFirst();
+            }
+
+            AssertValues(list);
+        }
+
+        [TestMethod]
+        public void TestMix4()
+        {
+            FastLinkedList<Node> list = new FastLinkedList<Node>();
+
+            int[] values = { 1, 2, 3 };
+
+            for (int i = 0; i < values.Length; ++i)
+            {
+                list.AddLast(new Node(values[i]));
+            }
+
+            while (list.GetListSize() > 0)
+            {
+                list.RemoveLast();
+            }
+
+            AssertValues(list);
+        }
+
         private void AssertValues(FastLinkedList<Node> list, params int[] values)
         {
             Assert.AreEqual(list.GetListSize(), values.Length);

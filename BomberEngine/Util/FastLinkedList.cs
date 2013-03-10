@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BomberEngine.Debugging;
 
 namespace BomberEngine.Util
 {
@@ -30,6 +31,57 @@ namespace BomberEngine.Util
         public void InsertAfter(T node, T item)
         {
             Insert(item, node, node != null ? node.listNext : null);
+        }
+
+        public void Remove(T item)
+        {
+            Debug.Assert(size > 0);
+
+            T prev = item.listPrev;
+            T next = item.listNext;
+
+            if (prev != null)
+            {
+                prev.listNext = next;
+            }
+            else
+            {
+                listFirst = next;
+            }
+
+            if (next != null)
+            {
+                next.listPrev = prev;
+            }
+            else
+            {
+                listLast = prev;
+            }
+
+            item.listNext = item.listPrev = null;
+            --size;
+        }
+
+        public T RemoveFirst()
+        {
+            T node = listFirst;
+            if (node != null)
+            {   
+                Remove(node);
+            }
+
+            return node;
+        }
+
+        public T RemoveLast()
+        {
+            T node = listLast;
+            if (node != null)
+            {
+                Remove(node);
+            }
+
+            return node;
         }
 
         public bool Contains(T item)
