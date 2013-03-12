@@ -559,31 +559,6 @@ namespace Bomberman.Game.Elements.Fields
             return true;
         }
 
-        public bool IsObstacleCell(FieldCell cell)
-        {
-            return CellHelper.IsObstacleCell(cell);
-        }
-
-        private bool ContainsCell(FieldCell root, FieldCellType type)
-        {
-            return CellHelper.ContainsCell(root, type);
-        }
-
-        private FieldCell FindCell(FieldCell root, FieldCellType type)
-        {
-            return CellHelper.FindCell(root, type);
-        }
-
-        private int CellsCount(FieldCell root)
-        {
-            return CellHelper.CellsCount(root);
-        }
-
-        private void CopyToList(FieldCell root, List<FieldCell> list)
-        {
-            CellHelper.CopyToList(root, list);
-        }
-
         public bool IsInsideField(int cx, int cy)
         {
             return cx >= 0 && cy >= 0 && cx < GetWidth() && cy < GetHeight();

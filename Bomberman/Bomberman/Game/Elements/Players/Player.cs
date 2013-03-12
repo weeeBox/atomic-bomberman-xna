@@ -1014,12 +1014,5 @@ namespace Bomberman.Game.Elements.Players
         }
 
         #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        private bool IsObstacleCell(FieldCell cell)
-        {
-            return CellHelper.IsObstacleCell(cell);
-        }
     }
 }
