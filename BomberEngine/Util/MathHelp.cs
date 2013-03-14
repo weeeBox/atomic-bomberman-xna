@@ -9,26 +9,6 @@ namespace BomberEngine.Util
     {
         private static Random random;
 
-        public static int Sign(float value)
-        {
-            return value > 0 ? 1 : (value < 0 ? -1 : 0);
-        }
-
-        public static int Sign(int value)
-        {
-            return value > 0 ? 1 : (value < 0 ? -1 : 0);
-        }
-
-        public static float Abs(float value)
-        {
-            return value < 0 ? -value : value;
-        }
-
-        public static int Abs(int value)
-        {
-            return value < 0 ? -value : value;
-        }
-
         public static int NextInt(int maxValue)
         {
             return GetRandom().Next(maxValue);
@@ -51,16 +31,6 @@ namespace BomberEngine.Util
                 random = new Random();
             }
             return random;
-        }
-
-        public static float Max(float a, float b)
-        {
-            return a > b ? a : b;
-        }
-
-        public static float Min(float a, float b)
-        {
-            return a < b ? a : b;
         }
     }
 }

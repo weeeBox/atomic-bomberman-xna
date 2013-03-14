@@ -10,7 +10,7 @@ using BomberEngine.Util;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class FieldCell : ListNode<FieldCell>, Updatable
+    public class FieldCell : Updatable
     {
         public FieldCellType type;
 
@@ -25,15 +25,11 @@ namespace Bomberman.Game.Elements.Fields
         /* Linked list stuff */
         public int slotIndex;
 
-        /* Indicates if can be used */
-        public bool valid;
-
         public FieldCell(FieldCellType type, int cx, int cy)
         {
             this.type = type;
 
             slotIndex = -1;
-            valid = true;
             SetCell(cx, cy);
         }
 
@@ -62,6 +58,11 @@ namespace Bomberman.Game.Elements.Fields
         public virtual bool IsSolid()
         {
             return false;
+        }
+
+        public virtual SolidCell AsSolid()
+        {
+            return null;
         }
 
         public virtual bool IsBrick()
@@ -262,13 +263,13 @@ namespace Bomberman.Game.Elements.Fields
 
         public static float OverlapX(FieldCell a, FieldCell b)
         {
-            float overlapX = Constant.CELL_WIDTH - MathHelp.Abs(a.px - b.px);
+            float overlapX = Constant.CELL_WIDTH - Math.Abs(a.px - b.px);
             return overlapX > 0 ? overlapX : 0;
         }
 
         public static float OverlapY(FieldCell a, FieldCell b)
         {
-            float overlapY = Constant.CELL_HEIGHT - MathHelp.Abs(a.py - b.py);
+            float overlapY = Constant.CELL_HEIGHT - Math.Abs(a.py - b.py);
             return overlapY > 0 ? overlapY : 0;
         }
     }

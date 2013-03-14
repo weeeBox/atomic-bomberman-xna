@@ -42,7 +42,6 @@ namespace Bomberman.Game.Elements.Fields
         private TimerManager timerManager;
 
         private LinkedList<MovableCell> movableCells;
-        private LinkedList<FieldCell> invalidCells;
         private LinkedList<CellContactList> contacts;
 
         public Field()
@@ -52,8 +51,6 @@ namespace Bomberman.Game.Elements.Fields
             players = new PlayerList();
 
             movableCells = new LinkedList<MovableCell>();
-            invalidCells = new LinkedList<FieldCell>();
-
             contacts = new LinkedList<CellContactList>();
         }
 
@@ -248,27 +245,14 @@ namespace Bomberman.Game.Elements.Fields
             {
                 UpdateSlot(delta, slot);
             }
-            RemoveInvalidCells();
         }
 
         public void UpdateSlot(float delta, FieldCellSlot slot)
         {
-            FieldCell cell = slot.Cell();
-            for (FieldCell c = cell; c != null; c = c.listNext)
-            {   
-                UpdateCell(delta, c);
-            }
-        }
-
-        private void UpdateCell(float delta, FieldCell cell)
-        {
-            for (FieldCell c = cell; c != null; c = c.listNext)
+            FieldCell cell = slot.cell;
+            if (cell != null)
             {
-                if (c.valid)
-                {
-                    Debug.Assert(Debug.flag && CheckCell(c));
-                    c.Update(delta);
-                }
+                cell.Update(delta);
             }
         }
 
@@ -286,14 +270,14 @@ namespace Bomberman.Game.Elements.Fields
 
         private void UpdateMoving(float delta)
         {
-            foreach (MovableCell movable in movableCells)
+            LinkedList<MovableCell> temp = new LinkedList<MovableCell>(movableCells);
+            foreach (MovableCell movable in temp)
             {   
-                if (movable.valid && movable.IsMoving())
+                if (movable.IsMoving())
                 {
                     UpdateMoving(delta, movable);
                 }
             }
-            RemoveInvalidCells();
         }
 
         private void UpdateMoving(float delta, MovableCell cell)
@@ -370,39 +354,40 @@ namespace Bomberman.Game.Elements.Fields
             }
 
             FieldCellSlot slot = GetSlot(cx, cy);
-            if (slot.ContainsSolid())
+            FieldCell cell = slot.cell;
+            if (cell != null)
             {
-                return false;
-            }
-
-            BrickCell brickCell = slot.GetBrick();
-            if (brickCell != null)
-            {   
-                if (!brickCell.destroyed)
+                if (cell.IsSolid())
                 {
-                    brickCell.Destroy();
+                    return false;
                 }
 
-                return false;
-            }
+                if (cell.IsBrick())
+                {
+                    BrickCell brick = cell.AsBrick();
+                    if (!brick.destroyed)
+                    {
+                        brick.Destroy();
+                    }
 
-            PowerupCell powerup = slot.GetPowerup();
-            if (powerup != null)
-            {
-                powerup.RemoveFromField();
-                return false;
-            }
+                    return false;
+                }
 
-            Bomb anotherBomb = slot.GetBomb();
-            if (anotherBomb != null)
-            {
-                anotherBomb.Blow();
-            }
+                if (cell.IsPowerup())
+                {
+                    cell.AsPowerup().RemoveFromField();
+                    return false;
+                }
 
-            Player player = slot.GetPlayer();
-            for (FieldCell pc = player; pc != null; pc = pc.listNext)
-            {
-                pc.AsPlayer().Kill();
+                if (cell.IsBomb())
+                {
+                    cell.AsBomb().Blow();
+                }
+
+                foreach (Player player in slot.players)
+                {
+                    player.Kill();
+                }
             }
 
             SetFlame(bomb.player, cx, cy);
@@ -412,16 +397,11 @@ namespace Bomberman.Game.Elements.Fields
         private void SetFlame(Player player, int cx, int cy)
         {
             FieldCellSlot slot = GetSlot(cx, cy);
-            for (FieldCell c = slot.GetFlame(); c != null; c = c.listNext)
+            FlameCell flame = slot.GetFlame();
+            if (flame != null && flame.player == player)
             {
-                FlameCell flame = c.AsFlame();
-                if (flame.player == player)
-                {
-                    flame.RemoveFromField();
-                    break;
-                }
+                flame.RemoveFromField();
             }
-
             AddCell(new FlameCell(player, cx, cy));
         }
 
@@ -487,10 +467,11 @@ namespace Bomberman.Game.Elements.Fields
 
         public void RemoveCell(FieldCell cell)
         {
-            Debug.Assert(cell.valid);
-
-            cell.valid = false;
-            invalidCells.AddLast(cell);
+            cells.Remove(cell);
+            if (cell.IsMovable())
+            {
+                RemoveMovable(cell.AsMovable());
+            }
         }
 
         private void ClearBrick(int cx, int cy)
@@ -533,22 +514,6 @@ namespace Bomberman.Game.Elements.Fields
             }
         }
 
-        private void RemoveInvalidCells()
-        {
-            if (invalidCells.Count > 0)
-            {
-                foreach (FieldCell cell in invalidCells)
-                {
-                    cells.Remove(cell);
-                    if (cell.IsMovable())
-                    {
-                        RemoveMovable(cell.AsMovable());
-                    }
-                }
-                invalidCells.Clear();
-            }
-        }
-
         public bool IsObstacleCell(int cx, int cy)
         {
             if (IsInsideField(cx, cy))
@@ -585,44 +550,44 @@ namespace Bomberman.Game.Elements.Fields
 
         public SolidCell GetSolid(int cx, int cy)
         {
-            return (SolidCell)GetCell(cx, cy, FieldCellType.Solid);
+            FieldCellSlot slot = GetSlot(cx, cy);
+            return slot != null ? slot.GetSolid() : null;
         }
 
         public BrickCell GetBrick(int cx, int cy)
         {
-            return (BrickCell)GetCell(cx, cy, FieldCellType.Brick);
+            FieldCellSlot slot = GetSlot(cx, cy);
+            return slot != null ? slot.GetBrick() : null;
         }
 
         public PowerupCell GetPowerup(int cx, int cy)
         {
-            return (PowerupCell)GetCell(cx, cy, FieldCellType.Powerup);
+            FieldCellSlot slot = GetSlot(cx, cy);
+            return slot != null ? slot.GetPowerup() : null;
         }
 
         public FlameCell GetFlame(int cx, int cy)
         {
-            return (FlameCell)GetCell(cx, cy, FieldCellType.Flame);
+            FieldCellSlot slot = GetSlot(cx, cy);
+            return slot != null ? slot.GetFlame() : null;
         }
 
         public Bomb GetBomb(int cx, int cy)
         {
-            return (Bomb)GetCell(cx, cy, FieldCellType.Bomb);
+            FieldCellSlot slot = GetSlot(cx, cy);
+            return slot != null ? slot.GetBomb() : null;
         }
 
-        public Player GetPlayer(int cx, int cy)
+        public LinkedList<Player> GetPlayers(int cx, int cy)
         {
-            return (Player)GetCell(cx, cy, FieldCellType.Player);
+            FieldCellSlot slot = GetSlot(cx, cy);
+            return slot != null ? slot.players : null;
         }
 
         public bool ContainsNoObstacle(int cx, int cy)
         {
             FieldCellSlot slot = GetSlot(cx, cy);
             return slot != null && !slot.ContainsObstacle();
-        }
-
-        public FieldCell GetCell(int cx, int cy, FieldCellType type)
-        {
-            FieldCellSlot slot = GetSlot(cx, cy);
-            return slot != null ? slot.Get(type) : null;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -634,30 +599,38 @@ namespace Bomberman.Game.Elements.Fields
             for (LinkedListNode<MovableCell> n1 = movableCells.First; n1 != null; n1 = n1.Next)
             {
                 MovableCell c1 = n1.Value;
-                if (c1.valid)
+                int numContacts = 0;
+                CellContactList cellContactList = c1.contactList;
+
+                for (LinkedListNode<MovableCell> n2 = n1.Next; n2 != null; n2 = n2.Next)
                 {
-                    int numContacts = 0;
-                    CellContactList cellContactList = c1.contactList;
-
-                    for (LinkedListNode<MovableCell> n2 = n1.Next; n2 != null; n2 = n2.Next)
+                    MovableCell c2 = n2.Value;
+                    if (Collides(c1, c2))
                     {
-                        MovableCell c2 = n2.Value;
-                        if (c2.valid && Collides(c1, c2))
-                        {
-                            cellContactList.Add(c2);
-                            ++numContacts;
-                        }
+                        cellContactList.Add(c2);
+                        ++numContacts;
                     }
+                }
 
-                    if (numContacts > 0)
-                    {
-                        contacts.AddLast(cellContactList);
-                    }
+                if (numContacts > 0)
+                {
+                    contacts.AddLast(cellContactList);
                 }
             }
 
             if (contacts.Count > 0)
             {
+                //Console.WriteLine("Contacts: " + contacts.Count);
+                //for (LinkedListNode<CellContactList> node = contacts.First; node != null; node = node.Next)
+                //{
+                //    LinkedList<MovableCell> cells = node.Value.cells;
+                //    Console.WriteLine("\t" + cells.Count);
+                //    foreach (MovableCell cell in cells)
+                //    {
+                //        Console.WriteLine("\t\t" + cell.type);
+                //    }
+                //}
+
                 for (LinkedListNode<CellContactList> node = contacts.First; node != null; node = node.Next)
                 {
                     CellContactList contactList = node.Value;
@@ -719,7 +692,7 @@ namespace Bomberman.Game.Elements.Fields
                 else
                 {
                     FlameCell flame = slot.GetFlame();
-                    if (flame != null && flame.valid && flame.GetCx() == slot.cx && flame.GetCy() == slot.cy)
+                    if (flame != null && flame.GetCx() == slot.cx && flame.GetCy() == slot.cy)
                     {
                         movable.HandleCollision(flame);
                     }

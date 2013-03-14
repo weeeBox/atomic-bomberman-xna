@@ -22,5 +22,10 @@ namespace Bomberman.Game.Elements.Cells
         {
             return true;
         }
+
+        public override SolidCell AsSolid()
+        {
+            return this;
+        }
     }
 }

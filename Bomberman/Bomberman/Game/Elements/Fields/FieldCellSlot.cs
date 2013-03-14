@@ -10,7 +10,7 @@ using BomberEngine.Util;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class FieldCellSlot : FastLinkedList<FieldCell>
+    public class FieldCellSlot
     {
         private static FieldCellType[] STATIC_CELL_TYPES = 
         {
@@ -22,66 +22,155 @@ namespace Bomberman.Game.Elements.Fields
         public int cx;
         public int cy;
 
+        public FieldCell cell;
+        public LinkedList<Player> players;
+
         public FieldCellSlot(int cx, int cy)
         {
             this.cx = cx;
             this.cy = cy;
+
+            players = new LinkedList<Player>();
         }
 
         //////////////////////////////////////////////////////////////////////////////
 
         #region Add/Remove
 
-        public void AddCell(FieldCell cell)
+        public void AddCell(FieldCell c)
         {
-            FieldCell node = FindInsertionNode(cell);
-            if (node != null)
+            if (c.IsPlayer())
             {
-                InsertAfterItem(node, cell);
+                Debug.Assert(Debug.flag && !players.Contains(c));
+                players.AddLast(c.AsPlayer());
             }
             else
             {
-                AddFirstItem(cell);
+                Debug.Assert(cell == null);
+                cell = c;
             }
         }
 
-        public void RemoveCell(FieldCell cell)
+        public void RemoveCell(FieldCell c)
         {
-            RemoveItem(cell);
-        }
-
-        private FieldCell FindInsertionNode(FieldCell cell)
-        {
-            int priority = cell.GetPriority();
-            for (FieldCell c = listLast; c != null; c = c.listPrev)
+            if (c.IsPlayer())
             {
-                if (c.GetPriority() <= priority)
-                {
-                    return c;
-                }
+                Debug.Assert(Debug.flag && players.Contains(c));
+                players.Remove(c.AsPlayer());
             }
-
-            return null;
+            else
+            {
+                Debug.Assert(cell != null);
+                cell = null;
+            }
         }
 
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Getters/Setters
+        #region Helpers
 
-        public FieldCell Cell()
+        public int Size()
         {
-            return listFirst;
+            return players.Count + (cell != null ? 1 : 0);
         }
 
-        public FieldCell Get(FieldCellType type)
+        public int PlayersCount()
         {
-            if (!IsEmpty())
+            return players.Count;
+        }
+
+        //public bool ContainsSolid()
+        //{
+        //    return Contains(FieldCellType.Solid);
+        //}
+
+        public SolidCell GetSolid()
+        {
+            return cell != null ? cell.AsSolid() : null;
+        }
+
+        //public bool ContainsBrick()
+        //{
+        //    return Contains(FieldCellType.Brick);
+        //}
+
+        public BrickCell GetBrick()
+        {
+            return cell != null ? cell.AsBrick() : null;
+        }
+
+        //public bool ContainsPowerup()
+        //{
+        //    return Contains(FieldCellType.Powerup);
+        //}
+
+        public PowerupCell GetPowerup()
+        {
+            return cell != null ? cell.AsPowerup() : null;
+        }
+
+        //public bool ContainsFlame()
+        //{
+        //    return Contains(FieldCellType.Flame);
+        //}
+
+        public FlameCell GetFlame()
+        {
+            return cell != null ? cell.AsFlame() : null;
+        }
+
+        //public bool ContainsBomb()
+        //{
+        //    return Contains(FieldCellType.Bomb);
+        //}
+
+        public Bomb GetBomb()
+        {
+            return cell != null ? cell.AsBomb() : null;
+        }
+
+        //public bool ContainsPlayer()
+        //{
+        //    return Contains(FieldCellType.Player);
+        //}
+
+        //public Player GetPlayer()
+        //{
+        //    return (Player)Get(FieldCellType.Player);
+        //}
+
+        public bool Contains(FieldCell c)
+        {
+            if (cell != null)
             {
-                for (FieldCell cell = listFirst; cell != null; cell = cell.listNext)
+                if (cell == c)
                 {
-                    if (cell.type == type)
+                    return true;
+                }
+
+                if (c.IsPlayer() && players.Contains(c.AsPlayer()))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool ContainsObstacle()
+        {
+            return cell != null && cell.IsObstacle();
+        }
+
+        public FieldCell GetStaticCell()
+        {
+            if (cell != null)
+            {
+                for (int i = 0; i < STATIC_CELL_TYPES.Length; ++i)
+                {
+                    if (cell.type == STATIC_CELL_TYPES[i])
                     {
                         return cell;
                     }
@@ -91,137 +180,6 @@ namespace Bomberman.Game.Elements.Fields
             return null;
         }
 
-        public int Size()
-        {
-            return GetListSize();
-        }
-
-        public bool IsEmpty()
-        {
-            return GetListSize() == 0;
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Helpers
-
-        public bool ContainsSolid()
-        {
-            return Contains(FieldCellType.Solid);
-        }
-
-        public SolidCell GetSolid()
-        {
-            return (SolidCell)Get(FieldCellType.Solid);
-        }
-
-        public bool ContainsBrick()
-        {
-            return Contains(FieldCellType.Brick);
-        }
-
-        public BrickCell GetBrick()
-        {
-            return (BrickCell)Get(FieldCellType.Brick);
-        }
-
-        public bool ContainsPowerup()
-        {
-            return Contains(FieldCellType.Powerup);
-        }
-
-        public PowerupCell GetPowerup()
-        {
-            return (PowerupCell)Get(FieldCellType.Powerup);
-        }
-
-        public bool ContainsFlame()
-        {
-            return Contains(FieldCellType.Flame);
-        }
-
-        public FlameCell GetFlame()
-        {
-            return (FlameCell)Get(FieldCellType.Flame);
-        }
-
-        public bool ContainsBomb()
-        {
-            return Contains(FieldCellType.Bomb);
-        }
-
-        public Bomb GetBomb()
-        {
-            return (Bomb)Get(FieldCellType.Bomb);
-        }
-
-        public bool ContainsPlayer()
-        {
-            return Contains(FieldCellType.Player);
-        }
-
-        public Player GetPlayer()
-        {
-            return (Player)Get(FieldCellType.Player);
-        }
-
-        public bool ContainsObstacle()
-        {
-            if (!IsEmpty())
-            {
-                for (FieldCell c = listLast; c != null; c = c.listPrev)
-                {
-                    if (c.IsObstacle())
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        public bool Contains(FieldCell cell)
-        {
-            return !IsEmpty() && ContainsItem(cell);
-        }
-
-        public FieldCell GetStaticCell()
-        {
-            for (int i = 0; i < STATIC_CELL_TYPES.Length; ++i)
-            {
-                FieldCell cell = Get(STATIC_CELL_TYPES[i]);
-                if (cell != null)
-                {
-                    return cell;
-                }
-            }
-
-            return null;
-        }
-
-        public bool Contains(FieldCellType type)
-        {
-            return Get(type) != null;
-        }
-
-        private int GetIndex(FieldCell cell)
-        {
-            return (int)cell.type;
-        }
-
-        private int GetIndex(FieldCellType type)
-        {
-            return (int)type;
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Iterators
         #endregion
     }
 }

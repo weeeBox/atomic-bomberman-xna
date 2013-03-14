@@ -82,28 +82,29 @@ namespace Bomberman.Game.Elements.Fields
 
             foreach (FieldCellSlot slot in slots)
             {
-                FieldCell cell = slot.Cell();
-                for (FieldCell c = cell; c != null; c = c.listNext)
-                {   
-                    DrawCells(context, c);
+                FieldCell cell = slot.cell;
+                if (cell != null)
+                {
+                    DrawCell(context, cell);
+                }
+
+                if (slot.PlayersCount() > 0)
+                {
+                    foreach (Player player in slot.players)
+                    {
+                        DrawCell(context, player);
+                    }
+                }
+
+                if (slot.Size() > 0)
+                {
+                    float drawX = Util.Cx2Px(slot.cx) - 0.5f * cellWidth;
+                    float drawY = Util.Cy2Py(slot.cy) - 0.5f * cellHeight;
+                    context.DrawString(drawX, drawY, "" + slot.Size());
                 }
             }
         }
-
-        private void DrawCells(Context context, FieldCell cell)
-        {
-            int cellsCount = 0;
-            for (FieldCell c = cell; c != null; c = c.listNext)
-            {
-                DrawCell(context, c);
-                ++cellsCount;
-            }
-
-            float drawX = Util.Cx2Px(cell.cx) - 0.5f * cellWidth;
-            float drawY = Util.Cy2Py(cell.cy) - 0.5f * cellHeight;
-            context.DrawString(drawX, drawY, "" + cellsCount);
-        }
-
+        
         private void DrawCell(Context context, FieldCell cell)
         {
             if (cell.IsBrick())

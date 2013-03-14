@@ -26,8 +26,6 @@ namespace Bomberman.Game.Elements.Players
 
         private Bomb m_bombInHands;
 
-        private float kickStopRemains;
-
         /* Kicked/Punched bombs */
         private List<Bomb> m_thrownBombs;
 
@@ -59,17 +57,7 @@ namespace Bomberman.Game.Elements.Players
                 m_thrownBombs[bombIndex].Update(delta);
             }
 
-            if (kickStopRemains > 0)
-            {
-                kickStopRemains -= delta;
-            }
-
             diseases.Update(delta);
-        }
-
-        public override bool IsMoving()
-        {
-            return base.IsMoving() && kickStopRemains <= 0.0f;
         }
 
         public void OnActionPressed(PlayerInput playerInput, PlayerAction action)
@@ -233,6 +221,11 @@ namespace Bomberman.Game.Elements.Players
         /* Player and bomb are moving */
         private bool HandleBombCollision(Bomb bomb)
         {
+            if (bomb.jellyBounced)
+            {
+                return MoveOutOfCollision(bomb);
+            }
+
             if (direction == bomb.direction)
             {
                 if (HasKick())
@@ -269,23 +262,15 @@ namespace Bomberman.Game.Elements.Players
                 }
             }
             else // moving in different directions
-            {
-                if (!bomb.jellyBlocked)
-                {
-                    
-                    MoveOutOfCollision(this, bomb);
+            {       
+                MoveOutOfCollision(this, bomb);
 
-                    if (HasKick())
-                    {
-                        if (TryKick(bomb))
-                        {                            
-                            return true;
-                        }
-                    }
-                }
-                else
+                if (HasKick())
                 {
-                    return MoveOutOfCollision(bomb);
+                    if (TryKick(bomb))
+                    {                            
+                        return true;
+                    }
                 }
             }
 
@@ -325,11 +310,6 @@ namespace Bomberman.Game.Elements.Players
 
         private bool TryKick(Bomb bomb)
         {
-            if (kickStopRemains > 0)
-            {
-                return false;
-            }
-
             FieldCellSlot blockingSlot = bomb.NearSlotDir(direction);
             if (blockingSlot != null && !blockingSlot.ContainsObstacle())
             {
@@ -383,7 +363,6 @@ namespace Bomberman.Game.Elements.Players
             }
 
             bomb.Kick(direction);
-            kickStopRemains = 0.1f;
         }
 
         public void Kill()

@@ -43,8 +43,7 @@ namespace Bomberman.Game.Elements.Cells
 
         private int m_triggerIndex;
 
-        private float jellyBlockRemains;
-        public bool jellyBlocked;
+        public bool jellyBounced;
 
         public Bomb(Player player)
            : base(FieldCellType.Bomb, player.GetCx(), player.GetCy())
@@ -59,16 +58,6 @@ namespace Bomberman.Game.Elements.Cells
             updater(delta);            
         }
 
-        public override void UpdateMoving(float delta)
-        {
-            float oldPx = px;
-            float oldPy = py;
-
-            base.UpdateMoving(delta);
-
-            jellyBlocked = IsJelly() && IsMoving() && oldPx == px && oldPy == py;
-        }
-
         private void UpdateNormal(float delta)
         {
             if (!IsTrigger())
@@ -80,9 +69,9 @@ namespace Bomberman.Game.Elements.Cells
                 }
             }
 
-            if (jellyBlockRemains > 0)
+            if (IsJelly())
             {
-                jellyBlockRemains -= delta;
+                jellyBounced = false;
             }
         }
 
@@ -270,8 +259,7 @@ namespace Bomberman.Game.Elements.Cells
         //////////////////////////////////////////////////////////////////////////////
 
         public void Activate()
-        {
-            valid = true;
+        {   
             active = true;
             SetCell(player.cx, player.cy);
             radius = player.GetBombRadius();
@@ -401,14 +389,14 @@ namespace Bomberman.Game.Elements.Cells
 
         private bool TryJellyOnObstacle()
         {
-            if (jellyBlockRemains > 0 || jellyBlocked)
-            {   
+            if (jellyBounced)
+            {
                 return true;
             }
 
             if (IsJelly())
-            {
-                jellyBlockRemains = 0.1f;
+            {   
+                jellyBounced = true;
                 SetMoveDirection(Util.Opposite(direction));
                 return true;
             }

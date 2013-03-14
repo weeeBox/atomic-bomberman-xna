@@ -58,8 +58,8 @@ namespace Bomberman.Game.Elements.Players.Input
                     float ndx = dx * lenOver1;
                     float ndy = dy * lenOver1;
 
-                    float adx = MathHelp.Abs(ndx);
-                    float ady = MathHelp.Abs(ndy);
+                    float adx = Math.Abs(ndx);
+                    float ady = Math.Abs(ndy);
 
                     float limit = !up && !down ? STICK_LIMIT_MAX : STICK_LIMIT_MIN;
                     left = dx < 0 && ady <= limit;
