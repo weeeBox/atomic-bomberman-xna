@@ -135,6 +135,7 @@
     <Compile Include="Game\Elements\Fields\FieldCellSlot.cs" />
     <Compile Include="Game\Elements\Fields\FieldCellType.cs" />
     <Compile Include="Game\Elements\Fields\FieldComponent.cs" />
+    <Compile Include="Game\Elements\Fields\MovableCellList.cs" />
     <Compile Include="Game\Elements\Players\DiseaseList.cs" />
     <Compile Include="Game\Elements\Players\Input\PlayerGamePadInput.cs" />
     <Compile Include="Game\Elements\Players\PowerupList.cs" />

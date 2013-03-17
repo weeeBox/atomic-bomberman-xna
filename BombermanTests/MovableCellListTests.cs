@@ -10,18 +10,18 @@ using Bomberman.Game.Elements.Players;
 namespace BombermanTests
 {
     [TestClass]
-    public class FieldCellSlotTests
+    public class MovableCellListTests
     {
         [TestMethod]
         public void TestAdd1()
         {
-            FieldCellSlot slot = new FieldCellSlot(0, 0);
+            MovableCellList slot = new MovableCellList();
 
             Player player = new Player(0);
             Bomb bomb = new Bomb(player);
 
-            slot.AddCell(player);
-            slot.AddCell(bomb);
+            slot.Add(player);
+            slot.Add(bomb);
 
             AssertNodes(slot, bomb, player);
         }
@@ -29,13 +29,13 @@ namespace BombermanTests
         [TestMethod]
         public void TestAdd2()
         {
-            FieldCellSlot slot = new FieldCellSlot(0, 0);
+            MovableCellList slot = new MovableCellList();
 
             Player player = new Player(0);
             Bomb bomb = new Bomb(player);
 
-            slot.AddCell(bomb);
-            slot.AddCell(player);
+            slot.Add(bomb);
+            slot.Add(player);
             
             AssertNodes(slot, bomb, player);
         }
@@ -43,15 +43,15 @@ namespace BombermanTests
         [TestMethod]
         public void TestAdd3()
         {
-            FieldCellSlot slot = new FieldCellSlot(0, 0);
+            MovableCellList slot = new MovableCellList();
 
             Player player = new Player(0);
             Bomb bomb1 = new Bomb(player);
             Bomb bomb2 = new Bomb(player);
 
-            slot.AddCell(bomb1);
-            slot.AddCell(bomb2);
-            slot.AddCell(player);
+            slot.Add(bomb1);
+            slot.Add(bomb2);
+            slot.Add(player);
 
             AssertNodes(slot, bomb1, bomb2, player);
         }
@@ -59,15 +59,15 @@ namespace BombermanTests
         [TestMethod]
         public void TestAdd4()
         {
-            FieldCellSlot slot = new FieldCellSlot(0, 0);
+            MovableCellList slot = new MovableCellList();
 
             Player player = new Player(0);
             Bomb bomb1 = new Bomb(player);
             Bomb bomb2 = new Bomb(player);
 
-            slot.AddCell(bomb1);
-            slot.AddCell(player);
-            slot.AddCell(bomb2);
+            slot.Add(bomb1);
+            slot.Add(player);
+            slot.Add(bomb2);
 
             AssertNodes(slot, bomb1, bomb2, player);
         }
@@ -75,15 +75,15 @@ namespace BombermanTests
         [TestMethod]
         public void TestAdd5()
         {
-            FieldCellSlot slot = new FieldCellSlot(0, 0);
+            MovableCellList slot = new MovableCellList();
 
             Player player = new Player(0);
             Bomb bomb1 = new Bomb(player);
             Bomb bomb2 = new Bomb(player);
 
-            slot.AddCell(player);
-            slot.AddCell(bomb1);
-            slot.AddCell(bomb2);
+            slot.Add(player);
+            slot.Add(bomb1);
+            slot.Add(bomb2);
 
             AssertNodes(slot, bomb1, bomb2, player);
         }
@@ -91,25 +91,23 @@ namespace BombermanTests
         [TestMethod]
         public void TestAdd6()
         {
-            FieldCellSlot slot = new FieldCellSlot(0, 0);
+            MovableCellList slot = new MovableCellList();
 
             Player player = new Player(0);
             Bomb bomb1 = new Bomb(player);
             Bomb bomb2 = new Bomb(player);
-            SolidCell solid = new SolidCell(0, 0);
 
-            slot.AddCell(player);
-            slot.AddCell(bomb1);
-            slot.AddCell(bomb2);
-            slot.AddCell(solid);
-
-            AssertNodes(slot, solid, bomb1, bomb2, player);
+            slot.Add(player);
+            slot.Add(bomb1);
+            slot.Add(bomb2);
+            
+            AssertNodes(slot, bomb1, bomb2, player);
         }
 
         [TestMethod]
         public void TestAdd7()
         {
-            FieldCellSlot slot = new FieldCellSlot(0, 0);
+            MovableCellList slot = new MovableCellList();
 
             Player player1 = new Player(0);
             Player player2 = new Player(1);
@@ -117,21 +115,18 @@ namespace BombermanTests
             Bomb bomb1 = new Bomb(player1);
             Bomb bomb2 = new Bomb(player2);
 
-            SolidCell solid = new SolidCell(0, 0);
+            slot.Add(player1);
+            slot.Add(bomb1);
+            slot.Add(bomb2);
+            slot.Add(player2);
 
-            slot.AddCell(solid);
-            slot.AddCell(player1);
-            slot.AddCell(bomb1);
-            slot.AddCell(bomb2);
-            slot.AddCell(player2);
-
-            AssertNodes(slot, solid, bomb1, bomb2, player1, player2);
+            AssertNodes(slot, bomb1, bomb2, player1, player2);
         }
 
         [TestMethod]
         public void TestAdd8()
         {
-            FieldCellSlot slot = new FieldCellSlot(0, 0);
+            MovableCellList slot = new MovableCellList();
 
             Player player1 = new Player(0);
             Player player2 = new Player(1);
@@ -139,10 +134,10 @@ namespace BombermanTests
             Bomb bomb1 = new Bomb(player1);
             Bomb bomb2 = new Bomb(player2);
 
-            slot.AddCell(player1);
-            slot.AddCell(bomb1);
-            slot.AddCell(bomb2);
-            slot.AddCell(player2);
+            slot.Add(player1);
+            slot.Add(bomb1);
+            slot.Add(bomb2);
+            slot.Add(player2);
 
             AssertNodes(slot, bomb1, bomb2, player1, player2);
         }
@@ -150,7 +145,7 @@ namespace BombermanTests
         [TestMethod]
         public void TestMix1()
         {
-            FieldCellSlot slot = new FieldCellSlot(0, 0);
+            MovableCellList slot = new MovableCellList();
 
             Player player1 = new Player(0);
             Player player2 = new Player(1);
@@ -158,30 +153,27 @@ namespace BombermanTests
             Bomb bomb1 = new Bomb(player1);
             Bomb bomb2 = new Bomb(player2);
 
-            SolidCell solid = new SolidCell(0, 0);
+            slot.Add(player1);
+            slot.Add(bomb1);
+            slot.Add(bomb2);
+            slot.Remove(player1);
+            slot.Add(player2);
 
-            slot.AddCell(solid);
-            slot.AddCell(player1);
-            slot.AddCell(bomb1);
-            slot.AddCell(bomb2);
-            slot.RemoveCell(player1);
-            slot.AddCell(player2);
-
-            AssertNodes(slot, solid, bomb1, bomb2, player2);
+            AssertNodes(slot, bomb1, bomb2, player2);
         }
 
-        private void AssertNodes(FieldCellSlot slot, params FieldCell[] nodes)
+        private void AssertNodes(MovableCellList slot, params MovableCell[] array)
         {
-            //Assert.AreEqual(slot.Size(), nodes.Length);
+            Assert.AreEqual(slot.Size(), array.Length);
 
-            //LinkedListNode<FieldCell> node = slot.Cells().First;
-            //for (int i = 0; i < nodes.Length; ++i)
-            //{
-            //    Assert.AreEqual(node.Value, nodes[i]);
-            //    node = node.Next;
-            //}
+            LinkedListNode<MovableCell> node = slot.list.First;
+            for (int i = 0; i < array.Length; ++i)
+            {
+                Assert.AreEqual(node.Value, array[i]);
+                node = node.Next;
+            }
 
-            //Assert.IsNull(node);
+            Assert.IsNull(node);
         }
     }
 }
