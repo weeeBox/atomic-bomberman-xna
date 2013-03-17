@@ -82,17 +82,17 @@ namespace Bomberman.Game.Elements.Fields
 
             foreach (FieldCellSlot slot in slots)
             {
-                FieldCell cell = slot.cell;
+                FieldCell cell = slot.staticCell;
                 if (cell != null)
                 {
                     DrawCell(context, cell);
                 }
 
-                if (slot.PlayersCount() > 0)
+                if (slot.MovableCount() > 0)
                 {
-                    foreach (Player player in slot.players)
+                    foreach (MovableCell movableCell in slot.movableCells.list)
                     {
-                        DrawCell(context, player);
+                        DrawCell(context, movableCell);
                     }
                 }
 

@@ -44,6 +44,11 @@ namespace Bomberman.Game.Elements.Fields
             list.Remove(cell);
         }
 
+        public bool Contains(MovableCell cell)
+        {
+            return list.Contains(cell);
+        }
+
         public int Size()
         {
             return list.Count;

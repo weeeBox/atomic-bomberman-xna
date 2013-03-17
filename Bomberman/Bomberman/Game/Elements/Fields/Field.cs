@@ -44,11 +44,15 @@ namespace Bomberman.Game.Elements.Fields
         private LinkedList<MovableCell> movableCells;
         private LinkedList<CellContactList> contacts;
 
+        private LinkedList<FieldCell> updateList;
+
         public Field()
         {
             currentField = this;
             timerManager = new TimerManager();
             players = new PlayerList();
+
+            updateList = new LinkedList<FieldCell>();
 
             movableCells = new LinkedList<MovableCell>();
             contacts = new LinkedList<CellContactList>();
@@ -249,10 +253,15 @@ namespace Bomberman.Game.Elements.Fields
 
         public void UpdateSlot(float delta, FieldCellSlot slot)
         {
-            FieldCell cell = slot.cell;
-            if (cell != null)
+            slot.GetCells(updateList);
+
+            if (updateList.Count > 0)
             {
-                cell.Update(delta);
+                foreach (FieldCell cell in updateList)
+                {
+                    cell.Update(delta);
+                }
+                updateList.Clear();
             }
         }
 
@@ -354,17 +363,18 @@ namespace Bomberman.Game.Elements.Fields
             }
 
             FieldCellSlot slot = GetSlot(cx, cy);
-            FieldCell cell = slot.cell;
-            if (cell != null)
+
+            FieldCell staticCell = slot.staticCell;
+            if (staticCell != null)
             {
-                if (cell.IsSolid())
+                if (staticCell.IsSolid())
                 {
                     return false;
                 }
 
-                if (cell.IsBrick())
+                if (staticCell.IsBrick())
                 {
-                    BrickCell brick = cell.AsBrick();
+                    BrickCell brick = staticCell.AsBrick();
                     if (!brick.destroyed)
                     {
                         brick.Destroy();
@@ -373,20 +383,28 @@ namespace Bomberman.Game.Elements.Fields
                     return false;
                 }
 
-                if (cell.IsPowerup())
+                if (staticCell.IsPowerup())
                 {
-                    cell.AsPowerup().RemoveFromField();
+                    staticCell.AsPowerup().RemoveFromField();
                     return false;
                 }
+            }
 
-                if (cell.IsBomb())
-                {
-                    cell.AsBomb().Blow();
-                }
+            if (slot.MovableCount() > 0)
+            {
+                LinkedList<FieldCell> tempList = new LinkedList<FieldCell>();
+                slot.GetCells(tempList);
 
-                foreach (Player player in slot.players)
+                foreach (FieldCell cell in tempList)
                 {
-                    player.Kill();
+                    if (cell.IsBomb())
+                    {
+                        cell.AsBomb().Blow();
+                    }
+                    else if (cell.IsPlayer())
+                    {
+                        cell.AsPlayer().Kill();
+                    }
                 }
             }
 
@@ -578,12 +596,6 @@ namespace Bomberman.Game.Elements.Fields
             return slot != null ? slot.GetBomb() : null;
         }
 
-        public LinkedList<Player> GetPlayers(int cx, int cy)
-        {
-            FieldCellSlot slot = GetSlot(cx, cy);
-            return slot != null ? slot.players : null;
-        }
-
         public bool ContainsNoObstacle(int cx, int cy)
         {
             FieldCellSlot slot = GetSlot(cx, cy);
@@ -684,7 +696,7 @@ namespace Bomberman.Game.Elements.Fields
         {
             if (slot != null)
             {
-                FieldCell staticCell = slot.GetStaticCell();
+                FieldCell staticCell = slot.staticCell;
                 if (staticCell != null)
                 {
                     CheckCollision(movable, staticCell);

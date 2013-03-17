@@ -12,56 +12,47 @@ namespace Bomberman.Game.Elements.Fields
 {
     public class FieldCellSlot
     {
-        private static FieldCellType[] STATIC_CELL_TYPES = 
-        {
-            FieldCellType.Solid,
-            FieldCellType.Brick,
-            FieldCellType.Powerup,
-        };
-
         public int cx;
         public int cy;
 
-        public FieldCell cell;
-        public LinkedList<Player> players;
+        public FieldCell staticCell;
+        public MovableCellList movableCells;
 
         public FieldCellSlot(int cx, int cy)
         {
             this.cx = cx;
             this.cy = cy;
 
-            players = new LinkedList<Player>();
+            movableCells = new MovableCellList();
         }
 
         //////////////////////////////////////////////////////////////////////////////
 
         #region Add/Remove
 
-        public void AddCell(FieldCell c)
+        public void AddCell(FieldCell cell)
         {
-            if (c.IsPlayer())
+            if (cell.IsMovable())
             {
-                Debug.Assert(Debug.flag && !players.Contains(c));
-                players.AddLast(c.AsPlayer());
+                movableCells.Add(cell.AsMovable());
             }
             else
             {
-                Debug.Assert(cell == null);
-                cell = c;
+                Debug.Assert(staticCell == null);
+                staticCell = cell;
             }
         }
 
-        public void RemoveCell(FieldCell c)
+        public void RemoveCell(FieldCell cell)
         {
-            if (c.IsPlayer())
+            if (cell.IsMovable())
             {
-                Debug.Assert(Debug.flag && players.Contains(c));
-                players.Remove(c.AsPlayer());
+                movableCells.Remove(cell.AsMovable());
             }
             else
             {
-                Debug.Assert(cell != null);
-                cell = null;
+                Debug.Assert(staticCell == cell);
+                staticCell = null;
             }
         }
 
@@ -73,12 +64,12 @@ namespace Bomberman.Game.Elements.Fields
 
         public int Size()
         {
-            return players.Count + (cell != null ? 1 : 0);
+            return movableCells.Size() + (staticCell != null ? 1 : 0);
         }
 
-        public int PlayersCount()
+        public int MovableCount()
         {
-            return players.Count;
+            return movableCells.Size();
         }
 
         //public bool ContainsSolid()
@@ -88,7 +79,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public SolidCell GetSolid()
         {
-            return cell != null ? cell.AsSolid() : null;
+            return staticCell != null ? staticCell.AsSolid() : null;
         }
 
         //public bool ContainsBrick()
@@ -98,7 +89,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public BrickCell GetBrick()
         {
-            return cell != null ? cell.AsBrick() : null;
+            return staticCell != null ? staticCell.AsBrick() : null;
         }
 
         //public bool ContainsPowerup()
@@ -108,7 +99,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public PowerupCell GetPowerup()
         {
-            return cell != null ? cell.AsPowerup() : null;
+            return staticCell != null ? staticCell.AsPowerup() : null;
         }
 
         //public bool ContainsFlame()
@@ -118,7 +109,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public FlameCell GetFlame()
         {
-            return cell != null ? cell.AsFlame() : null;
+            return staticCell != null ? staticCell.AsFlame() : null;
         }
 
         //public bool ContainsBomb()
@@ -128,7 +119,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public Bomb GetBomb()
         {
-            return cell != null ? cell.AsBomb() : null;
+            return staticCell != null ? staticCell.AsBomb() : null;
         }
 
         //public bool ContainsPlayer()
@@ -141,19 +132,16 @@ namespace Bomberman.Game.Elements.Fields
         //    return (Player)Get(FieldCellType.Player);
         //}
 
-        public bool Contains(FieldCell c)
-        {
-            if (cell != null)
+        public bool Contains(FieldCell cell)
+        {   
+            if (staticCell == cell)
             {
-                if (cell == c)
-                {
-                    return true;
-                }
+                return true;
+            }
 
-                if (c.IsPlayer() && players.Contains(c.AsPlayer()))
-                {
-                    return true;
-                }
+            if (cell.IsMovable() && movableCells.Contains(cell.AsMovable()))
+            {
+                return true;
             }
 
             return false;
@@ -161,23 +149,21 @@ namespace Bomberman.Game.Elements.Fields
 
         public bool ContainsObstacle()
         {
-            return cell != null && cell.IsObstacle();
+            return staticCell != null && staticCell.IsObstacle();
         }
 
-        public FieldCell GetStaticCell()
+        public void GetCells(LinkedList<FieldCell> list)
         {
-            if (cell != null)
+            if (staticCell != null)
             {
-                for (int i = 0; i < STATIC_CELL_TYPES.Length; ++i)
-                {
-                    if (cell.type == STATIC_CELL_TYPES[i])
-                    {
-                        return cell;
-                    }
-                }
+                list.AddLast(staticCell);
             }
 
-            return null;
+            LinkedList<MovableCell> movableList = movableCells.list;
+            foreach (FieldCell cell in movableList)
+            {
+                list.AddLast(cell);
+            }
         }
 
         #endregion
