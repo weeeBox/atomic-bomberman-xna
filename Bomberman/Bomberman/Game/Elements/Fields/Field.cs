@@ -16,7 +16,7 @@ using BomberEngine.Util;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class Field : Updatable
+    public class Field : IUpdatable
     {
         private static Field currentField;
 

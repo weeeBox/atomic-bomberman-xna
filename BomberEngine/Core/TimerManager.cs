@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BomberEngine.Core
 {
-    public class TimerManager : Updatable
+    public class TimerManager : IUpdatable
     {   
         // TODO: reuse objects + store timers in a sorted order (for a faster iteration)
         private List<Timer> timers;

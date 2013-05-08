@@ -7,35 +7,35 @@ using BomberEngine.Core.Visual;
 
 namespace BomberEngine.Core
 {
-    public class DrawableList : Drawable, Collection<Drawable>
+    public class DrawableList : IDrawable, Collection<IDrawable>
     {
-        private ObjectsList<Drawable> list;
+        private ObjectsList<IDrawable> list;
 
         public DrawableList()
         {
-            list = new ObjectsList<Drawable>();
+            list = new ObjectsList<IDrawable>();
         }
 
         public DrawableList(int capacity)
         {
-            list = new ObjectsList<Drawable>(capacity);
+            list = new ObjectsList<IDrawable>(capacity);
         }
 
         public void Draw(Context context)
         {
-            foreach (Drawable drawable in list)
+            foreach (IDrawable drawable in list)
             {
                 drawable.Draw(context);
             }
         }
 
-        public bool Add(Drawable drawable)
+        public bool Add(IDrawable drawable)
         {
             list.Add(drawable);
             return true;
         }
 
-        public bool Remove(Drawable drawable)
+        public bool Remove(IDrawable drawable)
         {
             return list.Remove(drawable);
         }
@@ -50,7 +50,7 @@ namespace BomberEngine.Core
             return list.Count;
         }
 
-        public bool Contains(Drawable drawable)
+        public bool Contains(IDrawable drawable)
         {
             return list.Contains(drawable);
         }

@@ -6,7 +6,7 @@ using BomberEngine.Core;
 
 namespace Bomberman.Game.Elements.Players
 {
-    public class PlayerList : Updatable
+    public class PlayerList : IUpdatable
     {
         public List<Player> list;
 

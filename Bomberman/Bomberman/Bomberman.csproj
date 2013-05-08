@@ -163,6 +163,8 @@
     <Compile Include="Game\Scenes\GameScene.cs" />
     <Compile Include="Game\StartupController.cs" />
     <Compile Include="Game\Util.cs" />
+    <Compile Include="Menu\MainMenuScene.cs" />
+    <Compile Include="Menu\MenuController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="BombermanGame.cs" />

@@ -149,22 +149,22 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        protected void AddUpdatable(Updatable updatable)
+        protected void AddUpdatable(IUpdatable updatable)
         {
             updatables.Add(updatable);
         }
 
-        protected void RemoveUpdatable(Updatable updatable)
+        protected void RemoveUpdatable(IUpdatable updatable)
         {
             updatables.Remove(updatable);
         }
 
-        protected void AddDrawable(Drawable drawable)
+        protected void AddDrawable(IDrawable drawable)
         {
             drawables.Add(drawable);
         }
 
-        protected void RemoveDrawable(Drawable drawable)
+        protected void RemoveDrawable(IDrawable drawable)
         {
             drawables.Remove(drawable);
         }

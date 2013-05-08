@@ -8,7 +8,7 @@ using BomberEngine.Core.Visual;
 
 namespace BomberEngine.Core
 {
-    public abstract class GameObject : Updatable, Drawable, InputListener
+    public abstract class GameObject : IUpdatable, IDrawable, InputListener
     {
         public virtual void Update(float delta)
         {   

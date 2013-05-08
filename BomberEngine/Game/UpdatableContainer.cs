@@ -6,7 +6,7 @@ using BomberEngine.Core;
 
 namespace BomberEngine.Game
 {
-    public class UpdatableContainer : Updatable
+    public class UpdatableContainer : IUpdatable
     {
         private UpdatableList list;
 
@@ -20,12 +20,12 @@ namespace BomberEngine.Game
             list.Update(delta);
         }
 
-        protected void AddUpdatable(Updatable updatable)
+        protected void AddUpdatable(IUpdatable updatable)
         {
             list.Add(updatable);
         }
 
-        protected void RemoveUpdatable(Updatable updatable)
+        protected void RemoveUpdatable(IUpdatable updatable)
         {
             list.Remove(updatable);
         }

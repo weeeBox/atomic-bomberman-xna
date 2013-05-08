@@ -10,7 +10,7 @@ using BomberEngine.Util;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class FieldCell : Updatable
+    public class FieldCell : IUpdatable
     {
         public FieldCellType type;
 

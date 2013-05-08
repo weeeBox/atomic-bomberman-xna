@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BomberEngine.Core
 {
-    public interface Updatable
+    public interface IUpdatable
     {
         void Update(float delta);
     }

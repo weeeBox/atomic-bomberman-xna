@@ -9,7 +9,7 @@ using BomberEngine.Core.Visual;
 
 namespace BomberEngine.Game
 {
-    public class Scene : DrawableElement
+    public class Scene : Drawable
     {
         private TimerManager timerManager;
 
@@ -112,12 +112,12 @@ namespace BomberEngine.Game
             updatablesList.Update(delta);
         }
 
-        public void AddUpdatabled(Updatable updatable)
+        public void AddUpdatabled(IUpdatable updatable)
         {
             updatablesList.Add(updatable);
         }
 
-        public void RemoveUpdatable(Updatable updatable)
+        public void RemoveUpdatable(IUpdatable updatable)
         {
             updatablesList.Remove(updatable);
         }
@@ -135,12 +135,12 @@ namespace BomberEngine.Game
             PostDraw(context);
         }
 
-        public void AddDrawable(Drawable drawable)
+        public void AddDrawable(IDrawable drawable)
         {
             drawableList.Add(drawable);
         }
 
-        public void RemoveDrawable(Drawable drawable)
+        public void RemoveDrawable(IDrawable drawable)
         {
             drawableList.Remove(drawable);
         }

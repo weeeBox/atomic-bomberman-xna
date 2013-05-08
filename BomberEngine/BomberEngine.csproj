@@ -95,6 +95,7 @@
     <Compile Include="Core\GameObject.cs" />
     <Compile Include="Core\Input\GamePadListenerList.cs" />
     <Compile Include="Core\NullUpdatable.cs" />
+    <Compile Include="Core\UI\View.cs" />
     <Compile Include="Debugging\Commands\ConsoleCommand.cs" />
     <Compile Include="Debugging\Commands\ConsoleCommandRegister.cs" />
     <Compile Include="Debugging\Console.cs" />
@@ -108,9 +109,8 @@
     <Compile Include="Core\Input\KeyboardListenerList.cs" />
     <Compile Include="Core\UpdatableDelegate.cs" />
     <Compile Include="Core\Visual\Camera.cs" />
-    <Compile Include="Core\Visual\DrawableElementComposite.cs" />
     <Compile Include="Core\Visual\Context.cs" />
-    <Compile Include="Core\Drawable.cs" />
+    <Compile Include="Core\IDrawable.cs" />
     <Compile Include="Core\DrawableList.cs" />
     <Compile Include="Core\Input\GamePadListener.cs" />
     <Compile Include="Core\Input\GamePadStateListener.cs" />
@@ -121,9 +121,9 @@
     <Compile Include="Core\Assets\AssetManager.cs" />
     <Compile Include="Core\Timer.cs" />
     <Compile Include="Core\TimerManager.cs" />
-    <Compile Include="Core\Updatable.cs" />
+    <Compile Include="Core\IUpdatable.cs" />
     <Compile Include="Core\UpdatableList.cs" />
-    <Compile Include="Core\Visual\DrawableElement.cs" />
+    <Compile Include="Core\Visual\Drawable.cs" />
     <Compile Include="Core\Visual\Image.cs" />
     <Compile Include="Debugging\Debug.cs" />
     <Compile Include="Debugging\Log.cs" />

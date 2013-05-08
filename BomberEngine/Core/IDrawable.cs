@@ -6,7 +6,7 @@ using BomberEngine.Core.Visual;
 
 namespace BomberEngine.Core
 {
-    public interface Drawable
+    public interface IDrawable
     {
         void Draw(Context context);
     }

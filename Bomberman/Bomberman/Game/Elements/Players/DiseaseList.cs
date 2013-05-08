@@ -7,7 +7,7 @@ using BomberEngine.Core;
 
 namespace Bomberman.Game.Elements.Players
 {
-    public class DiseaseList : Updatable
+    public class DiseaseList : IUpdatable
     {
         private Player m_player;
 

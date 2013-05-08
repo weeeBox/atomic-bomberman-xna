@@ -6,21 +6,21 @@ using BomberEngine.Util;
 
 namespace BomberEngine.Core
 {
-    public class UpdatableList : Updatable, Collection<Updatable>
+    public class UpdatableList : IUpdatable, Collection<IUpdatable>
     {
-        private static Updatable NULL_UPDATABLE = new NullUpdatable();
+        private static IUpdatable NULL_UPDATABLE = new NullUpdatable();
 
-        private List<Updatable> list;
+        private List<IUpdatable> list;
         private int removedCount;
 
         public UpdatableList()
         {
-            list = new List<Updatable>();
+            list = new List<IUpdatable>();
         }
 
         public UpdatableList(int capacity)
         {
-            list = new List<Updatable>(capacity);
+            list = new List<IUpdatable>(capacity);
         }
 
         public void Update(float delta)
@@ -37,13 +37,13 @@ namespace BomberEngine.Core
             }
         }
 
-        public bool Add(Updatable updatable)
+        public bool Add(IUpdatable updatable)
         {
             list.Add(updatable);
             return true;
         }
 
-        public bool Remove(Updatable updatable)
+        public bool Remove(IUpdatable updatable)
         {
             int index = list.IndexOf(updatable);
             if (index != -1)
@@ -69,7 +69,7 @@ namespace BomberEngine.Core
             }
         }
 
-        public void SetLast(Updatable updatable)
+        public void SetLast(IUpdatable updatable)
         {
             if (list.Count > 0)
             {
@@ -91,7 +91,7 @@ namespace BomberEngine.Core
             return list.Count - removedCount;
         }
 
-        public bool Contains(Updatable updatable)
+        public bool Contains(IUpdatable updatable)
         {
             return list.Contains(updatable);
         }

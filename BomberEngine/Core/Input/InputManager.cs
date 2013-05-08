@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace BomberEngine.Core.Input
 {
-    public class InputManager : Updatable
+    public class InputManager : IUpdatable
     {
         private static PlayerIndex[] PLAYERS_INDICES = 
         { 
