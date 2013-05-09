@@ -6,7 +6,7 @@ using BomberEngine.Core.Assets.Types;
 
 namespace BomberEngine.Core.Visual
 {
-    public class Image : View
+    public class Image : GameObject
     {
         private TextureImage texture;
 

@@ -13,7 +13,7 @@ using BomberEngine.Game;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class FieldDrawable : View
+    public class FieldDrawable : GameObject
     {
         private Field field;
 

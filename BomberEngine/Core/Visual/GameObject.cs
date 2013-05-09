@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace BomberEngine.Core.Visual
 {
-    public abstract class View : InteractiveObject
+    public abstract class GameObject : InteractiveObject
     {
         public const float ALIGN_MIN = 0.0f;
         public const float ALIGN_CENTER = 0.5f;
@@ -36,23 +36,23 @@ namespace BomberEngine.Core.Visual
         public float parentAlignX;
         public float parentAlignY;
 
-        private View parent;
+        private GameObject parent;
 
         private DrawableList drawables;
         private UpdatableList updatables;
 
         // timeline support
-        public View()
+        public GameObject()
             : this(0, 0)
         {
         }
 
-        public View(int width, int height)
+        public GameObject(int width, int height)
             : this(0, 0, width, height)
         {
         }
 
-        public View(float x, float y, int width, int height)
+        public GameObject(float x, float y, int width, int height)
         {
             this.x = x;
             this.y = y;
@@ -226,12 +226,12 @@ namespace BomberEngine.Core.Visual
             RemoveDrawable(element);
         }
 
-        public View getParent()
+        public GameObject getParent()
         {
             return parent;
         }
 
-        public void SetParent(View parent)
+        public void SetParent(GameObject parent)
         {
             this.parent = parent;
         }

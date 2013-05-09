@@ -121,7 +121,7 @@
     <Compile Include="Core\TimerManager.cs" />
     <Compile Include="Core\IUpdatable.cs" />
     <Compile Include="Core\UpdatableList.cs" />
-    <Compile Include="Core\Visual\View.cs" />
+    <Compile Include="Core\Visual\GameObject.cs" />
     <Compile Include="Core\Visual\Image.cs" />
     <Compile Include="Debugging\Debug.cs" />
     <Compile Include="Debugging\Log.cs" />
