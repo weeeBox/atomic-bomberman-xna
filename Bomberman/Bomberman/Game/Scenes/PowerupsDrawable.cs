@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework;
 
 namespace Bomberman.Game.Scenes
 {
-    public class PowerupsDrawable : DrawableElement
+    public class PowerupsDrawable : View
     {   
         private TextureImage[] powerupImages;
         private Field field;

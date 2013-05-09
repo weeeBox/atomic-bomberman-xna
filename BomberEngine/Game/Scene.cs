@@ -9,7 +9,7 @@ using BomberEngine.Core.Visual;
 
 namespace BomberEngine.Game
 {
-    public class Scene : DrawableElement
+    public class Scene : View
     {
         private TimerManager timerManager;
 
