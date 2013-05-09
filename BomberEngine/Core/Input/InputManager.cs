@@ -49,10 +49,10 @@ namespace BomberEngine.Core.Input
         private GamePadState[] currentGamepadStates;
         private KeyboardState currentKeyboardState;
 
-        private KeyboardListener keyboardListener;
-        private GamePadListener gamePadListener;
-        private GamePadStateListener gamePadStateListener;
-        private TouchListener touchListener;
+        private IKeyboardListener keyboardListener;
+        private IGamePadListener gamePadListener;
+        private IGamePadStateListener gamePadStateListener;
+        private ITouchListener touchListener;
 
         private GamePadDeadZone deadZone;
 
@@ -215,7 +215,7 @@ namespace BomberEngine.Core.Input
 
         #region Properties
 
-        public void SetInputListener(InputListener listener)
+        public void SetInputListener(IInputListener listener)
         {
             SetKeyboardListener(listener);
             SetGamePadListener(listener);
@@ -223,42 +223,42 @@ namespace BomberEngine.Core.Input
             SetTouchListener(listener);
         }
 
-        public KeyboardListener GetKeyboardListener()
+        public IKeyboardListener GetKeyboardListener()
         {
             return keyboardListener;
         }
 
-        public void SetKeyboardListener(KeyboardListener listener)
+        public void SetKeyboardListener(IKeyboardListener listener)
         {
             keyboardListener = listener;
         }
 
-        public GamePadListener GamePadListener()
+        public IGamePadListener GamePadListener()
         {
             return gamePadListener;
         }
 
-        public void SetGamePadListener(GamePadListener listener)
+        public void SetGamePadListener(IGamePadListener listener)
         {
             gamePadListener = listener;
         }
 
-        public GamePadStateListener GetGamePadStateListener()
+        public IGamePadStateListener GetGamePadStateListener()
         {
             return gamePadStateListener;
         }
 
-        private void SetGamePadStateListener(GamePadStateListener listener)
+        private void SetGamePadStateListener(IGamePadStateListener listener)
         {
             this.gamePadStateListener = listener;
         }
 
-        public TouchListener GetTouchListener()
+        public ITouchListener GetTouchListener()
         {
             return touchListener;
         }
 
-        public void SetTouchListener(TouchListener listener)
+        public void SetTouchListener(ITouchListener listener)
         {
             this.touchListener = listener;
         }

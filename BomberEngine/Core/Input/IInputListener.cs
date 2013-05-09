@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BomberEngine.Core.Input
 {
-    public interface InputListener : KeyboardListener, GamePadListener, GamePadStateListener, TouchListener
+    public interface IInputListener : IKeyboardListener, IGamePadListener, IGamePadStateListener, ITouchListener
     {
     }
 }

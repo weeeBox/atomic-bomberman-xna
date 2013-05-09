@@ -6,16 +6,16 @@ using BomberEngine.Util;
 
 namespace BomberEngine.Core.Input
 {
-    public class GamePadListenerList : GamePadListener
+    public class IGamePadListenerList : IGamePadListener
     {
-        private ConcurrentList<GamePadListener> listeners;
+        private ConcurrentList<IGamePadListener> listeners;
 
-        public GamePadListenerList()
+        public IGamePadListenerList()
         {
-            listeners = new ConcurrentList<GamePadListener>();
+            listeners = new ConcurrentList<IGamePadListener>();
         }
 
-        public bool Add(GamePadListener listener)
+        public bool Add(IGamePadListener listener)
         {
             if (!listeners.Contains(listener))
             {
@@ -25,14 +25,14 @@ namespace BomberEngine.Core.Input
             return false;
         }
 
-        public bool Remove(GamePadListener listener)
+        public bool Remove(IGamePadListener listener)
         {
             return listeners.Remove(listener);
         }
 
         public void ButtonPressed(ButtonEvent e)
         {
-            foreach (GamePadListener l in listeners)
+            foreach (IGamePadListener l in listeners)
             {
                 l.ButtonPressed(e);
             }
@@ -40,7 +40,7 @@ namespace BomberEngine.Core.Input
 
         public void ButtonReleased(ButtonEvent e)
         {
-            foreach (GamePadListener l in listeners)
+            foreach (IGamePadListener l in listeners)
             {
                 l.ButtonReleased(e);
             }

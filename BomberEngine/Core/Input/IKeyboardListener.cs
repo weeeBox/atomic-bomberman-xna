@@ -2,7 +2,7 @@
 
 namespace BomberEngine.Core.Input
 {   
-    public interface KeyboardListener
+    public interface IKeyboardListener
     {
         void KeyPressed(Keys key);
         void KeyReleased(Keys key);

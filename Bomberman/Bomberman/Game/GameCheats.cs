@@ -9,7 +9,7 @@ using Bomberman.Game.Elements;
 
 namespace Bomberman.Game
 {
-    public class GameCheats : KeyboardListener
+    public class GameCheats : IKeyboardListener
     {
         private Game game;
 

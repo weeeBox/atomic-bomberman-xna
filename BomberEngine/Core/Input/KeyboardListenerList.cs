@@ -7,16 +7,16 @@ using BomberEngine.Util;
 
 namespace BomberEngine.Core.Input
 {
-    public class KeyboardListenerList : KeyboardListener
+    public class KeyboardListenerList : IKeyboardListener
     {
-        private ConcurrentList<KeyboardListener> listeners;
+        private ConcurrentList<IKeyboardListener> listeners;
 
         public KeyboardListenerList()
         {
-            listeners = new ConcurrentList<KeyboardListener>();
+            listeners = new ConcurrentList<IKeyboardListener>();
         }
 
-        public bool Add(KeyboardListener listener)
+        public bool Add(IKeyboardListener listener)
         {
             if (!listeners.Contains(listener))
             {
@@ -26,14 +26,14 @@ namespace BomberEngine.Core.Input
             return false;
         }
 
-        public bool Remove(KeyboardListener listener)
+        public bool Remove(IKeyboardListener listener)
         {
             return listeners.Remove(listener);
         }
 
         public void KeyPressed(Keys key)
         {
-            foreach (KeyboardListener l in listeners)
+            foreach (IKeyboardListener l in listeners)
             {
                 l.KeyPressed(key);
             }
@@ -41,7 +41,7 @@ namespace BomberEngine.Core.Input
 
         public void KeyReleased(Keys key)
         {
-            foreach (KeyboardListener l in listeners)
+            foreach (IKeyboardListener l in listeners)
             {
                 l.KeyReleased(key);
             }

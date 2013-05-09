@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BomberEngine.Core.Input
 {
-    public interface GamePadStateListener
+    public interface IGamePadStateListener
     {
         void GamePadConnected(int playerIndex);
         void GamePadDisconnected(int playerIndex);

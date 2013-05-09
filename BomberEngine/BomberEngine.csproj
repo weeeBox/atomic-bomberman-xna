@@ -93,7 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\GameObject.cs" />
-    <Compile Include="Core\Input\GamePadListenerList.cs" />
+    <Compile Include="Core\Input\IGamePadListenerList.cs" />
     <Compile Include="Core\NullUpdatable.cs" />
     <Compile Include="Core\UI\View.cs" />
     <Compile Include="Debugging\Commands\ConsoleCommand.cs" />
@@ -112,12 +112,12 @@
     <Compile Include="Core\Visual\Context.cs" />
     <Compile Include="Core\IDrawable.cs" />
     <Compile Include="Core\DrawableList.cs" />
-    <Compile Include="Core\Input\GamePadListener.cs" />
-    <Compile Include="Core\Input\GamePadStateListener.cs" />
-    <Compile Include="Core\Input\InputListener.cs" />
+    <Compile Include="Core\Input\IGamePadListener.cs" />
+    <Compile Include="Core\Input\IGamePadStateListener.cs" />
+    <Compile Include="Core\Input\IInputListener.cs" />
     <Compile Include="Core\Input\InputManager.cs" />
-    <Compile Include="Core\Input\KeyboardListener.cs" />
-    <Compile Include="Core\Input\TouchListener.cs" />
+    <Compile Include="Core\Input\IKeyboardListener.cs" />
+    <Compile Include="Core\Input\ITouchListener.cs" />
     <Compile Include="Core\Assets\AssetManager.cs" />
     <Compile Include="Core\Timer.cs" />
     <Compile Include="Core\TimerManager.cs" />

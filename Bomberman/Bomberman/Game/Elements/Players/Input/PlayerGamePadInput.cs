@@ -11,7 +11,7 @@ using BomberEngine.Util;
 
 namespace Bomberman.Game.Elements.Players.Input
 {
-    public class PlayerGamePadInput : PlayerInput, GamePadListener, IUpdatable
+    public class PlayerGamePadInput : PlayerInput, IGamePadListener, IUpdatable
     {
         private const float STICK_DEAD_ZONE = 0.125f;
         private const float STICK_DEAD_ZONE_2 = STICK_DEAD_ZONE * STICK_DEAD_ZONE;
