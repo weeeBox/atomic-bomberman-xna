@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace BomberEngine.Core.Visual
 {
-    public abstract class View : BaseElement
+    public abstract class View : InteractiveObject
     {
         public const float ALIGN_MIN = 0.0f;
         public const float ALIGN_CENTER = 0.5f;
@@ -214,13 +214,13 @@ namespace BomberEngine.Core.Visual
 
         #region Hierarchy
 
-        public void Add(BaseElement element)
+        public void Add(InteractiveObject element)
         {
             AddUpdatable(element);
             AddDrawable(element);
         }
 
-        public void Remove(BaseElement element)
+        public void Remove(InteractiveObject element)
         {
             RemoveUpdatable(element);
             RemoveDrawable(element);
