@@ -197,10 +197,10 @@ namespace BomberEngine.Core.Visual
             {
                 drawables = new DrawableList();
             }
-            drawables.Add(drawables);
+            drawables.Add(drawable);
         }
 
-        public virtual void RemoteDrawable(IDrawable drawable)
+        public virtual void RemoveDrawable(IDrawable drawable)
         {
             if (drawables.Count() > 0)
             {
@@ -213,6 +213,18 @@ namespace BomberEngine.Core.Visual
         //////////////////////////////////////////////////////////////////////////////
 
         #region Hierarchy
+
+        public void Add(BaseElement element)
+        {
+            AddUpdatable(element);
+            AddDrawable(element);
+        }
+
+        public void Remove(BaseElement element)
+        {
+            RemoveUpdatable(element);
+            RemoveDrawable(element);
+        }
 
         public View getParent()
         {
