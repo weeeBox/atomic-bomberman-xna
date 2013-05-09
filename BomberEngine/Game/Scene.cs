@@ -151,13 +151,13 @@ namespace BomberEngine.Game
 
         #region Game Objects
 
-        protected void AddGameObject(GameObject obj)
+        protected void AddGameObject(BaseElement obj)
         {
             AddUpdatabled(obj);
             AddDrawable(obj);
         }
 
-        protected void RemoveGameObject(GameObject obj)
+        protected void RemoveGameObject(BaseElement obj)
         {
             RemoveUpdatable(obj);
             RemoveDrawable(obj);

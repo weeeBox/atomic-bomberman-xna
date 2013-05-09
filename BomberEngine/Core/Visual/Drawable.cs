@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace BomberEngine.Core.Visual
 {
-    public abstract class Drawable : GameObject
+    public abstract class Drawable : BaseElement
     {
         public const float ALIGN_MIN = 0.0f;
         public const float ALIGN_CENTER = 0.5f;

@@ -169,13 +169,13 @@ namespace BomberEngine.Game
             drawables.Remove(drawable);
         }
 
-        protected void AddGameObject(GameObject obj)
+        protected void AddGameObject(BaseElement obj)
         {
             AddUpdatable(obj);
             AddDrawable(obj);
         }
 
-        protected void RemoveGameObject(GameObject obj)
+        protected void RemoveGameObject(BaseElement obj)
         {
             RemoveUpdatable(obj);
             RemoveDrawable(obj);
