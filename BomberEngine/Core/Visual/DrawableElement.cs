@@ -85,6 +85,23 @@ namespace BomberEngine.Core.Visual
             updatables.Update(delta);
         }
 
+        public virtual void AddUpdatable(IUpdatable updatable)
+        {
+            if (updatables == UpdatableList.Empty)
+            {
+                updatables = new UpdatableList();
+            }
+            updatables.Add(updatable);
+        }
+
+        public virtual void RemoveUpdatable(IUpdatable updatable)
+        {
+            if (updatables.Count() > 0)
+            {
+                updatables.Remove(updatable);
+            }
+        }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
@@ -95,6 +112,11 @@ namespace BomberEngine.Core.Visual
         {
             PreDraw(context);
             PostDraw(context);
+        }
+
+        protected virtual void DrawChildren(Context context)
+        {
+            drawables.Draw(context);
         }
 
         public virtual void PreDraw(Context context)
@@ -151,6 +173,7 @@ namespace BomberEngine.Core.Visual
 
         public virtual void PostDraw(Context context)
         {
+            DrawChildren(context);
             RestoreTransformations(context);
         }
 
@@ -165,6 +188,23 @@ namespace BomberEngine.Core.Visual
             if (rotation != 0.0 || scaleX != 1.0 || scaleY != 1.0 || translateX != 0.0 || translateY != 0.0)
             {
                 context.PopMatrix();
+            }
+        }
+
+        public virtual void AddDrawable(IDrawable drawable)
+        {
+            if (drawables == DrawableList.Empty)
+            {
+                drawables = new DrawableList();
+            }
+            drawables.Add(drawables);
+        }
+
+        public virtual void RemoteDrawable(IDrawable drawable)
+        {
+            if (drawables.Count() > 0)
+            {
+                drawables.Remove(drawable);
             }
         }
 
