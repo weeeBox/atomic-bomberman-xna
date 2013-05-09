@@ -71,20 +71,30 @@ namespace BomberEngine.Core.Visual
 
             parentAlignX = parentAlignY = alignX = alignY = ALIGN_MIN;
             parent = null;
+
+            drawables = DrawableList.Empty;
+            updatables = UpdatableList.Empty;
         }
 
-        public void RestoreTransformations(Context context)
-        {
-            if (color != Color.White)
-            {
-                context.SetColor(Color.White);
-            }
+        //////////////////////////////////////////////////////////////////////////////
 
-            // if any transformation
-            if (rotation != 0.0 || scaleX != 1.0 || scaleY != 1.0 || translateX != 0.0 || translateY != 0.0)
-            {
-                context.PopMatrix();
-            }
+        #region Update
+
+        public override void Update(float delta)
+        {
+            updatables.Update(delta);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Draw
+
+        public override void Draw(Context context)
+        {
+            PreDraw(context);
+            PostDraw(context);
         }
 
         public virtual void PreDraw(Context context)
@@ -144,11 +154,25 @@ namespace BomberEngine.Core.Visual
             RestoreTransformations(context);
         }
 
-        public override void Draw(Context context)
+        public void RestoreTransformations(Context context)
         {
-            PreDraw(context);
-            PostDraw(context);
+            if (color != Color.White)
+            {
+                context.SetColor(Color.White);
+            }
+
+            // if any transformation
+            if (rotation != 0.0 || scaleX != 1.0 || scaleY != 1.0 || translateX != 0.0 || translateY != 0.0)
+            {
+                context.PopMatrix();
+            }
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Hierarchy
 
         public DrawableElement getParent()
         {
@@ -159,6 +183,12 @@ namespace BomberEngine.Core.Visual
         {
             this.parent = parent;
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Align
 
         public void SetAlign(float alignX, float alignY)
         {
@@ -171,5 +201,7 @@ namespace BomberEngine.Core.Visual
             this.parentAlignX = alignX;
             this.parentAlignY = alignY;
         }
+
+        #endregion
     }
 }

@@ -9,6 +9,8 @@ namespace BomberEngine.Core
 {
     public class DrawableList : IDrawable, Collection<IDrawable>
     {
+        public static readonly DrawableList Empty = new UnmmodifiableDrawbleList();
+
         private ObjectsList<IDrawable> list;
 
         public DrawableList()
@@ -21,7 +23,7 @@ namespace BomberEngine.Core
             list = new ObjectsList<IDrawable>(capacity);
         }
 
-        public void Draw(Context context)
+        public virtual void Draw(Context context)
         {
             foreach (IDrawable drawable in list)
             {
@@ -29,30 +31,62 @@ namespace BomberEngine.Core
             }
         }
 
-        public bool Add(IDrawable drawable)
+        public virtual bool Add(IDrawable drawable)
         {
             list.Add(drawable);
             return true;
         }
 
-        public bool Remove(IDrawable drawable)
+        public virtual bool Remove(IDrawable drawable)
         {
             return list.Remove(drawable);
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             list.Clear();
         }
 
-        public int Count()
+        public virtual int Count()
         {
             return list.Count;
         }
 
-        public bool Contains(IDrawable drawable)
+        public virtual bool Contains(IDrawable drawable)
         {
             return list.Contains(drawable);
+        }
+    }
+
+    sealed class UnmmodifiableDrawbleList : DrawableList
+    {
+        public override void Draw(Context context)
+        {   
+        }
+
+        public override bool Add(IDrawable drawable)
+        {
+            throw new InvalidOperationException("Can't add element to unmodifiable drawable list");
+        }
+
+        public override bool Remove(IDrawable drawable)
+        {
+            throw new InvalidOperationException("Can't remove element from unmodifiable drawable list");
+        }
+
+        public override void Clear()
+        {
+            throw new InvalidOperationException("Can't clear unmodifiable drawable list");
+        }
+
+        public override int Count()
+        {
+            return 0;
+        }
+
+        public override bool Contains(IDrawable drawable)
+        {
+            return false;
         }
     }
 }

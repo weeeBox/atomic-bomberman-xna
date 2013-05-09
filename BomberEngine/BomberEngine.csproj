@@ -94,7 +94,6 @@
   <ItemGroup>
     <Compile Include="Core\BaseElement.cs" />
     <Compile Include="Core\Input\IGamePadListenerList.cs" />
-    <Compile Include="Core\NullUpdatable.cs" />
     <Compile Include="Core\UI\View.cs" />
     <Compile Include="Debugging\Commands\ConsoleCommand.cs" />
     <Compile Include="Debugging\Commands\ConsoleCommandRegister.cs" />
