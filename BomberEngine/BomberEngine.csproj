@@ -92,8 +92,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\BaseUpdatableList.cs" />
     <Compile Include="Core\InteractiveObject.cs" />
     <Compile Include="Core\Input\IGamePadListenerList.cs" />
+    <Compile Include="Core\Visual\GameObjectList.cs" />
     <Compile Include="Debugging\Commands\ConsoleCommand.cs" />
     <Compile Include="Debugging\Commands\ConsoleCommandRegister.cs" />
     <Compile Include="Debugging\Console.cs" />
