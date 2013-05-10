@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace BomberEngine.Core.Visual
 {
-    public abstract class GameObject : InteractiveObject
+    public abstract class GameObject : BaseObject
     {
         public const float ALIGN_MIN = 0.0f;
         public const float ALIGN_CENTER = 0.5f;
