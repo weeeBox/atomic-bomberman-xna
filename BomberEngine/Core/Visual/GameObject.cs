@@ -38,10 +38,8 @@ namespace BomberEngine.Core.Visual
 
         private GameObject parent;
 
-        private DrawableList drawables;
-        private UpdatableList updatables;
+        private GameObjectList childList;
 
-        // timeline support
         public GameObject()
             : this(0, 0)
         {
@@ -72,8 +70,7 @@ namespace BomberEngine.Core.Visual
             parentAlignX = parentAlignY = alignX = alignY = ALIGN_MIN;
             parent = null;
 
-            drawables = DrawableList.Empty;
-            updatables = UpdatableList.Empty;
+            childList = GameObjectList.Null;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -82,24 +79,7 @@ namespace BomberEngine.Core.Visual
 
         public override void Update(float delta)
         {
-            updatables.Update(delta);
-        }
-
-        public virtual void AddUpdatable(IUpdatable updatable)
-        {
-            if (updatables == UpdatableList.Empty)
-            {
-                updatables = new UpdatableList();
-            }
-            updatables.Add(updatable);
-        }
-
-        public virtual void RemoveUpdatable(IUpdatable updatable)
-        {
-            if (updatables.Count() > 0)
-            {
-                updatables.Remove(updatable);
-            }
+            childList.Update(delta);
         }
 
         #endregion
@@ -116,7 +96,7 @@ namespace BomberEngine.Core.Visual
 
         protected virtual void DrawChildren(Context context)
         {
-            drawables.Draw(context);
+            childList.Draw(context);
         }
 
         public virtual void PreDraw(Context context)
@@ -191,39 +171,27 @@ namespace BomberEngine.Core.Visual
             }
         }
 
-        public virtual void AddDrawable(IDrawable drawable)
-        {
-            if (drawables == DrawableList.Empty)
-            {
-                drawables = new DrawableList();
-            }
-            drawables.Add(drawable);
-        }
-
-        public virtual void RemoveDrawable(IDrawable drawable)
-        {
-            if (drawables.Count() > 0)
-            {
-                drawables.Remove(drawable);
-            }
-        }
-
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 
         #region Hierarchy
 
-        public void Add(InteractiveObject element)
+        public void AddChild(GameObject child)
         {
-            AddUpdatable(element);
-            AddDrawable(element);
+            if (childList.IsNull())
+            {
+                childList = new GameObjectList();
+            }
+            childList.Add(child);
         }
 
-        public void Remove(InteractiveObject element)
+        public void RemoveChild(GameObject child)
         {
-            RemoveUpdatable(element);
-            RemoveDrawable(element);
+            if (childList.Count() > 0)
+            {
+                childList.Remove(child);
+            }
         }
 
         public GameObject getParent()

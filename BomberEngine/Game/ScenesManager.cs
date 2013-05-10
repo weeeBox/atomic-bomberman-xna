@@ -10,7 +10,7 @@ using BomberEngine.Core.Visual;
 
 namespace BomberEngine.Game
 {
-    public class ScenesManager : GameObject
+    public class ScenesManager : InteractiveObject
     {   
         private List<Scene> scenes;
         private Scene currentScene;

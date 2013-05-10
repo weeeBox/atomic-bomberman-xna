@@ -7,6 +7,7 @@ namespace BomberEngine.Core.Visual
 {
     public class GameObjectList : BaseUpdatableList<GameObject>, IDrawable
     {
+        public static readonly GameObjectList Null = new NullGameObjectList();
         private static readonly GameObject nullElement = new NullGameObject();
 
         public GameObjectList()

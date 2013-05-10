@@ -8,7 +8,7 @@ namespace BomberEngine.Core
 {
     public class UpdatableList : BaseUpdatableList<IUpdatable>
     {
-        public static readonly UpdatableList Empty = new NullUpdatableList();
+        public static readonly UpdatableList Null = new NullUpdatableList();
         private static readonly IUpdatable nullElement = new NullUpdatable();
 
         public UpdatableList()
