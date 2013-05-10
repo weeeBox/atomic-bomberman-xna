@@ -13,13 +13,40 @@ namespace BomberEngine.Game
     public class ScenesManager : InteractiveObject
     {   
         private List<Scene> scenes;
+        private UpdatableList updatables;
+        private DrawableList drawables;
+
         private Scene currentScene;
 
         public ScenesManager()
         {
             scenes = new List<Scene>();
+            updatables = new UpdatableList();
+            drawables = new DrawableList();
         }
         
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Updatable
+
+        public override void Update(float delta)
+        {
+            updatables.Update(delta);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Drawable
+
+        public override void Draw(Context context)
+        {
+            drawables.Draw(context);
+        }
+
+        #endregion
+
         //////////////////////////////////////////////////////////////////////////////
 
         #region InputListener methods
@@ -104,12 +131,12 @@ namespace BomberEngine.Game
                     if (!scene.allowsUpdatePrevious)
                     {
                         currentScene.Suspend();
-                        RemoveUpdatable(currentScene);
+                        updatables.Remove(currentScene);
                     }
 
                     if (!scene.allowsDrawPrevious)
                     {   
-                        RemoveDrawable(currentScene);
+                        drawables.Remove(currentScene);
                     }
                 }
             }
@@ -120,7 +147,8 @@ namespace BomberEngine.Game
             scene.sceneManager = this;
             scene.Start();
 
-            Add(scene);
+            updatables.Add(scene);
+            drawables.Add(scene);
         }
 
         public void RemoveScene(Scene scene)
@@ -136,9 +164,10 @@ namespace BomberEngine.Game
             }
 
             scene.sceneManager = null;
+            
             scenes.Remove(scene);
-
-            Remove(scene);
+            updatables.Remove(scene);
+            drawables.Remove(scene);
 
             if (scene == currentScene)
             {
@@ -147,13 +176,13 @@ namespace BomberEngine.Game
                     currentScene = scenes[scenes.Count - 1];
                     if (!scene.allowsDrawPrevious)
                     {
-                        AddDrawable(currentScene);
+                        drawables.Add(currentScene);
                     }
 
                     if (!scene.allowsUpdatePrevious)
                     {
                         currentScene.Resume();
-                        AddUpdatable(currentScene);
+                        updatables.Add(currentScene);
                     }
                 }
                 else
