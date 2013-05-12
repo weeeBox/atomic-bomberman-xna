@@ -10,7 +10,7 @@ using BomberEngine.Core.Visual.UI;
 
 namespace BomberEngine.Game
 {
-    public class Scene : View
+    public class Screen : View
     {
         public View rootView;
 
@@ -22,18 +22,18 @@ namespace BomberEngine.Game
         private KeyboardListenerList keyboardListeners;
         private IGamePadListenerList gamePadListeners;
 
-        public SceneManager sceneManager;
-        public SceneListener listener;
+        public ScreenManager screenManager;
+        public ScreenListener listener;
 
         protected bool m_allowsDrawPrevious;
         protected bool m_allowsUpdatePrevious;
 
-        public Scene()
+        public Screen()
             : this(Application.GetWidth(), Application.GetHeight())
         {
         }
 
-        public Scene(int width, int height)
+        public Screen(int width, int height)
             : base(width, height)
         {
             timerManager = new TimerManager();
@@ -274,23 +274,23 @@ namespace BomberEngine.Game
 
         #region Scenes management
 
-        protected void StartScene(Scene scene)
+        protected void StartScene(Screen scene)
         {
-            sceneManager.StartScene(scene);
+            screenManager.StartScene(scene);
         }
 
-        protected void StartNextScene(Scene scene)
+        protected void StartNextScene(Screen scene)
         {
-            sceneManager.StartScene(scene, false);
+            screenManager.StartScene(scene, false);
         }
 
         private void RemoveFromContainer()
         {
-            if (sceneManager == null)
+            if (screenManager == null)
             {
                 throw new InvalidOperationException("Scene container is not set");
             }
-            sceneManager.RemoveScene(this);
+            screenManager.RemoveScene(this);
         }
 
         #endregion

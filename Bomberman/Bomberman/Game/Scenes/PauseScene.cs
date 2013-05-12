@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Bomberman.Game.Scenes
 {
-    public class PauseScene : Scene
+    public class PauseScene : Screen
     {
         private Color backColor;
 

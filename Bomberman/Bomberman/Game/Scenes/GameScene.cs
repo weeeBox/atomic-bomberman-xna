@@ -16,7 +16,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Bomberman.Game.Scenes
 {
-    public class GameScene : Scene
+    public class GameScene : Screen
     {
         private Image fieldBackground;
 

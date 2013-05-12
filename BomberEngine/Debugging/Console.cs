@@ -13,7 +13,7 @@ using BomberEngine.Game;
 
 namespace BomberEngine.Debugging
 {
-    public class GameConsole : Scene
+    public class GameConsole : Screen
     {
         private List<String> m_lines;
 

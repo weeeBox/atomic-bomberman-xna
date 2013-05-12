@@ -11,11 +11,11 @@ namespace BomberEngine.Game
 {
     public class Controller : BaseElement
     {
-        private SceneManager sceneManager;
+        private ScreenManager sceneManager;
 
         public Controller()
         {
-            sceneManager = new SceneManager();
+            sceneManager = new ScreenManager();
         }
 
         public void Start()
@@ -46,22 +46,22 @@ namespace BomberEngine.Game
         {
         }
 
-        public Scene CurrentScene()
+        public Screen CurrentScene()
         {
             return sceneManager.CurrentScene();
         }
 
-        public bool IsCurrentScene(Scene scene)
+        public bool IsCurrentScene(Screen scene)
         {
             return sceneManager.IsCurrent(scene);
         }
 
-        public void StartScene(Scene scene)
+        public void StartScene(Screen scene)
         {
             sceneManager.StartScene(scene, true);
         }
 
-        public void StartNextScene(Scene scene)
+        public void StartNextScene(Screen scene)
         {
             sceneManager.StartScene(scene, false);
         }

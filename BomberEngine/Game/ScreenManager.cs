@@ -10,17 +10,17 @@ using BomberEngine.Core.Visual;
 
 namespace BomberEngine.Game
 {
-    public class SceneManager : BaseElement
+    public class ScreenManager : BaseElement
     {   
-        private List<Scene> scenes;
+        private List<Screen> scenes;
         private UpdatableList updatables;
         private DrawableList drawables;
 
-        private Scene currentScene;
+        private Screen currentScene;
 
-        public SceneManager()
+        public ScreenManager()
         {
-            scenes = new List<Scene>();
+            scenes = new List<Screen>();
             updatables = new UpdatableList();
             drawables = new DrawableList();
         }
@@ -107,12 +107,12 @@ namespace BomberEngine.Game
 
         #region Scene Container
 
-        public void StartScene(Scene scene)
+        public void StartScene(Screen scene)
         {
             StartScene(scene, false);
         }
 
-        public void StartScene(Scene scene, bool replaceCurrent)
+        public void StartScene(Screen scene, bool replaceCurrent)
         {
             if (scenes.Contains(scene))
             {
@@ -124,7 +124,7 @@ namespace BomberEngine.Game
                 if (replaceCurrent)
                 {
                     currentScene.Stop();
-                    currentScene.sceneManager = null;
+                    currentScene.screenManager = null;
                 }
                 else
                 {
@@ -144,16 +144,16 @@ namespace BomberEngine.Game
             currentScene = scene;
 
             scenes.Add(scene);
-            scene.sceneManager = this;
+            scene.screenManager = this;
             scene.Start();
 
             updatables.Add(scene);
             drawables.Add(scene);
         }
 
-        public void RemoveScene(Scene scene)
+        public void RemoveScene(Screen scene)
         {
-            if (scene.sceneManager != this)
+            if (scene.screenManager != this)
             {
                 throw new InvalidOperationException("Scene doesn't belong to this container: " + scene);
             }
@@ -163,7 +163,7 @@ namespace BomberEngine.Game
                 throw new InvalidOperationException("Scene manager doesn't contain the scene: " + scene);   
             }
 
-            scene.sceneManager = null;
+            scene.screenManager = null;
             
             scenes.Remove(scene);
             updatables.Remove(scene);
@@ -192,12 +192,12 @@ namespace BomberEngine.Game
             }
         }
 
-        public Scene CurrentScene()
+        public Screen CurrentScene()
         {
             return currentScene;
         }
 
-        public bool IsCurrent(Scene scene)
+        public bool IsCurrent(Screen scene)
         {
             return CurrentScene() == scene;
         }
