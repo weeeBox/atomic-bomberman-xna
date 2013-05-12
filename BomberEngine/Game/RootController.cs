@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace BomberEngine.Game
 {
-    public abstract class RootController : BaseObject
+    public abstract class RootController : BaseElement
     {   
         private Controller currentController;
         private GameConsole console;

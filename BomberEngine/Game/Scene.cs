@@ -9,7 +9,7 @@ using BomberEngine.Core.Visual;
 
 namespace BomberEngine.Game
 {
-    public class Scene : GameObject
+    public class Scene : VisualElement
     {
         private TimerManager timerManager;
 
@@ -151,13 +151,13 @@ namespace BomberEngine.Game
 
         #region Game Objects
 
-        protected void AddGameObject(BaseObject obj)
+        protected void AddGameObject(BaseElement obj)
         {
             AddUpdatabled(obj);
             AddDrawable(obj);
         }
 
-        protected void RemoveGameObject(BaseObject obj)
+        protected void RemoveGameObject(BaseElement obj)
         {
             RemoveUpdatable(obj);
             RemoveDrawable(obj);

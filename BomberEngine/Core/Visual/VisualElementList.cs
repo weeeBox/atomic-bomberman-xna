@@ -5,17 +5,17 @@ using System.Text;
 
 namespace BomberEngine.Core.Visual
 {
-    public class GameObjectList : BaseUpdatableList<GameObject>, IDrawable
+    public class VisualElementList : BaseUpdatableList<VisualElement>, IDrawable
     {
-        public static readonly GameObjectList Null = new NullGameObjectList();
-        private static readonly GameObject nullElement = new NullGameObject();
+        public static readonly VisualElementList Null = new NullGameObjectList();
+        private static readonly VisualElement nullElement = new NullGameObject();
 
-        public GameObjectList()
+        public VisualElementList()
             : base(nullElement)
         {
         }
 
-        public GameObjectList(int capacity)
+        public VisualElementList(int capacity)
             : base(nullElement, capacity)
         {
         }
@@ -29,7 +29,7 @@ namespace BomberEngine.Core.Visual
         }
     }
 
-    internal sealed class NullGameObjectList : GameObjectList
+    internal sealed class NullGameObjectList : VisualElementList
     {
         public override void Update(float delta)
         {
@@ -39,12 +39,12 @@ namespace BomberEngine.Core.Visual
         {
         }
 
-        public override bool Add(GameObject updatable)
+        public override bool Add(VisualElement updatable)
         {
             throw new InvalidOperationException("Can't add element to unmodifiable game object list");
         }
 
-        public override bool Remove(GameObject updatable)
+        public override bool Remove(VisualElement updatable)
         {
             throw new InvalidOperationException("Can't remove element from unmodifiable game object list");
         }
@@ -64,7 +64,7 @@ namespace BomberEngine.Core.Visual
             return 0;
         }
 
-        public override bool Contains(GameObject updatable)
+        public override bool Contains(VisualElement updatable)
         {
             return false;
         }
@@ -75,7 +75,7 @@ namespace BomberEngine.Core.Visual
         }
     }
 
-    internal sealed class NullGameObject : GameObject
+    internal sealed class NullGameObject : VisualElement
     {
         public override void Update(float delta)
         {   

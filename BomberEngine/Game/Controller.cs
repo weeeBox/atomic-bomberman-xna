@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace BomberEngine.Game
 {
-    public class Controller : BaseObject
+    public class Controller : BaseElement
     {
         private ScenesManager sceneManager;
 

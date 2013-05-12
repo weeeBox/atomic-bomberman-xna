@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace BomberEngine.Core.Visual
 {
-    public abstract class GameObject : BaseObject
+    public abstract class VisualElement : BaseElement
     {
         public const float ALIGN_MIN = 0.0f;
         public const float ALIGN_CENTER = 0.5f;
@@ -36,21 +36,21 @@ namespace BomberEngine.Core.Visual
         public float parentAlignX;
         public float parentAlignY;
 
-        private GameObject parent;
+        private VisualElement parent;
 
-        private GameObjectList childList;
+        private VisualElementList childList;
 
-        public GameObject()
+        public VisualElement()
             : this(0, 0)
         {
         }
 
-        public GameObject(int width, int height)
+        public VisualElement(int width, int height)
             : this(0, 0, width, height)
         {
         }
 
-        public GameObject(float x, float y, int width, int height)
+        public VisualElement(float x, float y, int width, int height)
         {
             this.x = x;
             this.y = y;
@@ -70,7 +70,7 @@ namespace BomberEngine.Core.Visual
             parentAlignX = parentAlignY = alignX = alignY = ALIGN_MIN;
             parent = null;
 
-            childList = GameObjectList.Null;
+            childList = VisualElementList.Null;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -177,16 +177,16 @@ namespace BomberEngine.Core.Visual
 
         #region Hierarchy
 
-        public void AddChild(GameObject child)
+        public void AddChild(VisualElement child)
         {
             if (childList.IsNull())
             {
-                childList = new GameObjectList();
+                childList = new VisualElementList();
             }
             childList.Add(child);
         }
 
-        public void RemoveChild(GameObject child)
+        public void RemoveChild(VisualElement child)
         {
             if (childList.Count() > 0)
             {
@@ -194,12 +194,12 @@ namespace BomberEngine.Core.Visual
             }
         }
 
-        public GameObject getParent()
+        public VisualElement getParent()
         {
             return parent;
         }
 
-        public void SetParent(GameObject parent)
+        public void SetParent(VisualElement parent)
         {
             this.parent = parent;
         }

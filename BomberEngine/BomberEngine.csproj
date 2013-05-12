@@ -93,9 +93,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\BaseUpdatableList.cs" />
-    <Compile Include="Core\BaseObject.cs" />
+    <Compile Include="Core\BaseElement.cs" />
     <Compile Include="Core\Input\IGamePadListenerList.cs" />
-    <Compile Include="Core\Visual\GameObjectList.cs" />
+    <Compile Include="Core\Visual\VisualElementList.cs" />
     <Compile Include="Debugging\Commands\ConsoleCommand.cs" />
     <Compile Include="Debugging\Commands\ConsoleCommandRegister.cs" />
     <Compile Include="Debugging\Console.cs" />
@@ -123,7 +123,7 @@
     <Compile Include="Core\TimerManager.cs" />
     <Compile Include="Core\IUpdatable.cs" />
     <Compile Include="Core\UpdatableList.cs" />
-    <Compile Include="Core\Visual\GameObject.cs" />
+    <Compile Include="Core\Visual\VisualElement.cs" />
     <Compile Include="Core\Visual\Image.cs" />
     <Compile Include="Debugging\Debug.cs" />
     <Compile Include="Debugging\Log.cs" />
