@@ -182,7 +182,7 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Notifications
+        #region Listener Notifications
 
         private void NotifyStarted()
         {
@@ -224,7 +224,12 @@ namespace BomberEngine.Game
 
         public override bool OnKeyPressed(Keys key)
         {
-            return keyboardListeners.OnKeyPressed(key);
+            if (keyboardListeners.OnKeyPressed(key))
+            {
+                return true;
+            }
+
+            return TryMoveFocus(key);
         }
 
         public override bool OnKeyReleased(Keys key)
@@ -266,6 +271,75 @@ namespace BomberEngine.Game
         public override bool OnButtonReleased(ButtonEvent e)
         {
             return gamePadListeners.OnButtonReleased(e);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Focus
+
+        private bool TryMoveFocus(Keys key)
+        {
+            FocusDirection direction = FindFocusDirection(key);
+            if (direction != FocusDirection.None)
+            {
+                return TryMoveFocus(direction);
+            }
+            return false;
+        }
+
+        private bool TryMoveFocus(Buttons button)
+        {
+            FocusDirection direction = FindFocusDirection(button);
+            if (direction != FocusDirection.None)
+            {
+                return TryMoveFocus(direction);
+            }
+            return false;
+        }
+
+        public override bool TryMoveFocus(FocusDirection direction)
+        {
+            return rootView != null && rootView.TryMoveFocus(direction);
+        }
+
+        protected virtual FocusDirection FindFocusDirection(Keys key)
+        {
+            switch (key)
+            {
+                case Keys.Down:
+                    return FocusDirection.Down;
+                case Keys.Up:
+                    return FocusDirection.Up;
+                case Keys.Left:
+                    return FocusDirection.Left;
+                case Keys.Right:
+                    return FocusDirection.Right;
+            }
+
+            return FocusDirection.None;
+        }
+
+        protected virtual FocusDirection FindFocusDirection(Buttons button)
+        {
+            switch (button)
+            {
+                case Buttons.DPadDown:
+                case Buttons.LeftThumbstickDown:
+                    return FocusDirection.Down;
+                case Buttons.DPadUp:
+                case Buttons.LeftThumbstickUp:
+                    return FocusDirection.Up;
+                case Buttons.DPadLeft:
+                case Buttons.LeftThumbstickLeft:
+                    return FocusDirection.Left;
+                case Buttons.DPadRight:
+                case Buttons.LeftThumbstickRight:
+                    return FocusDirection.Right;
+            }
+
+            return FocusDirection.None;
         }
 
         #endregion

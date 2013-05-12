@@ -7,6 +7,11 @@ namespace BomberEngine.Core.Visual.UI
 {
     public class View : VisualElement
     {
+        public enum FocusDirection
+        {
+            None, Up, Down, Left, Right
+        }
+
         public int id;
 
         public bool visible;
@@ -38,6 +43,11 @@ namespace BomberEngine.Core.Visual.UI
         public void requestFocus()
         {
 
+        }
+
+        public virtual bool TryMoveFocus(FocusDirection direction)
+        {
+            return false;
         }
 
         #endregion
