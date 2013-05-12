@@ -30,19 +30,19 @@ namespace BomberEngine.Core.Input
             return listeners.Remove(listener);
         }
 
-        public void ButtonPressed(ButtonEvent e)
+        public void OnButtonPressed(ButtonEvent e)
         {
             foreach (IGamePadListener l in listeners)
             {
-                l.ButtonPressed(e);
+                l.OnButtonPressed(e);
             }
         }
 
-        public void ButtonReleased(ButtonEvent e)
+        public void OnButtonReleased(ButtonEvent e)
         {
             foreach (IGamePadListener l in listeners)
             {
-                l.ButtonReleased(e);
+                l.OnButtonReleased(e);
             }
         }
     }

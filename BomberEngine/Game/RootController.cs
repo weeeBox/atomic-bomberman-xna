@@ -106,14 +106,14 @@ namespace BomberEngine.Game
             currentController.OnKeyReleased(key);
         }
 
-        public override void ButtonPressed(ButtonEvent e)
+        public override void OnButtonPressed(ButtonEvent e)
         {
-            currentController.ButtonPressed(e);
+            currentController.OnButtonPressed(e);
         }
 
-        public override void ButtonReleased(ButtonEvent e)
+        public override void OnButtonReleased(ButtonEvent e)
         {
-            currentController.ButtonReleased(e);
+            currentController.OnButtonReleased(e);
         }
 
         public override void GamePadConnected(int playerIndex)

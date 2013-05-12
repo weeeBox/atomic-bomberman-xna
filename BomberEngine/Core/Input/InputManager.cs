@@ -111,11 +111,11 @@ namespace BomberEngine.Core.Input
                 Buttons button = CHECK_BUTTONS[buttonIndex];
                 if (IsButtonDown(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
                 {
-                    gamePadListener.ButtonPressed(new ButtonEvent(gamePadIndex, button));
+                    gamePadListener.OnButtonPressed(new ButtonEvent(gamePadIndex, button));
                 }
                 else if (IsButtonUp(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
                 {
-                    gamePadListener.ButtonReleased(new ButtonEvent(gamePadIndex, button));
+                    gamePadListener.OnButtonReleased(new ButtonEvent(gamePadIndex, button));
                 }
             }
         }

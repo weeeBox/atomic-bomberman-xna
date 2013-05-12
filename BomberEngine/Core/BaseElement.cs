@@ -26,11 +26,11 @@ namespace BomberEngine.Core
         {   
         }
 
-        public virtual void ButtonPressed(ButtonEvent e)
+        public virtual void OnButtonPressed(ButtonEvent e)
         {
         }
 
-        public virtual void ButtonReleased(ButtonEvent e)
+        public virtual void OnButtonReleased(ButtonEvent e)
         {
         }
 

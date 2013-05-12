@@ -85,7 +85,7 @@ namespace Bomberman.Game.Elements.Players.Input
             actionLookup.Add(button, action);
         }
 
-        public void ButtonPressed(ButtonEvent e)
+        public void OnButtonPressed(ButtonEvent e)
         {
             if (e.playerIndex == playerIndex)
             {
@@ -97,7 +97,7 @@ namespace Bomberman.Game.Elements.Players.Input
             }
         }
 
-        public void ButtonReleased(ButtonEvent e)
+        public void OnButtonReleased(ButtonEvent e)
         {
             if (e.playerIndex == playerIndex)
             {
