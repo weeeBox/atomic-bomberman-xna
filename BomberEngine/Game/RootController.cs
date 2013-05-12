@@ -96,14 +96,14 @@ namespace BomberEngine.Game
 
         #region InputListener
 
-        public override void OnKeyPressed(Keys key)
+        public override bool OnKeyPressed(Keys key)
         {
-            currentController.OnKeyPressed(key);
+            return currentController.OnKeyPressed(key);
         }
 
-        public override void OnKeyReleased(Keys key)
+        public override bool OnKeyReleased(Keys key)
         {
-            currentController.OnKeyReleased(key);
+            return currentController.OnKeyReleased(key);
         }
 
         public override void OnButtonPressed(ButtonEvent e)

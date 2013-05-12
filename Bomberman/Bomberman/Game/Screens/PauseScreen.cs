@@ -28,12 +28,15 @@ namespace Bomberman.Game.Screens
             PostDraw(context);
         }
 
-        public override void OnKeyPressed(Keys key)
+        public override bool OnKeyPressed(Keys key)
         {
             if (key == Keys.Escape)
             {
                 Finish();
+                return true;
             }
+
+            return false;
         }
     }
 }

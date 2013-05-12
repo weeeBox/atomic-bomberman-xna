@@ -21,22 +21,28 @@ namespace Bomberman.Game.Elements.Players.Input
             actionLookup.Add(key, action);
         }
 
-        public void OnKeyPressed(Keys key)
+        public bool OnKeyPressed(Keys key)
         {
             PlayerAction action = GetAction(key);
             if (action != PlayerAction.Count)
             {
                 NotifyActionPressed(action);
+                return true;
             }
+
+            return false;
         }
 
-        public void OnKeyReleased(Keys key)
+        public bool OnKeyReleased(Keys key)
         {
             PlayerAction action = GetAction(key);
             if (action != PlayerAction.Count)
             {
                 NotifyActionReleased(action);
+                return true;
             }
+
+            return false;
         }
 
         private PlayerAction GetAction(Keys key)

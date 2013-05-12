@@ -270,7 +270,7 @@ namespace BomberEngine.Debugging
             get { return m_lines; }
         }
 
-        public override void OnKeyPressed(Keys key)
+        public override bool OnKeyPressed(Keys key)
         {
             if (key >= Keys.A && key <= Keys.Z)
             {
@@ -281,47 +281,63 @@ namespace BomberEngine.Debugging
                 }
 
                 EnterChar(chr);
+                return true;
             }
-            else if (key >= Keys.D0 && key <= Keys.D9 || key >= Keys.NumPad0 && key <= Keys.NumPad9)
+
+            if (key >= Keys.D0 && key <= Keys.D9 || key >= Keys.NumPad0 && key <= Keys.NumPad9)
             {
                 EnterChar((char)key);
+                return true;
             }
-            //else if (additionalInputKeys.Contains(key))
-            //{
-            //    EnterChar((char)key);
-            //}
-            else if (key == Keys.Left)
+
+            if (key == Keys.Left)
             {
                 MoveCursorLeft();
+                return true;
             }
-            else if (key == Keys.Right)
+
+            if (key == Keys.Right)
             {
                 MoveCursorRight();
+                return true;
             }
-            else if (key == Keys.Back)
+
+            if (key == Keys.Back)
             {
                 DeleteChar();
+                return true;
             }
-            else if (key == Keys.Enter)
+
+            if (key == Keys.Enter)
             {
                 TryExecuteCommand();
+                return true;
             }
-            else if (key == Keys.Tab)
+
+            if (key == Keys.Tab)
             {
                 DoAutoComplete();
+                return true;
             }
-            else if (key == Keys.LeftShift || key == Keys.RightShift)
+
+            if (key == Keys.LeftShift || key == Keys.RightShift)
             {
                 shiftPressed = true;
+                return true;
             }
+
+            return false;
         }
 
-        public override void OnKeyReleased(Keys key)
+        public override bool OnKeyReleased(Keys key)
         {   
             if (key == Keys.LeftShift || key == Keys.RightShift)
             {
                 shiftPressed = false;
+                return true;
             }
+
+            return false;
         }
     }
 }

@@ -45,15 +45,20 @@ namespace Bomberman
             return console;
         }
 
-        public override void OnKeyPressed(Keys key)
+        public override bool OnKeyPressed(Keys key)
         {
+            if (base.OnKeyPressed(key))
+            {
+                return true;
+            }
+
             if (key == Keys.Oem8)
             {
                 ToggleConsole();
-                return;
+                return true;
             }
 
-            base.OnKeyPressed(key);
+            return false;
         }
     }
 }

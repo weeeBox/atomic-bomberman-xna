@@ -66,14 +66,14 @@ namespace BomberEngine.Game
             screenManager.StartScreen(screen, false);
         }
 
-        public override void OnKeyPressed(Keys key)
+        public override bool OnKeyPressed(Keys key)
         {
-            screenManager.OnKeyPressed(key);
+            return screenManager.OnKeyPressed(key);
         }
 
-        public override void OnKeyReleased(Keys key)
+        public override bool OnKeyReleased(Keys key)
         {
-            screenManager.OnKeyReleased(key);
+            return screenManager.OnKeyReleased(key);
         }
 
         public override void OnButtonPressed(ButtonEvent e)

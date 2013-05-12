@@ -33,7 +33,7 @@ namespace Bomberman.Game
             lookup[Keys.OemMinus] = Powerups.Jelly;
         }
 
-        public void OnKeyPressed(Keys key)
+        public bool OnKeyPressed(Keys key)
         {
             List<Player> players = game.GetPlayers().list;
             Player player = players[0];
@@ -42,12 +42,15 @@ namespace Bomberman.Game
             {
                 int powerupIndex = lookup[key];
                 player.TryAddPowerup(powerupIndex);
+                return true;
             }
+
+            return false;
         }
 
-        public void OnKeyReleased(Keys key)
+        public bool OnKeyReleased(Keys key)
         {
-            
+            return false;
         }
     }
 }

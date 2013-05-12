@@ -18,12 +18,14 @@ namespace BomberEngine.Core
         {
         }
 
-        public virtual void OnKeyPressed(Keys key)
-        {   
+        public virtual bool OnKeyPressed(Keys key)
+        {
+            return false;
         }
 
-        public virtual void OnKeyReleased(Keys key)
-        {   
+        public virtual bool OnKeyReleased(Keys key)
+        {
+            return false;
         }
 
         public virtual void OnButtonPressed(ButtonEvent e)
