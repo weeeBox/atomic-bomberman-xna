@@ -20,7 +20,7 @@ namespace BomberEngine.Game
         private DrawableList drawableList;
 
         private KeyboardListenerList keyboardListeners;
-        private IGamePadListenerList gamePadListeners;
+        private GamePadListenerList gamePadListeners;
 
         public ScreenManager screenManager;
         public ScreenListener listener;
@@ -38,7 +38,7 @@ namespace BomberEngine.Game
         {
             timerManager = new TimerManager();
             keyboardListeners = new KeyboardListenerList();
-            gamePadListeners = new IGamePadListenerList();
+            gamePadListeners = new GamePadListenerList();
 
             updatableList = UpdatableList.Null;
             drawableList = DrawableList.Null;

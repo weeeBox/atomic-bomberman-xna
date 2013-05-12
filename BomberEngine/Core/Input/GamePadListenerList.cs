@@ -6,11 +6,11 @@ using BomberEngine.Util;
 
 namespace BomberEngine.Core.Input
 {
-    public class IGamePadListenerList : IGamePadListener
+    public class GamePadListenerList : IGamePadListener
     {
         private ConcurrentList<IGamePadListener> listeners;
 
-        public IGamePadListenerList()
+        public GamePadListenerList()
         {
             listeners = new ConcurrentList<IGamePadListener>();
         }
