@@ -42,19 +42,19 @@ namespace BomberEngine.Core
         {
         }
 
-        public virtual void PointerMoved(int x, int y, int fingerId)
+        public virtual void OnPointerMoved(int x, int y, int fingerId)
         {
         }
 
-        public virtual void PointerPressed(int x, int y, int fingerId)
+        public virtual void OnPointerPressed(int x, int y, int fingerId)
         {
         }
 
-        public virtual void PointerDragged(int x, int y, int fingerId)
+        public virtual void OnPointerDragged(int x, int y, int fingerId)
         {
         }
 
-        public virtual void PointerReleased(int x, int y, int fingerId)
+        public virtual void OnPointerReleased(int x, int y, int fingerId)
         {
         }
     }

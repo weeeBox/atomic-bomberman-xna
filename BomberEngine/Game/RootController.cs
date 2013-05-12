@@ -126,24 +126,24 @@ namespace BomberEngine.Game
             currentController.GamePadDisconnected(playerIndex);
         }
 
-        public override void PointerMoved(int x, int y, int fingerId)
+        public override void OnPointerMoved(int x, int y, int fingerId)
         {
-            currentController.PointerMoved(x, y, fingerId);
+            currentController.OnPointerMoved(x, y, fingerId);
         }
 
-        public override void PointerPressed(int x, int y, int fingerId)
+        public override void OnPointerPressed(int x, int y, int fingerId)
         {
-            currentController.PointerPressed(x, y, fingerId);
+            currentController.OnPointerPressed(x, y, fingerId);
         }
 
-        public override void PointerDragged(int x, int y, int fingerId)
+        public override void OnPointerDragged(int x, int y, int fingerId)
         {
-            currentController.PointerDragged(x, y, fingerId);
+            currentController.OnPointerDragged(x, y, fingerId);
         }
 
-        public override void PointerReleased(int x, int y, int fingerId)
+        public override void OnPointerReleased(int x, int y, int fingerId)
         {
-            currentController.PointerReleased(x, y, fingerId);
+            currentController.OnPointerReleased(x, y, fingerId);
         }
 
         #endregion
