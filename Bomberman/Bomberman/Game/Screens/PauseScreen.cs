@@ -7,13 +7,13 @@ using BomberEngine.Core.Visual;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Bomberman.Game.Scenes
+namespace Bomberman.Game.Screens
 {
-    public class PauseScene : Screen
+    public class PauseScreen : Screen
     {
         private Color backColor;
 
-        public PauseScene()
+        public PauseScreen()
         {
             backColor = new Color(0.0f, 0.0f, 0.0f, 0.25f);
             allowsDrawPrevious = true;

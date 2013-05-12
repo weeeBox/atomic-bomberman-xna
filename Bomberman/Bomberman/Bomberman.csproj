@@ -155,12 +155,12 @@
     <Compile Include="Game\GameCheats.cs" />
     <Compile Include="Game\GameController.cs" />
     <Compile Include="Game\Game.cs" />
-    <Compile Include="Game\Scenes\PauseScene.cs" />
-    <Compile Include="Game\Scenes\PowerupsDrawable.cs" />
+    <Compile Include="Game\Screens\PauseScreen.cs" />
+    <Compile Include="Game\Screens\PowerupsDrawable.cs" />
     <Compile Include="Game\Settings.cs" />
     <Compile Include="Game\Helper.cs" />
     <Compile Include="Game\Match.cs" />
-    <Compile Include="Game\Scenes\GameScene.cs" />
+    <Compile Include="Game\Screens\GameScreen.cs" />
     <Compile Include="Game\StartupController.cs" />
     <Compile Include="Game\Util.cs" />
     <Compile Include="Menu\MainMenuScene.cs" />

@@ -11,7 +11,7 @@ using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements;
 using Microsoft.Xna.Framework;
 
-namespace Bomberman.Game.Scenes
+namespace Bomberman.Game.Screens
 {
     public class PowerupsDrawable : VisualElement
     {   

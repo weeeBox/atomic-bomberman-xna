@@ -7,12 +7,12 @@ namespace BomberEngine.Game
 {
     public interface ScreenListener
     {
-        void OnSceneStarted(Screen scene);
+        void OnScreenStarted(Screen screen);
 
-        void OnSceneSuspended(Screen scene);
+        void OnScreenSuspended(Screen screen);
 
-        void OnSceneResumed(Screen scene);
+        void OnScreenResumed(Screen screen);
 
-        void OnSceneStoped(Screen scene);
+        void OnScreenStoped(Screen screen);
     }
 }

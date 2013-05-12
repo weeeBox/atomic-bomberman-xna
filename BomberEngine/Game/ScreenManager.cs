@@ -12,15 +12,15 @@ namespace BomberEngine.Game
 {
     public class ScreenManager : BaseElement
     {   
-        private List<Screen> scenes;
+        private List<Screen> screens;
         private UpdatableList updatables;
         private DrawableList drawables;
 
-        private Screen currentScene;
+        private Screen currentScreen;
 
         public ScreenManager()
         {
-            scenes = new List<Screen>();
+            screens = new List<Screen>();
             updatables = new UpdatableList();
             drawables = new DrawableList();
         }
@@ -53,153 +53,153 @@ namespace BomberEngine.Game
 
         public override void OnKeyPressed(Keys key)
         {
-            currentScene.OnKeyPressed(key);
+            currentScreen.OnKeyPressed(key);
         }
 
         public override void OnKeyReleased(Keys key)
         {
-            currentScene.OnKeyReleased(key);
+            currentScreen.OnKeyReleased(key);
         }
 
         public override void OnButtonPressed(ButtonEvent e)
         {
-            currentScene.OnButtonPressed(e);
+            currentScreen.OnButtonPressed(e);
         }
 
         public override void OnButtonReleased(ButtonEvent e)
         {
-            currentScene.OnButtonReleased(e);
+            currentScreen.OnButtonReleased(e);
         }
 
         public override void GamePadConnected(int playerIndex)
         {
-            currentScene.GamePadConnected(playerIndex);
+            currentScreen.GamePadConnected(playerIndex);
         }
 
         public override void GamePadDisconnected(int playerIndex)
         {
-            currentScene.GamePadDisconnected(playerIndex);
+            currentScreen.GamePadDisconnected(playerIndex);
         }
 
         public override void OnPointerMoved(int x, int y, int fingerId)
         {
-            currentScene.OnPointerMoved(x, y, fingerId);
+            currentScreen.OnPointerMoved(x, y, fingerId);
         }
 
         public override void OnPointerPressed(int x, int y, int fingerId)
         {
-            currentScene.OnPointerPressed(x, y, fingerId);
+            currentScreen.OnPointerPressed(x, y, fingerId);
         }
 
         public override void OnPointerDragged(int x, int y, int fingerId)
         {
-            currentScene.OnPointerDragged(x, y, fingerId);
+            currentScreen.OnPointerDragged(x, y, fingerId);
         }
 
         public override void OnPointerReleased(int x, int y, int fingerId)
         {
-            currentScene.OnPointerReleased(x, y, fingerId);
+            currentScreen.OnPointerReleased(x, y, fingerId);
         }
 
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Scene Container
+        #region Screen Container
 
-        public void StartScene(Screen scene)
+        public void StartScreen(Screen screen)
         {
-            StartScene(scene, false);
+            StartScreen(screen, false);
         }
 
-        public void StartScene(Screen scene, bool replaceCurrent)
+        public void StartScreen(Screen screen, bool replaceCurrent)
         {
-            if (scenes.Contains(scene))
+            if (screens.Contains(screen))
             {
-                throw new InvalidOperationException("Scene already started: " + scene);
+                throw new InvalidOperationException("Screen already started: " + screen);
             }
 
-            if (currentScene != null)
+            if (currentScreen != null)
             {
                 if (replaceCurrent)
                 {
-                    currentScene.Stop();
-                    currentScene.screenManager = null;
+                    currentScreen.Stop();
+                    currentScreen.screenManager = null;
                 }
                 else
                 {
-                    if (!scene.allowsUpdatePrevious)
+                    if (!screen.allowsUpdatePrevious)
                     {
-                        currentScene.Suspend();
-                        updatables.Remove(currentScene);
+                        currentScreen.Suspend();
+                        updatables.Remove(currentScreen);
                     }
 
-                    if (!scene.allowsDrawPrevious)
+                    if (!screen.allowsDrawPrevious)
                     {   
-                        drawables.Remove(currentScene);
+                        drawables.Remove(currentScreen);
                     }
                 }
             }
 
-            currentScene = scene;
+            currentScreen = screen;
 
-            scenes.Add(scene);
-            scene.screenManager = this;
-            scene.Start();
+            screens.Add(screen);
+            screen.screenManager = this;
+            screen.Start();
 
-            updatables.Add(scene);
-            drawables.Add(scene);
+            updatables.Add(screen);
+            drawables.Add(screen);
         }
 
-        public void RemoveScene(Screen scene)
+        public void RemoveScreen(Screen screen)
         {
-            if (scene.screenManager != this)
+            if (screen.screenManager != this)
             {
-                throw new InvalidOperationException("Scene doesn't belong to this container: " + scene);
+                throw new InvalidOperationException("Screen doesn't belong to this container: " + screen);
             }
 
-            if (!scenes.Contains(scene))
+            if (!screens.Contains(screen))
             {
-                throw new InvalidOperationException("Scene manager doesn't contain the scene: " + scene);   
+                throw new InvalidOperationException("Screen manager doesn't contain the screen: " + screen);   
             }
 
-            scene.screenManager = null;
+            screen.screenManager = null;
             
-            scenes.Remove(scene);
-            updatables.Remove(scene);
-            drawables.Remove(scene);
+            screens.Remove(screen);
+            updatables.Remove(screen);
+            drawables.Remove(screen);
 
-            if (scene == currentScene)
+            if (screen == currentScreen)
             {
-                if (scenes.Count > 0)
+                if (screens.Count > 0)
                 {
-                    currentScene = scenes[scenes.Count - 1];
-                    if (!scene.allowsDrawPrevious)
+                    currentScreen = screens[screens.Count - 1];
+                    if (!screen.allowsDrawPrevious)
                     {
-                        drawables.Add(currentScene);
+                        drawables.Add(currentScreen);
                     }
 
-                    if (!scene.allowsUpdatePrevious)
+                    if (!screen.allowsUpdatePrevious)
                     {
-                        currentScene.Resume();
-                        updatables.Add(currentScene);
+                        currentScreen.Resume();
+                        updatables.Add(currentScreen);
                     }
                 }
                 else
                 {
-                    currentScene = null;
+                    currentScreen = null;
                 }
             }
         }
 
-        public Screen CurrentScene()
+        public Screen CurrentScreen()
         {
-            return currentScene;
+            return currentScreen;
         }
 
-        public bool IsCurrent(Screen scene)
+        public bool IsCurrent(Screen screen)
         {
-            return CurrentScene() == scene;
+            return CurrentScreen() == screen;
         }
 
         #endregion

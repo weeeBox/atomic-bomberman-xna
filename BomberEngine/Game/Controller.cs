@@ -11,11 +11,11 @@ namespace BomberEngine.Game
 {
     public class Controller : BaseElement
     {
-        private ScreenManager sceneManager;
+        private ScreenManager screenManager;
 
         public Controller()
         {
-            sceneManager = new ScreenManager();
+            screenManager = new ScreenManager();
         }
 
         public void Start()
@@ -30,12 +30,12 @@ namespace BomberEngine.Game
 
         public override void Update(float delta)
         {
-            sceneManager.Update(delta);
+            screenManager.Update(delta);
         }
 
         public override void Draw(Context context)
         {
-            sceneManager.Draw(context);
+            screenManager.Draw(context);
         }
 
         protected virtual void OnStart()
@@ -46,74 +46,74 @@ namespace BomberEngine.Game
         {
         }
 
-        public Screen CurrentScene()
+        public Screen CurrentScreen()
         {
-            return sceneManager.CurrentScene();
+            return screenManager.CurrentScreen();
         }
 
-        public bool IsCurrentScene(Screen scene)
+        public bool IsCurrentScreen(Screen screen)
         {
-            return sceneManager.IsCurrent(scene);
+            return screenManager.IsCurrent(screen);
         }
 
-        public void StartScene(Screen scene)
+        public void StartScreen(Screen screen)
         {
-            sceneManager.StartScene(scene, true);
+            screenManager.StartScreen(screen, true);
         }
 
-        public void StartNextScene(Screen scene)
+        public void StartNextScreen(Screen screen)
         {
-            sceneManager.StartScene(scene, false);
+            screenManager.StartScreen(screen, false);
         }
 
         public override void OnKeyPressed(Keys key)
         {
-            sceneManager.OnKeyPressed(key);
+            screenManager.OnKeyPressed(key);
         }
 
         public override void OnKeyReleased(Keys key)
         {
-            sceneManager.OnKeyReleased(key);
+            screenManager.OnKeyReleased(key);
         }
 
         public override void OnButtonPressed(ButtonEvent e)
         {
-            sceneManager.OnButtonPressed(e);
+            screenManager.OnButtonPressed(e);
         }
 
         public override void OnButtonReleased(ButtonEvent e)
         {
-            sceneManager.OnButtonReleased(e);
+            screenManager.OnButtonReleased(e);
         }
 
         public override void GamePadConnected(int playerIndex)
         {
-            sceneManager.GamePadConnected(playerIndex);
+            screenManager.GamePadConnected(playerIndex);
         }
 
         public override void GamePadDisconnected(int playerIndex)
         {
-            sceneManager.GamePadDisconnected(playerIndex);
+            screenManager.GamePadDisconnected(playerIndex);
         }
 
         public override void OnPointerMoved(int x, int y, int fingerId)
         {
-            sceneManager.OnPointerMoved(x, y, fingerId);
+            screenManager.OnPointerMoved(x, y, fingerId);
         }
 
         public override void OnPointerPressed(int x, int y, int fingerId)
         {
-            sceneManager.OnPointerPressed(x, y, fingerId);
+            screenManager.OnPointerPressed(x, y, fingerId);
         }
 
         public override void OnPointerDragged(int x, int y, int fingerId)
         {
-            sceneManager.OnPointerDragged(x, y, fingerId);
+            screenManager.OnPointerDragged(x, y, fingerId);
         }
 
         public override void OnPointerReleased(int x, int y, int fingerId)
         {
-            sceneManager.OnPointerReleased(x, y, fingerId);
+            screenManager.OnPointerReleased(x, y, fingerId);
         }
     }
 }

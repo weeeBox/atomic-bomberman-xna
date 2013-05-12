@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BomberEngine.Game;
-using Bomberman.Game.Scenes;
+using Bomberman.Game.Screens;
 using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements.Players.Input;
 using Microsoft.Xna.Framework.Input;
@@ -16,7 +16,7 @@ namespace Bomberman.Game
 {
     public class GameController : Controller
     {
-        private GameScene gameScene;
+        private GameScreen gameScreen;
         private GameCheats cheats;
 
         private Game game;
@@ -30,7 +30,7 @@ namespace Bomberman.Game
 
             InitField(A.sch_X);
 
-            gameScene = new GameScene();
+            gameScreen = new GameScreen();
 
             InitPlayers();
             InitCheats();
@@ -47,7 +47,7 @@ namespace Bomberman.Game
             keyboardInput1.Map(Keys.D, PlayerAction.Right);
             keyboardInput1.Map(Keys.OemCloseBrackets, PlayerAction.Bomb);
             keyboardInput1.Map(Keys.OemOpenBrackets, PlayerAction.Special);
-            gameScene.AddKeyboardListener(keyboardInput1);
+            gameScreen.AddKeyboardListener(keyboardInput1);
 
             players[0].SetPlayerInput(keyboardInput1);
 
@@ -56,15 +56,15 @@ namespace Bomberman.Game
             keyboardInput2.Map(Keys.Left, PlayerAction.Left);
             keyboardInput2.Map(Keys.Down, PlayerAction.Down);
             keyboardInput2.Map(Keys.Right, PlayerAction.Right);
-            gameScene.AddKeyboardListener(keyboardInput2);
+            gameScreen.AddKeyboardListener(keyboardInput2);
 
             players[1].SetPlayerInput(keyboardInput2);
 
             PlayerGamePadInput gamePadInput = new PlayerGamePadInput(0);
             gamePadInput.Map(Buttons.A, PlayerAction.Bomb);
             gamePadInput.Map(Buttons.B, PlayerAction.Special);
-            gameScene.AddGamePadListener(gamePadInput);
-            gameScene.AddUpdatabled(gamePadInput);
+            gameScreen.AddGamePadListener(gamePadInput);
+            gameScreen.AddUpdatabled(gamePadInput);
 
             players[2].SetPlayerInput(gamePadInput);
         }
@@ -72,7 +72,7 @@ namespace Bomberman.Game
         private void InitCheats()
         {
             cheats = new GameCheats(game);
-            gameScene.AddKeyboardListener(cheats);
+            gameScreen.AddKeyboardListener(cheats);
         }
 
         private void InitField(int schemeId)
@@ -83,7 +83,7 @@ namespace Bomberman.Game
 
         protected override void OnStart()
         {
-            StartScene(gameScene);
+            StartScreen(gameScreen);
         }
     }
 }

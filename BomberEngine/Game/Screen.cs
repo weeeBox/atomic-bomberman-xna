@@ -188,7 +188,7 @@ namespace BomberEngine.Game
         {
             if (listener != null)
             {
-                listener.OnSceneStarted(this);
+                listener.OnScreenStarted(this);
             }
         }
 
@@ -196,7 +196,7 @@ namespace BomberEngine.Game
         {
             if (listener != null)
             {
-                listener.OnSceneSuspended(this);
+                listener.OnScreenSuspended(this);
             }
         }
 
@@ -204,7 +204,7 @@ namespace BomberEngine.Game
         {
             if (listener != null)
             {
-                listener.OnSceneResumed(this);
+                listener.OnScreenResumed(this);
             }
         }
 
@@ -212,7 +212,7 @@ namespace BomberEngine.Game
         {
             if (listener != null)
             {
-                listener.OnSceneStoped(this);
+                listener.OnScreenStoped(this);
             }
         }
 
@@ -272,25 +272,25 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Scenes management
+        #region Screens management
 
-        protected void StartScene(Screen scene)
+        protected void StartScreen(Screen screen)
         {
-            screenManager.StartScene(scene);
+            screenManager.StartScreen(screen);
         }
 
-        protected void StartNextScene(Screen scene)
+        protected void StartNextScreen(Screen screen)
         {
-            screenManager.StartScene(scene, false);
+            screenManager.StartScreen(screen, false);
         }
 
         private void RemoveFromContainer()
         {
             if (screenManager == null)
             {
-                throw new InvalidOperationException("Scene container is not set");
+                throw new InvalidOperationException("Screen container is not set");
             }
-            screenManager.RemoveScene(this);
+            screenManager.RemoveScreen(this);
         }
 
         #endregion

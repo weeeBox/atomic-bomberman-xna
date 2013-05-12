@@ -14,13 +14,13 @@ using Bomberman.Game.Elements.Players.Input;
 using Bomberman.Content;
 using Microsoft.Xna.Framework.Input;
 
-namespace Bomberman.Game.Scenes
+namespace Bomberman.Game.Screens
 {
-    public class GameScene : Screen
+    public class GameScreen : Screen
     {
         private Image fieldBackground;
 
-        public GameScene()
+        public GameScreen()
         {
             Field field = Game.Field();
             AddUpdatabled(field);
@@ -42,8 +42,8 @@ namespace Bomberman.Game.Scenes
 
             if (key == Keys.Escape)
             {
-                PauseScene pauseScene = new PauseScene();
-                StartNextScene(pauseScene);
+                PauseScreen pauseScreen = new PauseScreen();
+                StartNextScreen(pauseScreen);
             }
         }
     }

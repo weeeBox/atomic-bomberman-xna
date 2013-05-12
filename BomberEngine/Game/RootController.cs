@@ -79,13 +79,13 @@ namespace BomberEngine.Game
         {
             if (console != null)
             {
-                if (currentController.IsCurrentScene(console))
+                if (currentController.IsCurrentScreen(console))
                 {
                     console.Finish();
                 }
                 else
                 {
-                    currentController.StartNextScene(console);
+                    currentController.StartNextScreen(console);
                 }
             }
         }
