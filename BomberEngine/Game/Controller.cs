@@ -11,11 +11,11 @@ namespace BomberEngine.Game
 {
     public class Controller : BaseElement
     {
-        private ScenesManager sceneManager;
+        private SceneManager sceneManager;
 
         public Controller()
         {
-            sceneManager = new ScenesManager();
+            sceneManager = new SceneManager();
         }
 
         public void Start()

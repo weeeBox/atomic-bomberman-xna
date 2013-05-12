@@ -22,7 +22,7 @@ namespace BomberEngine.Game
         private KeyboardListenerList keyboardListeners;
         private IGamePadListenerList gamePadListeners;
 
-        public ScenesManager sceneManager;
+        public SceneManager sceneManager;
         public SceneListener listener;
 
         protected bool m_allowsDrawPrevious;
