@@ -99,7 +99,7 @@ namespace BomberEngine.Core.Visual
             childList.Draw(context);
         }
 
-        public virtual void PreDraw(Context context)
+        protected virtual void PreDraw(Context context)
         {
             // align to parent
             translateX = x - width * alignX;
@@ -151,13 +151,13 @@ namespace BomberEngine.Core.Visual
             }
         }
 
-        public virtual void PostDraw(Context context)
+        protected virtual void PostDraw(Context context)
         {
             DrawChildren(context);
             RestoreTransformations(context);
         }
 
-        public void RestoreTransformations(Context context)
+        protected void RestoreTransformations(Context context)
         {
             if (color != Color.White)
             {

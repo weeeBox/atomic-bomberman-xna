@@ -10,7 +10,8 @@ namespace BomberEngine.Core.Visual
     {
         private TextureImage texture;
 
-        public Image(TextureImage texture) : base(texture.GetWidth(), texture.GetHeight())
+        public Image(TextureImage texture)
+            : base(texture.GetWidth(), texture.GetHeight())
         {
             this.texture = texture;
         }

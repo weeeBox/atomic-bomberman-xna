@@ -9,7 +9,7 @@ namespace BomberEngine.Core
 {
     public class DrawableList : IDrawable, Collection<IDrawable>
     {
-        public static readonly DrawableList Empty = new UnmmodifiableDrawbleList();
+        public static readonly DrawableList Null = new NullDrawbleList();
 
         private ObjectsList<IDrawable> list;
 
@@ -56,9 +56,14 @@ namespace BomberEngine.Core
         {
             return list.Contains(drawable);
         }
+
+        public virtual bool IsNull()
+        {
+            return false;
+        }
     }
 
-    sealed class UnmmodifiableDrawbleList : DrawableList
+    sealed class NullDrawbleList : DrawableList
     {
         public override void Draw(Context context)
         {   
@@ -87,6 +92,11 @@ namespace BomberEngine.Core
         public override bool Contains(IDrawable drawable)
         {
             return false;
+        }
+
+        public override bool IsNull()
+        {
+            return true;
         }
     }
 }

@@ -6,26 +6,26 @@ using BomberEngine.Core;
 using BomberEngine.Core.Input;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core.Visual;
+using BomberEngine.Core.Visual.UI;
 
 namespace BomberEngine.Game
 {
-    public class Scene : VisualElement
+    public class Scene : View
     {
+        public View rootView;
+
         private TimerManager timerManager;
 
-        private UpdatableList updatablesList;
-
+        private UpdatableList updatableList;
         private DrawableList drawableList;
 
         private KeyboardListenerList keyboardListeners;
         private IGamePadListenerList gamePadListeners;
 
         public ScenesManager sceneManager;
-
         public SceneListener listener;
 
         protected bool m_allowsDrawPrevious;
-
         protected bool m_allowsUpdatePrevious;
 
         public Scene()
@@ -37,10 +37,11 @@ namespace BomberEngine.Game
             : base(width, height)
         {
             timerManager = new TimerManager();
-            updatablesList = new UpdatableList();
-            drawableList = new DrawableList();
             keyboardListeners = new KeyboardListenerList();
             gamePadListeners = new IGamePadListenerList();
+
+            updatableList = UpdatableList.Null;
+            drawableList = DrawableList.Null;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -109,17 +110,27 @@ namespace BomberEngine.Game
 
         public override void Update(float delta)
         {
-            updatablesList.Update(delta);
+            base.Update(delta);
+
+            updatableList.Update(delta);
+            timerManager.Update(delta);
         }
 
         public void AddUpdatabled(IUpdatable updatable)
         {
-            updatablesList.Add(updatable);
+            if (updatableList.IsNull())
+            {
+                updatableList = new UpdatableList();
+            }
+            updatableList.Add(updatable);
         }
 
         public void RemoveUpdatable(IUpdatable updatable)
         {
-            updatablesList.Remove(updatable);
+            if (updatableList.Count() > 0)
+            {
+                updatableList.Remove(updatable);
+            }
         }
 
         #endregion
@@ -130,37 +141,25 @@ namespace BomberEngine.Game
 
         public override void Draw(Context context)
         {
-            PreDraw(context);
+            base.Draw(context);
             drawableList.Draw(context);
-            PostDraw(context);
         }
 
         public void AddDrawable(IDrawable drawable)
         {
+            if (drawableList.IsNull())
+            {
+                drawableList = new DrawableList();
+            }
             drawableList.Add(drawable);
         }
 
         public void RemoveDrawable(IDrawable drawable)
         {
-            drawableList.Remove(drawable);
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Game Objects
-
-        protected void AddGameObject(BaseElement obj)
-        {
-            AddUpdatabled(obj);
-            AddDrawable(obj);
-        }
-
-        protected void RemoveGameObject(BaseElement obj)
-        {
-            RemoveUpdatable(obj);
-            RemoveDrawable(obj);
+            if (drawableList.Count() > 0)
+            {
+                drawableList.Remove(drawable);
+            }
         }
 
         #endregion
