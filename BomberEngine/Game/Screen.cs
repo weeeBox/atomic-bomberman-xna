@@ -258,14 +258,14 @@ namespace BomberEngine.Game
             return gamePadListeners.Remove(listener);
         }
 
-        public override void OnButtonPressed(ButtonEvent e)
+        public override bool OnButtonPressed(ButtonEvent e)
         {
-            gamePadListeners.OnButtonPressed(e);
+            return gamePadListeners.OnButtonPressed(e);
         }
 
-        public override void OnButtonReleased(ButtonEvent e)
+        public override bool OnButtonReleased(ButtonEvent e)
         {
-            gamePadListeners.OnButtonReleased(e);
+            return gamePadListeners.OnButtonReleased(e);
         }
 
         #endregion

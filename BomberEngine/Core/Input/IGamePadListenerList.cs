@@ -30,20 +30,24 @@ namespace BomberEngine.Core.Input
             return listeners.Remove(listener);
         }
 
-        public void OnButtonPressed(ButtonEvent e)
+        public bool OnButtonPressed(ButtonEvent e)
         {
+            bool handled = false;
             foreach (IGamePadListener l in listeners)
             {
-                l.OnButtonPressed(e);
+                handled |= l.OnButtonPressed(e);
             }
+            return handled;
         }
 
-        public void OnButtonReleased(ButtonEvent e)
+        public bool OnButtonReleased(ButtonEvent e)
         {
+            bool handled = false;
             foreach (IGamePadListener l in listeners)
             {
-                l.OnButtonReleased(e);
+                handled |= l.OnButtonReleased(e);
             }
+            return handled;
         }
     }
 }

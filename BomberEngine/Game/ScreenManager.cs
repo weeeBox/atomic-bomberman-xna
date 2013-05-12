@@ -61,14 +61,14 @@ namespace BomberEngine.Game
             return currentScreen.OnKeyReleased(key);
         }
 
-        public override void OnButtonPressed(ButtonEvent e)
+        public override bool OnButtonPressed(ButtonEvent e)
         {
-            currentScreen.OnButtonPressed(e);
+            return currentScreen.OnButtonPressed(e);
         }
 
-        public override void OnButtonReleased(ButtonEvent e)
+        public override bool OnButtonReleased(ButtonEvent e)
         {
-            currentScreen.OnButtonReleased(e);
+            return currentScreen.OnButtonReleased(e);
         }
 
         public override void GamePadConnected(int playerIndex)

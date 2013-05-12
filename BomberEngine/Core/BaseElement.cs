@@ -28,12 +28,14 @@ namespace BomberEngine.Core
             return false;
         }
 
-        public virtual void OnButtonPressed(ButtonEvent e)
+        public virtual bool OnButtonPressed(ButtonEvent e)
         {
+            return false;
         }
 
-        public virtual void OnButtonReleased(ButtonEvent e)
+        public virtual bool OnButtonReleased(ButtonEvent e)
         {
+            return false;
         }
 
         public virtual void GamePadConnected(int playerIndex)

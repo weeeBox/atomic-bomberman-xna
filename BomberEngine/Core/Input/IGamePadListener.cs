@@ -16,7 +16,7 @@ namespace BomberEngine.Core.Input
 
     public interface IGamePadListener
     {
-        void OnButtonPressed(ButtonEvent e);
-        void OnButtonReleased(ButtonEvent e);
+        bool OnButtonPressed(ButtonEvent e);
+        bool OnButtonReleased(ButtonEvent e);
     }
 }

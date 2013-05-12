@@ -85,7 +85,7 @@ namespace Bomberman.Game.Elements.Players.Input
             actionLookup.Add(button, action);
         }
 
-        public void OnButtonPressed(ButtonEvent e)
+        public bool OnButtonPressed(ButtonEvent e)
         {
             if (e.playerIndex == playerIndex)
             {
@@ -93,11 +93,13 @@ namespace Bomberman.Game.Elements.Players.Input
                 if (action != PlayerAction.Count)
                 {
                     NotifyActionPressed(action);
+                    return true;
                 }
             }
+            return false;
         }
 
-        public void OnButtonReleased(ButtonEvent e)
+        public bool OnButtonReleased(ButtonEvent e)
         {
             if (e.playerIndex == playerIndex)
             {
@@ -105,8 +107,10 @@ namespace Bomberman.Game.Elements.Players.Input
                 if (action != PlayerAction.Count)
                 {
                     NotifyActionReleased(action);
+                    return true;
                 }
             }
+            return false;
         }
 
         private void TryNofityAction(bool oldFlag, bool flag, PlayerAction action)
