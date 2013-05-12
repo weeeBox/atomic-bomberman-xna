@@ -18,11 +18,11 @@ namespace BomberEngine.Core
         {
         }
 
-        public virtual void KeyPressed(Keys key)
+        public virtual void OnKeyPressed(Keys key)
         {   
         }
 
-        public virtual void KeyReleased(Keys key)
+        public virtual void OnKeyReleased(Keys key)
         {   
         }
 

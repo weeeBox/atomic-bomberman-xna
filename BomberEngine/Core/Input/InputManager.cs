@@ -191,14 +191,14 @@ namespace BomberEngine.Core.Input
                 {
                     if (!oldKeys.Contains(newKeys[i]))
                     {
-                        keyboardListener.KeyPressed(newKeys[i]);
+                        keyboardListener.OnKeyPressed(newKeys[i]);
                     }
                 }
                 for (int i = 0; i < oldKeys.Length; ++i)
                 {
                     if (!newKeys.Contains(oldKeys[i]))
                     {
-                        keyboardListener.KeyReleased(oldKeys[i]);
+                        keyboardListener.OnKeyReleased(oldKeys[i]);
                     }
                 }
             }

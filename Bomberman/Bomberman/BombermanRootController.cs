@@ -45,7 +45,7 @@ namespace Bomberman
             return console;
         }
 
-        public override void KeyPressed(Keys key)
+        public override void OnKeyPressed(Keys key)
         {
             if (key == Keys.Oem8)
             {
@@ -53,7 +53,7 @@ namespace Bomberman
                 return;
             }
 
-            base.KeyPressed(key);
+            base.OnKeyPressed(key);
         }
     }
 }

@@ -66,14 +66,14 @@ namespace BomberEngine.Game
             sceneManager.StartScene(scene, false);
         }
 
-        public override void KeyPressed(Keys key)
+        public override void OnKeyPressed(Keys key)
         {
-            sceneManager.KeyPressed(key);
+            sceneManager.OnKeyPressed(key);
         }
 
-        public override void KeyReleased(Keys key)
+        public override void OnKeyReleased(Keys key)
         {
-            sceneManager.KeyReleased(key);
+            sceneManager.OnKeyReleased(key);
         }
 
         public override void ButtonPressed(ButtonEvent e)

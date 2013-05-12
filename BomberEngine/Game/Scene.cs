@@ -222,14 +222,14 @@ namespace BomberEngine.Game
 
         #region KeyboardListener
 
-        public override void KeyPressed(Keys key)
+        public override void OnKeyPressed(Keys key)
         {
-            keyboardListeners.KeyPressed(key);
+            keyboardListeners.OnKeyPressed(key);
         }
 
-        public override void KeyReleased(Keys key)
+        public override void OnKeyReleased(Keys key)
         {
-            keyboardListeners.KeyReleased(key);
+            keyboardListeners.OnKeyReleased(key);
         }
 
         public bool AddKeyboardListener(IKeyboardListener listener)

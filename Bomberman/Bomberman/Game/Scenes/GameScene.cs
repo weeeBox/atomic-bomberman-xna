@@ -36,9 +36,9 @@ namespace Bomberman.Game.Scenes
             AddChild(new PowerupsDrawable(field, 0, 0, Constant.FIELD_WIDTH, Constant.FIELD_OFFSET_Y));
         }
 
-        public override void KeyPressed(Keys key)
+        public override void OnKeyPressed(Keys key)
         {
-            base.KeyPressed(key);
+            base.OnKeyPressed(key);
 
             if (key == Keys.Escape)
             {

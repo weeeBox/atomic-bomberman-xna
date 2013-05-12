@@ -31,19 +31,19 @@ namespace BomberEngine.Core.Input
             return listeners.Remove(listener);
         }
 
-        public void KeyPressed(Keys key)
+        public void OnKeyPressed(Keys key)
         {
             foreach (IKeyboardListener l in listeners)
             {
-                l.KeyPressed(key);
+                l.OnKeyPressed(key);
             }
         }
 
-        public void KeyReleased(Keys key)
+        public void OnKeyReleased(Keys key)
         {
             foreach (IKeyboardListener l in listeners)
             {
-                l.KeyReleased(key);
+                l.OnKeyReleased(key);
             }
         }
     }

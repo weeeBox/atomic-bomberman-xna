@@ -21,7 +21,7 @@ namespace Bomberman.Game.Elements.Players.Input
             actionLookup.Add(key, action);
         }
 
-        public void KeyPressed(Keys key)
+        public void OnKeyPressed(Keys key)
         {
             PlayerAction action = GetAction(key);
             if (action != PlayerAction.Count)
@@ -30,7 +30,7 @@ namespace Bomberman.Game.Elements.Players.Input
             }
         }
 
-        public void KeyReleased(Keys key)
+        public void OnKeyReleased(Keys key)
         {
             PlayerAction action = GetAction(key);
             if (action != PlayerAction.Count)

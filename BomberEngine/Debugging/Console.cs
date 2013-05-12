@@ -270,7 +270,7 @@ namespace BomberEngine.Debugging
             get { return m_lines; }
         }
 
-        public override void KeyPressed(Keys key)
+        public override void OnKeyPressed(Keys key)
         {
             if (key >= Keys.A && key <= Keys.Z)
             {
@@ -316,7 +316,7 @@ namespace BomberEngine.Debugging
             }
         }
 
-        public override void KeyReleased(Keys key)
+        public override void OnKeyReleased(Keys key)
         {   
             if (key == Keys.LeftShift || key == Keys.RightShift)
             {

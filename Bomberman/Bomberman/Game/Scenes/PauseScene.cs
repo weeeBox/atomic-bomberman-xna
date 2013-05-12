@@ -28,7 +28,7 @@ namespace Bomberman.Game.Scenes
             PostDraw(context);
         }
 
-        public override void KeyPressed(Keys key)
+        public override void OnKeyPressed(Keys key)
         {
             if (key == Keys.Escape)
             {

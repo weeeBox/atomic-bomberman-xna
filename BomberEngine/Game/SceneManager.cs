@@ -51,14 +51,14 @@ namespace BomberEngine.Game
 
         #region InputListener methods
 
-        public override void KeyPressed(Keys key)
+        public override void OnKeyPressed(Keys key)
         {
-            currentScene.KeyPressed(key);
+            currentScene.OnKeyPressed(key);
         }
 
-        public override void KeyReleased(Keys key)
+        public override void OnKeyReleased(Keys key)
         {
-            currentScene.KeyReleased(key);
+            currentScene.OnKeyReleased(key);
         }
 
         public override void ButtonPressed(ButtonEvent e)
