@@ -99,11 +99,11 @@ namespace BomberEngine.Core.Input
 
             if (IsControllerConnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
             {
-                gamePadStateListener.GamePadConnected(gamePadIndex);
+                gamePadStateListener.OnGamePadConnected(gamePadIndex);
             }
             else if (IsControllerDisconnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
             {
-                gamePadStateListener.GamePadConnected(gamePadIndex);
+                gamePadStateListener.OnGamePadConnected(gamePadIndex);
             }
 
             for (int buttonIndex = 0; buttonIndex < CHECK_BUTTONS.Length; ++buttonIndex)

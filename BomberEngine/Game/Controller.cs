@@ -86,14 +86,14 @@ namespace BomberEngine.Game
             return screenManager.OnButtonReleased(e);
         }
 
-        public override void GamePadConnected(int playerIndex)
+        public override void OnGamePadConnected(int playerIndex)
         {
-            screenManager.GamePadConnected(playerIndex);
+            screenManager.OnGamePadConnected(playerIndex);
         }
 
-        public override void GamePadDisconnected(int playerIndex)
+        public override void OnGamePadDisconnected(int playerIndex)
         {
-            screenManager.GamePadDisconnected(playerIndex);
+            screenManager.OnGamePadDisconnected(playerIndex);
         }
 
         public override void OnPointerMoved(int x, int y, int fingerId)

@@ -38,11 +38,11 @@ namespace BomberEngine.Core
             return false;
         }
 
-        public virtual void GamePadConnected(int playerIndex)
+        public virtual void OnGamePadConnected(int playerIndex)
         {
         }
 
-        public virtual void GamePadDisconnected(int playerIndex)
+        public virtual void OnGamePadDisconnected(int playerIndex)
         {
         }
 
