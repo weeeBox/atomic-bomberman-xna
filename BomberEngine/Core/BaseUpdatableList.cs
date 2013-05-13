@@ -60,6 +60,16 @@ namespace BomberEngine.Core
             return false;
         }
 
+        public virtual T Get(int index)
+        {
+            return list[index];
+        }
+
+        public virtual int IndexOf(T updatable)
+        {
+            return list.IndexOf(updatable);
+        }
+
         public virtual void Remove(int index)
         {
             ++removedCount;

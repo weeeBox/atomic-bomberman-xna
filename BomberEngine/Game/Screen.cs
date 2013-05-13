@@ -7,12 +7,14 @@ using BomberEngine.Core.Input;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core.Visual;
 using BomberEngine.Core.Visual.UI;
+using BomberEngine.Debugging;
 
 namespace BomberEngine.Game
 {
     public class Screen : View
     {
-        public View rootView;
+        private View mRootView;
+        private View mFocusedView;
 
         private TimerManager timerManager;
 
@@ -43,6 +45,20 @@ namespace BomberEngine.Game
             updatableList = UpdatableList.Null;
             drawableList = DrawableList.Null;
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Root view
+
+        public void SetRootView(View view)
+        {
+            Debug.Assert(mRootView == null);
+
+            mRootView = view;
+            TryMoveFocus(FocusDirection.Down);
+        }
+
+        #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 
@@ -229,12 +245,33 @@ namespace BomberEngine.Game
                 return true;
             }
 
+            if (mFocusedView != null)
+            {
+                if (mFocusedView.OnKeyPressed(key))
+                {
+                    return true;
+                }
+            }
+
             return TryMoveFocus(key);
         }
 
         public override bool OnKeyReleased(Keys key)
         {
-            return keyboardListeners.OnKeyReleased(key);
+            if (keyboardListeners.OnKeyReleased(key))
+            {
+                return true;
+            }
+
+            if (mFocusedView != null)
+            {
+                if (mFocusedView.OnKeyReleased(key))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public bool AddKeyboardListener(IKeyboardListener listener)
@@ -283,7 +320,7 @@ namespace BomberEngine.Game
         {
             FocusDirection direction = FindFocusDirection(key);
             if (direction != FocusDirection.None)
-            {
+            {   
                 return TryMoveFocus(direction);
             }
             return false;
@@ -299,9 +336,47 @@ namespace BomberEngine.Game
             return false;
         }
 
-        public override bool TryMoveFocus(FocusDirection direction)
+        public virtual bool TryMoveFocus(FocusDirection direction)
         {
-            return rootView != null && rootView.TryMoveFocus(direction);
+            if (mFocusedView != null)
+            {
+                View parent = mFocusedView.GetParentView();
+                View view = parent.FindFocus(direction, mFocusedView);
+                if (view != null)
+                {
+                    FocusView(view);
+                    return true;
+                }
+            }
+            else
+            {
+                View view = mRootView.FindFocus(direction, null);
+                if (view != null)
+                {
+                    FocusView(view);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void FocusView(View view)
+        {
+            if (view != mFocusedView)
+            {
+                if (mFocusedView != null)
+                {
+                    mFocusedView.blur();
+                }
+
+                if (view != null)
+                {
+                    view.focus();
+                }
+
+                mFocusedView = view;
+            }
         }
 
         protected virtual FocusDirection FindFocusDirection(Keys key)
@@ -383,6 +458,16 @@ namespace BomberEngine.Game
         {
             get { return m_allowsUpdatePrevious; }
             protected set { m_allowsUpdatePrevious = value; }
+        }
+
+        public View rootView
+        {
+            get { return mRootView; }
+        }
+
+        public View focusedView
+        {
+            get { return mFocusedView; }
         }
 
         #endregion

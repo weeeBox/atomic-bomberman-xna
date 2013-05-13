@@ -36,9 +36,8 @@ namespace BomberEngine.Core.Visual
         public float parentAlignX;
         public float parentAlignY;
 
-        private VisualElement parent;
-
-        private VisualElementList childList;
+        protected VisualElement parent;
+        protected VisualElementList childList;
 
         public VisualElement()
             : this(0, 0)
@@ -194,14 +193,24 @@ namespace BomberEngine.Core.Visual
             }
         }
 
-        public VisualElement getParent()
+        public VisualElement ChildAt(int index)
         {
-            return parent;
+            return childList.Get(index);
         }
 
-        public void SetParent(VisualElement parent)
+        public int IndexOf(VisualElement child)
         {
-            this.parent = parent;
+            return childList.IndexOf(child);
+        }
+
+        public int ChildCount()
+        {
+            return childList.Count();
+        }
+
+        public VisualElement GetParent()
+        {
+            return parent;
         }
 
         #endregion

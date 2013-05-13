@@ -41,12 +41,22 @@ namespace BomberEngine.Core.Visual
 
         public override bool Add(VisualElement updatable)
         {
-            throw new InvalidOperationException("Can't add element to unmodifiable game object list");
+            throw new InvalidOperationException("Can't add element to null list");
         }
 
         public override bool Remove(VisualElement updatable)
         {
-            throw new InvalidOperationException("Can't remove element from unmodifiable game object list");
+            throw new InvalidOperationException("Can't remove element from null list");
+        }
+
+        public override VisualElement Get(int index)
+        {
+            throw new InvalidOperationException("Can't get element from null list");
+        }
+
+        public override int IndexOf(VisualElement updatable)
+        {
+            return -1;
         }
 
         public override void Remove(int index)
