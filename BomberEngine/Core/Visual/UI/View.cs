@@ -50,12 +50,26 @@ namespace BomberEngine.Core.Visual.UI
 
         public void focus()
         {
+            bool oldFocused = focused;
             focused = true;
+            if (focused ^ oldFocused)
+            {
+                OnFocusChanged(focused);
+            }
         }
 
         public void blur()
         {
+            bool oldFocused = focused;
             focused = false;
+            if (focused ^ oldFocused)
+            {
+                OnFocusChanged(focused);
+            }
+        }
+
+        protected virtual void OnFocusChanged(bool focused)
+        {
         }
 
         #endregion

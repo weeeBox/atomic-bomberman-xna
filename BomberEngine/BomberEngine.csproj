@@ -96,6 +96,7 @@
     <Compile Include="Core\BaseElement.cs" />
     <Compile Include="Core\Input\GamePadListenerList.cs" />
     <Compile Include="Core\Visual\UI\IFocusListener.cs" />
+    <Compile Include="Core\Visual\UI\RectView.cs" />
     <Compile Include="Core\Visual\UI\View.cs" />
     <Compile Include="Core\Visual\VisualElementList.cs" />
     <Compile Include="Debugging\Commands\ConsoleCommand.cs" />

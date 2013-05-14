@@ -126,7 +126,7 @@ namespace BomberEngine.Game
 
         public override void Update(float delta)
         {
-            base.Update(delta);
+            mRootView.Update(delta);
 
             updatableList.Update(delta);
             timerManager.Update(delta);
@@ -157,7 +157,7 @@ namespace BomberEngine.Game
 
         public override void Draw(Context context)
         {
-            base.Draw(context);
+            mRootView.Draw(context);
             drawableList.Draw(context);
         }
 
