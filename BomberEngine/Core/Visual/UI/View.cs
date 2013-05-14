@@ -58,41 +58,6 @@ namespace BomberEngine.Core.Visual.UI
             focused = false;
         }
 
-        public virtual View FindFocus(FocusDirection direction, View currentFocus)
-        {
-            switch (direction)
-            {
-                case FocusDirection.Down:
-                case FocusDirection.Right:
-                {
-                    int startIndex = currentFocus != null ? IndexOf(currentFocus) + 1 : 0;
-
-                    for (int i = startIndex; i < ChildCount(); ++i)
-                    {
-                        View view = ViewAt(i);
-                        Debug.Assert(view != null);
-
-                        View childFocus = view.FindFocus(direction, null);
-                        if (childFocus != null)
-                        {
-                            return childFocus;
-                        }
-
-                        if (view.CanFocus())
-                        {
-                            return view;
-                        }
-                    }
-                    break;
-                }   
-
-                default:
-                    throw new NotImplementedException();
-            }
-
-            return null;
-        }
-
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
@@ -110,7 +75,7 @@ namespace BomberEngine.Core.Visual.UI
             return GetParent() as View;
         }
 
-        public View ViewAt(int index)
+        public View ChildViewAt(int index)
         {
             return ChildAt(index) as View;
         }

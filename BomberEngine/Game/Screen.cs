@@ -336,32 +336,109 @@ namespace BomberEngine.Game
             return false;
         }
 
-        public virtual bool TryMoveFocus(FocusDirection direction)
+        private bool TryMoveFocus(FocusDirection direction)
         {
             if (mFocusedView != null)
             {
-                View parent = mFocusedView.GetParentView();
-                View view = parent.FindFocus(direction, mFocusedView);
+                View parentView = mFocusedView.GetParentView();
+                View view = FindFocusView(parentView, mFocusedView, direction);
                 if (view != null)
                 {
-                    FocusView(view);
-                    return true;
+                    return FocusView(view);
                 }
             }
             else
             {
-                View view = mRootView.FindFocus(direction, null);
+                View view = FindFocusView(mRootView, direction);
                 if (view != null)
                 {
-                    FocusView(view);
-                    return true;
+                    return FocusView(view);
                 }
             }
 
             return false;
         }
 
-        public void FocusView(View view)
+        private View FindFocusView(View root, FocusDirection direction)
+        {
+            if (direction == FocusDirection.Down || direction == FocusDirection.Right)
+            {
+                for (int i = 0; i < root.ChildCount(); ++i)
+                {
+                    View child = root.ChildViewAt(i);
+                    View view = FindFocusView(child, direction);
+                    if (view != null)
+                    {
+                        return view;
+                    }
+
+                    if (child.CanFocus())
+                    {
+                        return child;
+                    }
+                }
+            }
+            else if (direction == FocusDirection.Up || direction == FocusDirection.Left)
+            {
+                for (int i = root.ChildCount() - 1; i >= 0; --i)
+                {
+                    View child = root.ChildViewAt(i);
+                    View view = FindFocusView(child, direction);
+                    if (view != null)
+                    {
+                        return view;
+                    }
+
+                    if (child.CanFocus())
+                    {
+                        return child;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private View FindFocusView(View root, View current, FocusDirection direction)
+        {
+            int index = root.IndexOf(current);
+            Debug.Assert(index != -1);
+
+            if (direction == FocusDirection.Down || direction == FocusDirection.Right)
+            {
+                for (int i = index + 1; i < root.ChildCount(); ++i)
+                {
+                    View child = root.ChildViewAt(i);
+                    View view = FindFocusView(child, direction);
+                    if (view != null)
+                    {
+                        return view;
+                    }
+                }
+            }
+            else if (direction == FocusDirection.Up || direction == FocusDirection.Left)
+            {
+                for (int i = index - 1; i >= 0; --i)
+                {
+                    View child = root.ChildViewAt(i);
+                    View view = FindFocusView(child, direction);
+                    if (view != null)
+                    {
+                        return view;
+                    }
+                }
+            }
+
+            View parent = root.GetParentView();
+            if (parent != null)
+            {
+                return FindFocusView(parent, root, direction);
+            }
+
+            return null;
+        }
+
+        private bool FocusView(View view)
         {
             if (view != mFocusedView)
             {
@@ -376,7 +453,10 @@ namespace BomberEngine.Game
                 }
 
                 mFocusedView = view;
+                return true;
             }
+
+            return false;
         }
 
         protected virtual FocusDirection FindFocusDirection(Keys key)

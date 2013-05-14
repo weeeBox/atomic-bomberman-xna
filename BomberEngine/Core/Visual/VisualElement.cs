@@ -182,7 +182,14 @@ namespace BomberEngine.Core.Visual
             {
                 childList = new VisualElementList();
             }
+
+            if (child.parent != null)
+            {
+                parent.RemoveChild(child);
+            }
+
             childList.Add(child);
+            child.parent = this;
         }
 
         public void RemoveChild(VisualElement child)
@@ -190,6 +197,7 @@ namespace BomberEngine.Core.Visual
             if (childList.Count() > 0)
             {
                 childList.Remove(child);
+                child.parent = null;
             }
         }
 
