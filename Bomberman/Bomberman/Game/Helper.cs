@@ -17,6 +17,11 @@ namespace Bomberman.Game
             return Application.Assets().GetTexture(id);
         }
 
+        public static Font GetFont(int id)
+        {
+            return Application.Assets().GetFont(id);
+        }
+
         public static Scheme GetScheme(int id)
         {
             return ((BombermanAssetManager)Application.Assets()).GetScheme(id);

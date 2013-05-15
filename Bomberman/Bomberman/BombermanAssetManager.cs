@@ -32,10 +32,5 @@ namespace Bomberman
         {
             return (Scheme)GetAsset(id);
         }
-
-        protected override SpriteFont LoadSystemFont(ContentManager contentManager)
-        {
-            return contentManager.Load<SpriteFont>("SystemFont");
-        }
     }
 }

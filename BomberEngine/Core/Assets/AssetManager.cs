@@ -8,6 +8,7 @@ using BomberEngine.Game;
 using BomberEngine.Core.Assets.Loaders;
 using BomberEngine.Core.Assets.Types;
 using Microsoft.Xna.Framework.Graphics;
+using BomberEngine.Core.Visual;
 
 namespace BomberEngine.Core.Assets
 {
@@ -42,6 +43,7 @@ namespace BomberEngine.Core.Assets
         {
             loaders = new Dictionary<int, AssetLoader>();
             loaders.Add(AssetTypeBase.Texture, new TextureLoader());
+            loaders.Add(AssetTypeBase.VectorFont, new VectorFontLoader());
         }
 
         public void AddToQueue(AssetLoadInfo info)
@@ -74,6 +76,11 @@ namespace BomberEngine.Core.Assets
         public TextureImage GetTexture(int id)
         {
             return (TextureImage)GetAsset(id);
+        }
+
+        public Font GetFont(int id)
+        {
+            return (Font)GetAsset(id);
         }
 
         public Asset GetAsset(int id)
@@ -131,15 +138,16 @@ namespace BomberEngine.Core.Assets
             return assets[id] != null;
         }
 
-        public virtual SpriteFont GetSystemFont()
+        public virtual SpriteFont SystemFont
         {
-            if (systemFont == null)
+            get
             {
-                systemFont = LoadSystemFont(contentManager);
+                if (systemFont == null)
+                {
+                    systemFont = contentManager.Load<SpriteFont>("SystemFont");
+                }
+                return systemFont;
             }
-            return systemFont;
         }
-
-        protected abstract SpriteFont LoadSystemFont(ContentManager contentManager);
     }
 }

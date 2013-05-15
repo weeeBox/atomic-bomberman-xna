@@ -92,10 +92,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Assets\Loaders\VectorFontLoader.cs" />
     <Compile Include="Core\BaseUpdatableList.cs" />
     <Compile Include="Core\BaseElement.cs" />
     <Compile Include="Core\Input\GamePadListenerList.cs" />
-    <Compile Include="Core\Visual\IFont.cs" />
+    <Compile Include="Core\Visual\Font.cs" />
     <Compile Include="Core\Visual\UI\TextView.cs" />
     <Compile Include="Core\Visual\VectorFont.cs" />
     <Compile Include="Core\Visual\Text.cs" />

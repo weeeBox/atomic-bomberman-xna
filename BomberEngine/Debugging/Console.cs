@@ -22,7 +22,7 @@ namespace BomberEngine.Debugging
 
         private int cursorPos;
 
-        private SpriteFont font;
+        private Font font;
         private float charWidth;
         private float lineHeight;
         private float lineSpacing;
@@ -36,7 +36,7 @@ namespace BomberEngine.Debugging
 
         private Color backColor;
 
-        public GameConsole(SpriteFont font)
+        public GameConsole(Font font)
             : base(640, 320)
         {
             this.font = font;
@@ -50,9 +50,8 @@ namespace BomberEngine.Debugging
             commandBuffer = new StringBuilder();
             suggestedCommands = new LinkedList<ConsoleCommand>();
 
-            Vector2 charSize = font.MeasureString("W");
-            charWidth = charSize.X;
-            lineHeight = charSize.Y;
+            charWidth = font.StringWidth("W");
+            lineHeight = font.FontHeight();
             InitAdditionalInputKeys();
 
             backColor = new Color(0.0f, 0.0f, 0.0f, 0.75f);
@@ -107,7 +106,7 @@ namespace BomberEngine.Debugging
             {
                 String line = m_lines[i];
 
-                context.DrawString(font, drawX, drawY, line);
+                font.DrawString(context, line, drawX, drawY);
                 drawY -= lineHeight + lineSpacing;
 
                 if (drawY < 0)
@@ -122,11 +121,11 @@ namespace BomberEngine.Debugging
             float drawX = 10;
             float drawY = height - lineHeight - lineSpacing - 10;
 
-            context.DrawString(font, drawX, drawY, PROMPT_STRING);
+            font.DrawString(context, PROMPT_STRING, drawX, drawY);
             drawX += PROMPT_STRING.Length * charWidth;
 
             context.FillRect(drawX + cursorPos * charWidth, drawY + lineHeight, charWidth, 3, Color.White);
-            context.DrawString(font, drawX, drawY, commandBuffer);
+            font.DrawString(context, commandBuffer.ToString(), drawX, drawY);
         }
 
         public void AddLine(String line)

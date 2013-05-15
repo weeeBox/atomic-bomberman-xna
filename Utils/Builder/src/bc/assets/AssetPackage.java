@@ -9,7 +9,7 @@ import bc.assets.types.SchemeAsset;
 import bc.assets.types.TextureAsset;
 import bc.assets.types.MusicAsset;
 import bc.assets.types.SoundAsset;
-import bc.assets.types.CorelFontAsset;
+import bc.assets.types.VectorFontAsset;
 import bc.tasks.ContentProjTask;
 
 
@@ -64,7 +64,7 @@ public class AssetPackage
 		addResource(font);
 	}
 
-	public void addVectorFont(CorelFontAsset font)
+	public void addVectorFont(VectorFontAsset font)
 	{
 		addResource(font);
 	}

@@ -9,7 +9,9 @@ namespace BomberEngine.Core.Assets
     {
         private bool disposed;
 
-        protected abstract void OnDispose();
+        protected virtual void OnDispose()
+        {
+        }
 
         public void Dispose()
         {

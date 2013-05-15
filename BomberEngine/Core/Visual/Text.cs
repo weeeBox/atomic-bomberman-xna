@@ -32,11 +32,11 @@ namespace BomberEngine.Core.Visual
         }
 
         public String text;
-        public IFont font;
+        public Font font;
 
         protected FormattedString[] formattedStrings;
 
-        public Text(IFont font)
+        public Text(Font font)
         {
             Debug.Assert(font != null);
 

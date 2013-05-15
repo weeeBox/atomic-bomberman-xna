@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
 using Bomberman.Game.Commands;
 using Bomberman.Menu;
+using BomberEngine.Core.Visual;
 
 namespace Bomberman
 {
@@ -33,7 +34,7 @@ namespace Bomberman
 
         protected override GameConsole CreateConsole()
         {
-            SpriteFont consoleFont = contentManager.Load<SpriteFont>("ConsoleFont");
+            Font consoleFont = new VectorFont(contentManager.Load<SpriteFont>("ConsoleFont"));
             GameConsole console = new GameConsole(consoleFont);
 
             console.RegisterCommand(new PowerupAddCommand());

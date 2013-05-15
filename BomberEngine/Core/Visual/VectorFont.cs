@@ -8,7 +8,7 @@ namespace BomberEngine.Core.Visual
 {
     using XnaSpriteFont = Microsoft.Xna.Framework.Graphics.SpriteFont;
 
-    public class VectorFont : IFont
+    public class VectorFont : Font
     {
         private XnaSpriteFont fnt;
         private int fntHeight;
@@ -19,32 +19,32 @@ namespace BomberEngine.Core.Visual
             fntHeight = (int)fnt.MeasureString("0").Y;            
         }
 
-        public string[] WrapString(string text, int wrapWidth)
+        public override string[] WrapString(string text, int wrapWidth)
         {
             throw new NotImplementedException();
         }
 
-        public int StringWidth(string str)
+        public override int StringWidth(string str)
         {
             return (int)(fnt.MeasureString(str).X);
         }
 
-        public int FontHeight()
+        public override int FontHeight()
         {
             return fntHeight;
         }
 
-        public int LineOffset()
+        public override int LineOffset()
         {
             return fnt.LineSpacing;
         }
 
-        public void DrawString(Context context, String text, float x, float y)
+        public override void DrawString(Context context, String text, float x, float y)
         {
             DrawString(context, text, x, y, TextAlign.LEFT | TextAlign.TOP);
         }
 
-        public void DrawString(Context context, String text, float x, float y, TextAlign textAlign)
+        public override void DrawString(Context context, String text, float x, float y, TextAlign textAlign)
         {
             float dx = x;
             float dy = y;

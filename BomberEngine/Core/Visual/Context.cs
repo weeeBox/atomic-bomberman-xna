@@ -211,7 +211,7 @@ namespace BomberEngine.Core.Visual
 
         public void DrawString(float x, float y, String text)
         {
-            SpriteFont font = Application.Assets().GetSystemFont();
+            SpriteFont font = Application.Assets().SystemFont;
             DrawString(font, x, y, text);
         }
 
