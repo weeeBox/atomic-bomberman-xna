@@ -6,11 +6,13 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
 using Bomberman.Game.Commands;
+using Bomberman.Menu;
 
 namespace Bomberman
 {
     public class BombermanRootController : RootController
     {
+        private MenuController menuController;
         private GameController gameController;
         private ContentManager contentManager;
 
@@ -25,8 +27,8 @@ namespace Bomberman
             manager.AddPackToLoad(AssetPacks.Packs.ALL);
             manager.LoadImmediately();
 
-            gameController = new GameController();
-            StartController(gameController);
+            menuController = new MenuController();
+            StartController(menuController);
         }
 
         protected override GameConsole CreateConsole()

@@ -396,7 +396,7 @@ namespace BomberEngine.Game
                 }
             }
 
-            return null;
+            return root.focusable ? root : null;
         }
 
         private View FindFocusView(View root, View current, FocusDirection direction)

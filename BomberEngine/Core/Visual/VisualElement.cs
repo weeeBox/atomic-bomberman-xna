@@ -104,12 +104,6 @@ namespace BomberEngine.Core.Visual
             translateX = x - width * alignX;
             translateY = y - height * alignY;
 
-            if (parent != null)
-            {
-                translateX += parent.translateX + parent.width * parentAlignX;
-                translateY += parent.translateY + parent.height * parentAlignY;
-            }
-
             bool changeScale = (scaleX != 1.0 || scaleY != 1.0);
             bool changeRotation = (rotation != 0.0);
             bool changeTranslate = (translateX != 0.0 || translateY != 0.0);
