@@ -95,6 +95,8 @@
     <Compile Include="Core\BaseUpdatableList.cs" />
     <Compile Include="Core\BaseElement.cs" />
     <Compile Include="Core\Input\GamePadListenerList.cs" />
+    <Compile Include="Core\Visual\IFont.cs" />
+    <Compile Include="Core\Visual\Text.cs" />
     <Compile Include="Core\Visual\UI\IFocusListener.cs" />
     <Compile Include="Core\Visual\UI\RectView.cs" />
     <Compile Include="Core\Visual\UI\View.cs" />
@@ -139,6 +141,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\Collection.cs" />
     <Compile Include="Util\ConcurrentList.cs" />
+    <Compile Include="Util\Constants.cs" />
     <Compile Include="Util\FastLinkedList.cs" />
     <Compile Include="Util\FastLinkedListIterator.cs" />
     <Compile Include="Util\ListNode.cs" />
