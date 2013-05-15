@@ -114,7 +114,7 @@ namespace BomberEngine.Core.Visual
             {
                 FormattedString str = formattedStrings[i];
                 dx = alignX * (width - str.width);
-                font.DrawString(str.text, dx, dy);
+                font.DrawString(context, str.text, dx, dy);
                 dy += itemHeight + font.LineOffset();
             }
 

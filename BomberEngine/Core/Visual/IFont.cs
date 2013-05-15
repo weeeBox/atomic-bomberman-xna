@@ -12,7 +12,7 @@ namespace BomberEngine.Core.Visual
         int FontHeight();
         int LineOffset();
 
-        void DrawString(String text, float x, float y);
-        void DrawString(String text, float x, float y, TextAlign textAlign);
+        void DrawString(Context context, String text, float x, float y);
+        void DrawString(Context context, String text, float x, float y, TextAlign textAlign);
     }
 }
