@@ -15,8 +15,8 @@ namespace BomberEngine.Core.Visual
         public float x;
         public float y;
         
-        public int width;
-        public int height;
+        public float width;
+        public float height;
 
         public float rotation;
         public float rotationCenterX;
@@ -115,8 +115,8 @@ namespace BomberEngine.Core.Visual
 
                 if (changeRotation || changeScale)
                 {
-                    float rotationOffsetX = translateX + (width >> 1) + rotationCenterX;
-                    float rotationOffsetY = translateY + (height >> 1) + rotationCenterY;
+                    float rotationOffsetX = translateX + (0.5f * width) + rotationCenterX;
+                    float rotationOffsetY = translateY + (0.5f * height) + rotationCenterY;
 
                     context.Translate(rotationOffsetX, rotationOffsetY);
 

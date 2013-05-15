@@ -12,47 +12,43 @@ namespace Bomberman.Menu.Screens
     {
         public MainMenuScreen()
         {
+            int w = 50;
+            int h = 15;
+
             RectView rect = new FocusableRect(10, 10, 200, 400);
-
-            int w = 40;
-            int h = 10;
-
-            int nextY = 10;
             for (int i = 0; i < 4; ++i)
             {
-                rect.AddChild(new FocusableRect(10, nextY, w, h));
-                nextY += h + 10;
+                rect.AddChild(new FocusableRect(10, 0, w, h));
             }
 
-            RectView container = new RectView(10, nextY, 150, 150, Color.LightGray, Color.Black);
-            nextY += 150 + 10;
+            RectView container = new RectView(10, 0, 150, 150, Color.LightGray, Color.Black);
 
-            int childNextY = 10;
             for (int i = 0; i < 4; ++i)
             {
-                container.AddChild(new FocusableRect(10, childNextY, w, h));
-                childNextY += h + 10;
+                container.AddChild(new FocusableRect(10, 0, w, h));
             }
+            container.LayoutVer(10);
+            container.ResizeToFitViewsVer(10);
 
             rect.AddChild(container);
 
-            RectView container2 = new RectView(10, nextY, 150, 150, Color.LightGray, Color.Black);
-            nextY += 150 + 10;
-
-            childNextY = 10;
+            RectView container2 = new RectView(10, 0, 150, 150, Color.LightGray, Color.Black);
             for (int i = 0; i < 4; ++i)
             {
-                container2.AddChild(new FocusableRect(10, childNextY, w, h));
-                childNextY += h + 10;
+                container2.AddChild(new FocusableRect(10, 0, w, h));
             }
+            container2.LayoutVer(10);
+            container2.ResizeToFitViewsVer(10);
 
             rect.AddChild(container2);
 
             for (int i = 0; i < 4; ++i)
             {
-                rect.AddChild(new FocusableRect(10, nextY, w, h));
-                nextY += h + 10;
+                rect.AddChild(new FocusableRect(10, 0, w, h));
             }
+
+            rect.LayoutVer(10);
+            rect.ResizeToFitViewsVer(10);
 
             SetRootView(rect);
         }
