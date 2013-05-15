@@ -21,6 +21,10 @@ namespace BomberEngine.Core.Visual
 
         public override string[] WrapString(string text, int wrapWidth)
         {
+            if (wrapWidth == Int32.MaxValue)
+            {
+                return new String[] { text };
+            }
             throw new NotImplementedException();
         }
 

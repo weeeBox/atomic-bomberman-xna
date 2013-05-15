@@ -5,6 +5,9 @@ using System.Text;
 using BomberEngine.Game;
 using BomberEngine.Core.Visual.UI;
 using Microsoft.Xna.Framework;
+using BomberEngine.Core.Visual;
+using Bomberman.Game;
+using Assets;
 
 namespace Bomberman.Menu.Screens
 {
@@ -20,6 +23,9 @@ namespace Bomberman.Menu.Screens
             {
                 rect.AddChild(new FocusableRect(10, 0, w, h));
             }
+
+            Font font = Helper.GetFont(A.fnt_system);
+            rect.AddChild(new Text(font, "This is test"));
 
             RectView container = new RectView(10, 0, 150, 150, Color.LightGray, Color.Black);
 

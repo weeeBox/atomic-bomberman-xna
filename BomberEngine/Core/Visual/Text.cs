@@ -36,13 +36,12 @@ namespace BomberEngine.Core.Visual
 
         protected FormattedString[] formattedStrings;
 
-        public Text(Font font)
+        public Text(Font font, String text)
         {
             Debug.Assert(font != null);
 
             this.font = font;
-            width = Constants.UNDEFINED;
-            height = Constants.UNDEFINED;
+            SetString(text);
         }
 
         public void SetString(String newString)
