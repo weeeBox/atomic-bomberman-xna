@@ -345,7 +345,7 @@ namespace BomberEngine.Game
         {
             if (mFocusedView != null)
             {
-                View parentView = mFocusedView.GetParentView();
+                View parentView = mFocusedView.Parent();
                 View view = FindFocusView(parentView, mFocusedView, direction);
                 if (view != null)
                 {
@@ -370,7 +370,7 @@ namespace BomberEngine.Game
             {
                 for (int i = 0; i < root.ChildCount(); ++i)
                 {
-                    View child = root.ChildViewAt(i);
+                    View child = root.ViewAt(i);
                     View view = FindFocusView(child, direction);
                     if (view != null)
                     {
@@ -387,7 +387,7 @@ namespace BomberEngine.Game
             {
                 for (int i = root.ChildCount() - 1; i >= 0; --i)
                 {
-                    View child = root.ChildViewAt(i);
+                    View child = root.ViewAt(i);
                     View view = FindFocusView(child, direction);
                     if (view != null)
                     {
@@ -413,7 +413,7 @@ namespace BomberEngine.Game
             {
                 for (int i = index + 1; i < root.ChildCount(); ++i)
                 {
-                    View child = root.ChildViewAt(i);
+                    View child = root.ViewAt(i);
                     View view = FindFocusView(child, direction);
                     if (view != null)
                     {
@@ -425,7 +425,7 @@ namespace BomberEngine.Game
             {
                 for (int i = index - 1; i >= 0; --i)
                 {
-                    View child = root.ChildViewAt(i);
+                    View child = root.ViewAt(i);
                     View view = FindFocusView(child, direction);
                     if (view != null)
                     {
@@ -434,7 +434,7 @@ namespace BomberEngine.Game
                 }
             }
 
-            View parent = root.GetParentView();
+            View parent = root.Parent();
             if (parent != null)
             {
                 return FindFocusView(parent, root, direction);

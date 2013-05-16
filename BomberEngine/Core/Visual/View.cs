@@ -46,7 +46,7 @@ namespace BomberEngine.Core.Visual
         public float parentAlignY;
 
         protected View parent;
-        protected ViewList childList;
+        protected ViewList viewList;
 
         public View()
             : this(0, 0)
@@ -78,7 +78,7 @@ namespace BomberEngine.Core.Visual
             parentAlignX = parentAlignY = alignX = alignY = ALIGN_MIN;
             parent = null;
 
-            childList = ViewList.Null;
+            viewList = ViewList.Null;
 
             visible = enabled = true;
         }
@@ -89,7 +89,7 @@ namespace BomberEngine.Core.Visual
 
         public override void Update(float delta)
         {
-            childList.Update(delta);
+            viewList.Update(delta);
         }
 
         #endregion
@@ -106,7 +106,7 @@ namespace BomberEngine.Core.Visual
 
         protected virtual void DrawChildren(Context context)
         {
-            childList.Draw(context);
+            viewList.Draw(context);
         }
 
         protected virtual void PreDraw(Context context)
@@ -181,47 +181,47 @@ namespace BomberEngine.Core.Visual
 
         #region Hierarchy
 
-        public void AddChild(View child)
+        public void AddView(View child)
         {
-            if (childList.IsNull())
+            if (viewList.IsNull())
             {
-                childList = new ViewList();
+                viewList = new ViewList();
             }
 
             if (child.parent != null)
             {
-                parent.RemoveChild(child);
+                parent.RemoveView(child);
             }
 
-            childList.Add(child);
+            viewList.Add(child);
             child.parent = this;
         }
 
-        public void RemoveChild(View child)
+        public void RemoveView(View child)
         {
-            if (childList.Count() > 0)
+            if (viewList.Count() > 0)
             {
-                childList.Remove(child);
+                viewList.Remove(child);
                 child.parent = null;
             }
         }
 
-        public View ChildViewAt(int index)
+        public View ViewAt(int index)
         {
-            return childList.Get(index);
+            return viewList.Get(index);
         }
 
         public int IndexOf(View child)
         {
-            return childList.IndexOf(child);
+            return viewList.IndexOf(child);
         }
 
         public int ChildCount()
         {
-            return childList.Count();
+            return viewList.Count();
         }
 
-        public View GetParentView()
+        public View Parent()
         {
             return parent;
         }
@@ -313,7 +313,7 @@ namespace BomberEngine.Core.Visual
 
             if (ChildCount() > 0)
             {
-                View first = ChildViewAt(0);
+                View first = ViewAt(0);
                 float left = first.x;
                 float right = left + first.width;
                 float top = first.y;
@@ -321,7 +321,7 @@ namespace BomberEngine.Core.Visual
 
                 for (int i = 1; i < ChildCount(); ++i)
                 {
-                    View e = ChildViewAt(i);
+                    View e = ViewAt(i);
                     left = Math.Min(left, e.x);
                     right = Math.Max(right, e.x + e.width);
                     top = Math.Min(top, e.y);
@@ -330,7 +330,7 @@ namespace BomberEngine.Core.Visual
 
                 for (int i = 0; i < ChildCount(); ++i)
                 {
-                    View e = ChildViewAt(i);
+                    View e = ViewAt(i);
                     e.x = horizontal ? leftBorder + e.x - left : e.x;
                     e.y = vertical ? topBorder + e.y - top : e.y;
                 }
@@ -361,13 +361,13 @@ namespace BomberEngine.Core.Visual
             float total = 0;
             for (int i = 0; i < ChildCount(); ++i)
             {
-                total += ChildViewAt(i).width + (i < ChildCount() - 1 ? indent : 0);
+                total += ViewAt(i).width + (i < ChildCount() - 1 ? indent : 0);
             }
 
             float pos = 0.5f * align * (width - total);
             for (int i = 0; i < ChildCount(); ++i)
             {
-                View e = ChildViewAt(i);
+                View e = ViewAt(i);
                 e.x = pos;
                 pos += e.width + indent;
             }
@@ -383,13 +383,13 @@ namespace BomberEngine.Core.Visual
             float total = 0;
             for (int i = 0; i < ChildCount(); ++i)
             {
-                total += ChildViewAt(i).height + (i < ChildCount() - 1 ? indent : 0);
+                total += ViewAt(i).height + (i < ChildCount() - 1 ? indent : 0);
             }
 
             float pos = 0.5f * align * (height - total);
             for (int i = 0; i < ChildCount(); ++i)
             {
-                View e = ChildViewAt(i);
+                View e = ViewAt(i);
                 e.y = pos;
                 pos += e.height + indent;
             }

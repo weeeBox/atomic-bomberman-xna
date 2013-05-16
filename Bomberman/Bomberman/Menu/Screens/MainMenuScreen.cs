@@ -21,36 +21,36 @@ namespace Bomberman.Menu.Screens
             RectView rect = new FocusableRect(10, 10, 200, 400);
             for (int i = 0; i < 4; ++i)
             {
-                rect.AddChild(new FocusableRect(10, 0, w, h));
+                rect.AddView(new FocusableRect(10, 0, w, h));
             }
 
             Font font = Helper.GetFont(A.fnt_system);
-            rect.AddChild(new Text(font, "This is test"));
+            rect.AddView(new Text(font, "This is test"));
 
             RectView container = new RectView(10, 0, 150, 150, Color.LightGray, Color.Black);
 
             for (int i = 0; i < 4; ++i)
             {
-                container.AddChild(new FocusableRect(10, 0, w, h));
+                container.AddView(new FocusableRect(10, 0, w, h));
             }
             container.LayoutVer(10);
             container.ResizeToFitViewsVer(10);
 
-            rect.AddChild(container);
+            rect.AddView(container);
 
             RectView container2 = new RectView(10, 0, 150, 150, Color.LightGray, Color.Black);
             for (int i = 0; i < 4; ++i)
             {
-                container2.AddChild(new FocusableRect(10, 0, w, h));
+                container2.AddView(new FocusableRect(10, 0, w, h));
             }
             container2.LayoutVer(10);
             container2.ResizeToFitViewsVer(10);
 
-            rect.AddChild(container2);
+            rect.AddView(container2);
 
             for (int i = 0; i < 4; ++i)
             {
-                rect.AddChild(new FocusableRect(10, 0, w, h));
+                rect.AddView(new FocusableRect(10, 0, w, h));
             }
 
             rect.LayoutVer(10);

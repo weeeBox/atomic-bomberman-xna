@@ -27,13 +27,13 @@ namespace Bomberman.Game.Screens
 
             // field background
             fieldBackground = Helper.CreateImage(A.tex_FIELD7);
-            AddChild(fieldBackground);
+            AddView(fieldBackground);
 
             // field drawer
-            AddChild(new FieldDrawable(field, Constant.FIELD_OFFSET_X, Constant.FIELD_OFFSET_Y, Constant.FIELD_WIDTH, Constant.FIELD_HEIGHT));
+            AddView(new FieldDrawable(field, Constant.FIELD_OFFSET_X, Constant.FIELD_OFFSET_Y, Constant.FIELD_WIDTH, Constant.FIELD_HEIGHT));
 
             // field drawer
-            AddChild(new PowerupsDrawable(field, 0, 0, Constant.FIELD_WIDTH, Constant.FIELD_OFFSET_Y));
+            AddView(new PowerupsDrawable(field, 0, 0, Constant.FIELD_WIDTH, Constant.FIELD_OFFSET_Y));
         }
 
         public override bool OnKeyPressed(Keys key)

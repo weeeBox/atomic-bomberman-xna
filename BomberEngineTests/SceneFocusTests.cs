@@ -24,7 +24,7 @@ namespace BomberEngineTests
             Assert.IsFalse(f1.focused);
 
             View container = new View();
-            container.AddChild(f1);
+            container.AddView(f1);
 
             screen.SetRootView(container);
 
@@ -41,10 +41,10 @@ namespace BomberEngineTests
             Assert.IsFalse(f1.focused);
 
             View container1 = new View();
-            container1.AddChild(f1);
+            container1.AddView(f1);
 
             View container2 = new View();
-            container2.AddChild(container1);
+            container2.AddView(container1);
 
             screen.SetRootView(container2);
 
@@ -61,13 +61,13 @@ namespace BomberEngineTests
             Assert.IsFalse(f1.focused);
 
             View container1 = new View();
-            container1.AddChild(f1);
+            container1.AddView(f1);
 
             View container2 = new View();
-            container2.AddChild(container1);
+            container2.AddView(container1);
 
             View container3 = new View();
-            container3.AddChild(container2);
+            container3.AddView(container2);
 
             screen.SetRootView(container3);
 
@@ -93,19 +93,19 @@ namespace BomberEngineTests
             Assert.IsFalse(f1.focused);
 
             View container1 = new View();
-            container1.AddChild(n1);
-            container1.AddChild(n2);
-            container1.AddChild(f1);
+            container1.AddView(n1);
+            container1.AddView(n2);
+            container1.AddView(f1);
 
             View container2 = new View();
 
             View container3 = new View();
-            container3.AddChild(f2);
+            container3.AddView(f2);
 
             View rootView = new View();
-            rootView.AddChild(container1);
-            rootView.AddChild(container2);
-            rootView.AddChild(container3);
+            rootView.AddView(container1);
+            rootView.AddView(container2);
+            rootView.AddView(container3);
 
             screen.SetRootView(rootView);
 
@@ -131,19 +131,19 @@ namespace BomberEngineTests
             Assert.IsFalse(f1.focused);
 
             View container1 = new NotFocusableView("c1");
-            container1.AddChild(n1);
-            container1.AddChild(n2);
-            container1.AddChild(f1);
+            container1.AddView(n1);
+            container1.AddView(n2);
+            container1.AddView(f1);
 
             View container2 = new NotFocusableView("c2");
 
             View container3 = new NotFocusableView("c3");
-            container3.AddChild(f2);
+            container3.AddView(f2);
 
             View rootView = new NotFocusableView("root");
-            rootView.AddChild(container1);
-            rootView.AddChild(container2);
-            rootView.AddChild(container3);
+            rootView.AddView(container1);
+            rootView.AddView(container2);
+            rootView.AddView(container3);
 
             screen.SetRootView(rootView);
 
