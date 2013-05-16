@@ -8,6 +8,7 @@ using BomberEngine.Core.Visual.UI;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using BomberEngine.Core.Visual;
 
 namespace BomberEngineTests
 {

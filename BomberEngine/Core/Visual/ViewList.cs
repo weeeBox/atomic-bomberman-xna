@@ -5,17 +5,17 @@ using System.Text;
 
 namespace BomberEngine.Core.Visual
 {
-    public class VisualElementList : BaseUpdatableList<VisualElement>, IDrawable
+    public class ViewList : BaseUpdatableList<View>, IDrawable
     {
-        public static readonly VisualElementList Null = new NullGameObjectList();
-        private static readonly VisualElement nullElement = new NullGameObject();
+        public static readonly ViewList Null = new NullViewList();
+        private static readonly View nullElement = new NullGameObject();
 
-        public VisualElementList()
+        public ViewList()
             : base(nullElement)
         {
         }
 
-        public VisualElementList(int capacity)
+        public ViewList(int capacity)
             : base(nullElement, capacity)
         {
         }
@@ -29,7 +29,7 @@ namespace BomberEngine.Core.Visual
         }
     }
 
-    internal sealed class NullGameObjectList : VisualElementList
+    internal sealed class NullViewList : ViewList
     {
         public override void Update(float delta)
         {
@@ -39,34 +39,34 @@ namespace BomberEngine.Core.Visual
         {
         }
 
-        public override bool Add(VisualElement updatable)
+        public override bool Add(View updatable)
         {
             throw new InvalidOperationException("Can't add element to null list");
         }
 
-        public override bool Remove(VisualElement updatable)
+        public override bool Remove(View updatable)
         {
             throw new InvalidOperationException("Can't remove element from null list");
         }
 
-        public override VisualElement Get(int index)
+        public override View Get(int index)
         {
             throw new InvalidOperationException("Can't get element from null list");
         }
 
-        public override int IndexOf(VisualElement updatable)
+        public override int IndexOf(View updatable)
         {
             return -1;
         }
 
         public override void Remove(int index)
         {
-            throw new InvalidOperationException("Can't remove element from unmodifiable game object list");
+            throw new InvalidOperationException("Can't remove element from null list");
         }
 
         public override void Clear()
         {
-            throw new InvalidOperationException("Can't clear unmodifiable game object list");
+            throw new InvalidOperationException("Can't clear null list");
         }
 
         public override int Count()
@@ -74,7 +74,7 @@ namespace BomberEngine.Core.Visual
             return 0;
         }
 
-        public override bool Contains(VisualElement updatable)
+        public override bool Contains(View updatable)
         {
             return false;
         }
@@ -85,7 +85,7 @@ namespace BomberEngine.Core.Visual
         }
     }
 
-    internal sealed class NullGameObject : VisualElement
+    internal sealed class NullGameObject : View
     {
         public override void Update(float delta)
         {   

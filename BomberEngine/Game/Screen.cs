@@ -13,6 +13,11 @@ namespace BomberEngine.Game
 {
     public class Screen : View
     {
+        protected enum FocusDirection
+        {
+            None, Up, Down, Left, Right
+        }
+
         private View mRootView;
         private View mFocusedView;
 

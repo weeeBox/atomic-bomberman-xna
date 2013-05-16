@@ -17,7 +17,7 @@ namespace BomberEngine.Core.Visual
         BOTTOM = 1 << 5
     }
 
-    public class Text : VisualElement
+    public class Text : View
     {
         protected struct FormattedString
         {
