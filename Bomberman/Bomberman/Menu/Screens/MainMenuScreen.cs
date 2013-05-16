@@ -17,12 +17,12 @@ namespace Bomberman.Menu.Screens
         public MainMenuScreen()
         {
             int w = 50;
-            int h = 15;
+            int h = 20;
 
             RectView rect = new FocusableRect(10, 10, 200, 400);
             for (int i = 0; i < 4; ++i)
             {
-                rect.AddView(new FocusableRect(10, 0, w, h));
+                rect.AddView(new Button("Button", 10, 0, w, h));
             }
 
             Font font = Helper.GetFont(A.fnt_system);

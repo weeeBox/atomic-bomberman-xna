@@ -16,9 +16,15 @@ namespace BomberEngine.Core.Visual
     {
         protected IButtonDelegate buttonDelegate;
 
-        public AbstractButton(IButtonDelegate buttonDelegate)
+        public AbstractButton(int width, int height)
+            : this(0, 0, width, height)
         {
-            this.buttonDelegate = buttonDelegate;
+        }
+
+        public AbstractButton(int x, int y, int width, int height)
+            : base(x, y, width, height)
+        {
+            focusable = true;
         }
 
         public override bool OnKeyPressed(Keys key)

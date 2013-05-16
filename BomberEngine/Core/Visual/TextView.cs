@@ -42,15 +42,15 @@ namespace BomberEngine.Core.Visual
             Debug.Assert(font != null);
 
             this.font = font;
-            SetString(text);
+            SetText(text);
         }
 
-        public void SetString(String newString)
+        public virtual void SetText(String newString)
         {
-            SetString(newString, Int32.MaxValue);
+            SetText(newString, Int32.MaxValue);
         }
 
-        public virtual void SetString(String newString, int wrapWidth)
+        public virtual void SetText(String newString, int wrapWidth)
         {
             text = newString;
 

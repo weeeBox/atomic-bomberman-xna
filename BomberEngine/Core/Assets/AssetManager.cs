@@ -28,7 +28,7 @@ namespace BomberEngine.Core.Assets
         
         private Timer loadingTimer;
 
-        private SpriteFont systemFont;
+        private VectorFont systemFont;
 
         public AssetManager(ContentManager contentManager, int resourcesCount)
         {
@@ -138,13 +138,13 @@ namespace BomberEngine.Core.Assets
             return assets[id] != null;
         }
 
-        public virtual SpriteFont SystemFont
+        public virtual VectorFont SystemFont
         {
             get
             {
                 if (systemFont == null)
                 {
-                    systemFont = contentManager.Load<SpriteFont>("SystemFont");
+                    systemFont = new VectorFont(contentManager.Load<SpriteFont>("SystemFont"));
                 }
                 return systemFont;
             }

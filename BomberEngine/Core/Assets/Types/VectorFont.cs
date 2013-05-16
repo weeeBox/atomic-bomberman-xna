@@ -5,16 +5,15 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace BomberEngine.Core.Assets.Types
-{
-    using XnaSpriteFont = Microsoft.Xna.Framework.Graphics.SpriteFont;
+{   
     using BomberEngine.Core.Visual;
 
     public class VectorFont : Font
     {
-        private XnaSpriteFont fnt;
+        private SpriteFont fnt;
         private int fntHeight;
 
-        public VectorFont(XnaSpriteFont fnt)
+        public VectorFont(SpriteFont fnt)
         {
             this.fnt = fnt;
             fntHeight = (int)fnt.MeasureString("0").Y;            
@@ -72,6 +71,11 @@ namespace BomberEngine.Core.Assets.Types
             }
 
             context.DrawString(fnt, dx, dy, text);
+        }
+
+        public SpriteFont Font
+        {
+            get { return fnt; }
         }
     }
 }
