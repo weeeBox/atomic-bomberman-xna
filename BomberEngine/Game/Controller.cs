@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace BomberEngine.Game
 {
-    public class Controller : BaseElement
+    public class Controller : BaseElement, IScreenListener
     {
         private ScreenManager screenManager;
 
@@ -17,6 +17,32 @@ namespace BomberEngine.Game
         {
             screenManager = new ScreenManager();
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Updatable
+
+        public override void Update(float delta)
+        {
+            screenManager.Update(delta);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Drawable
+
+        public override void Draw(Context context)
+        {
+            screenManager.Draw(context);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Lifecycle
 
         public void Start()
         {
@@ -28,16 +54,6 @@ namespace BomberEngine.Game
             OnStop();
         }
 
-        public override void Update(float delta)
-        {
-            screenManager.Update(delta);
-        }
-
-        public override void Draw(Context context)
-        {
-            screenManager.Draw(context);
-        }
-
         protected virtual void OnStart()
         {
         }
@@ -45,6 +61,12 @@ namespace BomberEngine.Game
         protected virtual void OnStop()
         {
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Screens
 
         public Screen CurrentScreen()
         {
@@ -58,13 +80,37 @@ namespace BomberEngine.Game
 
         public void StartScreen(Screen screen)
         {
+            screen.listener = this;
             screenManager.StartScreen(screen, true);
         }
 
         public void StartNextScreen(Screen screen)
         {
+            screen.listener = this;
             screenManager.StartScreen(screen, false);
         }
+
+        public virtual void OnScreenStarted(Screen screen)
+        {   
+        }
+
+        public virtual void OnScreenSuspended(Screen screen)
+        {
+        }
+
+        public virtual void OnScreenResumed(Screen screen)
+        {
+        }
+
+        public virtual void OnScreenStoped(Screen screen)
+        {
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Input events
 
         public override bool OnKeyPressed(Keys key)
         {
@@ -115,5 +161,7 @@ namespace BomberEngine.Game
         {
             screenManager.OnPointerReleased(x, y, fingerId);
         }
+
+        #endregion
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BomberEngine.Game
 {
-    public interface ScreenListener
+    public interface IScreenListener
     {
         void OnScreenStarted(Screen screen);
 

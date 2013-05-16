@@ -30,7 +30,7 @@ namespace BomberEngine.Game
         private GamePadListenerList gamePadListeners;
 
         public ScreenManager screenManager;
-        public ScreenListener listener;
+        public IScreenListener listener;
 
         protected bool m_allowsDrawPrevious;
         protected bool m_allowsUpdatePrevious;

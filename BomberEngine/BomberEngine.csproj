@@ -138,7 +138,7 @@
     <Compile Include="Game\Controller.cs" />
     <Compile Include="Game\RootController.cs" />
     <Compile Include="Game\Screen.cs" />
-    <Compile Include="Game\ScreenListener.cs" />
+    <Compile Include="Game\IScreenListener.cs" />
     <Compile Include="Game\ScreenManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\Collection.cs" />
