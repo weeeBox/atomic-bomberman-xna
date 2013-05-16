@@ -98,6 +98,7 @@
     <Compile Include="Core\Input\GamePadListenerList.cs" />
     <Compile Include="Core\Assets\Types\Font.cs" />
     <Compile Include="Core\Assets\Types\VectorFont.cs" />
+    <Compile Include="Core\Visual\AbstractButton.cs" />
     <Compile Include="Core\Visual\TextView.cs" />
     <Compile Include="Core\Visual\RectView.cs" />
     <Compile Include="Core\Visual\ViewList.cs" />
