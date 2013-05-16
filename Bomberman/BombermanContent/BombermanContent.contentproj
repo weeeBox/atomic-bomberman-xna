@@ -153,6 +153,12 @@
       <Processor>FontDescriptionProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
+    <Compile Include="ButtonFont.spritefont">
+      <Name>ButtonFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <GeneratedByBuilder>true</GeneratedByBuilder>
+    </Compile>
     <Compile Include="POWBOMB.png">
       <Name>POWBOMB</Name>
       <Importer>TextureImporter</Importer>

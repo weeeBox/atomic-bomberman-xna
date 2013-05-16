@@ -14,87 +14,50 @@ namespace Bomberman.Menu.Screens
 {
     public class MainMenuScreen : Screen, IButtonDelegate
     {
+        private enum ButtonId
+        {
+            Play,
+            Settings,
+            Exit
+        }
+
         public MainMenuScreen()
         {
-            int w = 50;
+            int w = 150;
             int h = 20;
 
-            RectView rect = new FocusableRect(10, 10, 200, 400);
-            for (int i = 0; i < 4; ++i)
-            {
-                Button button = new Button("Button", 10, 0, w, h);
-                button.SetDelegate(this);
-                rect.AddView(button);
-            }
+            Font font = Helper.GetFont(A.fnt_button);
 
-            Font font = Helper.GetFont(A.fnt_system);
-            rect.AddView(new TextView(font, "This is test"));
+            View rootView = new View();
+            rootView.alignX = rootView.alignY = ALIGN_CENTER;
 
-            RectView container = new RectView(10, 0, 150, 150, Color.LightGray, Color.Black);
+            Button button = new Button("Play", font, 0, 0, w, h);
+            button.id = (int)ButtonId.Play;
+            button.SetDelegate(this);
+            rootView.AddView(button);
 
-            for (int i = 0; i < 4; ++i)
-            {
-                container.AddView(new FocusableRect(10, 0, w, h));
-            }
-            container.LayoutVer(10);
-            container.ResizeToFitViewsVer(10);
+            button = new Button("Settings", font, 0, 0, w, h);
+            button.id = (int)ButtonId.Settings;
+            button.SetDelegate(this);
+            rootView.AddView(button);
 
-            rect.AddView(container);
+            button = new Button("Exit", font, 0, 0, w, h);
+            button.id = (int)ButtonId.Exit;
+            button.SetDelegate(this);
+            rootView.AddView(button);
 
-            RectView container2 = new RectView(10, 0, 150, 150, Color.LightGray, Color.Black);
-            for (int i = 0; i < 4; ++i)
-            {
-                container2.AddView(new FocusableRect(10, 0, w, h));
-            }
-            container2.LayoutVer(10);
-            container2.ResizeToFitViewsVer(10);
+            rootView.LayoutVer(20);
+            rootView.ResizeToFitViewsVer();
 
-            rect.AddView(container2);
+            SetRootView(rootView);
 
-            for (int i = 0; i < 4; ++i)
-            {
-                rect.AddView(new FocusableRect(10, 0, w, h));
-            }
-
-            rect.LayoutVer(10);
-            rect.ResizeToFitViewsVer(10);
-
-            SetRootView(rect);
+            rootView.x = 0.5f * width;
+            rootView.y = 0.5f * height;
         }
 
         public void OnButtonPress(AbstractButton button)
-        {
-            Button btn = (Button)button;
-            Console.WriteLine("Button pressed: " + btn.Text());
-        }
-    }
-
-    class FocusableRect : RectView
-    {
-        private static Color DEFAULT_BORDER = Color.Black;
-        private static Color DEFAULT_FILL = Color.DarkGray;
-
-        private static Color FOCUSED_BORDER = Color.Black;
-        private static Color FOCUSED_FILL = Color.LightGray;
-
-        public FocusableRect(int x, int y, int width, int height)
-            : base(x, y, width, height, DEFAULT_FILL, DEFAULT_BORDER)
-        {
-            focusable = true;
-        }
-
-        protected override void OnFocusChanged(bool focused)
-        {
-            if (focused)
-            {
-                borderColor = FOCUSED_BORDER;
-                fillColor = FOCUSED_FILL;
-            }
-            else
-            {
-                borderColor = DEFAULT_BORDER;
-                fillColor = DEFAULT_FILL;
-            }
+        {   
+            Console.WriteLine("Button pressed: " + button.id);
         }
     }
 }

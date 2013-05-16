@@ -19,6 +19,7 @@
 	<!-- Fonts -->
 	<vectorFont name="system" file="${dir.fonts}/SystemFont.spritefont" />
 	<vectorFont name="console" file="${dir.fonts}/ConsoleFont.spritefont" />
+	<vectorFont name="button" file="${dir.fonts}/ButtonFont.spritefont" />
     
 	<!-- Powerups -->
 	<image name="pow_bomb" file="${dir.gfx}/Powerups/POWBOMB.png" />
