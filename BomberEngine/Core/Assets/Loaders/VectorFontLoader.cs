@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using BomberEngine.Core.Visual;
+using BomberEngine.Core.Assets.Types;
 
 namespace BomberEngine.Core.Assets.Loaders
 {

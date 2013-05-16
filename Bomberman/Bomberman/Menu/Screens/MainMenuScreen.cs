@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using BomberEngine.Core.Visual;
 using Bomberman.Game;
 using Assets;
+using BomberEngine.Core.Assets.Types;
 
 namespace Bomberman.Menu.Screens
 {
@@ -25,7 +26,7 @@ namespace Bomberman.Menu.Screens
             }
 
             Font font = Helper.GetFont(A.fnt_system);
-            rect.AddView(new Text(font, "This is test"));
+            rect.AddView(new TextView(font, "This is test"));
 
             RectView container = new RectView(10, 0, 150, 150, Color.LightGray, Color.Black);
 

@@ -18,7 +18,7 @@ namespace Bomberman.Game.Screens
 {
     public class GameScreen : Screen
     {
-        private Image fieldBackground;
+        private ImageView fieldBackground;
 
         public GameScreen()
         {

@@ -27,10 +27,10 @@ namespace Bomberman.Game
             return ((BombermanAssetManager)Application.Assets()).GetScheme(id);
         }
 
-        public static Image CreateImage(int id)
+        public static ImageView CreateImage(int id)
         {
             TextureImage texture = GetTexture(id);
-            return new Image(texture);
+            return new ImageView(texture);
         }
     }
 }

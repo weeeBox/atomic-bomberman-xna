@@ -6,11 +6,11 @@ using BomberEngine.Core.Assets.Types;
 
 namespace BomberEngine.Core.Visual
 {
-    public class Image : View
+    public class ImageView : View
     {
         private TextureImage texture;
 
-        public Image(TextureImage texture)
+        public ImageView(TextureImage texture)
             : base(texture.GetWidth(), texture.GetHeight())
         {
             this.texture = texture;

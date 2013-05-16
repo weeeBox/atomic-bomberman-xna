@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace BomberEngine.Core.Visual
+namespace BomberEngine.Core.Assets.Types
 {
     using XnaSpriteFont = Microsoft.Xna.Framework.Graphics.SpriteFont;
+    using BomberEngine.Core.Visual;
 
     public class VectorFont : Font
     {

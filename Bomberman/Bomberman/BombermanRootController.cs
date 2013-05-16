@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using Bomberman.Game.Commands;
 using Bomberman.Menu;
 using BomberEngine.Core.Visual;
+using BomberEngine.Core.Assets.Types;
 
 namespace Bomberman
 {

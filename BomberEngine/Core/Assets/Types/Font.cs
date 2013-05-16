@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BomberEngine.Core.Assets;
+using BomberEngine.Core.Visual;
 
-namespace BomberEngine.Core.Visual
+namespace BomberEngine.Core.Assets.Types
 {
     public abstract class Font : Asset
     {

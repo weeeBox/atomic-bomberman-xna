@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Debugging;
 using BomberEngine.Util;
+using BomberEngine.Core.Assets.Types;
 
 namespace BomberEngine.Core.Visual
 {
@@ -17,7 +18,7 @@ namespace BomberEngine.Core.Visual
         BOTTOM = 1 << 5
     }
 
-    public class Text : View
+    public class TextView : View
     {
         protected struct FormattedString
         {
@@ -36,7 +37,7 @@ namespace BomberEngine.Core.Visual
 
         protected FormattedString[] formattedStrings;
 
-        public Text(Font font, String text)
+        public TextView(Font font, String text)
         {
             Debug.Assert(font != null);
 

@@ -10,6 +10,7 @@ using BomberEngine.Core.Input;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Debugging.Commands;
 using BomberEngine.Game;
+using BomberEngine.Core.Assets.Types;
 
 namespace BomberEngine.Debugging
 {
