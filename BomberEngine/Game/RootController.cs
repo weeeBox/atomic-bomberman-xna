@@ -19,6 +19,10 @@ namespace BomberEngine.Game
         {   
         }
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Lifecycle
+
         public void Start()
         {
             console = CreateConsole();
@@ -38,15 +42,33 @@ namespace BomberEngine.Game
         {
         }
 
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Updatable
+
         public override void Update(float delta)
         {
             currentController.Update(delta);
         }
 
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Drawable
+
         public override void Draw(Context context)
         {
             currentController.Draw(context);
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Child controllers
 
         public void StartController(Controller controller)
         {
@@ -68,6 +90,8 @@ namespace BomberEngine.Game
             currentController = controller;
             controller.Start();
         }
+
+        #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 

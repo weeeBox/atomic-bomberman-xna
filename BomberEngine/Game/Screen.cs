@@ -30,7 +30,6 @@ namespace BomberEngine.Game
         private GamePadListenerList gamePadListeners;
 
         public ScreenManager screenManager;
-        public IScreenListener listener;
 
         protected bool m_allowsDrawPrevious;
         protected bool m_allowsUpdatePrevious;
@@ -72,25 +71,21 @@ namespace BomberEngine.Game
         internal void Start()
         {
             OnStart();
-            NotifyStarted();
         }
 
         internal void Suspend()
         {
             OnSuspend();
-            NotifySuspended();
         }
 
         internal void Resume()
         {
             OnResume();
-            NotifyResumed();
         }
 
         internal void Stop()
         {
             OnStop();
-            NotifyStoped();
             RemoveFromContainer();
         }
 
@@ -197,44 +192,6 @@ namespace BomberEngine.Game
         protected Timer ScheduleTimer(TimerCallback callback, float delay, bool repeated)
         {
             return timerManager.Schedule(callback, delay, repeated);
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Listener Notifications
-
-        private void NotifyStarted()
-        {
-            if (listener != null)
-            {
-                listener.OnScreenStarted(this);
-            }
-        }
-
-        private void NotifySuspended()
-        {
-            if (listener != null)
-            {
-                listener.OnScreenSuspended(this);
-            }
-        }
-
-        private void NotifyResumed()
-        {
-            if (listener != null)
-            {
-                listener.OnScreenResumed(this);
-            }
-        }
-
-        private void NotifyStoped()
-        {
-            if (listener != null)
-            {
-                listener.OnScreenStoped(this);
-            }
         }
 
         #endregion

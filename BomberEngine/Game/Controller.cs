@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace BomberEngine.Game
 {
-    public class Controller : BaseElement, IScreenListener
+    public class Controller : BaseElement
     {
         private ScreenManager screenManager;
 
@@ -79,31 +79,13 @@ namespace BomberEngine.Game
         }
 
         public void StartScreen(Screen screen)
-        {
-            screen.listener = this;
+        {   
             screenManager.StartScreen(screen, true);
         }
 
         public void StartNextScreen(Screen screen)
         {
-            screen.listener = this;
             screenManager.StartScreen(screen, false);
-        }
-
-        public virtual void OnScreenStarted(Screen screen)
-        {   
-        }
-
-        public virtual void OnScreenSuspended(Screen screen)
-        {
-        }
-
-        public virtual void OnScreenResumed(Screen screen)
-        {
-        }
-
-        public virtual void OnScreenStoped(Screen screen)
-        {
         }
 
         #endregion
