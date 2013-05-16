@@ -12,7 +12,7 @@ using BomberEngine.Core.Assets.Types;
 
 namespace Bomberman.Menu.Screens
 {
-    public class MainMenuScreen : Screen
+    public class MainMenuScreen : Screen, IButtonDelegate
     {
         public MainMenuScreen()
         {
@@ -22,7 +22,9 @@ namespace Bomberman.Menu.Screens
             RectView rect = new FocusableRect(10, 10, 200, 400);
             for (int i = 0; i < 4; ++i)
             {
-                rect.AddView(new Button("Button", 10, 0, w, h));
+                Button button = new Button("Button", 10, 0, w, h);
+                button.SetDelegate(this);
+                rect.AddView(button);
             }
 
             Font font = Helper.GetFont(A.fnt_system);
@@ -60,9 +62,10 @@ namespace Bomberman.Menu.Screens
             SetRootView(rect);
         }
 
-        public override bool OnKeyPressed(Microsoft.Xna.Framework.Input.Keys key)
+        public void OnButtonPress(AbstractButton button)
         {
-            return base.OnKeyPressed(key);
+            Button btn = (Button)button;
+            Console.WriteLine("Button pressed: " + btn.Text());
         }
     }
 

@@ -61,5 +61,21 @@ namespace BomberEngine.Core.Visual
         {
             color = focused ? highlightedColor : normalColor;
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
+        public TextView Label()
+        {
+            return label;
+        }
+
+        public String Text()
+        {
+            return label != null && label.Parent() == this ? label.text : null;
+        }
+
+        #endregion
     }
 }

@@ -82,5 +82,21 @@ namespace BomberEngine.Core.Visual
         protected virtual void OnRelease()
         {
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
+        public IButtonDelegate Delegate()
+        {
+            return buttonDelegate;
+        }
+
+        public void SetDelegate(IButtonDelegate buttonDelegate)
+        {
+            this.buttonDelegate = buttonDelegate;
+        }
+
+        #endregion
     }
 }
