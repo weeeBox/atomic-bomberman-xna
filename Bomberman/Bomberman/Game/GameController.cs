@@ -11,11 +11,15 @@ using BombermanCommon.Resources;
 using Bomberman.Content;
 using Assets;
 using BomberEngine.Core.Input;
+using BomberEngine.Core.Visual;
 
 namespace Bomberman.Game
 {
-    public class GameController : Controller
+    public class GameController : Controller, IButtonDelegate
     {
+        private const int SCREEN_GAME = 1;
+        private const int SCREEN_PAUSE = 2;
+
         private GameScreen gameScreen;
         private GameCheats cheats;
 
@@ -31,6 +35,7 @@ namespace Bomberman.Game
             InitField(A.sch_X);
 
             gameScreen = new GameScreen();
+            gameScreen.id = SCREEN_GAME;
 
             InitPlayers();
             InitCheats();
@@ -84,6 +89,48 @@ namespace Bomberman.Game
         protected override void OnStart()
         {
             StartScreen(gameScreen);
+        }
+
+        public override bool OnKeyPressed(Keys key)
+        {
+            if (base.OnKeyPressed(key))
+            {
+                return true;
+            }
+
+            if (key == Keys.Escape)
+            {
+                Screen screen = CurrentScreen();
+                if (screen.id == SCREEN_GAME)
+                {
+                    PauseScreen pauseScreen = new PauseScreen(this);
+                    pauseScreen.id = SCREEN_PAUSE;
+                    StartNextScreen(pauseScreen);
+                    return true;
+                }
+
+                if (screen.id == SCREEN_PAUSE)
+                {
+                    screen.Finish();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void OnButtonPress(AbstractButton button)
+        {
+            switch (button.id)
+            {
+                case PauseScreen.BUTTON_RESUME:
+                    CurrentScreen().Finish();
+                    break;
+
+                case PauseScreen.BUTTON_EXIT:
+                    Stop();
+                    break;
+            }
         }
     }
 }

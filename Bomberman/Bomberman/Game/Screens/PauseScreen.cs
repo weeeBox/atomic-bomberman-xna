@@ -14,47 +14,25 @@ using BomberEngine.Core.Input;
 
 namespace Bomberman.Game.Screens
 {
-    public class PauseScreen : Screen, IButtonDelegate
+    public class PauseScreen : Screen
     {
-        public PauseScreen()
+        public const int BUTTON_RESUME = 1;
+        public const int BUTTON_EXIT = 2;
+
+        public PauseScreen(IButtonDelegate buttonDelegate)
         {   
             allowsDrawPrevious = true;
 
             Color backColor = new Color(0.0f, 0.0f, 0.0f, 0.25f);
             AddView(new RectView(0, 0, width, height, backColor, Color.Black));
 
-            ButtonGroup group = new ButtonGroup(new String[] { "Resume", "Exit" }, this);
+            ButtonGroup group = new ButtonGroup();
+            group.AddButton("Resume", BUTTON_RESUME, buttonDelegate);
+            group.AddButton("Exit", BUTTON_EXIT, buttonDelegate);
             group.alignX = group.alignY = View.ALIGN_CENTER;
             group.x = 0.5f * width;
             group.y = 0.5f * height;
             AddView(group);
-        }
-
-        public override bool OnKeyPressed(Keys key)
-        {
-            if (key == Keys.Escape)
-            {
-                Finish();
-                return true;
-            }
-
-            return base.OnKeyPressed(key);
-        }
-
-        public override bool OnButtonPressed(ButtonEvent e)
-        {
-            if (e.button == Buttons.Back)
-            {
-                Finish();
-                return true;
-            }
-
-            return base.OnButtonPressed(e);
-        }
-
-        public void OnButtonPress(AbstractButton button)
-        {
-            
         }
     }
 }

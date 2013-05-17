@@ -35,22 +35,5 @@ namespace Bomberman.Game.Screens
             // field drawer
             AddView(new PowerupsDrawable(field, 0, 0, Constant.FIELD_WIDTH, Constant.FIELD_OFFSET_Y));
         }
-
-        public override bool OnKeyPressed(Keys key)
-        {
-            if (base.OnKeyPressed(key))
-            {
-                return true;
-            }
-
-            if (key == Keys.Escape)
-            {
-                PauseScreen pauseScreen = new PauseScreen();
-                StartNextScreen(pauseScreen);
-                return true;
-            }
-
-            return false;
-        }
     }
 }

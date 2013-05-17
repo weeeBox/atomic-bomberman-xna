@@ -11,22 +11,24 @@ namespace Bomberman.Menu
 {
     public class ButtonGroup : View
     {
-        public ButtonGroup(String[] titles, IButtonDelegate buttonDelegate)
-            : this(titles, buttonDelegate, 0)
+        public ButtonGroup()
+            : this(0)
         {
         }
 
-        public ButtonGroup(String[] titles, IButtonDelegate buttonDelegate, float width)
+        public ButtonGroup(float width)
             : base(width, 0)
+        {   
+        }
+
+        public void AddButton(String title, int id, IButtonDelegate buttonDelegate)
         {
             Font font = Helper.GetFont(A.fnt_button);
 
-            foreach (String title in titles)
-            {
-                Button button = new Button(title, font, 0, 0, width, font.FontHeight());
-                button.SetDelegate(buttonDelegate);
-                AddView(button);
-            }
+            Button button = new Button(title, font, 0, 0, width, font.FontHeight());
+            button.id = id;
+            button.SetDelegate(buttonDelegate);
+            AddView(button);
 
             LayoutVer(10);
             ResizeToFitViewsVer();
