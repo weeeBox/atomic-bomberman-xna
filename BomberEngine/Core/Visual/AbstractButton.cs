@@ -16,12 +16,12 @@ namespace BomberEngine.Core.Visual
     {
         protected IButtonDelegate buttonDelegate;
 
-        public AbstractButton(int width, int height)
+        public AbstractButton(float width, float height)
             : this(0, 0, width, height)
         {
         }
 
-        public AbstractButton(int x, int y, int width, int height)
+        public AbstractButton(float x, float y, float width, float height)
             : base(x, y, width, height)
         {
             focusable = true;

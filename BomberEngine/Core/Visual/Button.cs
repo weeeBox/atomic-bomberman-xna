@@ -16,14 +16,14 @@ namespace BomberEngine.Core.Visual
         public Color normalColor = Color.White;
         public Color highlightedColor = Color.Yellow;
 
-        public Button(String text, int x, int y, int width, int height)
+        public Button(String text, float x, float y, float width, float height)
             : base(x, y, width, height)
         {
             font = Application.Assets().SystemFont;
             SetText(text);
         }
 
-        public Button(String text, Font font, int x, int y, int width, int height)
+        public Button(String text, Font font, float x, float y, float width, float height)
             : base(x, y, width, height)
         {
             this.font = font;

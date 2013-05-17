@@ -88,14 +88,10 @@ namespace BomberEngine.Debugging
 
         public override void Draw(Context context)
         {
-            PreDraw(context);
-
             context.FillRect(0, 0, width, height, backColor);
 
             DrawLines(context);
             DrawPrompt(context);
-
-            PostDraw(context);
         }
 
         private void DrawLines(Context context)

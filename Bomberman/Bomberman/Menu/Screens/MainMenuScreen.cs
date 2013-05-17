@@ -29,7 +29,7 @@ namespace Bomberman.Menu.Screens
             Font font = Helper.GetFont(A.fnt_button);
 
             View rootView = new View();
-            rootView.alignX = rootView.alignY = ALIGN_CENTER;
+            rootView.alignX = rootView.alignY = View.ALIGN_CENTER;
 
             Button button = new Button("Play", font, 0, 0, w, h);
             button.id = (int)ButtonId.Play;

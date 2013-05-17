@@ -164,6 +164,7 @@
     <Compile Include="Game\Screens\GameScreen.cs" />
     <Compile Include="Game\StartupController.cs" />
     <Compile Include="Game\Util.cs" />
+    <Compile Include="Menu\ButtonGroup.cs" />
     <Compile Include="Menu\MenuController.cs" />
     <Compile Include="Menu\Screens\MainMenuScreen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -216,9 +217,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Game\Controllers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

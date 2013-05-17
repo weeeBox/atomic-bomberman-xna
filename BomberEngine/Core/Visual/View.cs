@@ -51,12 +51,12 @@ namespace BomberEngine.Core.Visual
         {
         }
 
-        public View(int width, int height)
+        public View(float width, float height)
             : this(0, 0, width, height)
         {
         }
 
-        public View(float x, float y, int width, int height)
+        public View(float x, float y, float width, float height)
         {
             this.x = x;
             this.y = y;

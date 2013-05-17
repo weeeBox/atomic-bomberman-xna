@@ -6,26 +6,28 @@ using BomberEngine.Game;
 using BomberEngine.Core.Visual;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using BomberEngine.Core.Visual.UI;
+using Assets;
+using BomberEngine.Core.Assets.Types;
+using Bomberman.Menu;
+using BomberEngine.Core.Input;
 
 namespace Bomberman.Game.Screens
 {
-    public class PauseScreen : Screen
+    public class PauseScreen : Screen, IButtonDelegate
     {
-        private Color backColor;
-
         public PauseScreen()
-        {
-            backColor = new Color(0.0f, 0.0f, 0.0f, 0.25f);
+        {   
             allowsDrawPrevious = true;
-        }
 
-        public override void Draw(Context context)
-        {
-            PreDraw(context);
+            Color backColor = new Color(0.0f, 0.0f, 0.0f, 0.25f);
+            AddView(new RectView(0, 0, width, height, backColor, Color.Black));
 
-            context.FillRect(0, 0, width, height, backColor);
-            
-            PostDraw(context);
+            ButtonGroup group = new ButtonGroup(new String[] { "Resume", "Exit" }, this);
+            group.alignX = group.alignY = View.ALIGN_CENTER;
+            group.x = 0.5f * width;
+            group.y = 0.5f * height;
+            AddView(group);
         }
 
         public override bool OnKeyPressed(Keys key)
@@ -36,7 +38,23 @@ namespace Bomberman.Game.Screens
                 return true;
             }
 
-            return false;
+            return base.OnKeyPressed(key);
+        }
+
+        public override bool OnButtonPressed(ButtonEvent e)
+        {
+            if (e.button == Buttons.Back)
+            {
+                Finish();
+                return true;
+            }
+
+            return base.OnButtonPressed(e);
+        }
+
+        public void OnButtonPress(AbstractButton button)
+        {
+            
         }
     }
 }

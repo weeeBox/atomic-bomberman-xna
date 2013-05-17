@@ -11,12 +11,15 @@ using BomberEngine.Debugging;
 
 namespace BomberEngine.Game
 {
-    public class Screen : View
+    public class Screen : BaseElement
     {
         protected enum FocusDirection
         {
             None, Up, Down, Left, Right
         }
+
+        public int width;
+        public int height;
 
         private View mRootView;
         private View mFocusedView;
@@ -40,8 +43,10 @@ namespace BomberEngine.Game
         }
 
         public Screen(int width, int height)
-            : base(width, height)
         {
+            this.width = width;
+            this.height = height;
+
             timerManager = new TimerManager();
             keyboardListeners = new KeyboardListenerList();
             gamePadListeners = new GamePadListenerList();
@@ -54,12 +59,19 @@ namespace BomberEngine.Game
 
         #region Root view
 
+        protected View CreateRootView()
+        {
+            return new View(0, 0, width, height);
+        }
+
         public void SetRootView(View view)
         {
-            Debug.Assert(mRootView == null);
-
             mRootView = view;
-            TryMoveFocus(FocusDirection.Down);
+        }
+
+        public void AddView(View view)
+        {
+            RootView.AddView(view);
         }
 
         #endregion
@@ -71,6 +83,11 @@ namespace BomberEngine.Game
         internal void Start()
         {
             OnStart();
+
+            if (mRootView != null)
+            {
+                TryMoveFocus(FocusDirection.Down);
+            }
         }
 
         internal void Suspend()
@@ -502,9 +519,16 @@ namespace BomberEngine.Game
             protected set { m_allowsUpdatePrevious = value; }
         }
 
-        protected View rootView
+        protected View RootView
         {
-            get { return mRootView; }
+            get 
+            {
+                if (mRootView == null)
+                {
+                    mRootView = CreateRootView();
+                }
+                return mRootView; 
+            }
         }
 
         public View focusedView
