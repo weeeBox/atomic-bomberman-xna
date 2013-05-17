@@ -26,7 +26,7 @@ namespace BomberEngineTests
             View container = new View();
             container.AddView(f1);
 
-            screen.SetRootView(container);
+            //screen.SetRootView(container);
 
             Assert.IsTrue(f1.focused);
             Assert.AreEqual(screen.focusedView, f1);
@@ -46,7 +46,7 @@ namespace BomberEngineTests
             View container2 = new View();
             container2.AddView(container1);
 
-            screen.SetRootView(container2);
+            //screen.SetRootView(container2);
 
             Assert.IsTrue(f1.focused);
             Assert.AreEqual(screen.focusedView, f1);
@@ -69,7 +69,7 @@ namespace BomberEngineTests
             View container3 = new View();
             container3.AddView(container2);
 
-            screen.SetRootView(container3);
+            //screen.SetRootView(container3);
 
             Assert.IsTrue(f1.focused);
             Assert.AreEqual(screen.focusedView, f1);
@@ -107,7 +107,7 @@ namespace BomberEngineTests
             rootView.AddView(container2);
             rootView.AddView(container3);
 
-            screen.SetRootView(rootView);
+            //screen.SetRootView(rootView);
 
             Assert.IsTrue(f1.focused);
             Assert.AreEqual(screen.focusedView, f1);
@@ -145,7 +145,7 @@ namespace BomberEngineTests
             rootView.AddView(container2);
             rootView.AddView(container3);
 
-            screen.SetRootView(rootView);
+            //screen.SetRootView(rootView);
 
             Assert.IsTrue(f1.focused);
             Assert.AreEqual(screen.focusedView, f1);

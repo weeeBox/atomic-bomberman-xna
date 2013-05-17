@@ -128,13 +128,13 @@ namespace BomberEngine.Game
                 }
                 else
                 {
-                    if (!screen.allowsUpdatePrevious)
+                    if (!screen.AllowsUpdatePrevious)
                     {
                         currentScreen.Suspend();
                         updatables.Remove(currentScreen);
                     }
 
-                    if (!screen.allowsDrawPrevious)
+                    if (!screen.AllowsDrawPrevious)
                     {   
                         drawables.Remove(currentScreen);
                     }
@@ -174,12 +174,12 @@ namespace BomberEngine.Game
                 if (screens.Count > 0)
                 {
                     currentScreen = screens[screens.Count - 1];
-                    if (!screen.allowsDrawPrevious)
+                    if (!screen.AllowsDrawPrevious)
                     {
                         drawables.Add(currentScreen);
                     }
 
-                    if (!screen.allowsUpdatePrevious)
+                    if (!screen.AllowsUpdatePrevious)
                     {
                         currentScreen.Resume();
                         updatables.Add(currentScreen);

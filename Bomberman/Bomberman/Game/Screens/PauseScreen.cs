@@ -21,7 +21,7 @@ namespace Bomberman.Game.Screens
 
         public PauseScreen(IButtonDelegate buttonDelegate)
         {   
-            allowsDrawPrevious = true;
+            AllowsDrawPrevious = true;
 
             Color backColor = new Color(0.0f, 0.0f, 0.0f, 0.25f);
             AddView(new RectView(0, 0, width, height, backColor, Color.Black));

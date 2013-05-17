@@ -49,7 +49,7 @@ namespace Bomberman.Menu.Screens
             rootView.LayoutVer(20);
             rootView.ResizeToFitViewsVer();
 
-            SetRootView(rootView);
+            AddView(rootView);
 
             rootView.x = 0.5f * width;
             rootView.y = 0.5f * height;

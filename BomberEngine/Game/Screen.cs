@@ -34,8 +34,8 @@ namespace BomberEngine.Game
 
         public ScreenManager screenManager;
 
-        protected bool m_allowsDrawPrevious;
-        protected bool m_allowsUpdatePrevious;
+        protected bool allowsDrawPrevious;
+        protected bool allowsUpdatePrevious;
 
         public Screen()
             : this(Application.GetWidth(), Application.GetHeight())
@@ -53,6 +53,8 @@ namespace BomberEngine.Game
 
             updatableList = UpdatableList.Null;
             drawableList = DrawableList.Null;
+
+            mRootView = CreateRootView();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -62,11 +64,6 @@ namespace BomberEngine.Game
         protected View CreateRootView()
         {
             return new View(0, 0, width, height);
-        }
-
-        public void SetRootView(View view)
-        {
-            mRootView = view;
         }
 
         public void AddView(View view)
@@ -507,28 +504,21 @@ namespace BomberEngine.Game
 
         #region Properties
 
-        public bool allowsDrawPrevious
+        public bool AllowsDrawPrevious
         {
-            get { return m_allowsDrawPrevious; }
-            protected set { m_allowsDrawPrevious = value; }
+            get { return allowsDrawPrevious; }
+            protected set { allowsDrawPrevious = value; }
         }
 
-        public bool allowsUpdatePrevious
+        public bool AllowsUpdatePrevious
         {
-            get { return m_allowsUpdatePrevious; }
-            protected set { m_allowsUpdatePrevious = value; }
+            get { return allowsUpdatePrevious; }
+            protected set { allowsUpdatePrevious = value; }
         }
 
         protected View RootView
         {
-            get 
-            {
-                if (mRootView == null)
-                {
-                    mRootView = CreateRootView();
-                }
-                return mRootView; 
-            }
+            get { return mRootView; }
         }
 
         public View focusedView

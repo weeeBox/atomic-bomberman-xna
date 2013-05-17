@@ -42,8 +42,8 @@ namespace BomberEngine.Debugging
         {
             this.font = font;
 
-            allowsDrawPrevious = true;
-            allowsUpdatePrevious = true;
+            AllowsDrawPrevious = true;
+            AllowsUpdatePrevious = true;
 
             m_lines = new List<String>();
             commands = new ConsoleCommandRegister();
