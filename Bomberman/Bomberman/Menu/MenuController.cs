@@ -9,6 +9,11 @@ namespace Bomberman.Menu
 {
     public class MenuController : Controller
     {
+        public MenuController(Controller parentController)
+            : base(parentController)
+        {
+        }
+
         protected override void OnStart()
         {
             StartScreen(new MainMenuScreen());

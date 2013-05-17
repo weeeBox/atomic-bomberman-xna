@@ -6,15 +6,20 @@ using BomberEngine.Core;
 using BomberEngine.Core.Input;
 using BomberEngine.Core.Visual;
 using Microsoft.Xna.Framework.Input;
+using BomberEngine.Debugging;
 
 namespace BomberEngine.Game
 {
     public class Controller : BaseElement
     {
-        private ScreenManager screenManager;
+        protected ScreenManager screenManager;
 
-        public Controller()
+        protected Controller childController;
+        protected Controller parentController;
+
+        public Controller(Controller parentController)
         {
+            this.parentController = parentController;
             screenManager = new ScreenManager();
         }
 
@@ -45,13 +50,34 @@ namespace BomberEngine.Game
         #region Lifecycle
 
         public void Start()
-        {
+        {   
             OnStart();
         }
 
         public void Stop()
         {
+            if (parentController != null)
+            {
+                parentController.OnChildControllerStopped(this);
+            }
+
+            if (childController != null)
+            {
+                childController.parentController = null;
+                childController.Stop();
+            }
+
             OnStop();
+        }
+
+        public void Suspend()
+        {
+            OnSuspend();
+        }
+
+        public void Resume()
+        {
+            OnResume();
         }
 
         protected virtual void OnStart()
@@ -62,7 +88,51 @@ namespace BomberEngine.Game
         {
         }
 
+        protected virtual void OnSuspend()
+        {
+        }
+
+        protected virtual void OnResume()
+        {
+        }
+
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        public void StartChildController(Controller controller)
+        {
+            if (controller == null)
+            {
+                throw new ArgumentException("Controller is null");
+            }
+
+            if (controller == childController)
+            {
+                throw new InvalidOperationException("Controller is already started");
+            }
+
+            if (childController != null)
+            {
+                throw new InvalidOperationException("Another child controller is already started");
+            }
+
+            childController = controller;
+            childController.parentController = this;
+            Application.RootController.StartController(childController);
+        }
+
+        private void StopChildController(Controller controller)
+        {
+            Debug.Assert(controller == childController);
+            OnChildControllerStopped(controller);
+            childController.parentController = null;
+            childController = null;
+        }
+
+        protected virtual void OnChildControllerStopped(Controller controller)
+        {
+        }
 
         //////////////////////////////////////////////////////////////////////////////
 
@@ -142,6 +212,22 @@ namespace BomberEngine.Game
         public override void OnPointerReleased(int x, int y, int fingerId)
         {
             screenManager.OnPointerReleased(x, y, fingerId);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
+        public Controller ChildController
+        {
+            get { return childController; }
+        }
+
+        public Controller ParentController
+        {
+            get { return parentController; }
         }
 
         #endregion

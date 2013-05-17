@@ -195,6 +195,11 @@ namespace BomberEngine.Game
             return sharedApplication.inputManager;
         }
 
+        public static RootController RootController
+        {
+            get { return sharedApplication.rootController; }
+        }
+
         public bool IsRunning()
         {
             return !stoped;

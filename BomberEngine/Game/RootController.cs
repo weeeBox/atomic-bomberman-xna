@@ -10,12 +10,13 @@ using Microsoft.Xna.Framework.Input;
 
 namespace BomberEngine.Game
 {
-    public abstract class RootController : BaseElement
+    public abstract class RootController : Controller
     {   
         private Controller currentController;
         private GameConsole console;
 
         public RootController()
+            : base(null)
         {   
         }
 
@@ -23,25 +24,11 @@ namespace BomberEngine.Game
 
         #region Lifecycle
 
-        public void Start()
+        protected override void OnStart()
         {
             console = CreateConsole();
-            OnStart();
         }
-
-        public void Stop()
-        {
-            OnStop();
-        }
-
-        protected virtual void OnStart()
-        {
-        }
-
-        protected virtual void OnStop()
-        {
-        }
-
+        
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
@@ -84,11 +71,19 @@ namespace BomberEngine.Game
                     throw new InvalidOperationException("Controller already set as current: " + controller);
                 }
 
-                currentController.Stop();
+                if (controller.ParentController == currentController)
+                {
+                    currentController.Suspend();
+                }
+                else
+                {
+                    currentController.Stop();
+                }
+                
             }
 
             currentController = controller;
-            controller.Start();
+            currentController.Start();
         }
 
         #endregion

@@ -29,7 +29,7 @@ namespace Bomberman
             manager.AddPackToLoad(AssetPacks.Packs.ALL);
             manager.LoadImmediately();
 
-            menuController = new MenuController();
+            menuController = new MenuController(this);
             StartController(menuController);
         }
 
