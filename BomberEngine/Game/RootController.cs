@@ -12,8 +12,8 @@ namespace BomberEngine.Game
 {
     public abstract class RootController : Controller
     {   
-        private Controller currentController;
-        private GameConsole console;
+        protected Controller currentController;
+        protected GameConsole console;
 
         public RootController()
             : base(null)
@@ -57,7 +57,7 @@ namespace BomberEngine.Game
 
         #region Child controllers
 
-        public void StartController(Controller controller)
+        public override void StartController(Controller controller)
         {
             if (controller == null)
             {
@@ -84,6 +84,11 @@ namespace BomberEngine.Game
 
             currentController = controller;
             currentController.Start();
+        }
+
+        protected override void StartChildController(Controller controller)
+        {
+            throw new InvalidOperationException("Can't start child controller from root controller");
         }
 
         #endregion
@@ -163,6 +168,17 @@ namespace BomberEngine.Game
         public override void OnPointerReleased(int x, int y, int fingerId)
         {
             currentController.OnPointerReleased(x, y, fingerId);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
+        public Controller CurrentController
+        {
+            get { return currentController; }
         }
 
         #endregion

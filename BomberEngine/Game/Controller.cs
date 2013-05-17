@@ -100,7 +100,7 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        public void StartChildController(Controller controller)
+        protected virtual void StartChildController(Controller controller)
         {
             if (controller == null)
             {
@@ -119,7 +119,12 @@ namespace BomberEngine.Game
 
             childController = controller;
             childController.parentController = this;
-            Application.RootController.StartController(childController);
+            StartController(controller);
+        }
+
+        public virtual void StartController(Controller controller)
+        {
+            Application.RootController.StartController(controller);
         }
 
         private void StopChildController(Controller controller)

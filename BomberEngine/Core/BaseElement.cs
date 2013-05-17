@@ -10,6 +10,8 @@ namespace BomberEngine.Core
 {
     public abstract class BaseElement : IUpdatable, IDrawable, IInputListener
     {
+        public int id;
+
         public virtual void Update(float delta)
         {   
         }

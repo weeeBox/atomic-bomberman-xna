@@ -19,8 +19,6 @@ namespace BomberEngine.Core.Visual
         public bool focused;
         public bool focusable;
 
-        public int id;
-
         public float x;
         public float y;
         

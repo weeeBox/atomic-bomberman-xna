@@ -12,16 +12,16 @@ using BomberEngine.Core.Assets.Types;
 
 namespace Bomberman.Menu.Screens
 {
-    public class MainMenuScreen : Screen, IButtonDelegate
+    public class MainMenuScreen : Screen
     {
-        private enum ButtonId
+        public enum ButtonId
         {
             Play,
             Settings,
             Exit
         }
 
-        public MainMenuScreen()
+        public MainMenuScreen(IButtonDelegate buttonDelegate)
         {
             int w = 150;
             int h = 20;
@@ -33,17 +33,17 @@ namespace Bomberman.Menu.Screens
 
             Button button = new Button("Play", font, 0, 0, w, h);
             button.id = (int)ButtonId.Play;
-            button.SetDelegate(this);
+            button.SetDelegate(buttonDelegate);
             rootView.AddView(button);
 
             button = new Button("Settings", font, 0, 0, w, h);
             button.id = (int)ButtonId.Settings;
-            button.SetDelegate(this);
+            button.SetDelegate(buttonDelegate);
             rootView.AddView(button);
 
             button = new Button("Exit", font, 0, 0, w, h);
             button.id = (int)ButtonId.Exit;
-            button.SetDelegate(this);
+            button.SetDelegate(buttonDelegate);
             rootView.AddView(button);
 
             rootView.LayoutVer(20);
@@ -53,11 +53,6 @@ namespace Bomberman.Menu.Screens
 
             rootView.x = 0.5f * width;
             rootView.y = 0.5f * height;
-        }
-
-        public void OnButtonPress(AbstractButton button)
-        {   
-            Console.WriteLine("Button pressed: " + button.id);
         }
     }
 }

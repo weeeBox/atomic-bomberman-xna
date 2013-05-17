@@ -502,7 +502,7 @@ namespace BomberEngine.Game
             protected set { m_allowsUpdatePrevious = value; }
         }
 
-        public View rootView
+        protected View rootView
         {
             get { return mRootView; }
         }
@@ -510,6 +510,11 @@ namespace BomberEngine.Game
         public View focusedView
         {
             get { return mFocusedView; }
+        }
+
+        protected Controller CurrentController
+        {
+            get { return Application.RootController.CurrentController; }
         }
 
         #endregion
