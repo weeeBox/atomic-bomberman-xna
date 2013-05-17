@@ -21,8 +21,7 @@ namespace Bomberman.Game
 
         private Game game;
 
-        public GameController(Controller parentController)
-            : base(parentController)
+        public GameController()
         {
             game = new Game();
             game.AddPlayer(new Player(0));

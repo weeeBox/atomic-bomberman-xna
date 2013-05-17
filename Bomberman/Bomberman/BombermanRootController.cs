@@ -29,8 +29,23 @@ namespace Bomberman
             manager.AddPackToLoad(AssetPacks.Packs.ALL);
             manager.LoadImmediately();
 
-            menuController = new MenuController(this);
+            menuController = new MenuController();
             StartController(menuController);
+        }
+
+        protected override void OnControllerStop(Controller controller)
+        {
+            switch (controller.exitCode)
+            {
+                case ExitCode.StartGame:
+                    gameController = new GameController();
+                    StartController(gameController);
+                    break;
+
+                case ExitCode.Quit:
+                    Application.sharedApplication.Stop();
+                    break;
+            }
         }
 
         protected override GameConsole CreateConsole()

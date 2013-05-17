@@ -11,7 +11,7 @@ namespace BomberEngine.Game
 {
     public abstract class Application
     {
-        private static Application sharedApplication;
+        public static Application sharedApplication;
 
         private RootController rootController;
 

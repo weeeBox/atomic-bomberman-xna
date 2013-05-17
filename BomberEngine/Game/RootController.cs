@@ -10,23 +10,32 @@ using Microsoft.Xna.Framework.Input;
 
 namespace BomberEngine.Game
 {
-    public abstract class RootController : Controller
+    public abstract class RootController : BaseElement
     {   
         protected Controller currentController;
         protected GameConsole console;
-
-        public RootController()
-            : base(null)
-        {   
-        }
 
         //////////////////////////////////////////////////////////////////////////////
 
         #region Lifecycle
 
-        protected override void OnStart()
+        public void Start()
         {
             console = CreateConsole();
+            OnStart();
+        }
+
+        public void Stop()
+        {
+            OnStop();
+        }
+
+        protected virtual void OnStart()
+        {
+        }
+
+        protected virtual void OnStop()
+        {
         }
         
         #endregion
@@ -57,7 +66,7 @@ namespace BomberEngine.Game
 
         #region Child controllers
 
-        public override void StartController(Controller controller)
+        public void StartController(Controller controller)
         {
             if (controller == null)
             {
@@ -86,9 +95,17 @@ namespace BomberEngine.Game
             currentController.Start();
         }
 
-        protected override void StartChildController(Controller controller)
+        internal void ControllerStopped(Controller controller)
         {
-            throw new InvalidOperationException("Can't start child controller from root controller");
+            Debug.Assert(controller == currentController);
+            currentController = null;
+
+            OnControllerStop(controller);
+        }
+
+        protected virtual void OnControllerStop(Controller controller)
+        {
+
         }
 
         #endregion

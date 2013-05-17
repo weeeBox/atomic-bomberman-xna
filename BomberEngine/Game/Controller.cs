@@ -17,9 +17,10 @@ namespace BomberEngine.Game
         protected Controller childController;
         protected Controller parentController;
 
-        public Controller(Controller parentController)
-        {
-            this.parentController = parentController;
+        public int exitCode;
+
+        public Controller()
+        {   
             screenManager = new ScreenManager();
         }
 
@@ -56,10 +57,12 @@ namespace BomberEngine.Game
 
         public void Stop()
         {
-            if (parentController != null)
-            {
-                parentController.OnChildControllerStopped(this);
-            }
+            Stop(exitCode);
+        }
+
+        public void Stop(int exitCode)
+        {
+            this.exitCode = exitCode;
 
             if (childController != null)
             {
@@ -67,7 +70,13 @@ namespace BomberEngine.Game
                 childController.Stop();
             }
 
+            if (parentController != null)
+            {
+                parentController.OnChildControllerStopped(this);
+            }
+
             OnStop();
+            Application.RootController.ControllerStopped(this);
         }
 
         public void Suspend()

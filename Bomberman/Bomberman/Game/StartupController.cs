@@ -7,10 +7,6 @@ using BomberEngine.Game;
 namespace Bomberman.Game
 {
     public class StartupController : Controller
-    {
-        public StartupController(Controller parentController)
-            : base(parentController)
-        {
-        }
+    {   
     }
 }

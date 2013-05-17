@@ -152,6 +152,7 @@
     <Compile Include="Game\Elements\Players\PlayerAction.cs" />
     <Compile Include="Game\Elements\Players\PlayerList.cs" />
     <Compile Include="Game\Elements\Players\Input\PlayerInput.cs" />
+    <Compile Include="Game\ExitCode.cs" />
     <Compile Include="Game\GameCheats.cs" />
     <Compile Include="Game\GameController.cs" />
     <Compile Include="Game\Game.cs" />
