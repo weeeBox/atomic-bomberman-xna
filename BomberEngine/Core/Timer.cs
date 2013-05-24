@@ -9,69 +9,46 @@ namespace BomberEngine.Core
 
     public class Timer
     {
-        private TimerCallback callback;
+        public static Timer freeRoot;
 
-        private int numRepeats;
-        private int numRepeated;
+        public bool cancelled;
 
-        private float elaspedTime;
-        private float timeout;
+        internal TimerCallback callback;
 
-        private bool cancelled;
+        public Timer next;
+        public Timer prev;
 
-        public Timer(TimerCallback callback, float timeout) : this(callback, timeout, 1)
-        {
-        }
+        internal TimerManager timerManager;
 
-        public Timer(TimerCallback callback, float timeout, int numRepeats)
-        {
-            if (callback == null)
-            {
-                throw new ArgumentException("Callback cannot be null");
-            }
+        internal int numRepeats;
+        internal int numRepeated;
 
-            if (numRepeats < 0)
-            {
-                throw new ArgumentException("Illegal number of repeats: " + numRepeats);
-            }
+        internal float timeout;
+        internal double fireTime;
 
-            this.callback = callback;
-            this.timeout = timeout < 0 ? 0 : timeout;
-            this.numRepeats = numRepeats;
-        }
+        public String name;
 
         public void Cancel()
         {
             cancelled = true;
+            timerManager.RemoveTimer(this);
         }
 
-        public void Reset()
-        {   
-            numRepeated = 0;
-            elaspedTime = 0;
-        }
-
-        public void AdvanceTime(float delta)
-        {
-            elaspedTime += delta;
-            if (elaspedTime >= timeout)
-            {
-                Fire();
-            }
-        }
-
-        protected void Fire()
+        internal void Fire()
         {   
             callback(this);
 
-            ++numRepeated;
-            if (numRepeated == numRepeats)
+            if (!cancelled)
             {
-                Cancel();
-            }
-            else
-            {
-                Reset();
+                ++numRepeated;
+                if (numRepeated == numRepeats)
+                {
+                    Cancel();
+                }
+                else
+                {
+                    fireTime = timerManager.currentTime + timeout;
+                }
             }
         }
 
@@ -80,24 +57,51 @@ namespace BomberEngine.Core
             get { return numRepeats != 1; }
         }
 
-        public float ElaspedTime
-        {
-            get { return elaspedTime; }
-        }
-
-        public float RemainingTime
-        {
-            get { return Math.Max(0, timeout - elaspedTime); }
-        }
-
         public float Timeout
         {
             get { return timeout; }
         }
 
-        public bool IsCancelled
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Timers pool
+
+        internal static Timer NextFreeTimer()
         {
-            get { return cancelled; }
+            if (freeRoot != null)
+            {
+                Timer timer = freeRoot;
+                freeRoot = timer.next;
+                return timer;
+            }
+
+            return new Timer();
         }
+
+        internal static void AddFreeTimer(Timer timer)
+        {
+            timer.Reset();
+
+            if (freeRoot != null)
+            {
+                timer.next = freeRoot;
+            }
+
+            freeRoot = timer;
+        }
+
+        private void Reset()
+        {
+            next = prev = null;
+            timerManager = null;
+            callback = null;
+            numRepeats = numRepeated = 0;
+            timeout = 0;
+            fireTime = 0;
+            cancelled = false;
+            name = null;
+        }
+
+        #endregion
     }
 }

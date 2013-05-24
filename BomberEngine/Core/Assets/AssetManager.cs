@@ -65,7 +65,7 @@ namespace BomberEngine.Core.Assets
 
         public void Load()
         {
-            loadingTimer = Application.ScheduleTimer(OnTimer, 0.05f);
+            Application.ScheduleTimer(OnTimer, 0.05f);
         }
 
         protected void AddLoader(int type, AssetLoader loader)

@@ -13,11 +13,53 @@ namespace BomberEngineTests
         private List<TimerCallback> callbacks = new List<TimerCallback>();
 
         [TestMethod]
+        public void testSortingTimers1()
+        {
+            Reset();
+
+            TestTimerManager manager = new TestTimerManager();
+            manager.Schedule(TimerCallback1, 0.0f,  "timer1");
+            manager.Schedule(TimerCallback1, 0.25f, "timer2");
+            manager.Schedule(TimerCallback1, 0.25f, "timer3");
+            manager.Schedule(TimerCallback1, 0.5f,  "timer4");
+            manager.Schedule(TimerCallback1, 0.75f, "timer5");
+
+            Timer timer = manager.RootTimer;
+            Assert.AreEqual(timer.name, "timer1"); timer = timer.next;
+            Assert.AreEqual(timer.name, "timer2"); timer = timer.next;
+            Assert.AreEqual(timer.name, "timer3"); timer = timer.next;
+            Assert.AreEqual(timer.name, "timer4"); timer = timer.next;
+            Assert.AreEqual(timer.name, "timer5"); timer = timer.next;
+            Assert.IsNull(timer);
+        }
+
+        [TestMethod]
+        public void testSortingTimers2()
+        {
+            Reset();
+
+            TestTimerManager manager = new TestTimerManager();
+            manager.Schedule(TimerCallback1, 0.75f, "timer1");
+            manager.Schedule(TimerCallback1, 0.5f,  "timer2");
+            manager.Schedule(TimerCallback1, 0.25f, "timer3");
+            manager.Schedule(TimerCallback1, 0.25f, "timer4");
+            manager.Schedule(TimerCallback1, 0.0f,  "timer5");
+
+            Timer timer = manager.RootTimer;
+            Assert.AreEqual(timer.name, "timer5"); timer = timer.next;
+            Assert.AreEqual(timer.name, "timer3"); timer = timer.next;
+            Assert.AreEqual(timer.name, "timer4"); timer = timer.next;
+            Assert.AreEqual(timer.name, "timer2"); timer = timer.next;
+            Assert.AreEqual(timer.name, "timer1"); timer = timer.next;
+            Assert.IsNull(timer);
+        }
+
+        [TestMethod]
         public void testAddTimer()
         {
             Reset();
 
-            TimerManager manager = new TimerManager();
+            TestTimerManager manager = new TestTimerManager();
             manager.Schedule(TimerCallback1, 0.5f);
 
             manager.Update(0.25f);
@@ -38,7 +80,7 @@ namespace BomberEngineTests
         {
             Reset();
 
-            TimerManager manager = new TimerManager();
+            TestTimerManager manager = new TestTimerManager();
             manager.Schedule(TimerCallback1, 0.75f);
             manager.Schedule(TimerCallback2, 0.5f);
 
@@ -64,7 +106,7 @@ namespace BomberEngineTests
         {
             Reset();
 
-            TimerManager manager = new TimerManager();
+            TestTimerManager manager = new TestTimerManager();
             manager.Schedule(TimerCallback1, 0.75f);
             manager.Schedule(TimerCallback2, 0.5f);
             manager.Schedule(TimerCallback3, 0.5f);
@@ -92,7 +134,7 @@ namespace BomberEngineTests
         {
             Reset();
 
-            TimerManager manager = new TimerManager();
+            TestTimerManager manager = new TestTimerManager();
             manager.Schedule(TimerCallback1, 0.75f);
             manager.Schedule(TimerCallback2, 0.5f);
 
@@ -136,8 +178,8 @@ namespace BomberEngineTests
         {
             Reset();
 
-            TimerManager manager = new TimerManager();
-            Timer timer1 = manager.Schedule(TimerCallback1, 0.75f);
+            TestTimerManager manager = new TestTimerManager();
+            manager.Schedule(TimerCallback1, 0.75f);
             manager.Schedule(TimerCallback2, 0.5f);
 
             manager.Update(0.25f); // 0.25
@@ -148,10 +190,10 @@ namespace BomberEngineTests
             AssertCallbacks(TimerCallback2);
             Assert.AreEqual(1, manager.GetTimersCount());
 
-            Timer timer2 = manager.Schedule(TimerCallback3, 1.0f); // fires at 1.5
+            manager.Schedule(TimerCallback3, 1.0f); // fires at 1.5
             Assert.AreEqual(2, manager.GetTimersCount());
 
-            timer1.Cancel();
+            manager.Cancel(TimerCallback1);
 
             manager.Update(0.25f); // 0.75
             AssertCallbacks(TimerCallback2);
@@ -164,7 +206,7 @@ namespace BomberEngineTests
             manager.Schedule(TimerCallback4, 0.15f); // fires at 1.15
             Assert.AreEqual(2, manager.GetTimersCount());
 
-            timer2.Cancel();
+            manager.Cancel(TimerCallback3);
 
             manager.Update(0.25f); // 1.25
             AssertCallbacks(TimerCallback2, TimerCallback4);
@@ -226,6 +268,15 @@ namespace BomberEngineTests
         private void Reset()
         {
             callbacks.Clear();
+            Timer.freeRoot = null;
+        }
+    }
+
+    class TestTimerManager : TimerManager
+    {
+        public Timer RootTimer
+        {
+            get { return rootTimer; }
         }
     }
 }

@@ -2,73 +2,200 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BomberEngine.Debugging;
 
 namespace BomberEngine.Core
 {
     public class TimerManager : IUpdatable
-    {   
-        // TODO: reuse objects + store timers in a sorted order (for a faster iteration)
-        private List<Timer> timers;
+    {
+        internal double currentTime;
+
+        protected Timer rootTimer;
+
+        private int timersCount;
 
         public TimerManager()
-        {
-            timers = new List<Timer>();
+        {   
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Updatable
 
         public void Update(float delta)
         {
-            int timerIndex = 0;
-            int timersCount = timers.Count;
-
-            while (timerIndex < timersCount)
+            currentTime += delta;
+            for (Timer t = rootTimer; t != null;)
             {
-                Timer timer = timers[timerIndex];
-
-                if (timer.IsCancelled)
+                if (t.fireTime > currentTime)
                 {
-                    timers.RemoveAt(timerIndex);
-                    --timersCount;
-                    continue;
+                    break;
                 }
 
-                timer.AdvanceTime(delta);
+                Timer timer = t;
+                t = t.next;
 
-                if (timer.IsCancelled)
-                {
-                    timers.RemoveAt(timerIndex);
-                    --timersCount;
-                    continue;
-                }
-  
-                ++timerIndex;
+                timer.Fire();
             }
         }
 
-        public Timer Schedule(TimerCallback callback, float delay)
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Schedule
+
+        public void Schedule(TimerCallback callback, float delay)
         {
-            return Schedule(callback, delay, false);
+            Schedule(callback, delay, null);
         }
 
-        public Timer Schedule(TimerCallback callback, float delay, Boolean repeated)
+        public void Schedule(TimerCallback callback, float delay, String name)
         {
-            return Schedule(callback, delay, repeated ? 0 : 1);
+            Schedule(callback, delay, false, name);
         }
 
-        public Timer Schedule(TimerCallback callback, float delay, int numRepeats)
+        public void Schedule(TimerCallback callback, float delay, bool repeated)
         {
-            Timer timer = new Timer(callback, delay, numRepeats);
+            Schedule(callback, delay, repeated, null);
+        }
+
+        public void Schedule(TimerCallback callback, float delay, bool repeated, String name)
+        {
+            Schedule(callback, delay, repeated ? 0 : 1, name);
+        }
+
+        public void Schedule(TimerCallback callback, float delay, int numRepeats)
+        {
+            Schedule(callback, delay, numRepeats, null);
+        }
+
+        public void Schedule(TimerCallback callback, float delay, int numRepeats, String name)
+        {
+            float timeout = delay < 0 ? 0 : delay;
+
+            Timer timer = NextFreeTimer();
+            timer.callback = callback;
+            timer.timeout = timeout;
+            timer.numRepeats = numRepeats;
+            timer.fireTime = currentTime + timeout;
+            timer.name = name;
+
             AddTimer(timer);
+        }
+
+        public void Cancel(TimerCallback callback)
+        {
+            for (Timer timer = rootTimer; timer != null;)
+            {
+                Timer t = timer;
+                timer = timer.next;
+
+                if (t.callback == callback)
+                {
+                    RemoveTimer(t);
+                }
+            }
+        }
+
+        public void Cancel(String name)
+        {
+            for (Timer timer = rootTimer; timer != null; )
+            {
+                Timer t = timer;
+                timer = timer.next;
+
+                if (t.name == name)
+                {
+                    RemoveTimer(t);
+                }
+            }
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Timer List
+
+        private Timer NextFreeTimer()
+        {
+            Timer timer = Timer.NextFreeTimer();
+            timer.timerManager = this;
             return timer;
+        }
+
+        private void AddFreeTimer(Timer timer)
+        {
+            Timer.AddFreeTimer(timer);
         }
 
         private void AddTimer(Timer timer)
         {
-            timers.Add(timer);
+            ++timersCount;
+
+            if (rootTimer != null)
+            {
+                // if timer has the least remaining time - it goes first
+                if (timer.fireTime < rootTimer.fireTime)
+                {
+                    timer.next = rootTimer;
+                    rootTimer.prev = timer;
+                    rootTimer = timer;
+
+                    return;
+                }
+
+                // try to insert in a sorted order
+                Timer tail = rootTimer;
+                for (Timer t = rootTimer.next; t != null; tail = t, t = t.next)
+                {
+                    if (timer.fireTime < t.fireTime)
+                    {
+                        Timer prev = t.prev;
+                        Timer next = t;
+
+                        timer.prev = prev;
+                        timer.next = next;
+
+                        next.prev = timer;
+                        prev.next = timer;
+
+                        return;
+                    }
+                }
+
+                // add timer at the end of the list
+                tail.next = timer;
+                timer.prev = tail;
+            }
+            else
+            {
+                rootTimer = timer; // timer is root now
+            }
+        }
+
+        internal void RemoveTimer(Timer timer)
+        {
+            Debug.Assert(timersCount > 0);
+            --timersCount;
+
+            Timer prev = timer.prev;
+            Timer next = timer.next;
+
+            if (prev != null) prev.next = next;
+            else rootTimer = next;
+
+            if (next != null) next.prev = prev;
+
+            AddFreeTimer(timer);
         }
 
         public int GetTimersCount()
         {
-            return timers.Count;
+            return timersCount;
         }
+
+        #endregion
     }
 }

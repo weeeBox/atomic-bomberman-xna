@@ -185,7 +185,7 @@ namespace BomberEngine.Debugging
                 }
                 else
                 {
-                    AddLine("Nicht verstehen: '" + commandString + "'");
+                    AddLine("Unknown command: '" + commandString + "'");
                 }
             }
 

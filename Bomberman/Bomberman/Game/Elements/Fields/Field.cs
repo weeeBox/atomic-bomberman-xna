@@ -813,14 +813,14 @@ namespace Bomberman.Game.Elements.Fields
 
         #region TimerManager
 
-        public Timer ScheduleTimer(TimerCallback callback, float delay)
+        public void ScheduleTimer(TimerCallback callback, float delay)
         {
-            return ScheduleTimer(callback, delay, false);
+            ScheduleTimer(callback, delay, false);
         }
 
-        public Timer ScheduleTimer(TimerCallback callback, float delay, bool repeated)
+        public void ScheduleTimer(TimerCallback callback, float delay, bool repeated)
         {
-            return timerManager.Schedule(callback, delay, repeated);
+            timerManager.Schedule(callback, delay, repeated);
         }
 
         #endregion
