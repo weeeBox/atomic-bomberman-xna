@@ -33,6 +33,11 @@ namespace Bomberman.Game.Elements.Players.Input
             return false;
         }
 
+        public bool OnKeyRepeated(Keys key)
+        {
+            return false; // TODO: handle key repeat
+        }
+
         public bool OnKeyReleased(Keys key)
         {
             PlayerAction action = GetAction(key);

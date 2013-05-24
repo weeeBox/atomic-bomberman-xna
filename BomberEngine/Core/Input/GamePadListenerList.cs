@@ -40,6 +40,16 @@ namespace BomberEngine.Core.Input
             return handled;
         }
 
+        public bool OnButtonRepeat(ButtonEvent e)
+        {
+            bool handled = false;
+            foreach (IGamePadListener l in listeners)
+            {
+                handled |= l.OnButtonRepeat(e);
+            }
+            return handled;
+        }
+
         public bool OnButtonReleased(ButtonEvent e)
         {
             bool handled = false;

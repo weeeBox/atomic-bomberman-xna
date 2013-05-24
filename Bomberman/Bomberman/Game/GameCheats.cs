@@ -48,6 +48,11 @@ namespace Bomberman.Game
             return false;
         }
 
+        public bool OnKeyRepeated(Keys key)
+        {
+            return false;
+        }
+
         public bool OnKeyReleased(Keys key)
         {
             return false;

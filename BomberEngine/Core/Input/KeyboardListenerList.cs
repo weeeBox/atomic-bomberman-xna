@@ -41,6 +41,16 @@ namespace BomberEngine.Core.Input
             return handled;
         }
 
+        public bool OnKeyRepeated(Keys key)
+        {
+            bool handled = false;
+            foreach (IKeyboardListener l in listeners)
+            {
+                handled |= l.OnKeyRepeated(key);
+            }
+            return handled;
+        }
+
         public bool OnKeyReleased(Keys key)
         {
             bool handled = false;

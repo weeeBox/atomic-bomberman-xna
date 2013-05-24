@@ -99,6 +99,11 @@ namespace Bomberman.Game.Elements.Players.Input
             return false;
         }
 
+        public bool OnButtonRepeat(ButtonEvent e)
+        {
+            return false;
+        }
+
         public bool OnButtonReleased(ButtonEvent e)
         {
             if (e.playerIndex == playerIndex)

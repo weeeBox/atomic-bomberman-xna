@@ -2,6 +2,8 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using BomberEngine.Debugging;
+using System;
 
 namespace BomberEngine.Core.Input
 {
@@ -44,6 +46,32 @@ namespace BomberEngine.Core.Input
             Buttons.LeftThumbstickRight,
         };
 
+        private struct ButtonRepeat
+        {   
+            public int playerIndex;
+            public Buttons button;
+            public double repeatTime;
+
+            public ButtonRepeat(int playerIndex, Buttons button, double repeatTime)
+            {   
+                this.playerIndex = playerIndex;
+                this.button = button;
+                this.repeatTime = repeatTime;
+            }
+        }
+
+        private struct KeyRepeat
+        {
+            public Keys key;
+            public double repeatTime;
+
+            public KeyRepeat(Keys key, double repeatTime)
+            {
+                this.key = key;
+                this.repeatTime = repeatTime;
+            }
+        }
+
         private const int MAX_GAMEPADS_COUNT = 4;
 
         private GamePadState[] currentGamepadStates;
@@ -55,6 +83,12 @@ namespace BomberEngine.Core.Input
         private ITouchListener touchListener;
 
         private GamePadDeadZone deadZone;
+
+        private const float REPEAT_TIMEOUT = 0.5f;
+        private double currentTime;
+
+        private List<ButtonRepeat> buttonRepeats = new List<ButtonRepeat>();
+        private List<KeyRepeat> keyRepeats = new List<KeyRepeat>();
 
         public InputManager()
         {
@@ -76,6 +110,101 @@ namespace BomberEngine.Core.Input
 #if WINDOWS
             UpdateKeyboard();
 #endif
+
+            UpdateRepeat(delta);
+        }
+
+        private void UpdateRepeat(float delta)
+        {
+            currentTime += delta;
+
+            UpdateGamepadsRepeat(delta);
+
+#if WINDOWS
+            UpdateKeyboardRepeat(delta);
+#endif
+        }
+
+        private void UpdateGamepadsRepeat(float delta)
+        {
+            for (int i = buttonRepeats.Count - 1; i >= 0; --i)
+            {
+                if (buttonRepeats[i].repeatTime <= currentTime)
+                {
+                    buttonRepeats.RemoveAt(i);
+                    throw new NotImplementedException();
+                }
+            }
+        }
+
+        private void UpdateKeyboardRepeat(float delta)
+        {
+            for (int i = keyRepeats.Count - 1; i >= 0; --i)
+            {
+                if (keyRepeats[i].repeatTime <= currentTime)
+                {
+                    keyboardListener.OnKeyReleased(keyRepeats[i].key);
+                    keyRepeats.RemoveAt(i);
+                }
+            }
+        }
+
+        private void AddKeyRepeat(Keys key)
+        {
+            Debug.Assert(Debug.flag && FindKeyRepeat(key) == -1);
+            keyRepeats.Add(new KeyRepeat(key, currentTime + REPEAT_TIMEOUT));
+        }
+
+        private void RemoveKeyRepeat(Keys key)
+        {
+            int index = FindKeyRepeat(key);
+            Debug.Assert(index != -1);
+
+            if (index != -1)
+            {
+                keyRepeats.RemoveAt(index);
+            }
+        }
+
+        private void AddButtonRepeat(int playerIndex, Buttons button)
+        {
+            Debug.Assert(Debug.flag && FindButtonRepeat(playerIndex, button) == -1);
+            buttonRepeats.Add(new ButtonRepeat(playerIndex, button, currentTime + REPEAT_TIMEOUT));
+        }
+
+        private void RemoveButtonRepeat(int playerIndex, Buttons button)
+        {
+            int index = FindButtonRepeat(playerIndex, button);
+            Debug.Assert(index != -1);
+
+            if (index != -1)
+            {
+                buttonRepeats.RemoveAt(index);
+            }
+        }
+
+        private int FindKeyRepeat(Keys key)
+        {
+            for (int i = 0; i < keyRepeats.Count; ++i)
+            {
+                if (keyRepeats[i].key == key)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        private int FindButtonRepeat(int playerIndex, Buttons button)
+        {
+            for (int i = 0; i < buttonRepeats.Count; ++i)
+            {
+                if (buttonRepeats[i].playerIndex == playerIndex && buttonRepeats[i].button == button)
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -112,10 +241,12 @@ namespace BomberEngine.Core.Input
                 if (IsButtonDown(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
                 {
                     gamePadListener.OnButtonPressed(new ButtonEvent(gamePadIndex, button));
+                    AddButtonRepeat(gamePadIndex, button);
                 }
                 else if (IsButtonUp(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
                 {
                     gamePadListener.OnButtonReleased(new ButtonEvent(gamePadIndex, button));
+                    RemoveButtonRepeat(gamePadIndex, button);
                 }
             }
         }
@@ -192,6 +323,7 @@ namespace BomberEngine.Core.Input
                     if (!oldKeys.Contains(newKeys[i]))
                     {
                         keyboardListener.OnKeyPressed(newKeys[i]);
+                        AddKeyRepeat(newKeys[i]);
                     }
                 }
                 for (int i = 0; i < oldKeys.Length; ++i)
@@ -199,6 +331,7 @@ namespace BomberEngine.Core.Input
                     if (!newKeys.Contains(oldKeys[i]))
                     {
                         keyboardListener.OnKeyReleased(oldKeys[i]);
+                        RemoveKeyRepeat(newKeys[i]);
                     }
                 }
             }
