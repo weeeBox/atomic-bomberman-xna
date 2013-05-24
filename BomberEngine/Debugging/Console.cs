@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Input;
 using BomberEngine.Debugging.Commands;
 using BomberEngine.Game;
 using BomberEngine.Core.Assets.Types;
+using BomberEngine.Core.Events;
 
 namespace BomberEngine.Debugging
 {
@@ -266,7 +267,39 @@ namespace BomberEngine.Debugging
             get { return m_lines; }
         }
 
-        public override bool OnKeyPressed(Keys key)
+        public override bool HandleEvent(Event evt)
+        {
+            if (evt.code == Event.KEYBOARD)
+            {
+                KeyboardEvent keyEvent = evt as KeyboardEvent;
+                Keys key = keyEvent.key;
+
+                switch (keyEvent.state)
+                {
+                    case KeyboardEvent.PRESSED:
+                    {
+                        if (OnKeyPressed(key)) return true;
+                        break;
+                    }
+
+                    case KeyboardEvent.REPEATED:
+                    {
+                        if (OnKeyRepeat(key)) return true;
+                        break;
+                    }
+
+                    case KeyboardEvent.RELEASED:
+                    {
+                        if (OnKeyReleased(key)) return true;
+                        break;
+                    }
+                }
+            }
+
+            return base.HandleEvent(evt);
+        }
+
+        private bool OnKeyPressed(Keys key)
         {
             if (key >= Keys.A && key <= Keys.Z)
             {
@@ -325,7 +358,12 @@ namespace BomberEngine.Debugging
             return false;
         }
 
-        public override bool OnKeyReleased(Keys key)
+        private bool OnKeyRepeat(Keys key)
+        {
+            return false;
+        }
+
+        private bool OnKeyReleased(Keys key)
         {   
             if (key == Keys.LeftShift || key == Keys.RightShift)
             {

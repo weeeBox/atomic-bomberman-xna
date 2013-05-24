@@ -30,7 +30,7 @@ namespace BomberEngine.Core.Input
             return listeners.Remove(listener);
         }
 
-        public bool OnButtonPressed(ButtonEvent e)
+        public bool OnButtonPressed(ButtonEventArg e)
         {
             bool handled = false;
             foreach (IGamePadListener l in listeners)
@@ -40,7 +40,7 @@ namespace BomberEngine.Core.Input
             return handled;
         }
 
-        public bool OnButtonRepeat(ButtonEvent e)
+        public bool OnButtonRepeat(ButtonEventArg e)
         {
             bool handled = false;
             foreach (IGamePadListener l in listeners)
@@ -50,7 +50,7 @@ namespace BomberEngine.Core.Input
             return handled;
         }
 
-        public bool OnButtonReleased(ButtonEvent e)
+        public bool OnButtonReleased(ButtonEventArg e)
         {
             bool handled = false;
             foreach (IGamePadListener l in listeners)

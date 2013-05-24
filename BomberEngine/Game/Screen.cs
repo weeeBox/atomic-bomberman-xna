@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core.Visual;
 using BomberEngine.Core.Visual.UI;
 using BomberEngine.Debugging;
+using BomberEngine.Core.Events;
 
 namespace BomberEngine.Game
 {
@@ -212,44 +213,88 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region KeyboardListener
+        #region Event handler
 
-        public override bool OnKeyPressed(Keys key)
+        public override bool HandleEvent(Event evt)
         {
-            if (keyboardListeners.OnKeyPressed(key))
+            if (evt.code == Event.GAMEPAD)
             {
-                return true;
-            }
-
-            if (mFocusedView != null)
-            {
-                if (mFocusedView.OnKeyPressed(key))
+                GamePadEvent gamePadEvt = evt as GamePadEvent;
+                switch (gamePadEvt.state)
                 {
-                    return true;
+                    case GamePadEvent.PRESSED:
+                    {
+                        if (gamePadListeners.OnButtonPressed(gamePadEvt.arg)) return true;
+                        break;
+                    }
+                    case GamePadEvent.REPEATED:
+                    {
+                        if (gamePadListeners.OnButtonReleased(gamePadEvt.arg)) return true;
+                        break;
+                    }
+                    case GamePadEvent.RELEASED:
+                    {
+                        if (gamePadListeners.OnButtonReleased(gamePadEvt.arg)) return true;
+                        break;
+                    }
+                }
+
+                if (mFocusedView != null)
+                {
+                    if (mFocusedView.HandleEvent(evt)) return true;
+                }
+
+                switch (gamePadEvt.state)
+                {
+                    case GamePadEvent.PRESSED:
+                    case GamePadEvent.REPEATED:
+                        return TryMoveFocus(gamePadEvt.arg.button);
+                }
+            }
+            else if (evt.code == Event.KEYBOARD)
+            {
+                KeyboardEvent keyEvent = evt as KeyboardEvent;
+                switch (keyEvent.state)
+                {
+                    case KeyboardEvent.PRESSED:
+                    {
+                        if (keyboardListeners.OnKeyPressed(keyEvent.key)) return true;
+                        break;
+                    }
+                    case KeyboardEvent.REPEATED:
+                    {
+                        if (keyboardListeners.OnKeyRepeated(keyEvent.key)) return true;
+                        break;
+                    }
+                    case KeyboardEvent.RELEASED:
+                    {
+                        if (keyboardListeners.OnKeyReleased(keyEvent.key)) return true;
+                        break;
+                    }
+                }
+
+                if (mFocusedView != null)
+                {
+                    if (mFocusedView.HandleEvent(evt)) return true;
+                }
+
+                switch (keyEvent.state)
+                {
+                    case KeyboardEvent.PRESSED:
+                    case KeyboardEvent.REPEATED:
+                        return TryMoveFocus(keyEvent.key);
                 }
             }
 
-            return TryMoveFocus(key);
+            return base.HandleEvent(evt);
         }
 
-        public override bool OnKeyReleased(Keys key)
-        {
-            if (keyboardListeners.OnKeyReleased(key))
-            {
-                return true;
-            }
+        #endregion
 
-            if (mFocusedView != null)
-            {
-                if (mFocusedView.OnKeyReleased(key))
-                {
-                    return true;
-                }
-            }
+        //////////////////////////////////////////////////////////////////////////////
 
-            return false;
-        }
-
+        #region KeyboardListeners
+        
         public bool AddKeyboardListener(IKeyboardListener listener)
         {
             return keyboardListeners.Add(listener);
@@ -274,16 +319,6 @@ namespace BomberEngine.Game
         public bool RemoveGamePadListener(IGamePadListener listener)
         {
             return gamePadListeners.Remove(listener);
-        }
-
-        public override bool OnButtonPressed(ButtonEvent e)
-        {
-            return gamePadListeners.OnButtonPressed(e);
-        }
-
-        public override bool OnButtonReleased(ButtonEvent e)
-        {
-            return gamePadListeners.OnButtonReleased(e);
         }
 
         #endregion

@@ -12,6 +12,7 @@ using Bomberman.Content;
 using Assets;
 using BomberEngine.Core.Input;
 using BomberEngine.Core.Visual;
+using BomberEngine.Core.Events;
 
 namespace Bomberman.Game
 {
@@ -91,13 +92,27 @@ namespace Bomberman.Game
             StartScreen(gameScreen);
         }
 
-        public override bool OnKeyPressed(Keys key)
+        public override bool HandleEvent(Event evt)
         {
-            if (base.OnKeyPressed(key))
+            if (base.HandleEvent(evt))
             {
                 return true;
             }
 
+            if (evt.code == Event.KEYBOARD)
+            {
+                KeyboardEvent keyEvent = evt as KeyboardEvent;
+                if (OnKeyPressed(keyEvent.key))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool OnKeyPressed(Keys key)
+        {
             if (key == Keys.Escape)
             {
                 Screen screen = CurrentScreen();

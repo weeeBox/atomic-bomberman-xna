@@ -5,10 +5,11 @@ using System.Text;
 using BomberEngine.Core.Input;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core.Visual;
+using BomberEngine.Core.Events;
 
 namespace BomberEngine.Core
 {
-    public abstract class BaseElement : IUpdatable, IDrawable, IInputListener
+    public abstract class BaseElement : IUpdatable, IDrawable, IEventHandler
     {
         public int id;
 
@@ -20,48 +21,9 @@ namespace BomberEngine.Core
         {
         }
 
-        public virtual bool OnKeyPressed(Keys key)
+        public virtual bool HandleEvent(Event evt)
         {
             return false;
-        }
-
-        public virtual bool OnKeyReleased(Keys key)
-        {
-            return false;
-        }
-
-        public virtual bool OnButtonPressed(ButtonEvent e)
-        {
-            return false;
-        }
-
-        public virtual bool OnButtonReleased(ButtonEvent e)
-        {
-            return false;
-        }
-
-        public virtual void OnGamePadConnected(int playerIndex)
-        {
-        }
-
-        public virtual void OnGamePadDisconnected(int playerIndex)
-        {
-        }
-
-        public virtual void OnPointerMoved(int x, int y, int fingerId)
-        {
-        }
-
-        public virtual void OnPointerPressed(int x, int y, int fingerId)
-        {
-        }
-
-        public virtual void OnPointerDragged(int x, int y, int fingerId)
-        {
-        }
-
-        public virtual void OnPointerReleased(int x, int y, int fingerId)
-        {
         }
     }
 }

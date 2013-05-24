@@ -2,12 +2,12 @@
 
 namespace BomberEngine.Core.Input
 {
-    public struct ButtonEvent
+    public struct ButtonEventArg
     {
         public Buttons button;
         public int playerIndex;
 
-        public ButtonEvent(int playerIndex, Buttons button)
+        public ButtonEventArg(int playerIndex, Buttons button)
         {
             this.playerIndex = playerIndex;
             this.button = button;
@@ -16,8 +16,8 @@ namespace BomberEngine.Core.Input
 
     public interface IGamePadListener
     {
-        bool OnButtonPressed(ButtonEvent e);
-        bool OnButtonRepeat(ButtonEvent e);
-        bool OnButtonReleased(ButtonEvent e);
+        bool OnButtonPressed(ButtonEventArg e);
+        bool OnButtonRepeat(ButtonEventArg e);
+        bool OnButtonReleased(ButtonEventArg e);
     }
 }

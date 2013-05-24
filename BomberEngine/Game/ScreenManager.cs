@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core;
 using BomberEngine.Core.Input;
 using BomberEngine.Core.Visual;
+using BomberEngine.Core.Events;
 
 namespace BomberEngine.Game
 {
@@ -49,56 +50,11 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region InputListener methods
+        #region Event handlers
 
-        public override bool OnKeyPressed(Keys key)
+        public override bool HandleEvent(Event evt)
         {
-            return currentScreen.OnKeyPressed(key);
-        }
-
-        public override bool OnKeyReleased(Keys key)
-        {
-            return currentScreen.OnKeyReleased(key);
-        }
-
-        public override bool OnButtonPressed(ButtonEvent e)
-        {
-            return currentScreen.OnButtonPressed(e);
-        }
-
-        public override bool OnButtonReleased(ButtonEvent e)
-        {
-            return currentScreen.OnButtonReleased(e);
-        }
-
-        public override void OnGamePadConnected(int playerIndex)
-        {
-            currentScreen.OnGamePadConnected(playerIndex);
-        }
-
-        public override void OnGamePadDisconnected(int playerIndex)
-        {
-            currentScreen.OnGamePadDisconnected(playerIndex);
-        }
-
-        public override void OnPointerMoved(int x, int y, int fingerId)
-        {
-            currentScreen.OnPointerMoved(x, y, fingerId);
-        }
-
-        public override void OnPointerPressed(int x, int y, int fingerId)
-        {
-            currentScreen.OnPointerPressed(x, y, fingerId);
-        }
-
-        public override void OnPointerDragged(int x, int y, int fingerId)
-        {
-            currentScreen.OnPointerDragged(x, y, fingerId);
-        }
-
-        public override void OnPointerReleased(int x, int y, int fingerId)
-        {
-            currentScreen.OnPointerReleased(x, y, fingerId);
+            return currentScreen.HandleEvent(evt);
         }
 
         #endregion

@@ -7,10 +7,11 @@ using BomberEngine.Core.Input;
 using BomberEngine.Core.Visual;
 using BomberEngine.Debugging;
 using Microsoft.Xna.Framework.Input;
+using BomberEngine.Core.Events;
 
 namespace BomberEngine.Game
 {
-    public abstract class RootController : BaseElement
+    public abstract class RootController : BaseElement, IInputListener
     {   
         protected Controller currentController;
         protected GameConsole console;
@@ -135,56 +136,87 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region InputListener
+        #region Event handler
 
-        public override bool OnKeyPressed(Keys key)
+        public override bool HandleEvent(Event evt)
         {
-            return currentController.OnKeyPressed(key);
+            return currentController.HandleEvent(evt);
         }
 
-        public override bool OnKeyReleased(Keys key)
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Events
+
+        private KeyboardEvent keyEvent = new KeyboardEvent();
+        private GamePadEvent gamePadEvent = new GamePadEvent();
+        private GamePadConnectivityEvent gamePadConnectivityEvent = new GamePadConnectivityEvent();
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Input listener
+
+        public virtual bool OnKeyPressed(Keys key)
         {
-            return currentController.OnKeyReleased(key);
+            return HandleEvent(keyEvent.Init(key, KeyboardEvent.PRESSED));
         }
 
-        public override bool OnButtonPressed(ButtonEvent e)
+        public virtual bool OnKeyRepeated(Keys key)
         {
-            return currentController.OnButtonPressed(e);
+            return HandleEvent(keyEvent.Init(key, KeyboardEvent.REPEATED));
         }
 
-        public override bool OnButtonReleased(ButtonEvent e)
+        public virtual bool OnKeyReleased(Keys key)
         {
-            return currentController.OnButtonReleased(e);
+            return HandleEvent(keyEvent.Init(key, KeyboardEvent.RELEASED));
         }
 
-        public override void OnGamePadConnected(int playerIndex)
+        public virtual bool OnButtonPressed(ButtonEventArg e)
         {
-            currentController.OnGamePadConnected(playerIndex);
+            return HandleEvent(gamePadEvent.Init(e, GamePadEvent.PRESSED));
         }
 
-        public override void OnGamePadDisconnected(int playerIndex)
+        public virtual bool OnButtonRepeat(ButtonEventArg e)
         {
-            currentController.OnGamePadDisconnected(playerIndex);
+            return HandleEvent(gamePadEvent.Init(e, GamePadEvent.REPEATED));
         }
 
-        public override void OnPointerMoved(int x, int y, int fingerId)
+        public virtual bool OnButtonReleased(ButtonEventArg e)
         {
-            currentController.OnPointerMoved(x, y, fingerId);
+            return HandleEvent(gamePadEvent.Init(e, GamePadEvent.RELEASED));
         }
 
-        public override void OnPointerPressed(int x, int y, int fingerId)
+        public virtual void OnGamePadConnected(int playerIndex)
         {
-            currentController.OnPointerPressed(x, y, fingerId);
+            throw new NotImplementedException();
         }
 
-        public override void OnPointerDragged(int x, int y, int fingerId)
+        public virtual void OnGamePadDisconnected(int playerIndex)
         {
-            currentController.OnPointerDragged(x, y, fingerId);
+            throw new NotImplementedException();
         }
 
-        public override void OnPointerReleased(int x, int y, int fingerId)
+        public virtual void OnPointerMoved(int x, int y, int fingerId)
         {
-            currentController.OnPointerReleased(x, y, fingerId);
+            throw new NotImplementedException();
+        }
+
+        public virtual void OnPointerPressed(int x, int y, int fingerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual void OnPointerDragged(int x, int y, int fingerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual void OnPointerReleased(int x, int y, int fingerId)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
@@ -199,5 +231,6 @@ namespace BomberEngine.Game
         }
 
         #endregion
+
     }
 }
