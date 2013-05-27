@@ -132,7 +132,8 @@ namespace BomberEngine.Game
             Font consoleFont = new VectorFont(contentManager.Load<SpriteFont>("ConsoleFont"));
             CConsole console = new CConsole(consoleFont);
 
-            console.RegisterCommand(new ExitCommand());
+            console.RegisterCommand(new Cmd_exit());
+            console.RegisterCommand(new Cmd_listcmds());
 
             return console;
         }

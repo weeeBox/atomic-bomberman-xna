@@ -35,6 +35,16 @@ namespace BomberEngine.Consoles.Commands
             return false;
         }
 
+        public List<CCommand> ListCommands()
+        {
+            List<CCommand> list = new List<CCommand>();
+            foreach (KeyValuePair<char, LinkedList<CCommand>> e in commandsLookup)
+            {
+                list.AddRange(e.Value);
+            }
+            return list;
+        }
+
         public CCommand FindCommand(String name)
         {
             LinkedList<CCommand> list = FindList(name);

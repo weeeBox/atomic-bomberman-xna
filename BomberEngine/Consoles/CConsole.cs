@@ -17,7 +17,7 @@ namespace BomberEngine.Consoles
     {
         private List<String> m_lines;
 
-        private const String PROMPT_STRING = "> ";
+        private const String PROMPT_STRING = "]";
         private StringBuilder commandBuffer;
 
         private int cursorPos;
@@ -56,8 +56,6 @@ namespace BomberEngine.Consoles
 
             backColor = new Color(0.0f, 0.0f, 0.0f, 0.75f);
             carretVisible = true;
-
-            RegisterCommands();
 
             ScheduleTimer(OnBlinkTimer, 0.25f, true);
         }
@@ -169,6 +167,8 @@ namespace BomberEngine.Consoles
                 CCommand command = commands.FindCommand(name);
                 if (command != null)
                 {
+                    command.console = this;
+
                     if (args.Length > 1)
                     {
                         command.args = args;
@@ -254,11 +254,6 @@ namespace BomberEngine.Consoles
 
         #region Command register
 
-        private void RegisterCommands()
-        {
-            RegisterCommand(new ExitCommand());
-        }
-
         public bool RegisterCommand(CCommand command)
         {
             return commands.RegisterCommand(command);
@@ -267,6 +262,11 @@ namespace BomberEngine.Consoles
         public bool UnregisterCommand(CCommand command)
         {
             return commands.UnregisterCommand(command);
+        }
+
+        public List<CCommand> ListCommands()
+        {
+            return commands.ListCommands();
         }
 
         #endregion
