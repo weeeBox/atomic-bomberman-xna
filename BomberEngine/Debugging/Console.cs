@@ -151,11 +151,19 @@ namespace BomberEngine.Debugging
             cursorPos = commandBuffer.Length;
         }
 
-        private void DeleteChar()
+        private void DeletePrevChar()
         {
             if (cursorPos > 0)
             {
                 commandBuffer.Remove(--cursorPos, 1);
+            }
+        }
+
+        private void DeleteNextChar()
+        {
+            if (cursorPos < commandBuffer.Length)
+            {
+                commandBuffer.Remove(cursorPos, 1);
             }
         }
 
@@ -301,6 +309,16 @@ namespace BomberEngine.Debugging
         private bool OnKeyPressed(ref KeyEventArg e)
         {
             KeyCode key = e.key;
+
+            if (e.IsCtrlPressed())
+            {
+                if (key == KeyCode.KB_C)
+                {
+                    Clear();
+                    return true;
+                }
+            }
+
             if (key >= KeyCode.KB_A && key <= KeyCode.KB_Z)
             {
                 char chr = (char)key;
@@ -333,7 +351,13 @@ namespace BomberEngine.Debugging
 
             if (key == KeyCode.KB_Back)
             {
-                DeleteChar();
+                DeletePrevChar();
+                return true;
+            }
+
+            if (key == KeyCode.KB_Delete)
+            {
+                DeleteNextChar();
                 return true;
             }
 
@@ -355,27 +379,18 @@ namespace BomberEngine.Debugging
         private bool OnKeyRepeat(ref KeyEventArg e)
         {
             KeyCode key = e.key;
-            if (key >= KeyCode.KB_A && key <= KeyCode.KB_Z)
-            {   
-                return OnKeyPressed(ref e);
-            }
 
-            if (key >= KeyCode.KB_D0 && key <= KeyCode.KB_D9 || key >= KeyCode.KB_NumPad0 && key <= KeyCode.KB_NumPad9)
+            if (key >= KeyCode.KB_A && key <= KeyCode.KB_Z || 
+                key >= KeyCode.KB_D0 && key <= KeyCode.KB_D9 || 
+                key >= KeyCode.KB_NumPad0 && key <= KeyCode.KB_NumPad9)
             {
                 return OnKeyPressed(ref e);
             }
 
-            if (key == KeyCode.KB_Left)
-            {
-                return OnKeyPressed(ref e);
-            }
-
-            if (key == KeyCode.KB_Right)
-            {
-                return OnKeyPressed(ref e);
-            }
-
-            if (key == KeyCode.KB_Back)
+            if (key == KeyCode.KB_Left ||
+                key == KeyCode.KB_Right ||
+                key == KeyCode.KB_Back ||
+                key == KeyCode.KB_Delete)
             {
                 return OnKeyPressed(ref e);
             }
