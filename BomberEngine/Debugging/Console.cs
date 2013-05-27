@@ -36,6 +36,8 @@ namespace BomberEngine.Debugging
 
         private Color backColor;
 
+        private bool carretVisible;
+
         public GameConsole(Font font)
             : base(640, 320)
         {
@@ -55,8 +57,11 @@ namespace BomberEngine.Debugging
             InitAdditionalInputKeys();
 
             backColor = new Color(0.0f, 0.0f, 0.0f, 0.75f);
+            carretVisible = true;
 
             RegisterCommands();
+
+            ScheduleTimer(OnBlinkTimer, 0.25f, true);
         }
 
         private void InitAdditionalInputKeys()
@@ -127,7 +132,11 @@ namespace BomberEngine.Debugging
             font.DrawString(context, PROMPT_STRING, drawX, drawY);
             drawX += PROMPT_STRING.Length * charWidth;
 
-            context.FillRect(drawX + cursorPos * charWidth, drawY + lineHeight, charWidth, 3, Color.White);
+            if (carretVisible)
+            {
+                context.FillRect(drawX + cursorPos * charWidth, drawY + lineHeight, charWidth, 3, Color.White);
+            }
+            
             font.DrawString(context, commandBuffer.ToString(), drawX, drawY);
         }
 
@@ -261,6 +270,10 @@ namespace BomberEngine.Debugging
             cursorPos = 0;
         }
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Cursor navigation 
+
         private void MoveCursorLeft()
         {
             if (cursorPos > 0)
@@ -319,6 +332,21 @@ namespace BomberEngine.Debugging
         {
             cursorPos = commandBuffer.Length;
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Timers
+
+        private void OnBlinkTimer(Timer timer)
+        {
+            carretVisible = !carretVisible;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
 
         public List<String> lines
         {
