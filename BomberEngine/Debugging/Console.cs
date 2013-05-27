@@ -270,6 +270,16 @@ namespace BomberEngine.Debugging
             }
         }
 
+        private void MoveCursorHome()
+        {
+            cursorPos = 0;
+        }
+
+        private void MoveCursorEnd()
+        {
+            cursorPos = commandBuffer.Length;
+        }
+
         public List<String> lines
         {
             get { return m_lines; }
@@ -315,6 +325,18 @@ namespace BomberEngine.Debugging
                 if (key == KeyCode.KB_C)
                 {
                     Clear();
+                    return true;
+                }
+
+                if (key == KeyCode.KB_A)
+                {
+                    MoveCursorHome();
+                    return true;
+                }
+
+                if (key == KeyCode.KB_E)
+                {
+                    MoveCursorEnd();
                     return true;
                 }
             }
@@ -370,6 +392,24 @@ namespace BomberEngine.Debugging
             if (key == KeyCode.KB_Tab)
             {
                 DoAutoComplete();
+                return true;
+            }
+
+            if (key == KeyCode.KB_Home)
+            {
+                MoveCursorHome();
+                return true;
+            }
+
+            if (key == KeyCode.KB_End)
+            {
+                MoveCursorEnd();
+                return true;
+            }
+
+            if (key == KeyCode.KB_Escape)
+            {
+                Clear();
                 return true;
             }
 
