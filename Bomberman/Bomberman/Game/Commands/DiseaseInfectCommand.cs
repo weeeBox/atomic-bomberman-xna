@@ -5,6 +5,7 @@ using System.Text;
 using BomberEngine.Debugging;
 using Bomberman.Game.Elements;
 using Bomberman.Game.Elements.Players;
+using BomberEngine.Consoles;
 
 namespace Bomberman.Game.Commands
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BomberEngine.Debugging.Commands;
+using BomberEngine.Consoles.Commands;
 using Bomberman.Game.Elements.Fields;
 using Bomberman.Game.Elements.Players;
 

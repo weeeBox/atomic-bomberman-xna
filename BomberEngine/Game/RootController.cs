@@ -8,6 +8,7 @@ using BomberEngine.Core.Visual;
 using BomberEngine.Debugging;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core.Events;
+using BomberEngine.Consoles;
 
 namespace BomberEngine.Game
 {

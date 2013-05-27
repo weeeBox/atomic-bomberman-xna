@@ -10,6 +10,7 @@ using Bomberman.Menu;
 using BomberEngine.Core.Visual;
 using BomberEngine.Core.Assets.Types;
 using BomberEngine.Core.Input;
+using BomberEngine.Consoles;
 
 namespace Bomberman
 {

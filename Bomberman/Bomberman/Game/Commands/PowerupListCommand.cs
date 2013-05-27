@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BomberEngine.Debugging.Commands;
+using BomberEngine.Consoles.Commands;
 using BomberEngine.Debugging;
+using BomberEngine.Consoles;
 
 namespace Bomberman.Game.Commands
 {

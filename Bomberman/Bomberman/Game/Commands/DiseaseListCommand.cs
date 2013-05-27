@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Debugging;
 using Bomberman.Game.Elements;
+using BomberEngine.Consoles;
 
 namespace Bomberman.Game.Commands
 {

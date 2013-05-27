@@ -8,12 +8,12 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using BomberEngine.Core.Input;
 using Microsoft.Xna.Framework.Input;
-using BomberEngine.Debugging.Commands;
 using BomberEngine.Game;
 using BomberEngine.Core.Assets.Types;
 using BomberEngine.Core.Events;
+using BomberEngine.Consoles.Commands;
 
-namespace BomberEngine.Debugging
+namespace BomberEngine.Consoles
 {
     public class GameConsole : Screen
     {
