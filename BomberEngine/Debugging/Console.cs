@@ -196,19 +196,21 @@ namespace BomberEngine.Debugging
         private void DoAutoComplete()
         {
             String token = commandBuffer.ToString();
-
-            suggestedCommands.Clear();
-            commands.GetSuggested(token, suggestedCommands);
-
-            if (suggestedCommands.Count == 1)
+            if (token.Length > 0)
             {
-                ConsoleCommand command = suggestedCommands.First.Value;
-                SetCommandText(command.GetName(), true);
-            }
-            else if (suggestedCommands.Count > 1)
-            {
-                String suggestedText = GetSuggestedText(token, suggestedCommands);
-                SetCommandText(suggestedText, false);
+                suggestedCommands.Clear();
+                commands.GetSuggested(token, suggestedCommands);
+
+                if (suggestedCommands.Count == 1)
+                {
+                    ConsoleCommand command = suggestedCommands.First.Value;
+                    SetCommandText(command.GetName(), true);
+                }
+                else if (suggestedCommands.Count > 1)
+                {
+                    String suggestedText = GetSuggestedText(token, suggestedCommands);
+                    SetCommandText(suggestedText, false);
+                }
             }
         }
 
