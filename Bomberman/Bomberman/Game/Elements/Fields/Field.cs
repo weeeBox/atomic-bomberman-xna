@@ -39,7 +39,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private FieldCellArray cells;
         private PlayerList players;
-        private TimerManager timerManager;
+        private DelayedCallManager timerManager;
 
         private LinkedList<MovableCell> movableCells;
         private LinkedList<CellContactList> contacts;
@@ -49,7 +49,7 @@ namespace Bomberman.Game.Elements.Fields
         public Field()
         {
             currentField = this;
-            timerManager = new TimerManager();
+            timerManager = new DelayedCallManager();
             players = new PlayerList();
 
             updateList = new LinkedList<FieldCell>();
@@ -813,12 +813,12 @@ namespace Bomberman.Game.Elements.Fields
 
         #region TimerManager
 
-        public void ScheduleTimer(TimerCallback callback, float delay)
+        public void ScheduleTimer(DelayedCallback callback, float delay)
         {
             ScheduleTimer(callback, delay, false);
         }
 
-        public void ScheduleTimer(TimerCallback callback, float delay, bool repeated)
+        public void ScheduleTimer(DelayedCallback callback, float delay, bool repeated)
         {
             timerManager.Schedule(callback, delay, repeated);
         }

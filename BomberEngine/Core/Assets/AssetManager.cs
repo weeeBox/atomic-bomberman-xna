@@ -26,7 +26,7 @@ namespace BomberEngine.Core.Assets
 
         private int loadedCount;
         
-        private Timer loadingTimer;
+        private DelayedCall loadingTimer;
 
         private VectorFont systemFont;
 
@@ -88,7 +88,7 @@ namespace BomberEngine.Core.Assets
             return assets[id];
         }
 
-        private void OnTimer(Timer timer)
+        private void OnTimer(DelayedCall timer)
         {
             AssetLoadInfo info = loadingQueue[loadedCount];
             if (LoadResource(info))

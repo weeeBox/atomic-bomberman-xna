@@ -20,7 +20,7 @@ namespace BomberEngine.Game
         private bool started;
         private bool stoped;
 
-        private TimerManager timerManager;
+        private DelayedCallManager timerManager;
         private InputManager inputManager;
         private AssetManager assetManager;
 
@@ -46,9 +46,9 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        protected TimerManager CreateTimerManager()
+        protected DelayedCallManager CreateTimerManager()
         {
-            return new TimerManager();
+            return new DelayedCallManager();
         }
 
         protected InputManager CreateInputManager()
@@ -133,17 +133,17 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        public static void ScheduleTimer(TimerCallback callback, float delay)
+        public static void ScheduleTimer(DelayedCallback callback, float delay)
         {
             ScheduleTimer(callback, delay, false);
         }
 
-        public static void ScheduleTimer(TimerCallback callback, float delay, Boolean repeated)
+        public static void ScheduleTimer(DelayedCallback callback, float delay, Boolean repeated)
         {
             ScheduleTimer(callback, delay, repeated ? 0 : 1);
         }
 
-        public static void ScheduleTimer(TimerCallback callback, float delay, int numRepeats)
+        public static void ScheduleTimer(DelayedCallback callback, float delay, int numRepeats)
         {
             sharedApplication.timerManager.Schedule(callback, delay, numRepeats);
         }

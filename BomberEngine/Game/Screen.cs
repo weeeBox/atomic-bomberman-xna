@@ -25,7 +25,7 @@ namespace BomberEngine.Game
         private View mRootView;
         private View mFocusedView;
 
-        private TimerManager timerManager;
+        private DelayedCallManager timerManager;
 
         private UpdatableList updatableList;
         private DrawableList drawableList;
@@ -47,7 +47,7 @@ namespace BomberEngine.Game
             this.width = width;
             this.height = height;
 
-            timerManager = new TimerManager();
+            timerManager = new DelayedCallManager();
             keyInputListeners = new IKeyInputListenerList();
 
             updatableList = UpdatableList.Null;
@@ -197,17 +197,17 @@ namespace BomberEngine.Game
 
         #region TimerManager
 
-        protected void ScheduleTimer(TimerCallback callback, float delay)
+        protected void ScheduleTimer(DelayedCallback callback, float delay)
         {
             ScheduleTimer(callback, delay, false);
         }
 
-        protected void ScheduleTimer(TimerCallback callback, float delay, bool repeated)
+        protected void ScheduleTimer(DelayedCallback callback, float delay, bool repeated)
         {
             timerManager.Schedule(callback, delay, repeated);
         }
 
-        protected void CancelTimer(TimerCallback callback)
+        protected void CancelTimer(DelayedCallback callback)
         {
             timerManager.Cancel(callback);
         }

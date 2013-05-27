@@ -5,20 +5,20 @@ using System.Text;
 
 namespace BomberEngine.Core
 {
-    public delegate void TimerCallback(Timer timer);
+    public delegate void DelayedCallback(DelayedCall call);
 
-    public class Timer
+    public class DelayedCall
     {
-        public static Timer freeRoot;
+        public static DelayedCall freeRoot;
 
         public bool cancelled;
 
-        internal TimerCallback callback;
+        internal DelayedCallback callback;
 
-        public Timer next;
-        public Timer prev;
+        public DelayedCall next;
+        public DelayedCall prev;
 
-        internal TimerManager timerManager;
+        internal DelayedCallManager manager;
 
         internal int numRepeats;
         internal int numRepeated;
@@ -31,7 +31,7 @@ namespace BomberEngine.Core
         public void Cancel()
         {
             cancelled = true;
-            timerManager.RemoveTimer(this);
+            manager.RemoveCall(this);
         }
 
         internal void Fire()
@@ -47,7 +47,7 @@ namespace BomberEngine.Core
                 }
                 else
                 {
-                    fireTime = timerManager.currentTime + timeout;
+                    fireTime = manager.currentTime + timeout;
                 }
             }
         }
@@ -64,36 +64,36 @@ namespace BomberEngine.Core
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Timers pool
+        #region Objects pool
 
-        internal static Timer NextFreeTimer()
+        internal static DelayedCall NextFreeCall()
         {
             if (freeRoot != null)
             {
-                Timer timer = freeRoot;
-                freeRoot = timer.next;
-                return timer;
+                DelayedCall call = freeRoot;
+                freeRoot = call.next;
+                return call;
             }
 
-            return new Timer();
+            return new DelayedCall();
         }
 
-        internal static void AddFreeTimer(Timer timer)
+        internal static void AddFreeCall(DelayedCall call)
         {
-            timer.Reset();
+            call.Reset();
 
             if (freeRoot != null)
             {
-                timer.next = freeRoot;
+                call.next = freeRoot;
             }
 
-            freeRoot = timer;
+            freeRoot = call;
         }
 
         private void Reset()
         {
             next = prev = null;
-            timerManager = null;
+            manager = null;
             callback = null;
             numRepeats = numRepeated = 0;
             timeout = 0;

@@ -132,8 +132,8 @@
     <Compile Include="Core\Input\InputManager.cs" />
     <Compile Include="Core\Input\ITouchInputListener.cs" />
     <Compile Include="Core\Assets\AssetManager.cs" />
-    <Compile Include="Core\Timer.cs" />
-    <Compile Include="Core\TimerManager.cs" />
+    <Compile Include="Core\DelayedCall.cs" />
+    <Compile Include="Core\DelayedCallManager.cs" />
     <Compile Include="Core\IUpdatable.cs" />
     <Compile Include="Core\UpdatableList.cs" />
     <Compile Include="Core\Visual\View.cs" />
