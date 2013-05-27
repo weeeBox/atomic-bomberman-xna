@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using BomberEngine.Consoles.Commands;
 using BomberEngine.Core;
-using BomberEngine.Core.Visual;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using BomberEngine.Core.Input;
-using Microsoft.Xna.Framework.Input;
-using BomberEngine.Game;
 using BomberEngine.Core.Assets.Types;
 using BomberEngine.Core.Events;
-using BomberEngine.Consoles.Commands;
+using BomberEngine.Core.Input;
+using BomberEngine.Core.Visual;
+using BomberEngine.Game;
+using Microsoft.Xna.Framework;
+using BomberEngine.Util;
 
 namespace BomberEngine.Consoles
 {
-    public class SystemConsole : Screen
+    public class Cmd : Screen
     {
         private List<String> m_lines;
 
@@ -38,7 +36,7 @@ namespace BomberEngine.Consoles
 
         private bool carretVisible;
 
-        public SystemConsole(Font font)
+        public Cmd(Font font)
             : base(Application.GetWidth(), 0.5f * Application.GetHeight())
         {
             this.font = font;
@@ -64,38 +62,9 @@ namespace BomberEngine.Consoles
             ScheduleTimer(OnBlinkTimer, 0.25f, true);
         }
 
-        private void InitAdditionalInputKeys()
-        {
-            additionalInputKeys = new HashSet<KeyCode>();
-            additionalInputKeys.Add(KeyCode.KB_Space);
-            additionalInputKeys.Add(KeyCode.KB_Multiply);
-            additionalInputKeys.Add(KeyCode.KB_Add);
-            additionalInputKeys.Add(KeyCode.KB_Separator);
-            additionalInputKeys.Add(KeyCode.KB_Subtract);
-            additionalInputKeys.Add(KeyCode.KB_Decimal);
-            additionalInputKeys.Add(KeyCode.KB_Divide);
-            additionalInputKeys.Add(KeyCode.KB_OemSemicolon);
-            additionalInputKeys.Add(KeyCode.KB_OemPlus);
-            additionalInputKeys.Add(KeyCode.KB_OemComma);
-            additionalInputKeys.Add(KeyCode.KB_OemMinus);
-            additionalInputKeys.Add(KeyCode.KB_OemPeriod);
-            additionalInputKeys.Add(KeyCode.KB_OemQuestion);
-            additionalInputKeys.Add(KeyCode.KB_OemOpenBrackets);
-            additionalInputKeys.Add(KeyCode.KB_OemPipe);
-            additionalInputKeys.Add(KeyCode.KB_OemCloseBrackets);
-            additionalInputKeys.Add(KeyCode.KB_OemQuotes);
-            additionalInputKeys.Add(KeyCode.KB_OemBackslash);
-        }
+        //////////////////////////////////////////////////////////////////////////////
 
-        private void RegisterCommands()
-        {
-            RegisterCommand(new ExitCommand());
-        }
-
-        public bool RegisterCommand(CCommand command)
-        {
-            return commands.RegisterCommand(command);
-        }
+        #region Drawable
 
         public override void Draw(Context context)
         {
@@ -140,10 +109,11 @@ namespace BomberEngine.Consoles
             font.DrawString(context, commandBuffer.ToString(), drawX, drawY);
         }
 
-        public void AddLine(String line)
-        {
-            m_lines.Add(line);
-        }
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Command buffer
 
         private void EnterChar(char chr)
         {
@@ -199,16 +169,16 @@ namespace BomberEngine.Consoles
                         String[] args = new String[tokens.Length - 1];
                         Array.Copy(tokens, 1, args, 0, args.Length);
 
-                        command.Execute(this, args);
+                        command.Execute(args);
                     }
                     else
                     {
-                        command.Execute(this);
+                        command.Execute();
                     }
                 }
                 else
                 {
-                    AddLine("Unknown command: '" + commandString + "'");
+                    Append("Unknown command: '" + commandString + "'");
                 }
             }
 
@@ -226,7 +196,7 @@ namespace BomberEngine.Consoles
                 if (suggestedCommands.Count == 1)
                 {
                     CCommand command = suggestedCommands.First.Value;
-                    SetCommandText(command.GetName(), true);
+                    SetCommandText(command.name, true);
                 }
                 else if (suggestedCommands.Count > 1)
                 {
@@ -239,7 +209,7 @@ namespace BomberEngine.Consoles
         private String GetSuggestedText(String token, LinkedList<CCommand> commandList)
         {
             LinkedListNode<CCommand> firstNode = commandList.First;
-            String firstCommandName = firstNode.Value.GetName();
+            String firstCommandName = firstNode.Value.name;
 
             if (firstCommandName.Length > token.Length)
             {
@@ -249,7 +219,7 @@ namespace BomberEngine.Consoles
                     char chr = firstCommandName[i];
                     for (LinkedListNode<CCommand> nextNode = firstNode.Next; nextNode != null; nextNode = nextNode.Next)
                     {
-                        String otherCommandName = nextNode.Value.GetName();
+                        String otherCommandName = nextNode.Value.name;
                         if (otherCommandName[i] != chr)
                         {
                             return suggestedToken.ToString();
@@ -264,11 +234,51 @@ namespace BomberEngine.Consoles
             return token;
         }
 
+        private void Append(String line)
+        {
+            m_lines.Add(line);
+        }
+
         private void Clear()
         {
             commandBuffer.Clear();
             cursorPos = 0;
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Command register
+
+        private void RegisterCommands()
+        {
+            RegisterCommand(new ExitCommand());
+        }
+
+        public bool RegisterCommand(CCommand command)
+        {
+            return commands.RegisterCommand(command);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Printing
+
+        public void Print(String message)
+        {
+            Append(message);
+        }
+
+        public void Print(String format, params Object[] args)
+        {
+            String message = StringUtils.TryFormat(format, args);
+            Append(message);
+        }
+
+        #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 
@@ -348,10 +358,7 @@ namespace BomberEngine.Consoles
 
         //////////////////////////////////////////////////////////////////////////////
 
-        public List<String> lines
-        {
-            get { return m_lines; }
-        }
+        #region Handle events
 
         public override bool HandleEvent(Event evt)
         {
@@ -383,6 +390,12 @@ namespace BomberEngine.Consoles
 
             return base.HandleEvent(evt);
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Input
 
         private bool OnKeyPressed(ref KeyEventArg e)
         {
@@ -516,5 +529,30 @@ namespace BomberEngine.Consoles
         {
             return false;
         }
+
+        private void InitAdditionalInputKeys()
+        {
+            additionalInputKeys = new HashSet<KeyCode>();
+            additionalInputKeys.Add(KeyCode.KB_Space);
+            additionalInputKeys.Add(KeyCode.KB_Multiply);
+            additionalInputKeys.Add(KeyCode.KB_Add);
+            additionalInputKeys.Add(KeyCode.KB_Separator);
+            additionalInputKeys.Add(KeyCode.KB_Subtract);
+            additionalInputKeys.Add(KeyCode.KB_Decimal);
+            additionalInputKeys.Add(KeyCode.KB_Divide);
+            additionalInputKeys.Add(KeyCode.KB_OemSemicolon);
+            additionalInputKeys.Add(KeyCode.KB_OemPlus);
+            additionalInputKeys.Add(KeyCode.KB_OemComma);
+            additionalInputKeys.Add(KeyCode.KB_OemMinus);
+            additionalInputKeys.Add(KeyCode.KB_OemPeriod);
+            additionalInputKeys.Add(KeyCode.KB_OemQuestion);
+            additionalInputKeys.Add(KeyCode.KB_OemOpenBrackets);
+            additionalInputKeys.Add(KeyCode.KB_OemPipe);
+            additionalInputKeys.Add(KeyCode.KB_OemCloseBrackets);
+            additionalInputKeys.Add(KeyCode.KB_OemQuotes);
+            additionalInputKeys.Add(KeyCode.KB_OemBackslash);
+        }
+
+        #endregion
     }
 }

@@ -15,7 +15,7 @@ namespace Bomberman.Game.Commands
         {
         }
 
-        public override void Execute(SystemConsole console, params String[] args)
+        public override void Execute(params String[] args)
         {   
         }
     }

@@ -12,11 +12,11 @@ namespace Bomberman.Game.Commands
     public class DiseaseInfectCommand : IngameConsoleCommand
     {
         public DiseaseInfectCommand()
-            : base("disease_infect")
+            : base("disinfect")
         {
         }
 
-        public override void Execute(SystemConsole console, params String[] args)
+        public override void Execute(params String[] args)
         {
             int diseaseIndex = GetInt(args, 0);
 
@@ -27,7 +27,7 @@ namespace Bomberman.Game.Commands
                 bool infected = player.TryInfect(diseaseIndex);
                 if (infected)
                 {
-                    console.AddLine("Infected: " + Diseases.FromIndex(diseaseIndex).name);
+                    Print("Infected: " + Diseases.FromIndex(diseaseIndex).name);
                 }
             }
         }

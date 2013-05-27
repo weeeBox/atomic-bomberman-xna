@@ -19,7 +19,7 @@ namespace BomberEngine.Game
     {
         protected ContentManager contentManager;
         protected Controller currentController;
-        protected SystemConsole console;
+        protected Cmd console;
 
         public RootController(ContentManager contentManager)
         {
@@ -125,10 +125,10 @@ namespace BomberEngine.Game
 
         #region Console
 
-        protected virtual SystemConsole CreateConsole()
+        protected virtual Cmd CreateConsole()
         {
             Font consoleFont = new VectorFont(contentManager.Load<SpriteFont>("ConsoleFont"));
-            SystemConsole console = new SystemConsole(consoleFont);
+            Cmd console = new Cmd(consoleFont);
 
             return console;
         }

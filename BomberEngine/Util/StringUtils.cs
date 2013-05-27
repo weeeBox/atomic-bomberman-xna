@@ -9,15 +9,19 @@ namespace BomberEngine.Util
     {
         public static string TryFormat(string format, params object[] args)
         {
-            try
+            if (args != null && args.Length > 0)
             {
-                return String.Format(format, args);
+                try
+                {
+                    return String.Format(format, args);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error while formatting string: " + e.Message);
+                }
             }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error while formatting string: " + e.Message);
-            }
-            return null;
+
+            return format;
         }
     }
 }

@@ -15,13 +15,13 @@ namespace Bomberman.Game.Commands
         {
         }
 
-        public override void Execute(SystemConsole console, params String[] args)
+        public override void Execute(params String[] args)
         {
-            Log(console, "Diseases:");
+            Print("Diseases:");
             Diseases[] array = Diseases.array;
             for (int i = 0; i < array.Length; ++i)
             {
-                Log(console, i + ": " + array[i].name);
+                Print(i + ": " + array[i].name);
             }
         }
     }

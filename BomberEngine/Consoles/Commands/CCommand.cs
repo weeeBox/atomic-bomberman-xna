@@ -7,19 +7,16 @@ namespace BomberEngine.Consoles.Commands
 {
     public abstract class CCommand
     {
-        private String name;
+        public String name;
+        public Cmd console;
+        public String args;
 
         protected CCommand(String name)
         {
             this.name = name;
         }
 
-        public abstract void Execute(SystemConsole console, params String[] args);
-
-        public String GetName()
-        {
-            return name;
-        }
+        public abstract void Execute(params String[] args);
 
         protected int GetInt(String[] args, String param)
         {
@@ -72,9 +69,14 @@ namespace BomberEngine.Consoles.Commands
             return defValue;
         }
 
-        protected void Log(SystemConsole console, String message)
+        protected void Print(String message)
         {
-            console.AddLine(GetName() + ": " + message);
+            console.Print(message);
+        }
+
+        protected void Print(String format, params Object[] args)
+        {
+            console.Print(format, args);
         }
     }
 }

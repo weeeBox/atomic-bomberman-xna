@@ -49,9 +49,9 @@ namespace Bomberman
             }
         }
 
-        protected override SystemConsole CreateConsole()
+        protected override Cmd CreateConsole()
         {
-            SystemConsole console = base.CreateConsole();
+            Cmd console = base.CreateConsole();
             return console;
         }
 

@@ -26,7 +26,7 @@ namespace BomberEngine.Consoles.Commands
             for (LinkedListNode<CCommand> node = list.First; node != null; node = node.Next)
             {
                 CCommand command = node.Value;
-                if (command.GetName().Equals(name))
+                if (command.name.Equals(name))
                 {
                     list.Remove(node);
                     return true;
@@ -41,7 +41,7 @@ namespace BomberEngine.Consoles.Commands
             LinkedList<CCommand> list = FindList(name);
             foreach (CCommand command in list)
             {
-                if (command.GetName().Equals(name))
+                if (command.name.Equals(name))
                 {
                     return command;
                 }
@@ -56,7 +56,7 @@ namespace BomberEngine.Consoles.Commands
 
             foreach (CCommand command in list)
             {
-                if (command.GetName().StartsWith(token))
+                if (command.name.StartsWith(token))
                 {
                     outList.AddLast(command);
                 }
@@ -65,7 +65,7 @@ namespace BomberEngine.Consoles.Commands
 
         private LinkedList<CCommand> FindList(CCommand command)
         {
-            return FindList(command.GetName());
+            return FindList(command.name);
         }
 
         private LinkedList<CCommand> FindList(String token)
@@ -85,7 +85,7 @@ namespace BomberEngine.Consoles.Commands
 
         private bool AddCommand(LinkedList<CCommand> commandList, CCommand command)
         {
-            String name = command.GetName();
+            String name = command.name;
             for (LinkedListNode<CCommand> node = commandList.First; node != null; node = node.Next)
             {
                 CCommand other = node.Value;
@@ -94,7 +94,7 @@ namespace BomberEngine.Consoles.Commands
                     return false; // no duplicates
                 }
 
-                String otherName = other.GetName();
+                String otherName = other.name;
                 if (name.CompareTo(otherName) < 0)
                 {
                     commandList.AddBefore(node, command);

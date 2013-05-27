@@ -15,14 +15,14 @@ namespace Bomberman.Game.Commands
         {
         }
 
-        public override void Execute(SystemConsole console, params string[] args)
+        public override void Execute(params String[] args)
         {
             String[] names = Bomberman.Game.Elements.Powerups.Names();
-            console.AddLine("Powerups:");
+            Print("Powerups:");
 
             for (int i = 0; i < names.Length; ++i)
             {
-                console.AddLine(" " + i + ": " + names[i]);
+                Print(" " + i + ": " + names[i]);
             }
         }
     }

@@ -16,7 +16,7 @@ namespace Bomberman.Game.Commands
         {
         }
 
-        public override void Execute(SystemConsole console, params String[] args)
+        public override void Execute(params String[] args)
         {
             List<Player> players = GetPlayers();
             Player player = players[0];
@@ -28,7 +28,7 @@ namespace Bomberman.Game.Commands
             }
             else
             {
-                Log(console, "Wrong powerup index");
+                Print("Wrong powerup index");
             }
         }
     }

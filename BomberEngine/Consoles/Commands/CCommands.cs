@@ -13,7 +13,7 @@ namespace BomberEngine.Consoles.Commands
         {
         }
 
-        public override void Execute(SystemConsole console, params String[] args)
+        public override void Execute(params String[] args)
         {
             Application.sharedApplication.Stop();
         }
