@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BomberEngine.Consoles.Commands
+namespace BomberEngine.Consoles
 {
     public class CCommandRegister
     {

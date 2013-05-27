@@ -92,7 +92,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Consoles\Commands\CCommandList.cs" />
+    <Compile Include="Consoles\CCommandList.cs" />
     <Compile Include="Core\Assets\Loaders\VectorFontLoader.cs" />
     <Compile Include="Core\BaseUpdatableList.cs" />
     <Compile Include="Core\BaseElement.cs" />
@@ -110,9 +110,9 @@
     <Compile Include="Core\Visual\TextView.cs" />
     <Compile Include="Core\Visual\RectView.cs" />
     <Compile Include="Core\Visual\ViewList.cs" />
-    <Compile Include="Consoles\Commands\CCommand.cs" />
-    <Compile Include="Consoles\Commands\CCommandRegister.cs" />
-    <Compile Include="Consoles\Commands\CCommands.cs" />
+    <Compile Include="Consoles\CCommand.cs" />
+    <Compile Include="Consoles\CCommandRegister.cs" />
+    <Compile Include="Game\cmds.cs" />
     <Compile Include="Consoles\CConsole.cs" />
     <Compile Include="Core\Assets\Asset.cs" />
     <Compile Include="Core\Assets\AssetLoader.cs" />

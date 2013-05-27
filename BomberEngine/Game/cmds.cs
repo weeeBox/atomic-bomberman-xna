@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BomberEngine.Game;
+using BomberEngine.Consoles;
 
-namespace BomberEngine.Consoles.Commands
+namespace BomberEngine.Game
 {
     public class Cmd_listcmds : CCommand
     {

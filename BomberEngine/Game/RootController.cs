@@ -12,7 +12,7 @@ using BomberEngine.Consoles;
 using BomberEngine.Core.Assets.Types;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using BomberEngine.Consoles.Commands;
+using BomberEngine.Consoles;
 
 namespace BomberEngine.Game
 {

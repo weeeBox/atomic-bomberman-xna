@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using BomberEngine.Consoles.Commands;
+using BomberEngine.Consoles;
 using BomberEngine.Core;
 using BomberEngine.Core.Assets.Types;
 using BomberEngine.Core.Events;
