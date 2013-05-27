@@ -277,6 +277,39 @@ namespace BomberEngine.Debugging
             }
         }
 
+        private void MoveCursorWordLeft()
+        {
+            while (cursorPos > 0 && commandBuffer[cursorPos - 1] == ' ')
+            {
+                --cursorPos;
+            }
+
+            while (cursorPos > 0 && commandBuffer[cursorPos-1] != ' ')
+            {
+                --cursorPos;
+            }
+        }
+
+        private void MoveCursorWordRight()
+        {
+            while (cursorPos < commandBuffer.Length - 1 && commandBuffer[cursorPos + 1] == ' ' || cursorPos == commandBuffer.Length - 1)
+            {
+                ++cursorPos;
+            }
+
+            while (cursorPos < commandBuffer.Length - 1 && commandBuffer[cursorPos + 1] != ' ' || cursorPos == commandBuffer.Length - 1)
+            {
+                ++cursorPos;
+            }
+
+            while (cursorPos < commandBuffer.Length - 1 && commandBuffer[cursorPos + 1] == ' ' || cursorPos == commandBuffer.Length - 1)
+            {
+                ++cursorPos;
+            }
+
+            MoveCursorRight();
+        }
+
         private void MoveCursorHome()
         {
             cursorPos = 0;
@@ -329,9 +362,15 @@ namespace BomberEngine.Debugging
 
             if (e.IsCtrlPressed())
             {
-                if (key == KeyCode.KB_C)
+                if (key == KeyCode.KB_Left)
                 {
-                    Clear();
+                    MoveCursorWordLeft();
+                    return true;
+                }
+
+                if (key == KeyCode.KB_Right)
+                {
+                    MoveCursorWordRight();
                     return true;
                 }
 
@@ -360,7 +399,7 @@ namespace BomberEngine.Debugging
                 return true;
             }
 
-            if (key >= KeyCode.KB_D0 && key <= KeyCode.KB_D9 || key >= KeyCode.KB_NumPad0 && key <= KeyCode.KB_NumPad9)
+            if (key >= KeyCode.KB_D0 && key <= KeyCode.KB_D9 || key >= KeyCode.KB_NumPad0 && key <= KeyCode.KB_NumPad9 || key == KeyCode.KB_Space)
             {
                 EnterChar((char)key);
                 return true;
