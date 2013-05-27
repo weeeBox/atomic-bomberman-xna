@@ -55,6 +55,8 @@ namespace BomberEngine.Debugging
             InitAdditionalInputKeys();
 
             backColor = new Color(0.0f, 0.0f, 0.0f, 0.75f);
+
+            RegisterCommands();
         }
 
         private void InitAdditionalInputKeys()
@@ -78,6 +80,11 @@ namespace BomberEngine.Debugging
             additionalInputKeys.Add(KeyCode.KB_OemCloseBrackets);
             additionalInputKeys.Add(KeyCode.KB_OemQuotes);
             additionalInputKeys.Add(KeyCode.KB_OemBackslash);
+        }
+
+        private void RegisterCommands()
+        {
+            RegisterCommand(new ExitCommand());
         }
 
         public bool RegisterCommand(ConsoleCommand command)

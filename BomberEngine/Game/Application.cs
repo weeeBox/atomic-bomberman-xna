@@ -90,19 +90,17 @@ namespace BomberEngine.Game
 
         public void Stop()
         {
+            stoped = true;
+        }
+
+        public void RunStop()
+        {
             if (!started)
             {
                 throw new InvalidOperationException("Application not started");
             }
 
-            if (stoped)
-            {
-                throw new InvalidOperationException("Application already stopped");
-            }
-
-            stoped = true;
             rootController.Stop();
-
             OnStop();
         }
 

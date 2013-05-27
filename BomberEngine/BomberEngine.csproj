@@ -111,6 +111,7 @@
     <Compile Include="Core\Visual\ViewList.cs" />
     <Compile Include="Debugging\Commands\ConsoleCommand.cs" />
     <Compile Include="Debugging\Commands\ConsoleCommandRegister.cs" />
+    <Compile Include="Debugging\Commands\ConsoleCommands.cs" />
     <Compile Include="Debugging\Console.cs" />
     <Compile Include="Core\Assets\Asset.cs" />
     <Compile Include="Core\Assets\AssetLoader.cs" />

@@ -81,7 +81,7 @@ namespace Bomberman
             }
             else
             {
-                application.Stop();
+                application.RunStop();
                 Exit();
             }
             

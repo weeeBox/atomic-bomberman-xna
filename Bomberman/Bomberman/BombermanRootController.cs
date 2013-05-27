@@ -44,7 +44,7 @@ namespace Bomberman
                     break;
 
                 case ExitCode.Quit:
-                    Application.sharedApplication.Stop();
+                    Application.sharedApplication.RunStop();
                     break;
             }
         }
