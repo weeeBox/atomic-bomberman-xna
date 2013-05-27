@@ -7,10 +7,9 @@ namespace BomberEngine.Core.Events
 {
     public class Event
     {
-        public const int KEYBOARD = 1;
-        public const int GAMEPAD = 2;
-        public const int GAMEPAD_CONNECTIVITY = 3;
-        public const int MOUSE = 4;
+        public const int KEY = 1;
+        public const int TOUCH = 2;
+        public const int GAMEPAD = 3;
 
         public int code;
 

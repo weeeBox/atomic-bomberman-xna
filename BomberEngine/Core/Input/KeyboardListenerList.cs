@@ -7,16 +7,16 @@ using BomberEngine.Util;
 
 namespace BomberEngine.Core.Input
 {
-    public class KeyboardListenerList : IKeyboardListener
+    public class IKeyInputListenerList : IKeyInputListener
     {
-        private ConcurrentList<IKeyboardListener> listeners;
+        private ConcurrentList<IKeyInputListener> listeners;
 
-        public KeyboardListenerList()
+        public IKeyInputListenerList()
         {
-            listeners = new ConcurrentList<IKeyboardListener>();
+            listeners = new ConcurrentList<IKeyInputListener>();
         }
 
-        public bool Add(IKeyboardListener listener)
+        public bool Add(IKeyInputListener listener)
         {
             if (!listeners.Contains(listener))
             {
@@ -26,35 +26,35 @@ namespace BomberEngine.Core.Input
             return false;
         }
 
-        public bool Remove(IKeyboardListener listener)
+        public bool Remove(IKeyInputListener listener)
         {
             return listeners.Remove(listener);
         }
 
-        public bool OnKeyPressed(Keys key)
+        public bool OnKeyPressed(KeyEventArg arg)
         {
             bool handled = false;
-            foreach (IKeyboardListener l in listeners)
+            foreach (IKeyInputListener l in listeners)
             {
-                handled |= l.OnKeyPressed(key);
+                handled |= l.OnKeyPressed(arg);
             }
             return handled;
         }
 
-        public bool OnKeyRepeated(Keys key)
+        public bool OnKeyRepeated(KeyEventArg key)
         {
             bool handled = false;
-            foreach (IKeyboardListener l in listeners)
+            foreach (IKeyInputListener l in listeners)
             {
                 handled |= l.OnKeyRepeated(key);
             }
             return handled;
         }
 
-        public bool OnKeyReleased(Keys key)
+        public bool OnKeyReleased(KeyEventArg key)
         {
             bool handled = false;
-            foreach (IKeyboardListener l in listeners)
+            foreach (IKeyInputListener l in listeners)
             {
                 handled |= l.OnKeyReleased(key);
             }

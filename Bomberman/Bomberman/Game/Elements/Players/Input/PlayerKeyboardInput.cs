@@ -7,23 +7,23 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Bomberman.Game.Elements.Players.Input
 {
-    public class PlayerKeyboardInput : PlayerInput, IKeyboardListener
+    public class PlayerKeyboardInput : PlayerInput, IKeyInputListener
     {
-        private Dictionary<Keys, PlayerAction> actionLookup;
+        private Dictionary<KeyCode, PlayerAction> actionLookup;
 
         public PlayerKeyboardInput()
         {
-            actionLookup = new Dictionary<Keys, PlayerAction>();
+            actionLookup = new Dictionary<KeyCode, PlayerAction>();
         }
 
-        public void Map(Keys key, PlayerAction action)
+        public void Map(KeyCode key, PlayerAction action)
         {
             actionLookup.Add(key, action);
         }
 
-        public bool OnKeyPressed(Keys key)
+        public bool OnKeyPressed(KeyEventArg e)
         {
-            PlayerAction action = GetAction(key);
+            PlayerAction action = GetAction(e.key);
             if (action != PlayerAction.Count)
             {
                 NotifyActionPressed(action);
@@ -33,14 +33,14 @@ namespace Bomberman.Game.Elements.Players.Input
             return false;
         }
 
-        public bool OnKeyRepeated(Keys key)
+        public bool OnKeyRepeated(KeyEventArg e)
         {
             return false; // TODO: handle key repeat
         }
 
-        public bool OnKeyReleased(Keys key)
+        public bool OnKeyReleased(KeyEventArg e)
         {
-            PlayerAction action = GetAction(key);
+            PlayerAction action = GetAction(e.key);
             if (action != PlayerAction.Count)
             {
                 NotifyActionReleased(action);
@@ -50,7 +50,7 @@ namespace Bomberman.Game.Elements.Players.Input
             return false;
         }
 
-        private PlayerAction GetAction(Keys key)
+        private PlayerAction GetAction(KeyCode key)
         {
             if (actionLookup.ContainsKey(key))
             {

@@ -11,7 +11,7 @@ using BomberEngine.Util;
 
 namespace Bomberman.Game.Elements.Players.Input
 {
-    public class PlayerGamePadInput : PlayerInput, IGamePadListener, IUpdatable
+    public class PlayerGamePadInput : PlayerInput, IKeyInputListener, IUpdatable
     {
         private const float STICK_DEAD_ZONE = 0.125f;
         private const float STICK_DEAD_ZONE_2 = STICK_DEAD_ZONE * STICK_DEAD_ZONE;
@@ -19,7 +19,7 @@ namespace Bomberman.Game.Elements.Players.Input
         private const float STICK_LIMIT_MIN = 0.75f;
         private const float STICK_LIMIT_MAX = 0.75f;
 
-        private Dictionary<Buttons, PlayerAction> actionLookup;
+        private Dictionary<KeyCode, PlayerAction> actionLookup;
         private int playerIndex;
 
         private float m_dx;
@@ -33,7 +33,7 @@ namespace Bomberman.Game.Elements.Players.Input
         public PlayerGamePadInput(int playerIndex)
         {
             this.playerIndex = playerIndex;
-            actionLookup = new Dictionary<Buttons, PlayerAction>();
+            actionLookup = new Dictionary<KeyCode, PlayerAction>();
         }
 
         public void Update(float delta)
@@ -80,16 +80,16 @@ namespace Bomberman.Game.Elements.Players.Input
             }
         }
 
-        public void Map(Buttons button, PlayerAction action)
+        public void Map(KeyCode key, PlayerAction action)
         {
-            actionLookup.Add(button, action);
+            actionLookup.Add(key, action);
         }
 
-        public bool OnButtonPressed(ButtonEventArg e)
+        public bool OnKeyPressed(KeyEventArg e)
         {
             if (e.playerIndex == playerIndex)
             {
-                PlayerAction action = GetAction(e.button);
+                PlayerAction action = GetAction(e.key);
                 if (action != PlayerAction.Count)
                 {
                     NotifyActionPressed(action);
@@ -99,16 +99,16 @@ namespace Bomberman.Game.Elements.Players.Input
             return false;
         }
 
-        public bool OnButtonRepeat(ButtonEventArg e)
+        public bool OnKeyRepeated(KeyEventArg e)
         {
             return false;
         }
 
-        public bool OnButtonReleased(ButtonEventArg e)
+        public bool OnKeyReleased(KeyEventArg e)
         {
             if (e.playerIndex == playerIndex)
             {
-                PlayerAction action = GetAction(e.button);
+                PlayerAction action = GetAction(e.key);
                 if (action != PlayerAction.Count)
                 {
                     NotifyActionReleased(action);
@@ -130,11 +130,11 @@ namespace Bomberman.Game.Elements.Players.Input
             }
         }
 
-        private PlayerAction GetAction(Buttons button)
+        private PlayerAction GetAction(KeyCode key)
         {
-            if (actionLookup.ContainsKey(button))
+            if (actionLookup.ContainsKey(key))
             {
-                return actionLookup[button];
+                return actionLookup[key];
             }
             return PlayerAction.Count;
         }

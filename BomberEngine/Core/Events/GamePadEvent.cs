@@ -2,31 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework.Input;
-using BomberEngine.Core.Input;
 
 namespace BomberEngine.Core.Events
 {
     public class GamePadEvent : Event
     {
-        public const int PRESSED = 1;
-        public const int REPEATED = 2;
-        public const int RELEASED = 3;
+        public const int DISCONNECTED = 0;
+        public const int CONNECTED = 1;
 
-        public ButtonEventArg arg;
+        public int index;
         public int state;
 
         public GamePadEvent()
             : base(Event.GAMEPAD)
         {
-        }
-
-        public Event Init(ButtonEventArg arg, int state)
-        {
-            this.arg = arg;
-            this.state = state;
-
-            return this;
         }
     }
 }

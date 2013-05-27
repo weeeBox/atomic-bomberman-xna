@@ -9,6 +9,7 @@ using Bomberman.Game.Commands;
 using Bomberman.Menu;
 using BomberEngine.Core.Visual;
 using BomberEngine.Core.Assets.Types;
+using BomberEngine.Core.Input;
 
 namespace Bomberman
 {
@@ -64,14 +65,14 @@ namespace Bomberman
             return console;
         }
 
-        public override bool OnKeyPressed(Keys key)
+        public override bool OnKeyPressed(KeyEventArg e)
         {
-            if (base.OnKeyPressed(key))
+            if (base.OnKeyPressed(e))
             {
                 return true;
             }
 
-            if (key == Keys.Oem8)
+            if (e.key == KeyCode.KB_Oem8)
             {
                 ToggleConsole();
                 return true;

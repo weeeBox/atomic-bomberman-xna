@@ -149,9 +149,8 @@ namespace BomberEngine.Game
 
         #region Events
 
-        private KeyboardEvent keyEvent = new KeyboardEvent();
-        private GamePadEvent gamePadEvent = new GamePadEvent();
-        private GamePadConnectivityEvent gamePadConnectivityEvent = new GamePadConnectivityEvent();
+        private KeyEvent keyEvent = new KeyEvent();
+        private GamePadEvent gamePadConnectivityEvent = new GamePadEvent();
 
         #endregion
 
@@ -159,34 +158,19 @@ namespace BomberEngine.Game
 
         #region Input listener
 
-        public virtual bool OnKeyPressed(Keys key)
+        public virtual bool OnKeyPressed(KeyEventArg arg)
         {
-            return HandleEvent(keyEvent.Init(key, KeyboardEvent.PRESSED));
+            return HandleEvent(keyEvent.Init(arg, KeyEvent.PRESSED));
         }
 
-        public virtual bool OnKeyRepeated(Keys key)
+        public virtual bool OnKeyRepeated(KeyEventArg arg)
         {
-            return HandleEvent(keyEvent.Init(key, KeyboardEvent.REPEATED));
+            return HandleEvent(keyEvent.Init(arg, KeyEvent.REPEATED));
         }
 
-        public virtual bool OnKeyReleased(Keys key)
+        public virtual bool OnKeyReleased(KeyEventArg arg)
         {
-            return HandleEvent(keyEvent.Init(key, KeyboardEvent.RELEASED));
-        }
-
-        public virtual bool OnButtonPressed(ButtonEventArg e)
-        {
-            return HandleEvent(gamePadEvent.Init(e, GamePadEvent.PRESSED));
-        }
-
-        public virtual bool OnButtonRepeat(ButtonEventArg e)
-        {
-            return HandleEvent(gamePadEvent.Init(e, GamePadEvent.REPEATED));
-        }
-
-        public virtual bool OnButtonReleased(ButtonEventArg e)
-        {
-            return HandleEvent(gamePadEvent.Init(e, GamePadEvent.RELEASED));
+            return HandleEvent(keyEvent.Init(arg, KeyEvent.RELEASED));
         }
 
         public virtual void OnGamePadConnected(int playerIndex)

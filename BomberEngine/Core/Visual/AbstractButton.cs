@@ -30,36 +30,18 @@ namespace BomberEngine.Core.Visual
 
         public override bool HandleEvent(Event evt)
         {
-            if (evt.code == Event.GAMEPAD)
+            if (evt.code == Event.KEY)
             {
-                GamePadEvent gamepadEvt = evt as GamePadEvent;
-                if (gamepadEvt.arg.button == Buttons.A)
+                KeyEvent keyEvent = evt as KeyEvent;
+                if (keyEvent.arg.key == KeyCode.KB_Enter)
                 {
-                    if (gamepadEvt.state == GamePadEvent.PRESSED)
-                    {
-                        OnPress();
-                        return true;
-                    }
-
-                    if (gamepadEvt.state == GamePadEvent.RELEASED)
-                    {
-                        OnRelease();
-                        return true;
-                    }
-                }
-            }
-            else if (evt.code == Event.KEYBOARD)
-            {
-                KeyboardEvent keyEvent = evt as KeyboardEvent;
-                if (keyEvent.key == Keys.Enter)
-                {
-                    if (keyEvent.state == KeyboardEvent.PRESSED)
+                    if (keyEvent.state == KeyEvent.PRESSED)
                     {
                         OnPress();
                         return true;                        
                     }
 
-                    if (keyEvent.state == KeyboardEvent.RELEASED)
+                    if (keyEvent.state == KeyEvent.RELEASED)
                     {
                         OnRelease();
                         return true;

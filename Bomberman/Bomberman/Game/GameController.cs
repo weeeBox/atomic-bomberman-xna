@@ -22,8 +22,6 @@ namespace Bomberman.Game
         private const int SCREEN_PAUSE = 2;
 
         private GameScreen gameScreen;
-        private GameCheats cheats;
-
         private Game game;
 
         public GameController()
@@ -39,7 +37,6 @@ namespace Bomberman.Game
             gameScreen.id = SCREEN_GAME;
 
             InitPlayers();
-            InitCheats();
         }
 
         private void InitPlayers()
@@ -47,38 +44,32 @@ namespace Bomberman.Game
             List<Player> players = game.GetPlayers().list;
 
             PlayerKeyboardInput keyboardInput1 = new PlayerKeyboardInput();
-            keyboardInput1.Map(Keys.W, PlayerAction.Up);
-            keyboardInput1.Map(Keys.A, PlayerAction.Left);
-            keyboardInput1.Map(Keys.S, PlayerAction.Down);
-            keyboardInput1.Map(Keys.D, PlayerAction.Right);
-            keyboardInput1.Map(Keys.OemCloseBrackets, PlayerAction.Bomb);
-            keyboardInput1.Map(Keys.OemOpenBrackets, PlayerAction.Special);
-            gameScreen.AddKeyboardListener(keyboardInput1);
+            keyboardInput1.Map(KeyCode.KB_W, PlayerAction.Up);
+            keyboardInput1.Map(KeyCode.KB_A, PlayerAction.Left);
+            keyboardInput1.Map(KeyCode.KB_S, PlayerAction.Down);
+            keyboardInput1.Map(KeyCode.KB_D, PlayerAction.Right);
+            keyboardInput1.Map(KeyCode.KB_OemCloseBrackets, PlayerAction.Bomb);
+            keyboardInput1.Map(KeyCode.KB_OemOpenBrackets, PlayerAction.Special);
+            gameScreen.AddKeyListener(keyboardInput1);
 
             players[0].SetPlayerInput(keyboardInput1);
 
             PlayerKeyboardInput keyboardInput2 = new PlayerKeyboardInput();
-            keyboardInput2.Map(Keys.Up, PlayerAction.Up);
-            keyboardInput2.Map(Keys.Left, PlayerAction.Left);
-            keyboardInput2.Map(Keys.Down, PlayerAction.Down);
-            keyboardInput2.Map(Keys.Right, PlayerAction.Right);
-            gameScreen.AddKeyboardListener(keyboardInput2);
+            keyboardInput2.Map(KeyCode.KB_Up, PlayerAction.Up);
+            keyboardInput2.Map(KeyCode.KB_Left, PlayerAction.Left);
+            keyboardInput2.Map(KeyCode.KB_Down, PlayerAction.Down);
+            keyboardInput2.Map(KeyCode.KB_Right, PlayerAction.Right);
+            gameScreen.AddKeyListener(keyboardInput2);
 
             players[1].SetPlayerInput(keyboardInput2);
 
             PlayerGamePadInput gamePadInput = new PlayerGamePadInput(0);
-            gamePadInput.Map(Buttons.A, PlayerAction.Bomb);
-            gamePadInput.Map(Buttons.B, PlayerAction.Special);
-            gameScreen.AddGamePadListener(gamePadInput);
+            gamePadInput.Map(KeyCode.GP_A, PlayerAction.Bomb);
+            gamePadInput.Map(KeyCode.GP_B, PlayerAction.Special);
+            gameScreen.AddKeyListener(gamePadInput);
             gameScreen.AddUpdatabled(gamePadInput);
 
             players[2].SetPlayerInput(gamePadInput);
-        }
-
-        private void InitCheats()
-        {
-            cheats = new GameCheats(game);
-            gameScreen.AddKeyboardListener(cheats);
         }
 
         private void InitField(int schemeId)
@@ -99,10 +90,10 @@ namespace Bomberman.Game
                 return true;
             }
 
-            if (evt.code == Event.KEYBOARD)
+            if (evt.code == Event.KEY)
             {
-                KeyboardEvent keyEvent = evt as KeyboardEvent;
-                if (OnKeyPressed(keyEvent.key))
+                KeyEvent keyEvent = evt as KeyEvent;
+                if (OnKeyPressed(keyEvent.arg))
                 {
                     return true;
                 }
@@ -111,9 +102,9 @@ namespace Bomberman.Game
             return false;
         }
 
-        private bool OnKeyPressed(Keys key)
+        private bool OnKeyPressed(KeyEventArg e)
         {
-            if (key == Keys.Escape)
+            if (e.key == KeyCode.KB_Escape)
             {
                 Screen screen = CurrentScreen();
                 if (screen.id == SCREEN_GAME)

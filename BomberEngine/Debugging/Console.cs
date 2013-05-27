@@ -31,7 +31,7 @@ namespace BomberEngine.Debugging
 
         private bool shiftPressed;
 
-        private HashSet<Keys> additionalInputKeys;
+        private HashSet<KeyCode> additionalInputKeys;
 
         private ConsoleCommandRegister commands;
         private LinkedList<ConsoleCommand> suggestedCommands;
@@ -61,25 +61,25 @@ namespace BomberEngine.Debugging
 
         private void InitAdditionalInputKeys()
         {
-            additionalInputKeys = new HashSet<Keys>();
-            additionalInputKeys.Add(Keys.Space);
-            additionalInputKeys.Add(Keys.Multiply);
-            additionalInputKeys.Add(Keys.Add);
-            additionalInputKeys.Add(Keys.Separator);
-            additionalInputKeys.Add(Keys.Subtract);
-            additionalInputKeys.Add(Keys.Decimal);
-            additionalInputKeys.Add(Keys.Divide);
-            additionalInputKeys.Add(Keys.OemSemicolon);
-            additionalInputKeys.Add(Keys.OemPlus);
-            additionalInputKeys.Add(Keys.OemComma);
-            additionalInputKeys.Add(Keys.OemMinus);
-            additionalInputKeys.Add(Keys.OemPeriod);
-            additionalInputKeys.Add(Keys.OemQuestion);
-            additionalInputKeys.Add(Keys.OemOpenBrackets);
-            additionalInputKeys.Add(Keys.OemPipe);
-            additionalInputKeys.Add(Keys.OemCloseBrackets);
-            additionalInputKeys.Add(Keys.OemQuotes);
-            additionalInputKeys.Add(Keys.OemBackslash);
+            additionalInputKeys = new HashSet<KeyCode>();
+            additionalInputKeys.Add(KeyCode.KB_Space);
+            additionalInputKeys.Add(KeyCode.KB_Multiply);
+            additionalInputKeys.Add(KeyCode.KB_Add);
+            additionalInputKeys.Add(KeyCode.KB_Separator);
+            additionalInputKeys.Add(KeyCode.KB_Subtract);
+            additionalInputKeys.Add(KeyCode.KB_Decimal);
+            additionalInputKeys.Add(KeyCode.KB_Divide);
+            additionalInputKeys.Add(KeyCode.KB_OemSemicolon);
+            additionalInputKeys.Add(KeyCode.KB_OemPlus);
+            additionalInputKeys.Add(KeyCode.KB_OemComma);
+            additionalInputKeys.Add(KeyCode.KB_OemMinus);
+            additionalInputKeys.Add(KeyCode.KB_OemPeriod);
+            additionalInputKeys.Add(KeyCode.KB_OemQuestion);
+            additionalInputKeys.Add(KeyCode.KB_OemOpenBrackets);
+            additionalInputKeys.Add(KeyCode.KB_OemPipe);
+            additionalInputKeys.Add(KeyCode.KB_OemCloseBrackets);
+            additionalInputKeys.Add(KeyCode.KB_OemQuotes);
+            additionalInputKeys.Add(KeyCode.KB_OemBackslash);
         }
 
         public bool RegisterCommand(ConsoleCommand command)
@@ -269,26 +269,26 @@ namespace BomberEngine.Debugging
 
         public override bool HandleEvent(Event evt)
         {
-            if (evt.code == Event.KEYBOARD)
+            if (evt.code == Event.KEY)
             {
-                KeyboardEvent keyEvent = evt as KeyboardEvent;
-                Keys key = keyEvent.key;
+                KeyEvent keyEvent = evt as KeyEvent;
+                KeyCode key = keyEvent.arg.key;
 
                 switch (keyEvent.state)
                 {
-                    case KeyboardEvent.PRESSED:
+                    case KeyEvent.PRESSED:
                     {
                         if (OnKeyPressed(key)) return true;
                         break;
                     }
 
-                    case KeyboardEvent.REPEATED:
+                    case KeyEvent.REPEATED:
                     {
                         if (OnKeyRepeat(key)) return true;
                         break;
                     }
 
-                    case KeyboardEvent.RELEASED:
+                    case KeyEvent.RELEASED:
                     {
                         if (OnKeyReleased(key)) return true;
                         break;
@@ -299,9 +299,9 @@ namespace BomberEngine.Debugging
             return base.HandleEvent(evt);
         }
 
-        private bool OnKeyPressed(Keys key)
+        private bool OnKeyPressed(KeyCode key)
         {
-            if (key >= Keys.A && key <= Keys.Z)
+            if (key >= KeyCode.KB_A && key <= KeyCode.KB_Z)
             {
                 char chr = (char)key;
                 if (!shiftPressed)
@@ -313,43 +313,43 @@ namespace BomberEngine.Debugging
                 return true;
             }
 
-            if (key >= Keys.D0 && key <= Keys.D9 || key >= Keys.NumPad0 && key <= Keys.NumPad9)
+            if (key >= KeyCode.KB_D0 && key <= KeyCode.KB_D9 || key >= KeyCode.KB_NumPad0 && key <= KeyCode.KB_NumPad9)
             {
                 EnterChar((char)key);
                 return true;
             }
 
-            if (key == Keys.Left)
+            if (key == KeyCode.KB_Left)
             {
                 MoveCursorLeft();
                 return true;
             }
 
-            if (key == Keys.Right)
+            if (key == KeyCode.KB_Right)
             {
                 MoveCursorRight();
                 return true;
             }
 
-            if (key == Keys.Back)
+            if (key == KeyCode.KB_Back)
             {
                 DeleteChar();
                 return true;
             }
 
-            if (key == Keys.Enter)
+            if (key == KeyCode.KB_Enter)
             {
                 TryExecuteCommand();
                 return true;
             }
 
-            if (key == Keys.Tab)
+            if (key == KeyCode.KB_Tab)
             {
                 DoAutoComplete();
                 return true;
             }
 
-            if (key == Keys.LeftShift || key == Keys.RightShift)
+            if (key == KeyCode.KB_LeftShift || key == KeyCode.KB_RightShift)
             {
                 shiftPressed = true;
                 return true;
@@ -358,14 +358,14 @@ namespace BomberEngine.Debugging
             return false;
         }
 
-        private bool OnKeyRepeat(Keys key)
+        private bool OnKeyRepeat(KeyCode key)
         {
             return false;
         }
 
-        private bool OnKeyReleased(Keys key)
+        private bool OnKeyReleased(KeyCode key)
         {   
-            if (key == Keys.LeftShift || key == Keys.RightShift)
+            if (key == KeyCode.KB_LeftShift || key == KeyCode.KB_RightShift)
             {
                 shiftPressed = false;
                 return true;

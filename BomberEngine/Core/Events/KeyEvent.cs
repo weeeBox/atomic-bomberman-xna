@@ -3,26 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Input;
+using BomberEngine.Core.Input;
 
 namespace BomberEngine.Core.Events
 {
-    public class KeyboardEvent : Event
+    public class KeyEvent : Event
     {
         public const int PRESSED = 1;
         public const int REPEATED = 2;
         public const int RELEASED = 3;
 
-        public Keys key;
+        public KeyEventArg arg;
         public int state;
 
-        public KeyboardEvent()
-            : base(Event.KEYBOARD)
+        public KeyEvent()
+            : base(Event.KEY)
         {
         }
 
-        public KeyboardEvent Init(Keys key, int state)
+        public KeyEvent Init(KeyEventArg arg, int state)
         {
-            this.key = key;
+            this.arg = arg;
             this.state = state;
 
             return this;

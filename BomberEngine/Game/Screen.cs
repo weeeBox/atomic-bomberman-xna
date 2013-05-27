@@ -30,8 +30,7 @@ namespace BomberEngine.Game
         private UpdatableList updatableList;
         private DrawableList drawableList;
 
-        private KeyboardListenerList keyboardListeners;
-        private GamePadListenerList gamePadListeners;
+        private IKeyInputListenerList keyInputListeners;
 
         public ScreenManager screenManager;
 
@@ -49,8 +48,7 @@ namespace BomberEngine.Game
             this.height = height;
 
             timerManager = new TimerManager();
-            keyboardListeners = new KeyboardListenerList();
-            gamePadListeners = new GamePadListenerList();
+            keyInputListeners = new IKeyInputListenerList();
 
             updatableList = UpdatableList.Null;
             drawableList = DrawableList.Null;
@@ -221,59 +219,25 @@ namespace BomberEngine.Game
         #region Event handler
 
         public override bool HandleEvent(Event evt)
-        {
-            if (evt.code == Event.GAMEPAD)
+        {   
+            if (evt.code == Event.KEY)
             {
-                GamePadEvent gamePadEvt = evt as GamePadEvent;
-                switch (gamePadEvt.state)
-                {
-                    case GamePadEvent.PRESSED:
-                    {
-                        if (gamePadListeners.OnButtonPressed(gamePadEvt.arg)) return true;
-                        break;
-                    }
-                    case GamePadEvent.REPEATED:
-                    {
-                        if (gamePadListeners.OnButtonReleased(gamePadEvt.arg)) return true;
-                        break;
-                    }
-                    case GamePadEvent.RELEASED:
-                    {
-                        if (gamePadListeners.OnButtonReleased(gamePadEvt.arg)) return true;
-                        break;
-                    }
-                }
-
-                if (mFocusedView != null)
-                {
-                    if (mFocusedView.HandleEvent(evt)) return true;
-                }
-
-                switch (gamePadEvt.state)
-                {
-                    case GamePadEvent.PRESSED:
-                    case GamePadEvent.REPEATED:
-                        return TryMoveFocus(gamePadEvt.arg.button);
-                }
-            }
-            else if (evt.code == Event.KEYBOARD)
-            {
-                KeyboardEvent keyEvent = evt as KeyboardEvent;
+                KeyEvent keyEvent = evt as KeyEvent;
                 switch (keyEvent.state)
                 {
-                    case KeyboardEvent.PRESSED:
+                    case KeyEvent.PRESSED:
                     {
-                        if (keyboardListeners.OnKeyPressed(keyEvent.key)) return true;
+                        if (keyInputListeners.OnKeyPressed(keyEvent.arg)) return true;
                         break;
                     }
-                    case KeyboardEvent.REPEATED:
+                    case KeyEvent.REPEATED:
                     {
-                        if (keyboardListeners.OnKeyRepeated(keyEvent.key)) return true;
+                        if (keyInputListeners.OnKeyRepeated(keyEvent.arg)) return true;
                         break;
                     }
-                    case KeyboardEvent.RELEASED:
+                    case KeyEvent.RELEASED:
                     {
-                        if (keyboardListeners.OnKeyReleased(keyEvent.key)) return true;
+                        if (keyInputListeners.OnKeyReleased(keyEvent.arg)) return true;
                         break;
                     }
                 }
@@ -285,9 +249,9 @@ namespace BomberEngine.Game
 
                 switch (keyEvent.state)
                 {
-                    case KeyboardEvent.PRESSED:
-                    case KeyboardEvent.REPEATED:
-                        return TryMoveFocus(keyEvent.key);
+                    case KeyEvent.PRESSED:
+                    case KeyEvent.REPEATED:
+                        return TryMoveFocus(keyEvent.arg.key);
                 }
             }
 
@@ -299,31 +263,15 @@ namespace BomberEngine.Game
         //////////////////////////////////////////////////////////////////////////////
 
         #region KeyboardListeners
-        
-        public bool AddKeyboardListener(IKeyboardListener listener)
+
+        public bool AddKeyListener(IKeyInputListener listener)
         {
-            return keyboardListeners.Add(listener);
+            return keyInputListeners.Add(listener);
         }
 
-        public bool RemoveKeyboardListener(IKeyboardListener listener)
+        public bool RemoveKeyboardListener(IKeyInputListener listener)
         {
-            return keyboardListeners.Remove(listener);
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region GamePadListeners
-
-        public bool AddGamePadListener(IGamePadListener listener)
-        {
-            return gamePadListeners.Add(listener);
-        }
-
-        public bool RemoveGamePadListener(IGamePadListener listener)
-        {
-            return gamePadListeners.Remove(listener);
+            return keyInputListeners.Remove(listener);
         }
 
         #endregion
@@ -332,21 +280,11 @@ namespace BomberEngine.Game
 
         #region Focus
 
-        private bool TryMoveFocus(Keys key)
+        private bool TryMoveFocus(KeyCode key)
         {
             FocusDirection direction = FindFocusDirection(key);
             if (direction != FocusDirection.None)
             {   
-                return TryMoveFocus(direction);
-            }
-            return false;
-        }
-
-        private bool TryMoveFocus(Buttons button)
-        {
-            FocusDirection direction = FindFocusDirection(button);
-            if (direction != FocusDirection.None)
-            {
                 return TryMoveFocus(direction);
             }
             return false;
@@ -475,38 +413,17 @@ namespace BomberEngine.Game
             return false;
         }
 
-        protected virtual FocusDirection FindFocusDirection(Keys key)
+        protected virtual FocusDirection FindFocusDirection(KeyCode key)
         {
             switch (key)
             {
-                case Keys.Down:
+                case KeyCode.KB_Down:
                     return FocusDirection.Down;
-                case Keys.Up:
+                case KeyCode.KB_Up:
                     return FocusDirection.Up;
-                case Keys.Left:
+                case KeyCode.KB_Left:
                     return FocusDirection.Left;
-                case Keys.Right:
-                    return FocusDirection.Right;
-            }
-
-            return FocusDirection.None;
-        }
-
-        protected virtual FocusDirection FindFocusDirection(Buttons button)
-        {
-            switch (button)
-            {
-                case Buttons.DPadDown:
-                case Buttons.LeftThumbstickDown:
-                    return FocusDirection.Down;
-                case Buttons.DPadUp:
-                case Buttons.LeftThumbstickUp:
-                    return FocusDirection.Up;
-                case Buttons.DPadLeft:
-                case Buttons.LeftThumbstickLeft:
-                    return FocusDirection.Left;
-                case Buttons.DPadRight:
-                case Buttons.LeftThumbstickRight:
+                case KeyCode.KB_Right:
                     return FocusDirection.Right;
             }
 

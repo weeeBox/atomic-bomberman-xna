@@ -150,7 +150,7 @@ namespace BomberEngineTests
             Assert.IsTrue(f1.focused);
             Assert.AreEqual(screen.focusedView, f1);
 
-            screen.OnKeyPressed(Keys.Down);
+            //screen.OnKeyPressed(KeyCode.KB_Down);
 
             Assert.IsTrue(f2.focused);
             Assert.AreEqual(screen.focusedView, f2);

@@ -7,6 +7,23 @@ using System;
 
 namespace BomberEngine.Core.Input
 {
+    public struct KeyEventArg
+    {
+        public int playerIndex;
+        public KeyCode key;
+
+        public KeyEventArg(KeyCode key)
+            : this(key, -1)
+        {
+        }
+
+        public KeyEventArg(KeyCode key, int playerIndex)
+        {
+            this.key = key;
+            this.playerIndex = playerIndex;
+        }
+    }
+
     public class InputManager : IUpdatable
     {
         private static PlayerIndex[] PLAYERS_INDICES = 
@@ -51,10 +68,9 @@ namespace BomberEngine.Core.Input
         private GamePadState[] currentGamepadStates;
         private KeyboardState currentKeyboardState;
 
-        private IKeyboardListener keyboardListener;
-        private IGamePadListener gamePadListener;
+        private IKeyInputListener keyListener;
+        private ITouchInputListener touchListener;
         private IGamePadStateListener gamePadStateListener;
-        private ITouchListener touchListener;
 
         private GamePadDeadZone deadZone;
 
@@ -112,12 +128,12 @@ namespace BomberEngine.Core.Input
             {
                 Buttons button = CHECK_BUTTONS[buttonIndex];
                 if (IsButtonDown(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
-                {
-                    gamePadListener.OnButtonPressed(new ButtonEventArg(gamePadIndex, button));
+                {   
+                    keyListener.OnKeyPressed(new KeyEventArg(KeyCodeHelper.FromButton(button), gamePadIndex));
                 }
                 else if (IsButtonUp(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
-                {
-                    gamePadListener.OnButtonReleased(new ButtonEventArg(gamePadIndex, button));
+                {   
+                    keyListener.OnKeyReleased(new KeyEventArg(KeyCodeHelper.FromButton(button), gamePadIndex));
                 }
             }
         }
@@ -184,7 +200,7 @@ namespace BomberEngine.Core.Input
             KeyboardState oldState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
 
-            if (keyboardListener != null)
+            if (keyListener != null)
             {
                 Keys[] oldKeys = oldState.GetPressedKeys();
                 Keys[] newKeys = currentKeyboardState.GetPressedKeys();
@@ -192,15 +208,15 @@ namespace BomberEngine.Core.Input
                 for (int i = 0; i < newKeys.Length; ++i)
                 {
                     if (!oldKeys.Contains(newKeys[i]))
-                    {
-                        keyboardListener.OnKeyPressed(newKeys[i]);
+                    {   
+                        keyListener.OnKeyPressed(new KeyEventArg(KeyCodeHelper.FromKey(newKeys[i])));
                     }
                 }
                 for (int i = 0; i < oldKeys.Length; ++i)
                 {
                     if (!newKeys.Contains(oldKeys[i]))
-                    {
-                        keyboardListener.OnKeyReleased(oldKeys[i]);
+                    {   
+                        keyListener.OnKeyReleased(new KeyEventArg(KeyCodeHelper.FromKey(oldKeys[i])));
                     }
                 }
             }
@@ -220,29 +236,18 @@ namespace BomberEngine.Core.Input
         public void SetInputListener(IInputListener listener)
         {
             SetKeyboardListener(listener);
-            SetGamePadListener(listener);
             SetGamePadStateListener(listener);
             SetTouchListener(listener);
         }
 
-        public IKeyboardListener GetKeyboardListener()
+        public IKeyInputListener GetKeyboardListener()
         {
-            return keyboardListener;
+            return keyListener;
         }
 
-        public void SetKeyboardListener(IKeyboardListener listener)
+        public void SetKeyboardListener(IKeyInputListener listener)
         {
-            keyboardListener = listener;
-        }
-
-        public IGamePadListener GamePadListener()
-        {
-            return gamePadListener;
-        }
-
-        public void SetGamePadListener(IGamePadListener listener)
-        {
-            gamePadListener = listener;
+            keyListener = listener;
         }
 
         public IGamePadStateListener GetGamePadStateListener()
@@ -255,12 +260,12 @@ namespace BomberEngine.Core.Input
             this.gamePadStateListener = listener;
         }
 
-        public ITouchListener GetTouchListener()
+        public ITouchInputListener GetTouchListener()
         {
             return touchListener;
         }
 
-        public void SetTouchListener(ITouchListener listener)
+        public void SetTouchListener(ITouchInputListener listener)
         {
             this.touchListener = listener;
         }

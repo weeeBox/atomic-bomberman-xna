@@ -16,7 +16,7 @@ namespace BomberEngine.Core.Events
         public int state;
 
         public MouseEvent()
-            : base(Event.MOUSE)
+            : base(Event.TOUCH)
         {
         }
     }

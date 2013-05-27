@@ -1,6 +1,6 @@
 ﻿namespace BomberEngine.Core.Input
 {
-    public interface ITouchListener
+    public interface ITouchInputListener
     {
         void OnPointerMoved(int x, int y, int fingerId);
         void OnPointerPressed(int x, int y, int fingerId);
