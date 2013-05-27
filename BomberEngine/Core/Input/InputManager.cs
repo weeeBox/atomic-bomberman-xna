@@ -24,6 +24,26 @@ namespace BomberEngine.Core.Input
             this.playerIndex = playerIndex;
         }
 
+        public bool IsShiftPressed()
+        {
+            return GetInputManager().IsShiftPressed();
+        }
+
+        public bool IsAltPressed()
+        {
+            return GetInputManager().IsAltPressed();
+        }
+
+        public bool IsCtrlPressed()
+        {
+            return GetInputManager().IsControlPressed();
+        }
+
+        public InputManager GetInputManager()
+        {
+            return Application.Input();
+        }
+
         public static bool Equals(ref KeyEventArg a, ref KeyEventArg b)
         {
             return a.key == b.key && a.playerIndex == b.playerIndex;
@@ -107,6 +127,10 @@ namespace BomberEngine.Core.Input
         private IGamePadStateListener gamePadStateListener;
 
         private GamePadDeadZone deadZone;
+
+        private bool shiftPressed;
+        private bool ctrlPressed;
+        private bool altPressed;
 
         public InputManager()
         {
@@ -281,7 +305,8 @@ namespace BomberEngine.Core.Input
                 for (int i = 0; i < newKeys.Length; ++i)
                 {
                     if (!oldKeys.Contains(newKeys[i]))
-                    {   
+                    {
+                        UpdateModifierKeysPressed(ref newKeys[i]);
                         FireKeyPressed(-1, KeyCodeHelper.FromKey(newKeys[i]), REPEAT_KEYBOARD_INDEX);
                     }
                 }
@@ -289,6 +314,8 @@ namespace BomberEngine.Core.Input
                 {
                     if (!newKeys.Contains(oldKeys[i]))
                     {
+                        UpdateModifierKeysReleased(ref oldKeys[i]);
+
                         FireKeyReleased(-1, KeyCodeHelper.FromKey(oldKeys[i]), REPEAT_KEYBOARD_INDEX);
                     }
                 }
@@ -318,6 +345,26 @@ namespace BomberEngine.Core.Input
             KeyEventArg eventArg = new KeyEventArg(key, playerIndex);
             keyListener.OnKeyReleased(eventArg);
             ClearKeyRepeat(ref eventArg, index);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Modifier keys
+
+        private void UpdateModifierKeysPressed(ref Keys key)
+        {
+            shiftPressed |= key == Keys.LeftShift || key == Keys.RightShift;
+            altPressed |= key == Keys.LeftAlt || key == Keys.RightAlt;
+            ctrlPressed |= key == Keys.LeftControl || key == Keys.RightControl;
+        }
+
+        private void UpdateModifierKeysReleased(ref Keys key)
+        {
+            shiftPressed &= key != Keys.LeftShift && key != Keys.RightShift;
+            altPressed &= key != Keys.LeftAlt && key != Keys.RightAlt;
+            ctrlPressed &= key != Keys.LeftControl && key != Keys.RightControl;
         }
 
         #endregion
@@ -361,6 +408,21 @@ namespace BomberEngine.Core.Input
         public void SetTouchListener(ITouchInputListener listener)
         {
             this.touchListener = listener;
+        }
+
+        public bool IsShiftPressed()
+        {
+            return shiftPressed;
+        }
+
+        public bool IsAltPressed()
+        {
+            return altPressed;
+        }
+
+        public bool IsControlPressed()
+        {
+            return ctrlPressed;
         }
 
         #endregion

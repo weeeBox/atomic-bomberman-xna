@@ -29,8 +29,6 @@ namespace BomberEngine.Debugging
         private float lineHeight;
         private float lineSpacing;
 
-        private bool shiftPressed;
-
         private HashSet<KeyCode> additionalInputKeys;
 
         private ConsoleCommandRegister commands;
@@ -274,25 +272,24 @@ namespace BomberEngine.Debugging
             if (evt.code == Event.KEY)
             {
                 KeyEvent keyEvent = evt as KeyEvent;
-                KeyCode key = keyEvent.arg.key;
 
                 switch (keyEvent.state)
                 {
                     case KeyEvent.PRESSED:
                     {
-                        if (OnKeyPressed(key)) return true;
+                        if (OnKeyPressed(ref keyEvent.arg)) return true;
                         break;
                     }
 
                     case KeyEvent.REPEATED:
                     {
-                        if (OnKeyRepeat(key)) return true;
+                        if (OnKeyRepeat(ref keyEvent.arg)) return true;
                         break;
                     }
 
                     case KeyEvent.RELEASED:
                     {
-                        if (OnKeyReleased(key)) return true;
+                        if (OnKeyReleased(ref keyEvent.arg)) return true;
                         break;
                     }
                 }
@@ -301,12 +298,13 @@ namespace BomberEngine.Debugging
             return base.HandleEvent(evt);
         }
 
-        private bool OnKeyPressed(KeyCode key)
+        private bool OnKeyPressed(ref KeyEventArg e)
         {
+            KeyCode key = e.key;
             if (key >= KeyCode.KB_A && key <= KeyCode.KB_Z)
             {
                 char chr = (char)key;
-                if (!shiftPressed)
+                if (!e.IsShiftPressed())
                 {
                     chr = char.ToLower(chr);
                 }
@@ -351,53 +349,42 @@ namespace BomberEngine.Debugging
                 return true;
             }
 
-            if (key == KeyCode.KB_LeftShift || key == KeyCode.KB_RightShift)
-            {
-                shiftPressed = true;
-                return true;
-            }
-
             return false;
         }
 
-        private bool OnKeyRepeat(KeyCode key)
+        private bool OnKeyRepeat(ref KeyEventArg e)
         {
+            KeyCode key = e.key;
             if (key >= KeyCode.KB_A && key <= KeyCode.KB_Z)
             {   
-                return OnKeyPressed(key);
+                return OnKeyPressed(ref e);
             }
 
             if (key >= KeyCode.KB_D0 && key <= KeyCode.KB_D9 || key >= KeyCode.KB_NumPad0 && key <= KeyCode.KB_NumPad9)
             {
-                return OnKeyPressed(key);
+                return OnKeyPressed(ref e);
             }
 
             if (key == KeyCode.KB_Left)
             {
-                return OnKeyPressed(key);
+                return OnKeyPressed(ref e);
             }
 
             if (key == KeyCode.KB_Right)
             {
-                return OnKeyPressed(key);
+                return OnKeyPressed(ref e);
             }
 
             if (key == KeyCode.KB_Back)
             {
-                return OnKeyPressed(key);
+                return OnKeyPressed(ref e);
             }
 
             return false;
         }
 
-        private bool OnKeyReleased(KeyCode key)
-        {   
-            if (key == KeyCode.KB_LeftShift || key == KeyCode.KB_RightShift)
-            {
-                shiftPressed = false;
-                return true;
-            }
-
+        private bool OnKeyReleased(ref KeyEventArg e)
+        {
             return false;
         }
     }
