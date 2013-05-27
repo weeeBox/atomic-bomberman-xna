@@ -33,6 +33,21 @@ namespace BomberEngine.Consoles.Commands
 
     //////////////////////////////////////////////////////////////////////////////
 
+    public class Cmd_listcvars : CCommand
+    {
+        public Cmd_listcvars()
+            : base("listcvars")
+        {
+        }
+
+        public override void Execute()
+        {
+            Print("Not implemented yet");
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+
     public class Cmd_exit : CCommand
     {
         public Cmd_exit()

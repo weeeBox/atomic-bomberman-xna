@@ -134,6 +134,7 @@ namespace BomberEngine.Game
 
             console.RegisterCommand(new Cmd_exit());
             console.RegisterCommand(new Cmd_listcmds());
+            console.RegisterCommand(new Cmd_listcvars());
 
             return console;
         }

@@ -18,6 +18,8 @@ namespace BomberEngine.Consoles
         private List<String> m_lines;
 
         private const String PROMPT_STRING = "]";
+        private const String PROMPT_CMD_STRING = "]\\";
+
         private StringBuilder commandBuffer;
 
         private int cursorPos;
@@ -158,16 +160,18 @@ namespace BomberEngine.Consoles
 
         private void TryExecuteCommand()
         {
-            String commandString = commandBuffer.ToString();
+            String commandString = CommandBufferText();
             String[] args = commandString.Split(' ');
 
             if (args.Length > 0)
             {
                 String name = args[0];
+
                 CCommand command = commands.FindCommand(name);
                 if (command != null)
                 {
                     command.console = this;
+                    Print(PROMPT_CMD_STRING + commandString);
 
                     if (args.Length > 1)
                     {
@@ -181,7 +185,7 @@ namespace BomberEngine.Consoles
                 }
                 else
                 {
-                    Append("Unknown command: '" + commandString + "'");
+                    Append("Unknown command: '" + name + "'");
                 }
             }
 
@@ -190,7 +194,7 @@ namespace BomberEngine.Consoles
 
         private void DoAutoComplete()
         {
-            String token = commandBuffer.ToString();
+            String token = CommandBufferText();
             if (token.Length > 0)
             {
                 suggestedCommands.Clear();
@@ -199,12 +203,18 @@ namespace BomberEngine.Consoles
                 if (suggestedCommands.Count == 1)
                 {
                     CCommand command = suggestedCommands.First.Value;
-                    SetCommandText(command.name, true);
+                    SetCommandText('\\' + command.name, true);
                 }
                 else if (suggestedCommands.Count > 1)
                 {
                     String suggestedText = GetSuggestedText(token, suggestedCommands);
-                    SetCommandText(suggestedText, false);
+                    SetCommandText('\\' + suggestedText, false);
+
+                    Print(PROMPT_CMD_STRING + suggestedText);
+                    foreach (CCommand cmd in suggestedCommands)
+                    {
+                        PrintIndent(cmd.name);
+                    }
                 }
             }
         }
@@ -235,6 +245,16 @@ namespace BomberEngine.Consoles
             }
 
             return token;
+        }
+
+        private String CommandBufferText()
+        {
+            if (commandBuffer.Length > 1 && commandBuffer[0] == '\\')
+            {
+                return commandBuffer.ToString(1, commandBuffer.Length - 1);
+            }
+
+            return commandBuffer.Length == 0 ? "" : commandBuffer.ToString();
         }
 
         private void Append(String line)
