@@ -30,6 +30,8 @@ namespace BomberEngine.Game
         private int width;
         private int height;
 
+        private double currentTime;
+
         public Application(int width, int height)
         {
             this.width = width;
@@ -119,7 +121,8 @@ namespace BomberEngine.Game
         //////////////////////////////////////////////////////////////////////////////
 
         public void Update(float delta)
-        {   
+        {
+            currentTime += delta;
             updatables.Update(delta);
         }
 
@@ -213,6 +216,11 @@ namespace BomberEngine.Game
         public static int GetHeight()
         {
             return sharedApplication.height;
+        }
+
+        public static double CurrentTime()
+        {
+            return sharedApplication.currentTime;
         }
 
         #endregion

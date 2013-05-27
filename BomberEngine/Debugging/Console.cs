@@ -360,6 +360,31 @@ namespace BomberEngine.Debugging
 
         private bool OnKeyRepeat(KeyCode key)
         {
+            if (key >= KeyCode.KB_A && key <= KeyCode.KB_Z)
+            {   
+                return OnKeyPressed(key);
+            }
+
+            if (key >= KeyCode.KB_D0 && key <= KeyCode.KB_D9 || key >= KeyCode.KB_NumPad0 && key <= KeyCode.KB_NumPad9)
+            {
+                return OnKeyPressed(key);
+            }
+
+            if (key == KeyCode.KB_Left)
+            {
+                return OnKeyPressed(key);
+            }
+
+            if (key == KeyCode.KB_Right)
+            {
+                return OnKeyPressed(key);
+            }
+
+            if (key == KeyCode.KB_Back)
+            {
+                return OnKeyPressed(key);
+            }
+
             return false;
         }
 

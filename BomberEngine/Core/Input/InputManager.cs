@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Debugging;
 using System;
+using BomberEngine.Game;
 
 namespace BomberEngine.Core.Input
 {
@@ -21,6 +22,11 @@ namespace BomberEngine.Core.Input
         {
             this.key = key;
             this.playerIndex = playerIndex;
+        }
+
+        public static bool Equals(ref KeyEventArg a, ref KeyEventArg b)
+        {
+            return a.key == b.key && a.playerIndex == b.playerIndex;
         }
     }
 
@@ -63,10 +69,38 @@ namespace BomberEngine.Core.Input
             Buttons.LeftThumbstickRight,
         };
 
+        private struct KeyRepeatInfo
+        {
+            public KeyEventArg eventArg;
+            public double timestamp;
+
+            public static readonly KeyRepeatInfo None = new KeyRepeatInfo(new KeyEventArg(KeyCode.KB_None), Double.MaxValue);
+
+            public KeyRepeatInfo(KeyEventArg eventArg, double timestamp)
+            {
+                this.eventArg = eventArg;
+                this.timestamp = timestamp;
+            }
+
+            public static bool Equals(ref KeyRepeatInfo a, ref KeyRepeatInfo b)
+            {
+                return KeyEventArg.Equals(ref a.eventArg, ref b.eventArg);
+            }
+        }
+
         private const int MAX_GAMEPADS_COUNT = 4;
+
+#if WINDOWS
+        private const int REPEAT_KEYBOARD_INDEX = MAX_GAMEPADS_COUNT;
+        private const int REPEAT_KEYS_COUNT = REPEAT_KEYBOARD_INDEX + 1;
+#else
+        private const int REPEAT_KEYS_COUNT = MAX_GAMEPADS_COUNT;
+#endif
 
         private GamePadState[] currentGamepadStates;
         private KeyboardState currentKeyboardState;
+
+        private KeyRepeatInfo[] keyRepeats;
 
         private IKeyInputListener keyListener;
         private ITouchInputListener touchListener;
@@ -77,13 +111,19 @@ namespace BomberEngine.Core.Input
         public InputManager()
         {
             deadZone = GamePadDeadZone.Circular;
-            currentGamepadStates = new GamePadState[MAX_GAMEPADS_COUNT];
 
+            currentGamepadStates = new GamePadState[MAX_GAMEPADS_COUNT];
             for (int i = 0; i < currentGamepadStates.Length; ++i)
             {
                 currentGamepadStates[i] = GamePad.GetState(PLAYERS_INDICES[i], deadZone);
             }
-            
+
+            keyRepeats = new KeyRepeatInfo[REPEAT_KEYS_COUNT];
+            for (int i = 0; i < keyRepeats.Length; ++i)
+            {
+                keyRepeats[i] = KeyRepeatInfo.None;
+            }
+
             currentKeyboardState = Keyboard.GetState();
         }
 
@@ -93,8 +133,41 @@ namespace BomberEngine.Core.Input
 
 #if WINDOWS
             UpdateKeyboard();
-#endif      
+#endif   
+            UpdateRepeats(delta);
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Key repeats
+
+        private void UpdateRepeats(float delta)
+        {
+            double currentTime = Application.CurrentTime();
+            for (int i = 0; i < keyRepeats.Length; ++i)
+            {
+                if (keyRepeats[i].timestamp < currentTime)
+                {
+                    keyListener.OnKeyRepeated(keyRepeats[i].eventArg);
+                    keyRepeats[i].timestamp = currentTime + 0.03;
+                }
+            }
+        }
+
+        private void SetKeyRepeat(ref KeyEventArg eventArg, int index)
+        {   
+            keyRepeats[index] = new KeyRepeatInfo(eventArg, Application.CurrentTime() + 0.5);
+        }
+
+        private void ClearKeyRepeat(ref KeyEventArg eventArg, int index)
+        {
+            if (KeyEventArg.Equals(ref eventArg, ref keyRepeats[index].eventArg))
+            {   
+                keyRepeats[index] = KeyRepeatInfo.None;
+            }
+        }
+
+        #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 
@@ -128,12 +201,12 @@ namespace BomberEngine.Core.Input
             {
                 Buttons button = CHECK_BUTTONS[buttonIndex];
                 if (IsButtonDown(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
-                {   
-                    keyListener.OnKeyPressed(new KeyEventArg(KeyCodeHelper.FromButton(button), gamePadIndex));
+                {
+                    FireKeyPressed(gamePadIndex, KeyCodeHelper.FromButton(button), gamePadIndex);
                 }
                 else if (IsButtonUp(button, ref oldState, ref currentGamepadStates[gamePadIndex]))
-                {   
-                    keyListener.OnKeyReleased(new KeyEventArg(KeyCodeHelper.FromButton(button), gamePadIndex));
+                {
+                    FireKeyReleased(gamePadIndex, KeyCodeHelper.FromButton(button), gamePadIndex);
                 }
             }
         }
@@ -209,14 +282,14 @@ namespace BomberEngine.Core.Input
                 {
                     if (!oldKeys.Contains(newKeys[i]))
                     {   
-                        keyListener.OnKeyPressed(new KeyEventArg(KeyCodeHelper.FromKey(newKeys[i])));
+                        FireKeyPressed(-1, KeyCodeHelper.FromKey(newKeys[i]), REPEAT_KEYBOARD_INDEX);
                     }
                 }
                 for (int i = 0; i < oldKeys.Length; ++i)
                 {
                     if (!newKeys.Contains(oldKeys[i]))
-                    {   
-                        keyListener.OnKeyReleased(new KeyEventArg(KeyCodeHelper.FromKey(oldKeys[i])));
+                    {
+                        FireKeyReleased(-1, KeyCodeHelper.FromKey(oldKeys[i]), REPEAT_KEYBOARD_INDEX);
                     }
                 }
             }
@@ -225,6 +298,26 @@ namespace BomberEngine.Core.Input
         public bool IsKeyPressed(Keys key)
         {
             return currentKeyboardState.IsKeyDown(key);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Key listener notifications
+
+        private void FireKeyPressed(int playerIndex, KeyCode key, int index)
+        {
+            KeyEventArg eventArg = new KeyEventArg(key, playerIndex);
+            keyListener.OnKeyPressed(eventArg);
+            SetKeyRepeat(ref eventArg, index);
+        }
+
+        private void FireKeyReleased(int playerIndex, KeyCode key, int index)
+        {
+            KeyEventArg eventArg = new KeyEventArg(key, playerIndex);
+            keyListener.OnKeyReleased(eventArg);
+            ClearKeyRepeat(ref eventArg, index);
         }
 
         #endregion
