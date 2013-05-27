@@ -8,14 +8,14 @@ using BomberEngine.Consoles;
 
 namespace Bomberman.Game.Commands
 {
-    public class PlayerAddCommand : BombermanConsoleCommand
+    public class PlayerAddCommand : IngameConsoleCommand
     {
         public PlayerAddCommand()
             : base("player_add")
         {
         }
 
-        public override void Execute(GameConsole console, params String[] args)
+        public override void Execute(SystemConsole console, params String[] args)
         {
             throw new NotImplementedException();
         }

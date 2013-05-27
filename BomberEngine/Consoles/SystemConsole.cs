@@ -15,7 +15,7 @@ using BomberEngine.Consoles.Commands;
 
 namespace BomberEngine.Consoles
 {
-    public class GameConsole : Screen
+    public class SystemConsole : Screen
     {
         private List<String> m_lines;
 
@@ -31,14 +31,14 @@ namespace BomberEngine.Consoles
 
         private HashSet<KeyCode> additionalInputKeys;
 
-        private ConsoleCommandRegister commands;
-        private LinkedList<ConsoleCommand> suggestedCommands;
+        private CCommandRegister commands;
+        private LinkedList<CCommand> suggestedCommands;
 
         private Color backColor;
 
         private bool carretVisible;
 
-        public GameConsole(Font font)
+        public SystemConsole(Font font)
             : base(Application.GetWidth(), 0.5f * Application.GetHeight())
         {
             this.font = font;
@@ -47,10 +47,10 @@ namespace BomberEngine.Consoles
             AllowsUpdatePrevious = true;
 
             m_lines = new List<String>();
-            commands = new ConsoleCommandRegister();
+            commands = new CCommandRegister();
 
             commandBuffer = new StringBuilder();
-            suggestedCommands = new LinkedList<ConsoleCommand>();
+            suggestedCommands = new LinkedList<CCommand>();
 
             charWidth = font.StringWidth("W");
             lineHeight = font.FontHeight();
@@ -92,7 +92,7 @@ namespace BomberEngine.Consoles
             RegisterCommand(new ExitCommand());
         }
 
-        public bool RegisterCommand(ConsoleCommand command)
+        public bool RegisterCommand(CCommand command)
         {
             return commands.RegisterCommand(command);
         }
@@ -191,7 +191,7 @@ namespace BomberEngine.Consoles
             if (tokens.Length > 0)
             {
                 String name = tokens[0];
-                ConsoleCommand command = commands.FindCommand(name);
+                CCommand command = commands.FindCommand(name);
                 if (command != null)
                 {
                     if (tokens.Length > 1)
@@ -225,7 +225,7 @@ namespace BomberEngine.Consoles
 
                 if (suggestedCommands.Count == 1)
                 {
-                    ConsoleCommand command = suggestedCommands.First.Value;
+                    CCommand command = suggestedCommands.First.Value;
                     SetCommandText(command.GetName(), true);
                 }
                 else if (suggestedCommands.Count > 1)
@@ -236,9 +236,9 @@ namespace BomberEngine.Consoles
             }
         }
 
-        private String GetSuggestedText(String token, LinkedList<ConsoleCommand> commandList)
+        private String GetSuggestedText(String token, LinkedList<CCommand> commandList)
         {
-            LinkedListNode<ConsoleCommand> firstNode = commandList.First;
+            LinkedListNode<CCommand> firstNode = commandList.First;
             String firstCommandName = firstNode.Value.GetName();
 
             if (firstCommandName.Length > token.Length)
@@ -247,7 +247,7 @@ namespace BomberEngine.Consoles
                 for (int i = token.Length; i < firstCommandName.Length; ++i)
                 {
                     char chr = firstCommandName[i];
-                    for (LinkedListNode<ConsoleCommand> nextNode = firstNode.Next; nextNode != null; nextNode = nextNode.Next)
+                    for (LinkedListNode<CCommand> nextNode = firstNode.Next; nextNode != null; nextNode = nextNode.Next)
                     {
                         String otherCommandName = nextNode.Value.GetName();
                         if (otherCommandName[i] != chr)

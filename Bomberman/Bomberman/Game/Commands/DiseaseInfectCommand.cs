@@ -9,14 +9,14 @@ using BomberEngine.Consoles;
 
 namespace Bomberman.Game.Commands
 {
-    public class DiseaseInfectCommand : BombermanConsoleCommand
+    public class DiseaseInfectCommand : IngameConsoleCommand
     {
         public DiseaseInfectCommand()
             : base("disease_infect")
         {
         }
 
-        public override void Execute(GameConsole console, params String[] args)
+        public override void Execute(SystemConsole console, params String[] args)
         {
             int diseaseIndex = GetInt(args, 0);
 

@@ -109,10 +109,10 @@
     <Compile Include="Core\Visual\TextView.cs" />
     <Compile Include="Core\Visual\RectView.cs" />
     <Compile Include="Core\Visual\ViewList.cs" />
-    <Compile Include="Consoles\Commands\ConsoleCommand.cs" />
-    <Compile Include="Consoles\Commands\ConsoleCommandRegister.cs" />
-    <Compile Include="Consoles\Commands\ConsoleCommands.cs" />
-    <Compile Include="Consoles\GameConsole.cs" />
+    <Compile Include="Consoles\Commands\CCommand.cs" />
+    <Compile Include="Consoles\Commands\CCommandRegister.cs" />
+    <Compile Include="Consoles\Commands\CCommands.cs" />
+    <Compile Include="Consoles\SystemConsole.cs" />
     <Compile Include="Core\Assets\Asset.cs" />
     <Compile Include="Core\Assets\AssetLoader.cs" />
     <Compile Include="Core\Assets\AssetLoadInfo.cs" />

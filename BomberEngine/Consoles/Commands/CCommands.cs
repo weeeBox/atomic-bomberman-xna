@@ -6,14 +6,14 @@ using BomberEngine.Game;
 
 namespace BomberEngine.Consoles.Commands
 {
-    public class ExitCommand : ConsoleCommand
+    public class ExitCommand : CCommand
     {
         public ExitCommand()
             : base("exit")
         {
         }
 
-        public override void Execute(GameConsole console, params String[] args)
+        public override void Execute(SystemConsole console, params String[] args)
         {
             Application.sharedApplication.Stop();
         }

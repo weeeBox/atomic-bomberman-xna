@@ -8,9 +8,9 @@ using Bomberman.Game.Elements.Players;
 
 namespace Bomberman.Game.Commands
 {
-    public abstract class BombermanConsoleCommand : ConsoleCommand
+    public abstract class IngameConsoleCommand : CCommand
     {
-        public BombermanConsoleCommand(String name)
+        public IngameConsoleCommand(String name)
             : base(name)
         {
         }

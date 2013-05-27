@@ -8,14 +8,14 @@ using BomberEngine.Consoles;
 
 namespace Bomberman.Game.Commands
 {
-    public class PowerupRemoveCommand : BombermanConsoleCommand
+    public class PowerupRemoveCommand : IngameConsoleCommand
     {
         public PowerupRemoveCommand()
             : base("powerup_remove")
         {
         }
 
-        public override void Execute(GameConsole console, params String[] args)
+        public override void Execute(SystemConsole console, params String[] args)
         {   
         }
     }

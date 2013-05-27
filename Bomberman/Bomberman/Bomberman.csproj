@@ -116,7 +116,7 @@
     <Compile Include="Content\Scheme.cs" />
     <Compile Include="Content\SchemeLoader.cs" />
     <Compile Include="Content\SchemeReader.cs" />
-    <Compile Include="Game\Commands\BombermanConsoleCommand.cs" />
+    <Compile Include="Game\Commands\IngameConsoleCommand.cs" />
     <Compile Include="Game\Commands\DiseaseInfectCommand.cs" />
     <Compile Include="Game\Commands\DiseaseListCommand.cs" />
     <Compile Include="Game\Commands\PlayerAddCommand.cs" />

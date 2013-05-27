@@ -18,11 +18,10 @@ namespace Bomberman
     {
         private MenuController menuController;
         private GameController gameController;
-        private ContentManager contentManager;
 
         public BombermanRootController(ContentManager contentManager)
-        {
-            this.contentManager = contentManager;
+            : base(contentManager)
+        {   
         }
 
         protected override void OnStart()
@@ -50,19 +49,9 @@ namespace Bomberman
             }
         }
 
-        protected override GameConsole CreateConsole()
+        protected override SystemConsole CreateConsole()
         {
-            Font consoleFont = new VectorFont(contentManager.Load<SpriteFont>("ConsoleFont"));
-            GameConsole console = new GameConsole(consoleFont);
-
-            console.RegisterCommand(new PowerupAddCommand());
-            console.RegisterCommand(new PowerupRemoveCommand());
-            console.RegisterCommand(new PowerupListCommand());
-            console.RegisterCommand(new PlayerAddCommand());
-            console.RegisterCommand(new PlayerRemoveCommand());
-            console.RegisterCommand(new DiseaseInfectCommand());
-            console.RegisterCommand(new DiseaseListCommand());
-
+            SystemConsole console = base.CreateConsole();
             return console;
         }
 

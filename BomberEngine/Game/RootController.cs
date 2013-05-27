@@ -9,13 +9,22 @@ using BomberEngine.Debugging;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core.Events;
 using BomberEngine.Consoles;
+using BomberEngine.Core.Assets.Types;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace BomberEngine.Game
 {
     public abstract class RootController : BaseElement, IInputListener
-    {   
+    {
+        protected ContentManager contentManager;
         protected Controller currentController;
-        protected GameConsole console;
+        protected SystemConsole console;
+
+        public RootController(ContentManager contentManager)
+        {
+            this.contentManager = contentManager;
+        }
 
         //////////////////////////////////////////////////////////////////////////////
 
@@ -116,7 +125,13 @@ namespace BomberEngine.Game
 
         #region Console
 
-        protected abstract GameConsole CreateConsole();
+        protected virtual SystemConsole CreateConsole()
+        {
+            Font consoleFont = new VectorFont(contentManager.Load<SpriteFont>("ConsoleFont"));
+            SystemConsole console = new SystemConsole(consoleFont);
+
+            return console;
+        }
 
         protected void ToggleConsole()
         {

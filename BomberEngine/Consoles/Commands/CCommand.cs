@@ -5,16 +5,16 @@ using System.Text;
 
 namespace BomberEngine.Consoles.Commands
 {
-    public abstract class ConsoleCommand
+    public abstract class CCommand
     {
         private String name;
 
-        protected ConsoleCommand(String name)
+        protected CCommand(String name)
         {
             this.name = name;
         }
 
-        public abstract void Execute(GameConsole console, params String[] args);
+        public abstract void Execute(SystemConsole console, params String[] args);
 
         public String GetName()
         {
@@ -72,7 +72,7 @@ namespace BomberEngine.Consoles.Commands
             return defValue;
         }
 
-        protected void Log(GameConsole console, String message)
+        protected void Log(SystemConsole console, String message)
         {
             console.AddLine(GetName() + ": " + message);
         }

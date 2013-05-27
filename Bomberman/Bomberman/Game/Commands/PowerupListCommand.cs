@@ -8,14 +8,14 @@ using BomberEngine.Consoles;
 
 namespace Bomberman.Game.Commands
 {
-    public class PowerupListCommand : ConsoleCommand
+    public class PowerupListCommand : CCommand
     {
         public PowerupListCommand()
             : base("powerup_list")
         {
         }
 
-        public override void Execute(GameConsole console, params string[] args)
+        public override void Execute(SystemConsole console, params string[] args)
         {
             String[] names = Bomberman.Game.Elements.Powerups.Names();
             console.AddLine("Powerups:");

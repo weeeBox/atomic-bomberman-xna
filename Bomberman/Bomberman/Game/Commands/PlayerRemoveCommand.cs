@@ -8,14 +8,14 @@ using BomberEngine.Consoles;
 
 namespace Bomberman.Game.Commands
 {
-    public class PlayerRemoveCommand : BombermanConsoleCommand
+    public class PlayerRemoveCommand : IngameConsoleCommand
     {
         public PlayerRemoveCommand()
             : base("player_remove")
         {
         }
 
-        public override void Execute(GameConsole console, params String[] args)
+        public override void Execute(SystemConsole console, params String[] args)
         {
             throw new NotImplementedException();
         }

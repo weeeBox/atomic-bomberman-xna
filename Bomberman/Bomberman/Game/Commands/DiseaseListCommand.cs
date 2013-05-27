@@ -8,14 +8,14 @@ using BomberEngine.Consoles;
 
 namespace Bomberman.Game.Commands
 {
-    public class DiseaseListCommand : BombermanConsoleCommand
+    public class DiseaseListCommand : IngameConsoleCommand
     {
         public DiseaseListCommand()
             : base("disease_list")
         {
         }
 
-        public override void Execute(GameConsole console, params String[] args)
+        public override void Execute(SystemConsole console, params String[] args)
         {
             Log(console, "Diseases:");
             Diseases[] array = Diseases.array;
