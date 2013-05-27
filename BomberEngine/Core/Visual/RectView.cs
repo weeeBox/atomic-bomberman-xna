@@ -11,12 +11,12 @@ namespace BomberEngine.Core.Visual.UI
         public Color borderColor;
         public Color fillColor;
 
-        private RectView(int x, int y, int width, int height)
+        private RectView(float x, float y, float width, float height)
             : base(x, y, width, height)
         {
         }
 
-        public RectView(int x, int y, int width, int height, Color fillColor, Color borderColor)
+        public RectView(float x, float y, float width, float height, Color fillColor, Color borderColor)
             : base(x, y, width, height)
         {
             this.fillColor = fillColor;

@@ -19,8 +19,8 @@ namespace BomberEngine.Game
             None, Up, Down, Left, Right
         }
 
-        public int width;
-        public int height;
+        public float width;
+        public float height;
 
         private View mRootView;
         private View mFocusedView;
@@ -42,7 +42,7 @@ namespace BomberEngine.Game
         {
         }
 
-        public Screen(int width, int height)
+        public Screen(float width, float height)
         {
             this.width = width;
             this.height = height;

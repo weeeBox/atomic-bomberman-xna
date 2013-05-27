@@ -39,7 +39,7 @@ namespace BomberEngine.Debugging
         private bool carretVisible;
 
         public GameConsole(Font font)
-            : base(640, 320)
+            : base(Application.GetWidth(), 0.5f * Application.GetHeight())
         {
             this.font = font;
 
