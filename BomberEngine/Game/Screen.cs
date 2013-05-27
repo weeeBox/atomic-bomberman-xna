@@ -209,6 +209,11 @@ namespace BomberEngine.Game
             timerManager.Schedule(callback, delay, repeated);
         }
 
+        protected void CancelTimer(TimerCallback callback)
+        {
+            timerManager.Cancel(callback);
+        }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
