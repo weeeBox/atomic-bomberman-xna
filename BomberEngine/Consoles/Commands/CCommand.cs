@@ -7,43 +7,44 @@ namespace BomberEngine.Consoles.Commands
 {
     public abstract class CCommand
     {
+        public CConsole console;
+
         public String name;
-        public Cmd console;
-        public String args;
+        public String[] args;
 
         protected CCommand(String name)
         {
             this.name = name;
         }
 
-        public abstract void Execute(params String[] args);
+        public abstract void Execute();
 
-        protected int GetInt(String[] args, String param)
+        protected int IntArg(String param)
         {
-            return GetInt(args, param, 0);
+            return IntArg(param, 0);
         }
 
-        protected int GetInt(String[] args, String param, int defValue)
+        protected int IntArg(String name, int defValue)
         {
-            for (int i = 0; i < args.Length - 1; ++i)
+            for (int i = 1; i < args.Length - 1; ++i)
             {
-                if (param.Equals(args[i]))
+                if (name.Equals(args[i]))
                 {
-                    return GetInt(args, i + 1, defValue);
+                    return IntArg(i + 1, defValue);
                 }
             }
 
             return defValue;
         }
 
-        protected int GetInt(String[] args, int index)
+        protected int IntArg(int index)
         {
-            return GetInt(args, index, 0);
+            return IntArg(index, 0);
         }
 
-        protected int GetInt(String[] args, int index, int defValue)
+        protected int IntArg(int index, int defValue)
         {
-            String str = Get(args, index);
+            String str = StrArg(index);
             if (str != null)
             {
                 int value;
@@ -54,20 +55,40 @@ namespace BomberEngine.Consoles.Commands
             return defValue;
         }
 
-        protected String Get(String[] args, int index)
+        protected String StrArg(int index)
         {
-            return Get(args, index, null);
+            return StrArg(index, null);
         }
 
-        protected String Get(String[] args, int index, String defValue)
+        protected String StrArg(int index, String defValue)
         {
-            if (index >= 0 && index < args.Length)
+            if (index >= 0 && index < args.Length - 1)
             {
-                return args[index];
+                return args[index + 1];
             }
 
             return defValue;
         }
+
+        protected String StrArg(String name, String defValue)
+        {
+            for (int i = 1; i < args.Length - 1; ++i)
+            {
+                if (name.Equals(args[i]))
+                {
+                    return StrArg(i + 1, defValue);
+                }
+            }
+
+            return defValue;
+        }
+
+        protected int ArgsCount()
+        {
+            return args.Length - 1;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
 
         protected void Print(String message)
         {
@@ -77,6 +98,16 @@ namespace BomberEngine.Consoles.Commands
         protected void Print(String format, params Object[] args)
         {
             console.Print(format, args);
+        }
+
+        protected void PrintIndent(String message)
+        {
+            console.PrintIndent(message);
+        }
+
+        protected void PrintIndent(String format, params Object[] args)
+        {
+            console.PrintIndent(format, args);
         }
     }
 }

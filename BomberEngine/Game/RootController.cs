@@ -12,14 +12,16 @@ using BomberEngine.Consoles;
 using BomberEngine.Core.Assets.Types;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using BomberEngine.Consoles.Commands;
 
 namespace BomberEngine.Game
 {
     public abstract class RootController : BaseElement, IInputListener
     {
         protected ContentManager contentManager;
-        protected Controller currentController;
-        protected Cmd console;
+
+        public Controller currentController;
+        public CConsole console;
 
         public RootController(ContentManager contentManager)
         {
@@ -125,10 +127,12 @@ namespace BomberEngine.Game
 
         #region Console
 
-        protected virtual Cmd CreateConsole()
+        protected virtual CConsole CreateConsole()
         {
             Font consoleFont = new VectorFont(contentManager.Load<SpriteFont>("ConsoleFont"));
-            Cmd console = new Cmd(consoleFont);
+            CConsole console = new CConsole(consoleFont);
+
+            console.RegisterCommand(new ExitCommand());
 
             return console;
         }

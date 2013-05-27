@@ -13,7 +13,7 @@ using BomberEngine.Util;
 
 namespace BomberEngine.Consoles
 {
-    public class Cmd : Screen
+    public class CConsole : Screen
     {
         private List<String> m_lines;
 
@@ -36,7 +36,7 @@ namespace BomberEngine.Consoles
 
         private bool carretVisible;
 
-        public Cmd(Font font)
+        public CConsole(Font font)
             : base(Application.GetWidth(), 0.5f * Application.GetHeight())
         {
             this.font = font;
@@ -60,6 +60,11 @@ namespace BomberEngine.Consoles
             RegisterCommands();
 
             ScheduleTimer(OnBlinkTimer, 0.25f, true);
+        }
+
+        public static CConsole Current()
+        {
+            return Application.RootController.console;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -156,20 +161,18 @@ namespace BomberEngine.Consoles
         private void TryExecuteCommand()
         {
             String commandString = commandBuffer.ToString();
-            String[] tokens = commandString.Split(' ');
+            String[] args = commandString.Split(' ');
 
-            if (tokens.Length > 0)
+            if (args.Length > 0)
             {
-                String name = tokens[0];
+                String name = args[0];
                 CCommand command = commands.FindCommand(name);
                 if (command != null)
                 {
-                    if (tokens.Length > 1)
+                    if (args.Length > 1)
                     {
-                        String[] args = new String[tokens.Length - 1];
-                        Array.Copy(tokens, 1, args, 0, args.Length);
-
-                        command.Execute(args);
+                        command.args = args;
+                        command.Execute();
                     }
                     else
                     {
@@ -261,6 +264,11 @@ namespace BomberEngine.Consoles
             return commands.RegisterCommand(command);
         }
 
+        public bool UnregisterCommand(CCommand command)
+        {
+            return commands.UnregisterCommand(command);
+        }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
@@ -276,6 +284,16 @@ namespace BomberEngine.Consoles
         {
             String message = StringUtils.TryFormat(format, args);
             Append(message);
+        }
+
+        public void PrintIndent(String message)
+        {
+            Print("  " + message);
+        }
+
+        public void PrintIndent(String format, params Object[] args)
+        {
+            Print("  " + format, args);
         }
 
         #endregion

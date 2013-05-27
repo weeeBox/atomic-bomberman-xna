@@ -20,13 +20,12 @@ namespace BomberEngine.Consoles.Commands
             return AddCommand(commandList, command);
         }
 
-        public bool UnregisterCommand(String name)
+        public bool UnregisterCommand(CCommand command)
         {
-            LinkedList<CCommand> list = FindList(name);
+            LinkedList<CCommand> list = FindList(command);
             for (LinkedListNode<CCommand> node = list.First; node != null; node = node.Next)
-            {
-                CCommand command = node.Value;
-                if (command.name.Equals(name))
+            {   
+                if (command == node.Value)
                 {
                     list.Remove(node);
                     return true;

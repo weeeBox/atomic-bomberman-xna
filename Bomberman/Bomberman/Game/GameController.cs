@@ -23,6 +23,7 @@ namespace Bomberman.Game
 
         private GameScreen gameScreen;
         private Game game;
+        private GameCommandList gameCommands;
 
         public GameController()
         {
@@ -37,6 +38,20 @@ namespace Bomberman.Game
             gameScreen.id = SCREEN_GAME;
 
             InitPlayers();
+        }
+
+        protected override void OnStart()
+        {
+            gameCommands = new GameCommandList();
+            gameCommands.Register();
+
+            StartScreen(gameScreen);
+        }
+
+        protected override void OnStop()
+        {
+            gameCommands.Unregister();
+            gameCommands = null;
         }
 
         private void InitPlayers()
@@ -76,11 +91,6 @@ namespace Bomberman.Game
         {
             Scheme scheme = Helper.GetScheme(schemeId);
             game.LoadField(scheme); 
-        }
-
-        protected override void OnStart()
-        {
-            StartScreen(gameScreen);
         }
 
         public override bool HandleEvent(Event evt)

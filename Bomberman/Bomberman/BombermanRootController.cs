@@ -5,7 +5,6 @@ using Bomberman.Game;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
-using Bomberman.Game.Commands;
 using Bomberman.Menu;
 using BomberEngine.Core.Visual;
 using BomberEngine.Core.Assets.Types;
@@ -49,9 +48,9 @@ namespace Bomberman
             }
         }
 
-        protected override Cmd CreateConsole()
+        protected override CConsole CreateConsole()
         {
-            Cmd console = base.CreateConsole();
+            CConsole console = base.CreateConsole();
             return console;
         }
 

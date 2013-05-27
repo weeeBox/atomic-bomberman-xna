@@ -116,14 +116,6 @@
     <Compile Include="Content\Scheme.cs" />
     <Compile Include="Content\SchemeLoader.cs" />
     <Compile Include="Content\SchemeReader.cs" />
-    <Compile Include="Game\Commands\IngameConsoleCommand.cs" />
-    <Compile Include="Game\Commands\DiseaseInfectCommand.cs" />
-    <Compile Include="Game\Commands\DiseaseListCommand.cs" />
-    <Compile Include="Game\Commands\PlayerAddCommand.cs" />
-    <Compile Include="Game\Commands\PlayerRemoveCommand.cs" />
-    <Compile Include="Game\Commands\PowerupAddCommand.cs" />
-    <Compile Include="Game\Commands\PowerupListCommand.cs" />
-    <Compile Include="Game\Commands\PowerupRemoveCommand.cs" />
     <Compile Include="Game\Constant.cs" />
     <Compile Include="Game\Elements\Cells\BrickCell.cs" />
     <Compile Include="Game\Elements\Cells\FlameCell.cs" />
@@ -153,7 +145,7 @@
     <Compile Include="Game\Elements\Players\PlayerList.cs" />
     <Compile Include="Game\Elements\Players\Input\PlayerInput.cs" />
     <Compile Include="Game\ExitCode.cs" />
-    <Compile Include="Game\GameConsoleCommands.cs" />
+    <Compile Include="Game\GameCommands.cs" />
     <Compile Include="Game\GameController.cs" />
     <Compile Include="Game\Game.cs" />
     <Compile Include="Game\Screens\PauseScreen.cs" />
