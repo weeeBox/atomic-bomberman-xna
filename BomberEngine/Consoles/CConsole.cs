@@ -10,6 +10,7 @@ using BomberEngine.Core.Visual;
 using BomberEngine.Game;
 using Microsoft.Xna.Framework;
 using BomberEngine.Util;
+using BomberEngine.Debugging;
 
 namespace BomberEngine.Consoles
 {
@@ -29,14 +30,15 @@ namespace BomberEngine.Consoles
         private float lineHeight;
         private float lineSpacing;
 
-        private HashSet<KeyCode> additionalInputKeys;
-
         private CCommandRegister commands;
         private LinkedList<CCommand> suggestedCommands;
 
         private Color backColor;
 
         private bool carretVisible;
+
+        private Dictionary<KeyCode, char> keyBindings;
+        private Dictionary<KeyCode, char> keyShiftBindings;
 
         public CConsole(Font font)
             : base(Application.GetWidth(), 0.5f * Application.GetHeight())
@@ -54,10 +56,59 @@ namespace BomberEngine.Consoles
 
             charWidth = font.StringWidth("W");
             lineHeight = font.FontHeight();
-            InitAdditionalInputKeys();
 
             backColor = new Color(0.0f, 0.0f, 0.0f, 0.75f);
             carretVisible = true;
+
+            keyBindings = new Dictionary<KeyCode, char>();
+            keyBindings[KeyCode.KB_OemMinus] = '-';
+            keyBindings[KeyCode.KB_OemPlus] = '=';
+            keyBindings[KeyCode.KB_OemComma] = ',';
+            keyBindings[KeyCode.KB_OemPeriod] = '.';
+            keyBindings[KeyCode.KB_OemQuestion] = '/';
+            keyBindings[KeyCode.KB_OemOpenBrackets] = '[';
+            keyBindings[KeyCode.KB_OemCloseBrackets] = ']';
+            keyBindings[KeyCode.KB_OemQuotes] = '\\';
+            keyBindings[KeyCode.KB_Divide] = '/';
+            keyBindings[KeyCode.KB_Multiply] = '*';
+            keyBindings[KeyCode.KB_Subtract] = '-';
+            keyBindings[KeyCode.KB_Add] = '+';
+            keyBindings[KeyCode.KB_OemSemicolon] = ';';
+            keyBindings[KeyCode.KB_OemTilde] = '\'';
+            keyBindings[KeyCode.KB_Decimal] = '.';
+            keyBindings[KeyCode.KB_NumPad1] = '1';
+            keyBindings[KeyCode.KB_NumPad2] = '2';
+            keyBindings[KeyCode.KB_NumPad3] = '3';
+            keyBindings[KeyCode.KB_NumPad4] = '4';
+            keyBindings[KeyCode.KB_NumPad5] = '5';
+            keyBindings[KeyCode.KB_NumPad6] = '6';
+            keyBindings[KeyCode.KB_NumPad7] = '7';
+            keyBindings[KeyCode.KB_NumPad8] = '8';
+            keyBindings[KeyCode.KB_NumPad9] = '9';
+            keyBindings[KeyCode.KB_NumPad0] = '0';
+
+
+            keyShiftBindings = new Dictionary<KeyCode, char>();
+            keyShiftBindings[KeyCode.KB_OemMinus] = '_';
+            keyShiftBindings[KeyCode.KB_OemPlus] = '+';
+            keyShiftBindings[KeyCode.KB_OemComma] = '<';
+            keyShiftBindings[KeyCode.KB_OemPeriod] = '>';
+            keyShiftBindings[KeyCode.KB_OemQuestion] = '?';
+            keyShiftBindings[KeyCode.KB_D1] = '!';
+            keyShiftBindings[KeyCode.KB_D2] = '@';
+            keyShiftBindings[KeyCode.KB_D3] = '#';
+            keyShiftBindings[KeyCode.KB_D4] = '$';
+            keyShiftBindings[KeyCode.KB_D5] = '%';
+            keyShiftBindings[KeyCode.KB_D6] = '^';
+            keyShiftBindings[KeyCode.KB_D7] = '&';
+            keyShiftBindings[KeyCode.KB_D8] = '*';
+            keyShiftBindings[KeyCode.KB_D9] = '(';
+            keyShiftBindings[KeyCode.KB_D0] = ')';
+            keyShiftBindings[KeyCode.KB_OemOpenBrackets] = '{';
+            keyShiftBindings[KeyCode.KB_OemCloseBrackets] = '}';
+            keyShiftBindings[KeyCode.KB_OemQuotes] = '|';
+            keyShiftBindings[KeyCode.KB_OemSemicolon] = ':';
+            keyShiftBindings[KeyCode.KB_OemTilde] = '"';
 
             ScheduleTimer(OnBlinkTimer, 0.25f, true);
         }
@@ -466,6 +517,16 @@ namespace BomberEngine.Consoles
                 }
             }
 
+            if (e.IsShiftPressed())
+            {
+                char bindShiftChr;
+                if (keyShiftBindings.TryGetValue(key, out bindShiftChr))
+                {
+                    EnterChar(bindShiftChr);
+                    return true;
+                }
+            }
+
             if (key >= KeyCode.KB_A && key <= KeyCode.KB_Z)
             {
                 char chr = (char)key;
@@ -478,7 +539,7 @@ namespace BomberEngine.Consoles
                 return true;
             }
 
-            if (key >= KeyCode.KB_D0 && key <= KeyCode.KB_D9 || key >= KeyCode.KB_NumPad0 && key <= KeyCode.KB_NumPad9 || key == KeyCode.KB_Space)
+            if (key >= KeyCode.KB_D0 && key <= KeyCode.KB_D9 || key == KeyCode.KB_Space)
             {
                 EnterChar((char)key);
                 return true;
@@ -538,6 +599,13 @@ namespace BomberEngine.Consoles
                 return true;
             }
 
+            char bindChr;
+            if (keyBindings.TryGetValue(key, out bindChr))
+            {
+                EnterChar(bindChr);
+                return true;
+            }
+
             return false;
         }
 
@@ -546,8 +614,7 @@ namespace BomberEngine.Consoles
             KeyCode key = e.key;
 
             if (key >= KeyCode.KB_A && key <= KeyCode.KB_Z || 
-                key >= KeyCode.KB_D0 && key <= KeyCode.KB_D9 || 
-                key >= KeyCode.KB_NumPad0 && key <= KeyCode.KB_NumPad9)
+                key >= KeyCode.KB_D0 && key <= KeyCode.KB_D9)
             {
                 return OnKeyPressed(ref e);
             }
@@ -560,35 +627,17 @@ namespace BomberEngine.Consoles
                 return OnKeyPressed(ref e);
             }
 
+            if (keyBindings.ContainsKey(key))
+            {
+                return OnKeyPressed(ref e);
+            }
+
             return false;
         }
 
         private bool OnKeyReleased(ref KeyEventArg e)
         {
             return false;
-        }
-
-        private void InitAdditionalInputKeys()
-        {
-            additionalInputKeys = new HashSet<KeyCode>();
-            additionalInputKeys.Add(KeyCode.KB_Space);
-            additionalInputKeys.Add(KeyCode.KB_Multiply);
-            additionalInputKeys.Add(KeyCode.KB_Add);
-            additionalInputKeys.Add(KeyCode.KB_Separator);
-            additionalInputKeys.Add(KeyCode.KB_Subtract);
-            additionalInputKeys.Add(KeyCode.KB_Decimal);
-            additionalInputKeys.Add(KeyCode.KB_Divide);
-            additionalInputKeys.Add(KeyCode.KB_OemSemicolon);
-            additionalInputKeys.Add(KeyCode.KB_OemPlus);
-            additionalInputKeys.Add(KeyCode.KB_OemComma);
-            additionalInputKeys.Add(KeyCode.KB_OemMinus);
-            additionalInputKeys.Add(KeyCode.KB_OemPeriod);
-            additionalInputKeys.Add(KeyCode.KB_OemQuestion);
-            additionalInputKeys.Add(KeyCode.KB_OemOpenBrackets);
-            additionalInputKeys.Add(KeyCode.KB_OemPipe);
-            additionalInputKeys.Add(KeyCode.KB_OemCloseBrackets);
-            additionalInputKeys.Add(KeyCode.KB_OemQuotes);
-            additionalInputKeys.Add(KeyCode.KB_OemBackslash);
         }
 
         #endregion

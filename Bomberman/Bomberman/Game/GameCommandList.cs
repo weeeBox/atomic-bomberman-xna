@@ -18,6 +18,8 @@ namespace Bomberman.Game
             {
                 new Cmd_infect(),
                 new Cmd_add(),
+                new Cmd_scheme(),
+                new Cmd_scheme_restart(),
             };
         }
     }
@@ -113,6 +115,36 @@ namespace Bomberman.Game
             {
                 Print("Wrong powerup index");
             }
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    public class Cmd_scheme : GameCCommand
+    {
+        public Cmd_scheme()
+            : base("scheme")
+        {
+        }
+
+        public override void Execute()
+        {
+   
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    public class Cmd_scheme_restart : GameCCommand
+    {
+        public Cmd_scheme_restart()
+            : base("scheme_restart")
+        {
+        }
+
+        public override void Execute()
+        {
+
         }
     }
 }
