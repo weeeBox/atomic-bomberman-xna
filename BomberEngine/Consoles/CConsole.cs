@@ -22,6 +22,7 @@ namespace BomberEngine.Consoles
         private const String PROMPT_CMD_STRING = "]\\";
 
         private StringBuilder commandBuffer;
+        private CConsoleHistory history;
 
         private int cursorPos;
 
@@ -52,6 +53,8 @@ namespace BomberEngine.Consoles
             commands = new CCommandRegister();
 
             commandBuffer = new StringBuilder();
+            history = new CConsoleHistory(128);
+
             suggestedCommands = new LinkedList<CCommand>();
 
             charWidth = font.StringWidth("W");
@@ -212,11 +215,16 @@ namespace BomberEngine.Consoles
         private void TryExecuteCommand()
         {
             String commandString = CommandBufferText().Trim();
-            TryExecuteCommand(commandString);
+            TryExecuteCommand(commandString, true);
             SetCommandText("");
         }
 
         public void TryExecuteCommand(String commandString)
+        {
+            TryExecuteCommand(commandString, false);
+        }
+
+        private void TryExecuteCommand(String commandString, bool pushHistory)
         {
             String[] args = commandString.Split(' ');
 
@@ -244,6 +252,11 @@ namespace BomberEngine.Consoles
                 else
                 {
                     Append("Unknown command: '" + name + "'");
+                }
+
+                if (pushHistory)
+                {
+                    PushHistory(commandString);
                 }
             }
         }
@@ -343,6 +356,35 @@ namespace BomberEngine.Consoles
         public List<CCommand> ListCommands()
         {
             return commands.ListCommands();
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region History
+
+        private void PushHistory(String line)
+        {
+            history.Push(line);
+        }
+
+        private void PrevHistory()
+        {
+            String line = history.Prev();
+            if (line != null)
+            {
+                SetCommandText(line);
+            }
+        }
+
+        private void NextHistory()
+        {
+            String line = history.Next();
+            if (line != null)
+            {
+                SetCommandText(line);
+            }
         }
 
         #endregion
@@ -559,6 +601,18 @@ namespace BomberEngine.Consoles
             if (key == KeyCode.KB_Right)
             {
                 MoveCursorRight();
+                return true;
+            }
+
+            if (key == KeyCode.KB_Up)
+            {
+                PrevHistory();
+                return true;
+            }
+
+            if (key == KeyCode.KB_Down)
+            {
+                NextHistory();
                 return true;
             }
 
