@@ -27,5 +27,15 @@ namespace BomberEngine.Consoles
 
             lastNode = list.AddLast(line);
         }
+
+        public void Up()
+        {
+
+        }
+
+        public void Down()
+        {
+
+        }
     }
 }

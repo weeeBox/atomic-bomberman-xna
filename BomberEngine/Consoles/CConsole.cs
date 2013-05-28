@@ -392,7 +392,7 @@ namespace BomberEngine.Consoles
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Printing
+        #region Output
 
         public void Print(String message)
         {
@@ -413,6 +413,16 @@ namespace BomberEngine.Consoles
         public void PrintIndent(String format, params Object[] args)
         {
             Print("  " + format, args);
+        }
+
+        private void ScrollUp()
+        {
+            output.Up();
+        }
+
+        private void ScrollDown()
+        {
+            output.Down();
         }
 
         #endregion
@@ -552,6 +562,18 @@ namespace BomberEngine.Consoles
                     return true;
                 }
 
+                if (key == KeyCode.KB_Up)
+                {
+                    ScrollUp();
+                    return true;
+                }
+
+                if (key == KeyCode.KB_Down)
+                {
+                    ScrollDown();
+                    return true;
+                }
+
                 if (key == KeyCode.KB_A)
                 {
                     MoveCursorHome();
@@ -685,6 +707,14 @@ namespace BomberEngine.Consoles
                 key == KeyCode.KB_Delete)
             {
                 return OnKeyPressed(ref e);
+            }
+
+            if (e.IsCtrlPressed())
+            {
+                if (key == KeyCode.KB_Up || key == KeyCode.KB_Down)
+                {
+                    return OnKeyPressed(ref e);
+                }
             }
 
             if (keyBindings.ContainsKey(key))
