@@ -211,7 +211,13 @@ namespace BomberEngine.Consoles
 
         private void TryExecuteCommand()
         {
-            String commandString = CommandBufferText();
+            String commandString = CommandBufferText().Trim();
+            TryExecuteCommand(commandString);
+            SetCommandText("");
+        }
+
+        public void TryExecuteCommand(String commandString)
+        {
             String[] args = commandString.Split(' ');
 
             if (args.Length > 0)
@@ -222,11 +228,12 @@ namespace BomberEngine.Consoles
                 if (command != null)
                 {
                     command.console = this;
+                    command.args = args;
+
                     Print(PROMPT_CMD_STRING + commandString);
 
                     if (args.Length > 1)
                     {
-                        command.args = args;
                         command.Execute();
                     }
                     else
@@ -239,8 +246,6 @@ namespace BomberEngine.Consoles
                     Append("Unknown command: '" + name + "'");
                 }
             }
-
-            SetCommandText("");
         }
 
         private void DoAutoComplete()

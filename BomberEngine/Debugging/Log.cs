@@ -10,13 +10,26 @@ namespace BomberEngine.Debugging
     {
         public static void d(Object format, params Object[] args)
         {
-            d(format != null ? format.ToString() : "null", args);
+            String message = Format(format, args);
+            Console.WriteLine("D/" + message);
         }
 
-        public static void d(String format, params Object[] args)
+        public static void e(Object format, params Object[] args)
         {
-            String message = StringUtils.TryFormat(format, args);
+            String message = Format(format, args);
+            Console.WriteLine("E/" + message);
+        }
+
+        public static void error(Exception ex, Object format, params Object[] args)
+        {
+            String message = Format(format, args);
             Console.WriteLine(message);
+            Console.WriteLine(ex.StackTrace);
+        }
+
+        private static String Format(Object format, params Object[] args)
+        {
+            return format != null ? StringUtils.TryFormat(format.ToString(), args) : null;
         }
     }
 }

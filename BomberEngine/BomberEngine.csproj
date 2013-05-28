@@ -105,6 +105,7 @@
     <Compile Include="Core\Assets\Types\VectorFont.cs" />
     <Compile Include="Core\Input\IKeyInputListener.cs" />
     <Compile Include="Core\Input\KeyCode.cs" />
+    <Compile Include="Core\IO\File.cs" />
     <Compile Include="Core\Visual\AbstractButton.cs" />
     <Compile Include="Core\Visual\Button.cs" />
     <Compile Include="Core\Visual\TextView.cs" />

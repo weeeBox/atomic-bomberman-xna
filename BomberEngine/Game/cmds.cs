@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Game;
 using BomberEngine.Consoles;
+using BomberEngine.Core.IO;
 
 namespace BomberEngine.Game
 {
@@ -59,6 +60,45 @@ namespace BomberEngine.Game
         public override void Execute()
         {
             Application.sharedApplication.Stop();
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    public class Cmd_exec : CCommand
+    {
+        public Cmd_exec()
+            : base("exec")
+        {
+        }
+
+        public override void Execute()
+        {
+            if (ArgsCount() != 1)
+            {
+                Print("usage: " + name + " <filename>");
+                return;
+            }
+
+            String filename = StrArg(0);
+            List<String> lines = File.Read(filename);
+
+            if (lines == null)
+            {
+                Print("Can't read file: " + filename);
+                return;
+            }
+
+            foreach (String line in lines)
+            {
+                String trim = line.Trim();
+                if (trim.Length == 0 || trim.StartsWith("//"))
+                {
+                    continue;
+                }
+
+                console.TryExecuteCommand(line);
+            }
         }
     }
 }
