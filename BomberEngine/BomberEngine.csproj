@@ -94,6 +94,7 @@
   <ItemGroup>
     <Compile Include="Consoles\CCommandList.cs" />
     <Compile Include="Consoles\CConsoleHistory.cs" />
+    <Compile Include="Consoles\CConsoleOutput.cs" />
     <Compile Include="Core\Assets\Loaders\VectorFontLoader.cs" />
     <Compile Include="Core\BaseUpdatableList.cs" />
     <Compile Include="Core\BaseElement.cs" />

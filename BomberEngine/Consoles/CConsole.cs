@@ -16,13 +16,12 @@ namespace BomberEngine.Consoles
 {
     public class CConsole : Screen
     {
-        private List<String> m_lines;
-
         private const String PROMPT_STRING = "]";
         private const String PROMPT_CMD_STRING = "]\\";
 
         private StringBuilder commandBuffer;
         private CConsoleHistory history;
+        private CConsoleOutput output;
 
         private int cursorPos;
 
@@ -49,16 +48,18 @@ namespace BomberEngine.Consoles
             AllowsDrawPrevious = true;
             AllowsUpdatePrevious = true;
 
-            m_lines = new List<String>();
             commands = new CCommandRegister();
 
             commandBuffer = new StringBuilder();
+
             history = new CConsoleHistory(128);
+            output = new CConsoleOutput(512);
 
             suggestedCommands = new LinkedList<CCommand>();
 
             charWidth = font.StringWidth("W");
             lineHeight = font.FontHeight();
+            lineSpacing = 0;
 
             backColor = new Color(0.0f, 0.0f, 0.0f, 0.75f);
             carretVisible = true;
@@ -138,9 +139,9 @@ namespace BomberEngine.Consoles
             float drawX = 10;
             float drawY = height - 2 * (lineHeight + lineSpacing) - 10;
 
-            for (int i = m_lines.Count - 1; i >= 0; --i)
+            for (LinkedListNode<String> node = output.lastNode; node != null; node = node.Previous)
             {
-                String line = m_lines[i];
+                String line = node.Value;
 
                 font.DrawString(context, line, drawX, drawY);
                 drawY -= lineHeight + lineSpacing;
@@ -328,7 +329,7 @@ namespace BomberEngine.Consoles
 
         private void Append(String line)
         {
-            m_lines.Add(line);
+            output.Push(line);
         }
 
         private void Clear()
