@@ -32,85 +32,92 @@ namespace Bomberman.Game.Elements.Players
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region CVars
+        #region Console vars
+
+        /* Player */
+        public static readonly CVar cg_playerSpeed      = new CVar("cg_playerSpeed",      200, CVar.READONLY);
+        public static readonly CVar cg_playerSpeedAdd   = new CVar("cg_playerSpeedAdd",   30,  CVar.READONLY);
 
         /* Initial powerups count */
-        public static readonly CVar pu_initBomb         = new CVar("pi_bomb",       1);
-        public static readonly CVar pu_initFlame        = new CVar("pi_flame",      2);
-        public static readonly CVar pu_initDisease      = new CVar("pi_disease",    0);
-        public static readonly CVar pu_initAbilityKick  = new CVar("pi_kick",       0);
-        public static readonly CVar pu_initExtraSpeed   = new CVar("pi_speed",      0);
-        public static readonly CVar pu_initAblityPunch  = new CVar("pi_punch",      0);
-        public static readonly CVar pu_initAbilityGrab  = new CVar("pi_grab",       0);
-        public static readonly CVar pu_initSpooger      = new CVar("pi_spooger",    0);
-        public static readonly CVar pu_initGoldflame    = new CVar("pi_goldflame",  0);
-        public static readonly CVar pu_initTrigger      = new CVar("pi_trigger",    0);
-        public static readonly CVar pu_initJelly        = new CVar("pi_jelly",      0);
-        public static readonly CVar pu_initEbola        = new CVar("pi_ebola",      0);
-        public static readonly CVar pu_initRandom       = new CVar("pi_random",     0);
+        public static readonly CVar cg_initBomb         = new CVar("cg_initBomb",       1);
+        public static readonly CVar cg_initFlame        = new CVar("cg_initFlame",      2);
+        public static readonly CVar cg_initDisease      = new CVar("cg_initDisease",    0);
+        public static readonly CVar cg_initKick         = new CVar("cg_initKick",       0);
+        public static readonly CVar cg_initExtraSpeed   = new CVar("cg_initExtraSpeed", 0);
+        public static readonly CVar cg_initPunch        = new CVar("cg_initPunch",      0);
+        public static readonly CVar cg_initGrab         = new CVar("cg_initGrab",       0);
+        public static readonly CVar cg_initSpooger      = new CVar("cg_initSpooger",    0);
+        public static readonly CVar cg_initGoldflame    = new CVar("cg_initGoldflame",  0);
+        public static readonly CVar cg_initTrigger      = new CVar("cg_initTrigger",    0);
+        public static readonly CVar cg_initJelly        = new CVar("cg_initJelly",      0);
+        public static readonly CVar cg_initEbola        = new CVar("cg_initEbola",      0);
+        public static readonly CVar cg_initRandom       = new CVar("cg_initRandom",     0);
 
         /* Max powerups count */
-        public static readonly CVar pu_maxBomb          = new CVar("pm_bomb",       8, CVar.READONLY);
-        public static readonly CVar pu_maxFlame         = new CVar("pm_flame",      8, CVar.READONLY);
-        public static readonly CVar pu_maxDisease       = new CVar("pm_disease",    0, CVar.READONLY);
-        public static readonly CVar pu_maxAbilityKick   = new CVar("pm_kick",       1, CVar.READONLY);
-        public static readonly CVar pu_maxExtraSpeed    = new CVar("pm_speed",      4, CVar.READONLY);
-        public static readonly CVar pu_maxAbilityPunch  = new CVar("pm_punch",      1, CVar.READONLY);
-        public static readonly CVar pu_maxAbilityGrab   = new CVar("pm_grab",       1, CVar.READONLY);
-        public static readonly CVar pu_maxSpooger       = new CVar("pm_spooger",    1, CVar.READONLY);
-        public static readonly CVar pu_maxGoldflame     = new CVar("pm_goldflame",  1, CVar.READONLY);
-        public static readonly CVar pu_maxTrigger       = new CVar("pm_trigger",    1, CVar.READONLY);
-        public static readonly CVar pu_maxJelly         = new CVar("pm_jelly",      1, CVar.READONLY);
-        public static readonly CVar pu_maxEbola         = new CVar("pm_ebola",      0, CVar.READONLY);
-        public static readonly CVar pu_maxRandom        = new CVar("pm_random",     0, CVar.READONLY);
+        public static readonly CVar cg_maxBomb          = new CVar("cg_maxBomb",       8, CVar.READONLY);
+        public static readonly CVar cg_maxFlame         = new CVar("cg_maxFlame",      8, CVar.READONLY);
+        public static readonly CVar cg_maxDisease       = new CVar("cg_maxDisease",    0, CVar.READONLY);
+        public static readonly CVar cg_maxKick          = new CVar("cg_maxKick",       1, CVar.READONLY);
+        public static readonly CVar cg_maxSpeed         = new CVar("cg_maxExtraSpeed", 4, CVar.READONLY);
+        public static readonly CVar cg_maxPunch         = new CVar("cg_maxPunch",      1, CVar.READONLY);
+        public static readonly CVar cg_maxGrab          = new CVar("cg_maxGrab",       1, CVar.READONLY);
+        public static readonly CVar cg_maxSpooger       = new CVar("cg_maxSpooger",    1, CVar.READONLY);
+        public static readonly CVar cg_maxGoldflame     = new CVar("cg_maxGoldflame",  1, CVar.READONLY);
+        public static readonly CVar cg_maxTrigger       = new CVar("cg_maxTrigger",    1, CVar.READONLY);
+        public static readonly CVar cg_maxJelly         = new CVar("cg_maxJelly",      1, CVar.READONLY);
+        public static readonly CVar cg_maxEbola         = new CVar("cg_maxEbola",      0, CVar.READONLY);
+        public static readonly CVar cg_maxRandom        = new CVar("cg_maxRandom",     0, CVar.READONLY);
 
         /* Timings */
-        public static readonly CVar t_fuzeTimeNormal    = new CVar("t_fuzeNormal",  2000);
-        public static readonly CVar t_fuzeTimeShort     = new CVar("t_fuzeShort",   500);
-        public static readonly CVar t_timeFlame         = new CVar("t_flame",       500);
+        public static readonly CVar cg_fuzeTimeNormal   = new CVar("cg_fuzeTimeNormal",  2000);
+        public static readonly CVar cg_fuzeTimeShort    = new CVar("cg_fuzeTimeShort",   500);
+        public static readonly CVar cg_timeFlame        = new CVar("cg_timeFlame",       500);
 
-        private static readonly CVar[] pu_init = 
+        private static readonly CVar[] initPowerups = 
         {
-	        pu_initBomb,
-	        pu_initFlame,
-	        pu_initDisease,
-	        pu_initAbilityKick,
-	        pu_initExtraSpeed,
-	        pu_initAblityPunch,
-	        pu_initAbilityGrab,
-	        pu_initSpooger,
-	        pu_initGoldflame,
-	        pu_initTrigger,
-	        pu_initJelly,
-	        pu_initEbola,
-	        pu_initRandom,
+	        cg_initBomb,
+	        cg_initFlame,
+	        cg_initDisease,
+	        cg_initKick,
+	        cg_initExtraSpeed,
+	        cg_initPunch,
+	        cg_initGrab,
+	        cg_initSpooger,
+	        cg_initGoldflame,
+	        cg_initTrigger,
+	        cg_initJelly,
+	        cg_initEbola,
+	        cg_initRandom,
         };
 
-        private static readonly CVar[] pu_max = 
+        private static readonly CVar[] maxPowerups = 
         {
-	        pu_maxBomb,
-	        pu_maxFlame,
-	        pu_maxDisease,
-	        pu_maxAbilityKick,
-	        pu_maxExtraSpeed,
-	        pu_maxAbilityPunch,
-	        pu_maxAbilityGrab,
-	        pu_maxSpooger,
-	        pu_maxGoldflame,
-	        pu_maxTrigger,
-	        pu_maxJelly,
-	        pu_maxEbola,
-	        pu_maxRandom,
+	        cg_maxBomb,
+	        cg_maxFlame,
+	        cg_maxDisease,
+	        cg_maxKick,
+	        cg_maxSpeed,
+	        cg_maxPunch,
+	        cg_maxGrab,
+	        cg_maxSpooger,
+	        cg_maxGoldflame,
+	        cg_maxTrigger,
+	        cg_maxJelly,
+	        cg_maxEbola,
+	        cg_maxRandom,
         };
 
         public static void RegisterCvars(CConsole console)
         {
-            console.RegisterCvars(pu_init);
-            console.RegisterCvars(pu_max);
+            console.RegisterCvars(initPowerups);
+            console.RegisterCvars(maxPowerups);
 
-            console.RegisterCvar(t_fuzeTimeNormal);
-            console.RegisterCvar(t_fuzeTimeShort);
-            console.RegisterCvar(t_timeFlame);
+            console.RegisterCvar(cg_fuzeTimeNormal);
+            console.RegisterCvar(cg_fuzeTimeShort);
+            console.RegisterCvar(cg_timeFlame);
+
+            console.RegisterCvar(cg_playerSpeed);
+            console.RegisterCvar(cg_playerSpeedAdd);
         }
 
         #endregion
