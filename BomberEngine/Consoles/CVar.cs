@@ -8,6 +8,13 @@ namespace BomberEngine.Consoles
 {
     public class CVar
     {
+        protected enum VarType
+        {
+            String,
+            Integer,
+            Float
+        }
+
         public String name;
 
         public String value;
@@ -16,17 +23,24 @@ namespace BomberEngine.Consoles
         public int valInt;
         public float valFloat;
 
+        protected VarType type;
+
         public CVar(String name, int defaultValue)
-            : this(name, StringUtils.ToString(defaultValue))
+            : this(name, StringUtils.ToString(defaultValue), VarType.Integer)
         {   
         }
 
         public CVar(String name, float defaultValue)
-            : this(name, StringUtils.ToString(defaultValue))
-        {
+            : this(name, StringUtils.ToString(defaultValue), VarType.Float)
+        {   
         }
 
         public CVar(String name, String defaultValue)
+            : this(name, defaultValue, VarType.String)
+        {
+        }
+
+        protected CVar(String name, String defaultValue, VarType type)
         {
             if (name == null)
             {
@@ -40,6 +54,7 @@ namespace BomberEngine.Consoles
 
             this.name = name;
             this.defaultValue = defaultValue;
+            this.type = type;
 
             SetValue(defaultValue);
         }
@@ -47,8 +62,12 @@ namespace BomberEngine.Consoles
         public void SetValue(String value)
         {
             this.value = value;
-            TrySetFloat(value);
-            TrySetInt(value);
+
+            if (type != VarType.String)
+            {
+                TrySetFloat(value);
+                TrySetInt(value);
+            }
         }
 
         public void SetValue(int v)
@@ -94,6 +113,23 @@ namespace BomberEngine.Consoles
             }
 
             return false;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        public bool IsString()
+        {
+            return type == VarType.String;
+        }
+
+        public bool IsInt()
+        {
+            return type == VarType.Integer;
+        }
+
+        public bool IsFloat()
+        {
+            return type == VarType.Float;
         }
     }
 }

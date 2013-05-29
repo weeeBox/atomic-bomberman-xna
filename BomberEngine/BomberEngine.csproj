@@ -96,6 +96,7 @@
     <Compile Include="Consoles\CConsoleHistory.cs" />
     <Compile Include="Consoles\CConsoleOutput.cs" />
     <Compile Include="Consoles\CVar.cs" />
+    <Compile Include="Consoles\CVarCommand.cs" />
     <Compile Include="Core\Assets\Loaders\VectorFontLoader.cs" />
     <Compile Include="Core\BaseUpdatableList.cs" />
     <Compile Include="Core\BaseElement.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Util\Constants.cs" />
     <Compile Include="Util\FastLinkedList.cs" />
     <Compile Include="Util\FastLinkedListIterator.cs" />
+    <Compile Include="Util\OutResult.cs" />
     <Compile Include="Util\ListNode.cs" />
     <Compile Include="Util\MathHelp.cs" />
     <Compile Include="Util\ObjectsList.cs" />

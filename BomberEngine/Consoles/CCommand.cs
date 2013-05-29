@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BomberEngine.Util;
 
 namespace BomberEngine.Consoles
 {
@@ -19,23 +20,9 @@ namespace BomberEngine.Consoles
 
         public abstract void Execute();
 
-        protected int IntArg(String param)
-        {
-            return IntArg(param, 0);
-        }
+        //////////////////////////////////////////////////////////////////////////////
 
-        protected int IntArg(String name, int defValue)
-        {
-            for (int i = 1; i < args.Length - 1; ++i)
-            {
-                if (name.Equals(args[i]))
-                {
-                    return IntArg(i + 1, defValue);
-                }
-            }
-
-            return defValue;
-        }
+        #region Args
 
         protected int IntArg(int index)
         {
@@ -45,14 +32,30 @@ namespace BomberEngine.Consoles
         protected int IntArg(int index, int defValue)
         {
             String str = StrArg(index);
-            if (str != null)
-            {
-                int value;
-                bool succeed = int.TryParse(str, out value);
-                return succeed ? value : defValue;
-            }
+            return StringUtils.ParseInt(str, defValue);
+        }
 
-            return defValue;
+        protected int IntArg(int index, OutResult result)
+        {
+            String str = StrArg(index);
+            return StringUtils.ParseInt(str, result);
+        }
+
+        protected float FloatArg(int index)
+        {
+            return FloatArg(index, 0.0f);
+        }
+
+        protected float FloatArg(int index, float defValue)
+        {
+            String str = StrArg(index);
+            return StringUtils.ParseFloat(str, defValue);
+        }
+
+        protected float FloatArg(int index, OutResult result)
+        {
+            String str = StrArg(index);
+            return StringUtils.ParseFloat(str, result);
         }
 
         protected String StrArg(int index)
@@ -70,25 +73,16 @@ namespace BomberEngine.Consoles
             return defValue;
         }
 
-        protected String StrArg(String name, String defValue)
-        {
-            for (int i = 1; i < args.Length - 1; ++i)
-            {
-                if (name.Equals(args[i]))
-                {
-                    return StrArg(i + 1, defValue);
-                }
-            }
-
-            return defValue;
-        }
-
         protected int ArgsCount()
         {
             return args.Length - 1;
         }
 
+        #endregion
+
         //////////////////////////////////////////////////////////////////////////////
+
+        #region Printing
 
         protected void Print(String message)
         {
@@ -109,5 +103,7 @@ namespace BomberEngine.Consoles
         {
             console.PrintIndent(format, args);
         }
+
+        #endregion
     }
 }
