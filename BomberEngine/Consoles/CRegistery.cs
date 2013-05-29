@@ -5,11 +5,11 @@ using System.Text;
 
 namespace BomberEngine.Consoles
 {
-    public class CCommandRegister
+    public class CRegistery
     {
         private Dictionary<char, LinkedList<CCommand>> commandsLookup;
 
-        public CCommandRegister()
+        public CRegistery()
         {
             commandsLookup = new Dictionary<char, LinkedList<CCommand>>();
         }

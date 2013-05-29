@@ -30,7 +30,7 @@ namespace BomberEngine.Consoles
         private float lineHeight;
         private float lineSpacing;
 
-        private CCommandRegister commands;
+        private CRegistery commands;
         private LinkedList<CCommand> suggestedCommands;
 
         private Color backColor;
@@ -48,7 +48,7 @@ namespace BomberEngine.Consoles
             AllowsDrawPrevious = true;
             AllowsUpdatePrevious = true;
 
-            commands = new CCommandRegister();
+            commands = new CRegistery();
 
             commandBuffer = new StringBuilder();
 

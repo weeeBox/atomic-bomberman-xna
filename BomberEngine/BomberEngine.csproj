@@ -95,6 +95,7 @@
     <Compile Include="Consoles\CCommandList.cs" />
     <Compile Include="Consoles\CConsoleHistory.cs" />
     <Compile Include="Consoles\CConsoleOutput.cs" />
+    <Compile Include="Consoles\CVar.cs" />
     <Compile Include="Core\Assets\Loaders\VectorFontLoader.cs" />
     <Compile Include="Core\BaseUpdatableList.cs" />
     <Compile Include="Core\BaseElement.cs" />
@@ -114,7 +115,7 @@
     <Compile Include="Core\Visual\RectView.cs" />
     <Compile Include="Core\Visual\ViewList.cs" />
     <Compile Include="Consoles\CCommand.cs" />
-    <Compile Include="Consoles\CCommandRegister.cs" />
+    <Compile Include="Consoles\CRegistery.cs" />
     <Compile Include="Game\cmds.cs" />
     <Compile Include="Consoles\CConsole.cs" />
     <Compile Include="Core\Assets\Asset.cs" />

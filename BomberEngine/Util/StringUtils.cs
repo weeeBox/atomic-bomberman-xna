@@ -7,7 +7,7 @@ namespace BomberEngine.Util
 {
     public class StringUtils
     {
-        public static string TryFormat(string format, params object[] args)
+        public static String TryFormat(String format, params Object[] args)
         {
             if (args != null && args.Length > 0)
             {
@@ -22,6 +22,21 @@ namespace BomberEngine.Util
             }
 
             return format;
+        }
+
+        public static String ToString(int value)
+        {
+            return value.ToString();
+        }
+
+        public static String ToString(float value)
+        {
+            return value.ToString();
+        }
+
+        public static String ToString(bool value)
+        {
+            return value.ToString();
         }
     }
 }
