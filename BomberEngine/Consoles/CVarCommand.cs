@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BomberEngine.Util;
 
 namespace BomberEngine.Consoles
 {
@@ -31,7 +32,35 @@ namespace BomberEngine.Consoles
 
             if (cvar.IsFloat())
             {
-                float value = FloatArg(0, float.NaN);
+                OutResult result = OutResult.instance;
+
+                float value = FloatArg(0, result);
+                if (result.succeed)
+                {
+                    cvar.SetValue(value);
+                }
+                else
+                {
+                    Print("Can't set float value");
+                }
+            }
+            else if (cvar.IsInt())
+            {
+                OutResult result = OutResult.instance;
+
+                int value = IntArg(0, result);
+                if (result.succeed)
+                {
+                    cvar.SetValue(value);
+                }
+                else
+                {
+                    Print("Can't set int value");
+                }
+            }
+            else
+            {
+                String value = StrArg(0);
                 cvar.SetValue(value);
             }
         }
