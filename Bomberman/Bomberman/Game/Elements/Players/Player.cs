@@ -35,8 +35,8 @@ namespace Bomberman.Game.Elements.Players
         #region Console vars
 
         /* Player */
-        public static readonly CVar cg_playerSpeed      = new CVar("cg_playerSpeed",      200, CVar.READONLY);
-        public static readonly CVar cg_playerSpeedAdd   = new CVar("cg_playerSpeedAdd",   30,  CVar.READONLY);
+        public static readonly CVar cg_playerSpeed      = new CVar("cg_playerSpeed",     200, CVar.READONLY);
+        public static readonly CVar cg_playerSpeedAdd   = new CVar("cg_playerSpeedAdd",   30, CVar.READONLY);
 
         /* Initial powerups count */
         public static readonly CVar cg_initBomb         = new CVar("cg_initBomb",       1);
@@ -67,6 +67,20 @@ namespace Bomberman.Game.Elements.Players
         public static readonly CVar cg_maxJelly         = new CVar("cg_maxJelly",      1, CVar.READONLY);
         public static readonly CVar cg_maxEbola         = new CVar("cg_maxEbola",      0, CVar.READONLY);
         public static readonly CVar cg_maxRandom        = new CVar("cg_maxRandom",     0, CVar.READONLY);
+
+        public static readonly CVar cg_fieldBomb        = new CVar("cg_fieldBomb",         10);
+        public static readonly CVar cg_fieldFlame       = new CVar("cg_fieldFlame",        10);
+        public static readonly CVar cg_fieldDisease     = new CVar("cg_fieldDisease",      10);
+        public static readonly CVar cg_fieldKick        = new CVar("cg_fieldKick",          4);
+        public static readonly CVar cg_fieldExtraSpeed  = new CVar("cg_fieldExtraSpeed",    8);
+        public static readonly CVar cg_fieldPunch       = new CVar("cg_fieldPunch",         2);
+        public static readonly CVar cg_fieldGrab        = new CVar("cg_fieldGrab",          2);
+        public static readonly CVar cg_fieldSpooger     = new CVar("cg_fieldSpooger",       1);
+        public static readonly CVar cg_fieldGoldflame   = new CVar("cg_fieldGoldflame",    -2);
+        public static readonly CVar cg_fieldTrigger     = new CVar("cg_fieldTrigger",       5);
+        public static readonly CVar cg_fieldJelly       = new CVar("cg_fieldJelly",         1);
+        public static readonly CVar cg_fieldEbola       = new CVar("cg_fieldEbola",        -4);
+        public static readonly CVar cg_fieldRandom      = new CVar("cg_fieldRandom",       -2);
 
         /* Timings */
         public static readonly CVar cg_fuzeTimeNormal   = new CVar("cg_fuzeTimeNormal",  2000);
@@ -107,10 +121,28 @@ namespace Bomberman.Game.Elements.Players
 	        cg_maxRandom,
         };
 
+        private static readonly CVar[] fieldPowerups = 
+        {
+	        cg_fieldBomb,
+	        cg_fieldFlame,
+	        cg_fieldDisease,
+	        cg_fieldKick,
+	        cg_fieldExtraSpeed,
+	        cg_fieldPunch,
+	        cg_fieldGrab,
+	        cg_fieldSpooger,
+	        cg_fieldGoldflame,
+	        cg_fieldTrigger,
+	        cg_fieldJelly,
+	        cg_fieldEbola,
+	        cg_fieldRandom,
+        };
+
         public static void RegisterCvars(CConsole console)
         {
             console.RegisterCvars(initPowerups);
             console.RegisterCvars(maxPowerups);
+            console.RegisterCvars(fieldPowerups);
 
             console.RegisterCvar(cg_fuzeTimeNormal);
             console.RegisterCvar(cg_fuzeTimeShort);
