@@ -372,6 +372,11 @@ namespace BomberEngine.Consoles
             return commands.ListCommands();
         }
 
+        public List<CVar> ListVars()
+        {
+            return commands.ListVars();
+        }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////

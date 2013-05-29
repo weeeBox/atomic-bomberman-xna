@@ -8,7 +8,7 @@ namespace BomberEngine.Consoles
 {
     public class CVarCommand : CCommand
     {
-        private CVar cvar;
+        public CVar cvar;
 
         public CVarCommand(CVar cvar)
             : base(cvar.name)

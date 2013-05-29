@@ -44,7 +44,19 @@ namespace BomberEngine.Game
 
         public override void Execute()
         {
-            Print("Not implemented yet");
+            List<CVar> vars = console.ListVars();
+            vars.Sort(CompareVars);
+
+            for (int i = 0; i < vars.Count; ++i)
+            {
+                Print(vars[i].name);
+            }
+            Print(vars.Count + " vars");
+        }
+
+        private int CompareVars(CVar a, CVar b)
+        {
+            return a.name.CompareTo(b.name);
         }
     }
 

@@ -40,7 +40,32 @@ namespace BomberEngine.Consoles
             List<CCommand> list = new List<CCommand>();
             foreach (KeyValuePair<char, LinkedList<CCommand>> e in commandsLookup)
             {
-                list.AddRange(e.Value);
+                LinkedList<CCommand> commands = e.Value;
+                foreach (CCommand command in commands)
+                {
+                    if (!(command is CVarCommand))
+                    {
+                        list.Add(command);
+                    }
+                }
+            }
+            return list;
+        }
+
+        public List<CVar> ListVars()
+        {
+            List<CVar> list = new List<CVar>();
+            foreach (KeyValuePair<char, LinkedList<CCommand>> e in commandsLookup)
+            {
+                LinkedList<CCommand> commands = e.Value;
+                foreach (CCommand command in commands)
+                {
+                    CVarCommand varCommand = command as CVarCommand;
+                    if (varCommand != null)
+                    {
+                        list.Add(varCommand.cvar);
+                    }
+                }
             }
             return list;
         }
