@@ -8,6 +8,7 @@ using Bomberman.Game.Elements.Players.Input;
 using Bomberman.Game.Elements.Fields;
 using BomberEngine.Debugging;
 using BomberEngine.Util;
+using BomberEngine.Consoles;
 
 namespace Bomberman.Game.Elements.Players
 {
@@ -28,6 +29,93 @@ namespace Bomberman.Game.Elements.Players
 
         /* Kicked/Punched bombs */
         private List<Bomb> m_thrownBombs;
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region CVars
+
+        /* Initial powerups count */
+        public static readonly CVar pu_initBomb         = new CVar("pi_bomb",       1);
+        public static readonly CVar pu_initFlame        = new CVar("pi_flame",      2);
+        public static readonly CVar pu_initDisease      = new CVar("pi_disease",    0);
+        public static readonly CVar pu_initAbilityKick  = new CVar("pi_kick",       0);
+        public static readonly CVar pu_initExtraSpeed   = new CVar("pi_speed",      0);
+        public static readonly CVar pu_initAblityPunch  = new CVar("pi_punch",      0);
+        public static readonly CVar pu_initAbilityGrab  = new CVar("pi_grab",       0);
+        public static readonly CVar pu_initSpooger      = new CVar("pi_spooger",    0);
+        public static readonly CVar pu_initGoldflame    = new CVar("pi_goldflame",  0);
+        public static readonly CVar pu_initTrigger      = new CVar("pi_trigger",    0);
+        public static readonly CVar pu_initJelly        = new CVar("pi_jelly",      0);
+        public static readonly CVar pu_initEbola        = new CVar("pi_ebola",      0);
+        public static readonly CVar pu_initRandom       = new CVar("pi_random",     0);
+
+        /* Max powerups count */
+        public static readonly CVar pu_maxBomb          = new CVar("pm_bomb",       8, CVar.READONLY);
+        public static readonly CVar pu_maxFlame         = new CVar("pm_flame",      8, CVar.READONLY);
+        public static readonly CVar pu_maxDisease       = new CVar("pm_disease",    0, CVar.READONLY);
+        public static readonly CVar pu_maxAbilityKick   = new CVar("pm_kick",       1, CVar.READONLY);
+        public static readonly CVar pu_maxExtraSpeed    = new CVar("pm_speed",      4, CVar.READONLY);
+        public static readonly CVar pu_maxAbilityPunch  = new CVar("pm_punch",      1, CVar.READONLY);
+        public static readonly CVar pu_maxAbilityGrab   = new CVar("pm_grab",       1, CVar.READONLY);
+        public static readonly CVar pu_maxSpooger       = new CVar("pm_spooger",    1, CVar.READONLY);
+        public static readonly CVar pu_maxGoldflame     = new CVar("pm_goldflame",  1, CVar.READONLY);
+        public static readonly CVar pu_maxTrigger       = new CVar("pm_trigger",    1, CVar.READONLY);
+        public static readonly CVar pu_maxJelly         = new CVar("pm_jelly",      1, CVar.READONLY);
+        public static readonly CVar pu_maxEbola         = new CVar("pm_ebola",      0, CVar.READONLY);
+        public static readonly CVar pu_maxRandom        = new CVar("pm_random",     0, CVar.READONLY);
+
+        /* Timings */
+        public static readonly CVar t_fuzeTimeNormal    = new CVar("t_fuzeNormal",  2000);
+        public static readonly CVar t_fuzeTimeShort     = new CVar("t_fuzeShort",   500);
+        public static readonly CVar t_timeFlame         = new CVar("t_flame",       500);
+
+        private static readonly CVar[] pu_init = 
+        {
+	        pu_initBomb,
+	        pu_initFlame,
+	        pu_initDisease,
+	        pu_initAbilityKick,
+	        pu_initExtraSpeed,
+	        pu_initAblityPunch,
+	        pu_initAbilityGrab,
+	        pu_initSpooger,
+	        pu_initGoldflame,
+	        pu_initTrigger,
+	        pu_initJelly,
+	        pu_initEbola,
+	        pu_initRandom,
+        };
+
+        private static readonly CVar[] pu_max = 
+        {
+	        pu_maxBomb,
+	        pu_maxFlame,
+	        pu_maxDisease,
+	        pu_maxAbilityKick,
+	        pu_maxExtraSpeed,
+	        pu_maxAbilityPunch,
+	        pu_maxAbilityGrab,
+	        pu_maxSpooger,
+	        pu_maxGoldflame,
+	        pu_maxTrigger,
+	        pu_maxJelly,
+	        pu_maxEbola,
+	        pu_maxRandom,
+        };
+
+        public static void RegisterCvars(CConsole console)
+        {
+            console.RegisterCvars(pu_init);
+            console.RegisterCvars(pu_max);
+
+            console.RegisterCvar(t_fuzeTimeNormal);
+            console.RegisterCvar(t_fuzeTimeShort);
+            console.RegisterCvar(t_timeFlame);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
 
         public Player(int index)
             : base(FieldCellType.Player, 0, 0)

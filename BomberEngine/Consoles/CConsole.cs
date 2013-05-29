@@ -344,6 +344,19 @@ namespace BomberEngine.Consoles
 
         #region Command register
 
+        public bool RegisterCvar(CVar cvar)
+        {
+            return RegisterCommand(new CVarCommand(cvar));
+        }
+
+        public void RegisterCvars(CVar[] cvars)
+        {
+            foreach (CVar cvar in cvars)
+            {
+                RegisterCvar(cvar);
+            }
+        }
+
         public bool RegisterCommand(CCommand command)
         {
             return commands.RegisterCommand(command);

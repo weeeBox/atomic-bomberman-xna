@@ -15,6 +15,8 @@ namespace BomberEngine.Consoles
             Float
         }
 
+        public const int READONLY = 1;
+
         public String name;
 
         public String value;
@@ -25,22 +27,22 @@ namespace BomberEngine.Consoles
 
         protected VarType type;
 
-        public CVar(String name, int defaultValue)
-            : this(name, StringUtils.ToString(defaultValue), VarType.Integer)
+        public CVar(String name, int defaultValue, int flags = 0)
+            : this(name, StringUtils.ToString(defaultValue), VarType.Integer, flags)
         {   
         }
 
-        public CVar(String name, float defaultValue)
-            : this(name, StringUtils.ToString(defaultValue), VarType.Float)
+        public CVar(String name, float defaultValue, int flags = 0)
+            : this(name, StringUtils.ToString(defaultValue), VarType.Float, flags)
         {   
         }
 
-        public CVar(String name, String defaultValue)
-            : this(name, defaultValue, VarType.String)
+        public CVar(String name, String defaultValue, int flags = 0)
+            : this(name, defaultValue, VarType.String, flags)
         {
         }
 
-        protected CVar(String name, String defaultValue, VarType type)
+        protected CVar(String name, String defaultValue, VarType type, int flags)
         {
             if (name == null)
             {

@@ -10,6 +10,7 @@ using BomberEngine.Core.Visual;
 using BomberEngine.Core.Assets.Types;
 using BomberEngine.Core.Input;
 using BomberEngine.Consoles;
+using Bomberman.Game.Elements.Players;
 
 namespace Bomberman
 {
@@ -51,6 +52,9 @@ namespace Bomberman
         protected override CConsole CreateConsole()
         {
             CConsole console = base.CreateConsole();
+
+            Player.RegisterCvars(console);
+
             return console;
         }
 
