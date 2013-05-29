@@ -372,9 +372,19 @@ namespace BomberEngine.Consoles
             return commands.ListCommands();
         }
 
+        public List<CCommand> ListCommands(String prefix)
+        {
+            return commands.ListCommands(prefix);
+        }
+
         public List<CVar> ListVars()
         {
             return commands.ListVars();
+        }
+
+        public List<CVar> ListVars(String prefix)
+        {
+            return commands.ListVars(prefix);
         }
 
         #endregion

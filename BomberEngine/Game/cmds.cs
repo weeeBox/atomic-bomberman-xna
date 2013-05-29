@@ -17,7 +17,9 @@ namespace BomberEngine.Game
 
         public override void Execute()
         {
-            List<CCommand> commands = console.ListCommands();
+            String prefix = StrArg(0);
+
+            List<CCommand> commands = prefix != null ? console.ListCommands(prefix) : console.ListCommands();
             commands.Sort(CompareCommands);
 
             for (int i = 0; i < commands.Count; ++i)
@@ -44,7 +46,9 @@ namespace BomberEngine.Game
 
         public override void Execute()
         {
-            List<CVar> vars = console.ListVars();
+            String prefix = StrArg(0);
+
+            List<CVar> vars = prefix != null ? console.ListVars(prefix) : console.ListVars();
             vars.Sort(CompareVars);
 
             for (int i = 0; i < vars.Count; ++i)

@@ -35,6 +35,8 @@ namespace BomberEngine.Consoles
             return false;
         }
 
+        /* Дублеж, пиздешь и провокация */
+
         public List<CCommand> ListCommands()
         {
             List<CCommand> list = new List<CCommand>();
@@ -44,6 +46,25 @@ namespace BomberEngine.Consoles
                 foreach (CCommand command in commands)
                 {
                     if (!(command is CVarCommand))
+                    {
+                        list.Add(command);
+                    }
+                }
+            }
+            return list;
+        }
+
+        public List<CCommand> ListCommands(String prefix)
+        {
+            prefix = prefix.ToLower();
+
+            List<CCommand> list = new List<CCommand>();
+            foreach (KeyValuePair<char, LinkedList<CCommand>> e in commandsLookup)
+            {
+                LinkedList<CCommand> commands = e.Value;
+                foreach (CCommand command in commands)
+                {
+                    if (!(command is CVarCommand) && command.name.ToLower().StartsWith(prefix))
                     {
                         list.Add(command);
                     }
@@ -62,6 +83,26 @@ namespace BomberEngine.Consoles
                 {
                     CVarCommand varCommand = command as CVarCommand;
                     if (varCommand != null)
+                    {
+                        list.Add(varCommand.cvar);
+                    }
+                }
+            }
+            return list;
+        }
+
+        public List<CVar> ListVars(String prefix)
+        {
+            prefix = prefix.ToLower();
+
+            List<CVar> list = new List<CVar>();
+            foreach (KeyValuePair<char, LinkedList<CCommand>> e in commandsLookup)
+            {
+                LinkedList<CCommand> commands = e.Value;
+                foreach (CCommand command in commands)
+                {
+                    CVarCommand varCommand = command as CVarCommand;
+                    if (varCommand != null && varCommand.name.ToLower().StartsWith(prefix))
                     {
                         list.Add(varCommand.cvar);
                     }
