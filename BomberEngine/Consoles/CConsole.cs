@@ -300,10 +300,11 @@ namespace BomberEngine.Consoles
                 for (int i = token.Length; i < firstCommandName.Length; ++i)
                 {
                     char chr = firstCommandName[i];
+                    char chrLower = char.ToLower(chr);
                     for (LinkedListNode<CCommand> nextNode = firstNode.Next; nextNode != null; nextNode = nextNode.Next)
                     {
                         String otherCommandName = nextNode.Value.name;
-                        if (otherCommandName[i] != chr)
+                        if (char.ToLower(otherCommandName[i]) != chrLower)
                         {
                             return suggestedToken.ToString();
                         }

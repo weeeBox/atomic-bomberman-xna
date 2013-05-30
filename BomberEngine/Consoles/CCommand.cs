@@ -104,6 +104,30 @@ namespace BomberEngine.Consoles
             console.PrintIndent(format, args);
         }
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Helpers
+
+        public bool StartsWith(String prefix)
+        {
+            if (prefix.Length <= name.Length)
+            {
+                for (int i = 0; i < prefix.Length; ++i)
+                {
+                    char pc = char.ToLower(prefix[i]);
+                    char nc = char.ToLower(name[i]);
+
+                    if (pc != nc) return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        #endregion
+
         #endregion
     }
 }
