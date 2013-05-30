@@ -70,7 +70,11 @@ namespace Bomberman
         public static readonly CVar cg_timeFlame = new CVar("cg_timeFlame", 500);
 
         /* Debug */
-        public static readonly CVar d_drawGrid = new CVar("d_drawGrid", 0, CFlags.Debug);
+        public static readonly CVar g_drawGrid = new CVar("g_drawGrid", 0, CFlags.Debug);
+        public static readonly CVar g_drawSlotSize = new CVar("g_drawSlotSize", 0, CFlags.Debug);
+        public static readonly CVar g_drawPlayerCell = new CVar("g_drawPlayerCell", 0, CFlags.Debug);
+        public static readonly CVar g_drawPlayerMovable = new CVar("g_drawPlayerMovable", 0, CFlags.Debug);
+        public static readonly CVar g_drawHiddenPowerups = new CVar("g_drawHiddenPowerups", 0, CFlags.Debug);
 
         public static readonly CVar[] powerupsInitials = 
         {
@@ -125,7 +129,11 @@ namespace Bomberman
 
         public static readonly CVar[] debugVars =
         {
-            d_drawGrid,
+            g_drawGrid,
+            g_drawSlotSize,
+            g_drawPlayerCell,
+            g_drawPlayerMovable,
+            g_drawHiddenPowerups,
         };
 
         public static void Register(CConsole console)
