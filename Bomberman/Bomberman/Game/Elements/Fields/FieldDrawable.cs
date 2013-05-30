@@ -256,14 +256,17 @@ namespace Bomberman.Game.Elements.Fields
         
         private void DrawGrid(Context context)
         {
-            for (int i = 0; i <= field.GetWidth(); ++i)
+            if (CVars.d_drawGrid.boolValue())
             {
-                context.DrawLine(i * cellWidth, 0, i * cellWidth, height, Color.Gray);
-            }
+                for (int i = 0; i <= field.GetWidth(); ++i)
+                {
+                    context.DrawLine(i * cellWidth, 0, i * cellWidth, height, Color.Gray);
+                }
 
-            for (int i = 0; i <= field.GetHeight(); ++i)
-            {
-                context.DrawLine(0, i * cellHeight, width, i * cellHeight, Color.Gray);
+                for (int i = 0; i <= field.GetHeight(); ++i)
+                {
+                    context.DrawLine(0, i * cellHeight, width, i * cellHeight, Color.Gray);
+                }
             }
         }
 

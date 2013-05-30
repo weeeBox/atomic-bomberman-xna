@@ -6,6 +6,13 @@ using BomberEngine.Util;
 
 namespace BomberEngine.Consoles
 {
+    public enum CFlags
+    {   
+        Readonly = 1,
+        Debug = 2,
+        Hidden = 4
+    }
+
     public class CVar
     {
         protected enum VarType
@@ -14,8 +21,6 @@ namespace BomberEngine.Consoles
             Integer,
             Float
         }
-
-        public const int READONLY = 1;
 
         public String name;
 
@@ -27,22 +32,22 @@ namespace BomberEngine.Consoles
 
         protected VarType type;
 
-        public CVar(String name, int defaultValue, int flags = 0)
+        public CVar(String name, int defaultValue, CFlags flags = 0)
             : this(name, StringUtils.ToString(defaultValue), VarType.Integer, flags)
         {   
         }
 
-        public CVar(String name, float defaultValue, int flags = 0)
+        public CVar(String name, float defaultValue, CFlags flags = 0)
             : this(name, StringUtils.ToString(defaultValue), VarType.Float, flags)
         {   
         }
 
-        public CVar(String name, String defaultValue, int flags = 0)
+        public CVar(String name, String defaultValue, CFlags flags = 0)
             : this(name, defaultValue, VarType.String, flags)
         {
         }
 
-        protected CVar(String name, String defaultValue, VarType type, int flags)
+        protected CVar(String name, String defaultValue, VarType type, CFlags flags)
         {
             if (name == null)
             {
@@ -118,6 +123,11 @@ namespace BomberEngine.Consoles
         }
 
         //////////////////////////////////////////////////////////////////////////////
+
+        public bool boolValue()
+        {
+            return intValue != 0;
+        }
 
         public bool IsString()
         {

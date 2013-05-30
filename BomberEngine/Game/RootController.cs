@@ -35,6 +35,8 @@ namespace BomberEngine.Game
         public void Start()
         {
             console = CreateConsole();
+            console.TryExecuteCommand("exec default.cfg");
+
             OnStart();
         }
 

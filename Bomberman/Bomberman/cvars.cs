@@ -9,16 +9,16 @@ namespace Bomberman
     public class CVars
     {
         /* Player */
-        public static readonly CVar cg_playerSpeed = new CVar("cg_playerSpeed", 200, CVar.READONLY);
-        public static readonly CVar cg_playerSpeedAdd = new CVar("cg_playerSpeedAdd", 30, CVar.READONLY);
+        public static readonly CVar cg_playerSpeed = new CVar("cg_playerSpeed", 200, CFlags.Readonly);
+        public static readonly CVar cg_playerSpeedAdd = new CVar("cg_playerSpeedAdd", 30, CFlags.Readonly);
 
         /* Bomb */
-        public static readonly CVar cg_bombRollSpeed = new CVar("cg_bombRollSpeed", 250, CVar.READONLY);
-        public static readonly CVar cg_bombFlySpeed = new CVar("cg_bombFlySpeed", 300, CVar.READONLY);
-        public static readonly CVar cg_bombDropGravity = new CVar("cg_bombDropGravity", 4000, CVar.READONLY);
-        public static readonly CVar cg_bombShortFlame = new CVar("cg_bombShortFlame", 1, CVar.READONLY);
-        public static readonly CVar cg_bombFlyDistance = new CVar("cg_bombFlyDistance", 3, CVar.READONLY);
-        public static readonly CVar cg_bombJumpDistance = new CVar("cg_bombJumpDistance", 1, CVar.READONLY);
+        public static readonly CVar cg_bombRollSpeed = new CVar("cg_bombRollSpeed", 250, CFlags.Readonly);
+        public static readonly CVar cg_bombFlySpeed = new CVar("cg_bombFlySpeed", 300, CFlags.Readonly);
+        public static readonly CVar cg_bombDropGravity = new CVar("cg_bombDropGravity", 4000, CFlags.Readonly);
+        public static readonly CVar cg_bombShortFlame = new CVar("cg_bombShortFlame", 1, CFlags.Readonly);
+        public static readonly CVar cg_bombFlyDistance = new CVar("cg_bombFlyDistance", 3, CFlags.Readonly);
+        public static readonly CVar cg_bombJumpDistance = new CVar("cg_bombJumpDistance", 1, CFlags.Readonly);
 
         /* Initial powerups count */
         public static readonly CVar cg_initBomb = new CVar("cg_initBomb", 1);
@@ -36,19 +36,19 @@ namespace Bomberman
         public static readonly CVar cg_initRandom = new CVar("cg_initRandom", 0);
 
         /* Max powerups count */
-        public static readonly CVar cg_maxBomb = new CVar("cg_maxBomb", 8, CVar.READONLY);
-        public static readonly CVar cg_maxFlame = new CVar("cg_maxFlame", 8, CVar.READONLY);
-        public static readonly CVar cg_maxDisease = new CVar("cg_maxDisease", 0, CVar.READONLY);
-        public static readonly CVar cg_maxKick = new CVar("cg_maxKick", 1, CVar.READONLY);
-        public static readonly CVar cg_maxSpeed = new CVar("cg_maxExtraSpeed", 4, CVar.READONLY);
-        public static readonly CVar cg_maxPunch = new CVar("cg_maxPunch", 1, CVar.READONLY);
-        public static readonly CVar cg_maxGrab = new CVar("cg_maxGrab", 1, CVar.READONLY);
-        public static readonly CVar cg_maxSpooger = new CVar("cg_maxSpooger", 1, CVar.READONLY);
-        public static readonly CVar cg_maxGoldflame = new CVar("cg_maxGoldflame", 1, CVar.READONLY);
-        public static readonly CVar cg_maxTrigger = new CVar("cg_maxTrigger", 1, CVar.READONLY);
-        public static readonly CVar cg_maxJelly = new CVar("cg_maxJelly", 1, CVar.READONLY);
-        public static readonly CVar cg_maxEbola = new CVar("cg_maxEbola", 0, CVar.READONLY);
-        public static readonly CVar cg_maxRandom = new CVar("cg_maxRandom", 0, CVar.READONLY);
+        public static readonly CVar cg_maxBomb = new CVar("cg_maxBomb", 8, CFlags.Readonly);
+        public static readonly CVar cg_maxFlame = new CVar("cg_maxFlame", 8, CFlags.Readonly);
+        public static readonly CVar cg_maxDisease = new CVar("cg_maxDisease", 0, CFlags.Readonly);
+        public static readonly CVar cg_maxKick = new CVar("cg_maxKick", 1, CFlags.Readonly);
+        public static readonly CVar cg_maxSpeed = new CVar("cg_maxExtraSpeed", 4, CFlags.Readonly);
+        public static readonly CVar cg_maxPunch = new CVar("cg_maxPunch", 1, CFlags.Readonly);
+        public static readonly CVar cg_maxGrab = new CVar("cg_maxGrab", 1, CFlags.Readonly);
+        public static readonly CVar cg_maxSpooger = new CVar("cg_maxSpooger", 1, CFlags.Readonly);
+        public static readonly CVar cg_maxGoldflame = new CVar("cg_maxGoldflame", 1, CFlags.Readonly);
+        public static readonly CVar cg_maxTrigger = new CVar("cg_maxTrigger", 1, CFlags.Readonly);
+        public static readonly CVar cg_maxJelly = new CVar("cg_maxJelly", 1, CFlags.Readonly);
+        public static readonly CVar cg_maxEbola = new CVar("cg_maxEbola", 0, CFlags.Readonly);
+        public static readonly CVar cg_maxRandom = new CVar("cg_maxRandom", 0, CFlags.Readonly);
 
         public static readonly CVar cg_fieldBomb = new CVar("cg_fieldBomb", 10);
         public static readonly CVar cg_fieldFlame = new CVar("cg_fieldFlame", 10);
@@ -68,6 +68,9 @@ namespace Bomberman
         public static readonly CVar cg_fuzeTimeNormal = new CVar("cg_fuzeTimeNormal", 2000);
         public static readonly CVar cg_fuzeTimeShort = new CVar("cg_fuzeTimeShort", 500);
         public static readonly CVar cg_timeFlame = new CVar("cg_timeFlame", 500);
+
+        /* Debug */
+        public static readonly CVar d_drawGrid = new CVar("d_drawGrid", 0, CFlags.Debug);
 
         public static readonly CVar[] powerupsInitials = 
         {
@@ -120,11 +123,17 @@ namespace Bomberman
 	        cg_fieldRandom,
         };
 
+        public static readonly CVar[] debugVars =
+        {
+            d_drawGrid,
+        };
+
         public static void Register(CConsole console)
         {
             console.RegisterCvars(powerupsInitials);
             console.RegisterCvars(powerupsMax);
             console.RegisterCvars(powerupsCount);
+            console.RegisterCvars(debugVars);
 
             console.RegisterCvar(cg_fuzeTimeNormal);
             console.RegisterCvar(cg_fuzeTimeShort);
