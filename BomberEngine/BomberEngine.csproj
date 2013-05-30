@@ -117,7 +117,7 @@
     <Compile Include="Core\Visual\ViewList.cs" />
     <Compile Include="Consoles\CCommand.cs" />
     <Compile Include="Consoles\CRegistery.cs" />
-    <Compile Include="Game\cmds.cs" />
+    <Compile Include="Game\common_commands.cs" />
     <Compile Include="Consoles\CConsole.cs" />
     <Compile Include="Core\Assets\Asset.cs" />
     <Compile Include="Core\Assets\AssetLoader.cs" />
