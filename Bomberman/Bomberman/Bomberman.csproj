@@ -151,7 +151,6 @@
     <Compile Include="Game\Game.cs" />
     <Compile Include="Game\Screens\PauseScreen.cs" />
     <Compile Include="Game\Screens\PowerupsDrawable.cs" />
-    <Compile Include="Game\Settings.cs" />
     <Compile Include="Game\Helper.cs" />
     <Compile Include="Game\Match.cs" />
     <Compile Include="Game\Screens\GameScreen.cs" />

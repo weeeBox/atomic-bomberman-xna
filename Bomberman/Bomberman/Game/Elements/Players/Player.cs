@@ -720,7 +720,7 @@ namespace Bomberman.Game.Elements.Players
         {
             if (IsInfectedShortFlame())
             {
-                return Settings.Get(Settings.VAL_BOMB_SHORT_FLAME);
+                return CVars.cg_bombShortFlame.intValue;
             }
             if (powerups.HasPowerup(Powerups.GoldFlame))
             {

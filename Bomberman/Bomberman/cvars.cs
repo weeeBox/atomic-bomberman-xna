@@ -12,6 +12,14 @@ namespace Bomberman
         public static readonly CVar cg_playerSpeed = new CVar("cg_playerSpeed", 200, CVar.READONLY);
         public static readonly CVar cg_playerSpeedAdd = new CVar("cg_playerSpeedAdd", 30, CVar.READONLY);
 
+        /* Bomb */
+        public static readonly CVar cg_bombRollSpeed = new CVar("cg_bombRollSpeed", 250, CVar.READONLY);
+        public static readonly CVar cg_bombFlySpeed = new CVar("cg_bombFlySpeed", 300, CVar.READONLY);
+        public static readonly CVar cg_bombDropGravity = new CVar("cg_bombDropGravity", 4000, CVar.READONLY);
+        public static readonly CVar cg_bombShortFlame = new CVar("cg_bombShortFlame", 1, CVar.READONLY);
+        public static readonly CVar cg_bombFlyDistance = new CVar("cg_bombFlyDistance", 3, CVar.READONLY);
+        public static readonly CVar cg_bombJumpDistance = new CVar("cg_bombJumpDistance", 1, CVar.READONLY);
+
         /* Initial powerups count */
         public static readonly CVar cg_initBomb = new CVar("cg_initBomb", 1);
         public static readonly CVar cg_initFlame = new CVar("cg_initFlame", 2);
@@ -124,6 +132,13 @@ namespace Bomberman
 
             console.RegisterCvar(cg_playerSpeed);
             console.RegisterCvar(cg_playerSpeedAdd);
+
+            console.RegisterCvar(cg_bombRollSpeed);
+            console.RegisterCvar(cg_bombFlySpeed);
+            console.RegisterCvar(cg_bombDropGravity);
+            console.RegisterCvar(cg_bombShortFlame);
+            console.RegisterCvar(cg_bombFlyDistance);
+            console.RegisterCvar(cg_bombJumpDistance);
         }
     }
 }

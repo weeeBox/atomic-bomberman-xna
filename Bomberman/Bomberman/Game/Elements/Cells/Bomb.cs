@@ -49,7 +49,7 @@ namespace Bomberman.Game.Elements.Cells
            : base(FieldCellType.Bomb, player.GetCx(), player.GetCy())
         {
             m_player = player;
-            SetSpeed(Settings.Get(Settings.VAL_BOMB_ROLL_SPEED));
+            SetSpeed(CVars.cg_bombRollSpeed.intValue);
         }
 
         public override void Update(float delta)
@@ -308,12 +308,12 @@ namespace Bomberman.Game.Elements.Cells
 
         private void Fly(float fromPx, float fromPy, Direction direction)
         {
-            Fly(fromPx, fromPy, direction, Settings.Get(Settings.VAL_BOMB_FLY_DISTANCE));
+            Fly(fromPx, fromPy, direction, CVars.cg_bombFlyDistance.intValue);
         }
 
         private void Jump(float fromPx, float fromPy, Direction direction)
         {
-            Fly(fromPx, fromPy, direction, Settings.Get(Settings.VAL_BOMB_JUMP_DISTANCE));
+            Fly(fromPx, fromPy, direction, CVars.cg_bombJumpDistance.intValue);
         }
 
         private void Fly(float fromPx, float fromPy, Direction direction, int numCells)
@@ -321,7 +321,7 @@ namespace Bomberman.Game.Elements.Cells
             int fromCx = Util.Px2Cx(fromPx);
             int fromCy = Util.Py2Cy(fromPy);
 
-            flySpeed = Settings.Get(Settings.VAL_BOMB_FLY_SPEED);
+            flySpeed = CVars.cg_bombFlySpeed.intValue;
 
             switch (direction)
             {
@@ -345,7 +345,7 @@ namespace Bomberman.Game.Elements.Cells
             }
 
             fallHeight = 0;
-            fallGravity = Settings.Get(Settings.VAL_BOMB_DROP_GRAVITY);
+            fallGravity = CVars.cg_bombDropGravity.intValue;
             fallSpeed = 0.5f * fallGravity * flyDistance / flySpeed;
 
             SetDirection(direction);
