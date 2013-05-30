@@ -13,29 +13,13 @@ using Bomberman.Game.Elements.Items;
 using Bomberman.Content;
 using BombermanCommon.Resources.Scheme;
 using BomberEngine.Util;
+using BomberEngine.Consoles;
 
 namespace Bomberman.Game.Elements.Fields
 {
     public class Field : IUpdatable
     {
         private static Field currentField;
-
-        private static readonly int[] POWERUPS_COUNT =
-        {
-            Settings.VAL_PU_FIELD_BOMB,
-            Settings.VAL_PU_FIELD_FLAME,
-            Settings.VAL_PU_FIELD_DISEASE,
-            Settings.VAL_PU_FIELD_ABILITY_KICK,
-            Settings.VAL_PU_FIELD_EXTRA_SPEED,
-            Settings.VAL_PU_FIELD_ABLITY_PUNCH,
-            Settings.VAL_PU_FIELD_ABILITY_GRAB,
-            Settings.VAL_PU_FIELD_SPOOGER,
-            Settings.VAL_PU_FIELD_GOLDFLAME,
-            Settings.VAL_PU_FIELD_TRIGGER,
-            Settings.VAL_PU_FIELD_JELLY,
-            Settings.VAL_PU_FIELD_EBOLA,
-            Settings.VAL_PU_FIELD_RANDOM,
-        };
 
         private FieldCellArray cells;
         private PlayerList players;
@@ -164,6 +148,8 @@ namespace Bomberman.Game.Elements.Fields
 
             ShuffleCells(brickCells, count);
 
+            CVar[] POWERUPS_COUNT = CVars.powerupsCount;
+
             int brickIndex = 0;
             foreach (PowerupInfo info in powerupInfo)
             {
@@ -173,7 +159,7 @@ namespace Bomberman.Game.Elements.Fields
                 }
 
                 int powerupIndex = info.powerupIndex;
-                int powerupCount = POWERUPS_COUNT[powerupIndex];
+                int powerupCount = POWERUPS_COUNT[powerupIndex].intValue;
                 if (powerupCount < 0)
                 {
                     if (MathHelp.NextInt(10) < -powerupCount)

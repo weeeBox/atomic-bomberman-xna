@@ -30,132 +30,6 @@ namespace Bomberman.Game.Elements.Players
         /* Kicked/Punched bombs */
         private List<Bomb> m_thrownBombs;
 
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Console vars
-
-        /* Player */
-        public static readonly CVar cg_playerSpeed      = new CVar("cg_playerSpeed",     200, CVar.READONLY);
-        public static readonly CVar cg_playerSpeedAdd   = new CVar("cg_playerSpeedAdd",   30, CVar.READONLY);
-
-        /* Initial powerups count */
-        public static readonly CVar cg_initBomb         = new CVar("cg_initBomb",       1);
-        public static readonly CVar cg_initFlame        = new CVar("cg_initFlame",      2);
-        public static readonly CVar cg_initDisease      = new CVar("cg_initDisease",    0);
-        public static readonly CVar cg_initKick         = new CVar("cg_initKick",       0);
-        public static readonly CVar cg_initExtraSpeed   = new CVar("cg_initExtraSpeed", 0);
-        public static readonly CVar cg_initPunch        = new CVar("cg_initPunch",      0);
-        public static readonly CVar cg_initGrab         = new CVar("cg_initGrab",       0);
-        public static readonly CVar cg_initSpooger      = new CVar("cg_initSpooger",    0);
-        public static readonly CVar cg_initGoldflame    = new CVar("cg_initGoldflame",  0);
-        public static readonly CVar cg_initTrigger      = new CVar("cg_initTrigger",    0);
-        public static readonly CVar cg_initJelly        = new CVar("cg_initJelly",      0);
-        public static readonly CVar cg_initEbola        = new CVar("cg_initEbola",      0);
-        public static readonly CVar cg_initRandom       = new CVar("cg_initRandom",     0);
-
-        /* Max powerups count */
-        public static readonly CVar cg_maxBomb          = new CVar("cg_maxBomb",       8, CVar.READONLY);
-        public static readonly CVar cg_maxFlame         = new CVar("cg_maxFlame",      8, CVar.READONLY);
-        public static readonly CVar cg_maxDisease       = new CVar("cg_maxDisease",    0, CVar.READONLY);
-        public static readonly CVar cg_maxKick          = new CVar("cg_maxKick",       1, CVar.READONLY);
-        public static readonly CVar cg_maxSpeed         = new CVar("cg_maxExtraSpeed", 4, CVar.READONLY);
-        public static readonly CVar cg_maxPunch         = new CVar("cg_maxPunch",      1, CVar.READONLY);
-        public static readonly CVar cg_maxGrab          = new CVar("cg_maxGrab",       1, CVar.READONLY);
-        public static readonly CVar cg_maxSpooger       = new CVar("cg_maxSpooger",    1, CVar.READONLY);
-        public static readonly CVar cg_maxGoldflame     = new CVar("cg_maxGoldflame",  1, CVar.READONLY);
-        public static readonly CVar cg_maxTrigger       = new CVar("cg_maxTrigger",    1, CVar.READONLY);
-        public static readonly CVar cg_maxJelly         = new CVar("cg_maxJelly",      1, CVar.READONLY);
-        public static readonly CVar cg_maxEbola         = new CVar("cg_maxEbola",      0, CVar.READONLY);
-        public static readonly CVar cg_maxRandom        = new CVar("cg_maxRandom",     0, CVar.READONLY);
-
-        public static readonly CVar cg_fieldBomb        = new CVar("cg_fieldBomb",         10);
-        public static readonly CVar cg_fieldFlame       = new CVar("cg_fieldFlame",        10);
-        public static readonly CVar cg_fieldDisease     = new CVar("cg_fieldDisease",      10);
-        public static readonly CVar cg_fieldKick        = new CVar("cg_fieldKick",          4);
-        public static readonly CVar cg_fieldExtraSpeed  = new CVar("cg_fieldExtraSpeed",    8);
-        public static readonly CVar cg_fieldPunch       = new CVar("cg_fieldPunch",         2);
-        public static readonly CVar cg_fieldGrab        = new CVar("cg_fieldGrab",          2);
-        public static readonly CVar cg_fieldSpooger     = new CVar("cg_fieldSpooger",       1);
-        public static readonly CVar cg_fieldGoldflame   = new CVar("cg_fieldGoldflame",    -2);
-        public static readonly CVar cg_fieldTrigger     = new CVar("cg_fieldTrigger",       5);
-        public static readonly CVar cg_fieldJelly       = new CVar("cg_fieldJelly",         1);
-        public static readonly CVar cg_fieldEbola       = new CVar("cg_fieldEbola",        -4);
-        public static readonly CVar cg_fieldRandom      = new CVar("cg_fieldRandom",       -2);
-
-        /* Timings */
-        public static readonly CVar cg_fuzeTimeNormal   = new CVar("cg_fuzeTimeNormal",  2000);
-        public static readonly CVar cg_fuzeTimeShort    = new CVar("cg_fuzeTimeShort",   500);
-        public static readonly CVar cg_timeFlame        = new CVar("cg_timeFlame",       500);
-
-        private static readonly CVar[] initPowerups = 
-        {
-	        cg_initBomb,
-	        cg_initFlame,
-	        cg_initDisease,
-	        cg_initKick,
-	        cg_initExtraSpeed,
-	        cg_initPunch,
-	        cg_initGrab,
-	        cg_initSpooger,
-	        cg_initGoldflame,
-	        cg_initTrigger,
-	        cg_initJelly,
-	        cg_initEbola,
-	        cg_initRandom,
-        };
-
-        private static readonly CVar[] maxPowerups = 
-        {
-	        cg_maxBomb,
-	        cg_maxFlame,
-	        cg_maxDisease,
-	        cg_maxKick,
-	        cg_maxSpeed,
-	        cg_maxPunch,
-	        cg_maxGrab,
-	        cg_maxSpooger,
-	        cg_maxGoldflame,
-	        cg_maxTrigger,
-	        cg_maxJelly,
-	        cg_maxEbola,
-	        cg_maxRandom,
-        };
-
-        private static readonly CVar[] fieldPowerups = 
-        {
-	        cg_fieldBomb,
-	        cg_fieldFlame,
-	        cg_fieldDisease,
-	        cg_fieldKick,
-	        cg_fieldExtraSpeed,
-	        cg_fieldPunch,
-	        cg_fieldGrab,
-	        cg_fieldSpooger,
-	        cg_fieldGoldflame,
-	        cg_fieldTrigger,
-	        cg_fieldJelly,
-	        cg_fieldEbola,
-	        cg_fieldRandom,
-        };
-
-        public static void RegisterCvars(CConsole console)
-        {
-            console.RegisterCvars(initPowerups);
-            console.RegisterCvars(maxPowerups);
-            console.RegisterCvars(fieldPowerups);
-
-            console.RegisterCvar(cg_fuzeTimeNormal);
-            console.RegisterCvar(cg_fuzeTimeShort);
-            console.RegisterCvar(cg_timeFlame);
-
-            console.RegisterCvar(cg_playerSpeed);
-            console.RegisterCvar(cg_playerSpeedAdd);
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
         public Player(int index)
             : base(FieldCellType.Player, 0, 0)
         {
@@ -525,48 +399,17 @@ namespace Bomberman.Game.Elements.Players
 
         #region Powerups
 
-        private static readonly int[] POWERUPS_INITIALS =
-        {
-            Settings.VAL_PU_INIT_BOMB,
-            Settings.VAL_PU_INIT_FLAME,
-            Settings.VAL_PU_INIT_DISEASE,
-            Settings.VAL_PU_INIT_ABILITY_KICK,
-            Settings.VAL_PU_INIT_EXTRA_SPEED,
-            Settings.VAL_PU_INIT_ABLITY_PUNCH,
-            Settings.VAL_PU_INIT_ABILITY_GRAB,
-            Settings.VAL_PU_INIT_SPOOGER,
-            Settings.VAL_PU_INIT_GOLDFLAME,
-            Settings.VAL_PU_INIT_TRIGGER,
-            Settings.VAL_PU_INIT_JELLY,
-            Settings.VAL_PU_INIT_EBOLA,
-            Settings.VAL_PU_INIT_RANDOM,
-        };
-
-        private static readonly int[] POWERUPS_MAX =
-        {
-            Settings.VAL_PU_MAX_BOMB,
-            Settings.VAL_PU_MAX_FLAME,
-            Settings.VAL_PU_MAX_DISEASE,
-            Settings.VAL_PU_MAX_ABILITY_KICK,
-            Settings.VAL_PU_MAX_EXTRA_SPEED,
-            Settings.VAL_PU_MAX_ABILITY_PUNCH,
-            Settings.VAL_PU_MAX_ABILITY_GRAB,
-            Settings.VAL_PU_MAX_SPOOGER,
-            Settings.VAL_PU_MAX_GOLDFLAME,
-            Settings.VAL_PU_MAX_TRIGGER,
-            Settings.VAL_PU_MAX_JELLY,
-            Settings.VAL_PU_MAX_EBOLA,
-            Settings.VAL_PU_MAX_RANDOM,
-        };
-
         private void InitPowerups()
         {
-            int totalCount = POWERUPS_INITIALS.Length;
+            CVar[] initials = CVars.powerupsInitials;
+            CVar[] max = CVars.powerupsMax;
+
+            int totalCount = initials.Length;
             powerups = new PowerupList(totalCount);
             for (int powerupIndex = 0; powerupIndex < totalCount; ++powerupIndex)
             {
-                int initialCount = Settings.Get(POWERUPS_INITIALS[powerupIndex]);
-                int maxCount = Settings.Get(POWERUPS_MAX[powerupIndex]);
+                int initialCount = initials[powerupIndex].intValue;
+                int maxCount = max[powerupIndex].intValue;
                 powerups.Init(powerupIndex, initialCount, maxCount);
             }
         }
@@ -739,8 +582,8 @@ namespace Bomberman.Game.Elements.Players
 
         private int CalcPlayerSpeed()
         {
-            int speedBase = Settings.Get(Settings.VAL_PLAYER_SPEED);
-            int speedAdd = Settings.Get(Settings.VAL_PLAYER_SPEED_ADD);
+            int speedBase = CVars.cg_playerSpeed.intValue;
+            int speedAdd = CVars.cg_playerSpeedAdd.intValue;
             return speedBase + speedAdd * powerups.GetCount(Powerups.Speed);
         }
 
@@ -751,7 +594,7 @@ namespace Bomberman.Game.Elements.Players
 
         private float CalcBombTimeout()
         {
-            return Settings.Get(Settings.VAL_FUZE_TIME_NORMAL) * 0.001f;
+            return CVars.cg_fuzeTimeNormal.intValue * 0.001f;
         }
 
         #endregion
@@ -762,7 +605,7 @@ namespace Bomberman.Game.Elements.Players
 
         private void InitBombs()
         {
-            int maxBombs = Settings.Get(Settings.VAL_PU_MAX_BOMB);
+            int maxBombs = CVars.cg_maxBomb.intValue;
             bombs = new BombList(this, maxBombs);
             bombs.SetMaxActiveCount(CalcBombsCount());
         }
@@ -864,9 +707,8 @@ namespace Bomberman.Game.Elements.Players
 
         public float GetBombTimeout()
         {
-            int timeout = IsInfectedShortFuze() ? Settings.Get(Settings.VAL_FUZE_TIME_SHORT) :
-                                                  Settings.Get(Settings.VAL_FUZE_TIME_NORMAL);
-            return timeout * 0.001f;
+            CVar var = IsInfectedShortFuze() ? CVars.cg_fuzeTimeShort : CVars.cg_fuzeTimeNormal;
+            return var.intValue * 0.001f;
         }
 
         public int GetIndex()

@@ -22,8 +22,8 @@ namespace BomberEngine.Consoles
         public String value;
         public String defaultValue;
 
-        public int valInt;
-        public float valFloat;
+        public int intValue;
+        public float floatValue;
 
         protected VarType type;
 
@@ -75,15 +75,15 @@ namespace BomberEngine.Consoles
         public void SetValue(int v)
         {
             value = StringUtils.ToString(v);
-            valInt = v;
-            valFloat = v;
+            intValue = v;
+            floatValue = v;
         }
 
         public void SetValue(float v)
         {
             value = StringUtils.ToString(v);
-            valInt = (int)v;
-            valFloat = v;
+            intValue = (int)v;
+            floatValue = v;
         }
 
         public void Reset()
@@ -98,7 +98,7 @@ namespace BomberEngine.Consoles
             int result;
             if (int.TryParse(value, out result))
             {
-                valInt = result;
+                intValue = result;
                 return true;
             }
 
@@ -110,7 +110,7 @@ namespace BomberEngine.Consoles
             float result;
             if (float.TryParse(value, out result))
             {
-                valFloat = result;
+                floatValue = result;
                 return true;
             }
 

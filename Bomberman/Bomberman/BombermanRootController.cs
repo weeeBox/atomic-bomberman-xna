@@ -52,9 +52,7 @@ namespace Bomberman
         protected override CConsole CreateConsole()
         {
             CConsole console = base.CreateConsole();
-
-            Player.RegisterCvars(console);
-
+            CVars.Register(console);
             return console;
         }
 

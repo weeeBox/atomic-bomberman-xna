@@ -116,6 +116,7 @@
     <Compile Include="Content\Scheme.cs" />
     <Compile Include="Content\SchemeLoader.cs" />
     <Compile Include="Content\SchemeReader.cs" />
+    <Compile Include="cvars.cs" />
     <Compile Include="Game\Constant.cs" />
     <Compile Include="Game\Elements\Cells\BrickCell.cs" />
     <Compile Include="Game\Elements\Cells\FlameCell.cs" />

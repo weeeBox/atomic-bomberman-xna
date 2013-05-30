@@ -17,7 +17,7 @@ namespace Bomberman.Game.Elements.Cells
             : base(FieldCellType.Flame, cx, cy)
         {
             this.player = player;
-            remains = Settings.Get(Settings.VAL_TIME_FLAME) * 0.001f;
+            remains = CVars.cg_timeFlame.intValue * 0.001f;
         }
 
         public override void Update(float delta)
