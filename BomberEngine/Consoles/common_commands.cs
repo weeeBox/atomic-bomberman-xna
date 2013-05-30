@@ -6,7 +6,7 @@ using BomberEngine.Game;
 using BomberEngine.Consoles;
 using BomberEngine.Core.IO;
 
-namespace BomberEngine.Game
+namespace BomberEngine.Consoles
 {
     public class Cmd_listcmds : CCommand
     {
