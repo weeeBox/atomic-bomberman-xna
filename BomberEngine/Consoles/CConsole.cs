@@ -225,7 +225,7 @@ namespace BomberEngine.Consoles
             TryExecuteCommand(commandString, false);
         }
 
-        private void TryExecuteCommand(String commandString, bool pushHistory)
+        private void TryExecuteCommand(String commandString, bool verbose)
         {
             String[] args = commandString.Split(' ');
 
@@ -239,7 +239,10 @@ namespace BomberEngine.Consoles
                     command.console = this;
                     command.args = args;
 
-                    Print(PROMPT_CMD_STRING + commandString);
+                    if (verbose)
+                    {
+                        Print(PROMPT_CMD_STRING + commandString);
+                    }
 
                     if (args.Length > 1)
                     {
@@ -255,7 +258,7 @@ namespace BomberEngine.Consoles
                     Append("Unknown command: '" + name + "'");
                 }
 
-                if (pushHistory)
+                if (verbose)
                 {
                     PushHistory(commandString);
                 }
