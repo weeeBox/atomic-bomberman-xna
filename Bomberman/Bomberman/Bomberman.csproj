@@ -146,7 +146,7 @@
     <Compile Include="Game\Elements\Players\PlayerList.cs" />
     <Compile Include="Game\Elements\Players\Input\PlayerInput.cs" />
     <Compile Include="Game\ExitCode.cs" />
-    <Compile Include="Game\GameCommandList.cs" />
+    <Compile Include="Game\cmds.cs" />
     <Compile Include="Game\GameController.cs" />
     <Compile Include="Game\Game.cs" />
     <Compile Include="Game\Screens\PauseScreen.cs" />

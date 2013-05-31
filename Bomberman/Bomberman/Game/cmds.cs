@@ -10,22 +10,6 @@ using Bomberman.Game.Elements;
 
 namespace Bomberman.Game
 {
-    public class GameCommandList : CCommandList
-    {
-        protected override CCommand[] CreateCommands()
-        {
-            return new CCommand[]
-            {
-                new Cmd_infect(),
-                new Cmd_add(),
-                new Cmd_map(),
-                new Cmd_scheme_restart(),
-            };
-        }
-    }
-
-    //////////////////////////////////////////////////////////////////////////////
-
     public abstract class GameCCommand : CCommand
     {
         public GameCCommand(String name)
@@ -139,10 +123,10 @@ namespace Bomberman.Game
 
     //////////////////////////////////////////////////////////////////////////////
 
-    public class Cmd_scheme_restart : GameCCommand
+    public class Cmd_map_restart : GameCCommand
     {
-        public Cmd_scheme_restart()
-            : base("scheme_restart")
+        public Cmd_map_restart()
+            : base("map_restart")
         {
         }
 

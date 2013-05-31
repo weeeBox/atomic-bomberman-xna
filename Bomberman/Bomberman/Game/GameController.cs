@@ -13,6 +13,7 @@ using Assets;
 using BomberEngine.Core.Input;
 using BomberEngine.Core.Visual;
 using BomberEngine.Core.Events;
+using BomberEngine.Consoles;
 
 namespace Bomberman.Game
 {
@@ -23,7 +24,14 @@ namespace Bomberman.Game
 
         private GameScreen gameScreen;
         private Game game;
-        private GameCommandList gameCommands;
+
+        private CCommand[] gameCommands = 
+        {
+            new Cmd_infect(),
+            new Cmd_add(),
+            new Cmd_map(),
+            new Cmd_map_restart(),
+        };
 
         public GameController()
         {
@@ -42,16 +50,13 @@ namespace Bomberman.Game
 
         protected override void OnStart()
         {
-            gameCommands = new GameCommandList();
-            gameCommands.Register();
-
+            Console().RegisterCommands(gameCommands);
             StartScreen(gameScreen);
         }
 
         protected override void OnStop()
         {
-            gameCommands.Unregister();
-            gameCommands = null;
+            Console().UnregisterCommands(gameCommands);
         }
 
         private void InitPlayers()

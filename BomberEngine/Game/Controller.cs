@@ -8,6 +8,7 @@ using BomberEngine.Core.Visual;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Debugging;
 using BomberEngine.Core.Events;
+using BomberEngine.Consoles;
 
 namespace BomberEngine.Game
 {
@@ -77,7 +78,7 @@ namespace BomberEngine.Game
             }
 
             OnStop();
-            Application.RootController.ControllerStopped(this);
+            Application.RootController().ControllerStopped(this);
         }
 
         public void Suspend()
@@ -134,7 +135,7 @@ namespace BomberEngine.Game
 
         public virtual void StartController(Controller controller)
         {
-            Application.RootController.StartController(controller);
+            Application.RootController().StartController(controller);
         }
 
         private void StopChildController(Controller controller)
@@ -198,6 +199,16 @@ namespace BomberEngine.Game
         public Controller ParentController
         {
             get { return parentController; }
+        }
+
+        protected RootController RootController()
+        {
+            return Application.RootController();
+        }
+
+        protected CConsole Console()
+        {
+            return RootController().console;
         }
 
         #endregion

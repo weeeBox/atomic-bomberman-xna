@@ -117,11 +117,6 @@ namespace BomberEngine.Consoles
             ScheduleTimer(OnBlinkTimer, 0.25f, true);
         }
 
-        public static CConsole Current()
-        {
-            return Application.RootController.console;
-        }
-
         //////////////////////////////////////////////////////////////////////////////
 
         #region Drawable
@@ -366,9 +361,28 @@ namespace BomberEngine.Consoles
             return commands.RegisterCommand(command);
         }
 
+        public bool RegisterCommands(CCommand[] commands)
+        {
+            for (int i = 0; i < commands.Length; ++i)
+            {
+                RegisterCommand(commands[i]);
+            }
+
+            return true;
+        }
+
         public bool UnregisterCommand(CCommand command)
         {
             return commands.UnregisterCommand(command);
+        }
+
+        public bool UnregisterCommands(CCommand[] commands)
+        {
+            for (int i = 0; i < commands.Length; ++i)
+            {
+                UnregisterCommand(commands[i]);
+            }
+            return true;
         }
 
         public List<CCommand> ListCommands()

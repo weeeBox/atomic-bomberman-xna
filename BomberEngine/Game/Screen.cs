@@ -485,7 +485,7 @@ namespace BomberEngine.Game
 
         protected Controller CurrentController
         {
-            get { return Application.RootController.CurrentController; }
+            get { return Application.RootController().CurrentController; }
         }
 
         #endregion
