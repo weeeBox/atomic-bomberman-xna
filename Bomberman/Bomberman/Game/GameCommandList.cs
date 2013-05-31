@@ -18,7 +18,7 @@ namespace Bomberman.Game
             {
                 new Cmd_infect(),
                 new Cmd_add(),
-                new Cmd_scheme(),
+                new Cmd_map(),
                 new Cmd_scheme_restart(),
             };
         }
@@ -120,16 +120,20 @@ namespace Bomberman.Game
 
     //////////////////////////////////////////////////////////////////////////////
 
-    public class Cmd_scheme : GameCCommand
+    public class Cmd_map : GameCCommand
     {
-        public Cmd_scheme()
-            : base("scheme")
+        public Cmd_map()
+            : base("map")
         {
         }
 
         public override void Execute()
         {
-   
+            if (ArgsCount() != 1)
+            {
+                Print("usage: " + name + " <map>");
+                return;
+            }
         }
     }
 
