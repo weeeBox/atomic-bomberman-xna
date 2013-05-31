@@ -1,61 +1,60 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="4.0">  
-  <PropertyGroup> 
-    <ProjectGuid>{C6AEAEDD-8396-4E89-A335-3D8FC84E5675}</ProjectGuid>  
-    <ProjectTypeGuids>{96E2B04D-8817-42c6-938A-82C39BA4D311};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>  
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>  
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>  
-    <OutputType>Library</OutputType>  
-    <AppDesignerFolder>Properties</AppDesignerFolder>  
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>  
-    <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>  
-    <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>  
-    <ContentRootDirectory>Content</ContentRootDirectory> 
-  </PropertyGroup>  
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'"> 
-    <PlatformTarget>x86</PlatformTarget> 
-  </PropertyGroup>  
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'"> 
-    <PlatformTarget>x86</PlatformTarget> 
-  </PropertyGroup>  
-  <PropertyGroup> 
-    <RootNamespace>BombermanContent</RootNamespace> 
-  </PropertyGroup>  
-  <ItemGroup> 
-    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.EffectImporter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL"> 
-      <Private>False</Private> 
-    </Reference>  
-    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.FBXImporter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL"> 
-      <Private>False</Private> 
-    </Reference>  
-    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.TextureImporter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL"> 
-      <Private>False</Private> 
-    </Reference>  
-    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.XImporter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL"> 
-      <Private>False</Private> 
-    </Reference>  
-    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.AudioImporters, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL"> 
-      <Private>False</Private> 
-    </Reference>  
-    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.VideoImporters, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL"> 
-      <Private>False</Private> 
-    </Reference> 
-  </ItemGroup>  
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets"/>  
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="4.0">
+  <PropertyGroup>
+    <ProjectGuid>{C6AEAEDD-8396-4E89-A335-3D8FC84E5675}</ProjectGuid>
+    <ProjectTypeGuids>{96E2B04D-8817-42c6-938A-82C39BA4D311};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
+    <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
+    <ContentRootDirectory>Content</ContentRootDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>BombermanContent</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.EffectImporter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.FBXImporter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.TextureImporter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.XImporter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.AudioImporters, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.VideoImporters, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  -->  
-  <ItemGroup> 
-    <ProjectReference Include="..\..\BombermanContentPipeline\BombermanContentPipeline.csproj"> 
-      <Project>{416DEC6A-7E49-4EDF-B93A-C149F7F7D95C}</Project>  
-      <Name>BombermanContentPipeline</Name> 
-    </ProjectReference> 
-  </ItemGroup>  
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\BombermanContentPipeline\BombermanContentPipeline.csproj">
+      <Project>{416DEC6A-7E49-4EDF-B93A-C149F7F7D95C}</Project>
+      <Name>BombermanContentPipeline</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="WLKE0001.png">
       <Name>WLKE0001</Name>
@@ -237,340 +236,342 @@
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="4CORNERS.SCH">
-      <Name>4CORNERS</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="AIRCHAOS.SCH">
-      <Name>AIRCHAOS</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="AIRMAIL.SCH">
-      <Name>AIRMAIL</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="ALLEYS.SCH">
-      <Name>ALLEYS</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="ALLEYS2.SCH">
-      <Name>ALLEYS2</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="ANTFARM.SCH">
-      <Name>ANTFARM</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="ASYLUM.SCH">
-      <Name>ASYLUM</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="BACK.SCH">
-      <Name>BACK</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="BACK2.SCH">
-      <Name>BACK2</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="BASIC.SCH">
-      <Name>BASIC</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="BASICSML.SCH">
-      <Name>BASICSML</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="BMAN93.SCH">
-      <Name>BMAN93</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="BORDER.SCH">
-      <Name>BORDER</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="BOWLING.SCH">
-      <Name>BOWLING</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="BOXED.SCH">
-      <Name>BOXED</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="BREAKOUT.SCH">
-      <Name>BREAKOUT</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="BUNCH.SCH">
-      <Name>BUNCH</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="CASTLE.SCH">
-      <Name>CASTLE</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="CASTLE2.SCH">
-      <Name>CASTLE2</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="CHAIN.SCH">
-      <Name>CHAIN</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="CHASE.SCH">
-      <Name>CHASE</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="CHECKERS.SCH">
-      <Name>CHECKERS</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="CHICANE.SCH">
-      <Name>CHICANE</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="CLEAR.SCH">
-      <Name>CLEAR</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="CLEARING.SCH">
-      <Name>CLEARING</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="CONFUSED.SCH">
-      <Name>CONFUSED</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="CUBIC.SCH">
-      <Name>CUBIC</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="CUTTER.SCH">
-      <Name>CUTTER</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="CUTTHROT.SCH">
-      <Name>CUTTHROT</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="DEADEND.SCH">
-      <Name>DEADEND</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="DIAMOND.SCH">
-      <Name>DIAMOND</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="DOGRACE.SCH">
-      <Name>DOGRACE</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="DOME.SCH">
-      <Name>DOME</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="E_VS_W.SCH">
-      <Name>E_VS_W</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="FAIR.SCH">
-      <Name>FAIR</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="FARGO.SCH">
-      <Name>FARGO</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="FORT.SCH">
-      <Name>FORT</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="FREEWAY.SCH">
-      <Name>FREEWAY</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="GRIDLOCK.SCH">
-      <Name>GRIDLOCK</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="HAPPY.SCH">
-      <Name>HAPPY</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="JAIL.SCH">
-      <Name>JAIL</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="LEAK.SCH">
-      <Name>LEAK</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="NEIGHBOR.SCH">
-      <Name>NEIGHBOR</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="NEIL.SCH">
-      <Name>NEIL</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="N_VS_S.SCH">
-      <Name>N_VS_S</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="OBSTACLE.SCH">
-      <Name>OBSTACLE</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="OG.SCH">
-      <Name>OG</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="PATTERN.SCH">
-      <Name>PATTERN</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="PINGPONG.SCH">
-      <Name>PINGPONG</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="PURIST.SCH">
-      <Name>PURIST</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="RACER1.SCH">
-      <Name>RACER1</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="RAIL1.SCH">
-      <Name>RAIL1</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="RAILROAD.SCH">
-      <Name>RAILROAD</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="ROOMMATE.SCH">
-      <Name>ROOMMATE</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="R_GARDEN.SCH">
-      <Name>R_GARDEN</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="SPIRAL.SCH">
-      <Name>SPIRAL</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="SPREAD.SCH">
-      <Name>SPREAD</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="TENNIS.SCH">
-      <Name>TENNIS</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="THATTHIS.SCH">
-      <Name>THATTHIS</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="THE_RIM.SCH">
-      <Name>THE_RIM</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="THISTHAT.SCH">
-      <Name>THISTHAT</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="TIGHT.SCH">
-      <Name>TIGHT</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="TOILET.SCH">
-      <Name>TOILET</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="UTURN.SCH">
-      <Name>UTURN</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="VOLLEY.SCH">
-      <Name>VOLLEY</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="WALLYBOM.SCH">
-      <Name>WALLYBOM</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
-    <Compile Include="X.SCH">
-      <Name>X</Name>
-      <Importer>SchemeImporter</Importer>
-      <GeneratedByBuilder>true</GeneratedByBuilder>
-    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="maps\4corners.sch">
+      <Name>4corners</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\airchaos.sch">
+      <Name>airchaos</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\airmail.sch">
+      <Name>airmail</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\alleys.sch">
+      <Name>alleys</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\alleys2.sch">
+      <Name>alleys2</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\antfarm.sch">
+      <Name>antfarm</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\asylum.sch">
+      <Name>asylum</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\back.sch">
+      <Name>back</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\back2.sch">
+      <Name>back2</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\basic.sch">
+      <Name>basic</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\basicsml.sch">
+      <Name>basicsml</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\bman93.sch">
+      <Name>bman93</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\border.sch">
+      <Name>border</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\bowling.sch">
+      <Name>bowling</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\boxed.sch">
+      <Name>boxed</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\breakout.sch">
+      <Name>breakout</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\bunch.sch">
+      <Name>bunch</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\castle.sch">
+      <Name>castle</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\castle2.sch">
+      <Name>castle2</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\chain.sch">
+      <Name>chain</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\chase.sch">
+      <Name>chase</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\checkers.sch">
+      <Name>checkers</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\chicane.sch">
+      <Name>chicane</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\clear.sch">
+      <Name>clear</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\clearing.sch">
+      <Name>clearing</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\confused.sch">
+      <Name>confused</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\cubic.sch">
+      <Name>cubic</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\cutter.sch">
+      <Name>cutter</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\cutthrot.sch">
+      <Name>cutthrot</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\deadend.sch">
+      <Name>deadend</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\diamond.sch">
+      <Name>diamond</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\dograce.sch">
+      <Name>dograce</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\dome.sch">
+      <Name>dome</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\e_vs_w.sch">
+      <Name>e_vs_w</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\fair.sch">
+      <Name>fair</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\fargo.sch">
+      <Name>fargo</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\fort.sch">
+      <Name>fort</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\freeway.sch">
+      <Name>freeway</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\gridlock.sch">
+      <Name>gridlock</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\happy.sch">
+      <Name>happy</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\jail.sch">
+      <Name>jail</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\leak.sch">
+      <Name>leak</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\neighbor.sch">
+      <Name>neighbor</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\neil.sch">
+      <Name>neil</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\n_vs_s.sch">
+      <Name>n_vs_s</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\obstacle.sch">
+      <Name>obstacle</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\og.sch">
+      <Name>og</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\pattern.sch">
+      <Name>pattern</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\pingpong.sch">
+      <Name>pingpong</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\purist.sch">
+      <Name>purist</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\racer1.sch">
+      <Name>racer1</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\rail1.sch">
+      <Name>rail1</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\railroad.sch">
+      <Name>railroad</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\roommate.sch">
+      <Name>roommate</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\r_garden.sch">
+      <Name>r_garden</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\spiral.sch">
+      <Name>spiral</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\spread.sch">
+      <Name>spread</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\tennis.sch">
+      <Name>tennis</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\thatthis.sch">
+      <Name>thatthis</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\the_rim.sch">
+      <Name>the_rim</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\thisthat.sch">
+      <Name>thisthat</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\tight.sch">
+      <Name>tight</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\toilet.sch">
+      <Name>toilet</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\uturn.sch">
+      <Name>uturn</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\volley.sch">
+      <Name>volley</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\wallybom.sch">
+      <Name>wallybom</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="maps\x.sch">
+      <Name>x</Name>
+      <Importer>SchemeImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

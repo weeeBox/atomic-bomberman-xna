@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using BomberEngine.Core;
 using BomberEngine.Game;
+using BomberEngine;
 
 namespace Bomberman
 {   
@@ -26,6 +27,8 @@ namespace Bomberman
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = WIDTH;
             graphics.PreferredBackBufferHeight = HEIGHT;
+
+            Global.graphicsDevice = graphics.GraphicsDevice;
 
             Content.RootDirectory = "Content";
 

@@ -17,7 +17,6 @@ namespace Bomberman
     public class BombermanRootController : RootController
     {
         private MenuController menuController;
-        private GameController gameController;
 
         public BombermanRootController(ContentManager contentManager)
             : base(contentManager)
@@ -39,8 +38,7 @@ namespace Bomberman
             switch (controller.exitCode)
             {
                 case ExitCode.StartGame:
-                    gameController = new GameController();
-                    StartController(gameController);
+                    StartController(new GameController("x"));
                     break;
 
                 case ExitCode.Quit:

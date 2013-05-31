@@ -9,40 +9,40 @@ namespace Bomberman.Content
 {
     public class Scheme : Asset
     {
-        private SchemeInfo info;
+        public String name;
+        public FieldData fieldData;
+        public PlayerLocationInfo[] playerLocations;
+        public PowerupInfo[] powerupInfo;
+        public int brickDensity;
 
-        public Scheme(SchemeInfo info)
+        public Scheme()
         {
-            this.info = info;
+            
         }
 
         public String GetName()
         {
-            return info.name;
+            return name;
         }
 
         public FieldData GetFieldData()
         {
-            return info.fieldData;
+            return fieldData;
         }
 
         public PlayerLocationInfo[] GetPlayerLocations()
         {
-            return info.playerLocations;
+            return playerLocations;
         }
 
         public PowerupInfo[] GetPowerupInfo()
         {
-            return info.powerupInfo;
+            return powerupInfo;
         }
 
         public int GetBrickDensity()
         {
-            return info.brickDensity;
-        }
-
-        protected override void OnDispose()
-        {
+            return brickDensity;
         }
     }
 }

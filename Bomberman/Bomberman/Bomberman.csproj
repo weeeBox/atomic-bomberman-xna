@@ -114,7 +114,6 @@
     <Compile Include="BombermanAssetManager.cs" />
     <Compile Include="BombermanRootController.cs" />
     <Compile Include="Content\Scheme.cs" />
-    <Compile Include="Content\SchemeLoader.cs" />
     <Compile Include="Content\SchemeReader.cs" />
     <Compile Include="cvars.cs" />
     <Compile Include="Game\Constant.cs" />

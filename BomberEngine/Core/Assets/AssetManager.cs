@@ -9,6 +9,8 @@ using BomberEngine.Core.Assets.Loaders;
 using BomberEngine.Core.Assets.Types;
 using Microsoft.Xna.Framework.Graphics;
 using BomberEngine.Core.Visual;
+using BomberEngine.Core.IO;
+using BomberEngine.Core.Assets.Readers;
 
 namespace BomberEngine.Core.Assets
 {
@@ -19,6 +21,7 @@ namespace BomberEngine.Core.Assets
         private AssetManagerListener listener;
 
         private Dictionary<int, AssetLoader> loaders;
+        private Dictionary<Type, AssetReader> readers;
 
         private Asset[] assets;
 
@@ -37,6 +40,7 @@ namespace BomberEngine.Core.Assets
             assets = new Asset[resourcesCount];
             loadingQueue = new List<AssetLoadInfo>();
             InitLoaders();
+            InitReaders();
         }
 
         private void InitLoaders()
@@ -44,6 +48,12 @@ namespace BomberEngine.Core.Assets
             loaders = new Dictionary<int, AssetLoader>();
             loaders.Add(AssetTypeBase.Texture, new TextureLoader());
             loaders.Add(AssetTypeBase.VectorFont, new VectorFontLoader());
+        }
+
+        private void InitReaders()
+        {
+            readers = new Dictionary<Type, AssetReader>();
+            readers.Add(typeof(TextureReader), new TextureReader());
         }
 
         public void AddToQueue(AssetLoadInfo info)
@@ -68,9 +78,14 @@ namespace BomberEngine.Core.Assets
             Application.ScheduleTimer(OnTimer, 0.05f);
         }
 
-        protected void AddLoader(int type, AssetLoader loader)
+        protected void RegisterLoader(int type, AssetLoader loader)
         {
             loaders.Add(type, loader);
+        }
+
+        protected void RegisterReader(Type type, AssetReader reader)
+        {
+            readers.Add(type, reader);
         }
 
         public TextureImage GetTexture(int id)
@@ -86,6 +101,21 @@ namespace BomberEngine.Core.Assets
         public Asset GetAsset(int id)
         {
             return assets[id];
+        }
+
+        public T LoadAsset<T>(String path) where T : Asset
+        {
+            Type type = typeof(T);
+            AssetReader reader;
+            if (readers.TryGetValue(type, out reader))
+            {
+                using (System.IO.Stream stream = System.IO.File.OpenRead(path))
+                {
+                    return (T) reader.Read(stream);
+                }
+            }
+
+            return default(T);
         }
 
         private void OnTimer(DelayedCall timer)

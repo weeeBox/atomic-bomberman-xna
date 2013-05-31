@@ -25,6 +25,8 @@ namespace Bomberman.Game
         private GameScreen gameScreen;
         private Game game;
 
+        private String schemeName;
+
         private CCommand[] gameCommands = 
         {
             new Cmd_infect(),
@@ -33,14 +35,16 @@ namespace Bomberman.Game
             new Cmd_map_restart(),
         };
 
-        public GameController()
+        public GameController(String schemeName)
         {
+            this.schemeName = schemeName;
+
             game = new Game();
             game.AddPlayer(new Player(0));
             game.AddPlayer(new Player(1));
             game.AddPlayer(new Player(2));
 
-            InitField(A.sch_X);
+            InitField(schemeName);
 
             gameScreen = new GameScreen();
             gameScreen.id = SCREEN_GAME;
@@ -92,9 +96,9 @@ namespace Bomberman.Game
             players[2].SetPlayerInput(gamePadInput);
         }
 
-        private void InitField(int schemeId)
+        private void InitField(String schemeName)
         {
-            Scheme scheme = Helper.GetScheme(schemeId);
+            Scheme scheme = Application.Assets().LoadAsset<Scheme>("Content\\maps\\" + schemeName + ".sch");
             game.LoadField(scheme); 
         }
 

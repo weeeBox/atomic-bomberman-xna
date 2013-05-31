@@ -16,7 +16,7 @@ namespace Bomberman
         public BombermanAssetManager(ContentManager contentManager)
             : base(contentManager, A.RES_COUNT)
         {
-            AddLoader(AssetType.Scheme, new SchemeLoader());
+            RegisterReader(typeof(Scheme), new SchemeReader());
         }
 
         public void AddPackToLoad(AssetPacks.Packs pack)

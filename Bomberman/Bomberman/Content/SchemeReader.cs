@@ -5,8 +5,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using BombermanCommon.Resources.Scheme;
-
-// TODO: replace this with the type you want to read.
+using BomberEngine.Core.Assets;
+using System.IO;
 
 namespace Bomberman.Content
 {
@@ -18,60 +18,242 @@ namespace Bomberman.Content
     /// be a part of your main game project, and not the Content Pipeline
     /// Extension Library project.
     /// </summary>
-    public class SchemeReader : ContentTypeReader<SchemeInfo>
+    public class SchemeReader : AssetReader
     {
-        protected override SchemeInfo Read(ContentReader input, SchemeInfo existingInstance)
+        private const int FIELD_WIDTH = 15;
+        private const int FIELD_HEIGHT = 11;
+        private const int MAX_PLAYERS = 10;
+        private const int MAX_POWERUPS = 13;
+
+        public Asset Read(Stream stream)
         {
-            SchemeInfo scheme = new SchemeInfo();
-            scheme.name = input.ReadString();
-            scheme.brickDensity = input.ReadInt32();
+            List<String> lines = ReadLines(stream);
 
-            // field
-            int fieldWidth = input.ReadInt32();
-            int fieldHeight = input.ReadInt32();
+            NameReader nameReader = new NameReader();
+            BrickDensityReader densityReader = new BrickDensityReader();
+            FieldDataReader dataReader = new FieldDataReader(FIELD_WIDTH, FIELD_HEIGHT);
+            PlayerLocationReader playersReader = new PlayerLocationReader(MAX_PLAYERS);
+            PowerupInfoReader powerupReader = new PowerupInfoReader(MAX_POWERUPS);
 
-            FieldData fieldData = new FieldData(fieldWidth, fieldHeight);
-            for (int y = 0; y < fieldHeight; ++y)
+            Dictionary<String, SchemeSectionReader> lookup = new Dictionary<String, SchemeSectionReader>();
+            lookup["-N"] = nameReader;
+            lookup["-B"] = densityReader;
+            lookup["-R"] = dataReader;
+            lookup["-S"] = playersReader;
+            lookup["-P"] = powerupReader;
+
+            for (int lineIndex = 0; lineIndex < lines.Count; ++lineIndex)
             {
-                for (int x = 0; x < fieldWidth; ++x)
+                string line = lines[lineIndex].Trim();
+
+                if (line.Length == 0)
                 {
-                    int block = input.ReadInt32();
-                    fieldData.Set(x, y, (FieldBlocks)block);
+                    continue;
+                }
+
+                if (line.StartsWith(";"))
+                {
+                    continue;
+                }
+
+                if (line[0] == '-')
+                {
+                    String[] tokens = line.Split(',');
+                    String type = tokens[0].Trim();
+
+                    if (lookup.ContainsKey(type))
+                    {
+                        SchemeSectionReader reader = lookup[type];
+
+                        String[] dataTokens = new String[tokens.Length - 1];
+                        for (int i = 0; i < dataTokens.Length; ++i)
+                        {
+                            dataTokens[i] = tokens[i + 1].Trim();
+                        }
+
+                        reader.Read(dataTokens);
+                    }
                 }
             }
-            scheme.fieldData = fieldData;
 
-            // players locations
-            int playerInfoCount = input.ReadInt32();
-            PlayerLocationInfo[] playerLocations = new PlayerLocationInfo[playerInfoCount];
-            for (int i = 0; i < playerInfoCount; ++i)
-            {
-                PlayerLocationInfo playerInfo = new PlayerLocationInfo();
-                playerInfo.x = input.ReadInt32();
-                playerInfo.y = input.ReadInt32();
-                playerInfo.team = input.ReadInt32();
-
-                playerLocations[i] = playerInfo;
-            }
-            scheme.playerLocations = playerLocations;
-
-            // powerups
-            int powerupInfoCount = input.ReadInt32();
-            PowerupInfo[] powerupInfo = new PowerupInfo[powerupInfoCount];
-            for (int i = 0; i < powerupInfoCount; ++i)
-            {
-                PowerupInfo info = new PowerupInfo();
-                info.powerupIndex = input.ReadInt32();
-                info.bornWith = input.ReadBoolean();
-                info.hasOverride = input.ReadBoolean();
-                info.overrideValue = input.ReadInt32();
-                info.forbidden = input.ReadBoolean();
-
-                powerupInfo[i] = info;
-            }
-            scheme.powerupInfo = powerupInfo;
+            Scheme scheme = new Scheme();
+            scheme.name = nameReader.GetName();
+            scheme.brickDensity = densityReader.GetDensity();
+            scheme.fieldData = dataReader.GetData();
+            scheme.playerLocations = playersReader.GetData();
+            scheme.powerupInfo = powerupReader.GetData();
 
             return scheme;
+        }
+
+        private List<String> ReadLines(Stream stream)
+        {
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                List<String> lines = new List<String>();
+                String line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    lines.Add(line);
+                }
+
+                return lines;
+            }
+        }
+    }
+
+    abstract class SchemeSectionReader
+    {
+        public abstract void Read(String[] tokens);
+
+        protected int ReadInt(String str)
+        {
+            return int.Parse(str);
+        }
+
+        protected bool ReadBool(String str)
+        {
+            return ReadInt(str) == 1;
+        }
+    }
+
+    class NameReader : SchemeSectionReader
+    {
+        private String name;
+
+        public override void Read(String[] tokens)
+        {
+            name = tokens[0];
+        }
+
+        public String GetName()
+        {
+            return name;
+        }
+    }
+
+    class BrickDensityReader : SchemeSectionReader
+    {
+        private int density;
+
+        public override void Read(String[] tokens)
+        {
+            density = ReadInt(tokens[0]);
+        }
+
+        public int GetDensity()
+        {
+            return density;
+        }
+    }
+
+    class FieldDataReader : SchemeSectionReader
+    {
+        private const char BLOCK_SOLID = '#';
+        private const char BLOCK_BRICK = ':';
+        private const char BLOCK_BLANK = '.';
+
+        private FieldData data;
+        private int rowIndex;
+
+        public FieldDataReader(int width, int height)
+        {
+            data = new FieldData(width, height);
+        }
+
+        public override void Read(String[] tokens)
+        {
+            String dataString = tokens[1];
+
+            for (int colIndex = 0; colIndex < dataString.Length; ++colIndex)
+            {
+                char chr = dataString[colIndex];
+                switch (chr)
+                {
+                    case BLOCK_SOLID:
+                        {
+                            data.Set(colIndex, rowIndex, FieldBlocks.Solid);
+                            break;
+                        }
+                    case BLOCK_BRICK:
+                        {
+                            data.Set(colIndex, rowIndex, FieldBlocks.Brick);
+                            break;
+                        }
+                    case BLOCK_BLANK:
+                        {
+                            data.Set(colIndex, rowIndex, FieldBlocks.Blank);
+                            break;
+                        }
+                }
+            }
+
+            ++rowIndex;
+        }
+
+        public FieldData GetData()
+        {
+            return data;
+        }
+    }
+
+    class PlayerLocationReader : SchemeSectionReader
+    {
+        private PlayerLocationInfo[] data;
+
+        private int playerIndex;
+
+        public PlayerLocationReader(int playersCount)
+        {
+            data = new PlayerLocationInfo[playersCount];
+        }
+
+        public override void Read(String[] tokens)
+        {
+            PlayerLocationInfo info = new PlayerLocationInfo();
+
+            info.index = ReadInt(tokens[0]);
+            info.x = ReadInt(tokens[1]);
+            info.y = ReadInt(tokens[2]);
+            info.team = tokens.Length > 3 ? ReadInt(tokens[3]) : -1;
+
+            data[playerIndex] = info;
+            ++playerIndex;
+        }
+
+        public PlayerLocationInfo[] GetData()
+        {
+            return data;
+        }
+    }
+
+    class PowerupInfoReader : SchemeSectionReader
+    {
+        private PowerupInfo[] data;
+        private int powerupIndex;
+
+        public PowerupInfoReader(int dataSize)
+        {
+            data = new PowerupInfo[dataSize];
+        }
+
+        public override void Read(String[] tokens)
+        {
+            PowerupInfo info = new PowerupInfo();
+            info.powerupIndex = ReadInt(tokens[0]);
+            info.bornWith = ReadBool(tokens[1]);
+            info.hasOverride = ReadBool(tokens[2]);
+            info.overrideValue = ReadInt(tokens[3]);
+            info.forbidden = ReadBool(tokens[4]);
+
+            data[powerupIndex] = info;
+
+            ++powerupIndex;
+        }
+
+        public PowerupInfo[] GetData()
+        {
+            return data;
         }
     }
 }
