@@ -18,7 +18,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public void Add(MovableCell cell)
         {
-            Debug.Assert(Debug.flag && !list.Contains(cell));
+            Debug.Assert(!list.Contains(cell));
 
             FieldCellType type = cell.type;
             for (LinkedListNode<MovableCell> node = list.Last; node != null; node = node.Previous)
@@ -40,7 +40,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public void Remove(MovableCell cell)
         {
-            Debug.Assert(Debug.flag && list.Contains(cell));
+            Debug.Assert(list.Contains(cell));
             list.Remove(cell);
         }
 

@@ -21,7 +21,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public void Add(MovableCell cell)
         {
-            Debug.Assert(Debug.flag && !cells.Contains(cell));
+            Debug.Assert(!cells.Contains(cell));
 
             if (targetCell.IsMoving())
             {

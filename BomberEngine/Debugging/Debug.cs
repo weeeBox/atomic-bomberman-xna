@@ -3,17 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BomberEngine.Util;
+using System.Diagnostics;
 
 namespace BomberEngine.Debugging
 {
     public class Debug
     {
-#if DEBUG
-        public static readonly bool flag = true;
-#else
-        public static readonly bool flag = false;
-#endif
-
         public static void CheckArgument(bool condition, String format, params Object[] args)
         {
             if (!condition)
@@ -33,26 +28,31 @@ namespace BomberEngine.Debugging
             CheckArgument(argument >= min && argument < max, "'{0}' {1} out of range {2}..{3}", name, argument, min, max - 1);
         }
 
+        [Conditional("DEBUG")]
         public static void Assert(bool condition, String format, params Object[] args)
         {
             System.Diagnostics.Debug.Assert(condition, "Assertion failed", format, args);
         }
 
+        [Conditional("DEBUG")]
         public static void Assert(bool condition, String message)
         {   
             System.Diagnostics.Debug.Assert(condition, "Assertion failed", message);
         }
 
+        [Conditional("DEBUG")]
         public static void Assert(bool condition)
         {
             System.Diagnostics.Debug.Assert(condition, "Assertion failed");
         }
 
+        [Conditional("DEBUG")]
         public static void AssertContains<T>(ICollection<T> collection, T element)
         {
             System.Diagnostics.Debug.Assert(collection.Contains(element), "Assertion failed");
         }
 
+        [Conditional("DEBUG")]
         public static void AssertNotContains<T>(ICollection<T> collection, T element)
         {
             System.Diagnostics.Debug.Assert(!collection.Contains(element), "Assertion failed");
