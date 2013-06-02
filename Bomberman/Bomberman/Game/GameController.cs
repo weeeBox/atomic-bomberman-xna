@@ -68,21 +68,21 @@ namespace Bomberman.Game
             List<Player> players = game.GetPlayers().list;
 
             PlayerKeyboardInput keyboardInput1 = new PlayerKeyboardInput();
-            keyboardInput1.Map(KeyCode.KB_W, PlayerAction.Up);
-            keyboardInput1.Map(KeyCode.KB_A, PlayerAction.Left);
-            keyboardInput1.Map(KeyCode.KB_S, PlayerAction.Down);
-            keyboardInput1.Map(KeyCode.KB_D, PlayerAction.Right);
-            keyboardInput1.Map(KeyCode.KB_OemCloseBrackets, PlayerAction.Bomb);
-            keyboardInput1.Map(KeyCode.KB_OemOpenBrackets, PlayerAction.Special);
+            keyboardInput1.Map(KeyCode.W, PlayerAction.Up);
+            keyboardInput1.Map(KeyCode.A, PlayerAction.Left);
+            keyboardInput1.Map(KeyCode.S, PlayerAction.Down);
+            keyboardInput1.Map(KeyCode.D, PlayerAction.Right);
+            keyboardInput1.Map(KeyCode.OemCloseBrackets, PlayerAction.Bomb);
+            keyboardInput1.Map(KeyCode.OemOpenBrackets, PlayerAction.Special);
             gameScreen.AddKeyListener(keyboardInput1);
 
             players[0].SetPlayerInput(keyboardInput1);
 
             PlayerKeyboardInput keyboardInput2 = new PlayerKeyboardInput();
-            keyboardInput2.Map(KeyCode.KB_Up, PlayerAction.Up);
-            keyboardInput2.Map(KeyCode.KB_Left, PlayerAction.Left);
-            keyboardInput2.Map(KeyCode.KB_Down, PlayerAction.Down);
-            keyboardInput2.Map(KeyCode.KB_Right, PlayerAction.Right);
+            keyboardInput2.Map(KeyCode.Up, PlayerAction.Up);
+            keyboardInput2.Map(KeyCode.Left, PlayerAction.Left);
+            keyboardInput2.Map(KeyCode.Down, PlayerAction.Down);
+            keyboardInput2.Map(KeyCode.Right, PlayerAction.Right);
             gameScreen.AddKeyListener(keyboardInput2);
 
             players[1].SetPlayerInput(keyboardInput2);
@@ -123,7 +123,7 @@ namespace Bomberman.Game
 
         private bool OnKeyPressed(KeyEventArg e)
         {
-            if (e.key == KeyCode.KB_Escape)
+            if (e.key == KeyCode.Escape)
             {
                 Screen screen = CurrentScreen();
                 if (screen.id == SCREEN_GAME)

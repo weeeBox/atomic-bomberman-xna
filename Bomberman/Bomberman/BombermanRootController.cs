@@ -61,7 +61,7 @@ namespace Bomberman
                 return true;
             }
 
-            if (e.key == KeyCode.KB_Oem8)
+            if (e.key == KeyCode.Oem8)
             {
                 ToggleConsole();
                 return true;

@@ -65,54 +65,54 @@ namespace BomberEngine.Consoles
             carretVisible = true;
 
             keyBindings = new Dictionary<KeyCode, char>();
-            keyBindings[KeyCode.KB_OemMinus] = '-';
-            keyBindings[KeyCode.KB_OemPlus] = '=';
-            keyBindings[KeyCode.KB_OemComma] = ',';
-            keyBindings[KeyCode.KB_OemPeriod] = '.';
-            keyBindings[KeyCode.KB_OemQuestion] = '/';
-            keyBindings[KeyCode.KB_OemOpenBrackets] = '[';
-            keyBindings[KeyCode.KB_OemCloseBrackets] = ']';
-            keyBindings[KeyCode.KB_OemQuotes] = '\\';
-            keyBindings[KeyCode.KB_Divide] = '/';
-            keyBindings[KeyCode.KB_Multiply] = '*';
-            keyBindings[KeyCode.KB_Subtract] = '-';
-            keyBindings[KeyCode.KB_Add] = '+';
-            keyBindings[KeyCode.KB_OemSemicolon] = ';';
-            keyBindings[KeyCode.KB_OemTilde] = '\'';
-            keyBindings[KeyCode.KB_Decimal] = '.';
-            keyBindings[KeyCode.KB_NumPad1] = '1';
-            keyBindings[KeyCode.KB_NumPad2] = '2';
-            keyBindings[KeyCode.KB_NumPad3] = '3';
-            keyBindings[KeyCode.KB_NumPad4] = '4';
-            keyBindings[KeyCode.KB_NumPad5] = '5';
-            keyBindings[KeyCode.KB_NumPad6] = '6';
-            keyBindings[KeyCode.KB_NumPad7] = '7';
-            keyBindings[KeyCode.KB_NumPad8] = '8';
-            keyBindings[KeyCode.KB_NumPad9] = '9';
-            keyBindings[KeyCode.KB_NumPad0] = '0';
+            keyBindings[KeyCode.OemMinus] = '-';
+            keyBindings[KeyCode.OemPlus] = '=';
+            keyBindings[KeyCode.OemComma] = ',';
+            keyBindings[KeyCode.OemPeriod] = '.';
+            keyBindings[KeyCode.OemQuestion] = '/';
+            keyBindings[KeyCode.OemOpenBrackets] = '[';
+            keyBindings[KeyCode.OemCloseBrackets] = ']';
+            keyBindings[KeyCode.OemQuotes] = '\\';
+            keyBindings[KeyCode.Divide] = '/';
+            keyBindings[KeyCode.Multiply] = '*';
+            keyBindings[KeyCode.Subtract] = '-';
+            keyBindings[KeyCode.Add] = '+';
+            keyBindings[KeyCode.OemSemicolon] = ';';
+            keyBindings[KeyCode.OemTilde] = '\'';
+            keyBindings[KeyCode.Decimal] = '.';
+            keyBindings[KeyCode.NumPad1] = '1';
+            keyBindings[KeyCode.NumPad2] = '2';
+            keyBindings[KeyCode.NumPad3] = '3';
+            keyBindings[KeyCode.NumPad4] = '4';
+            keyBindings[KeyCode.NumPad5] = '5';
+            keyBindings[KeyCode.NumPad6] = '6';
+            keyBindings[KeyCode.NumPad7] = '7';
+            keyBindings[KeyCode.NumPad8] = '8';
+            keyBindings[KeyCode.NumPad9] = '9';
+            keyBindings[KeyCode.NumPad0] = '0';
 
 
             keyShiftBindings = new Dictionary<KeyCode, char>();
-            keyShiftBindings[KeyCode.KB_OemMinus] = '_';
-            keyShiftBindings[KeyCode.KB_OemPlus] = '+';
-            keyShiftBindings[KeyCode.KB_OemComma] = '<';
-            keyShiftBindings[KeyCode.KB_OemPeriod] = '>';
-            keyShiftBindings[KeyCode.KB_OemQuestion] = '?';
-            keyShiftBindings[KeyCode.KB_D1] = '!';
-            keyShiftBindings[KeyCode.KB_D2] = '@';
-            keyShiftBindings[KeyCode.KB_D3] = '#';
-            keyShiftBindings[KeyCode.KB_D4] = '$';
-            keyShiftBindings[KeyCode.KB_D5] = '%';
-            keyShiftBindings[KeyCode.KB_D6] = '^';
-            keyShiftBindings[KeyCode.KB_D7] = '&';
-            keyShiftBindings[KeyCode.KB_D8] = '*';
-            keyShiftBindings[KeyCode.KB_D9] = '(';
-            keyShiftBindings[KeyCode.KB_D0] = ')';
-            keyShiftBindings[KeyCode.KB_OemOpenBrackets] = '{';
-            keyShiftBindings[KeyCode.KB_OemCloseBrackets] = '}';
-            keyShiftBindings[KeyCode.KB_OemQuotes] = '|';
-            keyShiftBindings[KeyCode.KB_OemSemicolon] = ':';
-            keyShiftBindings[KeyCode.KB_OemTilde] = '"';
+            keyShiftBindings[KeyCode.OemMinus] = '_';
+            keyShiftBindings[KeyCode.OemPlus] = '+';
+            keyShiftBindings[KeyCode.OemComma] = '<';
+            keyShiftBindings[KeyCode.OemPeriod] = '>';
+            keyShiftBindings[KeyCode.OemQuestion] = '?';
+            keyShiftBindings[KeyCode.D1] = '!';
+            keyShiftBindings[KeyCode.D2] = '@';
+            keyShiftBindings[KeyCode.D3] = '#';
+            keyShiftBindings[KeyCode.D4] = '$';
+            keyShiftBindings[KeyCode.D5] = '%';
+            keyShiftBindings[KeyCode.D6] = '^';
+            keyShiftBindings[KeyCode.D7] = '&';
+            keyShiftBindings[KeyCode.D8] = '*';
+            keyShiftBindings[KeyCode.D9] = '(';
+            keyShiftBindings[KeyCode.D0] = ')';
+            keyShiftBindings[KeyCode.OemOpenBrackets] = '{';
+            keyShiftBindings[KeyCode.OemCloseBrackets] = '}';
+            keyShiftBindings[KeyCode.OemQuotes] = '|';
+            keyShiftBindings[KeyCode.OemSemicolon] = ':';
+            keyShiftBindings[KeyCode.OemTilde] = '"';
 
             ScheduleTimer(OnBlinkTimer, 0.25f, true);
         }
@@ -596,37 +596,37 @@ namespace BomberEngine.Consoles
 
             if (e.IsCtrlPressed())
             {
-                if (key == KeyCode.KB_Left)
+                if (key == KeyCode.Left)
                 {
                     MoveCursorWordLeft();
                     return true;
                 }
 
-                if (key == KeyCode.KB_Right)
+                if (key == KeyCode.Right)
                 {
                     MoveCursorWordRight();
                     return true;
                 }
 
-                if (key == KeyCode.KB_Up)
+                if (key == KeyCode.Up)
                 {
                     ScrollUp();
                     return true;
                 }
 
-                if (key == KeyCode.KB_Down)
+                if (key == KeyCode.Down)
                 {
                     ScrollDown();
                     return true;
                 }
 
-                if (key == KeyCode.KB_A)
+                if (key == KeyCode.A)
                 {
                     MoveCursorHome();
                     return true;
                 }
 
-                if (key == KeyCode.KB_E)
+                if (key == KeyCode.E)
                 {
                     MoveCursorEnd();
                     return true;
@@ -643,7 +643,7 @@ namespace BomberEngine.Consoles
                 }
             }
 
-            if (key >= KeyCode.KB_A && key <= KeyCode.KB_Z)
+            if (key >= KeyCode.A && key <= KeyCode.Z)
             {
                 char chr = (char)key;
                 if (!e.IsShiftPressed())
@@ -655,73 +655,73 @@ namespace BomberEngine.Consoles
                 return true;
             }
 
-            if (key >= KeyCode.KB_D0 && key <= KeyCode.KB_D9 || key == KeyCode.KB_Space)
+            if (key >= KeyCode.D0 && key <= KeyCode.D9 || key == KeyCode.Space)
             {
                 EnterChar((char)key);
                 return true;
             }
 
-            if (key == KeyCode.KB_Left)
+            if (key == KeyCode.Left)
             {
                 MoveCursorLeft();
                 return true;
             }
 
-            if (key == KeyCode.KB_Right)
+            if (key == KeyCode.Right)
             {
                 MoveCursorRight();
                 return true;
             }
 
-            if (key == KeyCode.KB_Up)
+            if (key == KeyCode.Up)
             {
                 PrevHistory();
                 return true;
             }
 
-            if (key == KeyCode.KB_Down)
+            if (key == KeyCode.Down)
             {
                 NextHistory();
                 return true;
             }
 
-            if (key == KeyCode.KB_Back)
+            if (key == KeyCode.Back)
             {
                 DeletePrevChar();
                 return true;
             }
 
-            if (key == KeyCode.KB_Delete)
+            if (key == KeyCode.Delete)
             {
                 DeleteNextChar();
                 return true;
             }
 
-            if (key == KeyCode.KB_Enter)
+            if (key == KeyCode.Enter)
             {
                 TryExecuteCommand();
                 return true;
             }
 
-            if (key == KeyCode.KB_Tab)
+            if (key == KeyCode.Tab)
             {
                 DoAutoComplete();
                 return true;
             }
 
-            if (key == KeyCode.KB_Home)
+            if (key == KeyCode.Home)
             {
                 MoveCursorHome();
                 return true;
             }
 
-            if (key == KeyCode.KB_End)
+            if (key == KeyCode.End)
             {
                 MoveCursorEnd();
                 return true;
             }
 
-            if (key == KeyCode.KB_Escape)
+            if (key == KeyCode.Escape)
             {
                 Clear();
                 return true;
@@ -741,23 +741,23 @@ namespace BomberEngine.Consoles
         {
             KeyCode key = e.key;
 
-            if (key >= KeyCode.KB_A && key <= KeyCode.KB_Z || 
-                key >= KeyCode.KB_D0 && key <= KeyCode.KB_D9)
+            if (key >= KeyCode.A && key <= KeyCode.Z || 
+                key >= KeyCode.D0 && key <= KeyCode.D9)
             {
                 return OnKeyPressed(ref e);
             }
 
-            if (key == KeyCode.KB_Left ||
-                key == KeyCode.KB_Right ||
-                key == KeyCode.KB_Back ||
-                key == KeyCode.KB_Delete)
+            if (key == KeyCode.Left ||
+                key == KeyCode.Right ||
+                key == KeyCode.Back ||
+                key == KeyCode.Delete)
             {
                 return OnKeyPressed(ref e);
             }
 
             if (e.IsCtrlPressed())
             {
-                if (key == KeyCode.KB_Up || key == KeyCode.KB_Down)
+                if (key == KeyCode.Up || key == KeyCode.Down)
                 {
                     return OnKeyPressed(ref e);
                 }

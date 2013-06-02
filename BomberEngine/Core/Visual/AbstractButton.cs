@@ -33,7 +33,7 @@ namespace BomberEngine.Core.Visual
             if (evt.code == Event.KEY)
             {
                 KeyEvent keyEvent = evt as KeyEvent;
-                if (keyEvent.arg.key == KeyCode.KB_Enter)
+                if (keyEvent.arg.key == KeyCode.Enter)
                 {
                     if (keyEvent.state == KeyEvent.PRESSED)
                     {

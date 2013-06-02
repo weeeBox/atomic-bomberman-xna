@@ -45,6 +45,11 @@ namespace BomberEngine.Core
 
         #region Schedule
 
+        public void Schedule(DelayedCallback callback)
+        {
+            Schedule(callback, 0.0f, null);
+        }
+
         public void Schedule(DelayedCallback callback, float delay)
         {
             Schedule(callback, delay, null);

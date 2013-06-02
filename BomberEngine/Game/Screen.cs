@@ -417,13 +417,13 @@ namespace BomberEngine.Game
         {
             switch (key)
             {
-                case KeyCode.KB_Down:
+                case KeyCode.Down:
                     return FocusDirection.Down;
-                case KeyCode.KB_Up:
+                case KeyCode.Up:
                     return FocusDirection.Up;
-                case KeyCode.KB_Left:
+                case KeyCode.Left:
                     return FocusDirection.Left;
-                case KeyCode.KB_Right:
+                case KeyCode.Right:
                     return FocusDirection.Right;
             }
 

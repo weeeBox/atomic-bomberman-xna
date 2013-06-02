@@ -94,7 +94,7 @@ namespace BomberEngine.Core.Input
             public KeyEventArg eventArg;
             public double timestamp;
 
-            public static readonly KeyRepeatInfo None = new KeyRepeatInfo(new KeyEventArg(KeyCode.KB_None), Double.MaxValue);
+            public static readonly KeyRepeatInfo None = new KeyRepeatInfo(new KeyEventArg(KeyCode.None), Double.MaxValue);
 
             public KeyRepeatInfo(KeyEventArg eventArg, double timestamp)
             {
