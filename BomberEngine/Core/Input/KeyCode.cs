@@ -8,33 +8,9 @@ namespace BomberEngine.Core.Input
 {
     public enum KeyCode
     {
-        GP_DPadUp = -1,
-        GP_DPadDown = -2,
-        GP_DPadLeft = -4,
-        GP_DPadRight = -8,
-        GP_Start = -16,
-        GP_Back = -32,
-        GP_LeftStick = -64,
-        GP_RightStick = -128,
-        GP_LeftShoulder = -256,
-        GP_RightShoulder = -512,
-        GP_BigButton = -2048,
-        GP_A = -4096,
-        GP_B = -8192,
-        GP_X = -16384,
-        GP_Y = -32768,
-        GP_LeftThumbstickLeft = -2097152,
-        GP_RightTrigger = -4194304,
-        GP_LeftTrigger = -8388608,
-        GP_RightThumbstickUp = -16777216,
-        GP_RightThumbstickDown = -33554432,
-        GP_RightThumbstickRight = -67108864,
-        GP_RightThumbstickLeft = -134217728,
-        GP_LeftThumbstickUp = -268435456,
-        GP_LeftThumbstickDown = -536870912,
-        GP_LeftThumbstickRight = -1073741824,
-
         None = 0,
+
+        // Keyboard
         Back = 8,
         Tab = 9,
         Enter = 13,
@@ -194,14 +170,74 @@ namespace BomberEngine.Core.Input
         Zoom = 251,
         Pa1 = 253,
         OemClear = 254,
+
+        // Gamepad
+        GP_DPadUp = 255,
+        GP_DPadDown = 256,
+        GP_DPadLeft = 257,
+        GP_DPadRight = 258,
+        GP_Start = 259,
+        GP_Back = 260,
+        GP_LeftStick = 261,
+        GP_RightStick = 262,
+        GP_LeftShoulder = 263,
+        GP_RightShoulder = 264,
+        GP_BigButton = 265,
+        GP_A = 266,
+        GP_B = 267,
+        GP_X = 268,
+        GP_Y = 269,
+        GP_LeftThumbstickLeft = 270,
+        GP_RightTrigger = 271,
+        GP_LeftTrigger = 272,
+        GP_RightThumbstickUp = 273,
+        GP_RightThumbstickDown = 274,
+        GP_RightThumbstickRight = 275,
+        GP_RightThumbstickLeft = 276,
+        GP_LeftThumbstickUp = 277,
+        GP_LeftThumbstickDown = 278,
+        GP_LeftThumbstickRight = 279,
+
+        TotalCount = 280
     }
 
     public class KeyCodeHelper
     {
-        public static KeyCode FromButton(Buttons button)
+        private static Dictionary<Buttons, KeyCode> lookup;
+
+        static KeyCodeHelper()
         {
-            int intValue = -(int)(button);
-            return (KeyCode)intValue;
+            lookup = new Dictionary<Buttons, KeyCode>();
+            lookup.Add(Buttons.DPadUp, KeyCode.GP_DPadUp);
+            lookup.Add(Buttons.DPadDown, KeyCode.GP_DPadDown);
+            lookup.Add(Buttons.DPadLeft, KeyCode.GP_DPadLeft);
+            lookup.Add(Buttons.DPadRight, KeyCode.GP_DPadRight);
+            lookup.Add(Buttons.Start, KeyCode.GP_Start);
+            lookup.Add(Buttons.Back, KeyCode.GP_Back);
+            lookup.Add(Buttons.LeftStick, KeyCode.GP_LeftStick);
+            lookup.Add(Buttons.RightStick, KeyCode.GP_RightStick);
+            lookup.Add(Buttons.LeftShoulder, KeyCode.GP_LeftShoulder);
+            lookup.Add(Buttons.RightShoulder, KeyCode.GP_RightShoulder);
+            lookup.Add(Buttons.BigButton, KeyCode.GP_BigButton);
+            lookup.Add(Buttons.A, KeyCode.GP_A);
+            lookup.Add(Buttons.B, KeyCode.GP_B);
+            lookup.Add(Buttons.X, KeyCode.GP_X);
+            lookup.Add(Buttons.Y, KeyCode.GP_Y);
+            lookup.Add(Buttons.LeftThumbstickLeft, KeyCode.GP_LeftThumbstickLeft);
+            lookup.Add(Buttons.RightTrigger, KeyCode.GP_RightTrigger);
+            lookup.Add(Buttons.LeftTrigger, KeyCode.GP_LeftTrigger);
+            lookup.Add(Buttons.RightThumbstickUp, KeyCode.GP_RightThumbstickUp);
+            lookup.Add(Buttons.RightThumbstickDown, KeyCode.GP_RightThumbstickDown);
+            lookup.Add(Buttons.RightThumbstickRight, KeyCode.GP_RightThumbstickRight);
+            lookup.Add(Buttons.RightThumbstickLeft, KeyCode.GP_RightThumbstickLeft);
+            lookup.Add(Buttons.LeftThumbstickUp, KeyCode.GP_LeftThumbstickUp);
+            lookup.Add(Buttons.LeftThumbstickDown, KeyCode.GP_LeftThumbstickDown);
+            lookup.Add(Buttons.LeftThumbstickRight, KeyCode.GP_LeftThumbstickRight);
+        }
+
+        public static KeyCode FromButton(Buttons button)
+        {   
+            return lookup[button];
         }
 
         public static KeyCode FromKey(Keys key)
