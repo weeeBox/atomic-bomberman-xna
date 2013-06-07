@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Bomberman.Network
 {
-    public class GameClient : NetworkPeer
+    public class GameClientPeer : NetworkPeer
     {
-        public GameClient(String name, int port)
+        public GameClientPeer(String name, int port)
             : base(name, port)
         {
         }
