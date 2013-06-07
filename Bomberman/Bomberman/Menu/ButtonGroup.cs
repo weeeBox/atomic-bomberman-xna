@@ -21,11 +21,11 @@ namespace Bomberman.Menu
         {   
         }
 
-        public void AddButton(String title, int id, IButtonDelegate buttonDelegate)
+        public void AddButton(String title, int id, ButtonDelegate buttonDelegate)
         {
             Font font = Helper.GetFont(A.fnt_button);
 
-            Button button = new Button(title, font, 0, 0, width, font.FontHeight());
+            TextButton button = new TextButton(title, font, 0, 0, width, font.FontHeight());
             button.id = id;
             button.SetDelegate(buttonDelegate);
             AddView(button);

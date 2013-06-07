@@ -8,21 +8,18 @@ using BomberEngine.Core.Events;
 
 namespace BomberEngine.Core.Visual
 {
-    public interface IButtonDelegate
+    public delegate void ButtonDelegate(Button button);
+    
+    public class Button : View
     {
-        void OnButtonPress(AbstractButton button);
-    }
+        protected ButtonDelegate buttonDelegate;
 
-    public class AbstractButton : View
-    {
-        protected IButtonDelegate buttonDelegate;
-
-        public AbstractButton(float width, float height)
+        public Button(float width, float height)
             : this(0, 0, width, height)
         {
         }
 
-        public AbstractButton(float x, float y, float width, float height)
+        public Button(float x, float y, float width, float height)
             : base(x, y, width, height)
         {
             focusable = true;
@@ -56,7 +53,7 @@ namespace BomberEngine.Core.Visual
         {
             if (buttonDelegate != null)
             {
-                buttonDelegate.OnButtonPress(this);
+                buttonDelegate(this);
             }
         }
 
@@ -68,12 +65,12 @@ namespace BomberEngine.Core.Visual
 
         #region Properties
 
-        public IButtonDelegate Delegate()
+        public ButtonDelegate Delegate()
         {
             return buttonDelegate;
         }
 
-        public void SetDelegate(IButtonDelegate buttonDelegate)
+        public void SetDelegate(ButtonDelegate buttonDelegate)
         {
             this.buttonDelegate = buttonDelegate;
         }

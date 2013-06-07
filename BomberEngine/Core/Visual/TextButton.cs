@@ -8,7 +8,7 @@ using BomberEngine.Game;
 
 namespace BomberEngine.Core.Visual
 {
-    public class Button : AbstractButton
+    public class TextButton : Button
     {
         private TextView label;
         private Font font;
@@ -16,14 +16,14 @@ namespace BomberEngine.Core.Visual
         public Color normalColor = Color.White;
         public Color highlightedColor = Color.Yellow;
 
-        public Button(String text, float x, float y, float width, float height)
+        public TextButton(String text, float x, float y, float width, float height)
             : base(x, y, width, height)
         {
             font = Application.Assets().SystemFont;
             SetText(text);
         }
 
-        public Button(String text, Font font, float x, float y, float width, float height)
+        public TextButton(String text, Font font, float x, float y, float width, float height)
             : base(x, y, width, height)
         {
             this.font = font;

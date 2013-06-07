@@ -19,7 +19,7 @@ namespace Bomberman.Game.Screens
         public const int BUTTON_RESUME = 1;
         public const int BUTTON_EXIT = 2;
 
-        public PauseScreen(IButtonDelegate buttonDelegate)
+        public PauseScreen(ButtonDelegate buttonDelegate)
         {   
             AllowsDrawPrevious = true;
 

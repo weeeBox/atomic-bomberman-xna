@@ -17,7 +17,7 @@ using BomberEngine.Consoles;
 
 namespace Bomberman.Game
 {
-    public class GameController : Controller, IButtonDelegate
+    public class GameController : Controller
     {
         private const int SCREEN_GAME = 1;
         private const int SCREEN_PAUSE = 2;
@@ -128,7 +128,7 @@ namespace Bomberman.Game
                 Screen screen = CurrentScreen();
                 if (screen.id == SCREEN_GAME)
                 {
-                    PauseScreen pauseScreen = new PauseScreen(this);
+                    PauseScreen pauseScreen = new PauseScreen(OnPauseScreenButtonPress);
                     pauseScreen.id = SCREEN_PAUSE;
                     StartNextScreen(pauseScreen);
                     return true;
@@ -144,7 +144,7 @@ namespace Bomberman.Game
             return false;
         }
 
-        public void OnButtonPress(AbstractButton button)
+        private void OnPauseScreenButtonPress(Button button)
         {
             switch (button.id)
             {
