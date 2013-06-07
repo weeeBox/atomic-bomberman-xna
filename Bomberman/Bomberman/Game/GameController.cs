@@ -193,6 +193,22 @@ namespace Bomberman.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Updatable
+
+        public override void Update(float delta)
+        {
+            base.Update(delta);
+
+            if (networkPeer != null)
+            {
+                networkPeer.Update(delta);
+            }
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
         #region Net peer
 
         private void StartServer()
