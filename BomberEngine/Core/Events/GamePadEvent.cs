@@ -5,17 +5,26 @@ using System.Text;
 
 namespace BomberEngine.Core.Events
 {
+    public enum GamePadState
+    {
+        Disconnected,
+        Connected
+    }
+
     public class GamePadEvent : Event
     {
-        public const int DISCONNECTED = 0;
-        public const int CONNECTED = 1;
-
         public int index;
-        public int state;
+        public GamePadState state;
 
         public GamePadEvent()
             : base(Event.GAMEPAD)
+        {   
+        }
+
+        public void Init(int index, GamePadState state)
         {
+            this.index = index;
+            this.state = state;
         }
     }
 }
