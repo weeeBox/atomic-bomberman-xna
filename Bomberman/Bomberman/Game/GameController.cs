@@ -9,6 +9,8 @@ using BomberEngine.Core.Input;
 using BomberEngine.Core.Visual;
 using BomberEngine.Core.Events;
 using BomberEngine.Consoles;
+using Bomberman.Network;
+using BomberEngine.Debugging;
 
 namespace Bomberman.Game
 {
@@ -22,12 +24,12 @@ namespace Bomberman.Game
         }
 
         public String scheme;
-        public Mode type;
+        public Mode mode;
 
         public GameSettings(String scheme)
         {
             this.scheme = scheme;
-            type = Mode.SinglePlayer;
+            mode = Mode.SinglePlayer;
         }
     }
 
@@ -40,6 +42,7 @@ namespace Bomberman.Game
         private Game game;
 
         private GameSettings settings;
+        private NetworkPeer networkPeer;
 
         private CCommand[] gameCommands = 
         {
@@ -70,10 +73,26 @@ namespace Bomberman.Game
         {
             Console().RegisterCommands(gameCommands);
             StartScreen(gameScreen);
+
+            switch (settings.mode)
+            {
+                case GameSettings.Mode.SinglePlayer:
+                    break;
+                case GameSettings.Mode.MultiplayerClient:
+                    StartClient();
+                    break;
+                case GameSettings.Mode.MultiplayeServer:
+                    StartServer();
+                    break;
+                default:
+                    Debug.Fail("Unexpected game mode: " + settings.mode);
+                    break;
+            }
         }
 
         protected override void OnStop()
         {
+            StopNetworkPeer();
             Console().UnregisterCommands(gameCommands);
         }
 
@@ -171,5 +190,42 @@ namespace Bomberman.Game
                     break;
             }
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Net peer
+
+        private void StartServer()
+        {
+            String name = CVars.sv_name.value;
+            int port = CVars.sv_port.intValue;
+
+            networkPeer = new GameServer(name, port);
+            networkPeer.Start();
+        }
+
+        private void StartClient()
+        {
+            String name = CVars.sv_name.value;
+            int port = CVars.sv_port.intValue;
+
+            networkPeer = new GameClient();
+            networkPeer.Start();
+
+            Log.d("Started network peer");
+        }
+
+        private void StopNetworkPeer()
+        {
+            if (networkPeer != null)
+            {
+                networkPeer.Stop();
+                networkPeer = null;
+
+                Log.d("Stopped network peer");
+            }
+        }
+
+        #endregion
     }
 }

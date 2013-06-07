@@ -76,6 +76,10 @@ namespace Bomberman
         public static readonly CVar g_drawPlayerMovable = new CVar("g_drawPlayerMovable", 0, CFlags.Debug);
         public static readonly CVar g_drawHiddenPowerups = new CVar("g_drawHiddenPowerups", 0, CFlags.Debug);
 
+        /* Network */
+        public static readonly CVar sv_port = new CVar("sv_port", 251987);
+        public static readonly CVar sv_name = new CVar("sv_name", "bomberman");
+
         public static readonly CVar[] powerupsInitials = 
         {
 	        cg_initBomb,
@@ -127,7 +131,7 @@ namespace Bomberman
 	        cg_fieldRandom,
         };
 
-        public static readonly CVar[] debugVars =
+        private static readonly CVar[] debugVars =
         {
             g_drawGrid,
             g_drawSlotSize,
@@ -136,12 +140,19 @@ namespace Bomberman
             g_drawHiddenPowerups,
         };
 
+        private static readonly CVar[] serverVars =
+        {
+            sv_name,
+            sv_port
+        };
+
         public static void Register(CConsole console)
         {
             console.RegisterCvars(powerupsInitials);
             console.RegisterCvars(powerupsMax);
             console.RegisterCvars(powerupsCount);
             console.RegisterCvars(debugVars);
+            console.RegisterCvars(serverVars);
 
             console.RegisterCvar(cg_fuzeTimeNormal);
             console.RegisterCvar(cg_fuzeTimeShort);

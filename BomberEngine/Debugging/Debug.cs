@@ -51,11 +51,17 @@ namespace BomberEngine.Debugging
         {
             System.Diagnostics.Debug.Assert(collection.Contains(element), "Assertion failed");
         }
-
+            
         [Conditional("DEBUG")]
         public static void AssertNotContains<T>(ICollection<T> collection, T element)
         {
             System.Diagnostics.Debug.Assert(!collection.Contains(element), "Assertion failed");
+        }
+
+        [Conditional("DEBUG")]
+        public static void Fail(String format, params Object[] args)
+        {
+            System.Diagnostics.Debug.Assert(false, "Failed!", format, args);
         }
     }
 }

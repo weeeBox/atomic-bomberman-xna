@@ -161,6 +161,7 @@
     <Compile Include="Menu\Screens\SettingsScreen.cs" />
     <Compile Include="Network\GameClient.cs" />
     <Compile Include="Network\GameServer.cs" />
+    <Compile Include="Network\NetworkPeer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="BombermanGame.cs" />
