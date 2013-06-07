@@ -10,13 +10,10 @@ namespace Bomberman.Network
     public class GameServer : NetworkPeer
     {
         private NetServer server;
-        private String name;
-        private int port;
-
+        
         public GameServer(String name, int port)
-        {
-            this.name = name;
-            this.port = port;
+            : base(name, port)
+        {   
         }
 
         public override void Start()

@@ -53,11 +53,13 @@ namespace Bomberman
 
                     case MenuController.ExitCode.MultiplayerStart:
                     {
+                        settings.mode = GameSettings.Mode.MultiplayeServer;
                         break;
                     }
 
                     case MenuController.ExitCode.MultiplayerJoin:
                     {
+                        settings.mode = GameSettings.Mode.MultiplayerClient;
                         break;
                     }
                 }

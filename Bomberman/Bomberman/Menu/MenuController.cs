@@ -55,8 +55,10 @@ namespace Bomberman.Menu
             switch (buttonId)
             {
                 case MultiplayerScreen.ButtonId.Create:
+                    Stop(ExitCode.MultiplayerStart);
                     break;
                 case MultiplayerScreen.ButtonId.Join:
+                    Stop(ExitCode.MultiplayerJoin);
                     break;
             }
         }

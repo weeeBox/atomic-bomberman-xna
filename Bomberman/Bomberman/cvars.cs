@@ -77,7 +77,7 @@ namespace Bomberman
         public static readonly CVar g_drawHiddenPowerups = new CVar("g_drawHiddenPowerups", 0, CFlags.Debug);
 
         /* Network */
-        public static readonly CVar sv_port = new CVar("sv_port", 251987);
+        public static readonly CVar sv_port = new CVar("sv_port", 1334);
         public static readonly CVar sv_name = new CVar("sv_name", "bomberman");
 
         public static readonly CVar[] powerupsInitials = 

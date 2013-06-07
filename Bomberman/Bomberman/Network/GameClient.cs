@@ -7,6 +7,11 @@ namespace Bomberman.Network
 {
     public class GameClient : NetworkPeer
     {
+        public GameClient(String name, int port)
+            : base(name, port)
+        {
+        }
+
         public override void Start()
         {
             throw new NotImplementedException();
