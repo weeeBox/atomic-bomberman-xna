@@ -561,19 +561,19 @@ namespace BomberEngine.Consoles
 
                 switch (keyEvent.state)
                 {
-                    case KeyEvent.PRESSED:
+                    case KeyState.Pressed:
                     {
                         if (OnKeyPressed(ref keyEvent.arg)) return true;
                         break;
                     }
 
-                    case KeyEvent.REPEATED:
+                    case KeyState.Repeated:
                     {
                         if (OnKeyRepeat(ref keyEvent.arg)) return true;
                         break;
                     }
 
-                    case KeyEvent.RELEASED:
+                    case KeyState.Released:
                     {
                         if (OnKeyReleased(ref keyEvent.arg)) return true;
                         break;

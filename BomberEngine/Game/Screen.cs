@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using BomberEngine.Core;
 using BomberEngine.Core.Input;
-using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core.Visual;
-using BomberEngine.Core.Visual.UI;
 using BomberEngine.Debugging;
 using BomberEngine.Core.Events;
 
@@ -225,17 +220,17 @@ namespace BomberEngine.Game
                 KeyEvent keyEvent = evt as KeyEvent;
                 switch (keyEvent.state)
                 {
-                    case KeyEvent.PRESSED:
+                    case KeyState.Pressed:
                     {
                         if (keyInputListeners.OnKeyPressed(keyEvent.arg)) return true;
                         break;
                     }
-                    case KeyEvent.REPEATED:
+                    case KeyState.Repeated:
                     {
                         if (keyInputListeners.OnKeyRepeated(keyEvent.arg)) return true;
                         break;
                     }
-                    case KeyEvent.RELEASED:
+                    case KeyState.Released:
                     {
                         if (keyInputListeners.OnKeyReleased(keyEvent.arg)) return true;
                         break;
@@ -249,8 +244,8 @@ namespace BomberEngine.Game
 
                 switch (keyEvent.state)
                 {
-                    case KeyEvent.PRESSED:
-                    case KeyEvent.REPEATED:
+                    case KeyState.Pressed:
+                    case KeyState.Repeated:
                         return TryMoveFocus(keyEvent.arg.key);
                 }
             }

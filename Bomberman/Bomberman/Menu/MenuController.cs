@@ -11,6 +11,19 @@ namespace Bomberman.Menu
 {
     public class MenuController : Controller
     {
+        public enum ExitCode
+        {
+            Quit,
+            SingleStart,
+            MultiplayerStart,
+            MultiplayerJoin
+        }
+
+        private void Stop(ExitCode code)
+        {
+            Stop((int)code);
+        }
+
         protected override void OnStart()
         {
             StartScreen(new MainMenuScreen(OnMainMenuButtonPress));
@@ -22,12 +35,13 @@ namespace Bomberman.Menu
             switch (buttonId)
             {
                 case MainMenuScreen.ButtonId.Play:
-                    Stop(ExitCode.StartGame);
+                    Stop(ExitCode.SingleStart);
                     break;
                 case MainMenuScreen.ButtonId.Multiplayer:
                     StartNextScreen(new MultiplayerScreen(OnMultiplayerButtonPress));
                     break;
                 case MainMenuScreen.ButtonId.Settings:
+                    StartNextScreen(new SettingsScreen(OnSettingsButtonPress));
                     break;
                 case MainMenuScreen.ButtonId.Exit:
                     Stop(ExitCode.Quit);
@@ -45,6 +59,10 @@ namespace Bomberman.Menu
                 case MultiplayerScreen.ButtonId.Join:
                     break;
             }
+        }
+
+        private void OnSettingsButtonPress(Button button)
+        {
         }
     }
 }

@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using BomberEngine.Game;
 using Bomberman.Game.Screens;
 using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements.Players.Input;
-using Microsoft.Xna.Framework.Input;
-using BombermanCommon.Resources;
 using Bomberman.Content;
-using Assets;
 using BomberEngine.Core.Input;
 using BomberEngine.Core.Visual;
 using BomberEngine.Core.Events;
@@ -17,6 +12,25 @@ using BomberEngine.Consoles;
 
 namespace Bomberman.Game
 {
+    public class GameSettings
+    {
+        public enum Mode
+        {
+            SinglePlayer,
+            MultiplayeServer,
+            MultiplayerClient
+        }
+
+        public String scheme;
+        public Mode type;
+
+        public GameSettings(String scheme)
+        {
+            this.scheme = scheme;
+            type = Mode.SinglePlayer;
+        }
+    }
+
     public class GameController : Controller
     {
         private const int SCREEN_GAME = 1;
@@ -25,7 +39,7 @@ namespace Bomberman.Game
         private GameScreen gameScreen;
         private Game game;
 
-        private String schemeName;
+        private GameSettings settings;
 
         private CCommand[] gameCommands = 
         {
@@ -35,16 +49,16 @@ namespace Bomberman.Game
             new Cmd_map_restart(),
         };
 
-        public GameController(String schemeName)
+        public GameController(GameSettings settings)
         {
-            this.schemeName = schemeName;
+            this.settings = settings;
 
             game = new Game();
             game.AddPlayer(new Player(0));
             game.AddPlayer(new Player(1));
             game.AddPlayer(new Player(2));
 
-            InitField(schemeName);
+            InitField(settings.scheme);
 
             gameScreen = new GameScreen();
             gameScreen.id = SCREEN_GAME;
@@ -112,7 +126,7 @@ namespace Bomberman.Game
             if (evt.code == Event.KEY)
             {
                 KeyEvent keyEvent = evt as KeyEvent;
-                if (OnKeyPressed(keyEvent.arg))
+                if (keyEvent.state == KeyState.Pressed && OnKeyPressed(keyEvent.arg))
                 {
                     return true;
                 }

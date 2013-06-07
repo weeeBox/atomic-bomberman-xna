@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Input;
-using BomberEngine.Core.Input;
+﻿using BomberEngine.Core.Input;
 using BomberEngine.Core.Events;
 
 namespace BomberEngine.Core.Visual
@@ -32,13 +27,13 @@ namespace BomberEngine.Core.Visual
                 KeyEvent keyEvent = evt as KeyEvent;
                 if (keyEvent.arg.key == KeyCode.Enter)
                 {
-                    if (keyEvent.state == KeyEvent.PRESSED)
+                    if (keyEvent.state == KeyState.Pressed)
                     {
                         OnPress();
                         return true;                        
                     }
 
-                    if (keyEvent.state == KeyEvent.RELEASED)
+                    if (keyEvent.state == KeyState.Released)
                     {
                         OnRelease();
                         return true;

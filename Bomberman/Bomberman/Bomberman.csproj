@@ -144,7 +144,6 @@
     <Compile Include="Game\Elements\Players\PlayerAction.cs" />
     <Compile Include="Game\Elements\Players\PlayerList.cs" />
     <Compile Include="Game\Elements\Players\Input\PlayerInput.cs" />
-    <Compile Include="Game\ExitCode.cs" />
     <Compile Include="Game\cmds.cs" />
     <Compile Include="Game\GameController.cs" />
     <Compile Include="Game\Game.cs" />
@@ -159,6 +158,9 @@
     <Compile Include="Menu\MenuController.cs" />
     <Compile Include="Menu\Screens\MainMenuScreen.cs" />
     <Compile Include="Menu\Screens\MultiplayerScreen.cs" />
+    <Compile Include="Menu\Screens\SettingsScreen.cs" />
+    <Compile Include="Network\GameClient.cs" />
+    <Compile Include="Network\GameServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="BombermanGame.cs" />

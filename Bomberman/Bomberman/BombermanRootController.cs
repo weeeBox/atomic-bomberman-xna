@@ -29,21 +29,44 @@ namespace Bomberman
             manager.AddPackToLoad(AssetPacks.Packs.ALL);
             manager.LoadImmediately();
 
-            menuController = new MenuController();
-            StartController(menuController);
+            StartMainMenu();
         }
 
         protected override void OnControllerStop(Controller controller)
         {
-            switch (controller.exitCode)
+            if (controller is MenuController)
             {
-                case ExitCode.StartGame:
-                    StartController(new GameController("x"));
-                    break;
+                MenuController.ExitCode exitCode = (MenuController.ExitCode)controller.exitCode;
+                if (exitCode == MenuController.ExitCode.Quit)
+                {
+                    Application.sharedApplication.Stop();
+                    return;
+                }
 
-                case ExitCode.Quit:
-                    Application.sharedApplication.RunStop();
-                    break;
+                GameSettings settings = new GameSettings("x");
+                switch (exitCode)
+                {
+                    case MenuController.ExitCode.SingleStart:
+                    {   
+                        break;
+                    }
+
+                    case MenuController.ExitCode.MultiplayerStart:
+                    {
+                        break;
+                    }
+
+                    case MenuController.ExitCode.MultiplayerJoin:
+                    {
+                        break;
+                    }
+                }
+
+                StartController(new GameController(settings));
+            }
+            else if (controller is GameController)
+            {
+                StartMainMenu();
             }
         }
 
@@ -68,6 +91,12 @@ namespace Bomberman
             }
 
             return false;
+        }
+
+        private void StartMainMenu()
+        {
+            menuController = new MenuController();
+            StartController(menuController);
         }
     }
 }

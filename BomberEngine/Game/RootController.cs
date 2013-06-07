@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using BomberEngine.Core;
 using BomberEngine.Core.Input;
 using BomberEngine.Core.Visual;
 using BomberEngine.Debugging;
-using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core.Events;
 using BomberEngine.Consoles;
 using BomberEngine.Core.Assets.Types;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using BomberEngine.Consoles;
 
 namespace BomberEngine.Game
 {
@@ -185,17 +180,17 @@ namespace BomberEngine.Game
 
         public virtual bool OnKeyPressed(KeyEventArg arg)
         {
-            return HandleEvent(keyEvent.Init(arg, KeyEvent.PRESSED));
+            return HandleEvent(keyEvent.Init(arg, KeyState.Pressed));
         }
 
         public virtual bool OnKeyRepeated(KeyEventArg arg)
         {
-            return HandleEvent(keyEvent.Init(arg, KeyEvent.REPEATED));
+            return HandleEvent(keyEvent.Init(arg, KeyState.Repeated));
         }
 
         public virtual bool OnKeyReleased(KeyEventArg arg)
         {
-            return HandleEvent(keyEvent.Init(arg, KeyEvent.RELEASED));
+            return HandleEvent(keyEvent.Init(arg, KeyState.Released));
         }
 
         public virtual void OnGamePadConnected(int playerIndex)

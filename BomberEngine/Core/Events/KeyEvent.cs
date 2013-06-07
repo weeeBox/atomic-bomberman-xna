@@ -7,21 +7,24 @@ using BomberEngine.Core.Input;
 
 namespace BomberEngine.Core.Events
 {
+    public enum KeyState
+    {
+        Pressed,
+        Repeated,
+        Released
+    }
+
     public class KeyEvent : Event
     {
-        public const int PRESSED = 1;
-        public const int REPEATED = 2;
-        public const int RELEASED = 3;
-
         public KeyEventArg arg;
-        public int state;
+        public KeyState state;
 
         public KeyEvent()
             : base(Event.KEY)
         {
         }
 
-        public KeyEvent Init(KeyEventArg arg, int state)
+        public KeyEvent Init(KeyEventArg arg, KeyState state)
         {
             this.arg = arg;
             this.state = state;
