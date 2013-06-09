@@ -193,7 +193,7 @@ namespace Bomberman.Game.Elements.Fields
         private int GetBrickCells(BrickCell[] array)
         {
             int count = 0;
-            FieldCellSlot[] slots = cells.GetSlots();
+            FieldCellSlot[] slots = cells.slots;
             foreach (FieldCellSlot slot in slots)
             {   
                 BrickCell brickCell = slot.GetBrick();
@@ -230,7 +230,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private void UpdateCells(float delta)
         {
-            FieldCellSlot[] slots = cells.GetSlots();
+            FieldCellSlot[] slots = cells.slots;
             foreach (FieldCellSlot slot in slots)
             {
                 UpdateSlot(delta, slot);
@@ -446,7 +446,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public FieldCellSlot GetSlot(int index)
         {
-            FieldCellSlot[] slots = cells.GetSlots();
+            FieldCellSlot[] slots = cells.slots;
             return slots[index];
         }
 
@@ -545,7 +545,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public FieldCellSlot[] GetSlots()
         {
-            return cells.GetSlots();
+            return cells.slots;
         }
 
         #endregion

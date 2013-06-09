@@ -162,6 +162,9 @@
     <Compile Include="Network\GameClientPeer.cs" />
     <Compile Include="Network\GameServerPeer.cs" />
     <Compile Include="Network\NetworkPeer.cs" />
+    <Compile Include="Network\Requests\MapPeerData.cs" />
+    <Compile Include="Network\Requests\PeerData.cs" />
+    <Compile Include="Network\Requests\PeerDataID.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="BombermanGame.cs" />

@@ -10,10 +10,10 @@ namespace Bomberman.Game.Elements.Fields
 {
     public class FieldCellArray
     {
-        private int width;
-        private int height;
+        public int width;
+        public int height;
 
-        private FieldCellSlot[] slots;
+        public FieldCellSlot[] slots;
 
         public FieldCellArray(int width, int height)
         {
@@ -30,11 +30,6 @@ namespace Bomberman.Game.Elements.Fields
                     slots[index++] = new FieldCellSlot(cx, cy);
                 }
             }
-        }
-
-        public FieldCellSlot[] GetSlots()
-        {
-            return slots;
         }
 
         public FieldCellSlot Get(int x, int y)
