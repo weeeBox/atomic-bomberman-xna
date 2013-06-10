@@ -133,17 +133,22 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        public static void ScheduleTimer(DelayedCallback callback, float delay)
+        public static void ScheduleCall(DelayedCallback callback)
         {
-            ScheduleTimer(callback, delay, false);
+            ScheduleCall(callback, 0.0f);
         }
 
-        public static void ScheduleTimer(DelayedCallback callback, float delay, Boolean repeated)
+        public static void ScheduleCall(DelayedCallback callback, float delay)
         {
-            ScheduleTimer(callback, delay, repeated ? 0 : 1);
+            ScheduleCall(callback, delay, false);
         }
 
-        public static void ScheduleTimer(DelayedCallback callback, float delay, int numRepeats)
+        public static void ScheduleCall(DelayedCallback callback, float delay, Boolean repeated)
+        {
+            ScheduleCall(callback, delay, repeated ? 0 : 1);
+        }
+
+        public static void ScheduleCall(DelayedCallback callback, float delay, int numRepeats)
         {
             sharedApplication.timerManager.Schedule(callback, delay, numRepeats);
         }
