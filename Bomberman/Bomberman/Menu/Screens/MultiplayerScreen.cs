@@ -53,12 +53,12 @@ namespace Bomberman.Menu.Screens
 
             TextButton button = new TextButton("Back", font, 0, 0, w, h);
             button.id = (int)ButtonId.Back;
-            button.SetDelegate(OnButtonPress);
+            button.SetDelegate(OnButtonPressed);
             buttonContainer.AddView(button);
 
             button = new TextButton("Refresh", font, 0, 0, w, h);
             button.id = (int)ButtonId.Refresh;
-            button.SetDelegate(buttonDelegate);
+            button.SetDelegate(OnButtonPressed);
             buttonContainer.AddView(button);
 
             button = new TextButton("Create", font, 0, 0, w, h);
@@ -86,7 +86,7 @@ namespace Bomberman.Menu.Screens
 
         protected override void OnStop()
         {
-            StopDiscovery();
+            StopDiscovery(false);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -119,10 +119,10 @@ namespace Bomberman.Menu.Screens
 
         private void StopDiscoveryCall(DelayedCall call)
         {
-            StopDiscovery();
+            StopDiscovery(true);
         }
 
-        private void StopDiscovery()
+        private void StopDiscovery(bool updateUI)
         {
             if (serverDiscovery != null)
             {
@@ -130,7 +130,11 @@ namespace Bomberman.Menu.Screens
                 serverDiscovery = null;
 
                 RemoveUpdatable(UpdateDiscovery);
-                UpdateFoundServers();
+
+                if (updateUI)
+                {
+                    UpdateFoundServersUI();
+                }
 
                 Log.i("Stopped local servers discovery");
             }
@@ -150,6 +154,8 @@ namespace Bomberman.Menu.Screens
 
         private void SetBusy()
         {
+            ClearContainer();
+
             Font font = Helper.GetFont(A.fnt_button);
             TextView busyText = new TextView(font, "Searching for local servers...");
             containerView.AddView(busyText);
@@ -157,9 +163,9 @@ namespace Bomberman.Menu.Screens
             busyText.y = 0.5f * (containerView.height - busyText.height);
         }
 
-        private void UpdateFoundServers()
+        private void UpdateFoundServersUI()
         {
-            containerView.RemoveViews();
+            ClearContainer();
 
             Font font = Helper.GetFont(A.fnt_button);
 
@@ -171,9 +177,11 @@ namespace Bomberman.Menu.Screens
                 {
                     ServerInfo info = foundServers[i];
 
-                    TextView serverText = new TextView(font, info.name + " - " + info.endPoint);
-                    buttonContainer.AddView(serverText);
-                    serverText.x = 0.5f * (buttonContainer.width - serverText.width);
+                    TextButton serverButton = new TextButton(info.name + " - " + info.endPoint, font, 0, 0, 300, 20);
+                    serverButton.id = i;
+                    serverButton.SetDelegate(OnJoinButtonPressed);
+                    buttonContainer.AddView(serverButton);
+                    serverButton.x = 0.5f * (buttonContainer.width - serverButton.width);
                 }
 
                 buttonContainer.LayoutVer(0);
@@ -192,17 +200,36 @@ namespace Bomberman.Menu.Screens
             }
         }
 
+        private void ClearContainer()
+        {
+            if (containerView.ChildCount() > 0)
+            {
+                containerView.RemoveViews();
+            }
+        }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 
-        private void OnButtonPress(Button button)
+        private void OnButtonPressed(Button button)
         {
             ButtonId buttonId = (ButtonId)button.id;
             if (buttonId == ButtonId.Back)
             {
                 Finish();
             }
+            else if (buttonId == ButtonId.Refresh)
+            {
+                StopDiscovery(false);
+                StartDiscovery();
+            }
+        }
+
+        private void OnJoinButtonPressed(Button button)
+        {
+            ServerInfo info = foundServers[button.id];
+            Log.d("Join server: " + info.endPoint);
         }
     }
 }
