@@ -114,7 +114,7 @@ namespace BomberEngine.Consoles
             keyShiftBindings[KeyCode.OemSemicolon] = ':';
             keyShiftBindings[KeyCode.OemTilde] = '"';
 
-            ScheduleTimer(OnBlinkTimer, 0.25f, true);
+            ScheduleCall(OnBlinkTimer, 0.25f, true);
         }
 
         //////////////////////////////////////////////////////////////////////////////

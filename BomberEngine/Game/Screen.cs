@@ -204,17 +204,27 @@ namespace BomberEngine.Game
 
         #region TimerManager
 
-        protected void ScheduleTimer(DelayedCallback callback, float delay)
+        protected void ScheduleCall(DelayedCallback callback)
         {
-            ScheduleTimer(callback, delay, false);
+            ScheduleCall(callback, 0.0f);
         }
 
-        protected void ScheduleTimer(DelayedCallback callback, float delay, bool repeated)
+        protected void ScheduleCall(DelayedCallback callback, float delay)
         {
-            timerManager.Schedule(callback, delay, repeated);
+            ScheduleCall(callback, delay, false);
         }
 
-        protected void CancelTimer(DelayedCallback callback)
+        protected void ScheduleCall(DelayedCallback callback, float delay, Boolean repeated)
+        {
+            ScheduleCall(callback, delay, repeated ? 0 : 1);
+        }
+
+        protected void ScheduleCall(DelayedCallback callback, float delay, int numRepeats)
+        {
+            timerManager.Schedule(callback, delay, numRepeats);
+        }
+
+        protected void CancelCall(DelayedCallback callback)
         {
             timerManager.Cancel(callback);
         }

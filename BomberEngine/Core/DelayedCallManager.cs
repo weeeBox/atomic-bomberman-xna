@@ -117,6 +117,31 @@ namespace BomberEngine.Core
             }
         }
 
+        public void CancelAll(Object target)
+        {
+            for (DelayedCall call = rootCall; call != null; )
+            {
+                DelayedCall c = call;
+                call = call.next;
+
+                if (c.callback.Target == target)
+                {
+                    RemoveCall(c);
+                }
+            }
+        }
+
+        public void CancelAll()
+        {
+            for (DelayedCall call = rootCall; call != null; )
+            {
+                DelayedCall c = call;
+                call = call.next;
+
+                RemoveCall(c);
+            }
+        }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////

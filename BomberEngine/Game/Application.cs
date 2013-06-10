@@ -153,6 +153,21 @@ namespace BomberEngine.Game
             sharedApplication.timerManager.Schedule(callback, delay, numRepeats);
         }
 
+        public static void CancelCall(DelayedCallback callback)
+        {
+            sharedApplication.timerManager.Cancel(callback);
+        }
+
+        public static void CancelAllCalls(Object target)
+        {
+            sharedApplication.timerManager.CancelAll(target);
+        }
+
+        public static void CancelAllCalls()
+        {
+            sharedApplication.timerManager.CancelAll();
+        }
+
         //////////////////////////////////////////////////////////////////////////////
 
         protected void AddUpdatable(IUpdatable updatable)
