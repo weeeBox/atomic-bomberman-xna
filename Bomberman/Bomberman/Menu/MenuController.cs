@@ -6,6 +6,8 @@ using BomberEngine.Game;
 using Bomberman.Menu.Screens;
 using BomberEngine.Core.Visual;
 using Bomberman.Game;
+using Bomberman.Network;
+using BomberEngine.Debugging;
 
 namespace Bomberman.Menu
 {
@@ -19,6 +21,8 @@ namespace Bomberman.Menu
             MultiplayerJoin
         }
 
+        public LocalServersDiscovery serverDiscovery;
+
         private void Stop(ExitCode code)
         {
             Stop((int)code);
@@ -27,6 +31,11 @@ namespace Bomberman.Menu
         protected override void OnStart()
         {
             StartScreen(new MainMenuScreen(OnMainMenuButtonPress));
+        }
+
+        protected override void OnStop()
+        {
+            StopDiscovery();
         }
 
         private void OnMainMenuButtonPress(Button button)
@@ -38,7 +47,10 @@ namespace Bomberman.Menu
                     Stop(ExitCode.SingleStart);
                     break;
                 case MainMenuScreen.ButtonId.Multiplayer:
-                    StartNextScreen(new MultiplayerScreen(OnMultiplayerButtonPress));
+                    Screen multiplayerScreen = new MultiplayerScreen(OnMultiplayerButtonPress);
+                    multiplayerScreen.onStartDelegate = OnMultiplayerScreenStart;
+                    multiplayerScreen.onStopDelegate = OnMultiplayerScreenStop;
+                    StartNextScreen(multiplayerScreen);
                     break;
                 case MainMenuScreen.ButtonId.Settings:
                     StartNextScreen(new SettingsScreen(OnSettingsButtonPress));
@@ -65,6 +77,45 @@ namespace Bomberman.Menu
 
         private void OnSettingsButtonPress(Button button)
         {
+        }
+
+        private void OnMultiplayerScreenStart(Screen Screen)
+        {
+            StartDiscovery();
+        }
+
+        private void OnMultiplayerScreenStop(Screen Screen)
+        {
+            StopDiscovery();
+        }
+
+        private void StartDiscovery()
+        {
+            Debug.Assert(serverDiscovery == null);
+
+            String name = CVars.sv_name.value;
+            int port = CVars.sv_port.intValue;
+
+            serverDiscovery = new LocalServersDiscovery(OnLocalServerFound, name, port);
+            serverDiscovery.Start();
+
+            Log.i("Started local servers discovery...");
+        }
+
+        private void StopDiscovery()
+        {
+            if (serverDiscovery != null)
+            {
+                serverDiscovery.Stop();
+                serverDiscovery = null;
+
+                Log.i("Stopped local servers discovery");
+            }
+        }
+
+        private void OnLocalServerFound(ServerInfo info)
+        {
+            Log.d("Found local server: " + info.endPoint);
         }
     }
 }

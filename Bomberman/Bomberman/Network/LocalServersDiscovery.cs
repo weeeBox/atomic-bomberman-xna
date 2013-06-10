@@ -3,16 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Lidgren.Network;
+using System.Net;
 
 namespace Bomberman.Network
 {
-    public class GameClientPeer : NetworkPeer
+    public delegate void LocalServersDiscoveryDelegate(ServerInfo info);
+
+    public class ServerInfo
+    {
+        public String name;
+        public IPEndPoint endPoint;
+
+        public ServerInfo(String name, IPEndPoint endPoint)
+        {
+            this.name = name;
+            this.endPoint = endPoint;
+        }
+    }
+
+    public class LocalServersDiscovery : NetworkPeer
     {
         private NetClient client;
+        private LocalServersDiscoveryDelegate searchDelegate;
 
-        public GameClientPeer(String name, int port)
+        private int serverIndex;
+
+        public LocalServersDiscovery(LocalServersDiscoveryDelegate searchDelegate, String name, int port)
             : base(name, port)
         {
+            this.searchDelegate = searchDelegate;
         }
 
         public override void Start()
@@ -48,10 +67,14 @@ namespace Bomberman.Network
                 switch (msg.MessageType)
                 {
                     case NetIncomingMessageType.DiscoveryResponse:
-                        client.Connect(msg.SenderEndPoint);
+                    {
+                        String name = "Server " + (++serverIndex);
+                        IPEndPoint endPoint = msg.SenderEndPoint;
+
+                        ServerInfo info = new ServerInfo(name, endPoint);
+                        searchDelegate(info);
                         break;
-                    case NetIncomingMessageType.Data:
-                        break;
+                    }
                 }
             }
         }

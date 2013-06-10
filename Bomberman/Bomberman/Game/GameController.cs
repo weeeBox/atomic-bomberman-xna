@@ -216,7 +216,7 @@ namespace Bomberman.Game
             String name = CVars.sv_name.value;
             int port = CVars.sv_port.intValue;
 
-            networkPeer = new GameServerPeer(name, port);
+            networkPeer = new ServerPeer(name, port);
             networkPeer.Start();
         }
 
@@ -225,7 +225,7 @@ namespace Bomberman.Game
             String name = CVars.sv_name.value;
             int port = CVars.sv_port.intValue;
 
-            networkPeer = new GameClientPeer(name, port);
+            networkPeer = new ClientPeer(name, port);
             networkPeer.Start();
 
             Log.d("Started network peer");

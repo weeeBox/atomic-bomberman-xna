@@ -7,11 +7,11 @@ using BomberEngine.Debugging;
 
 namespace Bomberman.Network
 {
-    public class GameServerPeer : NetworkPeer
+    public class ServerPeer : NetworkPeer
     {
         private NetServer server;
         
-        public GameServerPeer(String name, int port)
+        public ServerPeer(String name, int port)
             : base(name, port)
         {   
         }

@@ -24,6 +24,13 @@ namespace BomberEngine.Debugging
         }
 
         [Conditional("DEBUG")]
+        public static void i(Object format, params Object[] args)
+        {
+            String message = Format(format, args);
+            Console.WriteLine("I/" + message);
+        }
+
+        [Conditional("DEBUG")]
         public static void error(Exception ex, Object format, params Object[] args)
         {
             String message = Format(format, args);
