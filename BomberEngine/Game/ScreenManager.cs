@@ -11,7 +11,7 @@ using BomberEngine.Core.Events;
 
 namespace BomberEngine.Game
 {
-    public class ScreenManager : BaseElement
+    public class ScreenManager : BaseElement, IDestroyable
     {   
         private List<Screen> screens;
         private UpdatableList updatables;
@@ -170,6 +170,17 @@ namespace BomberEngine.Game
             }
 
             return null;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Destroyable
+
+        public void Destroy()
+        {
+            updatables.Destroy();
         }
 
         #endregion

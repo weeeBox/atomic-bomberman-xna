@@ -9,6 +9,7 @@ using Bomberman.Game;
 using Assets;
 using Bomberman.Network;
 using BomberEngine.Debugging;
+using BomberEngine.Core;
 
 namespace Bomberman.Menu.Screens
 {
@@ -75,18 +76,6 @@ namespace Bomberman.Menu.Screens
 
         //////////////////////////////////////////////////////////////////////////////
 
-        public override void Update(float delta)
-        {
-            base.Update(delta);
-
-            if (serverDiscovery != null)
-            {
-                serverDiscovery.Update(delta);
-            }
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
-
         #region Local servers discovery
 
         private void StartDiscovery()
@@ -99,7 +88,14 @@ namespace Bomberman.Menu.Screens
             serverDiscovery = new LocalServersDiscovery(OnLocalServerFound, name, port);
             serverDiscovery.Start();
 
+            AddUpdatable(UpdateDiscovery);
+
             Log.i("Started local servers discovery...");
+        }
+
+        private void UpdateDiscovery(float delta)
+        {
+            serverDiscovery.Update(delta);
         }
 
         private void StopDiscovery()
@@ -108,6 +104,8 @@ namespace Bomberman.Menu.Screens
             {
                 serverDiscovery.Stop();
                 serverDiscovery = null;
+
+                RemoveUpdatable(UpdateDiscovery);
 
                 Log.i("Stopped local servers discovery");
             }

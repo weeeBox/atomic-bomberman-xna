@@ -6,7 +6,7 @@ using BomberEngine.Debugging;
 
 namespace BomberEngine.Core
 {
-    public class DelayedCallManager : IUpdatable
+    public class DelayedCallManager : IUpdatable, IDestroyable
     {
         internal double currentTime;
 
@@ -83,6 +83,7 @@ namespace BomberEngine.Core
             call.callback = callback;
             call.timeout = timeout;
             call.numRepeats = numRepeats;
+            call.scheduleTime = currentTime;
             call.fireTime = currentTime + timeout;
             call.name = name;
 
@@ -140,6 +141,17 @@ namespace BomberEngine.Core
 
                 RemoveCall(c);
             }
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Destroyable
+
+        public void Destroy()
+        {
+            CancelAll();
         }
 
         #endregion

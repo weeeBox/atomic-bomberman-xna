@@ -22,7 +22,7 @@ namespace BomberEngine.Game
         private View mRootView;
         private View mFocusedView;
 
-        private DelayedCallManager timerManager;
+        private DelayedCallManager callManager;
 
         private UpdatableList updatableList;
         private DrawableList drawableList;
@@ -50,7 +50,7 @@ namespace BomberEngine.Game
             this.width = width;
             this.height = height;
 
-            timerManager = new DelayedCallManager();
+            callManager = new DelayedCallManager();
             keyInputListeners = new IKeyInputListenerList();
 
             updatableList = UpdatableList.Null;
@@ -104,6 +104,9 @@ namespace BomberEngine.Game
 
         internal void Stop()
         {
+            callManager.Destroy();
+            updatableList.Destroy();
+
             OnStop();
             NotifyScreenDelegate(onStopDelegate);
             RemoveFromContainer();
@@ -149,10 +152,10 @@ namespace BomberEngine.Game
             mRootView.Update(delta);
 
             updatableList.Update(delta);
-            timerManager.Update(delta);
+            callManager.Update(delta);
         }
 
-        public void AddUpdatabled(IUpdatable updatable)
+        public void AddUpdatable(IUpdatable updatable)
         {
             if (updatableList.IsNull())
             {
@@ -161,7 +164,24 @@ namespace BomberEngine.Game
             updatableList.Add(updatable);
         }
 
+        public void AddUpdatable(UpdatableDelegate updatableDelegate)
+        {
+            if (updatableList.IsNull())
+            {
+                updatableList = new UpdatableList();
+            }
+            updatableList.Add(updatableDelegate);
+        }
+
         public void RemoveUpdatable(IUpdatable updatable)
+        {
+            if (updatableList.Count() > 0)
+            {
+                updatableList.Remove(updatable);
+            }
+        }
+
+        public void RemoveUpdatable(UpdatableDelegate updatable)
         {
             if (updatableList.Count() > 0)
             {
@@ -221,12 +241,12 @@ namespace BomberEngine.Game
 
         protected void ScheduleCall(DelayedCallback callback, float delay, int numRepeats)
         {
-            timerManager.Schedule(callback, delay, numRepeats);
+            callManager.Schedule(callback, delay, numRepeats);
         }
 
         protected void CancelCall(DelayedCallback callback)
         {
-            timerManager.Cancel(callback);
+            callManager.Cancel(callback);
         }
 
         #endregion

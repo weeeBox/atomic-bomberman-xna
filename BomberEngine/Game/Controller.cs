@@ -59,6 +59,7 @@ namespace BomberEngine.Game
 
         public void Stop()
         {
+            screenManager.Destroy();
             Stop(exitCode);
         }
 

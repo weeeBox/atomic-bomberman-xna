@@ -17,7 +17,7 @@ using BomberEngine.Consoles;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class Field : IUpdatable
+    public class Field : IUpdatable, IDestroyable
     {
         private static Field currentField;
 
@@ -40,6 +40,11 @@ namespace Bomberman.Game.Elements.Fields
 
             movableCells = new LinkedList<MovableCell>();
             contacts = new LinkedList<CellContactList>();
+        }
+
+        public void Destroy()
+        {
+            timerManager.CancelAll();
         }
 
         //////////////////////////////////////////////////////////////////////////////

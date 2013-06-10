@@ -25,6 +25,7 @@ namespace BomberEngine.Core
 
         internal float timeout;
         internal double fireTime;
+        internal double scheduleTime;
 
         public String name;
 
@@ -60,6 +61,11 @@ namespace BomberEngine.Core
         public float Timeout
         {
             get { return timeout; }
+        }
+
+        public float Elapsed
+        {
+            get { return (float) (manager.currentTime - scheduleTime); }
         }
 
         //////////////////////////////////////////////////////////////////////////////

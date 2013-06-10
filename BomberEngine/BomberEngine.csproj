@@ -108,6 +108,7 @@
     <Compile Include="Core\Events\MouseEvent.cs" />
     <Compile Include="Core\Assets\Types\Font.cs" />
     <Compile Include="Core\Assets\Types\VectorFont.cs" />
+    <Compile Include="Core\IDestroyable.cs" />
     <Compile Include="Core\Input\IKeyInputListener.cs" />
     <Compile Include="Core\Input\KeyCode.cs" />
     <Compile Include="Core\IO\File.cs" />

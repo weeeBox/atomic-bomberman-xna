@@ -124,7 +124,7 @@ namespace Bomberman.Game
             gamePadInput.Map(KeyCode.GP_A, PlayerAction.Bomb);
             gamePadInput.Map(KeyCode.GP_B, PlayerAction.Special);
             gameScreen.AddKeyListener(gamePadInput);
-            gameScreen.AddUpdatabled(gamePadInput);
+            gameScreen.AddUpdatable(gamePadInput);
 
             players[2].SetPlayerInput(gamePadInput);
         }

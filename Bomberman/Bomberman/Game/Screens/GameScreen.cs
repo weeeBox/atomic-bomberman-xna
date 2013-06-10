@@ -23,7 +23,7 @@ namespace Bomberman.Game.Screens
         public GameScreen()
         {
             Field field = Game.Field();
-            AddUpdatabled(field);
+            AddUpdatable(field);
 
             // field background
             fieldBackground = Helper.CreateImage(A.tex_FIELD7);
