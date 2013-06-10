@@ -30,7 +30,6 @@ namespace Bomberman.Menu.Screens
             Font font = Helper.GetFont(A.fnt_button);
 
             View rootView = new View();
-            rootView.alignX = rootView.alignY = View.ALIGN_CENTER;
 
             TextButton button = new TextButton("Play", font, 0, 0, w, h);
             button.id = (int)ButtonId.Play;
@@ -53,12 +52,12 @@ namespace Bomberman.Menu.Screens
             rootView.AddView(button);
 
             rootView.LayoutVer(20);
-            rootView.ResizeToFitViewsVer();
+            rootView.ResizeToFitViews();
 
             AddView(rootView);
 
-            rootView.x = 0.5f * width;
-            rootView.y = 0.5f * height;
+            rootView.x = 0.5f * (width - rootView.width);
+            rootView.y = 0.5f * (height - rootView.height);
         }
     }
 }

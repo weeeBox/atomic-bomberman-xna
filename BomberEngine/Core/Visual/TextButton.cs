@@ -5,6 +5,7 @@ using System.Text;
 using BomberEngine.Core.Assets.Types;
 using Microsoft.Xna.Framework;
 using BomberEngine.Game;
+using BomberEngine.Core.Visual.UI;
 
 namespace BomberEngine.Core.Visual
 {
@@ -20,6 +21,7 @@ namespace BomberEngine.Core.Visual
             : base(x, y, width, height)
         {
             font = Application.Assets().SystemFont;
+            AddBackground();
             SetText(text);
         }
 
@@ -27,7 +29,15 @@ namespace BomberEngine.Core.Visual
             : base(x, y, width, height)
         {
             this.font = font;
+            AddBackground();
             SetText(text);
+        }
+
+        private void AddBackground()
+        {
+            Color color = Color.Black;
+            RectView rect = new RectView(0, 0, width, height, color, color);
+            AddView(rect);
         }
 
         public void SetText(String text)
@@ -45,6 +55,8 @@ namespace BomberEngine.Core.Visual
                 else
                 {
                     label = new TextView(font, text);
+                    label.x = 0.5f * (width - label.width);
+                    label.y = 0.5f * (height - label.height);
                     AddView(label);
                 }
             }

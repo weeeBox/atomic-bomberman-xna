@@ -295,6 +295,11 @@ namespace BomberEngine.Core.Visual
             ResizeToFitViews(false, true, 0.0f, topBorder, 0.0f, bottomBorder);
         }
 
+        public void ResizeToFitViews()
+        {
+            ResizeToFitViews(true, true, 0.0f);
+        }
+
         public void ResizeToFitViews(bool horizontal, bool vertical, float border)
         {
             ResizeToFitViews(horizontal, vertical, border, border, border, border);

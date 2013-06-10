@@ -16,20 +16,30 @@ namespace Bomberman.Menu.Screens
         {
             Create,
             Join,
+            Refresh,
             Back
         }
 
         public MultiplayerScreen(ButtonDelegate buttonDelegate)
         {
-            int w = 150;
+            int w = 100;
             int h = 20;
 
             Font font = Helper.GetFont(A.fnt_button);
 
             View rootView = new View();
-            rootView.alignX = rootView.alignY = View.ALIGN_CENTER;
 
-            TextButton button = new TextButton("Create", font, 0, 0, w, h);
+            TextButton button = new TextButton("Back", font, 0, 0, w, h);
+            button.id = (int)ButtonId.Back;
+            button.SetDelegate(OnButtonPress);
+            rootView.AddView(button);
+
+            button = new TextButton("Refresh", font, 0, 0, w, h);
+            button.id = (int)ButtonId.Refresh;
+            button.SetDelegate(buttonDelegate);
+            rootView.AddView(button);
+
+            button = new TextButton("Create", font, 0, 0, w, h);
             button.id = (int)ButtonId.Create;
             button.SetDelegate(buttonDelegate);
             rootView.AddView(button);
@@ -39,20 +49,13 @@ namespace Bomberman.Menu.Screens
             button.SetDelegate(buttonDelegate);
             rootView.AddView(button);
 
-            button = new TextButton("Back", font, 0, 0, w, h);
-            button.id = (int)ButtonId.Back;
-            button.SetDelegate(OnButtonPress);
-            rootView.AddView(button);
-
-            rootView.LayoutVer(20);
-            rootView.ResizeToFitViewsVer();
+            rootView.LayoutHor(0);
+            rootView.ResizeToFitViews(true, true, 20);
 
             AddView(rootView);
 
-            rootView.alignX = rootView.alignY = View.ALIGN_CENTER;
-
-            rootView.x = 0.5f * width;
-            rootView.y = 0.5f * height;
+            rootView.x = 0.5f * (width - rootView.width);
+            rootView.y = height - rootView.height;
         }
 
         private void OnButtonPress(Button button)
