@@ -38,6 +38,16 @@ namespace Bomberman.Menu
             StopDiscovery();
         }
 
+        public override void Update(float delta)
+        {
+            base.Update(delta);
+
+            if (serverDiscovery != null)
+            {
+                serverDiscovery.Update(delta);
+            }
+        }
+
         private void OnMainMenuButtonPress(Button button)
         {   
             MainMenuScreen.ButtonId buttonId = (MainMenuScreen.ButtonId)button.id;
