@@ -134,6 +134,8 @@ namespace BomberEngine.Game
             console.RegisterCommand(new Cmd_listcvars());
             console.RegisterCommand(new Cmd_exec());
 
+            console.RegisterCvar(CVars.g_drawViewBorders);
+
             return console;
         }
 

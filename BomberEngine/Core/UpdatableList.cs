@@ -55,7 +55,10 @@ namespace BomberEngine.Core
 
         public void Destroy()
         {
-            Clear();
+            if (Count() > 0)
+            {
+                Clear();
+            }
         }
     }
 

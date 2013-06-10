@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using BomberEngine.Debugging;
+using BomberEngine.Consoles;
 
 namespace BomberEngine.Core.Visual
 {
@@ -156,6 +157,7 @@ namespace BomberEngine.Core.Visual
         protected virtual void PostDraw(Context context)
         {
             DrawChildren(context);
+            DrawBorders(context);
             RestoreTransformations(context);
         }
 
@@ -170,6 +172,15 @@ namespace BomberEngine.Core.Visual
             if (rotation != 0.0 || scaleX != 1.0 || scaleY != 1.0 || translateX != 0.0 || translateY != 0.0)
             {
                 context.PopMatrix();
+            }
+        }
+
+        [System.Diagnostics.Conditional("DEBUG")]
+        private void DrawBorders(Context context)
+        {
+            if (CVars.g_drawViewBorders.boolValue())
+            {   
+                context.DrawRect(0, 0, width, height, Color.White);
             }
         }
 
@@ -217,6 +228,11 @@ namespace BomberEngine.Core.Visual
         public int ChildCount()
         {
             return viewList.Count();
+        }
+
+        public void RemoveViews()
+        {
+            viewList.Clear();
         }
 
         public View Parent()
