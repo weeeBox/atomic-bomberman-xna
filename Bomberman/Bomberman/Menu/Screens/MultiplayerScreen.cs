@@ -18,7 +18,6 @@ namespace Bomberman.Menu.Screens
         public enum ButtonId
         {
             Create,
-            Join,
             Refresh,
             Back
         }
@@ -64,11 +63,6 @@ namespace Bomberman.Menu.Screens
 
             button = new TextButton("Create", font, 0, 0, w, h);
             button.id = (int)ButtonId.Create;
-            button.SetDelegate(buttonDelegate);
-            buttonContainer.AddView(button);
-
-            button = new TextButton("Join", font, 0, 0, w, h);
-            button.id = (int)ButtonId.Join;
             button.SetDelegate(buttonDelegate);
             buttonContainer.AddView(button);
 
@@ -171,18 +165,23 @@ namespace Bomberman.Menu.Screens
 
             if (foundServers.Count > 0)
             {
-                float nextY = 0;
+                View buttonContainer = new View(width, 0);
+
                 for (int i = 0; i < foundServers.Count; ++i)
                 {
                     ServerInfo info = foundServers[i];
 
                     TextView serverText = new TextView(font, info.name + " - " + info.endPoint);
-                    containerView.AddView(serverText);
-                    serverText.x = 0.5f * (containerView.width - serverText.width);
-                    serverText.y = nextY;
-
-                    nextY += serverText.height + 20;
+                    buttonContainer.AddView(serverText);
+                    serverText.x = 0.5f * (buttonContainer.width - serverText.width);
                 }
+
+                buttonContainer.LayoutVer(0);
+                buttonContainer.ResizeToFitViewsVer();
+
+                containerView.AddView(buttonContainer);
+                buttonContainer.x = 0.5f * (containerView.width - buttonContainer.width);
+                buttonContainer.y = 0.5f * (containerView.height - buttonContainer.height);
             }
             else
             {
