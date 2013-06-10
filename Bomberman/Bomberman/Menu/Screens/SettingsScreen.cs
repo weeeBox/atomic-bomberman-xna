@@ -18,6 +18,7 @@ namespace Bomberman.Menu.Screens
         }
 
         public SettingsScreen(ButtonDelegate buttonDelegate)
+            : base((int)MenuController.ScreenID.Settings)
         {
             int w = 150;
             int h = 20;

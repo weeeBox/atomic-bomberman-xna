@@ -174,6 +174,11 @@ namespace BomberEngine.Game
             screenManager.StartScreen(screen, false);
         }
 
+        protected Screen FindScreen(int id)
+        {
+            return screenManager.FindScreen(id);
+        }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////

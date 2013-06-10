@@ -158,6 +158,20 @@ namespace BomberEngine.Game
             return CurrentScreen() == screen;
         }
 
+        public Screen FindScreen(int id)
+        {
+            for (int i = 0; i < screens.Count; ++i)
+            {
+                Screen screen = screens[i];
+                if (screen.id == id)
+                {
+                    return screen;
+                }
+            }
+
+            return null;
+        }
+
         #endregion
     }
 }

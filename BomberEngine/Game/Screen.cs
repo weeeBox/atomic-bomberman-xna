@@ -39,9 +39,10 @@ namespace BomberEngine.Game
         public ScreenDelegate onResumeDelegate;
         public ScreenDelegate onStopDelegate;
 
-        public Screen()
+        public Screen(int id = 0)
             : this(Application.GetWidth(), Application.GetHeight())
         {
+            this.id = id;
         }
 
         public Screen(float width, float height)
@@ -113,27 +114,19 @@ namespace BomberEngine.Game
             Stop();
         }
 
-        protected void OnStart()
+        protected virtual void OnStart()
         {
         }
 
-        protected void OnSuspend()
+        protected virtual void OnSuspend()
         {
         }
 
-        protected void OnResume()
+        protected virtual void OnResume()
         {
         }
 
-        protected void OnPushBack()
-        {
-        }
-
-        protected void OnBringFront()
-        {
-        }
-
-        protected void OnStop()
+        protected virtual void OnStop()
         {
         }
 

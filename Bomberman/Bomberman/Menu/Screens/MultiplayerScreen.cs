@@ -7,6 +7,8 @@ using BomberEngine.Core.Visual;
 using BomberEngine.Core.Assets.Types;
 using Bomberman.Game;
 using Assets;
+using Bomberman.Network;
+using BomberEngine.Debugging;
 
 namespace Bomberman.Menu.Screens
 {
@@ -20,7 +22,10 @@ namespace Bomberman.Menu.Screens
             Back
         }
 
+        private LocalServersDiscovery serverDiscovery;
+
         public MultiplayerScreen(ButtonDelegate buttonDelegate)
+            : base((int)MenuController.ScreenID.Multiplayer)
         {
             int w = 100;
             int h = 20;
@@ -57,6 +62,66 @@ namespace Bomberman.Menu.Screens
             rootView.x = 0.5f * (width - rootView.width);
             rootView.y = height - rootView.height;
         }
+
+        protected override void OnStart()
+        {
+            StartDiscovery();
+        }
+
+        protected override void OnStop()
+        {
+            StopDiscovery();
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        public override void Update(float delta)
+        {
+            base.Update(delta);
+
+            if (serverDiscovery != null)
+            {
+                serverDiscovery.Update(delta);
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Local servers discovery
+
+        private void StartDiscovery()
+        {
+            Debug.Assert(serverDiscovery == null);
+
+            String name = CVars.sv_name.value;
+            int port = CVars.sv_port.intValue;
+
+            serverDiscovery = new LocalServersDiscovery(OnLocalServerFound, name, port);
+            serverDiscovery.Start();
+
+            Log.i("Started local servers discovery...");
+        }
+
+        private void StopDiscovery()
+        {
+            if (serverDiscovery != null)
+            {
+                serverDiscovery.Stop();
+                serverDiscovery = null;
+
+                Log.i("Stopped local servers discovery");
+            }
+        }
+
+        private void OnLocalServerFound(ServerInfo info)
+        {
+            Log.d("Found local server: " + info.endPoint);
+
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
 
         private void OnButtonPress(Button button)
         {

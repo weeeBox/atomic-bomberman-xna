@@ -21,7 +21,16 @@ namespace Bomberman.Menu
             MultiplayerJoin
         }
 
-        public LocalServersDiscovery serverDiscovery;
+        public enum ScreenID
+        {
+            MainMenu,
+            Multiplayer,
+            Settings,
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Lifecycle
 
         private void Stop(ExitCode code)
         {
@@ -33,20 +42,11 @@ namespace Bomberman.Menu
             StartScreen(new MainMenuScreen(OnMainMenuButtonPress));
         }
 
-        protected override void OnStop()
-        {
-            StopDiscovery();
-        }
+        #endregion
 
-        public override void Update(float delta)
-        {
-            base.Update(delta);
+        //////////////////////////////////////////////////////////////////////////////
 
-            if (serverDiscovery != null)
-            {
-                serverDiscovery.Update(delta);
-            }
-        }
+        #region Button delegates
 
         private void OnMainMenuButtonPress(Button button)
         {   
@@ -57,10 +57,7 @@ namespace Bomberman.Menu
                     Stop(ExitCode.SingleStart);
                     break;
                 case MainMenuScreen.ButtonId.Multiplayer:
-                    Screen multiplayerScreen = new MultiplayerScreen(OnMultiplayerButtonPress);
-                    multiplayerScreen.onStartDelegate = OnMultiplayerScreenStart;
-                    multiplayerScreen.onStopDelegate = OnMultiplayerScreenStop;
-                    StartNextScreen(multiplayerScreen);
+                    StartNextScreen(new MultiplayerScreen(OnMultiplayerButtonPress));
                     break;
                 case MainMenuScreen.ButtonId.Settings:
                     StartNextScreen(new SettingsScreen(OnSettingsButtonPress));
@@ -89,43 +86,17 @@ namespace Bomberman.Menu
         {
         }
 
-        private void OnMultiplayerScreenStart(Screen Screen)
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Helpers
+
+        private Screen FindScreen(ScreenID id)
         {
-            StartDiscovery();
+            return FindScreen((int)id);
         }
 
-        private void OnMultiplayerScreenStop(Screen Screen)
-        {
-            StopDiscovery();
-        }
-
-        private void StartDiscovery()
-        {
-            Debug.Assert(serverDiscovery == null);
-
-            String name = CVars.sv_name.value;
-            int port = CVars.sv_port.intValue;
-
-            serverDiscovery = new LocalServersDiscovery(OnLocalServerFound, name, port);
-            serverDiscovery.Start();
-
-            Log.i("Started local servers discovery...");
-        }
-
-        private void StopDiscovery()
-        {
-            if (serverDiscovery != null)
-            {
-                serverDiscovery.Stop();
-                serverDiscovery = null;
-
-                Log.i("Stopped local servers discovery");
-            }
-        }
-
-        private void OnLocalServerFound(ServerInfo info)
-        {
-            Log.d("Found local server: " + info.endPoint);
-        }
+        #endregion
     }
 }

@@ -23,6 +23,7 @@ namespace Bomberman.Menu.Screens
         }
 
         public MainMenuScreen(ButtonDelegate buttonDelegate)
+            : base((int)MenuController.ScreenID.MainMenu)
         {
             int w = 150;
             int h = 20;
