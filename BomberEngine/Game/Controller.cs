@@ -20,6 +20,7 @@ namespace BomberEngine.Game
         protected Controller parentController;
 
         public int exitCode;
+        public Object exitData;
 
         public Controller()
         {   
@@ -63,9 +64,10 @@ namespace BomberEngine.Game
             Stop(exitCode);
         }
 
-        public void Stop(int exitCode)
+        public void Stop(int exitCode, Object exitData = null)
         {
             this.exitCode = exitCode;
+            this.exitData = exitData;
 
             if (childController != null)
             {
@@ -80,6 +82,8 @@ namespace BomberEngine.Game
 
             OnStop();
             Application.RootController().ControllerStopped(this);
+
+            this.exitData = null;
         }
 
         public void Suspend()

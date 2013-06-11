@@ -11,6 +11,7 @@ using BomberEngine.Core.Events;
 using BomberEngine.Consoles;
 using Bomberman.Network;
 using BomberEngine.Debugging;
+using System.Net;
 
 namespace Bomberman.Game
 {
@@ -25,6 +26,7 @@ namespace Bomberman.Game
 
         public String scheme;
         public Mode mode;
+        public ServerInfo serverInfo;
 
         public GameSettings(String scheme)
         {
@@ -222,10 +224,13 @@ namespace Bomberman.Game
 
         private void StartClient()
         {
-            String name = CVars.sv_name.value;
-            int port = CVars.sv_port.intValue;
+            ServerInfo serverInfo = settings.serverInfo;
+            Debug.Assert(serverInfo != null);
 
-            networkPeer = new ClientPeer(name, port);
+            String name = CVars.sv_name.value;
+            IPEndPoint endPoint = serverInfo.endPoint;
+
+            networkPeer = new ClientPeer(name, endPoint);
             networkPeer.Start();
 
             Log.d("Started network peer");

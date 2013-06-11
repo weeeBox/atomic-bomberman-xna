@@ -32,9 +32,9 @@ namespace Bomberman.Menu
 
         #region Lifecycle
 
-        private void Stop(ExitCode code)
+        private void Stop(ExitCode code, Object data = null)
         {
-            Stop((int)code);
+            Stop((int)code, data);
         }
 
         protected override void OnStart()
@@ -75,6 +75,10 @@ namespace Bomberman.Menu
             {
                 case MultiplayerScreen.ButtonId.Create:
                     Stop(ExitCode.MultiplayerStart);
+                    break;
+                case MultiplayerScreen.ButtonId.Join:
+                    ServerInfo info = button.data as ServerInfo;
+                    Stop(ExitCode.MultiplayerJoin, info);
                     break;
             }
         }

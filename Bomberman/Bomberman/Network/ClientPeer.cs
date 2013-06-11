@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Lidgren.Network;
+using System.Net;
+using BomberEngine.Debugging;
 
 namespace Bomberman.Network
 {
     public class ClientPeer : NetworkPeer
     {
         private NetClient client;
+        private IPEndPoint endPoint;
 
-        public ClientPeer(String name, int port)
-            : base(name, port)
+        public ClientPeer(String name, IPEndPoint endPoint)
+            : base(name, endPoint.Port)
         {
+            this.endPoint = endPoint;
         }
 
         public override void Start()
@@ -23,12 +27,11 @@ namespace Bomberman.Network
             }
 
             NetPeerConfiguration config = new NetPeerConfiguration(name);
-            config.EnableMessageType(NetIncomingMessageType.DiscoveryResponse);
 
             client = new NetClient(config);
             client.Start();
 
-            client.DiscoverLocalPeers(port);
+            client.Connect(endPoint);
         }
 
         public override void Stop()
@@ -47,9 +50,15 @@ namespace Bomberman.Network
             {
                 switch (msg.MessageType)
                 {
-                    case NetIncomingMessageType.DiscoveryResponse:
-                        client.Connect(msg.SenderEndPoint);
+                    case NetIncomingMessageType.StatusChanged:
+                    {
+                        NetConnectionStatus status = (NetConnectionStatus)msg.ReadByte();
+                        if (status == NetConnectionStatus.Connected)
+                        {
+                            Log.d("Connected to the server");
+                        }
                         break;
+                    }
                     case NetIncomingMessageType.Data:
                         break;
                 }

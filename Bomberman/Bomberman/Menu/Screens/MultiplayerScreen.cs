@@ -19,6 +19,7 @@ namespace Bomberman.Menu.Screens
         {
             Create,
             Refresh,
+            Join,
             Back
         }
 
@@ -26,12 +27,15 @@ namespace Bomberman.Menu.Screens
         private List<ServerInfo> foundServers;
 
         private View containerView;
+        private ButtonDelegate buttonDelegate;
 
         public MultiplayerScreen(ButtonDelegate buttonDelegate)
             : base((int)MenuController.ScreenID.Multiplayer)
         {
             int w = 100;
             int h = 20;
+
+            this.buttonDelegate = buttonDelegate;
 
             Font font = Helper.GetFont(A.fnt_button);
 
@@ -178,8 +182,9 @@ namespace Bomberman.Menu.Screens
                     ServerInfo info = foundServers[i];
 
                     TextButton serverButton = new TextButton(info.name + " - " + info.endPoint, font, 0, 0, 300, 20);
-                    serverButton.id = i;
-                    serverButton.SetDelegate(OnJoinButtonPressed);
+                    serverButton.id = (int)ButtonId.Join;
+                    serverButton.data = info;
+                    serverButton.SetDelegate(buttonDelegate);
                     buttonContainer.AddView(serverButton);
                     serverButton.x = 0.5f * (buttonContainer.width - serverButton.width);
                 }
@@ -224,12 +229,6 @@ namespace Bomberman.Menu.Screens
                 StopDiscovery(false);
                 StartDiscovery();
             }
-        }
-
-        private void OnJoinButtonPressed(Button button)
-        {
-            ServerInfo info = foundServers[button.id];
-            Log.d("Join server: " + info.endPoint);
         }
     }
 }

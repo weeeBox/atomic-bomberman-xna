@@ -11,6 +11,7 @@ using BomberEngine.Core.Assets.Types;
 using BomberEngine.Core.Input;
 using BomberEngine.Consoles;
 using Bomberman.Game.Elements.Players;
+using Bomberman.Network;
 
 namespace Bomberman
 {
@@ -59,7 +60,11 @@ namespace Bomberman
 
                     case MenuController.ExitCode.MultiplayerJoin:
                     {
+                        ServerInfo serverInfo = controller.exitData as ServerInfo;
+                        Debug.Assert(serverInfo != null);
+
                         settings.mode = GameSettings.Mode.MultiplayerClient;
+                        settings.serverInfo = serverInfo;
                         break;
                     }
                 }

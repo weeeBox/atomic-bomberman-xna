@@ -1,4 +1,5 @@
-﻿using BomberEngine.Core.Input;
+﻿using System;
+using BomberEngine.Core.Input;
 using BomberEngine.Core.Events;
 
 namespace BomberEngine.Core.Visual
@@ -8,6 +9,8 @@ namespace BomberEngine.Core.Visual
     public class Button : View
     {
         protected ButtonDelegate buttonDelegate;
+
+        public Object data;
 
         public Button(float width, float height)
             : this(0, 0, width, height)

@@ -112,7 +112,7 @@
     <Compile Include="Core\Input\IKeyInputListener.cs" />
     <Compile Include="Core\Input\KeyCode.cs" />
     <Compile Include="Core\IO\File.cs" />
-    <Compile Include="Core\Visual\AbstractButton.cs" />
+    <Compile Include="Core\Visual\Button.cs" />
     <Compile Include="Core\Visual\TextButton.cs" />
     <Compile Include="Core\Visual\TextView.cs" />
     <Compile Include="Core\Visual\RectView.cs" />
