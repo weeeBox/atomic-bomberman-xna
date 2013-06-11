@@ -6,11 +6,11 @@ using Lidgren.Network;
 
 namespace Bomberman.Network.Requests
 {
-    public abstract class PeerData
+    public abstract class PeerCommand
     {
-        private byte id;
+        public byte id;
 
-        protected PeerData(byte id)
+        protected PeerCommand(byte id)
         {
             this.id = id;
         }   

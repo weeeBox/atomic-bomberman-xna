@@ -9,7 +9,7 @@ using Bomberman.Game.Elements;
 
 namespace Bomberman.Network.Requests
 {
-    public class MapPeerData : PeerData
+    public class MapPeerCommand : PeerCommand
     {
         private const byte BLOCK_EMPTY = 0;
         private const byte BLOCK_SOLID = 1;
@@ -17,8 +17,8 @@ namespace Bomberman.Network.Requests
 
         public Field field;
 
-        public MapPeerData()
-            : base((byte)PeerDataID.Map)
+        public MapPeerCommand()
+            : base((byte)PeerCommandID.Map)
         {
         }
 

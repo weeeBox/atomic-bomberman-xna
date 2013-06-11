@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Bomberman.Network.Requests
 {
-    public enum PeerDataID
+    public enum PeerCommandID
     {
         Map = 1
     }
