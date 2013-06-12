@@ -111,6 +111,10 @@
     <Compile Include="Core\IDestroyable.cs" />
     <Compile Include="Core\Input\IKeyInputListener.cs" />
     <Compile Include="Core\Input\KeyCode.cs" />
+    <Compile Include="Core\IO\BitUtils.cs" />
+    <Compile Include="Core\IO\BitWriter.cs" />
+    <Compile Include="Core\IO\BufferReader.cs" />
+    <Compile Include="Core\IO\BufferWriter.cs" />
     <Compile Include="Core\IO\File.cs" />
     <Compile Include="Core\Visual\Button.cs" />
     <Compile Include="Core\Visual\TextButton.cs" />

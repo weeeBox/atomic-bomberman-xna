@@ -9,6 +9,7 @@ namespace BomberEngine.Debugging
 {
     public class Debug
     {
+        [Conditional("DEBUG")]
         public static void CheckArgument(bool condition, String format, params Object[] args)
         {
             if (!condition)
@@ -18,11 +19,22 @@ namespace BomberEngine.Debugging
             }
         }
 
+        [Conditional("DEBUG")]
+        public static void CheckArgument(bool condition)
+        {
+            if (!condition)
+            {   
+                throw new ArgumentException();
+            }
+        }
+
+        [Conditional("DEBUG")]
         public static void CheckArgumentNotNull(String name, Object reference)
         {
             CheckArgument(reference != null, "'{0}' is null", name);
         }
 
+        [Conditional("DEBUG")]
         public static void CheckArgumentRange(String name, int argument, int min, int max)
         {
             CheckArgument(argument >= min && argument < max, "'{0}' {1} out of range {2}..{3}", name, argument, min, max - 1);
