@@ -6,6 +6,7 @@ using Lidgren.Network;
 using System.Net;
 using BomberEngine.Debugging;
 using Bomberman.Network.Requests;
+using BomberEngine.Core.IO;
 
 namespace Bomberman.Network
 {
@@ -18,7 +19,6 @@ namespace Bomberman.Network
             Connected
         }
 
-        private NetClient client;
         private IPEndPoint endPoint;
         private State state;
 
@@ -31,7 +31,7 @@ namespace Bomberman.Network
 
         public override void Start()
         {
-            if (client != null)
+            if (peer != null)
             {
                 throw new InvalidOperationException("Client already running");
             }
@@ -40,43 +40,30 @@ namespace Bomberman.Network
 
             NetPeerConfiguration config = new NetPeerConfiguration(name);
 
-            client = new NetClient(config);
-            client.Start();
+            peer = new NetClient(config);
+            peer.Start();
 
             state = State.Connecting;
-            client.Connect(endPoint);
+            peer.Connect(endPoint);
         }
 
         public override void Stop()
         {
-            if (client != null)
+            if (peer != null)
             {
-                client.Shutdown("disconnect");
-                client = null;
+                peer.Shutdown("disconnect");
+                peer = null;
             }
         }
 
-        public override void Update(float delta)
+        protected override void OnPeerConnected(IPEndPoint endPoint)
         {
-            NetIncomingMessage msg;
-            while ((msg = client.ReadMessage()) != null)
-            {
-                switch (msg.MessageType)
-                {
-                    case NetIncomingMessageType.StatusChanged:
-                    {
-                        NetConnectionStatus status = (NetConnectionStatus)msg.ReadByte();
-                        if (status == NetConnectionStatus.Connected)
-                        {
-                            Debug.Assert(state == State.Connecting);
-                            state = State.Connected;
-                        }
-                        break;
-                    }
-                    case NetIncomingMessageType.Data:
-                        break;
-                }
-            }
+            Log.i("Connected to the server: " + endPoint);
+        }
+
+        protected override void OnPeerDisconnected(IPEndPoint endPoint)
+        {
+            Log.i("Disconnected from the server: " + endPoint);
         }
     }
 }

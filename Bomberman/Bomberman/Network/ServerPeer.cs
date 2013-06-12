@@ -9,8 +9,7 @@ using System.Net;
 namespace Bomberman.Network
 {
     public class ServerPeer : NetworkPeer
-    {
-        private NetServer server;
+    {   
         private IDictionary<IPEndPoint, NetworkPlayer> players;
         
         public ServerPeer(String name, int port)
@@ -21,7 +20,7 @@ namespace Bomberman.Network
 
         public override void Start()
         {
-            if (server != null)
+            if (peer != null)
             {
                 throw new InvalidOperationException("Server already started");
             }
@@ -30,55 +29,39 @@ namespace Bomberman.Network
             config.EnableMessageType(NetIncomingMessageType.DiscoveryRequest);
             config.Port = port;
 
-            server = new NetServer(config);
-            server.Start();
+            peer = new NetServer(config);
+            peer.Start();
         }
 
         public override void Stop()
         {
-            if (server != null)
+            if (peer != null)
             {
-                server.Shutdown("shutdown");
-                server = null;
+                peer.Shutdown("shutdown");
+                peer = null;
             }
         }
 
-        public override void Update(float delta)
+        protected override bool HandleMessage(NetPeer peer, NetIncomingMessage msg)
         {
-            NetIncomingMessage msg;
-            while ((msg = server.ReadMessage()) != null)
+            if (base.HandleMessage(peer, msg))
             {
-                switch (msg.MessageType)
+                return true;
+            }
+
+            switch (msg.MessageType)
+            {
+                case NetIncomingMessageType.DiscoveryRequest:
                 {
-                    case NetIncomingMessageType.DiscoveryRequest:
-                    {   
-                        server.SendDiscoveryResponse(null, msg.SenderEndPoint);
-                        break;
-                    }
-
-                    case NetIncomingMessageType.StatusChanged:
-                    {
-                        NetConnectionStatus status = (NetConnectionStatus)msg.ReadByte();
-                        if (status == NetConnectionStatus.Connected)
-                        {
-                            AddClient(msg.SenderEndPoint);
-                        }
-                        else if (status == NetConnectionStatus.Disconnected)
-                        {
-                            RemoveClient(msg.SenderEndPoint);
-                        }
-                        break;
-                    }
-
-                    case NetIncomingMessageType.Data:
-                    {
-                        break;
-                    }
+                    peer.SendDiscoveryResponse(null, msg.SenderEndPoint);
+                    return true;
                 }
             }
+
+            return false;
         }
 
-        private void AddClient(IPEndPoint endPoint)
+        protected override void OnPeerConnected(IPEndPoint endPoint)
         {
             Debug.Assert(!players.ContainsKey(endPoint));
             players.Add(endPoint, new NetworkPlayer("Player", endPoint));
@@ -86,8 +69,8 @@ namespace Bomberman.Network
             Log.i("Client connected: " + endPoint);
         }
 
-        private void RemoveClient(IPEndPoint endPoint)
-        {
+        protected override void OnPeerDisconnected(IPEndPoint endPoint)
+        {   
             Debug.Assert(players.ContainsKey(endPoint));
             players.Remove(endPoint);
 

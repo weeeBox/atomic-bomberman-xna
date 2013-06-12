@@ -22,8 +22,7 @@ namespace Bomberman.Network
     }
 
     public class LocalServersDiscovery : NetworkPeer
-    {
-        private NetClient client;
+    {   
         private LocalServersDiscoveryDelegate searchDelegate;
 
         private int serverIndex;
@@ -36,7 +35,7 @@ namespace Bomberman.Network
 
         public override void Start()
         {
-            if (client != null)
+            if (peer != null)
             {
                 throw new InvalidOperationException("Client already running");
             }
@@ -44,39 +43,38 @@ namespace Bomberman.Network
             NetPeerConfiguration config = new NetPeerConfiguration(name);
             config.EnableMessageType(NetIncomingMessageType.DiscoveryResponse);
 
-            client = new NetClient(config);
-            client.Start();
+            peer = new NetClient(config);
+            peer.Start();
 
-            client.DiscoverLocalPeers(port);
+            peer.DiscoverLocalPeers(port);
         }
 
         public override void Stop()
         {
-            if (client != null)
+            if (peer != null)
             {
-                client.Shutdown("disconnect");
-                client = null;
+                peer.Shutdown("disconnect");
+                peer = null;
             }
         }
 
-        public override void Update(float delta)
+        protected override bool HandleMessage(NetPeer peer, NetIncomingMessage msg)
         {
-            NetIncomingMessage msg;
-            while ((msg = client.ReadMessage()) != null)
+            switch (msg.MessageType)
             {
-                switch (msg.MessageType)
+                case NetIncomingMessageType.DiscoveryResponse:
                 {
-                    case NetIncomingMessageType.DiscoveryResponse:
-                    {
-                        String name = "Server " + (++serverIndex);
-                        IPEndPoint endPoint = msg.SenderEndPoint;
+                    String name = "Server " + (++serverIndex);
+                    IPEndPoint endPoint = msg.SenderEndPoint;
 
-                        ServerInfo info = new ServerInfo(name, endPoint);
-                        searchDelegate(info);
-                        break;
-                    }
+                    ServerInfo info = new ServerInfo(name, endPoint);
+                    searchDelegate(info);
+
+                    return true;
                 }
             }
+
+            return false;
         }
     }
 }
