@@ -17,7 +17,7 @@ namespace Bomberman.Network
         protected String name;
         protected int port;
 
-        protected IDictionary<byte, NetworkMessage> commands;
+        protected IDictionary<NetworkMessageID, NetworkMessage> commands;
 
         private BufferReader reader;
         private BufferWriter writer;
@@ -30,7 +30,7 @@ namespace Bomberman.Network
             reader = new BufferReader();
             writer = new BufferWriter();
 
-            commands = new Dictionary<byte, NetworkMessage>();
+            commands = new Dictionary<NetworkMessageID, NetworkMessage>();
             RegisterCommands();
         }
 
@@ -114,12 +114,11 @@ namespace Bomberman.Network
         }
 
         private void RegisterCommand(NetworkMessage command)
-        {
-            byte id = command.id;
-            commands.Add(id, command);
+        {   
+            commands.Add(command.id, command);
         }
 
-        public NetworkMessage FindCommand(byte id)
+        public NetworkMessage FindCommand(NetworkMessageID id)
         {
             NetworkMessage command;
             if (commands.TryGetValue(id, out command))
