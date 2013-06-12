@@ -4,16 +4,19 @@ using System.Linq;
 using System.Text;
 using Lidgren.Network;
 using BomberEngine.Debugging;
+using System.Net;
 
 namespace Bomberman.Network
 {
     public class ServerPeer : NetworkPeer
     {
         private NetServer server;
+        private IDictionary<IPEndPoint, NetworkPlayer> players;
         
         public ServerPeer(String name, int port)
             : base(name, port)
-        {   
+        {
+            players = new Dictionary<IPEndPoint, NetworkPlayer>();
         }
 
         public override void Start()
@@ -58,7 +61,11 @@ namespace Bomberman.Network
                         NetConnectionStatus status = (NetConnectionStatus)msg.ReadByte();
                         if (status == NetConnectionStatus.Connected)
                         {
-                            Log.d("Client connected");
+                            AddClient(msg.SenderEndPoint);
+                        }
+                        else if (status == NetConnectionStatus.Disconnected)
+                        {
+                            RemoveClient(msg.SenderEndPoint);
                         }
                         break;
                     }
@@ -69,6 +76,32 @@ namespace Bomberman.Network
                     }
                 }
             }
+        }
+
+        private void AddClient(IPEndPoint endPoint)
+        {
+            Debug.Assert(!players.ContainsKey(endPoint));
+            players.Add(endPoint, new NetworkPlayer("Player", endPoint));
+
+            Log.i("Client connected: " + endPoint);
+        }
+
+        private void RemoveClient(IPEndPoint endPoint)
+        {
+            Debug.Assert(players.ContainsKey(endPoint));
+            players.Remove(endPoint);
+
+            Log.i("Client disconnected: " + endPoint);
+        }
+
+        private NetworkPlayer FindClient(IPEndPoint endPoint)
+        {
+            NetworkPlayer player;
+            if (players.TryGetValue(endPoint, out player))
+            {
+                return player;
+            }
+            return null;
         }
     }
 }

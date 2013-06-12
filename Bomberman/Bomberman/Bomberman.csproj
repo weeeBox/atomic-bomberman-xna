@@ -160,6 +160,7 @@
     <Compile Include="Menu\Screens\MultiplayerScreen.cs" />
     <Compile Include="Menu\Screens\SettingsScreen.cs" />
     <Compile Include="Network\ClientPeer.cs" />
+    <Compile Include="Network\NetworkPlayer.cs" />
     <Compile Include="Network\ServerPeer.cs" />
     <Compile Include="Network\NetworkPeer.cs" />
     <Compile Include="Network\Commands\MapPeerCommand.cs" />
