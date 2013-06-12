@@ -8,11 +8,11 @@ using System.Net;
 
 namespace Bomberman.Network
 {
-    public class ServerPeer : NetworkPeer
+    public class NetworkServer : NetworkPeer
     {   
         private IDictionary<IPEndPoint, NetworkPlayer> players;
         
-        public ServerPeer(String name, int port)
+        public NetworkServer(String name, int port)
             : base(name, port)
         {
             players = new Dictionary<IPEndPoint, NetworkPlayer>();

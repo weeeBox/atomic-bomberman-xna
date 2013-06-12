@@ -10,7 +10,7 @@ using BomberEngine.Core.IO;
 
 namespace Bomberman.Network
 {
-    public class ClientPeer : NetworkPeer
+    public class NetworkClient : NetworkPeer
     {
         private enum State
         {
@@ -22,7 +22,7 @@ namespace Bomberman.Network
         private IPEndPoint endPoint;
         private State state;
 
-        public ClientPeer(String name, IPEndPoint endPoint)
+        public NetworkClient(String name, IPEndPoint endPoint)
             : base(name, endPoint.Port)
         {
             this.endPoint = endPoint;
