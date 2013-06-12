@@ -17,7 +17,7 @@ namespace Bomberman.Network
         protected String name;
         protected int port;
 
-        protected IDictionary<byte, PeerCommand> commands;
+        protected IDictionary<byte, NetworkMessage> commands;
 
         private BufferReader reader;
         private BufferWriter writer;
@@ -30,7 +30,7 @@ namespace Bomberman.Network
             reader = new BufferReader();
             writer = new BufferWriter();
 
-            commands = new Dictionary<byte, PeerCommand>();
+            commands = new Dictionary<byte, NetworkMessage>();
             RegisterCommands();
         }
 
@@ -110,18 +110,18 @@ namespace Bomberman.Network
 
         private void RegisterCommands()
         {
-            RegisterCommand(new MapPeerCommand());
+            RegisterCommand(new MsgFieldState());
         }
 
-        private void RegisterCommand(PeerCommand command)
+        private void RegisterCommand(NetworkMessage command)
         {
             byte id = command.id;
             commands.Add(id, command);
         }
 
-        public PeerCommand FindCommand(byte id)
+        public NetworkMessage FindCommand(byte id)
         {
-            PeerCommand command;
+            NetworkMessage command;
             if (commands.TryGetValue(id, out command))
             {
                 return command;
