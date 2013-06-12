@@ -25,19 +25,8 @@ namespace Bomberman.Network.Requests
             this.id = id;
         }   
 
-        public void Write(BufferWriter writer)
-        {
-            writer.Write((byte)id);
-            WriteData(writer);
-        }
-
-        public void Read(BufferReader reader)
-        {
-            ReadData(reader);
-        }
-
-        protected abstract void WriteData(BufferWriter writer);
-        protected abstract void ReadData(BufferReader reader);
+        public abstract void Write(BufferWriter writer);
+        public abstract void Read(BufferReader reader);
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -55,7 +44,7 @@ namespace Bomberman.Network.Requests
         {
         }
 
-        protected override void WriteData(BufferWriter writer)
+        public override void Write(BufferWriter writer)
         {
             FieldCellArray cells = field.GetCells();
             int width = cells.GetWidth();
@@ -90,7 +79,7 @@ namespace Bomberman.Network.Requests
             }
         }
 
-        protected override void ReadData(BufferReader reader)
+        public override void Read(BufferReader reader)
         {
         }
     }

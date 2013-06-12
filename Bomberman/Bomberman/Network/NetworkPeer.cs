@@ -7,6 +7,7 @@ using Bomberman.Network.Requests;
 using Lidgren.Network;
 using System.Net;
 using BomberEngine.Core.IO;
+using BomberEngine.Debugging;
 
 namespace Bomberman.Network
 {
@@ -31,7 +32,7 @@ namespace Bomberman.Network
             writer = new BufferWriter();
 
             commands = new Dictionary<NetworkMessageID, NetworkMessage>();
-            RegisterCommands();
+            RegisterMessages();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -81,7 +82,7 @@ namespace Bomberman.Network
                 case NetIncomingMessageType.Data:
                 {
                     reader.Init(msg.Data, msg.LengthBits);
-                    ReadCommand(reader);
+                    NetworkMessage message = ReadMessage(reader);
                     reader.Reset();
                     break;
                 }
@@ -98,27 +99,38 @@ namespace Bomberman.Network
         {
         }
 
-        protected virtual void ReadCommand(BufferReader reader)
-        {   
+        protected virtual void OnMessageReceive(NetworkMessage message)
+        {
         }
 
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Commands
+        #region Messages
 
-        private void RegisterCommands()
+        private NetworkMessage ReadMessage(BufferReader reader)
         {
-            RegisterCommand(new MsgFieldState());
+            NetworkMessageID id = (NetworkMessageID)reader.ReadByte();
+
+            NetworkMessage message = FindMessage(id);
+            Debug.Assert(message != null);
+
+            message.Read(reader);
+            return message;
         }
 
-        private void RegisterCommand(NetworkMessage command)
+        private void RegisterMessages()
+        {
+            RegisterMessage(new MsgFieldState());
+        }
+
+        private void RegisterMessage(NetworkMessage command)
         {   
             commands.Add(command.id, command);
         }
 
-        public NetworkMessage FindCommand(NetworkMessageID id)
+        public NetworkMessage FindMessage(NetworkMessageID id)
         {
             NetworkMessage command;
             if (commands.TryGetValue(id, out command))

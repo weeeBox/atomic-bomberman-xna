@@ -26,6 +26,7 @@ namespace BomberEngine.Core.IO
         {
             m_data = null;
             m_bitLength = 0;
+            m_readPosition = 0;
         }
 
         /// <summary>
