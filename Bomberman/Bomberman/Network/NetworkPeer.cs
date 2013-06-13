@@ -18,7 +18,7 @@ namespace Bomberman.Network
         protected String name;
         protected int port;
 
-        protected IDictionary<NetworkMessageID, NetworkMessage> commands;
+        protected IDictionary<NetworkMessageID, NetworkMessage> messagePool;
 
         private BufferReader reader;
         private BufferWriter writer;
@@ -31,7 +31,7 @@ namespace Bomberman.Network
             reader = new BufferReader();
             writer = new BufferWriter();
 
-            commands = new Dictionary<NetworkMessageID, NetworkMessage>();
+            messagePool = new Dictionary<NetworkMessageID, NetworkMessage>();
             RegisterMessages();
         }
 
@@ -84,6 +84,7 @@ namespace Bomberman.Network
                     reader.Init(msg.Data, msg.LengthBits);
                     NetworkMessage message = ReadMessage(reader);
                     reader.Reset();
+                    OnMessageReceive(message);
                     break;
                 }
             }
@@ -113,7 +114,7 @@ namespace Bomberman.Network
         {
             NetworkMessageID id = (NetworkMessageID)reader.ReadByte();
 
-            NetworkMessage message = FindMessage(id);
+            NetworkMessage message = FindMessageObject(id);
             Debug.Assert(message != null);
 
             message.Read(reader);
@@ -127,13 +128,13 @@ namespace Bomberman.Network
 
         private void RegisterMessage(NetworkMessage command)
         {   
-            commands.Add(command.id, command);
+            messagePool.Add(command.id, command);
         }
 
-        public NetworkMessage FindMessage(NetworkMessageID id)
+        public NetworkMessage FindMessageObject(NetworkMessageID id)
         {
             NetworkMessage command;
-            if (commands.TryGetValue(id, out command))
+            if (messagePool.TryGetValue(id, out command))
             {
                 return command;
             }
