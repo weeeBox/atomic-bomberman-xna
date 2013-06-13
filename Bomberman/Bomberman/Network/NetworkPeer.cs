@@ -110,14 +110,14 @@ namespace Bomberman.Network
 
         #region Messages
 
-        protected void WriteMessage(NetworkMessage message)
+        protected void WriteMessage(NetConnection connection, NetworkMessage message)
         {
-            WriteMessage(writeBuffer, message);
+            WriteMessage(connection, writeBuffer, message);
         }
 
-        protected void WriteMessage(NetworkMessageID messageId)
+        protected void WriteMessage(NetConnection connection, NetworkMessageID messageId)
         {
-            WriteMessage(writeBuffer, messageId);
+            WriteMessage(connection, writeBuffer, messageId);
         }
 
         protected NetworkMessage FindMessageObject(NetworkMessageID messageId)
@@ -142,15 +142,15 @@ namespace Bomberman.Network
             return message;
         }
 
-        private void WriteMessage(BitWriteBuffer buffer, NetworkMessageID messageId)
+        private void WriteMessage(NetConnection connection, BitWriteBuffer buffer, NetworkMessageID messageId)
         {
             NetworkMessage message = FindMessageObject(messageId);
             Debug.Assert(message != null);
 
-            WriteMessage(buffer, message);
+            WriteMessage(connection, buffer, message);
         }
 
-        private void WriteMessage(BitWriteBuffer buffer, NetworkMessage message)
+        private void WriteMessage(NetConnection connection, BitWriteBuffer buffer, NetworkMessage message)
         {
             buffer.Reset();
 
@@ -159,16 +159,18 @@ namespace Bomberman.Network
             buffer.Write(id);
             message.Write(buffer);
 
-            Write(buffer);
+            Write(connection, buffer);
         }
 
-        private void Write(BitWriteBuffer buffer)
+        private void Write(NetConnection connection, BitWriteBuffer buffer)
         {
             byte[] data = buffer.Data;
             int length = buffer.LengthBytes;
 
             NetOutgoingMessage message = peer.CreateMessage(length);
             message.Write(data, 0, length);
+
+            peer.SendMessage(message, connection, NetDeliveryMethod.Unreliable);
         }
 
         private void RegisterMessages()

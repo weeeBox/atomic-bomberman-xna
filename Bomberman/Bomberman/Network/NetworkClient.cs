@@ -20,7 +20,7 @@ namespace Bomberman.Network
         }
 
         private IPEndPoint endPoint;
-        private IPEndPoint serverEndPoint;
+        private NetConnection serverConnection;
 
         private State state;
 
@@ -55,18 +55,37 @@ namespace Bomberman.Network
             {
                 peer.Shutdown("disconnect");
                 peer = null;
+                serverConnection = null;
             }
         }
 
         protected override void OnPeerConnected(NetConnection connection)
         {
             Log.i("Connected to the server: " + connection.RemoteEndPoint);
+            Debug.Assert(serverConnection == null);
+            serverConnection = connection;
+
             WriteMessage(NetworkMessageID.FieldStateRequest);
         }
 
         protected override void OnPeerDisconnected(NetConnection connection)
         {
             Log.i("Disconnected from the server: " + connection.RemoteEndPoint);
+            Debug.Assert(serverConnection == connection);
+
+            serverConnection = null;
+        }
+
+        private void WriteMessage(NetworkMessageID messageId)
+        {
+            Debug.Assert(serverConnection != null);
+            WriteMessage(serverConnection, messageId);
+        }
+
+        private void WriteMessage(NetworkMessage message)
+        {
+            Debug.Assert(serverConnection != null);
+            WriteMessage(serverConnection, message);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using Lidgren.Network;
 using BomberEngine.Debugging;
 using System.Net;
+using Bomberman.Network.Requests;
 
 namespace Bomberman.Network
 {
@@ -75,6 +76,11 @@ namespace Bomberman.Network
             connections.Remove(connection);
 
             Log.i("Client disconnected: " + connection);
+        }
+
+        protected override void OnMessageReceive(NetworkMessage message)
+        {
+            Log.i("Message received: " + message.id);
         }
 
         private NetworkPlayer FindClient(NetConnection connection)
