@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 
 namespace BomberEngine.Core.IO
 {
-    public class BitBufferReader : BitBuffer
+    public class BitReadBuffer : BitBuffer
     {
         private const string c_readOverflowError = "Trying to read past the buffer size - likely caused by mismatching Write/Reads, different size or order.";
 

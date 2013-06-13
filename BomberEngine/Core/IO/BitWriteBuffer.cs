@@ -27,7 +27,7 @@ namespace BomberEngine.Core.IO
         public uint UIntValue;
     }
 
-    public class BitBufferWriter : BitBuffer
+    public class BitWriteBuffer : BitBuffer
     {
         /// <summary>
         /// Number of bytes to overallocate for each message to avoid resizing

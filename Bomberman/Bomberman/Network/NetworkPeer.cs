@@ -20,16 +20,16 @@ namespace Bomberman.Network
 
         protected IDictionary<NetworkMessageID, NetworkMessage> messagePool;
 
-        private BitBufferReader reader;
-        private BitBufferWriter writer;
+        private BitReadBuffer readBuffer;
+        private BitWriteBuffer writeBuffer;
 
         protected NetworkPeer(String name, int port)
         {
             this.name = name;
             this.port = port;
 
-            reader = new BitBufferReader();
-            writer = new BitBufferWriter();
+            readBuffer = new BitReadBuffer();
+            writeBuffer = new BitWriteBuffer();
 
             messagePool = new Dictionary<NetworkMessageID, NetworkMessage>();
             RegisterMessages();
@@ -81,9 +81,9 @@ namespace Bomberman.Network
 
                 case NetIncomingMessageType.Data:
                 {
-                    reader.Init(msg.Data, msg.LengthBits);
-                    NetworkMessage message = ReadMessage(reader);
-                    reader.Reset();
+                    readBuffer.Init(msg.Data, msg.LengthBits);
+                    NetworkMessage message = ReadMessage(readBuffer);
+                    readBuffer.Reset();
                     OnMessageReceive(message);
                     break;
                 }
@@ -112,12 +112,12 @@ namespace Bomberman.Network
 
         protected void WriteMessage(NetworkMessage message)
         {
-            WriteMessage(writer, message);
+            WriteMessage(writeBuffer, message);
         }
 
         protected void WriteMessage(NetworkMessageID messageId)
         {
-            WriteMessage(writer, messageId);
+            WriteMessage(writeBuffer, messageId);
         }
 
         protected NetworkMessage FindMessageObject(NetworkMessageID messageId)
@@ -131,36 +131,38 @@ namespace Bomberman.Network
             return null;
         }
 
-        private NetworkMessage ReadMessage(BitBufferReader reader)
+        private NetworkMessage ReadMessage(BitReadBuffer buffer)
         {
-            NetworkMessageID id = (NetworkMessageID)reader.ReadByte();
+            NetworkMessageID id = (NetworkMessageID)buffer.ReadByte();
 
             NetworkMessage message = FindMessageObject(id);
             Debug.Assert(message != null);
 
-            message.Read(reader);
+            message.Read(buffer);
             return message;
         }
 
-        private void WriteMessage(BitBufferWriter writer, NetworkMessageID messageId)
+        private void WriteMessage(BitWriteBuffer buffer, NetworkMessageID messageId)
         {
             NetworkMessage message = FindMessageObject(messageId);
             Debug.Assert(message != null);
 
-            WriteMessage(writer, message);
+            WriteMessage(buffer, message);
         }
 
-        private void WriteMessage(BitBufferWriter writer, NetworkMessage message)
+        private void WriteMessage(BitWriteBuffer buffer, NetworkMessage message)
         {
-            writer.Reset();
+            buffer.Reset();
 
             byte id = (byte)message.id;
 
-            writer.Write(id);
-            message.Write(writer);
+            buffer.Write(id);
+            message.Write(buffer);
+
+            Write(buffer);
         }
 
-        private void Write(BitBufferWriter writer)
+        private void Write(BitWriteBuffer buffer)
         {
             
         }
