@@ -84,7 +84,7 @@ namespace Bomberman.Network
                     readBuffer.Init(msg.Data, msg.LengthBits);
                     NetworkMessage message = ReadMessage(readBuffer);
                     readBuffer.Reset();
-                    OnMessageReceive(message);
+                    OnMessageReceive(msg.SenderConnection, message);
                     break;
                 }
             }
@@ -100,7 +100,7 @@ namespace Bomberman.Network
         {
         }
 
-        protected virtual void OnMessageReceive(NetworkMessage message)
+        protected virtual void OnMessageReceive(NetConnection connection, NetworkMessage message)
         {
         }
 
@@ -120,7 +120,7 @@ namespace Bomberman.Network
             WriteMessage(connection, writeBuffer, messageId);
         }
 
-        protected NetworkMessage FindMessageObject(NetworkMessageID messageId)
+        protected NetworkMessage CreateMessage(NetworkMessageID messageId)
         {
             NetworkMessage message;
             if (messagePool.TryGetValue(messageId, out message))
@@ -128,14 +128,14 @@ namespace Bomberman.Network
                 return message;
             }
 
-            return null;
+            throw new ArgumentException("Message not registered: " + messageId);
         }
 
         private NetworkMessage ReadMessage(BitReadBuffer buffer)
         {
             NetworkMessageID id = (NetworkMessageID)buffer.ReadByte();
 
-            NetworkMessage message = FindMessageObject(id);
+            NetworkMessage message = CreateMessage(id);
             Debug.Assert(message != null);
 
             message.Read(buffer);
@@ -144,7 +144,7 @@ namespace Bomberman.Network
 
         private void WriteMessage(NetConnection connection, BitWriteBuffer buffer, NetworkMessageID messageId)
         {
-            NetworkMessage message = FindMessageObject(messageId);
+            NetworkMessage message = CreateMessage(messageId);
             Debug.Assert(message != null);
 
             WriteMessage(connection, buffer, message);

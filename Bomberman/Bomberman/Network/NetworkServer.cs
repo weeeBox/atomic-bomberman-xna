@@ -78,9 +78,12 @@ namespace Bomberman.Network
             Log.i("Client disconnected: " + connection);
         }
 
-        protected override void OnMessageReceive(NetworkMessage message)
+        protected override void OnMessageReceive(NetConnection connection, NetworkMessage message)
         {
-            Log.i("Message received: " + message.id);
+            NetworkPlayer player = FindClient(connection);
+            Debug.Assert(player != null);
+
+            Log.i("Message received: " + message.id + " from " + player.name);
         }
 
         private NetworkPlayer FindClient(NetConnection connection)
