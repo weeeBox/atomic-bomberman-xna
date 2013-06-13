@@ -20,6 +20,8 @@ namespace Bomberman.Network
         }
 
         private IPEndPoint endPoint;
+        private IPEndPoint serverEndPoint;
+
         private State state;
 
         public NetworkClient(String name, IPEndPoint endPoint)
@@ -56,15 +58,15 @@ namespace Bomberman.Network
             }
         }
 
-        protected override void OnPeerConnected(IPEndPoint endPoint)
+        protected override void OnPeerConnected(NetConnection connection)
         {
-            Log.i("Connected to the server: " + endPoint);
+            Log.i("Connected to the server: " + connection.RemoteEndPoint);
             WriteMessage(NetworkMessageID.FieldStateRequest);
         }
 
-        protected override void OnPeerDisconnected(IPEndPoint endPoint)
+        protected override void OnPeerDisconnected(NetConnection connection)
         {
-            Log.i("Disconnected from the server: " + endPoint);
+            Log.i("Disconnected from the server: " + connection.RemoteEndPoint);
         }
     }
 }

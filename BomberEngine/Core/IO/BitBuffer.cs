@@ -11,9 +11,32 @@ namespace BomberEngine.Core.IO
         protected int m_bitLength;
 
         public virtual void Reset()
-        {
-            m_data = null;
+        {   
             m_bitLength = 0;
+        }
+
+        /// <summary>
+        /// Gets or sets the internal data buffer
+        /// </summary>
+        public byte[] Data
+        {
+            get { return m_data; }
+        }
+
+        /// <summary>
+        /// Gets or sets the length of the used portion of the buffer in bytes
+        /// </summary>
+        public int LengthBytes
+        {
+            get { return ((m_bitLength + 7) >> 3); }
+        }
+
+        /// <summary>
+        /// Gets or sets the length of the used portion of the buffer in bits
+        /// </summary>
+        public int LengthBits
+        {
+            get { return m_bitLength; }
         }
     }
 }

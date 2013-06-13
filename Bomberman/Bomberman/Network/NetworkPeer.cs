@@ -65,14 +65,14 @@ namespace Bomberman.Network
                 {
                     NetConnectionStatus status = (NetConnectionStatus)msg.ReadByte();
                     if (status == NetConnectionStatus.Connected)
-                    {
-                        OnPeerConnected(msg.SenderEndPoint);
+                    {   
+                        OnPeerConnected(msg.SenderConnection);
                         return true;
                     }
 
                     if (status == NetConnectionStatus.Disconnected)
                     {
-                        OnPeerDisconnected(msg.SenderEndPoint);
+                        OnPeerDisconnected(msg.SenderConnection);
                         return true;
                     }
 
@@ -92,11 +92,11 @@ namespace Bomberman.Network
             return false;
         }
 
-        protected virtual void OnPeerConnected(IPEndPoint endPoint)
+        protected virtual void OnPeerConnected(NetConnection connection)
         {
         }
 
-        protected virtual void OnPeerDisconnected(IPEndPoint endPoint)
+        protected virtual void OnPeerDisconnected(NetConnection connection)
         {
         }
 
@@ -164,7 +164,11 @@ namespace Bomberman.Network
 
         private void Write(BitWriteBuffer buffer)
         {
-            
+            byte[] data = buffer.Data;
+            int length = buffer.LengthBytes;
+
+            NetOutgoingMessage message = peer.CreateMessage(length);
+            message.Write(data, 0, length);
         }
 
         private void RegisterMessages()

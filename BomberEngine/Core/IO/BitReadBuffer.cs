@@ -23,6 +23,7 @@ namespace BomberEngine.Core.IO
         public override void Reset()
         {
             base.Reset();
+            m_data = null;
             m_readPosition = 0;
         }
 
@@ -640,6 +641,22 @@ namespace BomberEngine.Core.IO
         public void SkipPadBits(int numberOfBits)
         {
             m_readPosition += numberOfBits;
+        }
+
+        /// <summary>
+        /// Gets or sets the read position in the buffer, in bits (not bytes)
+        /// </summary>
+        public long Position
+        {
+            get { return (long)m_readPosition; }
+        }
+
+        /// <summary>
+        /// Gets the position in the buffer in bytes; note that the bits of the first returned byte may already have been read - check the Position property to make sure.
+        /// </summary>
+        public int PositionInBytes
+        {
+            get { return (int)(m_readPosition / 8); }
         }
     }
 }

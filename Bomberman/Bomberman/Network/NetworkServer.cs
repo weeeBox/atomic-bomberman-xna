@@ -10,12 +10,12 @@ namespace Bomberman.Network
 {
     public class NetworkServer : NetworkPeer
     {   
-        private IDictionary<IPEndPoint, NetworkPlayer> players;
+        private IDictionary<NetConnection, NetworkPlayer> connections;
         
         public NetworkServer(String name, int port)
             : base(name, port)
         {
-            players = new Dictionary<IPEndPoint, NetworkPlayer>();
+            connections = new Dictionary<NetConnection, NetworkPlayer>();
         }
 
         public override void Start()
@@ -61,26 +61,26 @@ namespace Bomberman.Network
             return false;
         }
 
-        protected override void OnPeerConnected(IPEndPoint endPoint)
+        protected override void OnPeerConnected(NetConnection connection)
         {
-            Debug.Assert(!players.ContainsKey(endPoint));
-            players.Add(endPoint, new NetworkPlayer("Player", endPoint));
+            Debug.Assert(!connections.ContainsKey(connection));
+            connections.Add(connection, new NetworkPlayer("Player", connection));
 
-            Log.i("Client connected: " + endPoint);
+            Log.i("Client connected: " + connection);
         }
 
-        protected override void OnPeerDisconnected(IPEndPoint endPoint)
+        protected override void OnPeerDisconnected(NetConnection connection)
         {   
-            Debug.Assert(players.ContainsKey(endPoint));
-            players.Remove(endPoint);
+            Debug.Assert(connections.ContainsKey(connection));
+            connections.Remove(connection);
 
-            Log.i("Client disconnected: " + endPoint);
+            Log.i("Client disconnected: " + connection);
         }
 
-        private NetworkPlayer FindClient(IPEndPoint endPoint)
+        private NetworkPlayer FindClient(NetConnection connection)
         {
             NetworkPlayer player;
-            if (players.TryGetValue(endPoint, out player))
+            if (connections.TryGetValue(connection, out player))
             {
                 return player;
             }
