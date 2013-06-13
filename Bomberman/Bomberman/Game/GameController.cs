@@ -57,18 +57,6 @@ namespace Bomberman.Game
         public GameController(GameSettings settings)
         {
             this.settings = settings;
-
-            game = new Game();
-            game.AddPlayer(new Player(0));
-            game.AddPlayer(new Player(1));
-            game.AddPlayer(new Player(2));
-
-            InitField(settings.scheme);
-
-            gameScreen = new GameScreen();
-            gameScreen.id = SCREEN_GAME;
-
-            InitPlayers();
         }
 
         protected override void OnStart()
@@ -79,13 +67,47 @@ namespace Bomberman.Game
             switch (settings.mode)
             {
                 case GameSettings.Mode.SinglePlayer:
+                {
+                    game = new Game();
+                    game.AddPlayer(new Player(0));
+
+                    InitField(settings.scheme);
+
+                    gameScreen = new GameScreen();
+                    gameScreen.id = SCREEN_GAME;
+
+                    InitPlayers();
                     break;
+                }
                 case GameSettings.Mode.MultiplayerClient:
+                {
+                    game = new Game();
+                    game.AddPlayer(new Player(0));
+
+                    gameScreen = new GameScreen();
+                    gameScreen.id = SCREEN_GAME;
+
+                    InitPlayers();
+
                     StartClient();
                     break;
+                }
                 case GameSettings.Mode.MultiplayeServer:
+                {
+                    game = new Game();
+                    game.AddPlayer(new Player(0));
+
+                    InitField(settings.scheme);
+
+                    gameScreen = new GameScreen();
+                    gameScreen.id = SCREEN_GAME;
+
+                    InitPlayers();
+
                     StartServer();
                     break;
+                }
+
                 default:
                     Debug.Fail("Unexpected game mode: " + settings.mode);
                     break;
@@ -112,23 +134,6 @@ namespace Bomberman.Game
             gameScreen.AddKeyListener(keyboardInput1);
 
             players[0].SetPlayerInput(keyboardInput1);
-
-            PlayerKeyboardInput keyboardInput2 = new PlayerKeyboardInput();
-            keyboardInput2.Map(KeyCode.Up, PlayerAction.Up);
-            keyboardInput2.Map(KeyCode.Left, PlayerAction.Left);
-            keyboardInput2.Map(KeyCode.Down, PlayerAction.Down);
-            keyboardInput2.Map(KeyCode.Right, PlayerAction.Right);
-            gameScreen.AddKeyListener(keyboardInput2);
-
-            players[1].SetPlayerInput(keyboardInput2);
-
-            PlayerGamePadInput gamePadInput = new PlayerGamePadInput(0);
-            gamePadInput.Map(KeyCode.GP_A, PlayerAction.Bomb);
-            gamePadInput.Map(KeyCode.GP_B, PlayerAction.Special);
-            gameScreen.AddKeyListener(gamePadInput);
-            gameScreen.AddUpdatable(gamePadInput);
-
-            players[2].SetPlayerInput(gamePadInput);
         }
 
         private void InitField(String schemeName)

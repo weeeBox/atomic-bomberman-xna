@@ -77,7 +77,12 @@ namespace Bomberman.Network
 
         protected override void OnMessageReceive(NetConnection connection, NetworkMessage message, BitReadBuffer buffer)
         {
-            
+            switch (message)
+            {
+                case NetworkMessage.FieldStateResponse:
+                    GameNetwork.ReadFieldState(buffer);
+                    break;
+            }
         }
     }
 }
