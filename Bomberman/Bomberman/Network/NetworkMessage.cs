@@ -6,6 +6,8 @@ using Bomberman.Game.Elements.Fields;
 using Bomberman.Game.Elements;
 using BomberEngine.Core.IO;
 using Bomberman.Game.Elements.Cells;
+using Bomberman.Game.Elements.Players;
+using BomberEngine.Debugging;
 
 namespace Bomberman.Network.Requests
 {
@@ -34,6 +36,8 @@ namespace Bomberman.Network.Requests
 
     public class MsgFieldStateRequest : NetworkMessage
     {
+        public Player player;
+
         public MsgFieldStateRequest()
             : base(NetworkMessageID.FieldStateRequest)
         {
@@ -98,6 +102,10 @@ namespace Bomberman.Network.Requests
 
         public override void Read(BitReadBuffer reader)
         {
+            int width = reader.ReadInt32();
+            int height = reader.ReadInt32();
+
+            Log.i("Field: " + width + "x" + height);
         }
     }
 }

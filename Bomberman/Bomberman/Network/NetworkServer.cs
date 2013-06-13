@@ -6,6 +6,7 @@ using Lidgren.Network;
 using BomberEngine.Debugging;
 using System.Net;
 using Bomberman.Network.Requests;
+using Bomberman.Game.Elements.Fields;
 
 namespace Bomberman.Network
 {
@@ -84,6 +85,12 @@ namespace Bomberman.Network
             Debug.Assert(player != null);
 
             Log.i("Message received: " + message.id + " from " + player.name);
+            switch (message.id)
+            {
+                case NetworkMessageID.FieldStateRequest:
+                    SendFieldState(connection);
+                    break;
+            }
         }
 
         private NetworkPlayer FindClient(NetConnection connection)
@@ -94,6 +101,15 @@ namespace Bomberman.Network
                 return player;
             }
             return null;
+        }
+
+        private void SendFieldState(NetConnection connection)
+        {
+            MsgFieldStateResponse message = CreateMessage(NetworkMessageID.FieldStateResponse) as MsgFieldStateResponse;
+            Debug.Assert(message != null);
+
+            message.field = Field.Current();
+            WriteMessage(connection, message);
         }
     }
 }
