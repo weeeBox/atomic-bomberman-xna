@@ -8,12 +8,10 @@ using System.Runtime.InteropServices;
 
 namespace BomberEngine.Core.IO
 {
-    public class BufferReader
+    public class BitBufferReader : BitBuffer
     {
         private const string c_readOverflowError = "Trying to read past the buffer size - likely caused by mismatching Write/Reads, different size or order.";
 
-        private byte[] m_data;
-        private int m_bitLength;
         private int m_readPosition;
 
         public void Init(byte[] data, int bitLength)
@@ -22,10 +20,9 @@ namespace BomberEngine.Core.IO
             m_bitLength = bitLength;
         }
 
-        public void Reset()
+        public override void Reset()
         {
-            m_data = null;
-            m_bitLength = 0;
+            base.Reset();
             m_readPosition = 0;
         }
 

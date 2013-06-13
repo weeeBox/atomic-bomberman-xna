@@ -11,7 +11,8 @@ namespace Bomberman.Network.Requests
 {
     public enum NetworkMessageID
     {
-        FieldState,
+        FieldStateRequest,
+        FieldStateResponse,
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -25,13 +26,29 @@ namespace Bomberman.Network.Requests
             this.id = id;
         }   
 
-        public abstract void Write(BufferWriter writer);
-        public abstract void Read(BufferReader reader);
+        public abstract void Write(BitBufferWriter writer);
+        public abstract void Read(BitBufferReader reader);
     }
 
     //////////////////////////////////////////////////////////////////////////////
 
-    public class MsgFieldState : NetworkMessage
+    public class MsgFieldStateRequest : NetworkMessage
+    {
+        public MsgFieldStateRequest()
+            : base(NetworkMessageID.FieldStateRequest)
+        {
+        }
+
+        public override void Write(BitBufferWriter writer)
+        {   
+        }
+
+        public override void Read(BitBufferReader reader)
+        {
+        }
+    }
+
+    public class MsgFieldStateResponse : NetworkMessage
     {
         private const byte BLOCK_EMPTY = 0;
         private const byte BLOCK_SOLID = 1;
@@ -39,12 +56,12 @@ namespace Bomberman.Network.Requests
 
         public Field field;
 
-        public MsgFieldState()
-            : base((byte)NetworkMessageID.FieldState)
+        public MsgFieldStateResponse()
+            : base(NetworkMessageID.FieldStateResponse)
         {
         }
 
-        public override void Write(BufferWriter writer)
+        public override void Write(BitBufferWriter writer)
         {
             FieldCellArray cells = field.GetCells();
             int width = cells.GetWidth();
@@ -79,7 +96,7 @@ namespace Bomberman.Network.Requests
             }
         }
 
-        public override void Read(BufferReader reader)
+        public override void Read(BitBufferReader reader)
         {
         }
     }

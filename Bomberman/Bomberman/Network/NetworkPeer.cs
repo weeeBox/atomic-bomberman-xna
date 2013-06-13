@@ -20,16 +20,16 @@ namespace Bomberman.Network
 
         protected IDictionary<NetworkMessageID, NetworkMessage> messagePool;
 
-        private BufferReader reader;
-        private BufferWriter writer;
+        private BitBufferReader reader;
+        private BitBufferWriter writer;
 
         protected NetworkPeer(String name, int port)
         {
             this.name = name;
             this.port = port;
 
-            reader = new BufferReader();
-            writer = new BufferWriter();
+            reader = new BitBufferReader();
+            writer = new BitBufferWriter();
 
             messagePool = new Dictionary<NetworkMessageID, NetworkMessage>();
             RegisterMessages();
@@ -110,7 +110,28 @@ namespace Bomberman.Network
 
         #region Messages
 
-        private NetworkMessage ReadMessage(BufferReader reader)
+        protected void WriteMessage(NetworkMessage message)
+        {
+            WriteMessage(writer, message);
+        }
+
+        protected void WriteMessage(NetworkMessageID messageId)
+        {
+            WriteMessage(writer, messageId);
+        }
+
+        protected NetworkMessage FindMessageObject(NetworkMessageID messageId)
+        {
+            NetworkMessage message;
+            if (messagePool.TryGetValue(messageId, out message))
+            {
+                return message;
+            }
+
+            return null;
+        }
+
+        private NetworkMessage ReadMessage(BitBufferReader reader)
         {
             NetworkMessageID id = (NetworkMessageID)reader.ReadByte();
 
@@ -121,25 +142,38 @@ namespace Bomberman.Network
             return message;
         }
 
+        private void WriteMessage(BitBufferWriter writer, NetworkMessageID messageId)
+        {
+            NetworkMessage message = FindMessageObject(messageId);
+            Debug.Assert(message != null);
+
+            WriteMessage(writer, message);
+        }
+
+        private void WriteMessage(BitBufferWriter writer, NetworkMessage message)
+        {
+            writer.Reset();
+
+            byte id = (byte)message.id;
+
+            writer.Write(id);
+            message.Write(writer);
+        }
+
+        private void Write(BitBufferWriter writer)
+        {
+            
+        }
+
         private void RegisterMessages()
         {
-            RegisterMessage(new MsgFieldState());
+            RegisterMessage(new MsgFieldStateRequest());
+            RegisterMessage(new MsgFieldStateResponse());
         }
 
-        private void RegisterMessage(NetworkMessage command)
+        private void RegisterMessage(NetworkMessage message)
         {   
-            messagePool.Add(command.id, command);
-        }
-
-        public NetworkMessage FindMessageObject(NetworkMessageID id)
-        {
-            NetworkMessage command;
-            if (messagePool.TryGetValue(id, out command))
-            {
-                return command;
-            }
-
-            return null;
+            messagePool.Add(message.id, message);
         }
             
         #endregion

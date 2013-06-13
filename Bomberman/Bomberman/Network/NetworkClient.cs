@@ -59,6 +59,7 @@ namespace Bomberman.Network
         protected override void OnPeerConnected(IPEndPoint endPoint)
         {
             Log.i("Connected to the server: " + endPoint);
+            WriteMessage(NetworkMessageID.FieldStateRequest);
         }
 
         protected override void OnPeerDisconnected(IPEndPoint endPoint)

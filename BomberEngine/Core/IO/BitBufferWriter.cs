@@ -27,16 +27,12 @@ namespace BomberEngine.Core.IO
         public uint UIntValue;
     }
 
-    public class BufferWriter
+    public class BitBufferWriter : BitBuffer
     {
         /// <summary>
         /// Number of bytes to overallocate for each message to avoid resizing
         /// </summary>
         private const int c_overAllocateAmount = 4;
-
-        private byte[] m_data;
-        private int m_bitLength;
-        private int m_readPosition;
 
         /// <summary>
         /// Ensures the buffer can hold this number of bits
