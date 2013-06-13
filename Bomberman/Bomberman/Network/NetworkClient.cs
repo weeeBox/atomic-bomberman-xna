@@ -5,7 +5,6 @@ using System.Text;
 using Lidgren.Network;
 using System.Net;
 using BomberEngine.Debugging;
-using Bomberman.Network.Requests;
 using BomberEngine.Core.IO;
 
 namespace Bomberman.Network
@@ -65,7 +64,7 @@ namespace Bomberman.Network
             Debug.Assert(serverConnection == null);
             serverConnection = connection;
 
-            WriteMessage(NetworkMessageID.FieldStateRequest);
+            SendMessage(connection, NetworkMessageID.FieldStateRequest);
         }
 
         protected override void OnPeerDisconnected(NetConnection connection)
@@ -74,18 +73,6 @@ namespace Bomberman.Network
             Debug.Assert(serverConnection == connection);
 
             serverConnection = null;
-        }
-
-        private void WriteMessage(NetworkMessageID messageId)
-        {
-            Debug.Assert(serverConnection != null);
-            WriteMessage(serverConnection, messageId);
-        }
-
-        private void WriteMessage(NetworkMessage message)
-        {
-            Debug.Assert(serverConnection != null);
-            WriteMessage(serverConnection, message);
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BomberEngine.Core;
-using Bomberman.Network.Requests;
 using Lidgren.Network;
 using System.Net;
 using BomberEngine.Core.IO;
@@ -13,12 +12,16 @@ namespace Bomberman.Network
 {
     public abstract class NetworkPeer : IUpdatable
     {
+        public enum NetworkMessageID
+        {
+            FieldStateRequest,
+            FieldStateResponse,
+        }
+
         protected NetPeer peer;
 
         protected String name;
         protected int port;
-
-        protected IDictionary<NetworkMessageID, NetworkMessage> messagePool;
 
         private BitReadBuffer readBuffer;
         private BitWriteBuffer writeBuffer;
@@ -30,9 +33,6 @@ namespace Bomberman.Network
 
             readBuffer = new BitReadBuffer();
             writeBuffer = new BitWriteBuffer();
-
-            messagePool = new Dictionary<NetworkMessageID, NetworkMessage>();
-            RegisterMessages();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -81,10 +81,7 @@ namespace Bomberman.Network
 
                 case NetIncomingMessageType.Data:
                 {
-                    readBuffer.Init(msg.Data, msg.LengthBits);
-                    NetworkMessage message = ReadMessage(readBuffer);
-                    readBuffer.Reset();
-                    OnMessageReceive(msg.SenderConnection, message);
+                    ReadMessage(msg);
                     break;
                 }
             }
@@ -100,7 +97,7 @@ namespace Bomberman.Network
         {
         }
 
-        protected virtual void OnMessageReceive(NetConnection connection, NetworkMessage message)
+        protected virtual void OnMessageReceive(NetConnection connection, NetworkMessageID message, BitReadBuffer buffer)
         {
         }
 
@@ -110,59 +107,21 @@ namespace Bomberman.Network
 
         #region Messages
 
-        protected void WriteMessage(NetConnection connection, NetworkMessage message)
+        private void ReadMessage(NetIncomingMessage msg)
         {
-            WriteMessage(connection, writeBuffer, message);
+            readBuffer.Init(msg.Data, msg.LengthBits);
+            NetworkMessageID id = (NetworkMessageID)readBuffer.ReadByte();
+            OnMessageReceive(msg.SenderConnection, id, readBuffer);
+            readBuffer.Reset();
         }
 
-        protected void WriteMessage(NetConnection connection, NetworkMessageID messageId)
+        protected void SendMessage(NetConnection connection, NetworkMessageID message)
         {
-            WriteMessage(connection, writeBuffer, messageId);
+            BitWriteBuffer buffer = GetWriteBuffer(message);
+            SendBuffer(connection, buffer);
         }
 
-        protected NetworkMessage CreateMessage(NetworkMessageID messageId)
-        {
-            NetworkMessage message;
-            if (messagePool.TryGetValue(messageId, out message))
-            {
-                return message;
-            }
-
-            throw new ArgumentException("Message not registered: " + messageId);
-        }
-
-        private NetworkMessage ReadMessage(BitReadBuffer buffer)
-        {
-            NetworkMessageID id = (NetworkMessageID)buffer.ReadByte();
-
-            NetworkMessage message = CreateMessage(id);
-            Debug.Assert(message != null);
-
-            message.Read(buffer);
-            return message;
-        }
-
-        private void WriteMessage(NetConnection connection, BitWriteBuffer buffer, NetworkMessageID messageId)
-        {
-            NetworkMessage message = CreateMessage(messageId);
-            Debug.Assert(message != null);
-
-            WriteMessage(connection, buffer, message);
-        }
-
-        private void WriteMessage(NetConnection connection, BitWriteBuffer buffer, NetworkMessage message)
-        {
-            buffer.Reset();
-
-            byte id = (byte)message.id;
-
-            buffer.Write(id);
-            message.Write(buffer);
-
-            Write(connection, buffer);
-        }
-
-        private void Write(NetConnection connection, BitWriteBuffer buffer)
+        protected void SendBuffer(NetConnection connection, BitWriteBuffer buffer)
         {
             byte[] data = buffer.Data;
             int length = buffer.LengthBytes;
@@ -173,15 +132,14 @@ namespace Bomberman.Network
             peer.SendMessage(message, connection, NetDeliveryMethod.Unreliable);
         }
 
-        private void RegisterMessages()
+        protected BitWriteBuffer GetWriteBuffer(NetworkMessageID message)
         {
-            RegisterMessage(new MsgFieldStateRequest());
-            RegisterMessage(new MsgFieldStateResponse());
-        }
+            writeBuffer.Reset();
 
-        private void RegisterMessage(NetworkMessage message)
-        {   
-            messagePool.Add(message.id, message);
+            byte id = (byte)message;
+            writeBuffer.Write(id);
+
+            return writeBuffer;
         }
             
         #endregion

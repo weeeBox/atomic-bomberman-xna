@@ -163,7 +163,6 @@
     <Compile Include="Network\NetworkPlayer.cs" />
     <Compile Include="Network\NetworkServer.cs" />
     <Compile Include="Network\NetworkPeer.cs" />
-    <Compile Include="Network\NetworkMessage.cs" />
     <Compile Include="Network\LocalServersDiscovery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

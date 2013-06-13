@@ -5,8 +5,10 @@ using System.Text;
 using Lidgren.Network;
 using BomberEngine.Debugging;
 using System.Net;
-using Bomberman.Network.Requests;
 using Bomberman.Game.Elements.Fields;
+using BomberEngine.Core.IO;
+using Bomberman.Game.Elements.Cells;
+using Bomberman.Game.Elements;
 
 namespace Bomberman.Network
 {
@@ -79,13 +81,13 @@ namespace Bomberman.Network
             Log.i("Client disconnected: " + connection);
         }
 
-        protected override void OnMessageReceive(NetConnection connection, NetworkMessage message)
+        protected override void OnMessageReceive(NetConnection connection, NetworkMessageID message, BitReadBuffer buffer)
         {
             NetworkPlayer player = FindClient(connection);
             Debug.Assert(player != null);
 
-            Log.i("Message received: " + message.id + " from " + player.name);
-            switch (message.id)
+            Log.i("Message received: " + message + " from " + player.name);
+            switch (message)
             {
                 case NetworkMessageID.FieldStateRequest:
                     SendFieldState(connection);
@@ -103,13 +105,15 @@ namespace Bomberman.Network
             return null;
         }
 
+        private const byte BLOCK_EMPTY = 0;
+        private const byte BLOCK_SOLID = 1;
+        private const byte BLOCK_BRICK = 2;
+
         private void SendFieldState(NetConnection connection)
         {
-            MsgFieldStateResponse message = CreateMessage(NetworkMessageID.FieldStateResponse) as MsgFieldStateResponse;
-            Debug.Assert(message != null);
-
-            message.field = Field.Current();
-            WriteMessage(connection, message);
+            BitWriteBuffer buffer = GetWriteBuffer(NetworkMessageID.FieldStateResponse);
+            GameNetwork.WriteFieldState(buffer);
+            SendBuffer(connection, buffer);
         }
     }
 }
