@@ -12,7 +12,7 @@ namespace Bomberman.Network
 {
     public abstract class NetworkPeer : IUpdatable
     {
-        public enum NetworkMessageID
+        public enum NetworkMessage
         {
             FieldStateRequest,
             FieldStateResponse,
@@ -97,7 +97,7 @@ namespace Bomberman.Network
         {
         }
 
-        protected virtual void OnMessageReceive(NetConnection connection, NetworkMessageID message, BitReadBuffer buffer)
+        protected virtual void OnMessageReceive(NetConnection connection, NetworkMessage message, BitReadBuffer buffer)
         {
         }
 
@@ -110,12 +110,12 @@ namespace Bomberman.Network
         private void ReadMessage(NetIncomingMessage msg)
         {
             readBuffer.Init(msg.Data, msg.LengthBits);
-            NetworkMessageID id = (NetworkMessageID)readBuffer.ReadByte();
+            NetworkMessage id = (NetworkMessage)readBuffer.ReadByte();
             OnMessageReceive(msg.SenderConnection, id, readBuffer);
             readBuffer.Reset();
         }
 
-        protected void SendMessage(NetConnection connection, NetworkMessageID message)
+        protected void SendMessage(NetConnection connection, NetworkMessage message)
         {
             BitWriteBuffer buffer = GetWriteBuffer(message);
             SendBuffer(connection, buffer);
@@ -132,7 +132,7 @@ namespace Bomberman.Network
             peer.SendMessage(message, connection, NetDeliveryMethod.Unreliable);
         }
 
-        protected BitWriteBuffer GetWriteBuffer(NetworkMessageID message)
+        protected BitWriteBuffer GetWriteBuffer(NetworkMessage message)
         {
             writeBuffer.Reset();
 

@@ -81,7 +81,7 @@ namespace Bomberman.Network
             Log.i("Client disconnected: " + connection);
         }
 
-        protected override void OnMessageReceive(NetConnection connection, NetworkMessageID message, BitReadBuffer buffer)
+        protected override void OnMessageReceive(NetConnection connection, NetworkMessage message, BitReadBuffer buffer)
         {
             NetworkPlayer player = FindClient(connection);
             Debug.Assert(player != null);
@@ -89,7 +89,7 @@ namespace Bomberman.Network
             Log.i("Message received: " + message + " from " + player.name);
             switch (message)
             {
-                case NetworkMessageID.FieldStateRequest:
+                case NetworkMessage.FieldStateRequest:
                     SendFieldState(connection);
                     break;
             }
@@ -111,7 +111,7 @@ namespace Bomberman.Network
 
         private void SendFieldState(NetConnection connection)
         {
-            BitWriteBuffer buffer = GetWriteBuffer(NetworkMessageID.FieldStateResponse);
+            BitWriteBuffer buffer = GetWriteBuffer(NetworkMessage.FieldStateResponse);
             GameNetwork.WriteFieldState(buffer);
             SendBuffer(connection, buffer);
         }

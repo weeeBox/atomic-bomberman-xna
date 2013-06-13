@@ -64,7 +64,7 @@ namespace Bomberman.Network
             Debug.Assert(serverConnection == null);
             serverConnection = connection;
 
-            SendMessage(connection, NetworkMessageID.FieldStateRequest);
+            SendMessage(connection, NetworkMessage.FieldStateRequest);
         }
 
         protected override void OnPeerDisconnected(NetConnection connection)
@@ -73,6 +73,11 @@ namespace Bomberman.Network
             Debug.Assert(serverConnection == connection);
 
             serverConnection = null;
+        }
+
+        protected override void OnMessageReceive(NetConnection connection, NetworkMessage message, BitReadBuffer buffer)
+        {
+            
         }
     }
 }

@@ -159,6 +159,7 @@
     <Compile Include="Menu\Screens\MainMenuScreen.cs" />
     <Compile Include="Menu\Screens\MultiplayerScreen.cs" />
     <Compile Include="Menu\Screens\SettingsScreen.cs" />
+    <Compile Include="Network\GameNetwork.cs" />
     <Compile Include="Network\NetworkClient.cs" />
     <Compile Include="Network\NetworkPlayer.cs" />
     <Compile Include="Network\NetworkServer.cs" />
