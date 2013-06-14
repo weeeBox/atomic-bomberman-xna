@@ -7,13 +7,13 @@ using Lidgren.Network;
 
 namespace Bomberman.Network
 {
-    public class NetworkPlayer
+    public class Connection
     {
         public NetConnection connection;
         public String name;
         public int index;
 
-        public NetworkPlayer(String name, NetConnection connection)
+        public Connection(String name, NetConnection connection)
         {
             this.name = name;
             this.connection = connection;

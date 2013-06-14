@@ -44,7 +44,7 @@ namespace Bomberman.Game
         private Game game;
 
         private GameSettings settings;
-        private NetworkPeer networkPeer;
+        private Peer networkPeer;
 
         private CCommand[] gameCommands = 
         {
@@ -223,7 +223,7 @@ namespace Bomberman.Game
             String name = CVars.sv_name.value;
             int port = CVars.sv_port.intValue;
 
-            networkPeer = new NetworkServer(name, port);
+            networkPeer = new Server(name, port);
             networkPeer.Start();
         }
 
@@ -235,7 +235,7 @@ namespace Bomberman.Game
             String name = CVars.sv_name.value;
             IPEndPoint endPoint = serverInfo.endPoint;
 
-            networkPeer = new NetworkClient(name, endPoint);
+            networkPeer = new Client(name, endPoint);
             networkPeer.Start();
 
             Log.d("Started network peer");

@@ -21,7 +21,7 @@ namespace Bomberman.Network
         }
     }
 
-    public class LocalServersDiscovery : NetworkPeer
+    public class LocalServersDiscovery : Peer
     {   
         private LocalServersDiscoveryDelegate searchDelegate;
 

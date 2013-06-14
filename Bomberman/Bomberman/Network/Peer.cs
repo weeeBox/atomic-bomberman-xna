@@ -10,7 +10,7 @@ using BomberEngine.Debugging;
 
 namespace Bomberman.Network
 {
-    public abstract class NetworkPeer : IUpdatable
+    public abstract class Peer : IUpdatable
     {
         public enum NetworkMessage
         {
@@ -26,7 +26,7 @@ namespace Bomberman.Network
         private BitReadBuffer readBuffer;
         private BitWriteBuffer writeBuffer;
 
-        protected NetworkPeer(String name, int port)
+        protected Peer(String name, int port)
         {
             this.name = name;
             this.port = port;

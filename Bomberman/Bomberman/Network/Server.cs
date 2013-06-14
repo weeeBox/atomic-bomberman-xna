@@ -12,14 +12,14 @@ using Bomberman.Game.Elements;
 
 namespace Bomberman.Network
 {
-    public class NetworkServer : NetworkPeer
+    public class Server : Peer
     {   
-        private IDictionary<NetConnection, NetworkPlayer> connections;
+        private IDictionary<NetConnection, Connection> connections;
         
-        public NetworkServer(String name, int port)
+        public Server(String name, int port)
             : base(name, port)
         {
-            connections = new Dictionary<NetConnection, NetworkPlayer>();
+            connections = new Dictionary<NetConnection, Connection>();
         }
 
         public override void Start()
@@ -68,7 +68,7 @@ namespace Bomberman.Network
         protected override void OnPeerConnected(NetConnection connection)
         {
             Debug.Assert(!connections.ContainsKey(connection));
-            connections.Add(connection, new NetworkPlayer("Player", connection));
+            connections.Add(connection, new Connection("Player", connection));
 
             Log.i("Client connected: " + connection);
         }
@@ -83,7 +83,7 @@ namespace Bomberman.Network
 
         protected override void OnMessageReceive(NetConnection connection, NetworkMessage message, BitReadBuffer buffer)
         {
-            NetworkPlayer player = FindClient(connection);
+            Connection player = FindClient(connection);
             Debug.Assert(player != null);
 
             Log.i("Message received: " + message + " from " + player.name);
@@ -95,9 +95,9 @@ namespace Bomberman.Network
             }
         }
 
-        private NetworkPlayer FindClient(NetConnection connection)
+        private Connection FindClient(NetConnection connection)
         {
-            NetworkPlayer player;
+            Connection player;
             if (connections.TryGetValue(connection, out player))
             {
                 return player;
