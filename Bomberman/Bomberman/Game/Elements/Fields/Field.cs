@@ -51,6 +51,12 @@ namespace Bomberman.Game.Elements.Fields
 
         #region Setup
 
+        public void Init(int width, int height)
+        {
+            cells = new FieldCellArray(width, height);
+            movableCells = new LinkedList<MovableCell>();
+        }
+
         public void Setup(Scheme scheme)
         {
             SetupField(scheme.GetFieldData(), scheme.GetBrickDensity());

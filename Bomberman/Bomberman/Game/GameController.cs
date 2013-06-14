@@ -87,6 +87,7 @@ namespace Bomberman.Game
                 case GameSettings.Mode.MultiplayerClient:
                 {
                     game = new Game();
+                    game.AddPlayer(new Player(0));
 
                     StartScreen(new NetworkConnectionScreen());
 
@@ -351,27 +352,43 @@ namespace Bomberman.Game
             int width = buffer.ReadInt32();
             int height = buffer.ReadInt32();
 
-            int blocksCount = width * height;
-            for (int i = 0; i < blocksCount; ++i)
+            field.Init(width, height);
+
+            for (int y = 0; y < height; ++y)
             {
-                byte blockType = buffer.ReadByte();
-                if (blockType == BLOCK_EMPTY)
+                for (int x = 0; x < width; ++x)
                 {
-
-                }
-                else if (blockType == BLOCK_BRICK)
-                {
-                    byte powerup = buffer.ReadByte();
-                    if (powerup != NO_POWERUP)
+                    byte blockType = buffer.ReadByte();
+                    if (blockType == BLOCK_EMPTY)
                     {
+                        // nothing
+                    }
+                    else if (blockType == BLOCK_BRICK)
+                    {
+                        BrickCell brick = new BrickCell(x, y);
 
+                        byte powerup = buffer.ReadByte();
+                        if (powerup != NO_POWERUP)
+                        {
+                            brick.powerup = powerup;
+                        }
+
+                        field.AddCell(brick);
+                    }
+                    else if (blockType == BLOCK_SOLID)
+                    {
+                        SolidCell solid = new SolidCell(x, y);
+                        field.AddCell(solid);
                     }
                 }
-                else if (blockType == BLOCK_SOLID)
-                {
-
-                }
             }
+
+            gameScreen = new GameScreen();
+            gameScreen.id = SCREEN_GAME;
+
+            InitPlayers();
+
+            StartScreen(gameScreen);
         }
     }
 }

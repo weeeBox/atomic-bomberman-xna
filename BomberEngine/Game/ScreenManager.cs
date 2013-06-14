@@ -80,7 +80,6 @@ namespace BomberEngine.Game
                 if (replaceCurrent)
                 {
                     currentScreen.Stop();
-                    currentScreen.screenManager = null;
                 }
                 else
                 {
