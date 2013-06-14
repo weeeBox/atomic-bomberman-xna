@@ -12,14 +12,18 @@ using Bomberman.Game.Elements;
 
 namespace Bomberman.Network
 {
+    public interface ServerListener
+    {
+        void OnMessageReceived(Server server, Connection connection, NetworkMessage message);
+    }
+
     public class Server : Peer
-    {   
-        private IDictionary<NetConnection, Connection> connections;
-        
+    {
+        public ServerListener listener;
+
         public Server(String name, int port)
             : base(name, port)
-        {
-            connections = new Dictionary<NetConnection, Connection>();
+        {   
         }
 
         public override void Start()
@@ -65,55 +69,19 @@ namespace Bomberman.Network
             return false;
         }
 
-        protected override void OnPeerConnected(NetConnection connection)
+        protected override void OnPeerConnected(Connection connection)
         {
-            Debug.Assert(!connections.ContainsKey(connection));
-            connections.Add(connection, new Connection("Player", connection));
-
             Log.i("Client connected: " + connection);
         }
 
-        protected override void OnPeerDisconnected(NetConnection connection)
+        protected override void OnPeerDisconnected(Connection connection)
         {   
-            Debug.Assert(connections.ContainsKey(connection));
-            connections.Remove(connection);
-
             Log.i("Client disconnected: " + connection);
         }
 
-        protected override void OnMessageReceive(NetConnection connection, NetworkMessage message, BitReadBuffer buffer)
+        protected override void OnMessageReceive(Connection connection, NetworkMessage message)
         {
-            Connection player = FindClient(connection);
-            Debug.Assert(player != null);
-
-            Log.i("Message received: " + message + " from " + player.name);
-            switch (message)
-            {
-                case NetworkMessage.FieldStateRequest:
-                    SendFieldState(connection);
-                    break;
-            }
-        }
-
-        private Connection FindClient(NetConnection connection)
-        {
-            Connection player;
-            if (connections.TryGetValue(connection, out player))
-            {
-                return player;
-            }
-            return null;
-        }
-
-        private const byte BLOCK_EMPTY = 0;
-        private const byte BLOCK_SOLID = 1;
-        private const byte BLOCK_BRICK = 2;
-
-        private void SendFieldState(NetConnection connection)
-        {
-            BitWriteBuffer buffer = GetWriteBuffer(NetworkMessage.FieldStateResponse);
-            GameNetwork.WriteFieldState(buffer);
-            SendBuffer(connection, buffer);
+            listener.OnMessageReceived(this, connection, message);
         }
     }
 }

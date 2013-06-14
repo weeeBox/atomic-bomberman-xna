@@ -11,9 +11,10 @@ using Bomberman.Content;
 namespace Bomberman.Game
 {
     public class Game
-    {   
+    {
+        public Field field;
+
         private Match match;
-        private Field field;
 
         private static Game current;
 

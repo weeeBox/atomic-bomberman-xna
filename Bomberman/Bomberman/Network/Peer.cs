@@ -10,29 +10,28 @@ using BomberEngine.Debugging;
 
 namespace Bomberman.Network
 {
+    public enum NetworkMessage
+    {
+        FieldStateRequest,
+        FieldStateResponse,
+    }
+
     public abstract class Peer : IUpdatable
     {
-        public enum NetworkMessage
-        {
-            FieldStateRequest,
-            FieldStateResponse,
-        }
-
-        protected NetPeer peer;
-
         protected String name;
         protected int port;
 
-        private BitReadBuffer readBuffer;
-        private BitWriteBuffer writeBuffer;
+        protected NetPeer peer;
+        protected List<Connection> connections;
+        private IDictionary<NetConnection, Connection> connectionsLookup;
 
         protected Peer(String name, int port)
         {
             this.name = name;
             this.port = port;
 
-            readBuffer = new BitReadBuffer();
-            writeBuffer = new BitWriteBuffer();
+            connections = new List<Connection>();
+            connectionsLookup = new Dictionary<NetConnection, Connection>();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -65,14 +64,16 @@ namespace Bomberman.Network
                 {
                     NetConnectionStatus status = (NetConnectionStatus)msg.ReadByte();
                     if (status == NetConnectionStatus.Connected)
-                    {   
-                        OnPeerConnected(msg.SenderConnection);
+                    {
+                        Connection connection = AddConnection(msg.SenderConnection);
+                        OnPeerConnected(connection);
                         return true;
                     }
 
                     if (status == NetConnectionStatus.Disconnected)
                     {
-                        OnPeerDisconnected(msg.SenderConnection);
+                        Connection connection = RemoveConnection(msg.SenderConnection);
+                        OnPeerDisconnected(connection);
                         return true;
                     }
 
@@ -89,16 +90,53 @@ namespace Bomberman.Network
             return false;
         }
 
-        protected virtual void OnPeerConnected(NetConnection connection)
+        protected virtual void OnPeerConnected(Connection connection)
         {
         }
 
-        protected virtual void OnPeerDisconnected(NetConnection connection)
+        protected virtual void OnPeerDisconnected(Connection connection)
         {
         }
 
-        protected virtual void OnMessageReceive(NetConnection connection, NetworkMessage message, BitReadBuffer buffer)
+        protected virtual void OnMessageReceive(Connection connection, NetworkMessage message)
         {
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Connections
+
+        private Connection AddConnection(NetConnection c)
+        {
+            Debug.Assert(FindConnection(c) == null);
+
+            Connection connection = new Connection(peer, c);
+            connections.Add(connection);
+            connectionsLookup.Add(c, connection);
+            return connection;
+        }
+
+        private Connection RemoveConnection(NetConnection c)
+        {
+            Connection connection = FindConnection(c);
+            Debug.Assert(connection != null);
+
+            connections.Remove(connection);
+            connectionsLookup.Remove(c);
+
+            return connection;
+        }
+
+        private Connection FindConnection(NetConnection key)
+        {
+            Connection connection;
+            if (connectionsLookup.TryGetValue(key, out connection))
+            {
+                return connection;
+            }
+            return null;
         }
 
         #endregion
@@ -109,37 +147,13 @@ namespace Bomberman.Network
 
         private void ReadMessage(NetIncomingMessage msg)
         {
-            readBuffer.Init(msg.Data, msg.LengthBits);
-            NetworkMessage id = (NetworkMessage)readBuffer.ReadByte();
-            OnMessageReceive(msg.SenderConnection, id, readBuffer);
+            Connection connection = FindConnection(msg.SenderConnection);
+            Debug.Assert(connection != null);
+
+            BitReadBuffer readBuffer = connection.CreateReadBuffer(msg.Data, msg.LengthBits);
+            NetworkMessage message = (NetworkMessage)readBuffer.ReadByte();
+            OnMessageReceive(connection, message);
             readBuffer.Reset();
-        }
-
-        protected void SendMessage(NetConnection connection, NetworkMessage message)
-        {
-            BitWriteBuffer buffer = GetWriteBuffer(message);
-            SendBuffer(connection, buffer);
-        }
-
-        protected void SendBuffer(NetConnection connection, BitWriteBuffer buffer)
-        {
-            byte[] data = buffer.Data;
-            int length = buffer.LengthBytes;
-
-            NetOutgoingMessage message = peer.CreateMessage(length);
-            message.Write(data, 0, length);
-
-            peer.SendMessage(message, connection, NetDeliveryMethod.Unreliable);
-        }
-
-        protected BitWriteBuffer GetWriteBuffer(NetworkMessage message)
-        {
-            writeBuffer.Reset();
-
-            byte id = (byte)message;
-            writeBuffer.Write(id);
-
-            return writeBuffer;
         }
             
         #endregion

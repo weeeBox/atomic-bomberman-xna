@@ -12,6 +12,10 @@ using BomberEngine.Consoles;
 using Bomberman.Network;
 using BomberEngine.Debugging;
 using System.Net;
+using BomberEngine.Core.IO;
+using Bomberman.Game.Elements.Fields;
+using Bomberman.Game.Elements.Cells;
+using Bomberman.Game.Elements;
 
 namespace Bomberman.Game
 {
@@ -35,7 +39,7 @@ namespace Bomberman.Game
         }
     }
 
-    public class GameController : Controller
+    public class GameController : Controller, ClientListener, ServerListener
     {
         private const int SCREEN_GAME = 1;
         private const int SCREEN_PAUSE = 2;
@@ -62,7 +66,6 @@ namespace Bomberman.Game
         protected override void OnStart()
         {
             Console().RegisterCommands(gameCommands);
-            StartScreen(gameScreen);
 
             switch (settings.mode)
             {
@@ -77,17 +80,15 @@ namespace Bomberman.Game
                     gameScreen.id = SCREEN_GAME;
 
                     InitPlayers();
+
+                    StartScreen(gameScreen);
                     break;
                 }
                 case GameSettings.Mode.MultiplayerClient:
                 {
                     game = new Game();
-                    game.AddPlayer(new Player(0));
 
-                    gameScreen = new GameScreen();
-                    gameScreen.id = SCREEN_GAME;
-
-                    InitPlayers();
+                    StartScreen(new NetworkConnectionScreen());
 
                     StartClient();
                     break;
@@ -103,6 +104,8 @@ namespace Bomberman.Game
                     gameScreen.id = SCREEN_GAME;
 
                     InitPlayers();
+
+                    StartScreen(gameScreen);
 
                     StartServer();
                     break;
@@ -223,8 +226,13 @@ namespace Bomberman.Game
             String name = CVars.sv_name.value;
             int port = CVars.sv_port.intValue;
 
-            networkPeer = new Server(name, port);
+            Server server = new Server(name, port);
+            server.listener = this;
+            networkPeer = server;
+            
             networkPeer.Start();
+
+            Log.d("Started network server");
         }
 
         private void StartClient()
@@ -235,10 +243,13 @@ namespace Bomberman.Game
             String name = CVars.sv_name.value;
             IPEndPoint endPoint = serverInfo.endPoint;
 
-            networkPeer = new Client(name, endPoint);
+            Client client = new Client(name, endPoint);
+            client.listener = this;
+            networkPeer = client;
+            
             networkPeer.Start();
 
-            Log.d("Started network peer");
+            Log.d("Started network client");
         }
 
         private void StopNetworkPeer()
@@ -253,5 +264,114 @@ namespace Bomberman.Game
         }
 
         #endregion
+
+        public void OnMessageReceived(Client client, Connection connection, NetworkMessage message)
+        {
+            switch (message)
+            {
+                case NetworkMessage.FieldStateResponse:
+                {
+                    BitReadBuffer buffer = connection.ReadBuffer;
+                    ReadFieldState(buffer);
+                    break;
+                }
+            }
+        }
+
+        public void OnConnectedToServer(Client client, Connection serverConnection)
+        {   
+            serverConnection.SendMessage(NetworkMessage.FieldStateRequest);
+        }
+
+        public void OnDisconnectedFromServer(Client client)
+        {
+        }
+
+        public void OnMessageReceived(Server server, Connection connection, NetworkMessage message)
+        {
+            switch (message)
+            {
+                case NetworkMessage.FieldStateRequest:
+                {
+                    BitWriteBuffer buffer = connection.WriteBuffer;
+                    WriteFieldState(buffer);
+                    connection.SendMessage(NetworkMessage.FieldStateResponse, buffer);
+                    break;
+                }
+            }
+        }
+
+        private const byte BLOCK_EMPTY = 0;
+        private const byte BLOCK_SOLID = 1;
+        private const byte BLOCK_BRICK = 2;
+
+        private const byte NO_POWERUP = (byte)0xff;
+
+        private void WriteFieldState(BitWriteBuffer buffer)
+        {
+            Field field = game.field;
+
+            FieldCellArray cells = field.GetCells();
+            int width = cells.GetWidth();
+            int height = cells.GetHeight();
+
+            buffer.Write(width);
+            buffer.Write(height);
+
+            FieldCellSlot[] slots = cells.slots;
+            for (int i = 0; i < slots.Length; ++i)
+            {
+                FieldCell staticCell = slots[i].staticCell;
+                if (staticCell != null)
+                {
+                    if (staticCell.IsSolid())
+                    {
+                        buffer.Write(BLOCK_SOLID);
+                    }
+                    else if (staticCell.IsBrick())
+                    {
+                        BrickCell brick = staticCell.AsBrick();
+                        byte powerup = brick.powerup != Powerups.None ? (byte)brick.powerup : NO_POWERUP;
+
+                        buffer.Write(BLOCK_BRICK);
+                        buffer.Write(powerup);
+                    }
+                }
+                else
+                {
+                    buffer.Write(BLOCK_EMPTY);
+                }
+            }
+        }
+
+        private void ReadFieldState(BitReadBuffer buffer)
+        {
+            Field field = game.field;
+
+            int width = buffer.ReadInt32();
+            int height = buffer.ReadInt32();
+
+            int blocksCount = width * height;
+            for (int i = 0; i < blocksCount; ++i)
+            {
+                byte blockType = buffer.ReadByte();
+                if (blockType == BLOCK_EMPTY)
+                {
+
+                }
+                else if (blockType == BLOCK_BRICK)
+                {
+                    byte powerup = buffer.ReadByte();
+                    if (powerup != NO_POWERUP)
+                    {
+
+                    }
+                }
+                else if (blockType == BLOCK_SOLID)
+                {
+
+                }
+            }
+        }
     }
 }

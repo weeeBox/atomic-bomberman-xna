@@ -9,6 +9,13 @@ using BomberEngine.Core.IO;
 
 namespace Bomberman.Network
 {
+    public interface ClientListener
+    {
+        void OnMessageReceived(Client client, Connection connection, NetworkMessage message);
+        void OnConnectedToServer(Client client, Connection serverConnection);
+        void OnDisconnectedFromServer(Client client);
+    }
+
     public class Client : Peer
     {
         private enum State
@@ -18,8 +25,10 @@ namespace Bomberman.Network
             Connected
         }
 
+        public ClientListener listener;
+
         private IPEndPoint endPoint;
-        private NetConnection serverConnection;
+        private Connection serverConnection;
 
         private State state;
 
@@ -58,31 +67,27 @@ namespace Bomberman.Network
             }
         }
 
-        protected override void OnPeerConnected(NetConnection connection)
+        protected override void OnPeerConnected(Connection connection)
         {
             Log.i("Connected to the server: " + connection.RemoteEndPoint);
             Debug.Assert(serverConnection == null);
             serverConnection = connection;
 
-            SendMessage(connection, NetworkMessage.FieldStateRequest);
+            listener.OnConnectedToServer(this, serverConnection);
         }
 
-        protected override void OnPeerDisconnected(NetConnection connection)
+        protected override void OnPeerDisconnected(Connection connection)
         {
             Log.i("Disconnected from the server: " + connection.RemoteEndPoint);
             Debug.Assert(serverConnection == connection);
 
             serverConnection = null;
+            listener.OnDisconnectedFromServer(this);
         }
 
-        protected override void OnMessageReceive(NetConnection connection, NetworkMessage message, BitReadBuffer buffer)
+        protected override void OnMessageReceive(Connection connection, NetworkMessage message)
         {
-            switch (message)
-            {
-                case NetworkMessage.FieldStateResponse:
-                    GameNetwork.ReadFieldState(buffer);
-                    break;
-            }
+            listener.OnMessageReceived(this, connection, message);
         }
     }
 }
