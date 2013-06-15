@@ -14,8 +14,6 @@ namespace Bomberman.Game
     {
         public Field field;
 
-        private Match match;
-
         private static Game current;
 
         public Game()
@@ -42,11 +40,6 @@ namespace Bomberman.Game
         public static PlayerList Players()
         {
             return current.GetPlayers();
-        }
-
-        public static Match Match()
-        {
-            return current.match;
         }
 
         public static Field Field()

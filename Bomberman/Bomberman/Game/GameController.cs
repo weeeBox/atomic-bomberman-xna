@@ -279,12 +279,11 @@ namespace Bomberman.Game
             }
         }
 
-        public void OnConnectedToServer(Client client, Connection serverConnection)
+        public void OnClientConnected(Server server, Connection connection)
         {   
-            serverConnection.SendMessage(NetworkMessage.FieldStateRequest);
         }
 
-        public void OnDisconnectedFromServer(Client client)
+        public void OnClientDisconnected(Server server, Connection connection)
         {
         }
 
@@ -300,6 +299,15 @@ namespace Bomberman.Game
                     break;
                 }
             }
+        }
+
+        public void OnConnectedToServer(Client client, Connection serverConnection)
+        {
+            serverConnection.SendMessage(NetworkMessage.FieldStateRequest);
+        }
+
+        public void OnDisconnectedFromServer(Client client)
+        {
         }
 
         private const byte BLOCK_EMPTY = 0;

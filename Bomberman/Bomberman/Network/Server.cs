@@ -15,6 +15,8 @@ namespace Bomberman.Network
     public interface ServerListener
     {
         void OnMessageReceived(Server server, Connection connection, NetworkMessage message);
+        void OnClientConnected(Server server, Connection connection);
+        void OnClientDisconnected(Server server, Connection connection);
     }
 
     public class Server : Peer
@@ -72,11 +74,13 @@ namespace Bomberman.Network
         protected override void OnPeerConnected(Connection connection)
         {
             Log.i("Client connected: " + connection);
+            listener.OnClientConnected(this, connection);
         }
 
         protected override void OnPeerDisconnected(Connection connection)
         {   
             Log.i("Client disconnected: " + connection);
+            listener.OnClientDisconnected(this, connection);
         }
 
         protected override void OnMessageReceive(Connection connection, NetworkMessage message)

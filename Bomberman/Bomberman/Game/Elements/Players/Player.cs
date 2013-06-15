@@ -30,6 +30,8 @@ namespace Bomberman.Game.Elements.Players
         /* Kicked/Punched bombs */
         private List<Bomb> m_thrownBombs;
 
+        public Object data;
+
         public Player(int index)
             : base(FieldCellType.Player, 0, 0)
         {
