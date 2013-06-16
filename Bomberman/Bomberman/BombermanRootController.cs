@@ -72,7 +72,12 @@ namespace Bomberman
                 switch (exitCode)
                 {
                     case MultiplayerController.ExitCode.Create:
+                    {
+                        GameSettings settings = new GameSettings("x");
+                        settings.multiplayer = GameSettings.Multiplayer.Server;
+                        StartController(new GameController(settings));
                         break;
+                    }
 
                     case MultiplayerController.ExitCode.Join:
                         break;

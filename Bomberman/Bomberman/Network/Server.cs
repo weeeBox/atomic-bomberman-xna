@@ -67,6 +67,7 @@ namespace Bomberman.Network
                     BitWriteBuffer buffer = new BitWriteBuffer();
                     listener.WriteDiscoveryResponse(buffer);
                     NetOutgoingMessage message = peer.CreateMessage(buffer.LengthBytes);
+                    message.Write(buffer.Data, 0, buffer.LengthBytes);
                     peer.SendDiscoveryResponse(message, msg.SenderEndPoint);
                     return true;
                 }

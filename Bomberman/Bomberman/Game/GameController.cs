@@ -22,26 +22,21 @@ namespace Bomberman.Game
 {
     public class GameSettings
     {
-        public enum Mode
+        public enum Multiplayer
         {
-            LocalGame,
-            NetworkGame,
-        }
-
-        public enum Role
-        {
-            Client,
+            None,
             Server,
+            Client
         }
 
         public String scheme;
-        public Mode mode;
+        public Multiplayer multiplayer;
         public ServerInfo serverInfo;
 
         public GameSettings(String scheme)
         {
             this.scheme = scheme;
-            mode = Mode.LocalGame;
+            multiplayer = Multiplayer.None;
         }
     }
 
@@ -73,31 +68,53 @@ namespace Bomberman.Game
         {
             Console().RegisterCommands(gameCommands);
 
-            switch (settings.mode)
+            switch (settings.multiplayer)
             {
-                case GameSettings.Mode.LocalGame:
+                case GameSettings.Multiplayer.None:
                 {
-                    //game = new Game();
-                    //game.AddPlayer(new Player(0));
+                    game = new Game();
+                    game.AddPlayer(new Player(0));
 
-                    //InitField(settings.scheme);
+                    InitField(settings.scheme);
 
-                    //gameScreen = new GameScreen();
-                    //gameScreen.id = SCREEN_GAME;
+                    gameScreen = new GameScreen();
+                    gameScreen.id = SCREEN_GAME;
 
-                    //InitPlayers();
+                    InitPlayers();
 
-                    //StartScreen(gameScreen);
+                    StartScreen(gameScreen);
                     break;
                 }
-
-                case GameSettings.Mode.NetworkGame:
+                case GameSettings.Multiplayer.Client:
                 {
+                    game = new Game();
+                    game.AddPlayer(new Player(0));
+
+                    StartScreen(new NetworkConnectionScreen());
+
+                    StartClient();
+                    break;
+                }
+                case GameSettings.Multiplayer.Server:
+                {
+                    game = new Game();
+                    game.AddPlayer(new Player(0));
+
+                    InitField(settings.scheme);
+
+                    gameScreen = new GameScreen();
+                    gameScreen.id = SCREEN_GAME;
+
+                    InitPlayers();
+
+                    StartScreen(gameScreen);
+
+                    StartServer();
                     break;
                 }
                 
                 default:
-                    Debug.Fail("Unexpected game mode: " + settings.mode);
+                    Debug.Fail("Unexpected game mode: " + settings.multiplayer);
                     break;
             }
         }
