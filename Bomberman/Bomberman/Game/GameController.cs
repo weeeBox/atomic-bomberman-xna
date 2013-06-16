@@ -43,8 +43,12 @@ namespace Bomberman.Game
 
     public class GameController : Controller, ClientListener, ServerListener
     {
-        private const int SCREEN_GAME = 1;
-        private const int SCREEN_PAUSE = 2;
+        public enum ExitCode
+        {
+            StopServer,
+            StopClient,
+            Exit
+        }
 
         private GameScreen gameScreen;
         private Game game;
@@ -79,7 +83,6 @@ namespace Bomberman.Game
                     InitField(settings.scheme);
 
                     gameScreen = new GameScreen();
-                    gameScreen.id = SCREEN_GAME;
 
                     InitPlayers();
 
@@ -98,18 +101,7 @@ namespace Bomberman.Game
                 }
                 case GameSettings.Multiplayer.Server:
                 {
-                    game = new Game();
-                    game.AddPlayer(new Player(0));
-
-                    InitField(settings.scheme);
-
-                    gameScreen = new GameScreen();
-                    gameScreen.id = SCREEN_GAME;
-
-                    InitPlayers();
-
-                    StartScreen(gameScreen);
-
+                    StartScreen(new LobbyScreen(OnLobbyScreenButtonPressed));
                     StartServer();
                     break;
                 }
@@ -124,6 +116,11 @@ namespace Bomberman.Game
         {
             StopNetworkPeer();
             Console().UnregisterCommands(gameCommands);
+        }
+
+        public void Stop(ExitCode exitCode, Object data = null)
+        {
+            Stop((int)exitCode, data);
         }
 
         private void InitPlayers()
@@ -172,15 +169,13 @@ namespace Bomberman.Game
             if (e.key == KeyCode.Escape)
             {
                 Screen screen = CurrentScreen();
-                if (screen.id == SCREEN_GAME)
+                if (screen is GameScreen)
                 {
-                    PauseScreen pauseScreen = new PauseScreen(OnPauseScreenButtonPress);
-                    pauseScreen.id = SCREEN_PAUSE;
-                    StartNextScreen(pauseScreen);
+                    StartNextScreen(new PauseScreen(OnPauseScreenButtonPress));
                     return true;
                 }
 
-                if (screen.id == SCREEN_PAUSE)
+                if (screen is PauseScreen)
                 {
                     screen.Finish();
                     return true;
@@ -192,15 +187,58 @@ namespace Bomberman.Game
 
         private void OnPauseScreenButtonPress(Button button)
         {
-            switch (button.id)
+            PauseScreen.ButtonId buttonId = (PauseScreen.ButtonId)button.id;
+            switch (buttonId)
             {
-                case PauseScreen.BUTTON_RESUME:
+                case PauseScreen.ButtonId.Resume:
                     CurrentScreen().Finish();
                     break;
 
-                case PauseScreen.BUTTON_EXIT:
-                    Stop();
+                case PauseScreen.ButtonId.Exit:
+                    Stop(ExitCode.Exit);
                     break;
+            }
+        }
+
+        private void OnLobbyScreenButtonPressed(Button button)
+        {
+            LobbyScreen.ButtonId buttonId = (LobbyScreen.ButtonId)button.id;
+            switch (buttonId)
+            {
+                case LobbyScreen.ButtonId.Start:
+                {
+                    game = new Game();
+                    game.AddPlayer(new Player(0));
+
+                    InitField(settings.scheme);
+
+                    gameScreen = new GameScreen();
+
+                    InitPlayers();
+
+                    StartScreen(gameScreen);
+                    break;
+                }
+
+                case LobbyScreen.ButtonId.Back:
+                {
+                    switch (settings.multiplayer)
+                    {
+                        case GameSettings.Multiplayer.Server:
+                            Stop(ExitCode.StopServer);
+                            break;
+                        case GameSettings.Multiplayer.Client:
+                            Stop(ExitCode.StopClient);
+                            break;
+                        case GameSettings.Multiplayer.None:
+                            Stop(ExitCode.Exit);
+                            break;
+                        default:
+                            Debug.Fail("Unexpected exit code: " + exitCode);
+                            break;
+                    }
+                    break;
+                }
             }
         }
 
@@ -419,7 +457,6 @@ namespace Bomberman.Game
             }
 
             gameScreen = new GameScreen();
-            gameScreen.id = SCREEN_GAME;
 
             InitPlayers();
 

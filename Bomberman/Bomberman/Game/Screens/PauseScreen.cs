@@ -16,8 +16,11 @@ namespace Bomberman.Game.Screens
 {
     public class PauseScreen : Screen
     {
-        public const int BUTTON_RESUME = 1;
-        public const int BUTTON_EXIT = 2;
+        public enum ButtonId
+        {
+            Resume,
+            Exit,
+        }
 
         public PauseScreen(ButtonDelegate buttonDelegate)
         {   
@@ -27,8 +30,8 @@ namespace Bomberman.Game.Screens
             AddView(new RectView(0, 0, width, height, backColor, Color.Black));
 
             ButtonGroup group = new ButtonGroup();
-            group.AddButton("Resume", BUTTON_RESUME, buttonDelegate);
-            group.AddButton("Exit", BUTTON_EXIT, buttonDelegate);
+            group.AddButton("Resume", (int)ButtonId.Resume, buttonDelegate);
+            group.AddButton("Exit", (int)ButtonId.Exit, buttonDelegate);
             group.alignX = group.alignY = View.ALIGN_CENTER;
             group.x = 0.5f * width;
             group.y = 0.5f * height;
