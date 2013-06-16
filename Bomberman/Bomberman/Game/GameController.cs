@@ -51,6 +51,8 @@ namespace Bomberman.Game
         }
 
         private GameScreen gameScreen;
+        private PauseScreen pauseScreen;
+
         private Game game;
 
         private GameSettings settings;
@@ -101,7 +103,7 @@ namespace Bomberman.Game
                 }
                 case GameSettings.Multiplayer.Server:
                 {
-                    StartScreen(new LobbyScreen(OnLobbyScreenButtonPressed));
+                    StartScreen(new MultiplayerLobbyScreen(OnLobbyScreenButtonPressed));
                     StartServer();
                     break;
                 }
@@ -202,10 +204,10 @@ namespace Bomberman.Game
 
         private void OnLobbyScreenButtonPressed(Button button)
         {
-            LobbyScreen.ButtonId buttonId = (LobbyScreen.ButtonId)button.id;
+            MultiplayerLobbyScreen.ButtonId buttonId = (MultiplayerLobbyScreen.ButtonId)button.id;
             switch (buttonId)
             {
-                case LobbyScreen.ButtonId.Start:
+                case MultiplayerLobbyScreen.ButtonId.Start:
                 {
                     game = new Game();
                     game.AddPlayer(new Player(0));
@@ -220,7 +222,7 @@ namespace Bomberman.Game
                     break;
                 }
 
-                case LobbyScreen.ButtonId.Back:
+                case MultiplayerLobbyScreen.ButtonId.Back:
                 {
                     switch (settings.multiplayer)
                     {
@@ -324,6 +326,11 @@ namespace Bomberman.Game
             BitWriteBuffer buffer = connection.WriteBuffer;
             WriteFieldState(buffer);
             connection.SendMessage(NetworkMessage.FieldState, buffer);
+
+            MultiplayerLobbyScreen lobbyScreen = CurrentScreen() as MultiplayerLobbyScreen;
+            Debug.Assert(lobbyScreen != null);
+
+            lobbyScreen.AddPlayer(connection);
         }
 
         public void OnClientDisconnected(Server server, Connection connection)

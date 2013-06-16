@@ -54,6 +54,9 @@ namespace Bomberman.Network
             peer.Start();
 
             state = State.Connecting;
+
+            NetOutgoingMessage hailMessage = peer.CreateMessage();
+            hailMessage.Write(CVars.name.value);
             peer.Connect(endPoint);
         }
 
@@ -69,7 +72,7 @@ namespace Bomberman.Network
 
         protected override void OnPeerConnected(Connection connection)
         {
-            Log.i("Connected to the server: " + connection.RemoteEndPoint);
+            Log.i("Connected to the server: " + connection.GetRemoteEndPoint());
             Debug.Assert(serverConnection == null);
             serverConnection = connection;
 
@@ -78,7 +81,7 @@ namespace Bomberman.Network
 
         protected override void OnPeerDisconnected(Connection connection)
         {
-            Log.i("Disconnected from the server: " + connection.RemoteEndPoint);
+            Log.i("Disconnected from the server: " + connection.GetRemoteEndPoint());
             Debug.Assert(serverConnection == connection);
 
             serverConnection = null;

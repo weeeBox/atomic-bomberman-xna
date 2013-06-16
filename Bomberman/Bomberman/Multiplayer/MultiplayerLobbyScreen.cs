@@ -6,18 +6,22 @@ using BomberEngine.Game;
 using BomberEngine.Core.Visual;
 using BomberEngine.Core.Assets.Types;
 using Assets;
+using Bomberman.Network;
+using Bomberman.Game;
 
-namespace Bomberman.Game.Screens
+namespace Bomberman.Multiplayer
 {
-    public class LobbyScreen : Screen
-    {
+    public class MultiplayerLobbyScreen : Screen
+    {   
         public enum ButtonId
         {
             Back,
             Start,
         }
 
-        public LobbyScreen(ButtonDelegate buttonDelegate)
+        private View clientsView;
+
+        public MultiplayerLobbyScreen(ButtonDelegate buttonDelegate)
         {
             View contentView = new View(512, 363);
             contentView.alignX = View.ALIGN_CENTER;
@@ -35,10 +39,10 @@ namespace Bomberman.Game.Screens
 
             contentView.AddView(serverName);
 
-            View listView = new View(286, contentView.height);
-            listView.alignX = View.ALIGN_MAX;
-            listView.x = contentView.width;
-            contentView.AddView(listView);
+            clientsView = new View(286, contentView.height);
+            clientsView.alignX = View.ALIGN_MAX;
+            clientsView.x = contentView.width;
+            contentView.AddView(clientsView);
 
             AddView(contentView);
 
@@ -61,6 +65,11 @@ namespace Bomberman.Game.Screens
             buttons.LayoutHor(10);
             buttons.ResizeToFitViews();
             AddView(buttons);
+        }
+
+        public void AddPlayer(Connection name)
+        {
+
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Bomberman
         /* Player */
         public static readonly CVar cg_playerSpeed = new CVar("cg_playerSpeed", 200, CFlags.Readonly);
         public static readonly CVar cg_playerSpeedAdd = new CVar("cg_playerSpeedAdd", 30, CFlags.Readonly);
+        public static readonly CVar name = new CVar("name", "UnnamedPlayer");
 
         /* Bomb */
         public static readonly CVar cg_bombRollSpeed = new CVar("cg_bombRollSpeed", 250, CFlags.Readonly);
@@ -79,6 +80,7 @@ namespace Bomberman
         /* Network */
         public static readonly CVar sv_port = new CVar("sv_port", 1334);
         public static readonly CVar sv_name = new CVar("sv_name", "bomberman");
+        public static readonly CVar sv_hostname = new CVar("sv_hostname", "noname");
 
         public static readonly CVar[] powerupsInitials = 
         {
@@ -143,11 +145,14 @@ namespace Bomberman
         private static readonly CVar[] serverVars =
         {
             sv_name,
-            sv_port
+            sv_port,
+            sv_hostname,
         };
 
         public static void Register(CConsole console)
         {
+            console.RegisterCvar(name);
+
             console.RegisterCvars(powerupsInitials);
             console.RegisterCvars(powerupsMax);
             console.RegisterCvars(powerupsCount);

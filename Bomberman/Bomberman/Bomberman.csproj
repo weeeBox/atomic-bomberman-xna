@@ -147,7 +147,7 @@
     <Compile Include="Game\cmds.cs" />
     <Compile Include="Game\GameController.cs" />
     <Compile Include="Game\Game.cs" />
-    <Compile Include="Game\Screens\LobbyScreen.cs" />
+    <Compile Include="Multiplayer\MultiplayerLobbyScreen.cs" />
     <Compile Include="Multiplayer\MultiplayerController.cs" />
     <Compile Include="Multiplayer\MultiplayerScreen.cs" />
     <Compile Include="Multiplayer\NetworkConnectionScreen.cs" />

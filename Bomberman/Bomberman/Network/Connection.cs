@@ -10,6 +10,7 @@ namespace Bomberman.Network
 {
     public class Connection
     {
+        internal String name;
         internal NetConnection connection;
         internal NetPeer peer;
 
@@ -68,9 +69,14 @@ namespace Bomberman.Network
             return readBuffer;
         }
 
-        public IPEndPoint RemoteEndPoint
+        public IPEndPoint GetRemoteEndPoint()
         {
-            get { return connection.RemoteEndPoint; }
+            return connection.RemoteEndPoint;
+        }
+
+        public String GetName()
+        {
+            return name;
         }
     }
 }
