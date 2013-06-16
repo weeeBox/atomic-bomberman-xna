@@ -12,8 +12,7 @@ namespace Bomberman.Network
 {
     public enum NetworkMessage
     {
-        FieldStateRequest,
-        FieldStateResponse,
+        FieldState,
     }
 
     public abstract class Peer : IUpdatable

@@ -23,9 +23,14 @@ namespace Bomberman.Game
     {
         public enum Mode
         {
-            SinglePlayer,
-            MultiplayeServer,
-            MultiplayerClient
+            LocalGame,
+            NetworkGame,
+        }
+
+        public enum Role
+        {
+            Client,
+            Server,
         }
 
         public String scheme;
@@ -35,7 +40,7 @@ namespace Bomberman.Game
         public GameSettings(String scheme)
         {
             this.scheme = scheme;
-            mode = Mode.SinglePlayer;
+            mode = Mode.LocalGame;
         }
     }
 
@@ -69,49 +74,30 @@ namespace Bomberman.Game
 
             switch (settings.mode)
             {
-                case GameSettings.Mode.SinglePlayer:
+                case GameSettings.Mode.LocalGame:
                 {
-                    game = new Game();
-                    game.AddPlayer(new Player(0));
+                    StartScreen(new GameLobbyScreen(true));
 
-                    InitField(settings.scheme);
+                    //game = new Game();
+                    //game.AddPlayer(new Player(0));
 
-                    gameScreen = new GameScreen();
-                    gameScreen.id = SCREEN_GAME;
+                    //InitField(settings.scheme);
 
-                    InitPlayers();
+                    //gameScreen = new GameScreen();
+                    //gameScreen.id = SCREEN_GAME;
 
-                    StartScreen(gameScreen);
-                    break;
-                }
-                case GameSettings.Mode.MultiplayerClient:
-                {
-                    game = new Game();
-                    game.AddPlayer(new Player(0));
+                    //InitPlayers();
 
-                    StartScreen(new NetworkConnectionScreen());
-
-                    StartClient();
-                    break;
-                }
-                case GameSettings.Mode.MultiplayeServer:
-                {
-                    game = new Game();
-                    game.AddPlayer(new Player(0));
-
-                    InitField(settings.scheme);
-
-                    gameScreen = new GameScreen();
-                    gameScreen.id = SCREEN_GAME;
-
-                    InitPlayers();
-
-                    StartScreen(gameScreen);
-
-                    StartServer();
+                    //StartScreen(gameScreen);
                     break;
                 }
 
+                case GameSettings.Mode.NetworkGame:
+                {
+                    StartScreen(new GameLobbyScreen(false));
+                    break;
+                }
+                
                 default:
                     Debug.Fail("Unexpected game mode: " + settings.mode);
                     break;
@@ -270,7 +256,7 @@ namespace Bomberman.Game
         {
             switch (message)
             {
-                case NetworkMessage.FieldStateResponse:
+                case NetworkMessage.FieldState:
                 {
                     BitReadBuffer buffer = connection.ReadBuffer;
                     ReadFieldState(buffer);
@@ -280,7 +266,10 @@ namespace Bomberman.Game
         }
 
         public void OnClientConnected(Server server, Connection connection)
-        {   
+        {
+            BitWriteBuffer buffer = connection.WriteBuffer;
+            WriteFieldState(buffer);
+            connection.SendMessage(NetworkMessage.FieldState, buffer);
         }
 
         public void OnClientDisconnected(Server server, Connection connection)
@@ -288,22 +277,11 @@ namespace Bomberman.Game
         }
 
         public void OnMessageReceived(Server server, Connection connection, NetworkMessage message)
-        {
-            switch (message)
-            {
-                case NetworkMessage.FieldStateRequest:
-                {
-                    BitWriteBuffer buffer = connection.WriteBuffer;
-                    WriteFieldState(buffer);
-                    connection.SendMessage(NetworkMessage.FieldStateResponse, buffer);
-                    break;
-                }
-            }
+        {   
         }
 
         public void OnConnectedToServer(Client client, Connection serverConnection)
-        {
-            serverConnection.SendMessage(NetworkMessage.FieldStateRequest);
+        {   
         }
 
         public void OnDisconnectedFromServer(Client client)

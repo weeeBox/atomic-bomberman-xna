@@ -18,7 +18,6 @@ namespace Bomberman.Menu
             Quit,
             SingleStart,
             MultiplayerStart,
-            MultiplayerJoin
         }
 
         public enum ScreenID
@@ -57,28 +56,13 @@ namespace Bomberman.Menu
                     Stop(ExitCode.SingleStart);
                     break;
                 case MainMenuScreen.ButtonId.Multiplayer:
-                    StartNextScreen(new MultiplayerScreen(OnMultiplayerButtonPress));
+                    Stop(ExitCode.MultiplayerStart);
                     break;
                 case MainMenuScreen.ButtonId.Settings:
                     StartNextScreen(new SettingsScreen(OnSettingsButtonPress));
                     break;
                 case MainMenuScreen.ButtonId.Exit:
                     Stop(ExitCode.Quit);
-                    break;
-            }
-        }
-
-        private void OnMultiplayerButtonPress(Button button)
-        {
-            MultiplayerScreen.ButtonId buttonId = (MultiplayerScreen.ButtonId)button.id;
-            switch (buttonId)
-            {
-                case MultiplayerScreen.ButtonId.Create:
-                    Stop(ExitCode.MultiplayerStart);
-                    break;
-                case MultiplayerScreen.ButtonId.Join:
-                    ServerInfo info = button.data as ServerInfo;
-                    Stop(ExitCode.MultiplayerJoin, info);
                     break;
             }
         }

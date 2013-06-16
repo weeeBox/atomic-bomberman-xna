@@ -54,17 +54,7 @@ namespace Bomberman
 
                     case MenuController.ExitCode.MultiplayerStart:
                     {
-                        settings.mode = GameSettings.Mode.MultiplayeServer;
-                        break;
-                    }
-
-                    case MenuController.ExitCode.MultiplayerJoin:
-                    {
-                        ServerInfo serverInfo = controller.exitData as ServerInfo;
-                        Debug.Assert(serverInfo != null);
-
-                        settings.mode = GameSettings.Mode.MultiplayerClient;
-                        settings.serverInfo = serverInfo;
+                        settings.mode = GameSettings.Mode.NetworkGame;
                         break;
                     }
                 }
