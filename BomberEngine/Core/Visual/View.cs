@@ -232,7 +232,10 @@ namespace BomberEngine.Core.Visual
 
         public void RemoveViews()
         {
-            viewList.Clear();
+            if (viewList.Count() > 0)
+            {
+                viewList.Clear();
+            }
         }
 
         public View Parent()

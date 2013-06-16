@@ -24,7 +24,11 @@ namespace BomberEngine.Core.Visual
         {
             for (int i = 0; i < list.Count; ++i)
             {
-                list[i].Draw(context);
+                View view = list[i];
+                if (view.visible)
+                {
+                    view.Draw(context);
+                }
             }
         }
     }

@@ -6,6 +6,7 @@ using BomberEngine.Game;
 using BomberEngine.Core.Visual;
 using BomberEngine.Core.Assets.Types;
 using Assets;
+using Bomberman.Network;
 
 namespace Bomberman.Game.Screens
 {
@@ -70,24 +71,51 @@ namespace Bomberman.Game.Screens
 
         public void SetBusy()
         {
-
+            busyView.visible = true;
+            contentView.visible = false;
         }
 
-        public void SetEntries()
+        public void SetServers(List<ServerInfo> servers)
         {
+            busyView.visible = false;
+            contentView.visible = true;
 
+            contentView.RemoveViews();
+
+            if (servers.Count > 0)
+            {
+                for (int i = 0; i < servers.Count; ++i)
+                {
+                    ServerInfo server = servers[i];
+                    ServerView view = new ServerView(server);
+                    contentView.AddView(view);
+                }
+            }
+            else
+            {
+                Font font = Helper.GetFont(A.fnt_button);
+
+                TextView text = new TextView(font, "No servers found.");
+                text.alignX = text.alignY = View.ALIGN_CENTER;
+                text.x = 0.5f * contentView.width;
+                text.y = 0.5f * contentView.height;
+                contentView.AddView(text);
+            }
         }
     }
 
     class ServerView : View
     {
-        public ServerView(String name, int playersCount, int totalCount)
+        public ServerView(ServerInfo server)
             : base(154, 143)
         {
             Font font = Helper.GetFont(A.fnt_button);
 
-            TextView nameView = new TextView(font, name);
-
+            TextView nameView = new TextView(font, server.name);
+            nameView.alignX = View.ALIGN_CENTER;
+            nameView.x = 0.5f * width;
+            nameView.y = 104;
+            AddView(nameView);
         }
     }
 

@@ -16,6 +16,7 @@ using BomberEngine.Core.IO;
 using Bomberman.Game.Elements.Fields;
 using Bomberman.Game.Elements.Cells;
 using Bomberman.Game.Elements;
+using BomberEngine.Core;
 
 namespace Bomberman.Game
 {
@@ -50,10 +51,15 @@ namespace Bomberman.Game
         private const int SCREEN_PAUSE = 2;
 
         private GameScreen gameScreen;
+        private GameLobbyScreen lobbyScreen;
+
         private Game game;
 
         private GameSettings settings;
         private Peer networkPeer;
+
+        private LocalServersDiscovery serverDiscovery;
+        private List<ServerInfo> foundServers;
 
         private CCommand[] gameCommands = 
         {
@@ -76,7 +82,8 @@ namespace Bomberman.Game
             {
                 case GameSettings.Mode.LocalGame:
                 {
-                    StartScreen(new GameLobbyScreen(true));
+                    lobbyScreen = new GameLobbyScreen(true);
+                    StartScreen(lobbyScreen);
 
                     //game = new Game();
                     //game.AddPlayer(new Player(0));
@@ -94,7 +101,11 @@ namespace Bomberman.Game
 
                 case GameSettings.Mode.NetworkGame:
                 {
-                    StartScreen(new GameLobbyScreen(false));
+                    lobbyScreen = new GameLobbyScreen(false);
+                    StartScreen(lobbyScreen);
+
+                    StartDiscovery();
+
                     break;
                 }
                 
@@ -252,6 +263,63 @@ namespace Bomberman.Game
 
         #endregion
 
+        #region Local server discovery
+
+        private void StartDiscovery()
+        {
+            Debug.Assert(serverDiscovery == null);
+
+            String name = CVars.sv_name.value;
+            int port = CVars.sv_port.intValue;
+
+            serverDiscovery = new LocalServersDiscovery(OnLocalServerFound, name, port);
+            serverDiscovery.Start();
+
+            foundServers = new List<ServerInfo>();
+
+            lobbyScreen.AddUpdatable(UpdateDiscovery);
+            lobbyScreen.ScheduleCall(StopDiscoveryCall, 5.0f);
+
+            Log.i("Started local servers discovery...");
+            lobbyScreen.SetBusy();
+        }
+
+        private void UpdateDiscovery(float delta)
+        {
+            serverDiscovery.Update(delta);
+        }
+
+        private void StopDiscoveryCall(DelayedCall call)
+        {
+            StopDiscovery(true);
+        }
+
+        private void StopDiscovery(bool updateUI)
+        {
+            if (serverDiscovery != null)
+            {
+                serverDiscovery.Stop();
+                serverDiscovery = null;
+
+                lobbyScreen.RemoveUpdatable(UpdateDiscovery);
+
+                if (updateUI)
+                {
+                    lobbyScreen.SetServers(foundServers);
+                }
+
+                Log.i("Stopped local servers discovery");
+            }
+        }
+
+        private void OnLocalServerFound(ServerInfo info)
+        {
+            Log.d("Found local server: " + info.endPoint);
+            foundServers.Add(info);
+        }
+
+        #endregion
+
         public void OnMessageReceived(Client client, Connection connection, NetworkMessage message)
         {
             switch (message)
@@ -286,6 +354,39 @@ namespace Bomberman.Game
 
         public void OnDisconnectedFromServer(Client client)
         {
+        }
+
+        public void WriteDiscoveryResponse(BitWriteBuffer buffer)
+        {
+            Field field = game.field;
+
+            FieldCellArray cells = field.GetCells();
+            int width = cells.GetWidth();
+            int height = cells.GetHeight();
+
+            buffer.Write(width);
+            buffer.Write(height);
+
+            FieldCellSlot[] slots = cells.slots;
+            for (int i = 0; i < slots.Length; ++i)
+            {
+                FieldCell staticCell = slots[i].staticCell;
+                if (staticCell != null)
+                {
+                    if (staticCell.IsSolid())
+                    {
+                        buffer.Write(BLOCK_SOLID);
+                    }
+                    else if (staticCell.IsBrick())
+                    {   
+                        buffer.Write(BLOCK_BRICK);
+                    }
+                }
+                else
+                {
+                    buffer.Write(BLOCK_EMPTY);
+                }
+            }
         }
 
         private const byte BLOCK_EMPTY = 0;

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Lidgren.Network;
 using System.Net;
+using Bomberman.Game.Elements.Fields;
+using BomberEngine.Core.IO;
 
 namespace Bomberman.Network
 {
@@ -13,6 +15,11 @@ namespace Bomberman.Network
     {
         public String name;
         public IPEndPoint endPoint;
+
+        public int mapWidth;
+        public int mapHeight;
+
+        public FieldCellType[] cells;
 
         public ServerInfo(String name, IPEndPoint endPoint)
         {
@@ -64,10 +71,27 @@ namespace Bomberman.Network
             {
                 case NetIncomingMessageType.DiscoveryResponse:
                 {
+                    BitReadBuffer buffer = new BitReadBuffer();
+                    buffer.Init(msg.Data, msg.LengthBits);
+
+                    int width = buffer.ReadInt32();
+                    int height = buffer.ReadInt32();
+
+                    FieldCellType[] cells = new FieldCellType[width * height];
+                    for (int i = 0; i < cells.Length; ++i)
+                    {
+                        FieldCellType cell = (FieldCellType)buffer.ReadByte();
+                        cells[i] = cell;
+                    }
+
                     String name = "Server " + (++serverIndex);
                     IPEndPoint endPoint = msg.SenderEndPoint;
 
                     ServerInfo info = new ServerInfo(name, endPoint);
+                    info.mapWidth = width;
+                    info.mapHeight = height;
+                    info.cells = cells;
+
                     searchDelegate(info);
 
                     return true;

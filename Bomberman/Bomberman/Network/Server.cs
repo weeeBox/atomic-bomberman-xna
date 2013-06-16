@@ -17,6 +17,7 @@ namespace Bomberman.Network
         void OnMessageReceived(Server server, Connection connection, NetworkMessage message);
         void OnClientConnected(Server server, Connection connection);
         void OnClientDisconnected(Server server, Connection connection);
+        void WriteDiscoveryResponse(BitWriteBuffer buffer);
     }
 
     public class Server : Peer
@@ -63,7 +64,10 @@ namespace Bomberman.Network
             {
                 case NetIncomingMessageType.DiscoveryRequest:
                 {
-                    peer.SendDiscoveryResponse(null, msg.SenderEndPoint);
+                    BitWriteBuffer buffer = new BitWriteBuffer();
+                    listener.WriteDiscoveryResponse(buffer);
+                    NetOutgoingMessage message = peer.CreateMessage(buffer.LengthBytes);
+                    peer.SendDiscoveryResponse(message, msg.SenderEndPoint);
                     return true;
                 }
             }
