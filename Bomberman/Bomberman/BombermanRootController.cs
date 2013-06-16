@@ -44,22 +44,39 @@ namespace Bomberman
                     return;
                 }
 
-                GameSettings settings = new GameSettings("x");
                 switch (exitCode)
                 {
                     case MenuController.ExitCode.SingleStart:
-                    {   
+                    {
+                        GameSettings settings = new GameSettings("x");
+                        StartController(new GameController(settings));
                         break;
                     }
 
                     case MenuController.ExitCode.MultiplayerStart:
                     {
-                        settings.mode = GameSettings.Mode.NetworkGame;
+                        StartController(new MultiplayerController());
                         break;
                     }
                 }
+            }
+            else if (controller is MultiplayerController)
+            {
+                MultiplayerController.ExitCode exitCode = (MultiplayerController.ExitCode)controller.exitCode;
+                if (exitCode == MultiplayerController.ExitCode.Cancel)
+                {
+                    StartMainMenu();
+                    return;
+                }
 
-                StartController(new GameController(settings));
+                switch (exitCode)
+                {
+                    case MultiplayerController.ExitCode.Create:
+                        break;
+
+                    case MultiplayerController.ExitCode.Join:
+                        break;
+                }
             }
             else if (controller is GameController)
             {

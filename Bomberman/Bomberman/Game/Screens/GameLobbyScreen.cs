@@ -12,11 +12,19 @@ namespace Bomberman.Game.Screens
 {
     public class GameLobbyScreen : Screen
     {
+        public enum ButtonId
+        {
+            Back,
+            Refresh,
+            Create,
+            Join,
+        }
+
         private bool local;
         private View contentView;
         private View busyView;
 
-        public GameLobbyScreen(bool local)
+        public GameLobbyScreen(ButtonDelegate buttonDelegate, bool local)
         {
             Font font = Helper.GetFont(A.fnt_button);
 
@@ -49,12 +57,18 @@ namespace Bomberman.Game.Screens
             View buttonGroup = new View();
 
             TextButton button = new TextButton("BACK", 0, 0, 100, 20);
+            button.SetDelegate(buttonDelegate);
+            button.id = (int)ButtonId.Back;
             buttonGroup.AddView(button);
 
             button = new TextButton("REFRESH", 0, 0, 100, 20);
+            button.SetDelegate(buttonDelegate);
+            button.id = (int)ButtonId.Refresh;
             buttonGroup.AddView(button);
 
             button = new TextButton("CREATE", 0, 0, 100, 20);
+            button.SetDelegate(buttonDelegate);
+            button.id = (int)ButtonId.Create;
             buttonGroup.AddView(button);
 
             buttonGroup.LayoutHor(10);

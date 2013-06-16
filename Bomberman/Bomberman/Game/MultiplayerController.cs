@@ -7,11 +7,19 @@ using Bomberman.Network;
 using BomberEngine.Debugging;
 using Bomberman.Game.Screens;
 using BomberEngine.Core;
+using BomberEngine.Core.Visual;
 
 namespace Bomberman.Game
 {
     public class MultiplayerController : Controller
     {
+        public enum ExitCode
+        {
+            Cancel,
+            Create,
+            Join,
+        }
+
         private LocalServersDiscovery serverDiscovery;
         private List<ServerInfo> foundServers;
 
@@ -19,7 +27,7 @@ namespace Bomberman.Game
 
         protected override void OnStart()
         {
-            lobbyScreen = new GameLobbyScreen(false);
+            lobbyScreen = new GameLobbyScreen(OnButtonPressed, false);
             StartScreen(lobbyScreen);
 
             StartDiscovery();
@@ -28,6 +36,11 @@ namespace Bomberman.Game
         protected override void OnStop()
         {
             StopDiscovery(false);
+        }
+
+        private void Stop(ExitCode exitCode, Object data = null)
+        {
+            Stop((int)exitCode, data);
         }
 
         #region Local server discovery
@@ -83,6 +96,21 @@ namespace Bomberman.Game
         {
             Log.d("Found local server: " + info.endPoint);
             foundServers.Add(info);
+        }
+
+        #endregion
+
+        #region Button delegate
+
+        private void OnButtonPressed(Button button)
+        {
+            GameLobbyScreen.ButtonId buttonId = (GameLobbyScreen.ButtonId)button.id;
+            switch (buttonId)
+            {
+                case GameLobbyScreen.ButtonId.Back:
+                    Stop(ExitCode.Cancel);
+                    break;
+            }
         }
 
         #endregion
