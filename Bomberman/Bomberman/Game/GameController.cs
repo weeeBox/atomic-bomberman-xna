@@ -51,15 +51,10 @@ namespace Bomberman.Game
         private const int SCREEN_PAUSE = 2;
 
         private GameScreen gameScreen;
-        private GameLobbyScreen lobbyScreen;
-
         private Game game;
 
         private GameSettings settings;
         private Peer networkPeer;
-
-        private LocalServersDiscovery serverDiscovery;
-        private List<ServerInfo> foundServers;
 
         private CCommand[] gameCommands = 
         {
@@ -82,9 +77,6 @@ namespace Bomberman.Game
             {
                 case GameSettings.Mode.LocalGame:
                 {
-                    lobbyScreen = new GameLobbyScreen(true);
-                    StartScreen(lobbyScreen);
-
                     //game = new Game();
                     //game.AddPlayer(new Player(0));
 
@@ -101,11 +93,6 @@ namespace Bomberman.Game
 
                 case GameSettings.Mode.NetworkGame:
                 {
-                    lobbyScreen = new GameLobbyScreen(false);
-                    StartScreen(lobbyScreen);
-
-                    StartDiscovery();
-
                     break;
                 }
                 
@@ -259,63 +246,6 @@ namespace Bomberman.Game
 
                 Log.d("Stopped network peer");
             }
-        }
-
-        #endregion
-
-        #region Local server discovery
-
-        private void StartDiscovery()
-        {
-            Debug.Assert(serverDiscovery == null);
-
-            String name = CVars.sv_name.value;
-            int port = CVars.sv_port.intValue;
-
-            serverDiscovery = new LocalServersDiscovery(OnLocalServerFound, name, port);
-            serverDiscovery.Start();
-
-            foundServers = new List<ServerInfo>();
-
-            lobbyScreen.AddUpdatable(UpdateDiscovery);
-            lobbyScreen.ScheduleCall(StopDiscoveryCall, 5.0f);
-
-            Log.i("Started local servers discovery...");
-            lobbyScreen.SetBusy();
-        }
-
-        private void UpdateDiscovery(float delta)
-        {
-            serverDiscovery.Update(delta);
-        }
-
-        private void StopDiscoveryCall(DelayedCall call)
-        {
-            StopDiscovery(true);
-        }
-
-        private void StopDiscovery(bool updateUI)
-        {
-            if (serverDiscovery != null)
-            {
-                serverDiscovery.Stop();
-                serverDiscovery = null;
-
-                lobbyScreen.RemoveUpdatable(UpdateDiscovery);
-
-                if (updateUI)
-                {
-                    lobbyScreen.SetServers(foundServers);
-                }
-
-                Log.i("Stopped local servers discovery");
-            }
-        }
-
-        private void OnLocalServerFound(ServerInfo info)
-        {
-            Log.d("Found local server: " + info.endPoint);
-            foundServers.Add(info);
         }
 
         #endregion
