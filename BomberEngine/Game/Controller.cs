@@ -211,14 +211,14 @@ namespace BomberEngine.Game
             get { return parentController; }
         }
 
-        protected RootController RootController()
+        protected RootController GetRootController()
         {
             return Application.RootController();
         }
 
-        protected CConsole Console()
+        protected CConsole GetConsole()
         {
-            return RootController().console;
+            return GetRootController().console;
         }
 
         #endregion

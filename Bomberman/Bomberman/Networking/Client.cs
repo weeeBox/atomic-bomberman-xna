@@ -7,12 +7,12 @@ using System.Net;
 using BomberEngine.Debugging;
 using BomberEngine.Core.IO;
 
-namespace Bomberman.Network
+namespace Bomberman.Networking
 {
     public interface ClientListener
     {
-        void OnMessageReceived(Client client, Connection connection, NetworkMessage message);
-        void OnConnectedToServer(Client client, Connection serverConnection);
+        void OnMessageReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message);
+        void OnConnectedToServer(Client client, NetConnection serverConnection);
         void OnDisconnectedFromServer(Client client);
     }
 
@@ -27,15 +27,15 @@ namespace Bomberman.Network
 
         public ClientListener listener;
 
-        private IPEndPoint endPoint;
-        private Connection serverConnection;
+        private IPEndPoint remoteEndPoint;
+        private NetConnection serverConnection;
 
         private State state;
 
-        public Client(String name, IPEndPoint endPoint)
-            : base(name, endPoint.Port)
+        public Client(String name, IPEndPoint remoteEndPoint)
+            : base(name, remoteEndPoint.Port)
         {
-            this.endPoint = endPoint;
+            this.remoteEndPoint = remoteEndPoint;
             state = State.Created;
         }
 
@@ -57,7 +57,7 @@ namespace Bomberman.Network
 
             NetOutgoingMessage hailMessage = peer.CreateMessage();
             hailMessage.Write(CVars.name.value);
-            peer.Connect(endPoint);
+            peer.Connect(remoteEndPoint);
         }
 
         public override void Stop()
@@ -70,27 +70,27 @@ namespace Bomberman.Network
             }
         }
 
-        protected override void OnPeerConnected(Connection connection)
+        protected override void OnPeerConnected(NetConnection connection)
         {
-            Log.i("Connected to the server: " + connection.GetRemoteEndPoint());
+            Log.i("Connected to the server: " + connection.RemoteEndPoint);
             Debug.Assert(serverConnection == null);
             serverConnection = connection;
 
             listener.OnConnectedToServer(this, serverConnection);
         }
 
-        protected override void OnPeerDisconnected(Connection connection)
+        protected override void OnPeerDisconnected(NetConnection connection)
         {
-            Log.i("Disconnected from the server: " + connection.GetRemoteEndPoint());
+            Log.i("Disconnected from the server: " + connection.RemoteEndPoint);
             Debug.Assert(serverConnection == connection);
 
             serverConnection = null;
             listener.OnDisconnectedFromServer(this);
         }
 
-        protected override void OnMessageReceive(Connection connection, NetworkMessage message)
+        protected override void OnMessageReceive(NetworkMessageId messageId, NetIncomingMessage message)
         {
-            listener.OnMessageReceived(this, connection, message);
+            listener.OnMessageReceived(this, messageId, message);
         }
     }
 }

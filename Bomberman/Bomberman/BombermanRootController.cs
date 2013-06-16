@@ -1,28 +1,26 @@
-﻿using Assets;
-using BomberEngine.Debugging;
+﻿using System;
+using Assets;
+using BomberEngine.Consoles;
+using BomberEngine.Core.Input;
 using BomberEngine.Game;
 using Bomberman.Game;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Input;
 using Bomberman.Menu;
-using BomberEngine.Core.Visual;
-using BomberEngine.Core.Assets.Types;
-using BomberEngine.Core.Input;
-using BomberEngine.Consoles;
-using Bomberman.Game.Elements.Players;
-using Bomberman.Network;
 using Bomberman.Multiplayer;
+using Bomberman.Networking;
+using Microsoft.Xna.Framework.Content;
+using System.Net;
 
 namespace Bomberman
 {
     public class BombermanRootController : RootController
     {
         private MenuController menuController;
+        private MultiplayerManager multiplayerManager;
 
         public BombermanRootController(ContentManager contentManager)
             : base(contentManager)
-        {   
+        {
+            multiplayerManager = new MultiplayerManager();
         }
 
         protected override void OnStart()
@@ -32,6 +30,12 @@ namespace Bomberman
             manager.LoadImmediately();
 
             StartMainMenu();
+        }
+
+        public override void Update(float delta)
+        {
+            base.Update(delta);
+            multiplayerManager.Update(delta);
         }
 
         protected override void OnControllerStop(Controller controller)
@@ -118,5 +122,33 @@ namespace Bomberman
             menuController = new MenuController();
             StartController(menuController);
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Multiplayer
+
+        public void StartGameServer(ServerListener listener)
+        {
+            String appId = CVars.sv_appId.value;
+            int port = CVars.sv_port.intValue;
+
+            multiplayerManager.CreateServer(appId, port);
+            multiplayerManager.SetServerListener(listener);
+            multiplayerManager.Start();
+        }
+
+        public void StartGameClient(IPEndPoint remoteEndPoint, ClientListener listener)
+        {
+            String appId = CVars.sv_appId.value;
+            int port = CVars.sv_port.intValue;
+
+            multiplayerManager.CreateClient(appId, remoteEndPoint, port);
+            multiplayerManager.SetClientListener(listener);
+            multiplayerManager.Start();
+        }
+
+        // TODO: move server discovery here
+
+        #endregion
     }
 }

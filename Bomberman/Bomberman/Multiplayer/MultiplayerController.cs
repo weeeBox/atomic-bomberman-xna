@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BomberEngine.Game;
-using Bomberman.Network;
+using Bomberman.Networking;
 using BomberEngine.Debugging;
 using Bomberman.Game.Screens;
 using BomberEngine.Core;
 using BomberEngine.Core.Visual;
+using Bomberman.Content;
+using Lidgren.Network;
+using BombermanCommon.Resources.Scheme;
 
 namespace Bomberman.Multiplayer
 {
-    public class MultiplayerController : Controller
+    public class MultiplayerController : Controller, ClientListener, ServerListener
     {
         public enum ExitCode
         {
@@ -23,12 +26,13 @@ namespace Bomberman.Multiplayer
         private LocalServersDiscovery serverDiscovery;
         private List<ServerInfo> foundServers;
 
-        private MultiplayerScreen lobbyScreen;
+        private MultiplayerScreen multiplayerScreen;
+        private Scheme currentScheme;
 
         protected override void OnStart()
         {
-            lobbyScreen = new MultiplayerScreen(OnButtonPressed, false);
-            StartScreen(lobbyScreen);
+            multiplayerScreen = new MultiplayerScreen(OnButtonPressed, false);
+            StartScreen(multiplayerScreen);
 
             StartDiscovery();
         }
@@ -43,13 +47,15 @@ namespace Bomberman.Multiplayer
             Stop((int)exitCode, data);
         }
 
+
+
         #region Local server discovery
 
         private void StartDiscovery()
         {
             Debug.Assert(serverDiscovery == null);
 
-            String name = CVars.sv_name.value;
+            String name = CVars.sv_appId.value;
             int port = CVars.sv_port.intValue;
 
             serverDiscovery = new LocalServersDiscovery(OnLocalServerFound, name, port);
@@ -57,11 +63,11 @@ namespace Bomberman.Multiplayer
 
             foundServers = new List<ServerInfo>();
 
-            lobbyScreen.AddUpdatable(UpdateDiscovery);
-            lobbyScreen.ScheduleCall(StopDiscoveryCall, 5.0f);
+            multiplayerScreen.AddUpdatable(UpdateDiscovery);
+            multiplayerScreen.ScheduleCall(StopDiscoveryCall, 5.0f);
 
             Log.i("Started local servers discovery...");
-            lobbyScreen.SetBusy();
+            multiplayerScreen.SetBusy();
         }
 
         private void UpdateDiscovery(float delta)
@@ -81,11 +87,11 @@ namespace Bomberman.Multiplayer
                 serverDiscovery.Stop();
                 serverDiscovery = null;
 
-                lobbyScreen.RemoveUpdatable(UpdateDiscovery);
+                multiplayerScreen.RemoveUpdatable(UpdateDiscovery);
 
                 if (updateUI)
                 {
-                    lobbyScreen.SetServers(foundServers);
+                    multiplayerScreen.SetServers(foundServers);
                 }
 
                 Log.i("Stopped local servers discovery");
@@ -112,7 +118,12 @@ namespace Bomberman.Multiplayer
                     break;
 
                 case MultiplayerScreen.ButtonId.Create:
-                    Stop(ExitCode.Create);
+                    StopDiscovery(false);
+
+                    currentScheme = Application.Assets().LoadAsset<Scheme>("Content\\maps\\x.sch");
+                    StartNextScreen(new MultiplayerLobbyScreen(currentScheme, OnLobbyScreenButtonPressed));
+
+                    StartServer();
                     break;
 
                 case MultiplayerScreen.ButtonId.Join:
@@ -126,6 +137,60 @@ namespace Bomberman.Multiplayer
             }
         }
 
+        private void OnLobbyScreenButtonPressed(Button button)
+        {
+            MultiplayerLobbyScreen.ButtonId buttonId = (MultiplayerLobbyScreen.ButtonId)button.id;
+            switch (buttonId)
+            {
+                case MultiplayerLobbyScreen.ButtonId.Start:
+                {   
+                    break;
+                }
+
+                case MultiplayerLobbyScreen.ButtonId.Back:
+                {
+                    CurrentScreen().Finish();
+                    break;
+                }
+            }
+        }
+
         #endregion
+
+        private void StartServer()
+        {
+            BombermanRootController rootController = GetRootController() as BombermanRootController;
+            rootController.StartGameServer(this);
+        }
+
+        public void OnMessageReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnConnectedToServer(Client client, NetConnection serverConnection)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnDisconnectedFromServer(Client client)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnClientConnected(Server server, NetConnection connection)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnClientDisconnected(Server server, NetConnection connection)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

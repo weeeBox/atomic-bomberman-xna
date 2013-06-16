@@ -6,7 +6,7 @@ using BomberEngine.Game;
 using BomberEngine.Core.Visual;
 using BomberEngine.Core.Assets.Types;
 using Assets;
-using Bomberman.Network;
+using Bomberman.Networking;
 using Bomberman.Game;
 
 namespace Bomberman.Multiplayer

@@ -6,8 +6,9 @@ using BomberEngine.Game;
 using BomberEngine.Core.Visual;
 using BomberEngine.Core.Assets.Types;
 using Assets;
-using Bomberman.Network;
+using Bomberman.Networking;
 using Bomberman.Game;
+using Bomberman.Content;
 
 namespace Bomberman.Multiplayer
 {
@@ -21,7 +22,7 @@ namespace Bomberman.Multiplayer
 
         private View clientsView;
 
-        public MultiplayerLobbyScreen(ButtonDelegate buttonDelegate)
+        public MultiplayerLobbyScreen(Scheme scheme, ButtonDelegate buttonDelegate)
         {
             View contentView = new View(512, 363);
             contentView.alignX = View.ALIGN_CENTER;
@@ -67,7 +68,7 @@ namespace Bomberman.Multiplayer
             AddView(buttons);
         }
 
-        public void AddPlayer(Connection name)
+        public void AddPlayer(Object name)
         {
 
         }

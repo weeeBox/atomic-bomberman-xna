@@ -79,7 +79,7 @@ namespace Bomberman
 
         /* Network */
         public static readonly CVar sv_port = new CVar("sv_port", 1334);
-        public static readonly CVar sv_name = new CVar("sv_name", "bomberman");
+        public static readonly CVar sv_appId = new CVar("sv_appId", "bomberman");
         public static readonly CVar sv_hostname = new CVar("sv_hostname", "noname");
 
         public static readonly CVar[] powerupsInitials = 
@@ -144,7 +144,7 @@ namespace Bomberman
 
         private static readonly CVar[] serverVars =
         {
-            sv_name,
+            sv_appId,
             sv_port,
             sv_hostname,
         };

@@ -9,7 +9,7 @@ using BomberEngine.Core.Input;
 using BomberEngine.Core.Visual;
 using BomberEngine.Core.Events;
 using BomberEngine.Consoles;
-using Bomberman.Network;
+using Bomberman.Networking;
 using BomberEngine.Debugging;
 using System.Net;
 using BomberEngine.Core.IO;
@@ -41,7 +41,7 @@ namespace Bomberman.Game
         }
     }
 
-    public class GameController : Controller, ClientListener, ServerListener
+    public class GameController : Controller
     {
         public enum ExitCode
         {
@@ -73,7 +73,7 @@ namespace Bomberman.Game
 
         protected override void OnStart()
         {
-            Console().RegisterCommands(gameCommands);
+            GetConsole().RegisterCommands(gameCommands);
 
             switch (settings.multiplayer)
             {
@@ -103,8 +103,8 @@ namespace Bomberman.Game
                 }
                 case GameSettings.Multiplayer.Server:
                 {
-                    StartScreen(new MultiplayerLobbyScreen(OnLobbyScreenButtonPressed));
-                    StartServer();
+                    //StartScreen(new MultiplayerLobbyScreen(OnLobbyScreenButtonPressed));
+                    //StartServer();
                     break;
                 }
                 
@@ -117,7 +117,7 @@ namespace Bomberman.Game
         protected override void OnStop()
         {
             StopNetworkPeer();
-            Console().UnregisterCommands(gameCommands);
+            GetConsole().UnregisterCommands(gameCommands);
         }
 
         public void Stop(ExitCode exitCode, Object data = null)
@@ -266,208 +266,208 @@ namespace Bomberman.Game
 
         private void StartServer()
         {
-            String name = CVars.sv_name.value;
-            int port = CVars.sv_port.intValue;
+            //String name = CVars.sv_name.value;
+            //int port = CVars.sv_port.intValue;
 
-            Server server = new Server(name, port);
-            server.listener = this;
-            networkPeer = server;
+            //Server server = new Server(name, port);
+            //server.listener = this;
+            //networkPeer = server;
             
-            networkPeer.Start();
+            //networkPeer.Start();
 
-            Log.d("Started network server");
+            //Log.d("Started network server");
         }
 
         private void StartClient()
         {
-            ServerInfo serverInfo = settings.serverInfo;
-            Debug.Assert(serverInfo != null);
+            //ServerInfo serverInfo = settings.serverInfo;
+            //Debug.Assert(serverInfo != null);
 
-            String name = CVars.sv_name.value;
-            IPEndPoint endPoint = serverInfo.endPoint;
+            //String name = CVars.sv_name.value;
+            //IPEndPoint endPoint = serverInfo.endPoint;
 
-            Client client = new Client(name, endPoint);
-            client.listener = this;
-            networkPeer = client;
+            //Client client = new Client(name, endPoint);
+            //client.listener = this;
+            //networkPeer = client;
             
-            networkPeer.Start();
+            //networkPeer.Start();
 
-            Log.d("Started network client");
+            //Log.d("Started network client");
         }
 
         private void StopNetworkPeer()
         {
-            if (networkPeer != null)
-            {
-                networkPeer.Stop();
-                networkPeer = null;
+            //if (networkPeer != null)
+            //{
+            //    networkPeer.Stop();
+            //    networkPeer = null;
 
-                Log.d("Stopped network peer");
-            }
+            //    Log.d("Stopped network peer");
+            //}
         }
 
         #endregion
 
-        public void OnMessageReceived(Client client, Connection connection, NetworkMessage message)
-        {
-            switch (message)
-            {
-                case NetworkMessage.FieldState:
-                {
-                    BitReadBuffer buffer = connection.ReadBuffer;
-                    ReadFieldState(buffer);
-                    break;
-                }
-            }
-        }
+        //public void OnMessageReceived(Client client, Connection connection, NetworkMessageId message)
+        //{
+        //    switch (message)
+        //    {
+        //        case NetworkMessageId.FieldState:
+        //        {
+        //            BitReadBuffer buffer = connection.ReadBuffer;
+        //            ReadFieldState(buffer);
+        //            break;
+        //        }
+        //    }
+        //}
 
-        public void OnClientConnected(Server server, Connection connection)
-        {
-            BitWriteBuffer buffer = connection.WriteBuffer;
-            WriteFieldState(buffer);
-            connection.SendMessage(NetworkMessage.FieldState, buffer);
+        //public void OnClientConnected(Server server, Connection connection)
+        //{
+        //    BitWriteBuffer buffer = connection.WriteBuffer;
+        //    WriteFieldState(buffer);
+        //    connection.SendMessage(NetworkMessageId.FieldState, buffer);
 
-            MultiplayerLobbyScreen lobbyScreen = CurrentScreen() as MultiplayerLobbyScreen;
-            Debug.Assert(lobbyScreen != null);
+        //    MultiplayerLobbyScreen lobbyScreen = CurrentScreen() as MultiplayerLobbyScreen;
+        //    Debug.Assert(lobbyScreen != null);
 
-            lobbyScreen.AddPlayer(connection);
-        }
+        //    lobbyScreen.AddPlayer(connection);
+        //}
 
-        public void OnClientDisconnected(Server server, Connection connection)
-        {
-        }
+        //public void OnClientDisconnected(Server server, Connection connection)
+        //{
+        //}
 
-        public void OnMessageReceived(Server server, Connection connection, NetworkMessage message)
-        {   
-        }
+        //public void OnMessageReceived(Server server, Connection connection, NetworkMessageId message)
+        //{   
+        //}
 
-        public void OnConnectedToServer(Client client, Connection serverConnection)
-        {   
-        }
+        //public void OnConnectedToServer(Client client, Connection serverConnection)
+        //{   
+        //}
 
-        public void OnDisconnectedFromServer(Client client)
-        {
-        }
+        //public void OnDisconnectedFromServer(Client client)
+        //{
+        //}
 
-        public void WriteDiscoveryResponse(BitWriteBuffer buffer)
-        {
-            Field field = game.field;
+        //public void WriteDiscoveryResponse(BitWriteBuffer buffer)
+        //{
+        //    Field field = game.field;
 
-            FieldCellArray cells = field.GetCells();
-            int width = cells.GetWidth();
-            int height = cells.GetHeight();
+        //    FieldCellArray cells = field.GetCells();
+        //    int width = cells.GetWidth();
+        //    int height = cells.GetHeight();
 
-            buffer.Write(width);
-            buffer.Write(height);
+        //    buffer.Write(width);
+        //    buffer.Write(height);
 
-            FieldCellSlot[] slots = cells.slots;
-            for (int i = 0; i < slots.Length; ++i)
-            {
-                FieldCell staticCell = slots[i].staticCell;
-                if (staticCell != null)
-                {
-                    if (staticCell.IsSolid())
-                    {
-                        buffer.Write(BLOCK_SOLID);
-                    }
-                    else if (staticCell.IsBrick())
-                    {   
-                        buffer.Write(BLOCK_BRICK);
-                    }
-                }
-                else
-                {
-                    buffer.Write(BLOCK_EMPTY);
-                }
-            }
-        }
+        //    FieldCellSlot[] slots = cells.slots;
+        //    for (int i = 0; i < slots.Length; ++i)
+        //    {
+        //        FieldCell staticCell = slots[i].staticCell;
+        //        if (staticCell != null)
+        //        {
+        //            if (staticCell.IsSolid())
+        //            {
+        //                buffer.Write(BLOCK_SOLID);
+        //            }
+        //            else if (staticCell.IsBrick())
+        //            {   
+        //                buffer.Write(BLOCK_BRICK);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            buffer.Write(BLOCK_EMPTY);
+        //        }
+        //    }
+        //}
 
-        private const byte BLOCK_EMPTY = 0;
-        private const byte BLOCK_SOLID = 1;
-        private const byte BLOCK_BRICK = 2;
+        //private const byte BLOCK_EMPTY = 0;
+        //private const byte BLOCK_SOLID = 1;
+        //private const byte BLOCK_BRICK = 2;
 
-        private const byte NO_POWERUP = (byte)0xff;
+        //private const byte NO_POWERUP = (byte)0xff;
 
-        private void WriteFieldState(BitWriteBuffer buffer)
-        {
-            Field field = game.field;
+        //private void WriteFieldState(BitWriteBuffer buffer)
+        //{
+        //    Field field = game.field;
 
-            FieldCellArray cells = field.GetCells();
-            int width = cells.GetWidth();
-            int height = cells.GetHeight();
+        //    FieldCellArray cells = field.GetCells();
+        //    int width = cells.GetWidth();
+        //    int height = cells.GetHeight();
 
-            buffer.Write(width);
-            buffer.Write(height);
+        //    buffer.Write(width);
+        //    buffer.Write(height);
 
-            FieldCellSlot[] slots = cells.slots;
-            for (int i = 0; i < slots.Length; ++i)
-            {
-                FieldCell staticCell = slots[i].staticCell;
-                if (staticCell != null)
-                {
-                    if (staticCell.IsSolid())
-                    {
-                        buffer.Write(BLOCK_SOLID);
-                    }
-                    else if (staticCell.IsBrick())
-                    {
-                        BrickCell brick = staticCell.AsBrick();
-                        byte powerup = brick.powerup != Powerups.None ? (byte)brick.powerup : NO_POWERUP;
+        //    FieldCellSlot[] slots = cells.slots;
+        //    for (int i = 0; i < slots.Length; ++i)
+        //    {
+        //        FieldCell staticCell = slots[i].staticCell;
+        //        if (staticCell != null)
+        //        {
+        //            if (staticCell.IsSolid())
+        //            {
+        //                buffer.Write(BLOCK_SOLID);
+        //            }
+        //            else if (staticCell.IsBrick())
+        //            {
+        //                BrickCell brick = staticCell.AsBrick();
+        //                byte powerup = brick.powerup != Powerups.None ? (byte)brick.powerup : NO_POWERUP;
 
-                        buffer.Write(BLOCK_BRICK);
-                        buffer.Write(powerup);
-                    }
-                }
-                else
-                {
-                    buffer.Write(BLOCK_EMPTY);
-                }
-            }
-        }
+        //                buffer.Write(BLOCK_BRICK);
+        //                buffer.Write(powerup);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            buffer.Write(BLOCK_EMPTY);
+        //        }
+        //    }
+        //}
 
-        private void ReadFieldState(BitReadBuffer buffer)
-        {
-            Field field = game.field;
+        //private void ReadFieldState(BitReadBuffer buffer)
+        //{
+        //    Field field = game.field;
 
-            int width = buffer.ReadInt32();
-            int height = buffer.ReadInt32();
+        //    int width = buffer.ReadInt32();
+        //    int height = buffer.ReadInt32();
 
-            field.Init(width, height);
+        //    field.Init(width, height);
 
-            for (int y = 0; y < height; ++y)
-            {
-                for (int x = 0; x < width; ++x)
-                {
-                    byte blockType = buffer.ReadByte();
-                    if (blockType == BLOCK_EMPTY)
-                    {
-                        // nothing
-                    }
-                    else if (blockType == BLOCK_BRICK)
-                    {
-                        BrickCell brick = new BrickCell(x, y);
+        //    for (int y = 0; y < height; ++y)
+        //    {
+        //        for (int x = 0; x < width; ++x)
+        //        {
+        //            byte blockType = buffer.ReadByte();
+        //            if (blockType == BLOCK_EMPTY)
+        //            {
+        //                // nothing
+        //            }
+        //            else if (blockType == BLOCK_BRICK)
+        //            {
+        //                BrickCell brick = new BrickCell(x, y);
 
-                        byte powerup = buffer.ReadByte();
-                        if (powerup != NO_POWERUP)
-                        {
-                            brick.powerup = powerup;
-                        }
+        //                byte powerup = buffer.ReadByte();
+        //                if (powerup != NO_POWERUP)
+        //                {
+        //                    brick.powerup = powerup;
+        //                }
 
-                        field.AddCell(brick);
-                    }
-                    else if (blockType == BLOCK_SOLID)
-                    {
-                        SolidCell solid = new SolidCell(x, y);
-                        field.AddCell(solid);
-                    }
-                }
-            }
+        //                field.AddCell(brick);
+        //            }
+        //            else if (blockType == BLOCK_SOLID)
+        //            {
+        //                SolidCell solid = new SolidCell(x, y);
+        //                field.AddCell(solid);
+        //            }
+        //        }
+        //    }
 
-            gameScreen = new GameScreen();
+        //    gameScreen = new GameScreen();
 
-            InitPlayers();
+        //    InitPlayers();
 
-            StartScreen(gameScreen);
-        }
+        //    StartScreen(gameScreen);
+        //}
     }
 }

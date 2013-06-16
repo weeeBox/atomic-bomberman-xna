@@ -10,19 +10,19 @@ using BomberEngine.Core.IO;
 using Bomberman.Game.Elements.Cells;
 using Bomberman.Game.Elements;
 
-namespace Bomberman.Network
+namespace Bomberman.Networking
 {
     public interface ServerListener
     {
-        void OnMessageReceived(Server server, Connection connection, NetworkMessage message);
-        void OnClientConnected(Server server, Connection connection);
-        void OnClientDisconnected(Server server, Connection connection);
-        void WriteDiscoveryResponse(BitWriteBuffer buffer);
+        void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message);
+        void OnClientConnected(Server server, NetConnection connection);
+        void OnClientDisconnected(Server server, NetConnection connection);
     }
 
     public class Server : Peer
     {
         public ServerListener listener;
+        public ServerInfo serverInfo;
 
         public Server(String name, int port)
             : base(name, port)
@@ -39,6 +39,9 @@ namespace Bomberman.Network
             NetPeerConfiguration config = new NetPeerConfiguration(name);
             config.EnableMessageType(NetIncomingMessageType.DiscoveryRequest);
             config.Port = port;
+
+            String hostName = CVars.sv_hostname.value;
+            serverInfo = new ServerInfo(hostName);
 
             peer = new NetServer(config);
             peer.Start();
@@ -64,10 +67,8 @@ namespace Bomberman.Network
             {
                 case NetIncomingMessageType.DiscoveryRequest:
                 {
-                    BitWriteBuffer buffer = new BitWriteBuffer();
-                    listener.WriteDiscoveryResponse(buffer);
-                    NetOutgoingMessage message = peer.CreateMessage(buffer.LengthBytes);
-                    message.Write(buffer.Data, 0, buffer.LengthBytes);
+                    NetOutgoingMessage message = peer.CreateMessage();
+                    LocalServersDiscovery.WriteDiscoveryResponse(message, serverInfo);
                     peer.SendDiscoveryResponse(message, msg.SenderEndPoint);
                     return true;
                 }
@@ -76,21 +77,21 @@ namespace Bomberman.Network
             return false;
         }
 
-        protected override void OnPeerConnected(Connection connection)
+        protected override void OnPeerConnected(NetConnection connection)
         {
             Log.i("Client connected: " + connection);
             listener.OnClientConnected(this, connection);
         }
 
-        protected override void OnPeerDisconnected(Connection connection)
+        protected override void OnPeerDisconnected(NetConnection connection)
         {   
             Log.i("Client disconnected: " + connection);
             listener.OnClientDisconnected(this, connection);
         }
 
-        protected override void OnMessageReceive(Connection connection, NetworkMessage message)
+        protected override void OnMessageReceive(NetworkMessageId messageId, NetIncomingMessage message)
         {
-            listener.OnMessageReceived(this, connection, message);
+            listener.OnMessageReceived(this, messageId, message);
         }
     }
 }

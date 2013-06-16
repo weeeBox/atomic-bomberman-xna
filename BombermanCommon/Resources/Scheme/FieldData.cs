@@ -12,11 +12,21 @@ namespace BombermanCommon.Resources.Scheme
         private int height;
 
         public FieldData(int width, int height)
+            : this(width, height, new FieldBlocks[width * height])
+        {  
+        }
+
+        public FieldData(int width, int height, FieldBlocks[] data)
         {
+            if (data.Length != width * height)
+            {
+                throw new ArgumentException("Invalid data array size");
+            }
+
             this.width = width;
             this.height = height;
 
-            data = new FieldBlocks[width * height];
+            this.data = data;
         }
 
         public FieldBlocks Get(int x, int y)

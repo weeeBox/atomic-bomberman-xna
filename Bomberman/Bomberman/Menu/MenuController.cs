@@ -6,7 +6,7 @@ using BomberEngine.Game;
 using Bomberman.Menu.Screens;
 using BomberEngine.Core.Visual;
 using Bomberman.Game;
-using Bomberman.Network;
+using Bomberman.Networking;
 using BomberEngine.Debugging;
 
 namespace Bomberman.Menu
