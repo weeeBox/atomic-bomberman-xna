@@ -110,6 +110,19 @@ namespace Bomberman.Game
                 case GameLobbyScreen.ButtonId.Back:
                     Stop(ExitCode.Cancel);
                     break;
+
+                case GameLobbyScreen.ButtonId.Create:
+                    Stop(ExitCode.Create);
+                    break;
+
+                case GameLobbyScreen.ButtonId.Join:
+                    Stop(ExitCode.Join);
+                    break;
+
+                case GameLobbyScreen.ButtonId.Refresh:
+                    StopDiscovery(false);
+                    StartDiscovery();
+                    break;
             }
         }
 
