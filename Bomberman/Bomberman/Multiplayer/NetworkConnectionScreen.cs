@@ -6,8 +6,9 @@ using BomberEngine.Game;
 using BomberEngine.Core.Visual;
 using Assets;
 using BomberEngine.Core.Assets.Types;
+using Bomberman.Game;
 
-namespace Bomberman.Game.Screens
+namespace Bomberman.Multiplayer
 {
     public class NetworkConnectionScreen : Screen
     {

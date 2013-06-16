@@ -12,6 +12,7 @@ using BomberEngine.Core.Input;
 using BomberEngine.Consoles;
 using Bomberman.Game.Elements.Players;
 using Bomberman.Network;
+using Bomberman.Multiplayer;
 
 namespace Bomberman
 {

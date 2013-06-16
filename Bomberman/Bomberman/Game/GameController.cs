@@ -17,6 +17,7 @@ using Bomberman.Game.Elements.Fields;
 using Bomberman.Game.Elements.Cells;
 using Bomberman.Game.Elements;
 using BomberEngine.Core;
+using Bomberman.Multiplayer;
 
 namespace Bomberman.Game
 {

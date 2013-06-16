@@ -147,9 +147,9 @@
     <Compile Include="Game\cmds.cs" />
     <Compile Include="Game\GameController.cs" />
     <Compile Include="Game\Game.cs" />
-    <Compile Include="Game\MultiplayerController.cs" />
-    <Compile Include="Game\Screens\GameLobbyScreen.cs" />
-    <Compile Include="Game\Screens\NetworkConnectionScreen.cs" />
+    <Compile Include="Multiplayer\MultiplayerController.cs" />
+    <Compile Include="Multiplayer\GameLobbyScreen.cs" />
+    <Compile Include="Multiplayer\NetworkConnectionScreen.cs" />
     <Compile Include="Game\Screens\PauseScreen.cs" />
     <Compile Include="Game\Screens\PowerupsDrawable.cs" />
     <Compile Include="Game\Helper.cs" />
@@ -160,7 +160,6 @@
     <Compile Include="Menu\ButtonGroup.cs" />
     <Compile Include="Menu\MenuController.cs" />
     <Compile Include="Menu\Screens\MainMenuScreen.cs" />
-    <Compile Include="Menu\Screens\MultiplayerScreen.cs" />
     <Compile Include="Menu\Screens\SettingsScreen.cs" />
     <Compile Include="Network\Client.cs" />
     <Compile Include="Network\Connection.cs" />

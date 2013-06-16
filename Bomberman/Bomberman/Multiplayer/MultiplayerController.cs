@@ -9,7 +9,7 @@ using Bomberman.Game.Screens;
 using BomberEngine.Core;
 using BomberEngine.Core.Visual;
 
-namespace Bomberman.Game
+namespace Bomberman.Multiplayer
 {
     public class MultiplayerController : Controller
     {
