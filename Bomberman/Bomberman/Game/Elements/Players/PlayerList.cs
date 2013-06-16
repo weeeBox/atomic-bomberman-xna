@@ -43,9 +43,9 @@ namespace Bomberman.Game.Elements.Players
             return list[playerIndex];
         }
 
-        public int Count
+        public int GetCount()
         {
-            get { return list.Count; }
+            return list.Count;
         }
     }
 }

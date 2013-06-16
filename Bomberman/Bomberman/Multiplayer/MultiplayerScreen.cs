@@ -11,7 +11,7 @@ using Bomberman.Game;
 
 namespace Bomberman.Multiplayer
 {
-    public class GameLobbyScreen : Screen
+    public class MultiplayerScreen : Screen
     {
         public enum ButtonId
         {
@@ -25,7 +25,7 @@ namespace Bomberman.Multiplayer
         private View contentView;
         private View busyView;
 
-        public GameLobbyScreen(ButtonDelegate buttonDelegate, bool local)
+        public MultiplayerScreen(ButtonDelegate buttonDelegate, bool local)
         {
             Font font = Helper.GetFont(A.fnt_button);
 

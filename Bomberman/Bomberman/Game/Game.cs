@@ -32,6 +32,11 @@ namespace Bomberman.Game
             return field.GetPlayers();
         }
 
+        public int GetPlayersCount()
+        {
+            return field.GetPlayers().GetCount();
+        }
+
         public void LoadField(Scheme scheme)
         {
             field.Setup(scheme);

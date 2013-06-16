@@ -23,11 +23,11 @@ namespace Bomberman.Multiplayer
         private LocalServersDiscovery serverDiscovery;
         private List<ServerInfo> foundServers;
 
-        private GameLobbyScreen lobbyScreen;
+        private MultiplayerScreen lobbyScreen;
 
         protected override void OnStart()
         {
-            lobbyScreen = new GameLobbyScreen(OnButtonPressed, false);
+            lobbyScreen = new MultiplayerScreen(OnButtonPressed, false);
             StartScreen(lobbyScreen);
 
             StartDiscovery();
@@ -104,22 +104,22 @@ namespace Bomberman.Multiplayer
 
         private void OnButtonPressed(Button button)
         {
-            GameLobbyScreen.ButtonId buttonId = (GameLobbyScreen.ButtonId)button.id;
+            MultiplayerScreen.ButtonId buttonId = (MultiplayerScreen.ButtonId)button.id;
             switch (buttonId)
             {
-                case GameLobbyScreen.ButtonId.Back:
+                case MultiplayerScreen.ButtonId.Back:
                     Stop(ExitCode.Cancel);
                     break;
 
-                case GameLobbyScreen.ButtonId.Create:
+                case MultiplayerScreen.ButtonId.Create:
                     Stop(ExitCode.Create);
                     break;
 
-                case GameLobbyScreen.ButtonId.Join:
+                case MultiplayerScreen.ButtonId.Join:
                     Stop(ExitCode.Join);
                     break;
 
-                case GameLobbyScreen.ButtonId.Refresh:
+                case MultiplayerScreen.ButtonId.Refresh:
                     StopDiscovery(false);
                     StartDiscovery();
                     break;
