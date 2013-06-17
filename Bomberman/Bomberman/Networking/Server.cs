@@ -17,12 +17,12 @@ namespace Bomberman.Networking
         void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message);
         void OnClientConnected(Server server, NetConnection connection);
         void OnClientDisconnected(Server server, NetConnection connection);
+        void OnDiscoveryResponse(Server server, NetOutgoingMessage message);
     }
 
     public class Server : Peer
     {
         public ServerListener listener;
-        public ServerInfo serverInfo;
 
         public Server(String name, int port)
             : base(name, port)
@@ -39,10 +39,7 @@ namespace Bomberman.Networking
             NetPeerConfiguration config = new NetPeerConfiguration(name);
             config.EnableMessageType(NetIncomingMessageType.DiscoveryRequest);
             config.Port = port;
-
-            String hostName = CVars.sv_hostname.value;
-            serverInfo = new ServerInfo(hostName);
-
+            
             peer = new NetServer(config);
             peer.Start();
         }
@@ -68,7 +65,7 @@ namespace Bomberman.Networking
                 case NetIncomingMessageType.DiscoveryRequest:
                 {
                     NetOutgoingMessage message = peer.CreateMessage();
-                    LocalServersDiscovery.WriteDiscoveryResponse(message, serverInfo);
+                    listener.OnDiscoveryResponse(this, message);
                     peer.SendDiscoveryResponse(message, msg.SenderEndPoint);
                     return true;
                 }

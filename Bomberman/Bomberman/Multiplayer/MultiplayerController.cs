@@ -11,10 +11,30 @@ using BomberEngine.Core.Visual;
 using Bomberman.Content;
 using Lidgren.Network;
 using BombermanCommon.Resources.Scheme;
+using System.Net;
 
 namespace Bomberman.Multiplayer
 {
-    public class MultiplayerController : Controller, ClientListener, ServerListener
+    public class ServerInfo
+    {
+        public String name;
+        public IPEndPoint endPoint;
+
+        public Scheme scheme;
+
+        public ServerInfo(String name)
+        {
+            this.name = name;
+        }
+
+        public ServerInfo(String name, IPEndPoint endPoint)
+        {
+            this.name = name;
+            this.endPoint = endPoint;
+        }
+    }
+
+    public class MultiplayerController : Controller, ClientListener, ServerListener, LocalServersDiscoveryListener
     {
         public enum ExitCode
         {
@@ -58,7 +78,7 @@ namespace Bomberman.Multiplayer
             String name = CVars.sv_appId.value;
             int port = CVars.sv_port.intValue;
 
-            serverDiscovery = new LocalServersDiscovery(OnLocalServerFound, name, port);
+            serverDiscovery = new LocalServersDiscovery(this, name, port);
             serverDiscovery.Start();
 
             foundServers = new List<ServerInfo>();
@@ -191,6 +211,94 @@ namespace Bomberman.Multiplayer
         public void OnClientDisconnected(Server server, NetConnection connection)
         {
             throw new NotImplementedException();
+        }
+
+        public void OnDiscoveryResponse(Server server, NetOutgoingMessage msg)
+        {
+            String hostName = CVars.sv_hostname.value;
+            ServerInfo serverInfo = new ServerInfo(hostName);
+            serverInfo.scheme = currentScheme;
+
+            WriteServerInfo(msg, serverInfo);
+        }
+
+        public void OnServerDiscoveryResponse(LocalServersDiscovery serverDiscovery, NetIncomingMessage msg)
+        {
+            ServerInfo info = ReadServerInfo(msg);
+            OnLocalServerFound(info);
+        }
+
+        private static ServerInfo ReadServerInfo(NetIncomingMessage message)
+        {
+            // name
+            String name = message.ReadString();
+
+            // scheme
+            Scheme scheme = new Scheme();
+
+            // scheme: name
+            scheme.name = message.ReadString();
+
+            // scheme: field data
+            int fieldWidth = message.ReadInt32();
+            int fieldHeight = message.ReadInt32();
+            FieldBlocks[] fieldDataArray = new FieldBlocks[fieldWidth * fieldHeight];
+            for (int i = 0; i < fieldDataArray.Length; ++i)
+            {
+                fieldDataArray[i] = (FieldBlocks)message.ReadByte();
+            }
+            scheme.fieldData = new FieldData(fieldWidth, fieldHeight, fieldDataArray);
+
+            // scheme: player locations
+            int locationsCount = message.ReadByte();
+            PlayerLocationInfo[] playerLocations = new PlayerLocationInfo[locationsCount];
+            for (int i = 0; i < locationsCount; ++i)
+            {
+                int x = message.ReadByte();
+                int y = message.ReadByte();
+                int team = message.ReadByte();
+
+                playerLocations[i] = new PlayerLocationInfo(i, x, y, team);
+            }
+            scheme.playerLocations = playerLocations;
+
+            ServerInfo info = new ServerInfo(name, message.SenderEndPoint);
+            info.scheme = scheme;
+            return info;
+        }
+
+        private static void WriteServerInfo(NetOutgoingMessage message, ServerInfo info)
+        {
+            // name
+            message.Write(info.name);
+
+            // scheme
+            Scheme scheme = info.scheme;
+
+            // scheme: name
+            message.Write(scheme.name);
+
+            // scheme: field data
+            FieldData fieldData = scheme.fieldData;
+            message.Write(fieldData.GetWidth());
+            message.Write(fieldData.GetHeight());
+
+            FieldBlocks[] blocks = fieldData.GetDataArray();
+            for (int i = 0; i < blocks.Length; ++i)
+            {
+                byte block = (byte)blocks[i];
+                message.Write(block);
+            }
+
+            // scheme: player locations
+            PlayerLocationInfo[] playerLocations = scheme.GetPlayerLocations();
+            message.Write((byte)playerLocations.Length);
+            for (int i = 0; i < playerLocations.Length; ++i)
+            {
+                message.Write((byte)playerLocations[i].x);
+                message.Write((byte)playerLocations[i].y);
+                message.Write((byte)playerLocations[i].team);
+            }
         }
     }
 }
