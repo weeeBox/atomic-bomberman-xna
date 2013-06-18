@@ -34,7 +34,7 @@ namespace Bomberman.Multiplayer
         }
     }
 
-    public class MultiplayerController : Controller, ClientListener, ServerListener, LocalServersDiscoveryListener
+    public class MultiplayerController : BombermanController, ClientListener, ServerListener, LocalServersDiscoveryListener
     {
         public enum ExitCode
         {
@@ -127,14 +127,18 @@ namespace Bomberman.Multiplayer
         #endregion
 
         private void StartServer()
-        {
-            BombermanRootController rootController = GetRootController() as BombermanRootController;
-            rootController.StartGameServer(this);
+        {   
+            GetRootController().StartGameServer(this);
         }
 
-        private void StartClient()
-        {
+        private void StartClient(IPEndPoint remoteEndPoint)
+        {   
+            GetRootController().StartGameClient(remoteEndPoint, this);
+        }
 
+        private void StopPeer()
+        {
+            GetRootController().StopPeer();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -318,15 +322,15 @@ namespace Bomberman.Multiplayer
             switch (buttonId)
             {
                 case MultiplayerLobbyScreen.ButtonId.Start:
-                    {
-                        break;
-                    }
+                {
+                    break;
+                }
 
                 case MultiplayerLobbyScreen.ButtonId.Back:
-                    {
-                        CurrentScreen().Finish();
-                        break;
-                    }
+                {
+                    CurrentScreen().Finish();
+                    break;
+                }
             }
         }
 

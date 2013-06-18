@@ -147,6 +147,11 @@ namespace Bomberman
             multiplayerManager.Start();
         }
 
+        public void StopPeer()
+        {
+            multiplayerManager.Stop();
+        }
+
         // TODO: move server discovery here
 
         #endregion
