@@ -7,8 +7,6 @@ using BomberEngine.Core.Events;
 
 namespace BomberEngine.Game
 {
-    public delegate void ScreenDelegate(Screen screen);
-
     public class Screen : BaseElement
     {
         protected enum FocusDirection
@@ -33,11 +31,6 @@ namespace BomberEngine.Game
 
         protected bool allowsDrawPrevious;
         protected bool allowsUpdatePrevious;
-
-        public ScreenDelegate onStartDelegate;
-        public ScreenDelegate onSuspendDelegate;
-        public ScreenDelegate onResumeDelegate;
-        public ScreenDelegate onStopDelegate;
 
         public Screen(int id = 0)
             : this(Application.GetWidth(), Application.GetHeight())
@@ -82,7 +75,6 @@ namespace BomberEngine.Game
         internal void Start()
         {
             OnStart();
-            NotifyScreenDelegate(onStartDelegate);
 
             if (mRootView != null)
             {
@@ -93,13 +85,11 @@ namespace BomberEngine.Game
         internal void Suspend()
         {
             OnSuspend();
-            NotifyScreenDelegate(onSuspendDelegate);
         }
 
         internal void Resume()
         {
             OnResume();
-            NotifyScreenDelegate(onResumeDelegate);
         }
 
         internal void Stop()
@@ -108,7 +98,6 @@ namespace BomberEngine.Game
             updatableList.Destroy();
 
             OnStop();
-            NotifyScreenDelegate(onStopDelegate);
             RemoveFromContainer();
         }
 
@@ -131,14 +120,6 @@ namespace BomberEngine.Game
 
         protected virtual void OnStop()
         {
-        }
-
-        private void NotifyScreenDelegate(ScreenDelegate screenDelegate)
-        {
-            if (screenDelegate != null)
-            {
-                screenDelegate(this);
-            }
         }
 
         #endregion
