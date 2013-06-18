@@ -112,6 +112,7 @@
     <Compile Include="AssetType.cs" />
     <Compile Include="BombermanApplication.cs" />
     <Compile Include="BombermanAssetManager.cs" />
+    <Compile Include="BombermanController.cs" />
     <Compile Include="BombermanRootController.cs" />
     <Compile Include="Content\Scheme.cs" />
     <Compile Include="Content\SchemeReader.cs" />

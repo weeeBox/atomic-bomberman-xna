@@ -8,7 +8,7 @@ namespace Bomberman
 {
     public abstract class BombermanController : Controller
     {
-        protected override BombermanRootController GetRootController()
+        protected new BombermanRootController GetRootController()
         {
             return base.GetRootController() as BombermanRootController;
         }
