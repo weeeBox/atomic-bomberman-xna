@@ -67,9 +67,14 @@ namespace Bomberman.Multiplayer
             Stop((int)exitCode, data);
         }
 
-
+        //////////////////////////////////////////////////////////////////////////////
 
         #region Local server discovery
+
+        private void UpdateDiscovery(float delta)
+        {
+            serverDiscovery.Update(delta);
+        }
 
         private void StartDiscovery()
         {
@@ -90,16 +95,6 @@ namespace Bomberman.Multiplayer
             multiplayerScreen.SetBusy();
         }
 
-        private void UpdateDiscovery(float delta)
-        {
-            serverDiscovery.Update(delta);
-        }
-
-        private void StopDiscoveryCall(DelayedCall call)
-        {
-            StopDiscovery(true);
-        }
-
         private void StopDiscovery(bool updateUI)
         {
             if (serverDiscovery != null)
@@ -118,61 +113,15 @@ namespace Bomberman.Multiplayer
             }
         }
 
+        private void StopDiscoveryCall(DelayedCall call)
+        {
+            StopDiscovery(true);
+        }
+
         private void OnLocalServerFound(ServerInfo info)
         {
             Log.d("Found local server: " + info.endPoint);
             foundServers.Add(info);
-        }
-
-        #endregion
-
-        #region Button delegate
-
-        private void OnButtonPressed(Button button)
-        {
-            MultiplayerScreen.ButtonId buttonId = (MultiplayerScreen.ButtonId)button.id;
-            switch (buttonId)
-            {
-                case MultiplayerScreen.ButtonId.Back:
-                    Stop(ExitCode.Cancel);
-                    break;
-
-                case MultiplayerScreen.ButtonId.Create:
-                    StopDiscovery(false);
-
-                    currentScheme = Application.Assets().LoadAsset<Scheme>("Content\\maps\\x.sch");
-                    StartNextScreen(new MultiplayerLobbyScreen(currentScheme, OnLobbyScreenButtonPressed));
-
-                    StartServer();
-                    break;
-
-                case MultiplayerScreen.ButtonId.Join:
-                    Stop(ExitCode.Join);
-                    break;
-
-                case MultiplayerScreen.ButtonId.Refresh:
-                    StopDiscovery(false);
-                    StartDiscovery();
-                    break;
-            }
-        }
-
-        private void OnLobbyScreenButtonPressed(Button button)
-        {
-            MultiplayerLobbyScreen.ButtonId buttonId = (MultiplayerLobbyScreen.ButtonId)button.id;
-            switch (buttonId)
-            {
-                case MultiplayerLobbyScreen.ButtonId.Start:
-                {   
-                    break;
-                }
-
-                case MultiplayerLobbyScreen.ButtonId.Back:
-                {
-                    CurrentScreen().Finish();
-                    break;
-                }
-            }
         }
 
         #endregion
@@ -182,6 +131,15 @@ namespace Bomberman.Multiplayer
             BombermanRootController rootController = GetRootController() as BombermanRootController;
             rootController.StartGameServer(this);
         }
+
+        private void StartClient()
+        {
+
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region ClientListener
 
         public void OnMessageReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message)
         {
@@ -197,6 +155,12 @@ namespace Bomberman.Multiplayer
         {
             throw new NotImplementedException();
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region ServerListener
 
         public void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
         {
@@ -222,11 +186,23 @@ namespace Bomberman.Multiplayer
             WriteServerInfo(msg, serverInfo);
         }
 
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region LocalServersDiscoveryListener
+
         public void OnServerDiscoveryResponse(LocalServersDiscovery serverDiscovery, NetIncomingMessage msg)
         {
             ServerInfo info = ReadServerInfo(msg);
             OnLocalServerFound(info);
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Server Info
 
         private static ServerInfo ReadServerInfo(NetIncomingMessage message)
         {
@@ -300,5 +276,60 @@ namespace Bomberman.Multiplayer
                 message.Write((byte)playerLocations[i].team);
             }
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Button delegate
+
+        private void OnButtonPressed(Button button)
+        {
+            MultiplayerScreen.ButtonId buttonId = (MultiplayerScreen.ButtonId)button.id;
+            switch (buttonId)
+            {
+                case MultiplayerScreen.ButtonId.Back:
+                    Stop(ExitCode.Cancel);
+                    break;
+
+                case MultiplayerScreen.ButtonId.Create:
+                    StopDiscovery(false);
+
+                    currentScheme = Application.Assets().LoadAsset<Scheme>("Content\\maps\\x.sch");
+                    StartNextScreen(new MultiplayerLobbyScreen(currentScheme, OnLobbyScreenButtonPressed));
+
+                    StartServer();
+                    break;
+
+                case MultiplayerScreen.ButtonId.Join:
+                    Stop(ExitCode.Join);
+                    break;
+
+                case MultiplayerScreen.ButtonId.Refresh:
+                    StopDiscovery(false);
+                    StartDiscovery();
+                    break;
+            }
+        }
+
+        private void OnLobbyScreenButtonPressed(Button button)
+        {
+            MultiplayerLobbyScreen.ButtonId buttonId = (MultiplayerLobbyScreen.ButtonId)button.id;
+            switch (buttonId)
+            {
+                case MultiplayerLobbyScreen.ButtonId.Start:
+                    {
+                        break;
+                    }
+
+                case MultiplayerLobbyScreen.ButtonId.Back:
+                    {
+                        CurrentScreen().Finish();
+                        break;
+                    }
+            }
+        }
+
+        #endregion
     }
 }
