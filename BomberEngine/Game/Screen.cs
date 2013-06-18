@@ -268,6 +268,18 @@ namespace BomberEngine.Game
                     if (mFocusedView.HandleEvent(evt)) return true;
                 }
 
+                if (keyEvent.state == KeyState.Pressed)
+                {
+                    if (keyEvent.arg.key == KeyCode.Escape ||
+                        keyEvent.arg.key == KeyCode.GP_B || keyEvent.arg.key == KeyCode.GP_Back)
+                    {
+                        if (OnBackKeyPressed(keyEvent.arg))
+                        {
+                            return true;
+                        }
+                    }
+                }
+
                 switch (keyEvent.state)
                 {
                     case KeyState.Pressed:
@@ -513,7 +525,7 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Back button
+        #region Back key/button
 
         public void SetBackButton(Button button)
         {
@@ -537,6 +549,19 @@ namespace BomberEngine.Game
             {
                 backButtonDelegate(button);
             }
+        }
+
+        protected virtual bool OnBackKeyPressed(KeyEventArg arg)
+        {
+            if (backButton != null)
+            {
+                OnBackButtonPress(backButton);
+            }
+            else
+            {
+                Finish();
+            }
+            return true;
         }
 
         #endregion
