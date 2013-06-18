@@ -26,9 +26,12 @@ namespace Bomberman.Multiplayer
         private bool local;
         private View contentView;
         private View busyView;
+        private ButtonDelegate buttonDelegate;
 
         public MultiplayerScreen(ButtonDelegate buttonDelegate, bool local)
         {
+            this.buttonDelegate = buttonDelegate;
+
             Font font = Helper.GetFont(A.fnt_button);
 
             TextView headerText = new TextView(font, "LOCAL SERVERS");
@@ -103,8 +106,11 @@ namespace Bomberman.Multiplayer
             {
                 for (int i = 0; i < servers.Count; ++i)
                 {
-                    ServerInfo server = servers[i];
-                    ServerView view = new ServerView(server);
+                    ServerInfo serverInfo = servers[i];
+                    ServerView view = new ServerView(serverInfo);
+                    view.SetDelegate(buttonDelegate);
+                    view.id = (int)ButtonId.Join;
+                    view.data = serverInfo;
                     contentView.AddView(view);
                 }
             }
@@ -121,15 +127,13 @@ namespace Bomberman.Multiplayer
         }
     }
 
-    class ServerView : View
+    class ServerView : Button
     {
         private TextView nameView;
 
         public ServerView(ServerInfo server)
             : base(154, 143)
         {
-            focusable = true;
-
             Font font = Helper.GetFont(A.fnt_button);
 
             nameView = new TextView(font, server.name);

@@ -93,12 +93,12 @@ namespace Bomberman.Game
                 }
                 case GameSettings.Multiplayer.Client:
                 {
-                    game = new Game();
-                    game.AddPlayer(new Player(0));
+                    //game = new Game();
+                    //game.AddPlayer(new Player(0));
 
-                    StartScreen(new NetworkConnectionScreen());
+                    //StartScreen(new NetworkConnectionScreen());
 
-                    StartClient();
+                    //StartClient();
                     break;
                 }
                 case GameSettings.Multiplayer.Server:

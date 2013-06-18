@@ -43,11 +43,18 @@ namespace Bomberman.Multiplayer
             Join,
         }
 
+        public enum ConnectingId
+        {
+            ConnectToServer
+        }
+
         private LocalServersDiscovery serverDiscovery;
         private List<ServerInfo> foundServers;
 
         private MultiplayerScreen multiplayerScreen;
         private ServerInfo serverInfo;
+
+        private NetworkConnectionScreen connectionScreen;
 
         protected override void OnStart()
         {
@@ -291,10 +298,13 @@ namespace Bomberman.Multiplayer
             switch (buttonId)
             {
                 case MultiplayerScreen.ButtonId.Back:
+                {
                     Stop(ExitCode.Cancel);
                     break;
+                }
 
                 case MultiplayerScreen.ButtonId.Create:
+                {
                     StopDiscovery(false);
 
                     String hostName = CVars.sv_hostname.value;
@@ -306,15 +316,23 @@ namespace Bomberman.Multiplayer
 
                     StartServer();
                     break;
+                }
 
                 case MultiplayerScreen.ButtonId.Join:
-                    Stop(ExitCode.Join);
+                {
+                    ServerInfo info = button.data as ServerInfo;
+                    Debug.Assert(info != null);
+
+                    StartClient(info.endPoint);
                     break;
+                }
 
                 case MultiplayerScreen.ButtonId.Refresh:
+                {
                     StopDiscovery(false);
                     StartDiscovery();
                     break;
+                }
             }
         }
 
@@ -324,7 +342,7 @@ namespace Bomberman.Multiplayer
             switch (buttonId)
             {
                 case MultiplayerLobbyScreen.ButtonId.Start:
-                {
+                {   
                     break;
                 }
 
@@ -335,6 +353,29 @@ namespace Bomberman.Multiplayer
                     break;
                 }
             }
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Connecting screen
+
+        private void StartConnectionScreen(ConnectingId connectionId)
+        {
+            if (connectionScreen == null)
+            {
+                connectionScreen = new NetworkConnectionScreen(OnConnectionCancelled);
+            }
+
+            connectionScreen.operationId = (int)connectionId;
+            StartNextScreen(connectionScreen);
+        }
+
+        private void OnConnectionCancelled(int operationId)
+        {
+            ConnectingId connectingId = (ConnectingId)operationId;
+
         }
 
         #endregion
