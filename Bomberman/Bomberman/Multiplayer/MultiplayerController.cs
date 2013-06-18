@@ -349,7 +349,6 @@ namespace Bomberman.Multiplayer
                 case MultiplayerLobbyScreen.ButtonId.Back:
                 {
                     StopPeer();
-                    CurrentScreen().Finish();
                     break;
                 }
             }

@@ -8,8 +8,7 @@ namespace BomberEngine.Core.Visual
     
     public class Button : View
     {
-        protected ButtonDelegate buttonDelegate;
-
+        public ButtonDelegate buttonDelegate;
         public Object data;
 
         public Button(float width, float height)

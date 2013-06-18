@@ -192,10 +192,6 @@ namespace Bomberman.Game
             PauseScreen.ButtonId buttonId = (PauseScreen.ButtonId)button.id;
             switch (buttonId)
             {
-                case PauseScreen.ButtonId.Resume:
-                    CurrentScreen().Finish();
-                    break;
-
                 case PauseScreen.ButtonId.Exit:
                     Stop(ExitCode.Exit);
                     break;

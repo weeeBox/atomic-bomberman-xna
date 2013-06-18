@@ -60,6 +60,7 @@ namespace Bomberman.Multiplayer
             button.SetDelegate(buttonDelegate);
             button.id = (int)ButtonId.Back;
             buttons.AddView(button);
+            SetBackButton(button);
 
             button = new TextButton("START!", 0, 0, 100, 20);
             button.SetDelegate(buttonDelegate);

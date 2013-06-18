@@ -32,6 +32,9 @@ namespace BomberEngine.Game
         protected bool allowsDrawPrevious;
         protected bool allowsUpdatePrevious;
 
+        private Button backButton;
+        private ButtonDelegate backButtonDelegate;
+
         public Screen(int id = 0)
             : this(Application.GetWidth(), Application.GetHeight())
         {
@@ -504,6 +507,36 @@ namespace BomberEngine.Game
         protected Controller CurrentController
         {
             get { return Application.RootController().CurrentController; }
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Back button
+
+        public void SetBackButton(Button button)
+        {
+            backButton = button;
+
+            if (button != null)
+            {
+                backButtonDelegate = button.buttonDelegate;
+                button.buttonDelegate = OnBackButtonPress;
+            }
+            else
+            {
+                backButtonDelegate = null;
+            }
+        }
+
+        protected virtual void OnBackButtonPress(Button button)
+        {
+            Finish();
+            if (backButtonDelegate != null)
+            {
+                backButtonDelegate(button);
+            }
         }
 
         #endregion

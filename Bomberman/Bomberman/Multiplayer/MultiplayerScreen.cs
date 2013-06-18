@@ -66,6 +66,7 @@ namespace Bomberman.Multiplayer
             button.SetDelegate(buttonDelegate);
             button.id = (int)ButtonId.Back;
             buttonGroup.AddView(button);
+            SetBackButton(button);
 
             button = new TextButton("REFRESH", 0, 0, 100, 20);
             button.SetDelegate(buttonDelegate);
