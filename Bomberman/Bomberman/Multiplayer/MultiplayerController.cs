@@ -47,7 +47,7 @@ namespace Bomberman.Multiplayer
         private List<ServerInfo> foundServers;
 
         private MultiplayerScreen multiplayerScreen;
-        private Scheme currentScheme;
+        private ServerInfo serverInfo;
 
         protected override void OnStart()
         {
@@ -138,6 +138,7 @@ namespace Bomberman.Multiplayer
 
         private void StopPeer()
         {
+            serverInfo = null;
             GetRootController().StopPeer();
         }
 
@@ -183,10 +184,7 @@ namespace Bomberman.Multiplayer
 
         public void OnDiscoveryResponse(Server server, NetOutgoingMessage msg)
         {
-            String hostName = CVars.sv_hostname.value;
-            ServerInfo serverInfo = new ServerInfo(hostName);
-            serverInfo.scheme = currentScheme;
-
+            Debug.Assert(serverInfo != null);
             WriteServerInfo(msg, serverInfo);
         }
 
@@ -299,8 +297,12 @@ namespace Bomberman.Multiplayer
                 case MultiplayerScreen.ButtonId.Create:
                     StopDiscovery(false);
 
-                    currentScheme = Application.Assets().LoadAsset<Scheme>("Content\\maps\\x.sch");
-                    StartNextScreen(new MultiplayerLobbyScreen(currentScheme, OnLobbyScreenButtonPressed));
+                    String hostName = CVars.sv_hostname.value;
+
+                    Scheme scheme = Application.Assets().LoadAsset<Scheme>("Content\\maps\\x.sch");
+                    serverInfo = new ServerInfo(hostName);
+                    serverInfo.scheme = scheme;
+                    StartNextScreen(new MultiplayerLobbyScreen(serverInfo, OnLobbyScreenButtonPressed));
 
                     StartServer();
                     break;

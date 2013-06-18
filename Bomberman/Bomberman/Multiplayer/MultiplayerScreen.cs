@@ -8,6 +8,8 @@ using BomberEngine.Core.Assets.Types;
 using Assets;
 using Bomberman.Networking;
 using Bomberman.Game;
+using Microsoft.Xna.Framework;
+using BomberEngine.Core.Visual.UI;
 
 namespace Bomberman.Multiplayer
 {
@@ -121,16 +123,25 @@ namespace Bomberman.Multiplayer
 
     class ServerView : View
     {
+        private TextView nameView;
+
         public ServerView(ServerInfo server)
             : base(154, 143)
         {
+            focusable = true;
+
             Font font = Helper.GetFont(A.fnt_button);
 
-            TextView nameView = new TextView(font, server.name);
+            nameView = new TextView(font, server.name);
             nameView.alignX = View.ALIGN_CENTER;
             nameView.x = 0.5f * width;
             nameView.y = 104;
             AddView(nameView);
+        }
+
+        protected override void OnFocusChanged(bool focused)
+        {
+            nameView.color = focused ? Color.Yellow : Color.White;
         }
     }
 

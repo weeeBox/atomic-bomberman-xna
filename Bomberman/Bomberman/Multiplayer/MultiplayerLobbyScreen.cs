@@ -21,9 +21,12 @@ namespace Bomberman.Multiplayer
         }
 
         private View clientsView;
+        private ServerInfo serverInfo;
 
-        public MultiplayerLobbyScreen(Scheme scheme, ButtonDelegate buttonDelegate)
+        public MultiplayerLobbyScreen(ServerInfo serverInfo, ButtonDelegate buttonDelegate)
         {
+            this.serverInfo = serverInfo;
+
             View contentView = new View(512, 363);
             contentView.alignX = View.ALIGN_CENTER;
             contentView.x = 0.5f * width;
@@ -33,7 +36,7 @@ namespace Bomberman.Multiplayer
 
             contentView.AddView(new View(215, 145));
 
-            TextView serverName = new TextView(font, "SERVER NAME");
+            TextView serverName = new TextView(font, serverInfo.name);
             serverName.alignX = View.ALIGN_CENTER;
             serverName.x = 113;
             serverName.y = 155;
