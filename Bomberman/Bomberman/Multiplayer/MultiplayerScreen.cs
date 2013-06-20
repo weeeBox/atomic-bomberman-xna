@@ -23,12 +23,11 @@ namespace Bomberman.Multiplayer
             Join,
         }
 
-        private bool local;
         private View contentView;
         private View busyView;
         private ButtonDelegate buttonDelegate;
 
-        public MultiplayerScreen(ButtonDelegate buttonDelegate, bool local)
+        public MultiplayerScreen(ButtonDelegate buttonDelegate)
         {
             this.buttonDelegate = buttonDelegate;
 

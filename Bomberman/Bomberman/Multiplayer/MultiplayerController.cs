@@ -36,6 +36,12 @@ namespace Bomberman.Multiplayer
 
     public class MultiplayerController : BombermanController, ClientListener, ServerListener, LocalServersDiscoveryListener
     {
+        public enum ScreenId
+        {
+            Multiplyer,
+            Lobby
+        }
+
         public enum ExitCode
         {
             Cancel,
@@ -45,15 +51,14 @@ namespace Bomberman.Multiplayer
 
         private LocalServersDiscovery serverDiscovery;
         private List<ServerInfo> foundServers;
-
-        private MultiplayerScreen multiplayerScreen;
         private ServerInfo serverInfo;
 
         private NetworkConnectionScreen connectionScreen;
 
         protected override void OnStart()
         {
-            multiplayerScreen = new MultiplayerScreen(OnButtonPressed, false);
+            Screen multiplayerScreen = new MultiplayerScreen(OnButtonPressed);
+            multiplayerScreen.id = (int)ScreenId.Multiplyer;
             StartScreen(multiplayerScreen);
 
             StartDiscovery();
@@ -90,6 +95,7 @@ namespace Bomberman.Multiplayer
 
             foundServers = new List<ServerInfo>();
 
+            MultiplayerScreen multiplayerScreen = (MultiplayerScreen)FindScreen(ScreenId.Multiplyer);
             multiplayerScreen.AddUpdatable(UpdateDiscovery);
             multiplayerScreen.ScheduleCall(StopDiscoveryCall, 5.0f);
 
@@ -104,11 +110,15 @@ namespace Bomberman.Multiplayer
                 serverDiscovery.Stop();
                 serverDiscovery = null;
 
-                multiplayerScreen.RemoveUpdatable(UpdateDiscovery);
-
-                if (updateUI)
+                MultiplayerScreen multiplayerScreen = (MultiplayerScreen)FindScreen(ScreenId.Multiplyer);
+                if (multiplayerScreen != null)
                 {
-                    multiplayerScreen.SetServers(foundServers);
+                    multiplayerScreen.RemoveUpdatable(UpdateDiscovery);
+
+                    if (updateUI)
+                    {
+                        multiplayerScreen.SetServers(foundServers);
+                    }
                 }
 
                 Log.i("Stopped local servers discovery");
@@ -157,7 +167,7 @@ namespace Bomberman.Multiplayer
         public void OnConnectedToServer(Client client, NetConnection serverConnection)
         {
             StopConnectionScreen();
-            StartNextScreen(new MultiplayerLobbyScreen(serverInfo, OnLobbyScreenButtonPressed, false));
+            StartLobbyScreen(serverInfo, false);
         }
 
         public void OnDisconnectedFromServer(Client client)
@@ -176,7 +186,7 @@ namespace Bomberman.Multiplayer
         }
 
         public void OnClientConnected(Server server, NetConnection connection)
-        {   
+        {
         }
 
         public void OnClientDisconnected(Server server, NetConnection connection)
@@ -306,7 +316,7 @@ namespace Bomberman.Multiplayer
                     Scheme scheme = Application.Assets().LoadAsset<Scheme>("Content\\maps\\x.sch");
                     serverInfo = new ServerInfo(hostName);
                     serverInfo.scheme = scheme;
-                    StartNextScreen(new MultiplayerLobbyScreen(serverInfo, OnLobbyScreenButtonPressed, true));
+                    StartLobbyScreen(serverInfo, true);
 
                     StartServer();
                     break;
@@ -386,5 +396,19 @@ namespace Bomberman.Multiplayer
         }
 
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        private void StartLobbyScreen(ServerInfo info, bool isServer)
+        {
+            Screen screen = new MultiplayerLobbyScreen(serverInfo, OnLobbyScreenButtonPressed, isServer);
+            screen.id = (int)ScreenId.Lobby;
+            StartNextScreen(screen);
+        }
+
+        private Screen FindScreen(ScreenId id)
+        {
+            return FindScreen((int)id);
+        }
     }
 }
