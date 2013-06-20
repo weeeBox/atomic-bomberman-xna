@@ -185,7 +185,7 @@ namespace Bomberman.Multiplayer
         {   
         }
 
-        public void OnClientConnected(Server server, NetConnection connection)
+        public void OnClientConnected(Server server, String name, NetConnection connection)
         {
         }
 

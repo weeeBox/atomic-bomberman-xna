@@ -15,7 +15,7 @@ namespace Bomberman.Networking
     public interface ServerListener
     {
         void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message);
-        void OnClientConnected(Server server, NetConnection connection);
+        void OnClientConnected(Server server, String name, NetConnection connection);
         void OnClientDisconnected(Server server, NetConnection connection);
         void OnDiscoveryResponse(Server server, NetOutgoingMessage message);
     }
@@ -23,6 +23,8 @@ namespace Bomberman.Networking
     public class Server : Peer
     {
         public ServerListener listener;
+
+        private int nextClientIndex;
 
         public Server(String name, int port)
             : base(name, port)
@@ -77,7 +79,19 @@ namespace Bomberman.Networking
         protected override void OnPeerConnected(NetConnection connection)
         {
             Log.i("Client connected: " + connection);
-            listener.OnClientConnected(this, connection);
+
+            NetIncomingMessage hailMessage = connection.RemoteHailMessage;
+            String name;
+            if (hailMessage != null)
+            {
+                name = hailMessage.ReadString();
+            }
+            else
+            {
+                name = "Client-" + nextClientIndex++;
+            }
+
+            listener.OnClientConnected(this, name, connection);
         }
 
         protected override void OnPeerDisconnected(NetConnection connection)

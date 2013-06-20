@@ -57,7 +57,7 @@ namespace Bomberman.Networking
 
             NetOutgoingMessage hailMessage = peer.CreateMessage();
             hailMessage.Write(CVars.name.value);
-            peer.Connect(remoteEndPoint);
+            peer.Connect(remoteEndPoint, hailMessage);
         }
 
         public override void Stop()

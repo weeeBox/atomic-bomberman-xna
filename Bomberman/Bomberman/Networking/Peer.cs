@@ -57,12 +57,6 @@ namespace Bomberman.Networking
 
         protected virtual bool HandleMessage(NetPeer peer, NetIncomingMessage msg)
         {
-            if (msg.SenderConnection != null && msg.SenderConnection.RemoteHailMessage != null)
-            {
-                String serverName = msg.SenderConnection.RemoteHailMessage.ReadString();
-                Log.d("Server name: " + serverName);
-            }
-
             switch (msg.MessageType)
             {
                 case NetIncomingMessageType.StatusChanged:
