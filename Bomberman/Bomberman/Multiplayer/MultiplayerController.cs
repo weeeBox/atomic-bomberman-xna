@@ -43,11 +43,6 @@ namespace Bomberman.Multiplayer
             Join,
         }
 
-        public enum ConnectingId
-        {
-            ConnectToServer
-        }
-
         private LocalServersDiscovery serverDiscovery;
         private List<ServerInfo> foundServers;
 
@@ -137,9 +132,10 @@ namespace Bomberman.Multiplayer
         {   
             GetRootController().StartGameServer(this);
         }
-
+        
         private void StartClient(IPEndPoint remoteEndPoint)
-        {   
+        {
+            StartConnectionScreen(OnServerConnectionCancelled, "Connecting to " + remoteEndPoint + "...");
             GetRootController().StartGameClient(remoteEndPoint, this);
         }
 
@@ -155,17 +151,18 @@ namespace Bomberman.Multiplayer
 
         public void OnMessageReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void OnConnectedToServer(Client client, NetConnection serverConnection)
         {
-            throw new NotImplementedException();
+            StopConnectionScreen();
+            StartNextScreen(new MultiplayerLobbyScreen(serverInfo, OnLobbyScreenButtonPressed, false));
         }
 
         public void OnDisconnectedFromServer(Client client)
         {
-            throw new NotImplementedException();
+            
         }
 
         #endregion
@@ -175,18 +172,15 @@ namespace Bomberman.Multiplayer
         #region ServerListener
 
         public void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
-        {
-            throw new NotImplementedException();
+        {   
         }
 
         public void OnClientConnected(Server server, NetConnection connection)
-        {
-            throw new NotImplementedException();
+        {   
         }
 
         public void OnClientDisconnected(Server server, NetConnection connection)
-        {
-            throw new NotImplementedException();
+        {   
         }
 
         public void OnDiscoveryResponse(Server server, NetOutgoingMessage msg)
@@ -312,7 +306,7 @@ namespace Bomberman.Multiplayer
                     Scheme scheme = Application.Assets().LoadAsset<Scheme>("Content\\maps\\x.sch");
                     serverInfo = new ServerInfo(hostName);
                     serverInfo.scheme = scheme;
-                    StartNextScreen(new MultiplayerLobbyScreen(serverInfo, OnLobbyScreenButtonPressed));
+                    StartNextScreen(new MultiplayerLobbyScreen(serverInfo, OnLobbyScreenButtonPressed, true));
 
                     StartServer();
                     break;
@@ -323,6 +317,7 @@ namespace Bomberman.Multiplayer
                     ServerInfo info = button.data as ServerInfo;
                     Debug.Assert(info != null);
 
+                    serverInfo = info;
                     StartClient(info.endPoint);
                     break;
                 }
@@ -360,21 +355,34 @@ namespace Bomberman.Multiplayer
 
         #region Connecting screen
 
-        private void StartConnectionScreen(ConnectingId connectionId)
+        private void StartConnectionScreen(ConnectionCancelCallback cancelCallback, String message)
         {
             if (connectionScreen == null)
             {
-                connectionScreen = new NetworkConnectionScreen(OnConnectionCancelled);
+                connectionScreen = new NetworkConnectionScreen();
             }
 
-            connectionScreen.operationId = (int)connectionId;
-            StartNextScreen(connectionScreen);
+            connectionScreen.cancelCallback = cancelCallback;
+            connectionScreen.SetStatusText(message);
+
+            if (CurrentScreen() != connectionScreen)
+            {
+                StartNextScreen(connectionScreen);
+            }
         }
 
-        private void OnConnectionCancelled(int operationId)
+        private void StopConnectionScreen()
         {
-            ConnectingId connectingId = (ConnectingId)operationId;
+            if (CurrentScreen() == connectionScreen)
+            {
+                connectionScreen.Finish();
+            }
+        }
 
+        private void OnServerConnectionCancelled()
+        {
+            Log.d("Cancelled connecting to the server");
+            StopPeer();
         }
 
         #endregion

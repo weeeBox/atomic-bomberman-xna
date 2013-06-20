@@ -18,12 +18,14 @@ namespace Bomberman.Multiplayer
         {
             Back,
             Start,
+            Ready,
         }
 
         private View clientsView;
         private ServerInfo serverInfo;
+        private bool isServer;
 
-        public MultiplayerLobbyScreen(ServerInfo serverInfo, ButtonDelegate buttonDelegate)
+        public MultiplayerLobbyScreen(ServerInfo serverInfo, ButtonDelegate buttonDelegate, bool isServer)
         {
             this.serverInfo = serverInfo;
 
@@ -62,9 +64,12 @@ namespace Bomberman.Multiplayer
             buttons.AddView(button);
             SetBackButton(button);
 
-            button = new TextButton("START!", 0, 0, 100, 20);
+            String label = isServer ? "START" : "READY";
+            ButtonId buttonId = isServer ? ButtonId.Start : ButtonId.Ready;
+
+            button = new TextButton(label, 0, 0, 100, 20);
             button.SetDelegate(buttonDelegate);
-            button.id = (int)ButtonId.Start;
+            button.id = (int)buttonId;
             buttons.AddView(button);
 
             buttons.LayoutHor(10);
