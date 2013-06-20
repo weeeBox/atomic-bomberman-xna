@@ -11,8 +11,18 @@ using BomberEngine.Core.Events;
 
 namespace BomberEngine.Game
 {
+    public interface IScreenManagerListener
+    {
+        void OnScreenStarted(ScreenManager manager, Screen screen);
+        void OnScreenSuspended(ScreenManager manager, Screen screen);
+        void OnScreenResumed(ScreenManager manager, Screen screen);
+        void OnScreenStopped(ScreenManager manager, Screen screen);
+    }
+
     public class ScreenManager : BaseElement, IDestroyable
-    {   
+    {
+        public IScreenManagerListener listener;
+
         private List<Screen> screens;
         private UpdatableList updatables;
         private DrawableList drawables;
@@ -79,13 +89,13 @@ namespace BomberEngine.Game
             {
                 if (replaceCurrent)
                 {
-                    currentScreen.Stop();
+                    Stop(currentScreen);
                 }
                 else
                 {
                     if (!screen.AllowsUpdatePrevious)
                     {
-                        currentScreen.Suspend();
+                        Suspend(currentScreen);
                         updatables.Remove(currentScreen);
                     }
 
@@ -100,7 +110,8 @@ namespace BomberEngine.Game
 
             screens.Add(screen);
             screen.screenManager = this;
-            screen.Start();
+
+            Start(screen);
 
             updatables.Add(screen);
             drawables.Add(screen);
@@ -118,8 +129,6 @@ namespace BomberEngine.Game
                 throw new InvalidOperationException("Screen manager doesn't contain the screen: " + screen);   
             }
 
-            screen.screenManager = null;
-            
             screens.Remove(screen);
             updatables.Remove(screen);
             drawables.Remove(screen);
@@ -136,7 +145,7 @@ namespace BomberEngine.Game
 
                     if (!screen.AllowsUpdatePrevious)
                     {
-                        currentScreen.Resume();
+                        Resume(currentScreen);
                         updatables.Add(currentScreen);
                     }
                 }
@@ -144,6 +153,45 @@ namespace BomberEngine.Game
                 {
                     currentScreen = null;
                 }
+            }
+
+            screen.screenManager = null;
+            Stop(screen);
+        }
+
+        private void Start(Screen screen)
+        {
+            screen.Start();
+            if (listener != null)
+            {
+                listener.OnScreenStarted(this, screen);
+            }
+        }
+
+        private void Suspend(Screen screen)
+        {
+            screen.Suspend();
+            if (listener != null)
+            {
+                listener.OnScreenSuspended(this, screen);
+            }
+        }
+
+        private void Resume(Screen screen)
+        {
+            screen.Resume();
+            if (listener != null)
+            {
+                listener.OnScreenResumed(this, screen);
+            }
+        }
+
+        private void Stop(Screen screen)
+        {
+            screen.Stop();
+            if (listener != null)
+            {
+                listener.OnScreenStopped(this, screen);
             }
         }
 

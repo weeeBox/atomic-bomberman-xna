@@ -101,12 +101,11 @@ namespace BomberEngine.Game
             updatableList.Destroy();
 
             OnStop();
-            RemoveFromContainer();
         }
 
         public void Finish()
         {
-            Stop();
+            RemoveFromContainer();
         }
 
         protected virtual void OnStart()

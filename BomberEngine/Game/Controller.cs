@@ -12,7 +12,7 @@ using BomberEngine.Consoles;
 
 namespace BomberEngine.Game
 {
-    public class Controller : BaseElement
+    public class Controller : BaseElement, IScreenManagerListener
     {
         protected ScreenManager screenManager;
 
@@ -25,6 +25,7 @@ namespace BomberEngine.Game
         public Controller()
         {   
             screenManager = new ScreenManager();
+            screenManager.listener = this;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -219,6 +220,28 @@ namespace BomberEngine.Game
         protected virtual CConsole GetConsole()
         {
             return GetRootController().console;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region IScreenManagerListener
+
+        public virtual void OnScreenStarted(ScreenManager manager, Screen screen)
+        {   
+        }
+
+        public virtual void OnScreenSuspended(ScreenManager manager, Screen screen)
+        {   
+        }
+
+        public virtual void OnScreenResumed(ScreenManager manager, Screen screen)
+        {
+        }
+
+        public virtual void OnScreenStopped(ScreenManager manager, Screen screen)
+        {
         }
 
         #endregion
