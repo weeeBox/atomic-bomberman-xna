@@ -170,6 +170,11 @@ namespace BomberEngine.Game
             return screenManager.IsCurrent(screen);
         }
 
+        public void StartPopup(Popup popup)
+        {
+            screenManager.StartPopup(popup);
+        }
+
         public void StartScreen(Screen screen)
         {   
             screenManager.StartScreen(screen, true);

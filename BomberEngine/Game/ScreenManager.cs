@@ -24,6 +24,7 @@ namespace BomberEngine.Game
         public IScreenManagerListener listener;
 
         private List<Screen> screens;
+
         private UpdatableList updatables;
         private DrawableList drawables;
 
@@ -72,6 +73,11 @@ namespace BomberEngine.Game
         //////////////////////////////////////////////////////////////////////////////
 
         #region Screen Container
+
+        public void StartPopup(Popup popup)
+        {
+            StartScreen(popup, false);
+        }
 
         public void StartScreen(Screen screen)
         {
