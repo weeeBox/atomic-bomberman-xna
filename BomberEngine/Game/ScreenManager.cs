@@ -207,7 +207,7 @@ namespace BomberEngine.Game
 
         public Screen FindScreen(int id)
         {
-            for (int i = 0; i < screens.Count; ++i)
+            for (int i = screens.Count-1; i >= 0; --i)
             {
                 Screen screen = screens[i];
                 if (screen.id == id)
