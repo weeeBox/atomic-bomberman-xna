@@ -9,11 +9,14 @@ using Assets;
 using Bomberman.Networking;
 using Bomberman.Game;
 using Bomberman.Content;
+using Lidgren.Network;
+using System.Collections;
+using BomberEngine.Debugging;
 
 namespace Bomberman.Multiplayer
 {
     public class MultiplayerLobbyScreen : Screen
-    {   
+    {
         public enum ButtonId
         {
             Back,
@@ -24,17 +27,19 @@ namespace Bomberman.Multiplayer
         private View clientsView;
         private ServerInfo serverInfo;
         private bool isServer;
+        private IDictionary<NetConnection, ClientInfoView> viewsLookup;
 
         public MultiplayerLobbyScreen(ServerInfo serverInfo, ButtonDelegate buttonDelegate, bool isServer)
         {
             this.serverInfo = serverInfo;
+            viewsLookup = new Dictionary<NetConnection, ClientInfoView>();
 
             View contentView = new View(512, 363);
             contentView.alignX = View.ALIGN_CENTER;
             contentView.x = 0.5f * width;
             contentView.y = 48;
 
-            Font font = Helper.GetFont(A.fnt_button);
+            Font font = GetDefaultFont();
 
             contentView.AddView(new View(215, 145));
 
@@ -77,9 +82,54 @@ namespace Bomberman.Multiplayer
             AddView(buttons);
         }
 
-        public void AddPlayer(Object name)
+        public void AddClient(String name, NetConnection connection)
         {
+            Debug.Assert(FindClientView(connection) == null);
 
+            ClientInfoView clientView = new ClientInfoView(name, connection);
+            clientsView.AddView(clientView);
+            clientsView.LayoutVer(10);
+
+            viewsLookup[connection] = clientView;
+        }
+
+        public void RemoveClient(NetConnection connection)
+        {
+            ClientInfoView clientView = FindClientView(connection);
+            Debug.Assert(clientView != null);
+
+            viewsLookup.Remove(connection);
+
+            clientsView.RemoveView(clientView);
+            clientsView.LayoutVer(10);
+        }
+
+        private ClientInfoView FindClientView(NetConnection connection)
+        {
+            ClientInfoView view;
+            if (viewsLookup.TryGetValue(connection, out view))
+            {
+                return view;
+            }
+            return null;
+        }
+
+        private static Font GetDefaultFont()
+        {
+            return Helper.GetFont(A.fnt_button);
+        }
+    }
+
+    class ClientInfoView : View
+    {
+        public ClientInfoView(String name, NetConnection connection)
+        {
+            Font font = Helper.GetFont(A.fnt_button);
+
+            TextView textView = new TextView(font, connection.RemoteEndPoint + ": " + name);
+            AddView(textView);
+
+            ResizeToFitViews();
         }
     }
 }

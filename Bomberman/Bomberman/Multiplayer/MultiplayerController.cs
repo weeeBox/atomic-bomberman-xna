@@ -187,10 +187,14 @@ namespace Bomberman.Multiplayer
 
         public void OnClientConnected(Server server, String name, NetConnection connection)
         {
+            MultiplayerLobbyScreen lobbyScreen = FindLobbyScreen();
+            lobbyScreen.AddClient(name, connection);
         }
 
         public void OnClientDisconnected(Server server, NetConnection connection)
-        {   
+        {
+            MultiplayerLobbyScreen lobbyScreen = FindLobbyScreen();
+            lobbyScreen.RemoveClient(connection);
         }
 
         public void OnDiscoveryResponse(Server server, NetOutgoingMessage msg)
@@ -404,6 +408,11 @@ namespace Bomberman.Multiplayer
             Screen screen = new MultiplayerLobbyScreen(serverInfo, OnLobbyScreenButtonPressed, isServer);
             screen.id = (int)ScreenId.Lobby;
             StartNextScreen(screen);
+        }
+
+        private MultiplayerLobbyScreen FindLobbyScreen()
+        {
+            return (MultiplayerLobbyScreen)FindScreen(ScreenId.Lobby);
         }
 
         private Screen FindScreen(ScreenId id)
