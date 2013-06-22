@@ -38,11 +38,16 @@ namespace BomberEngine.Core.Visual
         protected FormattedString[] formattedStrings;
 
         public TextView(Font font, String text)
+            : this(font, text, Int32.MaxValue)
+        {
+        }
+
+        public TextView(Font font, String text, int textWidth)
         {
             Debug.Assert(font != null);
 
             this.font = font;
-            SetText(text);
+            SetText(text, textWidth);
         }
 
         public virtual void SetText(String newString)

@@ -114,6 +114,7 @@
     <Compile Include="BombermanAssetManager.cs" />
     <Compile Include="BombermanController.cs" />
     <Compile Include="BombermanRootController.cs" />
+    <Compile Include="Common\Popups\DialogPopup.cs" />
     <Compile Include="Content\Scheme.cs" />
     <Compile Include="Content\SchemeReader.cs" />
     <Compile Include="cvars.cs" />

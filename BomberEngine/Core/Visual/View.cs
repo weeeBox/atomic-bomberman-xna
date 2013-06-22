@@ -35,8 +35,8 @@ namespace BomberEngine.Core.Visual
 
         public Color color;
 
-        protected float translateX;
-        protected float translateY;
+        private float translateX;
+        private float translateY;
 
         public float alignX;
         public float alignY;
@@ -113,6 +113,12 @@ namespace BomberEngine.Core.Visual
             // align to parent
             translateX = x - width * alignX;
             translateY = y - height * alignY;
+
+            if (parent != null)
+            {
+                translateX += parent.width * parentAlignX;
+                translateY += parent.height * parentAlignY;
+            }
 
             bool changeScale = (scaleX != 1.0 || scaleY != 1.0);
             bool changeRotation = (rotation != 0.0);
