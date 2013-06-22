@@ -12,6 +12,7 @@ using Bomberman.Content;
 using Lidgren.Network;
 using BombermanCommon.Resources.Scheme;
 using System.Net;
+using Bomberman.Common.Popups;
 
 namespace Bomberman.Multiplayer
 {
@@ -172,7 +173,26 @@ namespace Bomberman.Multiplayer
 
         public void OnDisconnectedFromServer(Client client)
         {
-            
+            Screen currentScreen = CurrentScreen();
+            ScreenId screenId = (ScreenId)currentScreen.id;
+
+            switch (screenId)
+            {
+                case ScreenId.Lobby:
+                    StopPeer();
+                    DialogPopup.ShowMessage(OnDisconnectedFromServerDialogFinish, "Server connection lost");
+                    break;
+                case ScreenId.Multiplyer:
+                    break;
+            }
+        }
+
+        private void OnDisconnectedFromServerDialogFinish(DialogPopup popup, int buttonId)
+        {
+            MultiplayerLobbyScreen lobbyScreen = FindLobbyScreen();
+            Debug.Assert(lobbyScreen != null);
+
+            lobbyScreen.Finish();
         }
 
         #endregion

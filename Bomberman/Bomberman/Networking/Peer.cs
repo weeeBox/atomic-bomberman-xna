@@ -49,7 +49,7 @@ namespace Bomberman.Networking
         public void Update(float delta)
         {
             NetIncomingMessage msg;
-            while ((msg = peer.ReadMessage()) != null)
+            while (peer != null && (msg = peer.ReadMessage()) != null)
             {
                 HandleMessage(peer, msg);
             }

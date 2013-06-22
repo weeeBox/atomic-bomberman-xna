@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace BomberEngine.Core.Assets.Types
 {   
     using BomberEngine.Core.Visual;
+    using System.Collections.ObjectModel;
 
     public class VectorFont : Font
     {
