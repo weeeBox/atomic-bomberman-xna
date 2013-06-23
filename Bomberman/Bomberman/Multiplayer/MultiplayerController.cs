@@ -35,7 +35,7 @@ namespace Bomberman.Multiplayer
         }
     }
 
-    public class MultiplayerController : BombermanController, ClientListener, ServerListener, LocalServersDiscoveryListener
+    public class MultiplayerController : BombermanController, ClientListener, ServerListener
     {
         public enum ScreenId
         {
@@ -86,44 +86,48 @@ namespace Bomberman.Multiplayer
 
         private void StartDiscovery()
         {
-            Debug.Assert(serverDiscovery == null);
+            //Debug.Assert(serverDiscovery == null);
 
-            String name = CVars.sv_appId.value;
-            int port = CVars.sv_port.intValue;
+            //String name = CVars.sv_appId.value;
+            //int port = CVars.sv_port.intValue;
 
-            serverDiscovery = new LocalServersDiscovery(this, name, port);
-            serverDiscovery.Start();
+            //serverDiscovery = new LocalServersDiscovery(this, name, port);
+            //serverDiscovery.Start();
 
-            foundServers = new List<ServerInfo>();
+            //foundServers = new List<ServerInfo>();
 
-            MultiplayerScreen multiplayerScreen = (MultiplayerScreen)FindScreen(ScreenId.Multiplyer);
-            multiplayerScreen.AddUpdatable(UpdateDiscovery);
-            multiplayerScreen.ScheduleCall(StopDiscoveryCall, 5.0f);
+            //MultiplayerScreen multiplayerScreen = (MultiplayerScreen)FindScreen(ScreenId.Multiplyer);
+            //multiplayerScreen.AddUpdatable(UpdateDiscovery);
+            //multiplayerScreen.ScheduleCall(StopDiscoveryCall, 5.0f);
 
-            Log.i("Started local servers discovery...");
-            multiplayerScreen.SetBusy();
+            //Log.i("Started local servers discovery...");
+            //multiplayerScreen.SetBusy();
+
+            throw new NotImplementedException();
         }
 
         private void StopDiscovery(bool updateUI)
         {
-            if (serverDiscovery != null)
-            {
-                serverDiscovery.Stop();
-                serverDiscovery = null;
+            //if (serverDiscovery != null)
+            //{
+            //    serverDiscovery.Stop();
+            //    serverDiscovery = null;
 
-                MultiplayerScreen multiplayerScreen = (MultiplayerScreen)FindScreen(ScreenId.Multiplyer);
-                if (multiplayerScreen != null)
-                {
-                    multiplayerScreen.RemoveUpdatable(UpdateDiscovery);
+            //    MultiplayerScreen multiplayerScreen = (MultiplayerScreen)FindScreen(ScreenId.Multiplyer);
+            //    if (multiplayerScreen != null)
+            //    {
+            //        multiplayerScreen.RemoveUpdatable(UpdateDiscovery);
 
-                    if (updateUI)
-                    {
-                        multiplayerScreen.SetServers(foundServers);
-                    }
-                }
+            //        if (updateUI)
+            //        {
+            //            multiplayerScreen.SetServers(foundServers);
+            //        }
+            //    }
 
-                Log.i("Stopped local servers discovery");
-            }
+            //    Log.i("Stopped local servers discovery");
+            //}
+
+            throw new NotImplementedException();
         }
 
         private void StopDiscoveryCall(DelayedCall call)

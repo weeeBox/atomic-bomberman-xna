@@ -30,11 +30,11 @@ namespace Bomberman.Game
             Client
         }
 
-        public String scheme;
+        public Scheme scheme;
         public Multiplayer multiplayer;
         public ServerInfo serverInfo;
 
-        public GameSettings(String scheme)
+        public GameSettings(Scheme scheme)
         {
             this.scheme = scheme;
             multiplayer = Multiplayer.None;
@@ -141,9 +141,8 @@ namespace Bomberman.Game
             players[0].SetPlayerInput(keyboardInput1);
         }
 
-        private void InitField(String schemeName)
-        {
-            Scheme scheme = Application.Assets().LoadAsset<Scheme>("Content\\maps\\" + schemeName + ".sch");
+        private void InitField(Scheme scheme)
+        {   
             game.LoadField(scheme); 
         }
 

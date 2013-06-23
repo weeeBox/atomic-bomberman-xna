@@ -8,10 +8,11 @@ using System.Net;
 using BomberEngine.Game;
 using BomberEngine.Core.Visual;
 using Bomberman.Content;
+using Lidgren.Network;
 
 namespace Bomberman.Multiplayer
 {
-    public class DebugMultiplayerController : BombermanController, LocalServersDiscoveryListener, ServerListener, ClientListener
+    public class DebugMultiplayerController : BombermanController, ServerListener, ClientListener, ILocalServersDiscoveryRequestListener, ILocalServersDiscoveryResponseListener
     {
         public enum Mode
         {
@@ -24,7 +25,13 @@ namespace Bomberman.Multiplayer
             Cancel
         }
 
-        private LocalServersDiscovery serverDiscovery;
+        public enum ExitCode
+        {
+            Cancel,
+            ClientStarted,
+            ServerStarted,
+        }
+
         private Mode mode;
         private ServerInfo serverInfo;
 
@@ -47,7 +54,7 @@ namespace Bomberman.Multiplayer
             Screen screen = new Screen();
             Button button = new TextButton("Cancel", 0, 0, 100, 20);
             button.id = (int)ButtonId.Cancel;
-            button.SetDelegate(OnButtonPressed);
+            button.SetDelegate(OnCancelButtonPressed);
             button.alignX = button.alignY = button.parentAlignX = button.parentAlignY = View.ALIGN_CENTER;
             screen.AddView(button);
             screen.SetBackButton(button);
@@ -58,26 +65,14 @@ namespace Bomberman.Multiplayer
         protected override void OnStop()
         {
             StopDiscovery();
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        private void OnCancelButtonPressed(Button button)
+        {
             StopPeer();
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        private void OnButtonPressed(Button button)
-        {
-            Stop();
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        public override void Update(float delta)
-        {
-            base.Update(delta);
-
-            if (serverDiscovery != null)
-            {
-                serverDiscovery.Update(delta);
-            }
+            Stop(ExitCode.Cancel);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -86,26 +81,12 @@ namespace Bomberman.Multiplayer
 
         private void StartDiscovery()
         {
-            Debug.Assert(serverDiscovery == null);
-
-            String name = CVars.sv_appId.value;
-            int port = CVars.sv_port.intValue;
-
-            serverDiscovery = new LocalServersDiscovery(this, name, port);
-            serverDiscovery.Start();
-
-            Log.i("Started local servers discovery...");
+            GetRootController().StartLocalServerDiscovery(this);
         }
 
         private void StopDiscovery()
         {
-            if (serverDiscovery != null)
-            {
-                serverDiscovery.Stop();
-                serverDiscovery = null;
-
-                Log.i("Stopped local servers discovery");
-            }
+            GetRootController().StopLocalServerDiscovery();
         }
 
         private void OnLocalServerFound(ServerInfo info)
@@ -113,10 +94,13 @@ namespace Bomberman.Multiplayer
             Log.d("Found local server: " + info.endPoint);
             StopDiscovery();
 
+            serverInfo = info;
             StartClient(info.endPoint);
         }
 
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
 
         private void StartServer()
         {
@@ -139,22 +123,14 @@ namespace Bomberman.Multiplayer
             GetRootController().StopPeer();
         }
 
-        public void OnMessageReceived(Server server, NetworkMessageId messageId, Lidgren.Network.NetIncomingMessage message)
-        {   
-        }
-
         public void OnClientConnected(Server server, string name, Lidgren.Network.NetConnection connection)
         {
             Log.d("Client connected: name=" + name + " endpoint=" + connection.RemoteEndPoint);
+            Stop(ExitCode.ServerStarted, serverInfo);
         }
 
         public void OnClientDisconnected(Server server, Lidgren.Network.NetConnection connection)
         {
-        }
-
-        public void OnDiscoveryResponse(Server server, Lidgren.Network.NetOutgoingMessage message)
-        {
-            MultiplayerController.WriteServerInfo(message, serverInfo);
         }
 
         public void OnMessageReceived(Client client, NetworkMessageId messageId, Lidgren.Network.NetIncomingMessage message)
@@ -163,17 +139,31 @@ namespace Bomberman.Multiplayer
 
         public void OnConnectedToServer(Client client, Lidgren.Network.NetConnection serverConnection)
         {
-            Log.d("Connected to the server: " + serverConnection.RemoteEndPoint);
+            Stop(ExitCode.ClientStarted, serverInfo);
         }
 
         public void OnDisconnectedFromServer(Client client)
         {
         }
 
-        public void OnServerDiscoveryResponse(LocalServersDiscovery serverDiscovery, Lidgren.Network.NetIncomingMessage msg)
+        //////////////////////////////////////////////////////////////////////////////
+
+        public void OnServerDiscoveryRequest(NetOutgoingMessage msg)
+        {
+            MultiplayerController.WriteServerInfo(msg, serverInfo);
+        }
+
+        public void OnServerDiscoveryResponse(NetIncomingMessage msg)
         {
             ServerInfo info = MultiplayerController.ReadServerInfo(msg);
             OnLocalServerFound(info);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        private void Stop(ExitCode code, ServerInfo serverInfo = null)
+        {
+            Stop((int)code, serverInfo);
         }
     }
 }

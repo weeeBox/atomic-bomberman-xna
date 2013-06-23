@@ -11,16 +11,21 @@ using BombermanCommon.Resources.Scheme;
 
 namespace Bomberman.Networking
 {
-    public interface LocalServersDiscoveryListener
+    public interface ILocalServersDiscoveryRequestListener
     {
-        void OnServerDiscoveryResponse(LocalServersDiscovery serverDiscovery, NetIncomingMessage msg);
+        void OnServerDiscoveryRequest(NetOutgoingMessage msg);
+    }
+
+    public interface ILocalServersDiscoveryResponseListener
+    {
+        void OnServerDiscoveryResponse(NetIncomingMessage msg);
     }
 
     public class LocalServersDiscovery : Peer
     {   
-        private LocalServersDiscoveryListener listener;
+        private ILocalServersDiscoveryResponseListener listener;
 
-        public LocalServersDiscovery(LocalServersDiscoveryListener listener, String name, int port)
+        public LocalServersDiscovery(ILocalServersDiscoveryResponseListener listener, String name, int port)
             : base(name, port)
         {
             this.listener = listener;
@@ -57,7 +62,7 @@ namespace Bomberman.Networking
             {
                 case NetIncomingMessageType.DiscoveryResponse:
                 {
-                    listener.OnServerDiscoveryResponse(this, msg);
+                    listener.OnServerDiscoveryResponse(msg);
                     return true;
                 }
             }

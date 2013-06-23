@@ -6,12 +6,14 @@ using Bomberman.Networking;
 using BomberEngine.Debugging;
 using System.Net;
 using BomberEngine.Core;
+using Lidgren.Network;
 
 namespace Bomberman.Multiplayer
 {
-    public class MultiplayerManager : IUpdatable
+    public class MultiplayerManager : IUpdatable, ClientListener, ServerListener
     {
         private Peer networkPeer;
+        private LocalServersDiscovery serverDiscovery;
 
         public void Update(float delta)
         {
@@ -19,16 +21,50 @@ namespace Bomberman.Multiplayer
             {
                 networkPeer.Update(delta);
             }
+            if (serverDiscovery != null)
+            {
+                serverDiscovery.Update(delta);
+            }
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Local server discovery
+
+        public void StartLocalServerDiscovery(ILocalServersDiscoveryResponseListener listener, String name, int port)
+        {
+            Debug.Assert(serverDiscovery != null);
+            
+            serverDiscovery = new LocalServersDiscovery(listener, name, port);
+            serverDiscovery.Start();
+
+            Log.i("Started local servers discovery...");
+        }
+
+        public void StopLocalServerDiscovery()
+        {
+            if (serverDiscovery != null)
+            {
+                serverDiscovery.Stop();
+                serverDiscovery = null;
+
+                Log.i("Stopped local servers discovery");
+            }
+        }
+
+        #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 
         #region Net peer
 
-        public void CreateServer(String appIdentifier, int port)
+        public void CreateServer(String appIdentifier, int port, ILocalServersDiscoveryRequestListener discoveryRequestListener = null)
         {
             Debug.Assert(networkPeer == null);
-            networkPeer = new Server(appIdentifier, port);
+            Server server = new Server(appIdentifier, port);
+            server.listener = this;
+            server.discoveryRequestListener = discoveryRequestListener;
+            networkPeer = server;
 
             Log.d("Created network server");
         }
@@ -36,7 +72,9 @@ namespace Bomberman.Multiplayer
         public void CreateClient(String appIdetifier, IPEndPoint remoteEndPoint, int port)
         {
             Debug.Assert(networkPeer == null);
-            networkPeer = new Client(appIdetifier, remoteEndPoint);
+            Client client = new Client(appIdetifier, remoteEndPoint);
+            client.listener = this;
+            networkPeer = client;
 
             Log.d("Created network client");
         }
@@ -51,6 +89,8 @@ namespace Bomberman.Multiplayer
 
         public void Stop()
         {
+            StopLocalServerDiscovery();
+
             if (networkPeer != null)
             {
                 networkPeer.Stop();
@@ -64,26 +104,40 @@ namespace Bomberman.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Delegates
+        #region Client listener
 
-        public void SetServerListener(ServerListener listener)
-        {
-            Debug.Assert(networkPeer != null);
-
-            Server server = networkPeer as Server;
-            Debug.Assert(server != null);
-
-            server.listener = listener;
+        public void OnMessageReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message)
+        {   
         }
 
-        public void SetClientListener(ClientListener listener)
+        public void OnConnectedToServer(Client client, NetConnection serverConnection)
+        {   
+        }
+
+        public void OnDisconnectedFromServer(Client client)
+        {   
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Server listener
+
+        public void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
         {
-            Debug.Assert(networkPeer != null);
+        }
 
-            Client client = networkPeer as Client;
-            Debug.Assert(client != null);
+        public void OnClientConnected(Server server, string name, NetConnection connection)
+        {
+        }
 
-            client.listener = listener;
+        public void OnClientDisconnected(Server server, NetConnection connection)
+        {
+        }
+
+        public void OnDiscoveryResponse(Server server, NetOutgoingMessage message)
+        {
         }
 
         #endregion

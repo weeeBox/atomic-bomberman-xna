@@ -9,6 +9,7 @@ using Bomberman.Multiplayer;
 using Bomberman.Networking;
 using Microsoft.Xna.Framework.Content;
 using System.Net;
+using BomberEngine.Debugging;
 
 namespace Bomberman
 {
@@ -53,9 +54,7 @@ namespace Bomberman
                 {
                     case MenuController.ExitCode.SingleStart:
                     {
-                        GameSettings settings = new GameSettings("x");
-                        StartController(new GameController(settings));
-                        break;
+                        throw new NotImplementedException();
                     }
 
                     case MenuController.ExitCode.MultiplayerStart:
@@ -89,12 +88,7 @@ namespace Bomberman
                 switch (exitCode)
                 {
                     case MultiplayerController.ExitCode.Create:
-                    {
-                        GameSettings settings = new GameSettings("x");
-                        settings.multiplayer = GameSettings.Multiplayer.Server;
-                        StartController(new GameController(settings));
                         break;
-                    }
 
                     case MultiplayerController.ExitCode.Join:
                         break;
@@ -106,7 +100,36 @@ namespace Bomberman
             }
             else if (controller is DebugMultiplayerController)
             {
-                StartMainMenu();
+                DebugMultiplayerController.ExitCode exitCode = (DebugMultiplayerController.ExitCode)controller.exitCode;
+                switch (exitCode)
+                {
+                    case DebugMultiplayerController.ExitCode.Cancel:
+                    {
+                        StartMainMenu();
+                        break;
+                    }
+                    case DebugMultiplayerController.ExitCode.ClientStarted:
+                    {
+                        ServerInfo info = controller.exitData as ServerInfo;
+                        Debug.Assert(info != null);
+
+                        GameSettings settings = new GameSettings(info.scheme);
+                        settings.multiplayer = GameSettings.Multiplayer.Client;
+                        StartController(new GameController(settings));
+                        break;
+                    }
+
+                    case DebugMultiplayerController.ExitCode.ServerStarted:
+                    {
+                        ServerInfo info = controller.exitData as ServerInfo;
+                        Debug.Assert(info != null);
+
+                        GameSettings settings = new GameSettings(info.scheme);
+                        settings.multiplayer = GameSettings.Multiplayer.Server;
+                        StartController(new GameController(settings));
+                        break;
+                    }
+                }
             }
         }
 
@@ -149,7 +172,6 @@ namespace Bomberman
             int port = CVars.sv_port.intValue;
 
             multiplayerManager.CreateServer(appId, port);
-            multiplayerManager.SetServerListener(listener);
             multiplayerManager.Start();
         }
 
@@ -159,7 +181,6 @@ namespace Bomberman
             int port = CVars.sv_port.intValue;
 
             multiplayerManager.CreateClient(appId, remoteEndPoint, port);
-            multiplayerManager.SetClientListener(listener);
             multiplayerManager.Start();
         }
 
@@ -168,7 +189,17 @@ namespace Bomberman
             multiplayerManager.Stop();
         }
 
-        // TODO: move server discovery here
+        public void StartLocalServerDiscovery(ILocalServersDiscoveryResponseListener listener)
+        {
+            String appId = CVars.sv_appId.value;
+            int port = CVars.sv_port.intValue;
+            multiplayerManager.StartLocalServerDiscovery(listener, appId, port);
+        }
+
+        public void StopLocalServerDiscovery()
+        {
+            multiplayerManager.StopLocalServerDiscovery();
+        }
 
         #endregion
     }

@@ -17,12 +17,12 @@ namespace Bomberman.Networking
         void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message);
         void OnClientConnected(Server server, String name, NetConnection connection);
         void OnClientDisconnected(Server server, NetConnection connection);
-        void OnDiscoveryResponse(Server server, NetOutgoingMessage message);
     }
 
     public class Server : Peer
     {
         public ServerListener listener;
+        public ILocalServersDiscoveryRequestListener discoveryRequestListener;
 
         private int nextClientIndex;
 
@@ -66,9 +66,17 @@ namespace Bomberman.Networking
             {
                 case NetIncomingMessageType.DiscoveryRequest:
                 {
-                    NetOutgoingMessage message = peer.CreateMessage();
-                    listener.OnDiscoveryResponse(this, message);
-                    peer.SendDiscoveryResponse(message, msg.SenderEndPoint);
+                    if (discoveryRequestListener != null)
+                    {
+                        NetOutgoingMessage message = peer.CreateMessage();
+                        discoveryRequestListener.OnServerDiscoveryRequest(message);
+                        peer.SendDiscoveryResponse(message, msg.SenderEndPoint);
+                    }
+                    else
+                    {
+                        Log.d("Discovery request ignored");
+                    }
+
                     return true;
                 }
             }
