@@ -149,6 +149,7 @@
     <Compile Include="Game\cmds.cs" />
     <Compile Include="Game\GameController.cs" />
     <Compile Include="Game\Game.cs" />
+    <Compile Include="Multiplayer\DebugMultiplayerController.cs" />
     <Compile Include="Multiplayer\MultiplayerManager.cs" />
     <Compile Include="Multiplayer\MultiplayerLobbyScreen.cs" />
     <Compile Include="Multiplayer\MultiplayerController.cs" />

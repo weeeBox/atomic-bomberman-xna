@@ -18,6 +18,8 @@ namespace Bomberman.Menu
             Quit,
             SingleStart,
             MultiplayerStart,
+            DebugServerStart,
+            DebugClientStart,
         }
 
         public enum ScreenID
@@ -57,6 +59,12 @@ namespace Bomberman.Menu
                     break;
                 case MainMenuScreen.ButtonId.Multiplayer:
                     Stop(ExitCode.MultiplayerStart);
+                    break;
+                case MainMenuScreen.ButtonId.DebugStartServer:
+                    Stop(ExitCode.DebugServerStart);
+                    break;
+                case MainMenuScreen.ButtonId.DebugStartClient:
+                    Stop(ExitCode.DebugClientStart);
                     break;
                 case MainMenuScreen.ButtonId.Settings:
                     StartNextScreen(new SettingsScreen(OnSettingsButtonPress));

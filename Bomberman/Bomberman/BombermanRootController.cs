@@ -63,6 +63,18 @@ namespace Bomberman
                         StartController(new MultiplayerController());
                         break;
                     }
+
+                    case MenuController.ExitCode.DebugClientStart:
+                    {
+                        StartController(new DebugMultiplayerController(DebugMultiplayerController.Mode.Client));
+                        break;
+                    }
+
+                    case MenuController.ExitCode.DebugServerStart:
+                    {
+                        StartController(new DebugMultiplayerController(DebugMultiplayerController.Mode.Server));
+                        break;
+                    }
                 }
             }
             else if (controller is MultiplayerController)
@@ -89,6 +101,10 @@ namespace Bomberman
                 }
             }
             else if (controller is GameController)
+            {
+                StartMainMenu();
+            }
+            else if (controller is DebugMultiplayerController)
             {
                 StartMainMenu();
             }

@@ -18,6 +18,8 @@ namespace Bomberman.Menu.Screens
         {
             Play,
             Multiplayer,
+            DebugStartServer,
+            DebugStartClient,
             Settings,
             Exit
         }
@@ -34,6 +36,16 @@ namespace Bomberman.Menu.Screens
 
             TextButton button = new TextButton("Play", font, 0, 0, w, h);
             button.id = (int)ButtonId.Play;
+            button.SetDelegate(buttonDelegate);
+            rootView.AddView(button);
+
+            button = new TextButton("Join server", font, 0, 0, w, h);
+            button.id = (int)ButtonId.DebugStartClient;
+            button.SetDelegate(buttonDelegate);
+            rootView.AddView(button);
+
+            button = new TextButton("Start server", font, 0, 0, w, h);
+            button.id = (int)ButtonId.DebugStartServer;
             button.SetDelegate(buttonDelegate);
             rootView.AddView(button);
 

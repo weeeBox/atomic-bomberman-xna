@@ -241,7 +241,7 @@ namespace Bomberman.Multiplayer
 
         #region Server Info
 
-        private static ServerInfo ReadServerInfo(NetIncomingMessage message)
+        internal static ServerInfo ReadServerInfo(NetIncomingMessage message)
         {
             // name
             String name = message.ReadString();
@@ -280,7 +280,7 @@ namespace Bomberman.Multiplayer
             return info;
         }
 
-        private static void WriteServerInfo(NetOutgoingMessage message, ServerInfo info)
+        internal static void WriteServerInfo(NetOutgoingMessage message, ServerInfo info)
         {
             // name
             message.Write(info.name);
