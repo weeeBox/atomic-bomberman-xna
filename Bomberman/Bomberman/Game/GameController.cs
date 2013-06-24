@@ -133,6 +133,12 @@ namespace Bomberman.Game
                     game = new Game();
                     game.AddPlayer(new Player(0));
 
+                    List<NetConnection> connections = GetServer().GetConnections();
+                    for (int i = 0; i < connections.Count; ++i)
+                    {
+                        game.AddPlayer(new Player(i + 1));
+                    }
+
                     LoadField(settings.scheme);
 
                     gameScreen = new GameScreen();
@@ -367,6 +373,7 @@ namespace Bomberman.Game
             Field field = game.field;
             Debug.Assert(field != null);
 
+            // powerups
             FieldCellSlot[] slots = field.GetCells().slots;
             for (int i = 0; i < slots.Length; ++i)
             {
@@ -376,6 +383,16 @@ namespace Bomberman.Game
                     response.Write((byte)brick.powerup);
                 }
             }
+
+            // players
+            List<Player> players = game.GetPlayers().list;
+            response.Write((byte)players.Count);
+            for (int i = 0; i < players.Count; ++i)
+            {
+                Player player = players[i];
+                response.Write((byte)player.cx);
+                response.Write((byte)player.cy);
+            }
         }
 
         private void ReadFieldState(NetIncomingMessage response)
@@ -383,6 +400,7 @@ namespace Bomberman.Game
             Field field = game.field;
             Debug.Assert(field != null);
 
+            // powerups
             FieldCellSlot[] slots = field.GetCells().slots;
             for (int i = 0; i < slots.Length; ++i)
             {
@@ -391,6 +409,17 @@ namespace Bomberman.Game
                 {
                     brick.powerup = response.ReadByte();
                 }
+            }
+
+            // players
+            int playersCount = response.ReadByte();
+            for (int i = 0; i < playersCount; ++i)
+            {
+                Player player = new Player(i);
+                int cx = response.ReadByte();
+                int cy = response.ReadByte();
+                player.SetCell(cx, cy);
+                game.AddPlayer(player);
             }
         }
 
@@ -415,6 +444,22 @@ namespace Bomberman.Game
                 screen.cancelCallback = null;
                 screen.Finish();
             }
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Helpers
+
+        private Client GetClient()
+        {
+            return GetMultiplayerManager().GetClient();
+        }
+
+        private Server GetServer()
+        {
+            return GetMultiplayerManager().GetServer();
         }
 
         #endregion

@@ -122,12 +122,14 @@ namespace Bomberman.Networking
                 name = "Client-" + nextClientIndex++;
             }
 
+            AddConnection(connection);
             listener.OnClientConnected(this, name, connection);
         }
 
         protected override void OnPeerDisconnected(NetConnection connection)
         {   
             Log.i("Client disconnected: " + connection);
+            RemoveConnection(connection);
             listener.OnClientDisconnected(this, connection);
         }
 
