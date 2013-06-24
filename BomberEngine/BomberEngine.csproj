@@ -159,6 +159,7 @@
     <Compile Include="Game\Screen.cs" />
     <Compile Include="Game\ScreenManager.cs" />
     <Compile Include="Global.cs" />
+    <Compile Include="Native\INativeInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\Collection.cs" />
     <Compile Include="Util\ConcurrentList.cs" />

@@ -11,10 +11,11 @@ using Microsoft.Xna.Framework.Media;
 using BomberEngine.Core;
 using BomberEngine.Game;
 using BomberEngine;
+using BomberEngine.Native;
 
 namespace Bomberman
 {   
-    public class BombermanGame : Microsoft.Xna.Framework.Game
+    public class BombermanGame : Microsoft.Xna.Framework.Game, INativeInterface
     {
         private static readonly int WIDTH = 640;
         private static readonly int HEIGHT = 480;
@@ -36,7 +37,7 @@ namespace Bomberman
             IsMouseVisible = true;
             #endif
 
-            application = new BombermanApplication(Content, WIDTH, HEIGHT);
+            application = new BombermanApplication(Content, this, WIDTH, HEIGHT);
         }
 
         /// <summary>
@@ -100,6 +101,13 @@ namespace Bomberman
             application.Draw(graphics.GraphicsDevice);
 
             base.Draw(gameTime);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        public void SetWindowTitle(string title)
+        {
+            this.Window.Title = title;
         }
     }
 }

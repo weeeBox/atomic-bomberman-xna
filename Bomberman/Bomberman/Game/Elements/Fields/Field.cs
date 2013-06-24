@@ -57,14 +57,19 @@ namespace Bomberman.Game.Elements.Fields
             movableCells = new LinkedList<MovableCell>();
         }
 
-        public void Setup(Scheme scheme)
+        public void Load(Scheme scheme)
         {
             SetupField(scheme.GetFieldData(), scheme.GetBrickDensity());
             SetupPlayers(players, scheme.GetPlayerLocations());
             SetupPowerups(scheme.GetPowerupInfo());
         }
 
-        private void SetupField(FieldData data, int brickDensity)
+        public void Setup(Scheme scheme)
+        {
+            SetupField(scheme.GetFieldData());
+        }
+
+        private void SetupField(FieldData data, int brickDensity = -1)
         {
             int width = data.GetWidth();
             int height = data.GetHeight();
@@ -87,7 +92,7 @@ namespace Bomberman.Game.Elements.Fields
 
                         case FieldBlocks.Brick:
                         {
-                            if (MathHelp.NextInt(100) <= brickDensity)
+                            if (brickDensity == -1 || MathHelp.NextInt(100) <= brickDensity)
                             {
                                 AddCell(new BrickCell(x, y));
                             }

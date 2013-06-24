@@ -40,6 +40,7 @@ namespace Bomberman.Menu
 
         protected override void OnStart()
         {
+            Application.SetWindowTitle("");
             StartScreen(new MainMenuScreen(OnMainMenuButtonPress));
         }
 

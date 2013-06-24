@@ -50,6 +50,22 @@ namespace Bomberman.Game
             Exit
         }
 
+        public enum ClientState
+        {
+            Undefined,      // for the single game mode
+            Created,        // initial state
+            WaitFieldState, // wait until server responds with field state: players, powerup, etc
+            Active,         // game in progress
+        }
+
+        public enum ServerState
+        {
+            Undefined,      // for the single game mode
+            Created,        // initial state
+            SendFieldState, // sends field state to clients
+            Active,         // game in progress
+        }
+
         private GameScreen gameScreen;
         private PauseScreen pauseScreen;
 
@@ -57,6 +73,9 @@ namespace Bomberman.Game
 
         private GameSettings settings;
         private Peer networkPeer;
+
+        private ClientState clientState;
+        private ServerState serverState;
 
         private CCommand[] gameCommands = 
         {
@@ -75,6 +94,9 @@ namespace Bomberman.Game
         {
             GetConsole().RegisterCommands(gameCommands);
 
+            clientState = ClientState.Undefined;
+            serverState = ServerState.Undefined;
+
             switch (settings.multiplayer)
             {
                 case GameSettings.Multiplayer.None:
@@ -82,7 +104,7 @@ namespace Bomberman.Game
                     game = new Game();
                     game.AddPlayer(new Player(0));
 
-                    InitField(settings.scheme);
+                    LoadField(settings.scheme);
 
                     gameScreen = new GameScreen();
 
@@ -93,18 +115,38 @@ namespace Bomberman.Game
                 }
                 case GameSettings.Multiplayer.Client:
                 {
-                    //game = new Game();
-                    //game.AddPlayer(new Player(0));
+                    Application.SetWindowTitle("Client");
 
-                    //StartScreen(new NetworkConnectionScreen());
+                    clientState = ClientState.Created;
 
-                    //StartClient();
+                    game = new Game();
+                    game.AddPlayer(new Player(0));
+
+                    SetupField(settings.scheme);
+
+                    gameScreen = new GameScreen();
+
+                    InitPlayers();
+
+                    StartScreen(gameScreen);
                     break;
                 }
                 case GameSettings.Multiplayer.Server:
                 {
-                    //StartScreen(new MultiplayerLobbyScreen(OnLobbyScreenButtonPressed));
-                    //StartServer();
+                    Application.SetWindowTitle("Server");
+
+                    serverState = ServerState.Created;
+
+                    game = new Game();
+                    game.AddPlayer(new Player(0));
+
+                    SetupField(settings.scheme);
+
+                    gameScreen = new GameScreen();
+
+                    InitPlayers();
+
+                    StartScreen(gameScreen);
                     break;
                 }
                 
@@ -141,9 +183,14 @@ namespace Bomberman.Game
             players[0].SetPlayerInput(keyboardInput1);
         }
 
-        private void InitField(Scheme scheme)
+        private void LoadField(Scheme scheme)
         {   
             game.LoadField(scheme); 
+        }
+
+        private void SetupField(Scheme scheme)
+        {
+            game.SetupField(scheme);
         }
 
         public override bool HandleEvent(Event evt)
@@ -207,7 +254,7 @@ namespace Bomberman.Game
                     game = new Game();
                     game.AddPlayer(new Player(0));
 
-                    InitField(settings.scheme);
+                    LoadField(settings.scheme);
 
                     gameScreen = new GameScreen();
 

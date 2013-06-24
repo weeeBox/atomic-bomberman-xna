@@ -37,7 +37,14 @@ namespace Bomberman.Game
             return field.GetPlayers().GetCount();
         }
 
+        /* Loads field from scheme: setups bricks, powerups and players */
         public void LoadField(Scheme scheme)
+        {
+            field.Load(scheme);
+        }
+
+        /* Loads field from scheme: setups ONLY bricks */
+        public void SetupField(Scheme scheme)
         {
             field.Setup(scheme);
         }

@@ -6,6 +6,7 @@ using BomberEngine.Core.Visual;
 using BomberEngine.Debugging;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using BomberEngine.Native;
 
 namespace BomberEngine.Game
 {
@@ -27,13 +28,15 @@ namespace BomberEngine.Game
         private UpdatableList updatables;
         private DrawableList drawables;
 
+        private INativeInterface nativeInterface;
         private int width;
         private int height;
 
         private double currentTime;
 
-        public Application(int width, int height)
+        public Application(INativeInterface nativeBridge, int width, int height)
         {
+            this.nativeInterface = nativeBridge;
             this.width = width;
             this.height = height;
 
@@ -202,6 +205,17 @@ namespace BomberEngine.Game
             RemoveUpdatable(obj);
             RemoveDrawable(obj);
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Native interface
+
+        public static void SetWindowTitle(String title)
+        {
+            sharedApplication.nativeInterface.SetWindowTitle(title);
+        }
+
+        #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 

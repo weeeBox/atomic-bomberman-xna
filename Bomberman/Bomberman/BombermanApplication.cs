@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using BomberEngine.Core.Input;
 using Microsoft.Xna.Framework.Input;
+using BomberEngine.Native;
 
 namespace Bomberman
 {
@@ -12,7 +13,8 @@ namespace Bomberman
     {
         private ContentManager contentManager;
 
-        public BombermanApplication(ContentManager contentManager, int width, int height) : base(width, height)
+        public BombermanApplication(ContentManager contentManager, INativeInterface nativeInterface, int width, int height)
+            : base(nativeInterface, width, height)
         {
             this.contentManager = contentManager;
         }
