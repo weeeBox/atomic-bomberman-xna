@@ -55,18 +55,27 @@ namespace Bomberman.Multiplayer
             }
         }
 
+        public void StartListeningForServerDiscovery(ILocalServersDiscoveryRequestListener listener)
+        {
+            GetServer().StartListeningDiscoveryRequests(listener);
+        }
+
+        public void StopListeningForServerDiscovery()
+        {
+            GetServer().StopListeningDiscoveryRequests();
+        }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 
         #region Net peer
 
-        public void CreateServer(String appIdentifier, int port, ILocalServersDiscoveryRequestListener discoveryRequestListener = null)
+        public void CreateServer(String appIdentifier, int port)
         {
             Debug.Assert(networkPeer == null);
             Server server = new Server(appIdentifier, port);
             server.listener = this;
-            server.discoveryRequestListener = discoveryRequestListener;
             networkPeer = server;
 
             Log.d("Created network server");
@@ -183,5 +192,23 @@ namespace Bomberman.Multiplayer
         }
 
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        internal Server GetServer()
+        {
+            Server server = networkPeer as Server;
+            Debug.Assert(server != null);
+
+            return server;
+        }
+
+        internal Client GetClient()
+        {
+            Client client = networkPeer as Client;
+            Debug.Assert(client != null);
+
+            return client;
+        }
     }
 }

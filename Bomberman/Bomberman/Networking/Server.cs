@@ -22,8 +22,8 @@ namespace Bomberman.Networking
     public class Server : Peer
     {
         public ServerListener listener;
-        public ILocalServersDiscoveryRequestListener discoveryRequestListener;
 
+        private ILocalServersDiscoveryRequestListener discoveryRequestListener;
         private int nextClientIndex;
 
         public Server(String name, int port)
@@ -53,6 +53,16 @@ namespace Bomberman.Networking
                 peer.Shutdown("shutdown");
                 peer = null;
             }
+        }
+
+        public void StartListeningDiscoveryRequests(ILocalServersDiscoveryRequestListener listener)
+        {
+            discoveryRequestListener = listener;
+        }
+
+        public void StopListeningDiscoveryRequests()
+        {
+            discoveryRequestListener = null;
         }
 
         protected override bool HandleMessage(NetPeer peer, NetIncomingMessage msg)
