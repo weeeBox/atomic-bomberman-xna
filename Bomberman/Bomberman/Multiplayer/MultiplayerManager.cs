@@ -36,7 +36,7 @@ namespace Bomberman.Multiplayer
 
         public void StartLocalServerDiscovery(ILocalServersDiscoveryResponseListener listener)
         {
-            Debug.Assert(serverDiscovery != null);
+            Debug.Assert(serverDiscovery == null);
 
             String appId = CVars.sv_appId.value;
             int port = CVars.sv_port.intValue;

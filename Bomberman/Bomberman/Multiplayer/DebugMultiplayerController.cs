@@ -115,6 +115,7 @@ namespace Bomberman.Multiplayer
             serverInfo.scheme = scheme;
 
             GetMultiplayerManager().StartServer(this);
+            GetMultiplayerManager().StartListeningForServerDiscovery(this);
         }
 
         private void StartClient(IPEndPoint remoteEndPoint)
