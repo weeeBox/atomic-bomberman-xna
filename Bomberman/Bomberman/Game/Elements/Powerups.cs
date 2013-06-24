@@ -7,7 +7,7 @@ namespace Bomberman.Game.Elements
 {
     public class Powerups
     {
-        public const int None = -1;
+        public const int None = 0xff;
 
         public const int Bomb = 0;
         public const int Flame = 1;

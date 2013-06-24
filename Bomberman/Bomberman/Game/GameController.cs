@@ -133,7 +133,7 @@ namespace Bomberman.Game
                     game = new Game();
                     game.AddPlayer(new Player(0));
 
-                    SetupField(settings.scheme);
+                    LoadField(settings.scheme);
 
                     gameScreen = new GameScreen();
 
@@ -308,6 +308,8 @@ namespace Bomberman.Game
 
                     SetupField(settings.scheme);
 
+                    ReadFieldState(message);
+
                     gameScreen = new GameScreen();
 
                     InitPlayers();
@@ -338,7 +340,9 @@ namespace Bomberman.Game
             {
                 case NetworkMessageId.FieldState:
                 {
-                    SendMessage(NetworkMessageId.FieldState, message.SenderConnection, NetDeliveryMethod.ReliableOrdered);
+                    NetOutgoingMessage response = CreateMessage(NetworkMessageId.FieldState);
+                    WriteFieldState(response);
+                    SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableOrdered);
                     break;
                 }
             }
@@ -350,6 +354,44 @@ namespace Bomberman.Game
 
         public void OnClientDisconnected(Server server, NetConnection connection)
         {
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Messages
+
+        private void WriteFieldState(NetOutgoingMessage response)
+        {
+            Field field = game.field;
+            Debug.Assert(field != null);
+
+            FieldCellSlot[] slots = field.GetCells().slots;
+            for (int i = 0; i < slots.Length; ++i)
+            {
+                BrickCell brick = slots[i].GetBrick();
+                if (brick != null)
+                {
+                    response.Write((byte)brick.powerup);
+                }
+            }
+        }
+
+        private void ReadFieldState(NetIncomingMessage response)
+        {
+            Field field = game.field;
+            Debug.Assert(field != null);
+
+            FieldCellSlot[] slots = field.GetCells().slots;
+            for (int i = 0; i < slots.Length; ++i)
+            {
+                BrickCell brick = slots[i].GetBrick();
+                if (brick != null)
+                {
+                    brick.powerup = response.ReadByte();
+                }
+            }
         }
 
         #endregion

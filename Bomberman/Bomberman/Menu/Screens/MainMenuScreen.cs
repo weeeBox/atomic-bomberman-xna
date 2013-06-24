@@ -49,10 +49,10 @@ namespace Bomberman.Menu.Screens
             button.SetDelegate(buttonDelegate);
             rootView.AddView(button);
 
-            button = new TextButton("Multiplayer", font, 0, 0, w, h);
-            button.id = (int)ButtonId.Multiplayer;
-            button.SetDelegate(buttonDelegate);
-            rootView.AddView(button);
+            //button = new TextButton("Multiplayer", font, 0, 0, w, h);
+            //button.id = (int)ButtonId.Multiplayer;
+            //button.SetDelegate(buttonDelegate);
+            //rootView.AddView(button);
 
             button = new TextButton("Settings", font, 0, 0, w, h);
             button.id = (int)ButtonId.Settings;
