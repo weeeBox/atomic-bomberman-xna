@@ -34,11 +34,14 @@ namespace Bomberman.Multiplayer
 
         #region Local server discovery
 
-        public void StartLocalServerDiscovery(ILocalServersDiscoveryResponseListener listener, String name, int port)
+        public void StartLocalServerDiscovery(ILocalServersDiscoveryResponseListener listener)
         {
             Debug.Assert(serverDiscovery != null);
-            
-            serverDiscovery = new LocalServersDiscovery(listener, name, port);
+
+            String appId = CVars.sv_appId.value;
+            int port = CVars.sv_port.intValue;
+
+            serverDiscovery = new LocalServersDiscovery(listener, appId, port);
             serverDiscovery.Start();
 
             Log.i("Started local servers discovery...");
@@ -71,7 +74,27 @@ namespace Bomberman.Multiplayer
 
         #region Net peer
 
-        public void CreateServer(String appIdentifier, int port)
+        public void StartServer(ServerListener listener)
+        {
+            String appId = CVars.sv_appId.value;
+            int port = CVars.sv_port.intValue;
+
+            CreateServer(appId, port);
+            SetServerListener(listener);
+            Start();
+        }
+
+        public void StartClient(IPEndPoint remoteEndPoint, ClientListener listener)
+        {
+            String appId = CVars.sv_appId.value;
+            int port = CVars.sv_port.intValue;
+
+            CreateClient(appId, remoteEndPoint, port);
+            SetClientListener(listener);
+            Start();
+        }
+
+        private void CreateServer(String appIdentifier, int port)
         {
             Debug.Assert(networkPeer == null);
             Server server = new Server(appIdentifier, port);
@@ -81,7 +104,7 @@ namespace Bomberman.Multiplayer
             Log.d("Created network server");
         }
 
-        public void CreateClient(String appIdetifier, IPEndPoint remoteEndPoint, int port)
+        private void CreateClient(String appIdetifier, IPEndPoint remoteEndPoint, int port)
         {
             Debug.Assert(networkPeer == null);
             Client client = new Client(appIdetifier, remoteEndPoint);
@@ -91,7 +114,7 @@ namespace Bomberman.Multiplayer
             Log.d("Created network client");
         }
 
-        public void Start()
+        private void Start()
         {
             Debug.Assert(networkPeer != null);
             networkPeer.Start();

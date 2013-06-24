@@ -162,47 +162,9 @@ namespace Bomberman
             StartController(menuController);
         }
 
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Multiplayer
-
-        public void StartGameServer(ServerListener listener)
+        public MultiplayerManager GetMultiplayerManager()
         {
-            String appId = CVars.sv_appId.value;
-            int port = CVars.sv_port.intValue;
-
-            multiplayerManager.CreateServer(appId, port);
-            multiplayerManager.SetServerListener(listener);
-            multiplayerManager.Start();
+            return multiplayerManager;
         }
-
-        public void StartGameClient(IPEndPoint remoteEndPoint, ClientListener listener)
-        {
-            String appId = CVars.sv_appId.value;
-            int port = CVars.sv_port.intValue;
-
-            multiplayerManager.CreateClient(appId, remoteEndPoint, port);
-            multiplayerManager.SetClientListener(listener);
-            multiplayerManager.Start();
-        }
-
-        public void StopPeer()
-        {
-            multiplayerManager.Stop();
-        }
-
-        public void StartLocalServerDiscovery(ILocalServersDiscoveryResponseListener listener)
-        {
-            String appId = CVars.sv_appId.value;
-            int port = CVars.sv_port.intValue;
-            multiplayerManager.StartLocalServerDiscovery(listener, appId, port);
-        }
-
-        public void StopLocalServerDiscovery()
-        {
-            multiplayerManager.StopLocalServerDiscovery();
-        }
-
-        #endregion
     }
 }

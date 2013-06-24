@@ -83,12 +83,12 @@ namespace Bomberman.Multiplayer
 
         private void StartDiscovery()
         {
-            GetRootController().StartLocalServerDiscovery(this);
+            GetMultiplayerManager().StartLocalServerDiscovery(this);
         }
 
         private void StopDiscovery()
         {
-            GetRootController().StopLocalServerDiscovery();
+            GetMultiplayerManager().StopLocalServerDiscovery();
         }
 
         private void OnLocalServerFound(ServerInfo info)
@@ -114,17 +114,18 @@ namespace Bomberman.Multiplayer
             serverInfo = new ServerInfo(hostName);
             serverInfo.scheme = scheme;
 
-            GetRootController().StartGameServer(this);
+            GetMultiplayerManager().StartServer(this);
         }
 
         private void StartClient(IPEndPoint remoteEndPoint)
-        {   
-            GetRootController().StartGameClient(remoteEndPoint, this);
+        {
+            GetMultiplayerManager().StartClient(remoteEndPoint, this);
         }
 
         private void StopPeer()
-        {   
-            GetRootController().StopPeer();
+        {
+            serverInfo = null;
+            GetMultiplayerManager().Stop();
         }
 
         #endregion

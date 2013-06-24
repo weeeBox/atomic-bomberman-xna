@@ -145,19 +145,19 @@ namespace Bomberman.Multiplayer
 
         private void StartServer()
         {   
-            GetRootController().StartGameServer(this);
+            GetMultiplayerManager().StartServer(this);
         }
         
         private void StartClient(IPEndPoint remoteEndPoint)
         {
             StartConnectionScreen(OnServerConnectionCancelled, "Connecting to " + remoteEndPoint + "...");
-            GetRootController().StartGameClient(remoteEndPoint, this);
+            GetMultiplayerManager().StartClient(remoteEndPoint, this);
         }
 
         private void StopPeer()
         {
             serverInfo = null;
-            GetRootController().StopPeer();
+            GetMultiplayerManager().Stop();
         }
 
         //////////////////////////////////////////////////////////////////////////////
