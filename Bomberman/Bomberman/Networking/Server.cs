@@ -140,6 +140,28 @@ namespace Bomberman.Networking
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Messages
+
+        public void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        {
+            for (int i = 0; i < connections.Count; ++i)
+            {
+                SendMessage(message, connections[i], method);
+            }
+        }
+
+        public void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        {
+            for (int i = 0; i < connections.Count; ++i)
+            {
+                SendMessage(messageId, connections[i], method);
+            }
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
         #region Connections
 
         public List<NetConnection> GetConnections()

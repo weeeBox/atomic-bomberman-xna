@@ -93,6 +93,22 @@ namespace Bomberman.Networking
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Messages
+
+        public void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        {
+            SendMessage(message, serverConnection, method);
+        }
+
+        public void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        {   
+            SendMessage(messageId, serverConnection, method);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
         #region Properties
 
         public NetConnection GetServerConnection()
