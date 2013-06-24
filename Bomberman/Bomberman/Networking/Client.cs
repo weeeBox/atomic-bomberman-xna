@@ -18,26 +18,20 @@ namespace Bomberman.Networking
 
     public class Client : Peer
     {
-        private enum State
-        {
-            Created,
-            Connecting,
-            Connected
-        }
-
         public ClientListener listener;
 
         private IPEndPoint remoteEndPoint;
         private NetConnection serverConnection;
 
-        private State state;
-
         public Client(String name, IPEndPoint remoteEndPoint)
             : base(name, remoteEndPoint.Port)
         {
             this.remoteEndPoint = remoteEndPoint;
-            state = State.Created;
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Lifecycle
 
         public override void Start()
         {
@@ -46,14 +40,10 @@ namespace Bomberman.Networking
                 throw new InvalidOperationException("Client already running");
             }
 
-            Debug.Assert(state == State.Created);
-
             NetPeerConfiguration config = new NetPeerConfiguration(name);
 
             peer = new NetClient(config);
             peer.Start();
-
-            state = State.Connecting;
 
             NetOutgoingMessage hailMessage = peer.CreateMessage();
             hailMessage.Write(CVars.name.value);
@@ -69,6 +59,12 @@ namespace Bomberman.Networking
                 serverConnection = null;
             }
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Inheritance
 
         protected override void OnPeerConnected(NetConnection connection)
         {
@@ -92,5 +88,18 @@ namespace Bomberman.Networking
         {
             listener.OnMessageReceived(this, messageId, message);
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
+        public NetConnection GetServerConnection()
+        {
+            return serverConnection;
+        }
+
+        #endregion
     }
 }

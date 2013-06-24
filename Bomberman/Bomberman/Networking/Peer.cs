@@ -11,8 +11,7 @@ using BomberEngine.Debugging;
 namespace Bomberman.Networking
 {
     public enum NetworkMessageId
-    {
-        Discovery,
+    {   
         FieldState,
         Count,
     }
@@ -23,14 +22,11 @@ namespace Bomberman.Networking
         protected int port;
 
         protected NetPeer peer;
-        protected List<NetConnection> connections;
 
         protected Peer(String name, int port)
         {
             this.name = name;
             this.port = port;
-
-            connections = new List<NetConnection>();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -63,18 +59,14 @@ namespace Bomberman.Networking
                 {
                     NetConnectionStatus status = (NetConnectionStatus)msg.ReadByte();
                     if (status == NetConnectionStatus.Connected)
-                    {
-                        NetConnection connection = msg.SenderConnection;
-                        AddConnection(connection);
-                        OnPeerConnected(connection);
+                    {   
+                        OnPeerConnected(msg.SenderConnection);
                         return true;
                     }
 
                     if (status == NetConnectionStatus.Disconnected)
                     {
-                        NetConnection connection = msg.SenderConnection;
-                        RemoveConnection(connection);
-                        OnPeerDisconnected(connection);
+                        OnPeerDisconnected(msg.SenderConnection);
                         return true;
                     }
 
@@ -107,29 +99,6 @@ namespace Bomberman.Networking
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Connections
-
-        private void AddConnection(NetConnection c)
-        {
-            Debug.Assert(!connections.Contains(c));
-            connections.Add(c);
-        }
-
-        private void RemoveConnection(NetConnection c)
-        {
-            bool removed = connections.Remove(c);
-            Debug.Assert(removed);
-        }
-
-        public List<NetConnection> GetConnections()
-        {
-            return connections;
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
         #region Messages
 
         private void ReadMessage(NetIncomingMessage msg)
@@ -138,9 +107,15 @@ namespace Bomberman.Networking
             OnMessageReceive(message, msg);
         }
 
-        public void SendMessage(NetOutgoingMessage message, NetConnection recipient)
+        public void SendMessage(NetOutgoingMessage message, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
         {
-            peer.SendMessage(message, recipient, NetDeliveryMethod.Unreliable);
+            peer.SendMessage(message, recipient, method);
+        }
+
+        public void SendMessage(NetworkMessageId messageId, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        {
+            NetOutgoingMessage message = CreateMessage(messageId);
+            peer.SendMessage(message, recipient, method);
         }
 
         public NetOutgoingMessage CreateMessage()

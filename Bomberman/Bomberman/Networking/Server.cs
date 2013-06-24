@@ -26,10 +26,17 @@ namespace Bomberman.Networking
         private ILocalServersDiscoveryRequestListener discoveryRequestListener;
         private int nextClientIndex;
 
+        private List<NetConnection> connections;
+
         public Server(String name, int port)
             : base(name, port)
-        {   
+        {
+            connections = new List<NetConnection>();
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Lifecycle
 
         public override void Start()
         {
@@ -64,6 +71,12 @@ namespace Bomberman.Networking
         {
             discoveryRequestListener = null;
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Inheritance
 
         protected override bool HandleMessage(NetPeer peer, NetIncomingMessage msg)
         {
@@ -122,5 +135,30 @@ namespace Bomberman.Networking
         {
             listener.OnMessageReceived(this, messageId, message);
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Connections
+
+        public List<NetConnection> GetConnections()
+        {
+            return connections;
+        }
+
+        private void AddConnection(NetConnection connection)
+        {
+            Debug.Assert(!connections.Contains(connection));
+            connections.Add(connection);
+        }
+
+        private void RemoveConnection(NetConnection connection)
+        {
+            Debug.Assert(connections.Contains(connection));
+            connections.Remove(connection);
+        }
+
+        #endregion
     }
 }

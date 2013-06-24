@@ -18,6 +18,9 @@ namespace Bomberman.Multiplayer
         private ClientListener clientListener;
         private ServerListener serverListener;
 
+        private NetConnection serverConnection;
+        private List<NetConnection> clientConnection;
+
         public void Update(float delta)
         {
             if (networkPeer != null)
@@ -139,6 +142,23 @@ namespace Bomberman.Multiplayer
         }
 
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        public NetOutgoingMessage CreateMessage(NetworkMessageId messageId)
+        {
+            return networkPeer.CreateMessage(messageId);
+        }
+
+        public void SendMessage(NetOutgoingMessage message, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        {
+            networkPeer.SendMessage(message, recipient, method);
+        }
+
+        public void SendMessage(NetworkMessageId messageId, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        {
+            networkPeer.SendMessage(messageId, recipient, method);
+        }
 
         //////////////////////////////////////////////////////////////////////////////
 
