@@ -31,6 +31,10 @@ namespace Bomberman.Networking
             this.listener = listener;
         }
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Lifecycle
+
         public override void Start()
         {
             if (peer != null)
@@ -56,6 +60,12 @@ namespace Bomberman.Networking
             }
         }
 
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Inheritance
+
         protected override bool HandleMessage(NetPeer peer, NetIncomingMessage msg)
         {
             switch (msg.MessageType)
@@ -69,5 +79,17 @@ namespace Bomberman.Networking
 
             return false;
         }
+
+        public override void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        {
+            throw new InvalidOperationException();
+        }
+
+        public override void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        {
+            throw new InvalidOperationException();
+        }
+
+        #endregion
     }
 }

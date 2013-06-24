@@ -118,6 +118,9 @@ namespace Bomberman.Networking
             peer.SendMessage(message, recipient, method);
         }
 
+        public abstract void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable);
+        public abstract void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable);
+        
         public NetOutgoingMessage CreateMessage()
         {
             return peer.CreateMessage();

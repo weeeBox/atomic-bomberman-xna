@@ -160,6 +160,16 @@ namespace Bomberman.Multiplayer
             networkPeer.SendMessage(messageId, recipient, method);
         }
 
+        public void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        {
+            networkPeer.SendMessage(message, method);
+        }
+
+        public void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        {
+            networkPeer.SendMessage(messageId, method);
+        }
+
         //////////////////////////////////////////////////////////////////////////////
 
         #region Client listener

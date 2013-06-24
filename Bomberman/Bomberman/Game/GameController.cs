@@ -312,7 +312,7 @@ namespace Bomberman.Game
             Debug.Assert(clientState == ClientState.Created);
             clientState = ClientState.WaitFieldState;
 
-            
+
         }
 
         #endregion
@@ -329,6 +329,16 @@ namespace Bomberman.Game
         private void SendMessage(NetOutgoingMessage message, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
         {
             GetMultiplayerManager().SendMessage(message, recipient, method);
+        }
+
+        private void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        {
+            GetMultiplayerManager().SendMessage(messageId, method);
+        }
+
+        private void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        {
+            GetMultiplayerManager().SendMessage(message, method);
         }
 
         private void SendMessage(NetworkMessageId messageId, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
