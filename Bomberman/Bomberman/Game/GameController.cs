@@ -117,11 +117,8 @@ namespace Bomberman.Game
                 {
                     Application.SetWindowTitle("Client");
 
+                    GetMultiplayerManager().SetClientListener(this);
                     clientState = ClientState.Created;
-
-                    game = new Game();
-
-                    SetupField(settings.scheme);
                     RequestFieldState();
                     
                     break;
@@ -130,6 +127,7 @@ namespace Bomberman.Game
                 {
                     Application.SetWindowTitle("Server");
 
+                    GetMultiplayerManager().SetServerListener(this);
                     serverState = ServerState.Created;
 
                     game = new Game();
@@ -239,48 +237,6 @@ namespace Bomberman.Game
             }
         }
 
-        private void OnLobbyScreenButtonPressed(Button button)
-        {
-            MultiplayerLobbyScreen.ButtonId buttonId = (MultiplayerLobbyScreen.ButtonId)button.id;
-            switch (buttonId)
-            {
-                case MultiplayerLobbyScreen.ButtonId.Start:
-                {
-                    game = new Game();
-                    game.AddPlayer(new Player(0));
-
-                    LoadField(settings.scheme);
-
-                    gameScreen = new GameScreen();
-
-                    InitPlayers();
-
-                    StartScreen(gameScreen);
-                    break;
-                }
-
-                case MultiplayerLobbyScreen.ButtonId.Back:
-                {
-                    switch (settings.multiplayer)
-                    {
-                        case GameSettings.Multiplayer.Server:
-                            Stop(ExitCode.StopServer);
-                            break;
-                        case GameSettings.Multiplayer.Client:
-                            Stop(ExitCode.StopClient);
-                            break;
-                        case GameSettings.Multiplayer.None:
-                            Stop(ExitCode.Exit);
-                            break;
-                        default:
-                            Debug.Fail("Unexpected exit code: " + exitCode);
-                            break;
-                    }
-                    break;
-                }
-            }
-        }
-
         //////////////////////////////////////////////////////////////////////////////
 
         #region Network messages
@@ -296,7 +252,7 @@ namespace Bomberman.Game
 
         private void OnRequestFieldStateCancelled()
         {
-
+            throw new NotImplementedException();
         }
 
         #endregion
@@ -342,7 +298,24 @@ namespace Bomberman.Game
         #region Client listener
 
         public void OnMessageReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message)
-        {   
+        {
+            switch (messageId)
+            {
+                case NetworkMessageId.FieldState:
+                {
+                    game = new Game();
+                    game.AddPlayer(new Player(0));
+
+                    SetupField(settings.scheme);
+
+                    gameScreen = new GameScreen();
+
+                    InitPlayers();
+
+                    StartScreen(gameScreen);
+                    break;
+                }
+            }
         }
 
         public void OnConnectedToServer(Client client, NetConnection serverConnection)
@@ -365,7 +338,7 @@ namespace Bomberman.Game
             {
                 case NetworkMessageId.FieldState:
                 {
-                    Log.d("Field request received");
+                    SendMessage(NetworkMessageId.FieldState, message.SenderConnection, NetDeliveryMethod.ReliableOrdered);
                     break;
                 }
             }
@@ -390,6 +363,16 @@ namespace Bomberman.Game
             NetworkConnectionScreen screen = new NetworkConnectionScreen(message);
             screen.cancelCallback = cancelCallback;
             StartNextScreen(screen);
+        }
+
+        private void HideConnectionScreen()
+        {
+            NetworkConnectionScreen screen = CurrentScreen() as NetworkConnectionScreen;
+            if (screen != null)
+            {
+                screen.cancelCallback = null;
+                screen.Finish();
+            }
         }
 
         #endregion
