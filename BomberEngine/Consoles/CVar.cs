@@ -54,11 +54,6 @@ namespace BomberEngine.Consoles
                 throw new NullReferenceException("Name is null");
             }
 
-            if (defaultValue == null)
-            {
-                throw new NullReferenceException("Default value is null");
-            }
-
             this.name = name;
             this.defaultValue = defaultValue;
             this.type = type;

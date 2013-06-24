@@ -30,7 +30,20 @@ namespace Bomberman
             manager.AddPackToLoad(AssetPacks.Packs.ALL);
             manager.LoadImmediately();
 
-            StartMainMenu();
+            StartMainMenuController();
+
+            String mode = CVars.g_startupMultiplayerMode.value;
+            if (mode != null)
+            {
+                if (mode.Equals("client"))
+                {
+                    menuController.Stop((int)MenuController.ExitCode.DebugClientStart);
+                }
+                else if (mode.Equals("server"))
+                {
+                    menuController.Stop((int)MenuController.ExitCode.DebugServerStart);
+                }
+            }
         }
 
         public override void Update(float delta)
@@ -81,7 +94,7 @@ namespace Bomberman
                 MultiplayerController.ExitCode exitCode = (MultiplayerController.ExitCode)controller.exitCode;
                 if (exitCode == MultiplayerController.ExitCode.Cancel)
                 {
-                    StartMainMenu();
+                    StartMainMenuController();
                     return;
                 }
 
@@ -96,7 +109,7 @@ namespace Bomberman
             }
             else if (controller is GameController)
             {
-                StartMainMenu();
+                StartMainMenuController();
             }
             else if (controller is DebugMultiplayerController)
             {
@@ -105,7 +118,7 @@ namespace Bomberman
                 {
                     case DebugMultiplayerController.ExitCode.Cancel:
                     {
-                        StartMainMenu();
+                        StartMainMenuController();
                         break;
                     }
                     case DebugMultiplayerController.ExitCode.ClientStarted:
@@ -156,7 +169,7 @@ namespace Bomberman
             return false;
         }
 
-        private void StartMainMenu()
+        private void StartMainMenuController()
         {
             menuController = new MenuController();
             StartController(menuController);

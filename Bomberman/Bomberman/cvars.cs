@@ -76,6 +76,7 @@ namespace Bomberman
         public static readonly CVar g_drawPlayerCell = new CVar("g_drawPlayerCell", 0, CFlags.Debug);
         public static readonly CVar g_drawPlayerMovable = new CVar("g_drawPlayerMovable", 0, CFlags.Debug);
         public static readonly CVar g_drawHiddenPowerups = new CVar("g_drawHiddenPowerups", 0, CFlags.Debug);
+        public static readonly CVar g_startupMultiplayerMode = new CVar("g_startupMultiplayerMode", null, CFlags.Debug);
 
         /* Network */
         public static readonly CVar sv_port = new CVar("sv_port", 1334);
@@ -140,6 +141,7 @@ namespace Bomberman
             g_drawPlayerCell,
             g_drawPlayerMovable,
             g_drawHiddenPowerups,
+            g_startupMultiplayerMode,
         };
 
         private static readonly CVar[] serverVars =

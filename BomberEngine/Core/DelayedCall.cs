@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BomberEngine.Debugging;
 
 namespace BomberEngine.Core
 {
@@ -12,6 +13,10 @@ namespace BomberEngine.Core
         public static DelayedCall freeRoot;
 
         public bool cancelled;
+
+        private const int maxId = 2000000000;
+        private static int nextId;
+        private int id;
 
         internal DelayedCallback callback;
 
@@ -32,14 +37,20 @@ namespace BomberEngine.Core
         public void Cancel()
         {
             cancelled = true;
-            manager.RemoveCall(this);
+            if (manager != null)
+            {
+                manager.RemoveCall(this);
+                manager = null;
+            }
         }
 
         internal void Fire()
-        {   
+        {
+            int oldId = id;
+
             callback(this);
 
-            if (!cancelled)
+            if (oldId == id) // timer may be cancelled inside callback call and then reused: check if it's the same time (not a reused instance)
             {
                 ++numRepeated;
                 if (numRepeated == numRepeats)
@@ -74,14 +85,21 @@ namespace BomberEngine.Core
 
         internal static DelayedCall NextFreeCall()
         {
+            DelayedCall call;
             if (freeRoot != null)
             {
-                DelayedCall call = freeRoot;
+                call = freeRoot;
                 freeRoot = call.next;
-                return call;
+            }
+            else
+            {
+                call = new DelayedCall();
             }
 
-            return new DelayedCall();
+            nextId = nextId == maxId ? 1 : (nextId + 1); // we need non-zero value
+            call.id = nextId;
+
+            return call;
         }
 
         internal static void AddFreeCall(DelayedCall call)
@@ -98,12 +116,14 @@ namespace BomberEngine.Core
 
         private void Reset()
         {
+            id = 0;
             next = prev = null;
             manager = null;
             callback = null;
             numRepeats = numRepeated = 0;
             timeout = 0;
             fireTime = 0;
+            scheduleTime = 0;
             cancelled = false;
             name = null;
         }

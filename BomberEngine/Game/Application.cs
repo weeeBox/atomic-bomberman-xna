@@ -122,6 +122,7 @@ namespace BomberEngine.Game
         {
             currentTime += delta;
             updatables.Update(delta);
+            timerManager.Update(delta);
         }
 
         public void Draw(GraphicsDevice graphicsDevice)

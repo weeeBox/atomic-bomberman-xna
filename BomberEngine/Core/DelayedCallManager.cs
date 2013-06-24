@@ -99,7 +99,7 @@ namespace BomberEngine.Core
 
                 if (c.callback == callback)
                 {
-                    RemoveCall(c);
+                    c.Cancel();
                 }
             }
         }
@@ -113,7 +113,7 @@ namespace BomberEngine.Core
 
                 if (c.name == name)
                 {
-                    RemoveCall(c);
+                    c.Cancel();
                 }
             }
         }
@@ -127,7 +127,7 @@ namespace BomberEngine.Core
 
                 if (c.callback.Target == target)
                 {
-                    RemoveCall(c);
+                    c.Cancel();
                 }
             }
         }
@@ -139,7 +139,7 @@ namespace BomberEngine.Core
                 DelayedCall c = call;
                 call = call.next;
 
-                RemoveCall(c);
+                c.Cancel();
             }
         }
 
@@ -174,6 +174,7 @@ namespace BomberEngine.Core
 
         private void AddCall(DelayedCall call)
         {
+            Debug.Assert(call.manager == this);
             ++callsCount;
 
             if (rootCall != null)
@@ -219,6 +220,7 @@ namespace BomberEngine.Core
 
         internal void RemoveCall(DelayedCall call)
         {
+            Debug.Assert(call.manager == this);
             Debug.Assert(callsCount > 0);
             --callsCount;
 

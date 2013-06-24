@@ -9,6 +9,10 @@ using BomberEngine.Game;
 using BomberEngine.Core.Visual;
 using Bomberman.Content;
 using Lidgren.Network;
+using BomberEngine.Core.Assets.Types;
+using Bomberman.Game;
+using Assets;
+using BomberEngine.Core;
 
 namespace Bomberman.Multiplayer
 {
@@ -61,6 +65,13 @@ namespace Bomberman.Multiplayer
             screen.AddView(button);
             screen.SetBackButton(button);
 
+            Font font = Helper.GetFont(A.fnt_system);
+            TextView textView = new TextView(font, mode.ToString());
+            textView.alignX = View.ALIGN_CENTER;
+            textView.x = 0.5f * screen.width;
+            textView.y = 10;
+            screen.AddView(textView);
+
             StartScreen(screen);
         }
 
@@ -84,11 +95,21 @@ namespace Bomberman.Multiplayer
         private void StartDiscovery()
         {
             GetMultiplayerManager().StartLocalServerDiscovery(this);
+            Application.ScheduleCall(OnDiscoveryTimeout, 1.0f);
         }
 
         private void StopDiscovery()
         {
             GetMultiplayerManager().StopLocalServerDiscovery();
+            Application.CancelCall(OnDiscoveryTimeout);
+        }
+
+        private void OnDiscoveryTimeout(DelayedCall call)
+        {
+            Log.d("Discovery timeout");
+
+            StopDiscovery();
+            StartDiscovery();
         }
 
         private void OnLocalServerFound(ServerInfo info)
