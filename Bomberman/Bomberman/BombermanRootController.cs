@@ -172,6 +172,7 @@ namespace Bomberman
             int port = CVars.sv_port.intValue;
 
             multiplayerManager.CreateServer(appId, port);
+            multiplayerManager.SetServerListener(listener);
             multiplayerManager.Start();
         }
 
@@ -181,6 +182,7 @@ namespace Bomberman
             int port = CVars.sv_port.intValue;
 
             multiplayerManager.CreateClient(appId, remoteEndPoint, port);
+            multiplayerManager.SetClientListener(listener);
             multiplayerManager.Start();
         }
 

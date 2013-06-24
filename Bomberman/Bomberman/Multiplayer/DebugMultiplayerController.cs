@@ -12,7 +12,9 @@ using Lidgren.Network;
 
 namespace Bomberman.Multiplayer
 {
-    public class DebugMultiplayerController : BombermanController, ServerListener, ClientListener, ILocalServersDiscoveryRequestListener, ILocalServersDiscoveryResponseListener
+    public class DebugMultiplayerController : BombermanController, 
+        ILocalServersDiscoveryRequestListener, ILocalServersDiscoveryResponseListener,
+        ServerListener, ClientListener
     {
         public enum Mode
         {
@@ -102,6 +104,8 @@ namespace Bomberman.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Peer
+
         private void StartServer()
         {
             String hostName = CVars.sv_hostname.value;
@@ -123,6 +127,16 @@ namespace Bomberman.Multiplayer
             GetRootController().StopPeer();
         }
 
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Server listener
+
+        public void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
+        {
+        }
+
         public void OnClientConnected(Server server, string name, Lidgren.Network.NetConnection connection)
         {
             Log.d("Client connected: name=" + name + " endpoint=" + connection.RemoteEndPoint);
@@ -132,6 +146,12 @@ namespace Bomberman.Multiplayer
         public void OnClientDisconnected(Server server, Lidgren.Network.NetConnection connection)
         {
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Client listener
 
         public void OnMessageReceived(Client client, NetworkMessageId messageId, Lidgren.Network.NetIncomingMessage message)
         {
@@ -145,6 +165,8 @@ namespace Bomberman.Multiplayer
         public void OnDisconnectedFromServer(Client client)
         {
         }
+
+        #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 

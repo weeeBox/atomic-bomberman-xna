@@ -15,6 +15,9 @@ namespace Bomberman.Multiplayer
         private Peer networkPeer;
         private LocalServersDiscovery serverDiscovery;
 
+        private ClientListener clientListener;
+        private ServerListener serverListener;
+
         public void Update(float delta)
         {
             if (networkPeer != null)
@@ -98,6 +101,9 @@ namespace Bomberman.Multiplayer
 
                 Log.d("Stopped network peer");
             }
+
+            clientListener = null;
+            serverListener = null;
         }
 
         #endregion
@@ -107,15 +113,27 @@ namespace Bomberman.Multiplayer
         #region Client listener
 
         public void OnMessageReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message)
-        {   
+        {
+            if (clientListener != null)
+            {
+                clientListener.OnMessageReceived(client, messageId, message);
+            }
         }
 
         public void OnConnectedToServer(Client client, NetConnection serverConnection)
-        {   
+        {
+            if (clientListener != null)
+            {
+                clientListener.OnConnectedToServer(client, serverConnection);
+            }
         }
 
         public void OnDisconnectedFromServer(Client client)
-        {   
+        {
+            if (clientListener != null)
+            {
+                clientListener.OnDisconnectedFromServer(client);
+            }
         }
 
         #endregion
@@ -126,18 +144,42 @@ namespace Bomberman.Multiplayer
 
         public void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
         {
+            if (serverListener != null)
+            {
+                serverListener.OnMessageReceived(server, messageId, message);
+            }
         }
 
         public void OnClientConnected(Server server, string name, NetConnection connection)
         {
+            if (serverListener != null)
+            {
+                serverListener.OnClientConnected(server, name, connection);
+            }
         }
 
         public void OnClientDisconnected(Server server, NetConnection connection)
         {
+            if (serverListener != null)
+            {
+                serverListener.OnClientDisconnected(server, connection);
+            }
         }
 
-        public void OnDiscoveryResponse(Server server, NetOutgoingMessage message)
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
+        public void SetServerListener(ServerListener listener)
         {
+            serverListener = listener;
+        }
+
+        public void SetClientListener(ClientListener listener)
+        {
+            clientListener = listener;
         }
 
         #endregion
