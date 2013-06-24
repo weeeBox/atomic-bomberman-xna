@@ -23,11 +23,11 @@ namespace Bomberman.Multiplayer
 
         private TextView statusTextView;
 
-        public NetworkConnectionScreen()
+        public NetworkConnectionScreen(String message = "Connecting...")
         {
             Font font = Helper.GetFont(A.fnt_button);
 
-            statusTextView = new TextView(font, "Connecting to the server...");
+            statusTextView = new TextView(font, message);
             statusTextView.alignX = statusTextView.alignY = View.ALIGN_CENTER;
             statusTextView.x = 0.5f * width;
             statusTextView.y = 0.5f * height;

@@ -42,7 +42,7 @@ namespace Bomberman.Game
         }
     }
 
-    public class GameController : BombermanController
+    public class GameController : BombermanController, ClientListener, ServerListener
     {
         public enum ExitCode
         {
@@ -73,7 +73,6 @@ namespace Bomberman.Game
         private Game game;
 
         private GameSettings settings;
-        private Peer networkPeer;
 
         private ClientState clientState;
         private ServerState serverState;
@@ -121,15 +120,10 @@ namespace Bomberman.Game
                     clientState = ClientState.Created;
 
                     game = new Game();
-                    game.AddPlayer(new Player(0));
 
                     SetupField(settings.scheme);
-
-                    gameScreen = new GameScreen();
-
-                    InitPlayers();
-
-                    StartScreen(gameScreen);
+                    RequestFieldState();
+                    
                     break;
                 }
                 case GameSettings.Multiplayer.Server:
@@ -289,22 +283,6 @@ namespace Bomberman.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Updatable
-
-        public override void Update(float delta)
-        {
-            base.Update(delta);
-
-            if (networkPeer != null)
-            {
-                networkPeer.Update(delta);
-            }
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
         #region Network messages
 
         private void RequestFieldState()
@@ -312,6 +290,12 @@ namespace Bomberman.Game
             Debug.Assert(clientState == ClientState.Created);
             clientState = ClientState.WaitFieldState;
 
+            SendMessage(NetworkMessageId.FieldState, NetDeliveryMethod.ReliableOrdered);
+            StartConnectionScreen(OnRequestFieldStateCancelled, "Waiting for the server...");
+        }
+
+        private void OnRequestFieldStateCancelled()
+        {
 
         }
 
@@ -349,6 +333,63 @@ namespace Bomberman.Game
         private void StopNetworkPeer()
         {
             GetMultiplayerManager().Stop();
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Client listener
+
+        public void OnMessageReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message)
+        {   
+        }
+
+        public void OnConnectedToServer(Client client, NetConnection serverConnection)
+        {
+        }
+
+        public void OnDisconnectedFromServer(Client client)
+        {
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Server listener
+
+        public void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
+        {
+            switch (messageId)
+            {
+                case NetworkMessageId.FieldState:
+                {
+                    Log.d("Field request received");
+                    break;
+                }
+            }
+        }
+
+        public void OnClientConnected(Server server, string name, NetConnection connection)
+        {
+        }
+
+        public void OnClientDisconnected(Server server, NetConnection connection)
+        {
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Connection screen
+
+        private void StartConnectionScreen(ConnectionCancelCallback cancelCallback, String message)
+        {
+            NetworkConnectionScreen screen = new NetworkConnectionScreen(message);
+            screen.cancelCallback = cancelCallback;
+            StartNextScreen(screen);
         }
 
         #endregion
