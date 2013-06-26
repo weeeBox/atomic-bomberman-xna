@@ -23,26 +23,17 @@ using Lidgren.Network;
 namespace Bomberman.Game
 {
     public class GameSettings
-    {
-        public enum Multiplayer
-        {
-            None,
-            Server,
-            Client
-        }
-
+    {   
         public Scheme scheme;
-        public Multiplayer multiplayer;
         public ServerInfo serverInfo;
 
         public GameSettings(Scheme scheme)
         {
             this.scheme = scheme;
-            multiplayer = Multiplayer.None;
         }
     }
 
-    public class GameController : BombermanController, ClientListener, ServerListener
+    public class GameController : BombermanController
     {
         public enum ExitCode
         {
@@ -51,33 +42,12 @@ namespace Bomberman.Game
             Exit
         }
 
-        public enum ClientState
-        {
-            Undefined,      // for the single game mode
-            Created,        // initial state
-            WaitFieldState, // wait until server responds with field state: players, powerup, etc
-            Active,         // game in progress
-        }
+        protected GameScreen gameScreen;
+        protected PauseScreen pauseScreen;
+        
+        protected Game game;
 
-        public enum ServerState
-        {
-            Undefined,      // for the single game mode
-            Created,        // initial state
-            SendFieldState, // sends field state to clients
-            Active,         // game in progress
-        }
-
-        private GameScreen gameScreen;
-        private PauseScreen pauseScreen;
-
-        private Game game;
-
-        private GameSettings settings;
-
-        private ClientState clientState;
-        private ServerState serverState;
-
-        private IDictionary<NetConnection, Player> playersLookup;
+        protected GameSettings settings;
 
         private CCommand[] gameCommands = 
         {
@@ -87,110 +57,42 @@ namespace Bomberman.Game
             new Cmd_map_restart(),
         };
 
-        public GameController(GameSettings settings)
+        public static GameController Client(GameSettings settings)
         {
-            this.settings = settings;
+            return new ClientGameController(settings);
         }
 
-        public override void Update(float delta)
+        public static GameController Server(GameSettings settings)
         {
-            base.Update(delta);
+            return new ServerGameController(settings);
+        }
 
-            if (game != null)
-            {
-                if (settings.multiplayer == GameSettings.Multiplayer.Client)
-                {
-                    Player player = game.GetPlayers().list[0];
-                    SendActions(player);
-                }
-            }
+        public static GameController Local(GameSettings settings)
+        {
+            return new LocalGameController(settings);
+        }
+
+        protected GameController(GameSettings settings)
+        {
+            this.settings = settings;
         }
 
         protected override void OnStart()
         {
             GetConsole().RegisterCommands(gameCommands);
-
-            clientState = ClientState.Undefined;
-            serverState = ServerState.Undefined;
-
-            switch (settings.multiplayer)
-            {
-                case GameSettings.Multiplayer.None:
-                {
-                    game = new Game();
-                    game.AddPlayer(new Player(0));
-
-                    LoadField(settings.scheme);
-
-                    gameScreen = new GameScreen();
-
-                    InitPlayers();
-
-                    StartScreen(gameScreen);
-                    break;
-                }
-                case GameSettings.Multiplayer.Client:
-                {
-                    Application.SetWindowTitle("Client");
-
-                    GetMultiplayerManager().SetClientListener(this);
-                    clientState = ClientState.Created;
-                    RequestFieldState();
-                    
-                    break;
-                }
-                case GameSettings.Multiplayer.Server:
-                {
-                    Application.SetWindowTitle("Server");
-
-                    GetMultiplayerManager().SetServerListener(this);
-                    serverState = ServerState.Created;
-
-                    game = new Game();
-                    game.AddPlayer(new Player(0));
-
-                    playersLookup = new Dictionary<NetConnection, Player>();
-
-                    List<NetConnection> connections = GetServer().GetConnections();
-                    for (int i = 0; i < connections.Count; ++i)
-                    {
-                        Player player = new Player(i + i);
-                        player.SetPlayerInput(new PlayerNetworkInput());
-                        game.AddPlayer(player);
-
-                        AddPlayerConnection(connections[i], player);
-                    }
-
-                    LoadField(settings.scheme);
-
-                    gameScreen = new GameScreen();
-
-                    InitPlayers();
-
-                    StartScreen(gameScreen);
-                    break;
-                }
-                
-                default:
-                    Debug.Fail("Unexpected game mode: " + settings.multiplayer);
-                    break;
-            }
         }
 
         protected override void OnStop()
-        {
-            playersLookup = null;
-
-            StopNetworkPeer();
+        {   
             GetConsole().UnregisterCommands(gameCommands);
         }
 
-        public void Stop(ExitCode exitCode, Object data = null)
+        protected void Stop(ExitCode exitCode, Object data = null)
         {
             Stop((int)exitCode, data);
         }
 
-        private void InitPlayers()
+        protected void InitPlayers()
         {
             List<Player> players = game.GetPlayers().list;
 
@@ -206,12 +108,12 @@ namespace Bomberman.Game
             players[0].SetPlayerInput(keyboardInput1);
         }
 
-        private void LoadField(Scheme scheme)
+        protected void LoadField(Scheme scheme)
         {   
             game.LoadField(scheme); 
         }
 
-        private void SetupField(Scheme scheme)
+        protected void SetupField(Scheme scheme)
         {
             game.SetupField(scheme);
         }
@@ -266,97 +168,245 @@ namespace Bomberman.Game
                     break;
             }
         }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    #region Local game
+
+    internal class LocalGameController : GameController
+    {
+        public LocalGameController(GameSettings settings)
+            : base(settings)
+        {
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+
+            game = new Game();
+            game.AddPlayer(new Player(0));
+
+            LoadField(settings.scheme);
+
+            gameScreen = new GameScreen();
+
+            InitPlayers();
+
+            StartScreen(gameScreen);
+        }
+    }
+
+    #endregion
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    #region Network game
+
+    internal abstract class NetworkGameController : GameController
+    {
+        public NetworkGameController(GameSettings settings)
+            : base(settings)
+        {
+        }
+
+        protected override void OnStop()
+        {
+            StopNetworkPeer();
+            base.OnStop();
+        }
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Network messages
+        #region Protocol
 
-        private void RequestFieldState()
+        protected void WriteFieldState(NetOutgoingMessage response)
         {
-            Debug.Assert(clientState == ClientState.Created);
-            clientState = ClientState.WaitFieldState;
+            Field field = game.field;
+            Debug.Assert(field != null);
 
-            SendMessage(NetworkMessageId.FieldState, NetDeliveryMethod.ReliableOrdered);
-            StartConnectionScreen(OnRequestFieldStateCancelled, "Waiting for the server...");
-        }
-
-        private void OnRequestFieldStateCancelled()
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Player connection
-
-        private void AddPlayerConnection(NetConnection connection, Player player)
-        {
-            Debug.Assert(!playersLookup.ContainsKey(connection));
-            playersLookup.Add(connection, player);
-
-            Debug.Assert(player.connection == null);
-            player.connection = connection;
-        }
-
-        private void RemovePlayerConnection(NetConnection connection)
-        {
-            Player player = FindPlayer(connection);
-            Debug.Assert(player != null && player.connection == connection);
-            player.connection = null;
-
-            playersLookup.Remove(connection);
-        }
-
-        private Player FindPlayer(NetConnection connection)
-        {
-            Player player;
-            if (playersLookup.TryGetValue(connection, out player))
+            // powerups
+            FieldCellSlot[] slots = field.GetCells().slots;
+            for (int i = 0; i < slots.Length; ++i)
             {
-                return player;
+                BrickCell brick = slots[i].GetBrick();
+                if (brick != null)
+                {
+                    response.Write((byte)brick.powerup);
+                }
             }
 
-            return null;
+            // players
+            List<Player> players = game.GetPlayers().list;
+            response.Write((byte)players.Count);
+            for (int i = 0; i < players.Count; ++i)
+            {
+                Player player = players[i];
+                response.Write((byte)player.cx);
+                response.Write((byte)player.cy);
+            }
+        }
+
+        protected void ReadFieldState(NetIncomingMessage response)
+        {
+            Field field = game.field;
+            Debug.Assert(field != null);
+
+            // powerups
+            FieldCellSlot[] slots = field.GetCells().slots;
+            for (int i = 0; i < slots.Length; ++i)
+            {
+                BrickCell brick = slots[i].GetBrick();
+                if (brick != null)
+                {
+                    brick.powerup = response.ReadByte();
+                }
+            }
+
+            // players
+            int playersCount = response.ReadByte();
+            for (int i = 0; i < playersCount; ++i)
+            {
+                Player player = new Player(i);
+                int cx = response.ReadByte();
+                int cy = response.ReadByte();
+                player.SetCell(cx, cy);
+                game.AddPlayer(player);
+            }
+        }
+
+        protected void WritePlayerActions(NetOutgoingMessage response, PlayerInput input)
+        {
+            int mask = 0;
+            int actionsCount = (int)PlayerAction.Count;
+            for (int i = 0; i < actionsCount; ++i)
+            {
+                if (input.IsActionPressed(i))
+                {
+                    mask |= 1 << i;
+                }
+            }
+            response.Write(mask, actionsCount);
+        }
+
+        protected void ReadPlayerActions(NetIncomingMessage response, PlayerNetworkInput input)
+        {
+            int actionsCount = (int)PlayerAction.Count;
+            int mask = response.ReadInt32(actionsCount);
+            for (int i = 0; i < actionsCount; ++i)
+            {
+                PlayerAction action = (PlayerAction)i;
+                if ((mask & (1 << i)) == 0)
+                {
+                    input.OnActionReleased(action);
+                }
+            }
+            for (int i = 0; i < actionsCount; ++i)
+            {
+                PlayerAction action = (PlayerAction)i;
+                if ((mask & (1 << i)) != 0)
+                {
+                    input.OnActionPressed(action);
+                }
+            }
         }
 
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Network
+        #region Network helpers
 
-        private NetOutgoingMessage CreateMessage(NetworkMessageId messageId)
+        protected NetOutgoingMessage CreateMessage(NetworkMessageId messageId)
         {
             return GetMultiplayerManager().CreateMessage(messageId);
         }
 
-        private void SendMessage(NetOutgoingMessage message, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        protected void SendMessage(NetOutgoingMessage message, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
         {
             GetMultiplayerManager().SendMessage(message, recipient, method);
         }
 
-        private void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        protected void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
         {
             GetMultiplayerManager().SendMessage(messageId, method);
         }
 
-        private void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        protected void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
         {
             GetMultiplayerManager().SendMessage(message, method);
         }
 
-        private void SendMessage(NetworkMessageId messageId, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        protected void SendMessage(NetworkMessageId messageId, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
         {
             GetMultiplayerManager().SendMessage(messageId, recipient, method);
         }
 
-        private void StopNetworkPeer()
+        protected void StopNetworkPeer()
         {
             GetMultiplayerManager().Stop();
         }
 
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Connection screen
+
+        protected void StartConnectionScreen(ConnectionCancelCallback cancelCallback, String message)
+        {
+            NetworkConnectionScreen screen = new NetworkConnectionScreen(message);
+            screen.cancelCallback = cancelCallback;
+            StartNextScreen(screen);
+        }
+
+        protected void HideConnectionScreen()
+        {
+            NetworkConnectionScreen screen = CurrentScreen() as NetworkConnectionScreen;
+            if (screen != null)
+            {
+                screen.cancelCallback = null;
+                screen.Finish();
+            }
+        }
+
+        #endregion
+    }
+
+    #endregion
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    #region Client side game
+
+    internal class ClientGameController : NetworkGameController, ClientListener
+    {
+        public ClientGameController(GameSettings settings)
+            : base(settings)
+        {
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+
+            Application.SetWindowTitle("Client");
+
+            GetMultiplayerManager().SetClientListener(this);
+            RequestFieldState();
+        }
+
+        public override void Update(float delta)
+        {
+            base.Update(delta);
+
+            if (game != null)
+            {   
+                Player player = game.GetPlayers().list[0];
+                SendActions(player);
+            }
+        }
 
         //////////////////////////////////////////////////////////////////////////////
 
@@ -400,6 +450,84 @@ namespace Bomberman.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Field state
+
+        private void RequestFieldState()
+        {
+            SendMessage(NetworkMessageId.FieldState, NetDeliveryMethod.ReliableOrdered);
+            StartConnectionScreen(OnRequestFieldStateCancelled, "Waiting for the server...");
+        }
+
+        private void OnRequestFieldStateCancelled()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        private void SendActions(Player player)
+        {
+            NetOutgoingMessage msg = CreateMessage(NetworkMessageId.PlayerActions);
+            WritePlayerActions(msg, player.input);
+            SendMessage(msg, player.connection);
+        }
+    }
+
+    #endregion
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    #region Server side game
+
+    internal class ServerGameController : NetworkGameController, ServerListener
+    {
+        private IDictionary<NetConnection, Player> playersLookup;
+
+        public ServerGameController(GameSettings settings) :
+            base(settings)
+        {
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+
+            Application.SetWindowTitle("Server");
+
+            GetMultiplayerManager().SetServerListener(this);
+            
+            game = new Game();
+            game.AddPlayer(new Player(0));
+
+            playersLookup = new Dictionary<NetConnection, Player>();
+
+            List<NetConnection> connections = GetServer().GetConnections();
+            for (int i = 0; i < connections.Count; ++i)
+            {
+                Player player = new Player(i + i);
+                player.SetPlayerInput(new PlayerNetworkInput());
+                game.AddPlayer(player);
+
+                AddPlayerConnection(connections[i], player);
+            }
+
+            LoadField(settings.scheme);
+
+            gameScreen = new GameScreen();
+
+            InitPlayers();
+
+            StartScreen(gameScreen);
+        }
+
+        protected override void OnStop()
+        {
+            playersLookup = null;
+            base.OnStop();
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
         #region Server listener
 
         public void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
@@ -407,24 +535,24 @@ namespace Bomberman.Game
             switch (messageId)
             {
                 case NetworkMessageId.FieldState:
-                {
-                    NetOutgoingMessage response = CreateMessage(NetworkMessageId.FieldState);
-                    WriteFieldState(response);
-                    SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableOrdered);
-                    break;
-                }
+                    {
+                        NetOutgoingMessage response = CreateMessage(NetworkMessageId.FieldState);
+                        WriteFieldState(response);
+                        SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableOrdered);
+                        break;
+                    }
 
                 case NetworkMessageId.PlayerActions:
-                {
-                    Player player = FindPlayer(message.SenderConnection);
-                    Debug.Assert(player != null);
+                    {
+                        Player player = FindPlayer(message.SenderConnection);
+                        Debug.Assert(player != null);
 
-                    PlayerNetworkInput input = player.input as PlayerNetworkInput;
-                    Debug.Assert(input != null);
+                        PlayerNetworkInput input = player.input as PlayerNetworkInput;
+                        Debug.Assert(input != null);
 
-                    ReadPlayerActions(message, input);
-                    break;
-                }
+                        ReadPlayerActions(message, input);
+                        break;
+                    }
             }
         }
 
@@ -446,127 +574,35 @@ namespace Bomberman.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Messages
+        #region Player connection
 
-        private void WriteFieldState(NetOutgoingMessage response)
+        private void AddPlayerConnection(NetConnection connection, Player player)
         {
-            Field field = game.field;
-            Debug.Assert(field != null);
+            Debug.Assert(!playersLookup.ContainsKey(connection));
+            playersLookup.Add(connection, player);
 
-            // powerups
-            FieldCellSlot[] slots = field.GetCells().slots;
-            for (int i = 0; i < slots.Length; ++i)
-            {
-                BrickCell brick = slots[i].GetBrick();
-                if (brick != null)
-                {
-                    response.Write((byte)brick.powerup);
-                }
-            }
-
-            // players
-            List<Player> players = game.GetPlayers().list;
-            response.Write((byte)players.Count);
-            for (int i = 0; i < players.Count; ++i)
-            {
-                Player player = players[i];
-                response.Write((byte)player.cx);
-                response.Write((byte)player.cy);
-            }
+            Debug.Assert(player.connection == null);
+            player.connection = connection;
         }
 
-        private void ReadFieldState(NetIncomingMessage response)
+        private void RemovePlayerConnection(NetConnection connection)
         {
-            Field field = game.field;
-            Debug.Assert(field != null);
+            Player player = FindPlayer(connection);
+            Debug.Assert(player != null && player.connection == connection);
+            player.connection = null;
 
-            // powerups
-            FieldCellSlot[] slots = field.GetCells().slots;
-            for (int i = 0; i < slots.Length; ++i)
-            {
-                BrickCell brick = slots[i].GetBrick();
-                if (brick != null)
-                {
-                    brick.powerup = response.ReadByte();
-                }
-            }
-
-            // players
-            int playersCount = response.ReadByte();
-            for (int i = 0; i < playersCount; ++i)
-            {
-                Player player = new Player(i);
-                int cx = response.ReadByte();
-                int cy = response.ReadByte();
-                player.SetCell(cx, cy);
-                game.AddPlayer(player);
-            }
+            playersLookup.Remove(connection);
         }
 
-        private void WritePlayerActions(NetOutgoingMessage response, PlayerInput input)
+        private Player FindPlayer(NetConnection connection)
         {
-            int mask = 0;
-            int actionsCount = (int)PlayerAction.Count;
-            for (int i = 0; i < actionsCount; ++i)
+            Player player;
+            if (playersLookup.TryGetValue(connection, out player))
             {
-                if (input.IsActionPressed(i))
-                {
-                    mask |= 1 << i;
-                }
+                return player;
             }
-            response.Write(mask, actionsCount);
-        }
 
-        private void ReadPlayerActions(NetIncomingMessage response, PlayerNetworkInput input)
-        {
-            int actionsCount = (int)PlayerAction.Count;
-            int mask = response.ReadInt32(actionsCount);
-            for (int i = 0; i < actionsCount; ++i)
-            {
-                PlayerAction action = (PlayerAction)i;
-                if ((mask & (1 << i)) == 0)
-                {
-                    input.OnActionReleased(action);
-                }
-            }
-            for (int i = 0; i < actionsCount; ++i)
-            {
-                PlayerAction action = (PlayerAction)i;
-                if ((mask & (1 << i)) != 0)
-                {
-                    input.OnActionPressed(action);
-                }
-            }
-        }
-
-        #endregion
-
-        private void SendActions(Player player)
-        {
-            NetOutgoingMessage msg = CreateMessage(NetworkMessageId.PlayerActions);
-            WritePlayerActions(msg, player.input);
-            SendMessage(msg, player.connection);
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Connection screen
-
-        private void StartConnectionScreen(ConnectionCancelCallback cancelCallback, String message)
-        {
-            NetworkConnectionScreen screen = new NetworkConnectionScreen(message);
-            screen.cancelCallback = cancelCallback;
-            StartNextScreen(screen);
-        }
-
-        private void HideConnectionScreen()
-        {
-            NetworkConnectionScreen screen = CurrentScreen() as NetworkConnectionScreen;
-            if (screen != null)
-            {
-                screen.cancelCallback = null;
-                screen.Finish();
-            }
+            return null;
         }
 
         #endregion
@@ -575,11 +611,6 @@ namespace Bomberman.Game
 
         #region Helpers
 
-        private Client GetClient()
-        {
-            return GetMultiplayerManager().GetClient();
-        }
-
         private Server GetServer()
         {
             return GetMultiplayerManager().GetServer();
@@ -587,4 +618,6 @@ namespace Bomberman.Game
 
         #endregion
     }
+
+    #endregion
 }

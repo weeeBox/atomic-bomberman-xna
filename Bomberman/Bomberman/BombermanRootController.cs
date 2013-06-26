@@ -127,8 +127,7 @@ namespace Bomberman
                         Debug.Assert(info != null);
 
                         GameSettings settings = new GameSettings(info.scheme);
-                        settings.multiplayer = GameSettings.Multiplayer.Client;
-                        StartController(new GameController(settings));
+                        StartController(GameController.Client(settings));
                         break;
                     }
 
@@ -138,8 +137,7 @@ namespace Bomberman
                         Debug.Assert(info != null);
 
                         GameSettings settings = new GameSettings(info.scheme);
-                        settings.multiplayer = GameSettings.Multiplayer.Server;
-                        StartController(new GameController(settings));
+                        StartController(GameController.Server(settings));
                         break;
                     }
                 }
