@@ -221,7 +221,7 @@ namespace Bomberman.Game
 
         #region Protocol
 
-        protected void WriteFieldState(NetOutgoingMessage response)
+        protected void WriteFieldState(NetOutgoingMessage response, Player senderPlayer)
         {
             Field field = game.field;
             Debug.Assert(field != null);
@@ -239,6 +239,11 @@ namespace Bomberman.Game
 
             // players
             List<Player> players = game.GetPlayers().list;
+
+            int senderIndex = players.IndexOf(senderPlayer);
+            Debug.Assert(senderIndex != -1);
+            response.Write((byte)senderIndex);
+
             response.Write((byte)players.Count);
             for (int i = 0; i < players.Count; ++i)
             {
@@ -265,6 +270,7 @@ namespace Bomberman.Game
             }
 
             // players
+            int senderIndex = response.ReadByte();
             int playersCount = response.ReadByte();
             for (int i = 0; i < playersCount; ++i)
             {
@@ -272,6 +278,11 @@ namespace Bomberman.Game
                 int cx = response.ReadByte();
                 int cy = response.ReadByte();
                 player.SetCell(cx, cy);
+                if (senderIndex != i)
+                {
+                    player.SetPlayerInput(new PlayerNetworkInput());
+                }
+
                 game.AddPlayer(player);
             }
         }
@@ -382,6 +393,8 @@ namespace Bomberman.Game
 
     internal class ClientGameController : NetworkGameController, ClientListener
     {
+        private Player localPlayer;
+
         public ClientGameController(GameSettings settings)
             : base(settings)
         {
@@ -403,8 +416,7 @@ namespace Bomberman.Game
 
             if (game != null)
             {   
-                Player player = game.GetPlayers().list[0];
-                SendActions(player);
+                SendActions(localPlayer);
             }
         }
 
@@ -418,19 +430,37 @@ namespace Bomberman.Game
             {
                 case NetworkMessageId.FieldState:
                 {
-                    Player player = new Player(0);
-                    player.connection = client.GetServerConnection();
-
                     game = new Game();
-                    game.AddPlayer(player);
-
+                    
                     SetupField(settings.scheme);
 
                     ReadFieldState(message);
 
                     gameScreen = new GameScreen();
 
-                    InitPlayers();
+                    localPlayer = null;
+                    List<Player> players = game.GetPlayers().list;
+                    for (int i = 0; i < players.Count; ++i)
+                    {
+                        if (players[i].input == null)
+                        {
+                            localPlayer = players[i];
+                            break;
+                        }
+                    }
+
+                    // input
+                    PlayerKeyboardInput keyboardInput1 = new PlayerKeyboardInput();
+                    keyboardInput1.Map(KeyCode.W, PlayerAction.Up);
+                    keyboardInput1.Map(KeyCode.A, PlayerAction.Left);
+                    keyboardInput1.Map(KeyCode.S, PlayerAction.Down);
+                    keyboardInput1.Map(KeyCode.D, PlayerAction.Right);
+                    keyboardInput1.Map(KeyCode.OemCloseBrackets, PlayerAction.Bomb);
+                    keyboardInput1.Map(KeyCode.OemOpenBrackets, PlayerAction.Special);
+                    gameScreen.AddKeyListener(keyboardInput1);
+
+                    localPlayer.SetPlayerInput(keyboardInput1);
+                    localPlayer.connection = client.GetServerConnection();
 
                     StartScreen(gameScreen);
                     break;
@@ -535,30 +565,33 @@ namespace Bomberman.Game
             switch (messageId)
             {
                 case NetworkMessageId.FieldState:
-                    {
-                        NetOutgoingMessage response = CreateMessage(NetworkMessageId.FieldState);
-                        WriteFieldState(response);
-                        SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableOrdered);
-                        break;
-                    }
+                {
+                    Player player = FindPlayer(message.SenderConnection);
+                    Debug.Assert(player != null);
+
+                    NetOutgoingMessage response = CreateMessage(NetworkMessageId.FieldState);
+                    WriteFieldState(response, player);
+                    SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableOrdered);
+                    break;
+                }
 
                 case NetworkMessageId.PlayerActions:
-                    {
-                        Player player = FindPlayer(message.SenderConnection);
-                        Debug.Assert(player != null);
+                {
+                    Player player = FindPlayer(message.SenderConnection);
+                    Debug.Assert(player != null);
 
-                        PlayerNetworkInput input = player.input as PlayerNetworkInput;
-                        Debug.Assert(input != null);
+                    PlayerNetworkInput input = player.input as PlayerNetworkInput;
+                    Debug.Assert(input != null);
 
-                        ReadPlayerActions(message, input);
-                        break;
-                    }
+                    ReadPlayerActions(message, input);
+                    break;
+                }
             }
         }
 
         public void OnClientConnected(Server server, string name, NetConnection connection)
         {
-            throw new NotImplementedException(); // clients can't join inprogress game yet
+            throw new NotImplementedException(); // clients can't join in progress game yet
         }
 
         public void OnClientDisconnected(Server server, NetConnection connection)
