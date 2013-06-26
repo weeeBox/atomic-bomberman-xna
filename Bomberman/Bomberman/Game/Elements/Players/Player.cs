@@ -9,6 +9,7 @@ using Bomberman.Game.Elements.Fields;
 using BomberEngine.Debugging;
 using BomberEngine.Util;
 using BomberEngine.Consoles;
+using Lidgren.Network;
 
 namespace Bomberman.Game.Elements.Players
 {
@@ -19,7 +20,7 @@ namespace Bomberman.Game.Elements.Players
         private bool alive;
         private int triggerBombsCount;
 
-        private PlayerInput input;
+        public PlayerInput input;
 
         private BombList bombs;
         public PowerupList powerups;
@@ -31,6 +32,7 @@ namespace Bomberman.Game.Elements.Players
         private List<Bomb> m_thrownBombs;
 
         public Object data;
+        public NetConnection connection;
 
         public Player(int index)
             : base(FieldCellType.Player, 0, 0)

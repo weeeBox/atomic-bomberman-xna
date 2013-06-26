@@ -132,6 +132,7 @@
     <Compile Include="Game\Elements\Fields\MovableCellList.cs" />
     <Compile Include="Game\Elements\Players\DiseaseList.cs" />
     <Compile Include="Game\Elements\Players\Input\PlayerGamePadInput.cs" />
+    <Compile Include="Game\Elements\Players\Input\PlayerNetworkInput.cs" />
     <Compile Include="Game\Elements\Players\PowerupList.cs" />
     <Compile Include="Game\Elements\Powerups.cs" />
     <Compile Include="Game\Elements\Direction.cs" />

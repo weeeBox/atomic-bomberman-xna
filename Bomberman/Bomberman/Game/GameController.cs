@@ -77,6 +77,8 @@ namespace Bomberman.Game
         private ClientState clientState;
         private ServerState serverState;
 
+        private IDictionary<NetConnection, Player> playersLookup;
+
         private CCommand[] gameCommands = 
         {
             new Cmd_infect(),
@@ -88,6 +90,20 @@ namespace Bomberman.Game
         public GameController(GameSettings settings)
         {
             this.settings = settings;
+        }
+
+        public override void Update(float delta)
+        {
+            base.Update(delta);
+
+            if (game != null)
+            {
+                if (settings.multiplayer == GameSettings.Multiplayer.Client)
+                {
+                    Player player = game.GetPlayers().list[0];
+                    SendActions(player);
+                }
+            }
         }
 
         protected override void OnStart()
@@ -133,10 +149,16 @@ namespace Bomberman.Game
                     game = new Game();
                     game.AddPlayer(new Player(0));
 
+                    playersLookup = new Dictionary<NetConnection, Player>();
+
                     List<NetConnection> connections = GetServer().GetConnections();
                     for (int i = 0; i < connections.Count; ++i)
                     {
-                        game.AddPlayer(new Player(i + 1));
+                        Player player = new Player(i + i);
+                        player.SetPlayerInput(new PlayerNetworkInput());
+                        game.AddPlayer(player);
+
+                        AddPlayerConnection(connections[i], player);
                     }
 
                     LoadField(settings.scheme);
@@ -157,6 +179,8 @@ namespace Bomberman.Game
 
         protected override void OnStop()
         {
+            playersLookup = null;
+
             StopNetworkPeer();
             GetConsole().UnregisterCommands(gameCommands);
         }
@@ -265,6 +289,41 @@ namespace Bomberman.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Player connection
+
+        private void AddPlayerConnection(NetConnection connection, Player player)
+        {
+            Debug.Assert(!playersLookup.ContainsKey(connection));
+            playersLookup.Add(connection, player);
+
+            Debug.Assert(player.connection == null);
+            player.connection = connection;
+        }
+
+        private void RemovePlayerConnection(NetConnection connection)
+        {
+            Player player = FindPlayer(connection);
+            Debug.Assert(player != null && player.connection == connection);
+            player.connection = null;
+
+            playersLookup.Remove(connection);
+        }
+
+        private Player FindPlayer(NetConnection connection)
+        {
+            Player player;
+            if (playersLookup.TryGetValue(connection, out player))
+            {
+                return player;
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
         #region Network
 
         private NetOutgoingMessage CreateMessage(NetworkMessageId messageId)
@@ -309,8 +368,11 @@ namespace Bomberman.Game
             {
                 case NetworkMessageId.FieldState:
                 {
+                    Player player = new Player(0);
+                    player.connection = client.GetServerConnection();
+
                     game = new Game();
-                    game.AddPlayer(new Player(0));
+                    game.AddPlayer(player);
 
                     SetupField(settings.scheme);
 
@@ -351,15 +413,33 @@ namespace Bomberman.Game
                     SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableOrdered);
                     break;
                 }
+
+                case NetworkMessageId.PlayerActions:
+                {
+                    Player player = FindPlayer(message.SenderConnection);
+                    Debug.Assert(player != null);
+
+                    PlayerNetworkInput input = player.input as PlayerNetworkInput;
+                    Debug.Assert(input != null);
+
+                    ReadPlayerActions(message, input);
+                    break;
+                }
             }
         }
 
         public void OnClientConnected(Server server, string name, NetConnection connection)
         {
+            throw new NotImplementedException(); // clients can't join inprogress game yet
         }
 
         public void OnClientDisconnected(Server server, NetConnection connection)
         {
+            Player player = FindPlayer(connection);
+            Debug.Assert(player != null);
+
+            RemovePlayerConnection(connection);
+            // TODO: notify gameplay
         }
 
         #endregion
@@ -423,7 +503,50 @@ namespace Bomberman.Game
             }
         }
 
+        private void WritePlayerActions(NetOutgoingMessage response, PlayerInput input)
+        {
+            int mask = 0;
+            int actionsCount = (int)PlayerAction.Count;
+            for (int i = 0; i < actionsCount; ++i)
+            {
+                if (input.IsActionPressed(i))
+                {
+                    mask |= 1 << i;
+                }
+            }
+            response.Write(mask, actionsCount);
+        }
+
+        private void ReadPlayerActions(NetIncomingMessage response, PlayerNetworkInput input)
+        {
+            int actionsCount = (int)PlayerAction.Count;
+            int mask = response.ReadInt32(actionsCount);
+            for (int i = 0; i < actionsCount; ++i)
+            {
+                PlayerAction action = (PlayerAction)i;
+                if ((mask & (1 << i)) == 0)
+                {
+                    input.OnActionReleased(action);
+                }
+            }
+            for (int i = 0; i < actionsCount; ++i)
+            {
+                PlayerAction action = (PlayerAction)i;
+                if ((mask & (1 << i)) != 0)
+                {
+                    input.OnActionPressed(action);
+                }
+            }
+        }
+
         #endregion
+
+        private void SendActions(Player player)
+        {
+            NetOutgoingMessage msg = CreateMessage(NetworkMessageId.PlayerActions);
+            WritePlayerActions(msg, player.input);
+            SendMessage(msg, player.connection);
+        }
 
         //////////////////////////////////////////////////////////////////////////////
 

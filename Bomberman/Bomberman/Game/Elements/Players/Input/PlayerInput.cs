@@ -73,6 +73,11 @@ namespace Bomberman.Game.Elements.Players.Input
         public bool IsActionPressed(PlayerAction action)
         {
             int index = GetIndex(action);
+            return IsActionPressed(index);
+        }
+
+        public bool IsActionPressed(int index)
+        {
             return actionsPressedState[index];
         }
 
