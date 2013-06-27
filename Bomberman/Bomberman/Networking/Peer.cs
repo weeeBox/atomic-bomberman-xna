@@ -14,6 +14,7 @@ namespace Bomberman.Networking
     {   
         FieldState,
         PlayerActions,
+        PlayerPositions,
         Count,
     }
 

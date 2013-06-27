@@ -323,6 +323,34 @@ namespace Bomberman.Game
             }
         }
 
+        protected void WritePlayersPositions(NetOutgoingMessage msg, List<Player> players)
+        {
+            int count = players.Count;
+            msg.Write((byte)count);
+            for (int i = 0; i < count; ++i)
+            {
+                Player player = players[i];
+                msg.Write(player.px);
+                msg.Write(player.py);
+            }
+        }
+
+        protected void ReadPlayersPositions(NetIncomingMessage msg, List<Player> players)
+        {
+            int count = msg.ReadByte();
+            Debug.Assert(players.Count == count);
+
+            for (int i = 0; i < count; ++i)
+            {
+                Player player = players[i];
+
+                float px = msg.ReadFloat();
+                float py = msg.ReadFloat();
+
+                player.SetPos(px, py);
+            }
+        }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
@@ -465,6 +493,14 @@ namespace Bomberman.Game
                     StartScreen(gameScreen);
                     break;
                 }
+
+                case NetworkMessageId.PlayerPositions:
+                {
+                    List<Player> players = game.GetPlayers().list;
+                    ReadPlayersPositions(message, players);
+
+                    break;
+                }
             }
         }
 
@@ -511,7 +547,8 @@ namespace Bomberman.Game
 
     internal class ServerGameController : NetworkGameController, ServerListener
     {
-        private IDictionary<NetConnection, Player> playersLookup;
+        private IDictionary<NetConnection, Player> networkPlayersLookup;
+        private List<Player> networkPlayers;
 
         public ServerGameController(GameSettings settings) :
             base(settings)
@@ -529,7 +566,8 @@ namespace Bomberman.Game
             game = new Game();
             game.AddPlayer(new Player(0));
 
-            playersLookup = new Dictionary<NetConnection, Player>();
+            networkPlayersLookup = new Dictionary<NetConnection, Player>();
+            networkPlayers = new List<Player>();
 
             List<NetConnection> connections = GetServer().GetConnections();
             for (int i = 0; i < connections.Count; ++i)
@@ -552,8 +590,29 @@ namespace Bomberman.Game
 
         protected override void OnStop()
         {
-            playersLookup = null;
+            networkPlayersLookup = null;
+            networkPlayers = null;
             base.OnStop();
+        }
+
+        public override void Update(float delta)
+        {
+            base.Update(delta);
+
+            SendPlayerPositions(delta);
+        }
+
+        private void SendPlayerPositions(float delta)
+        {
+            NetOutgoingMessage message = CreateMessage(NetworkMessageId.PlayerPositions);
+            WritePlayersPositions(message, game.GetPlayers().list);
+
+            for (int i = 0; i < networkPlayers.Count; ++i)
+            {
+                NetConnection connection = networkPlayers[i].connection;
+                Debug.Assert(connection != null);
+                SendMessage(message, connection);
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -611,11 +670,14 @@ namespace Bomberman.Game
 
         private void AddPlayerConnection(NetConnection connection, Player player)
         {
-            Debug.Assert(!playersLookup.ContainsKey(connection));
-            playersLookup.Add(connection, player);
+            Debug.Assert(!networkPlayersLookup.ContainsKey(connection));
+            networkPlayersLookup.Add(connection, player);
 
             Debug.Assert(player.connection == null);
             player.connection = connection;
+
+            Debug.Assert(!networkPlayers.Contains(player));
+            networkPlayers.Add(player);
         }
 
         private void RemovePlayerConnection(NetConnection connection)
@@ -624,13 +686,16 @@ namespace Bomberman.Game
             Debug.Assert(player != null && player.connection == connection);
             player.connection = null;
 
-            playersLookup.Remove(connection);
+            networkPlayersLookup.Remove(connection);
+
+            Debug.Assert(networkPlayers.Contains(player));
+            networkPlayers.Remove(player);
         }
 
         private Player FindPlayer(NetConnection connection)
         {
             Player player;
-            if (playersLookup.TryGetValue(connection, out player))
+            if (networkPlayersLookup.TryGetValue(connection, out player))
             {
                 return player;
             }
