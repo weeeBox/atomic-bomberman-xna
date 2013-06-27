@@ -11,7 +11,7 @@ using BomberEngine.Util;
 
 namespace Bomberman.Game.Elements.Players.Input
 {
-    public class PlayerGamePadInput : PlayerInput, IKeyInputListener, IUpdatable
+    public class PlayerGamePadInput : PlayerInput, IKeyInputListener
     {
         private const float STICK_DEAD_ZONE = 0.125f;
         private const float STICK_DEAD_ZONE_2 = STICK_DEAD_ZONE * STICK_DEAD_ZONE;
@@ -36,8 +36,10 @@ namespace Bomberman.Game.Elements.Players.Input
             actionLookup = new Dictionary<KeyCode, PlayerAction>();
         }
 
-        public void Update(float delta)
+        public override void Update(float delta)
         {
+            base.Update(delta);
+
             Vector2 stick = Application.Input().ThumbSticks(playerIndex).Left;
             float dx = stick.X;
             float dy = stick.Y;

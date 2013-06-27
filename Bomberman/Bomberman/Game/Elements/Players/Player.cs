@@ -15,6 +15,16 @@ namespace Bomberman.Game.Elements.Players
 {
     public class Player : MovableCell
     {
+        private static readonly PlayerAction[] ACTIONS = 
+        {
+            PlayerAction.Up,
+            PlayerAction.Left,
+            PlayerAction.Down,
+            PlayerAction.Right,
+            PlayerAction.Bomb,
+            PlayerAction.Special
+        };
+
         private int index;
 
         private bool alive;
@@ -52,6 +62,8 @@ namespace Bomberman.Game.Elements.Players
         {
             base.Update(delta);
 
+            UpdateInput(delta);
+
             if (m_bombInHands != null)
             {
                 m_bombInHands.Update(delta);
@@ -63,6 +75,31 @@ namespace Bomberman.Game.Elements.Players
             }
 
             diseases.Update(delta);
+        }
+
+        private void UpdateInput(float delta)
+        {
+            input.Update(delta);
+
+            for (int i = 0; i < ACTIONS.Length; ++i)
+            {
+                PlayerAction action = ACTIONS[i];
+                if (input.IsActionJustPressed(action))
+                {
+                    OnActionPressed(input, action);
+                }
+            }
+
+            for (int i = 0; i < ACTIONS.Length; ++i)
+            {
+                PlayerAction action = ACTIONS[i];
+                if (input.IsActionJustReleased(action))
+                {
+                    OnActionReleased(input, action);
+                }
+            }
+
+            input.SaveState();
         }
 
         public void OnActionPressed(PlayerInput playerInput, PlayerAction action)
@@ -158,11 +195,6 @@ namespace Bomberman.Game.Elements.Players
         }
 
         private void StopMovingToDirection(Direction dir)
-        {
-            StopMoving();
-        }
-
-        public void OnActonsReleased(PlayerInput playerInput)
         {
             StopMoving();
         }
@@ -645,7 +677,6 @@ namespace Bomberman.Game.Elements.Players
         public void SetPlayerInput(PlayerInput input)
         {
             this.input = input;
-            input.player = this;
         }
 
         #endregion

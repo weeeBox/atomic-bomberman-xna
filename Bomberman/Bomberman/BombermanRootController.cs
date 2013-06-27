@@ -10,6 +10,7 @@ using Bomberman.Networking;
 using Microsoft.Xna.Framework.Content;
 using System.Net;
 using BomberEngine.Debugging;
+using Bomberman.Content;
 
 namespace Bomberman
 {
@@ -67,7 +68,10 @@ namespace Bomberman
                 {
                     case MenuController.ExitCode.SingleStart:
                     {
-                        throw new NotImplementedException();
+                        Scheme scheme = Application.Assets().LoadAsset<Scheme>("Content\\maps\\x.sch");
+                        GameSettings settings = new GameSettings(scheme);
+                        StartController(GameController.Local(settings));
+                        break;
                     }
 
                     case MenuController.ExitCode.MultiplayerStart:

@@ -4,70 +4,48 @@ using System.Linq;
 using System.Text;
 using BomberEngine;
 using BomberEngine.Debugging;
+using BomberEngine.Core;
 
 namespace Bomberman.Game.Elements.Players.Input
 {
-    public abstract class PlayerInput
+    public abstract class PlayerInput : IUpdatable
     {
-        public Player player;
+        private int stateBits;
+        private int stateBitsOld;
 
-        private bool[] actionsPressedState;
         private int pressedCount;
 
-        public PlayerInput()
+        public virtual void Update(float delta)
         {   
-            actionsPressedState = new bool[GetIndex(PlayerAction.Count)];
+        }
+
+        public void SaveState()
+        {
+            stateBitsOld = stateBits;
         }
 
         protected void NotifyActionPressed(PlayerAction action)
         {
             int index = GetIndex(action);
 
-            Debug.Assert(!actionsPressedState[index], "Action already pressed: " + action);
-            actionsPressedState[index] = true;
+            Debug.Assert(!IsActionPressed(index), "Action already pressed: " + action);
+            SetActionPressed(index);
             ++pressedCount;
-
-            if (player != null)
-            {
-                player.OnActionPressed(this, action);
-            }
         }
 
         protected void NotifyActionReleased(PlayerAction action)
         {
             int index = GetIndex(action);
 
-            Debug.Assert(actionsPressedState[index], "Action not pressed: " + action);
+            Debug.Assert(IsActionPressed(index), "Action not pressed: " + action);
             Debug.Assert(pressedCount > 0, "Invalid pressed counter: " + pressedCount);
-            actionsPressedState[index] = false;
+            SetActionReleased(index);
             --pressedCount;
-
-            if (player != null)
-            {
-                player.OnActionReleased(this, action);
-            }
         }
 
         protected void ReleaseAllActions()
         {
-            if (pressedCount > 0)
-            {
-                for (int i = 0; i < actionsPressedState.Length; ++i)
-                {
-                    if (actionsPressedState[i])
-                    {
-                        Debug.Assert(pressedCount > 0, "Invalid pressed counter: " + pressedCount);
-                        --pressedCount;
-
-                        if (player != null)
-                        {
-                            player.OnActionReleased(this, GetAction(i));
-                        }
-                        actionsPressedState[i] = false;
-                    }
-                }
-                Debug.Assert(pressedCount == 0, "Invalid pressed counter: " + pressedCount);
-            }
+            stateBits = 0;
         }
 
         public bool IsActionPressed(PlayerAction action)
@@ -76,9 +54,46 @@ namespace Bomberman.Game.Elements.Players.Input
             return IsActionPressed(index);
         }
 
+        public bool IsActionJustPressed(PlayerAction action)
+        {
+            int index = GetIndex(action);
+            return IsActionJustPressed(index);
+        }
+
+        public bool IsActionJustReleased(PlayerAction action)
+        {
+            int index = GetIndex(action);
+            return IsActionJustReleased(index);
+        }
+
         public bool IsActionPressed(int index)
         {
-            return actionsPressedState[index];
+            return IsActionPressed(stateBits, index);
+        }
+
+        public bool IsActionJustPressed(int index)
+        {
+            return IsActionPressed(stateBits, index) && !IsActionPressed(stateBitsOld, index);
+        }
+
+        public bool IsActionJustReleased(int index)
+        {
+            return !IsActionPressed(stateBits, index) && IsActionPressed(stateBitsOld, index);
+        }
+
+        private bool IsActionPressed(int bits, int index)
+        {
+            return (bits & (1 << index)) != 0;
+        }
+
+        private void SetActionPressed(int index)
+        {
+            stateBits |= 1 << index;
+        }
+
+        private void SetActionReleased(int index)
+        {
+            stateBits &= ~(1 << index);
         }
 
         public int GetPressedActionCount()
