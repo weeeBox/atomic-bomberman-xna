@@ -10,7 +10,7 @@ using Lidgren.Network;
 
 namespace Bomberman.Game.Multiplayer
 {
-    public class GameControllerServer : GameControllerNetwork, ServerListener
+    public class GameControllerServer : GameControllerNetwork, IServerListener
     {
         private IDictionary<NetConnection, Player> networkPlayersLookup;
         private List<Player> networkPlayers;

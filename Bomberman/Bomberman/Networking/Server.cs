@@ -12,7 +12,7 @@ using Bomberman.Game.Elements;
 
 namespace Bomberman.Networking
 {
-    public interface ServerListener
+    public interface IServerListener
     {
         void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message);
         void OnClientConnected(Server server, String name, NetConnection connection);
@@ -21,7 +21,7 @@ namespace Bomberman.Networking
 
     public class Server : Peer
     {
-        public ServerListener listener;
+        public IServerListener listener;
 
         private ILocalServersDiscoveryRequestListener discoveryRequestListener;
         private int nextClientIndex;

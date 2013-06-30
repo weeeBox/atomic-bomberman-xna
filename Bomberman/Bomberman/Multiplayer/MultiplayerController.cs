@@ -35,7 +35,7 @@ namespace Bomberman.Multiplayer
         }
     }
 
-    public class MultiplayerController : BombermanController, ClientListener, ServerListener
+    public class MultiplayerController : BombermanController, IClientListener, IServerListener
     {
         public enum ScreenId
         {

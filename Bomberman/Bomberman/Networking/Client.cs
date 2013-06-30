@@ -9,7 +9,7 @@ using BomberEngine.Core.IO;
 
 namespace Bomberman.Networking
 {
-    public interface ClientListener
+    public interface IClientListener
     {
         void OnMessageReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message);
         void OnConnectedToServer(Client client, NetConnection serverConnection);
@@ -18,7 +18,7 @@ namespace Bomberman.Networking
 
     public class Client : Peer
     {
-        public ClientListener listener;
+        public IClientListener listener;
 
         private IPEndPoint remoteEndPoint;
         private NetConnection serverConnection;

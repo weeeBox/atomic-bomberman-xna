@@ -10,13 +10,13 @@ using Lidgren.Network;
 
 namespace Bomberman.Multiplayer
 {
-    public class MultiplayerManager : IUpdatable, ClientListener, ServerListener
+    public class MultiplayerManager : IUpdatable, IClientListener, IServerListener
     {
         private Peer networkPeer;
         private LocalServersDiscovery serverDiscovery;
 
-        private ClientListener clientListener;
-        private ServerListener serverListener;
+        private IClientListener clientListener;
+        private IServerListener serverListener;
 
         private NetConnection serverConnection;
         private List<NetConnection> clientConnection;
@@ -77,7 +77,7 @@ namespace Bomberman.Multiplayer
 
         #region Net peer
 
-        public void StartServer(ServerListener listener)
+        public void StartServer(IServerListener listener)
         {
             String appId = CVars.sv_appId.value;
             int port = CVars.sv_port.intValue;
@@ -87,7 +87,7 @@ namespace Bomberman.Multiplayer
             Start();
         }
 
-        public void StartClient(IPEndPoint remoteEndPoint, ClientListener listener)
+        public void StartClient(IPEndPoint remoteEndPoint, IClientListener listener)
         {
             String appId = CVars.sv_appId.value;
             int port = CVars.sv_port.intValue;
@@ -234,12 +234,12 @@ namespace Bomberman.Multiplayer
 
         #region Properties
 
-        public void SetServerListener(ServerListener listener)
+        public void SetServerListener(IServerListener listener)
         {
             serverListener = listener;
         }
 
-        public void SetClientListener(ClientListener listener)
+        public void SetClientListener(IClientListener listener)
         {
             clientListener = listener;
         }

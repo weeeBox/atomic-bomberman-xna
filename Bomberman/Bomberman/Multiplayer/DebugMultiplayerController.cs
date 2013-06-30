@@ -18,7 +18,7 @@ namespace Bomberman.Multiplayer
 {
     public class DebugMultiplayerController : BombermanController, 
         ILocalServersDiscoveryRequestListener, ILocalServersDiscoveryResponseListener,
-        ServerListener, ClientListener
+        IServerListener, IClientListener
     {
         public enum Mode
         {
