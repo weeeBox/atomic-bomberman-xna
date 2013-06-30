@@ -150,9 +150,12 @@
     <Compile Include="Game\cmds.cs" />
     <Compile Include="Game\GameController.cs" />
     <Compile Include="Game\Game.cs" />
-    <Compile Include="Game\Multiplayer\ClientGamePacket.cs" />
+    <Compile Include="Game\Multiplayer\GameControllerClient.cs" />
+    <Compile Include="Game\Multiplayer\GamePacketClient.cs" />
     <Compile Include="Game\Multiplayer\GamePacket.cs" />
-    <Compile Include="Game\Multiplayer\ServerGamePacket.cs" />
+    <Compile Include="Game\Multiplayer\GameControllerNetwork.cs" />
+    <Compile Include="Game\Multiplayer\GameControllerServer.cs" />
+    <Compile Include="Game\Multiplayer\GamePacketServer.cs" />
     <Compile Include="Multiplayer\DebugMultiplayerController.cs" />
     <Compile Include="Multiplayer\MultiplayerManager.cs" />
     <Compile Include="Multiplayer\MultiplayerLobbyScreen.cs" />

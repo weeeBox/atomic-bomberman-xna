@@ -6,7 +6,7 @@ using Bomberman.Game.Elements;
 
 namespace Bomberman.Game.Multiplayer
 {
-    public class ServerGamePacket : GamePacket
+    public class GamePacketServer : GamePacket
     {
         public int playersCount;
         public PlayerState[] players;

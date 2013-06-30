@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Bomberman.Game.Multiplayer
 {
-    public class ClientGamePacket : GamePacket
+    public class GamePacketClient : GamePacket
     {
         public int actionStatesBitmask;
         public bool firstRun;
