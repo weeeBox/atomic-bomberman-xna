@@ -13,6 +13,8 @@ namespace Bomberman.Networking
     public enum NetworkMessageId
     {   
         FieldState,
+        ClientPacket,
+        ServerPacket,
         PlayerActions,
         PlayerPositions,
         Count,

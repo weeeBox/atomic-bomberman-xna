@@ -64,12 +64,12 @@ namespace Bomberman.Game.Multiplayer
         {
             base.Update(delta);
 
-            SendPlayerPositions(delta);
+            SendServerPacket(delta);
         }
 
-        private void SendPlayerPositions(float delta)
+        private void SendServerPacket(float delta)
         {
-            NetOutgoingMessage message = CreateMessage(NetworkMessageId.PlayerPositions);
+            NetOutgoingMessage message = CreateMessage(NetworkMessageId.ServerPacket);
             WritePlayersPositions(message, game.GetPlayers().list);
 
             for (int i = 0; i < networkPlayers.Count; ++i)
@@ -166,6 +166,22 @@ namespace Bomberman.Game.Multiplayer
             }
 
             return null;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Game state
+
+        private void FillGameState(GameState state)
+        {
+            List<Player> players = game.GetPlayers().list;
+            state.playersCount = players.Count;
+            for (int i = 0; i < players.Count; ++i)
+            {
+                state.players[i].SetFrom(players[i]);
+            }
         }
 
         #endregion
