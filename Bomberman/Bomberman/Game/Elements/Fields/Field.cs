@@ -34,7 +34,7 @@ namespace Bomberman.Game.Elements.Fields
         {
             currentField = this;
             timerManager = new DelayedCallManager();
-            players = new PlayerList();
+            players = new PlayerList(CVars.cg_maxPlayers.intValue);
 
             updateList = new LinkedList<FieldCell>();
 

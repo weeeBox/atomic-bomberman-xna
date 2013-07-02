@@ -65,6 +65,9 @@ namespace Bomberman
         public static readonly CVar cg_fieldEbola = new CVar("cg_fieldEbola", -4);
         public static readonly CVar cg_fieldRandom = new CVar("cg_fieldRandom", -2);
 
+        /* Game settings */
+        public static readonly CVar cg_maxPlayers = new CVar("cg_maxPlayers", 10);
+
         /* Timings */
         public static readonly CVar cg_fuzeTimeNormal = new CVar("cg_fuzeTimeNormal", 2000);
         public static readonly CVar cg_fuzeTimeShort = new CVar("cg_fuzeTimeShort", 500);
@@ -164,6 +167,8 @@ namespace Bomberman
             console.RegisterCvar(cg_fuzeTimeNormal);
             console.RegisterCvar(cg_fuzeTimeShort);
             console.RegisterCvar(cg_timeFlame);
+
+            console.RegisterCvar(cg_maxPlayers);
 
             console.RegisterCvar(cg_playerSpeed);
             console.RegisterCvar(cg_playerSpeedAdd);

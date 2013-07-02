@@ -174,14 +174,9 @@ namespace Bomberman.Game.Multiplayer
 
         #region Game state
 
-        private void FillGameState(GameState state)
-        {
-            List<Player> players = game.GetPlayers().list;
-            state.playersCount = players.Count;
-            for (int i = 0; i < players.Count; ++i)
-            {
-                state.players[i].SetFrom(players[i]);
-            }
+        private void FillGameState(GameStateSnapshot state)
+        {   
+            state.SetFrom(game.GetPlayers().list);
         }
 
         #endregion

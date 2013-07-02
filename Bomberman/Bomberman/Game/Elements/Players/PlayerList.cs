@@ -10,9 +10,9 @@ namespace Bomberman.Game.Elements.Players
     {
         public List<Player> list;
 
-        public PlayerList()
+        public PlayerList(int capacity)
         {
-            list = new List<Player>();
+            list = new List<Player>(capacity);
         }
 
         public void Update(float delta)

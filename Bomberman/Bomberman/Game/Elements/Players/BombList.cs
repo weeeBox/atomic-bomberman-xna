@@ -12,28 +12,28 @@ namespace Bomberman.Game.Elements.Items
 {
     public class BombList
     {
-        private Bomb[] bombs;
+        public Bomb[] array;
 
         private int maxActiveCount;
 
         public BombList(Player player, int capacity)
         {
-            bombs = new Bomb[capacity];
+            array = new Bomb[capacity];
             for (int i = 0; i < capacity; ++i)
             {
-                bombs[i] = new Bomb(player);
+                array[i] = new Bomb(player);
             }
         }
 
         public void SetMaxActiveCount(int count)
         {
-            Debug.CheckArgumentRange("count", count, 0, bombs.Length + 1);
+            Debug.CheckArgumentRange("count", count, 0, array.Length + 1);
             this.maxActiveCount = count;
         }
 
         public bool IncMaxActiveCount()
         {
-            if (maxActiveCount < bombs.Length)
+            if (maxActiveCount < array.Length)
             {
                 ++maxActiveCount;
                 return true;
@@ -51,9 +51,9 @@ namespace Bomberman.Game.Elements.Items
         {
             Bomb kickedBomb = null;
 
-            for (int i = 0; i < bombs.Length; ++i)
+            for (int i = 0; i < array.Length; ++i)
             {
-                Bomb bomb = bombs[i];
+                Bomb bomb = array[i];
                 if (bomb.active)
                 {
                     if (bomb.IsMoving() && (kickedBomb == null || kickedBomb.remains > bomb.remains))
@@ -70,9 +70,9 @@ namespace Bomberman.Game.Elements.Items
         {
             Bomb triggerBomb = null;
 
-            for (int i = 0; i < bombs.Length; ++i)
+            for (int i = 0; i < array.Length; ++i)
             {
-                Bomb bomb = bombs[i];
+                Bomb bomb = array[i];
                 if (bomb.active)
                 {
                     if (bomb.CanTrigger() && (triggerBomb == null || triggerBomb.triggerIndex > bomb.triggerIndex))
@@ -90,9 +90,9 @@ namespace Bomberman.Game.Elements.Items
             Bomb nextBomb = null;
             
             int activeCount = 0;
-            for (int i = 0; i < bombs.Length; ++i)
+            for (int i = 0; i < array.Length; ++i)
             {
-                Bomb bomb = bombs[i];
+                Bomb bomb = array[i];
                 if (bomb.active)
                 {   
                     if (++activeCount == maxActiveCount)

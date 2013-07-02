@@ -156,6 +156,7 @@
     <Compile Include="Game\Multiplayer\GameControllerNetwork.cs" />
     <Compile Include="Game\Multiplayer\GameControllerServer.cs" />
     <Compile Include="Game\Multiplayer\GamePacketServer.cs" />
+    <Compile Include="Game\Multiplayer\GameStateSnapshot.cs" />
     <Compile Include="Multiplayer\DebugMultiplayerController.cs" />
     <Compile Include="Multiplayer\MultiplayerManager.cs" />
     <Compile Include="Multiplayer\MultiplayerLobbyScreen.cs" />

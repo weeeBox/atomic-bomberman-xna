@@ -32,7 +32,7 @@ namespace Bomberman.Game.Elements.Players
 
         public PlayerInput input;
 
-        private BombList bombs;
+        public BombList bombs;
         public PowerupList powerups;
         public DiseaseList diseases;
 
