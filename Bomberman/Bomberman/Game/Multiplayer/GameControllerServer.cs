@@ -63,21 +63,29 @@ namespace Bomberman.Game.Multiplayer
         public override void Update(float delta)
         {
             base.Update(delta);
-
             SendServerPacket(delta);
         }
 
         private void SendServerPacket(float delta)
         {
-            NetOutgoingMessage message = CreateMessage(NetworkMessageId.ServerPacket);
-            WritePlayersPositions(message, game.GetPlayers().list);
+            NetOutgoingMessage payloadMessage = CreateMessage();
+            WriteServerPacket(payloadMessage);
 
             for (int i = 0; i < networkPlayers.Count; ++i)
             {
-                NetConnection connection = networkPlayers[i].connection;
+                Player player = networkPlayers[i];
+
+                NetOutgoingMessage message = CreateMessage(NetworkMessageId.ServerPacket);
+                message.Write(player.lastAckPacketId);
+                message.Write(payloadMessage);
+
+                NetConnection connection = player.connection;
                 Debug.Assert(connection != null);
+
                 SendMessage(message, connection);
             }
+
+            RecycleMessage(payloadMessage);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -89,27 +97,48 @@ namespace Bomberman.Game.Multiplayer
             switch (messageId)
             {
                 case NetworkMessageId.FieldState:
-                    {
-                        Player player = FindPlayer(message.SenderConnection);
-                        Debug.Assert(player != null);
+                {
+                    Player player = FindPlayer(message.SenderConnection);
+                    Debug.Assert(player != null);
 
-                        NetOutgoingMessage response = CreateMessage(NetworkMessageId.FieldState);
-                        WriteFieldState(response, player);
-                        SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableOrdered);
-                        break;
+                    NetOutgoingMessage response = CreateMessage(NetworkMessageId.FieldState);
+                    WriteFieldState(response, player);
+                    SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableOrdered);
+                    break;
+                }
+
+                case NetworkMessageId.ClientPacket:
+                {
+                    Player player = FindPlayer(message.SenderConnection);
+                    Debug.Assert(player != null);
+
+                    ClientPacket packet = ReadClientPacket(message);
+                    player.lastAckPacketId = packet.id;
+
+                    PlayerNetworkInput input = player.input as PlayerNetworkInput;
+                    Debug.Assert(input != null);
+
+                    int actions = packet.actions;
+                    int actionsCount = (int)PlayerAction.Count;
+                    for (int i = 0; i < actionsCount; ++i)
+                    {
+                        PlayerAction action = (PlayerAction)i;
+                        if ((actions & (1 << i)) == 0)
+                        {
+                            input.OnActionReleased(action);
+                        }
+                    }
+                    for (int i = 0; i < actionsCount; ++i)
+                    {
+                        PlayerAction action = (PlayerAction)i;
+                        if ((actions & (1 << i)) != 0)
+                        {
+                            input.OnActionPressed(action);
+                        }
                     }
 
-                case NetworkMessageId.PlayerActions:
-                    {
-                        Player player = FindPlayer(message.SenderConnection);
-                        Debug.Assert(player != null);
-
-                        PlayerNetworkInput input = player.input as PlayerNetworkInput;
-                        Debug.Assert(input != null);
-
-                        ReadPlayerActions(message, input);
-                        break;
-                    }
+                    break;
+                }
             }
         }
 

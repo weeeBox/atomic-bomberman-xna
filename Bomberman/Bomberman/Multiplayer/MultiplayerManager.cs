@@ -145,6 +145,11 @@ namespace Bomberman.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
+        public NetOutgoingMessage CreateMessage()
+        {
+            return networkPeer.CreateMessage();
+        }
+
         public NetOutgoingMessage CreateMessage(NetworkMessageId messageId)
         {
             return networkPeer.CreateMessage(messageId);
@@ -168,6 +173,16 @@ namespace Bomberman.Multiplayer
         public void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
         {
             networkPeer.SendMessage(messageId, method);
+        }
+
+        public void RecycleMessage(NetOutgoingMessage msg)
+        {
+            networkPeer.RecycleMessage(msg);
+        }
+
+        public void RecycleMessage(NetIncomingMessage msg)
+        {
+            networkPeer.RecycleMessage(msg);
         }
 
         //////////////////////////////////////////////////////////////////////////////

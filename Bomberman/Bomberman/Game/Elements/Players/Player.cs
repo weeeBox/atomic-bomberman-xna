@@ -44,6 +44,8 @@ namespace Bomberman.Game.Elements.Players
         public Object data;
         public NetConnection connection;
 
+        public int lastAckPacketId; // last acknowledged packet id
+
         public Player(int index)
             : base(FieldCellType.Player, 0, 0)
         {

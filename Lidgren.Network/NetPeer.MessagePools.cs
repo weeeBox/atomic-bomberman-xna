@@ -184,7 +184,7 @@ namespace Lidgren.Network
 			m_incomingMessagesPool.Enqueue(toRecycle);
 		}
 
-		internal void Recycle(NetOutgoingMessage msg)
+		public void Recycle(NetOutgoingMessage msg)
 		{
 			if (m_outgoingMessagesPool == null)
 				return;

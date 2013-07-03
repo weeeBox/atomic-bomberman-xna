@@ -473,6 +473,7 @@ namespace Bomberman.Game.Elements.Cells
         public Player player
         {
             get { return m_player; }
+            set { m_player = value; }
         }
 
         public bool trigger

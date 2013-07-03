@@ -15,8 +15,6 @@ namespace Bomberman.Networking
         FieldState,
         ClientPacket,
         ServerPacket,
-        PlayerActions,
-        PlayerPositions,
         Count,
     }
 
@@ -147,6 +145,16 @@ namespace Bomberman.Networking
             NetOutgoingMessage message = CreateMessage(initialCapacity);
             WriteMessageId(messageId, message);
             return message;
+        }
+
+        public void RecycleMessage(NetOutgoingMessage msg)
+        {
+            peer.Recycle(msg);
+        }
+
+        public void RecycleMessage(NetIncomingMessage msg)
+        {
+            peer.Recycle(msg);
         }
 
         private void WriteMessageId(NetworkMessageId messageId, NetOutgoingMessage message)
