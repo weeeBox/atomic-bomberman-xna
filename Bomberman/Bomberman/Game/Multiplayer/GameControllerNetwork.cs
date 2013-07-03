@@ -205,6 +205,20 @@ namespace Bomberman.Game.Multiplayer
                 buffer.Write(p.py);
                 buffer.Write((byte)p.direction);
                 buffer.Write(p.GetSpeed());
+
+                // powerups
+                int powerupsCount = (int)Powerups.Count;
+                for (int i = 0; i < powerupsCount; ++i)
+                {
+                    bool hasPower = p.powerups.HasPowerup(i);
+                    buffer.Write(hasPower);
+                    if (hasPower)
+                    {   
+                        buffer.Write((byte)p.powerups.GetCount(i));
+                    }
+                }
+
+                // diseases
             }
 
             Bomb[] bombs = p.bombs.array;
@@ -299,6 +313,22 @@ namespace Bomberman.Game.Multiplayer
                 p.SetPos(px, py);
                 p.SetSpeed(speed);
                 p.SetDirection(direction);
+
+                // powerups
+                int powerupsCount = (int)Powerups.Count;
+                for (int i = 0; i < powerupsCount; ++i)
+                {
+                    bool hasPower = msg.ReadBoolean();
+                    if (hasPower)
+                    {
+                        int count = msg.ReadByte();
+                        p.powerups.SetCount(i, count);
+                    }
+                    else
+                    {
+                        p.powerups.SetCount(i, 0);
+                    }
+                }
             }
             else if (p.IsAlive())
             {
