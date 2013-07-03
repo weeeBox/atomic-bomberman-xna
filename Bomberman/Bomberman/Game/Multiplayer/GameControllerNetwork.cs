@@ -219,6 +219,16 @@ namespace Bomberman.Game.Multiplayer
                 }
 
                 // diseases
+                int diseasesCount = (int)Diseases.Count;
+                for (int i = 0; i < diseasesCount; ++i)
+                {
+                    bool infected = p.diseases.IsInfected(i);
+                    buffer.Write(infected);
+                    if (infected)
+                    {
+                        buffer.WriteTime(NetTime.Now + p.diseases.GetInfectedRemains(i), false);
+                    }
+                }
             }
 
             Bomb[] bombs = p.bombs.array;
@@ -327,6 +337,23 @@ namespace Bomberman.Game.Multiplayer
                     else
                     {
                         p.powerups.SetCount(i, 0);
+                    }
+                }
+
+                // diseases
+                int diseasesCount = (int)Diseases.Count;
+                for (int i = 0; i < diseasesCount; ++i)
+                {
+                    bool infected = msg.ReadBoolean();
+                    if (infected)
+                    {
+                        float remains = (float)(msg.ReadTime(false) - NetTime.Now);
+                        p.diseases.TryInfect(i);
+                        p.diseases.SetInfectedRemains(i, remains);
+                    }
+                    else
+                    {
+                        p.diseases.TryCure(i);
                     }
                 }
             }

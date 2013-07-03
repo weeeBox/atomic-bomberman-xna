@@ -137,8 +137,12 @@ namespace Bomberman.Game.Elements.Players
         }
 
         public bool TryCure(Diseases disease)
+        {   
+            return TryCure(disease.index);
+        }
+
+        public bool TryCure(int index)
         {
-            int index = disease.index;
             bool wasInfected = flags[index];
             flags[index] = false;
             if (wasInfected)
@@ -158,6 +162,16 @@ namespace Bomberman.Game.Elements.Players
         public bool IsInfected(int index)
         {
             return flags[index];
+        }
+
+        public float GetInfectedRemains(int index)
+        {
+            return IsInfected(index) ? remains[index] : 0.0f;
+        }
+
+        public void SetInfectedRemains(int index, float time)
+        {
+            remains[index] = time < 0.0f ? 0.0f : time;
         }
 
         private void UpdateFlagsChanges()
