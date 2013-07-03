@@ -15,8 +15,16 @@ namespace Bomberman.Game.Multiplayer
     public struct ClientPacket
     {
         public int id;
+        public int lastAckId;
         public float timeStamp;
         public int actions;
+    }
+
+    public struct ServerPacket
+    {
+        public int id;
+        public int lastAckId;
+        public float timeStamp;
     }
 
     public abstract class GameControllerNetwork : GameController
@@ -112,6 +120,7 @@ namespace Bomberman.Game.Multiplayer
         protected void WriteClientPacket(NetOutgoingMessage msg, ref ClientPacket packet)
         {
             msg.Write(packet.id);
+            msg.Write(packet.lastAckId);
             msg.WriteTime(packet.timeStamp, false);
             msg.Write(packet.actions, (int)PlayerAction.Count);
         }
@@ -120,6 +129,7 @@ namespace Bomberman.Game.Multiplayer
         {
             ClientPacket packet;
             packet.id = msg.ReadInt32();
+            packet.lastAckId = msg.ReadInt32();
             packet.timeStamp = (float)msg.ReadTime(false);
             packet.actions = msg.ReadInt32((int)PlayerAction.Count);
 
@@ -219,10 +229,12 @@ namespace Bomberman.Game.Multiplayer
             }
         }
 
-        protected void ReadServerPacket(NetIncomingMessage msg)
+        protected ServerPacket ReadServerPacket(NetIncomingMessage msg)
         {
-            int lastAckPacketId = msg.ReadInt32();
-            float sentTime = (float)msg.ReadTime(false);
+            ServerPacket packet;
+            packet.id = msg.ReadInt32();
+            packet.lastAckId = msg.ReadInt32();
+            packet.timeStamp = (float)msg.ReadTime(false);
 
             ReadServerPacket(msg, game.field);
 
@@ -231,6 +243,8 @@ namespace Bomberman.Game.Multiplayer
             {
                 ReadServerPacket(msg, players[i]);
             }
+
+            return packet;
         }
 
         private void ReadServerPacket(NetIncomingMessage msg, Field field)
@@ -314,16 +328,16 @@ namespace Bomberman.Game.Multiplayer
                 if (!b.active)
                 {
                     b.player = p;
-                    b.active = true;
+                    b.Activate();
                     game.field.SetBomb(b);
                 }
 
+                b.remains = remains;
                 b.SetPos(px, py);
+                b.SetSpeed(speed);
+                b.SetJelly(jelly);
+                b.SetTrigger(trigger);
                 // TODO: jelly & trigger
-            }
-            else if (b.active)
-            {   
-                b.Blow();
             }
         }
 

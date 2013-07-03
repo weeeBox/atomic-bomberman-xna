@@ -96,7 +96,9 @@ namespace Bomberman.Game.Multiplayer
                 {
                     if (game != null)
                     {
-                        ReadServerPacket(message);
+                        ServerPacket packet = ReadServerPacket(message);
+                        localPlayer.lastAckPacketId = packet.id;
+
                     }
                     break;
                 }
@@ -129,6 +131,7 @@ namespace Bomberman.Game.Multiplayer
 
             ClientPacket packet;
             packet.id = nextPacketId;
+            packet.lastAckId = player.lastAckPacketId;
             packet.timeStamp = (float)NetTime.Now;
             packet.actions = actions;
 

@@ -15,6 +15,8 @@ namespace Bomberman.Game.Multiplayer
         private IDictionary<NetConnection, Player> networkPlayersLookup;
         private List<Player> networkPlayers;
 
+        private int nextPacketId;
+
         public GameControllerServer(GameSettings settings) :
             base(settings)
         {
@@ -76,6 +78,7 @@ namespace Bomberman.Game.Multiplayer
                 Player player = networkPlayers[i];
 
                 NetOutgoingMessage message = CreateMessage(NetworkMessageId.ServerPacket);
+                message.Write(nextPacketId);
                 message.Write(player.lastAckPacketId);
                 message.Write(payloadMessage);
 
@@ -86,6 +89,8 @@ namespace Bomberman.Game.Multiplayer
             }
 
             RecycleMessage(payloadMessage);
+
+            ++nextPacketId;
         }
 
         //////////////////////////////////////////////////////////////////////////////

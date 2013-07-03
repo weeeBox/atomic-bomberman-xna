@@ -36,7 +36,7 @@ namespace Bomberman.Game.Elements.Cells
         public float remains;
 
         private bool dud;
-        private bool jelly;
+        private bool m_jelly;
 
         private bool m_trigger;
         private byte m_state;
@@ -266,7 +266,7 @@ namespace Bomberman.Game.Elements.Cells
             remains = player.GetBombTimeout();
             SetState(STATE_NORMAL);
             dud = false;
-            jelly = player.IsJelly();
+            m_jelly = player.IsJelly();
             m_trigger = player.IsTrigger();
             if (m_trigger)
             {
@@ -442,12 +442,22 @@ namespace Bomberman.Game.Elements.Cells
 
         public bool IsJelly()
         {
-            return jelly;
+            return m_jelly;
+        }
+
+        public void SetJelly(bool jelly)
+        {
+            m_jelly = jelly;
         }
 
         public bool IsTrigger()
         {
             return m_trigger;
+        }
+
+        public void SetTrigger(bool trigger)
+        {
+            m_trigger = trigger;
         }
 
         public bool CanTrigger()
