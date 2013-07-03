@@ -278,34 +278,37 @@ namespace Bomberman.Game.Multiplayer
             FieldCellSlot[] slots = field.GetCells().slots;
             for (int i = 0; i < slots.Length; ++i)
             {
-                bool shouldRead = msg.ReadBoolean();
-                if (!shouldRead)
-                {
-                    continue;
-                }
-
                 FieldCellSlot slot = slots[i];
-                byte type = msg.ReadByte(BITS_FOR_STATIC_CELL);
-                switch (type)
+
+                bool hasStaticCell = msg.ReadBoolean();
+                if (hasStaticCell)
+                {   
+                    byte type = msg.ReadByte(BITS_FOR_STATIC_CELL);
+                    switch (type)
+                    {
+                        case CELL_BRICK:
+                        {
+                            bool hasPowerup = msg.ReadBoolean();
+                            int powerup = hasPowerup ? msg.ReadInt32(BITS_FOR_POWERUP) : Powerups.None;
+                            break;
+                        }
+
+                        case CELL_POWERUP:
+                        {
+                            int powerup = msg.ReadInt32(BITS_FOR_POWERUP);
+                            break;
+                        }
+
+                        case CELL_FLAME:
+                        {
+                            int playerIndex = msg.ReadInt32(bitsForPlayerIndex);
+                            break;
+                        }
+                    }
+                }
+                else if (slot.staticCell != null && !slot.staticCell.IsSolid())
                 {
-                    case CELL_BRICK:
-                    {
-                        bool hasPowerup = msg.ReadBoolean();
-                        int powerup = hasPowerup ? msg.ReadInt32(BITS_FOR_POWERUP) : Powerups.None;
-                        break;
-                    }
-
-                    case CELL_POWERUP:
-                    {
-                        int powerup = msg.ReadInt32(BITS_FOR_POWERUP);
-                        break;
-                    }
-
-                    case CELL_FLAME:
-                    {
-                        int playerIndex = msg.ReadInt32(bitsForPlayerIndex);
-                        break;
-                    }
+                    slot.RemoveCell(slot.staticCell);
                 }
             }
         }
