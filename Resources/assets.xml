@@ -1,39 +1,81 @@
 <package name="ALL">
-	<image name="WLKE0001" file="${dir.gfx}/WLKE0001.png" />
-	<image name="WLKN0001" file="${dir.gfx}/WLKN0001.png" />
-	<image name="WLKS0001" file="${dir.gfx}/WLKS0001.png" />
-	<image name="WLKW0001" file="${dir.gfx}/WLKW0001.png" />
-	
-	<image name="PUD" file="${dir.gfx}/BMF0010.png" />
-	<image name="PUL" file="${dir.gfx}/PUL0010.png" />
-	<image name="PUR" file="${dir.gfx}/PUR0010.png" />
-	<image name="PUP" file="${dir.gfx}/PUBN010.png" />
-	
-	<image name="FIELD7" file="${dir.gfx}/FIELD7.png" />
-	<image name="BMB1001" file="${dir.gfx}/BMB1001.png" />
-	<image name="BMBC1" file="${dir.gfx}/BMBC1.png" />
-	<image name="DIGIB001" file="${dir.gfx}/DIGIB001.png" />
-	<image name="F0BRICK" file="${dir.gfx}/F0BRICK.png" />
-	<image name="F0SOLID" file="${dir.gfx}/F0SOLID.png" />
-
-	<!-- Fonts -->
-	<vectorFont name="system" file="${dir.fonts}/SystemFont.spritefont" />
-	<vectorFont name="console" file="${dir.fonts}/ConsoleFont.spritefont" />
-	<vectorFont name="button" file="${dir.fonts}/ButtonFont.spritefont" />
+    <image name="WLKE0001" file="${dir.gfx}/WLKE0001.png" />
+    <image name="WLKN0001" file="${dir.gfx}/WLKN0001.png" />
+    <image name="WLKS0001" file="${dir.gfx}/WLKS0001.png" />
+    <image name="WLKW0001" file="${dir.gfx}/WLKW0001.png" />
     
-	<!-- Powerups -->
-	<image name="pow_bomb" file="${dir.gfx}/Powerups/POWBOMB.png" />
-	<image name="pow_disea" file="${dir.gfx}/Powerups/POWDISEA.png" />
-	<image name="pow_ebola" file="${dir.gfx}/Powerups/POWEBOLA.png" />
-	<image name="pow_flame" file="${dir.gfx}/Powerups/POWFLAME.png" />
-	<image name="pow_gold" file="${dir.gfx}/Powerups/POWGOLD.png" />
-	<image name="pow_grab" file="${dir.gfx}/Powerups/POWGRAB.png" />
-	<image name="pow_jelly" file="${dir.gfx}/Powerups/POWJELLY.png" />
-	<image name="pow_kick" file="${dir.gfx}/Powerups/POWKICK.png" />
-	<image name="pow_punch" file="${dir.gfx}/Powerups/POWPUNCH.png" />
-	<image name="pow_skate" file="${dir.gfx}/Powerups/POWSKATE.png" />
-	<image name="pow_trig" file="${dir.gfx}/Powerups/POWTRIG.png" />
-	<image name="pow_pooge" file="${dir.gfx}/Powerups/PWSPOOGE.png" />
-	<image name="pow_rand" file="${dir.gfx}/Powerups/PWRANDOM.png" />
+    <image name="PUD" file="${dir.gfx}/BMF0010.png" />
+    <image name="PUL" file="${dir.gfx}/PUL0010.png" />
+    <image name="PUR" file="${dir.gfx}/PUR0010.png" />
+    <image name="PUP" file="${dir.gfx}/PUBN010.png" />
+    
+    <image name="FIELD7" file="${dir.gfx}/FIELD7.png" />
+    <image name="BMB1001" file="${dir.gfx}/BMB1001.png" />
+    <image name="BMBC1" file="${dir.gfx}/BMBC1.png" />
+    <image name="DIGIB001" file="${dir.gfx}/DIGIB001.png" />
+    <image name="F0BRICK" file="${dir.gfx}/F0BRICK.png" />
+    <image name="F0SOLID" file="${dir.gfx}/F0SOLID.png" />
+
+    <!-- Fonts -->
+    <vectorFont name="system" file="${dir.fonts}/SystemFont.spritefont" />
+    <vectorFont name="console" file="${dir.fonts}/ConsoleFont.spritefont" />
+    <vectorFont name="button" file="${dir.fonts}/ButtonFont.spritefont" />
+    
+    <!-- Powerups -->
+    <image name="pow_bomb" file="${dir.gfx}/Powerups/POWBOMB.png" />
+    <image name="pow_disea" file="${dir.gfx}/Powerups/POWDISEA.png" />
+    <image name="pow_ebola" file="${dir.gfx}/Powerups/POWEBOLA.png" />
+    <image name="pow_flame" file="${dir.gfx}/Powerups/POWFLAME.png" />
+    <image name="pow_gold" file="${dir.gfx}/Powerups/POWGOLD.png" />
+    <image name="pow_grab" file="${dir.gfx}/Powerups/POWGRAB.png" />
+    <image name="pow_jelly" file="${dir.gfx}/Powerups/POWJELLY.png" />
+    <image name="pow_kick" file="${dir.gfx}/Powerups/POWKICK.png" />
+    <image name="pow_punch" file="${dir.gfx}/Powerups/POWPUNCH.png" />
+    <image name="pow_skate" file="${dir.gfx}/Powerups/POWSKATE.png" />
+    <image name="pow_trig" file="${dir.gfx}/Powerups/POWTRIG.png" />
+    <image name="pow_pooge" file="${dir.gfx}/Powerups/PWSPOOGE.png" />
+    <image name="pow_rand" file="${dir.gfx}/Powerups/PWRANDOM.png" />
+
+    <!-- Animation -->
+    <animation name="BOMBS" file="${dir.anim}/BOMBS.anim" />
+    <animation name="BWALK1" file="${dir.anim}/BWALK1.anim" />
+    <animation name="BWALK2" file="${dir.anim}/BWALK2.anim" />
+    <animation name="BWALK3" file="${dir.anim}/BWALK3.anim" />
+    <animation name="BWALK4" file="${dir.anim}/BWALK4.anim" />
+    <animation name="CORNER0" file="${dir.anim}/CORNER0.anim" />
+    <animation name="CORNER1" file="${dir.anim}/CORNER1.anim" />
+    <animation name="CORNER2" file="${dir.anim}/CORNER2.anim" />
+    <animation name="CORNER3" file="${dir.anim}/CORNER3.anim" />
+    <animation name="CORNER4" file="${dir.anim}/CORNER4.anim" />
+    <animation name="CORNER5" file="${dir.anim}/CORNER5.anim" />
+    <animation name="CORNER6" file="${dir.anim}/CORNER6.anim" />
+    <animation name="CORNER7" file="${dir.anim}/CORNER7.anim" />
+    <animation name="KICK" file="${dir.anim}/KICK.anim" />
+    <animation name="PUNCH" file="${dir.anim}/PUNCH.anim" />
+    <animation name="PUP1" file="${dir.anim}/PUP1.anim" />
+    <animation name="PUP2" file="${dir.anim}/PUP2.anim" />
+    <animation name="PUP3" file="${dir.anim}/PUP3.anim" />
+    <animation name="PUP4" file="${dir.anim}/PUP4.anim" />
+    <animation name="STAND" file="${dir.anim}/STAND.anim" />
+    <animation name="TRIGANIM" file="${dir.anim}/TRIGANIM.anim" />
+    <animation name="WALK" file="${dir.anim}/WALK.anim" />
+    <animation name="XPLODE10" file="${dir.anim}/XPLODE10.anim" />
+    <animation name="XPLODE11" file="${dir.anim}/XPLODE11.anim" />
+    <animation name="XPLODE12" file="${dir.anim}/XPLODE12.anim" />
+    <animation name="XPLODE13" file="${dir.anim}/XPLODE13.anim" />
+    <animation name="XPLODE14" file="${dir.anim}/XPLODE14.anim" />
+    <animation name="XPLODE15" file="${dir.anim}/XPLODE15.anim" />
+    <animation name="XPLODE16" file="${dir.anim}/XPLODE16.anim" />
+    <animation name="XPLODE17" file="${dir.anim}/XPLODE17.anim" />
+    <animation name="XPLODE2" file="${dir.anim}/XPLODE2.anim" />
+    <animation name="XPLODE3" file="${dir.anim}/XPLODE3.anim" />
+    <animation name="XPLODE4" file="${dir.anim}/XPLODE4.anim" />
+    <animation name="XPLODE5" file="${dir.anim}/XPLODE5.anim" />
+    <animation name="XPLODE6" file="${dir.anim}/XPLODE6.anim" />
+    <animation name="XPLODE7" file="${dir.anim}/XPLODE7.anim" />
+    <animation name="XPLODE8" file="${dir.anim}/XPLODE8.anim" />
+    <animation name="XPLODE9" file="${dir.anim}/XPLODE9.anim" />
+    <animation name="ZEN" file="${dir.anim}/ZEN.anim" />
+
     
 </package>

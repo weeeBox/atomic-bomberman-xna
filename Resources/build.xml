@@ -1,50 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE project [
-	<!ENTITY asset_list SYSTEM "assets.xml">
+    <!ENTITY asset_list SYSTEM "assets.xml">
 ]>
 
 <project name="Resources" default="run">
-	
-	<property name="dir.res" value="." />
-	<property name="dir.gfx" value="${dir.res}/Gfx" />
-	<property name="dir.sound" value="${dir.res}/Sfx" />
-	<property name="dir.fonts" value="${dir.res}/Fonts" />
-	<property name="dir.schemes" value="${dir.res}/Data" />
-	
-	<property name="csproject.name" value="Bomberman"/>
-	<property name="csproject.content" value="../${csproject.name}/${csproject.name}Content" />
-	<property name="csproject.file" value="${csproject.content}/${csproject.name}Content.contentproj" />
-	
-	<property name="cscode.file" value="../${csproject.name}/${csproject.name}/Assets.cs" />
-	
-	<property name="dir.builder" value="../Utils/Builder"/>
-	
-	<target name="clean">
-		<ant antfile="build.xml" target="clean" dir="${dir.builder}"/>
-	</target>
-	
-	<target name="build">
-		<ant antfile="build.xml" target="build" dir="${dir.builder}"/>
-		
-		<!-- Content task -->
-		<path id="libs">
-			<fileset dir="${dir.builder}/lib">
-				<include name="**/*.jar" /> 
-			</fileset>
-		</path>
-		
-		<taskdef name="content" classname="bc.tasks.ContentProjTask">
-			<classpath path="${dir.builder}/bin"/>
-			<classpath refid="libs"/>
-		</taskdef>
-		
-		<property name="dir.restmp" value="${dir.builder}/tmp/res"/>
-	</target>
-	
-	<target name="run" depends="build">
-		<content projFile="${csproject.file}" codeFile="${cscode.file}" resTemp="${dir.restmp}">			
-			&asset_list;
-		</content>
-	</target>	
+    
+    <property name="dir.res" value="." />
+    <property name="dir.gfx" value="${dir.res}/Gfx" />
+    <property name="dir.sound" value="${dir.res}/Sfx" />
+    <property name="dir.fonts" value="${dir.res}/Fonts" />
+    <property name="dir.schemes" value="${dir.res}/Data" />
+    <property name="dir.anim" value="${dir.res}/Animations" />
+    
+    <property name="csproject.name" value="Bomberman"/>
+    <property name="csproject.content" value="../${csproject.name}/${csproject.name}Content" />
+    <property name="csproject.file" value="${csproject.content}/${csproject.name}Content.contentproj" />
+    
+    <property name="cscode.file" value="../${csproject.name}/${csproject.name}/Assets.cs" />
+    
+    <property name="dir.builder" value="../Utils/Builder"/>
+    
+    <target name="clean">
+        <ant antfile="build.xml" target="clean" dir="${dir.builder}"/>
+    </target>
+    
+    <target name="build">
+        <ant antfile="build.xml" target="build" dir="${dir.builder}"/>
+        
+        <!-- Content task -->
+        <path id="libs">
+            <fileset dir="${dir.builder}/lib">
+                <include name="**/*.jar" /> 
+            </fileset>
+        </path>
+        
+        <taskdef name="content" classname="bc.tasks.ContentProjTask">
+            <classpath path="${dir.builder}/bin"/>
+            <classpath refid="libs"/>
+        </taskdef>
+        
+        <property name="dir.restmp" value="${dir.builder}/tmp/res"/>
+    </target>
+    
+    <target name="run" depends="build">
+        <content projFile="${csproject.file}" codeFile="${cscode.file}" resTemp="${dir.restmp}">            
+            &asset_list;
+        </content>
+    </target>   
 </project>

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import bc.assets.types.Animation;
 import bc.assets.types.PixelFontRes;
 import bc.assets.types.SchemeAsset;
 import bc.assets.types.TextureAsset;
@@ -82,6 +83,11 @@ public class AssetPackage
 	public void addScheme(SchemeAsset scheme)
 	{
 		addResource(scheme);
+	}
+	
+	public void addAnimation(Animation animation)
+	{
+		addResource(animation);
 	}
 
 	private void addResource(Asset res)
