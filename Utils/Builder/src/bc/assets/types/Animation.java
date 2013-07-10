@@ -30,7 +30,7 @@ public class Animation extends Asset
 		if (textureFile == null)
 		{
 			File sourceFile = getSourceFile();
-			textureFile = new File(sourceFile.getParentFile(), FileUtils.getFilenameNoExt(sourceFile) + ".png");
+			textureFile = new File(sourceFile.getParentFile(), FileUtils.getFilenameNoExt(sourceFile) + "_tex.png");
 		}
 		
 		String textureName = FileUtils.getFilenameNoExt(textureFile);

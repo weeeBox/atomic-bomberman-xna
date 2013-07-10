@@ -57,340 +57,11 @@
     </ProjectReference> 
   </ItemGroup>  
   <ItemGroup> 
-    <None Include="maps\4corners.sch"> 
-      <Name>4corners</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\airchaos.sch"> 
-      <Name>airchaos</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\airmail.sch"> 
-      <Name>airmail</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\alleys.sch"> 
-      <Name>alleys</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\alleys2.sch"> 
-      <Name>alleys2</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\antfarm.sch"> 
-      <Name>antfarm</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\asylum.sch"> 
-      <Name>asylum</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\back.sch"> 
-      <Name>back</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\back2.sch"> 
-      <Name>back2</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\basic.sch"> 
-      <Name>basic</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\basicsml.sch"> 
-      <Name>basicsml</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\bman93.sch"> 
-      <Name>bman93</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\border.sch"> 
-      <Name>border</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\bowling.sch"> 
-      <Name>bowling</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\boxed.sch"> 
-      <Name>boxed</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\breakout.sch"> 
-      <Name>breakout</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\bunch.sch"> 
-      <Name>bunch</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\castle.sch"> 
-      <Name>castle</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\castle2.sch"> 
-      <Name>castle2</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\chain.sch"> 
-      <Name>chain</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\chase.sch"> 
-      <Name>chase</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\checkers.sch"> 
-      <Name>checkers</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\chicane.sch"> 
-      <Name>chicane</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\clear.sch"> 
-      <Name>clear</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\clearing.sch"> 
-      <Name>clearing</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\confused.sch"> 
-      <Name>confused</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\cubic.sch"> 
-      <Name>cubic</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\cutter.sch"> 
-      <Name>cutter</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\cutthrot.sch"> 
-      <Name>cutthrot</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\deadend.sch"> 
-      <Name>deadend</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\diamond.sch"> 
-      <Name>diamond</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\dograce.sch"> 
-      <Name>dograce</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\dome.sch"> 
-      <Name>dome</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\e_vs_w.sch"> 
-      <Name>e_vs_w</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\fair.sch"> 
-      <Name>fair</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\fargo.sch"> 
-      <Name>fargo</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\fort.sch"> 
-      <Name>fort</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\freeway.sch"> 
-      <Name>freeway</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\gridlock.sch"> 
-      <Name>gridlock</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\happy.sch"> 
-      <Name>happy</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\jail.sch"> 
-      <Name>jail</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\leak.sch"> 
-      <Name>leak</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\neighbor.sch"> 
-      <Name>neighbor</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\neil.sch"> 
-      <Name>neil</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\n_vs_s.sch"> 
-      <Name>n_vs_s</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\obstacle.sch"> 
-      <Name>obstacle</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\og.sch"> 
-      <Name>og</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\pattern.sch"> 
-      <Name>pattern</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\pingpong.sch"> 
-      <Name>pingpong</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\purist.sch"> 
-      <Name>purist</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\racer1.sch"> 
-      <Name>racer1</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\rail1.sch"> 
-      <Name>rail1</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\railroad.sch"> 
-      <Name>railroad</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\roommate.sch"> 
-      <Name>roommate</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\r_garden.sch"> 
-      <Name>r_garden</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\spiral.sch"> 
-      <Name>spiral</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\spread.sch"> 
-      <Name>spread</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\tennis.sch"> 
-      <Name>tennis</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\thatthis.sch"> 
-      <Name>thatthis</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\the_rim.sch"> 
-      <Name>the_rim</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\thisthat.sch"> 
-      <Name>thisthat</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\tight.sch"> 
-      <Name>tight</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\toilet.sch"> 
-      <Name>toilet</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\uturn.sch"> 
-      <Name>uturn</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\volley.sch"> 
-      <Name>volley</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\wallybom.sch"> 
-      <Name>wallybom</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-    </None>  
-    <None Include="maps\x.sch"> 
-      <Name>x</Name>  
-      <Importer>SchemeImporter</Importer>  
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
+    <None Include="XPLODE9.png"> 
+      <Name>XPLODE9</Name>  
+      <Importer>TextureImporter</Importer>  
+      <Processor>TextureProcessor</Processor>  
+      <GeneratedByBuilder>true</GeneratedByBuilder> 
     </None> 
   </ItemGroup>  
   <ItemGroup>
@@ -574,8 +245,8 @@
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="BOMBS.png">
-      <Name>BOMBS</Name>
+    <Compile Include="BOMBS_tex.png">
+      <Name>BOMBS_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -585,8 +256,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="BWALK1.png">
-      <Name>BWALK1</Name>
+    <Compile Include="BWALK1_tex.png">
+      <Name>BWALK1_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -596,8 +267,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="BWALK2.png">
-      <Name>BWALK2</Name>
+    <Compile Include="BWALK2_tex.png">
+      <Name>BWALK2_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -607,8 +278,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="BWALK3.png">
-      <Name>BWALK3</Name>
+    <Compile Include="BWALK3_tex.png">
+      <Name>BWALK3_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -618,8 +289,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="BWALK4.png">
-      <Name>BWALK4</Name>
+    <Compile Include="BWALK4_tex.png">
+      <Name>BWALK4_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -629,8 +300,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="CORNER0.png">
-      <Name>CORNER0</Name>
+    <Compile Include="CORNER0_tex.png">
+      <Name>CORNER0_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -640,8 +311,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="CORNER1.png">
-      <Name>CORNER1</Name>
+    <Compile Include="CORNER1_tex.png">
+      <Name>CORNER1_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -651,8 +322,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="CORNER2.png">
-      <Name>CORNER2</Name>
+    <Compile Include="CORNER2_tex.png">
+      <Name>CORNER2_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -662,8 +333,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="CORNER3.png">
-      <Name>CORNER3</Name>
+    <Compile Include="CORNER3_tex.png">
+      <Name>CORNER3_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -673,8 +344,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="CORNER4.png">
-      <Name>CORNER4</Name>
+    <Compile Include="CORNER4_tex.png">
+      <Name>CORNER4_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -684,8 +355,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="CORNER5.png">
-      <Name>CORNER5</Name>
+    <Compile Include="CORNER5_tex.png">
+      <Name>CORNER5_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -695,8 +366,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="CORNER6.png">
-      <Name>CORNER6</Name>
+    <Compile Include="CORNER6_tex.png">
+      <Name>CORNER6_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -706,8 +377,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="CORNER7.png">
-      <Name>CORNER7</Name>
+    <Compile Include="CORNER7_tex.png">
+      <Name>CORNER7_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -717,8 +388,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="KICK.png">
-      <Name>KICK</Name>
+    <Compile Include="KICK_tex.png">
+      <Name>KICK_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -728,8 +399,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="PUNCH.png">
-      <Name>PUNCH</Name>
+    <Compile Include="PUNCH_tex.png">
+      <Name>PUNCH_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -739,8 +410,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="PUP1.png">
-      <Name>PUP1</Name>
+    <Compile Include="PUP1_tex.png">
+      <Name>PUP1_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -750,8 +421,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="PUP2.png">
-      <Name>PUP2</Name>
+    <Compile Include="PUP2_tex.png">
+      <Name>PUP2_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -761,8 +432,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="PUP3.png">
-      <Name>PUP3</Name>
+    <Compile Include="PUP3_tex.png">
+      <Name>PUP3_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -772,8 +443,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="PUP4.png">
-      <Name>PUP4</Name>
+    <Compile Include="PUP4_tex.png">
+      <Name>PUP4_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -783,8 +454,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="STAND.png">
-      <Name>STAND</Name>
+    <Compile Include="STAND_tex.png">
+      <Name>STAND_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -794,8 +465,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="TRIGANIM.png">
-      <Name>TRIGANIM</Name>
+    <Compile Include="TRIGANIM_tex.png">
+      <Name>TRIGANIM_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -805,8 +476,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="WALK.png">
-      <Name>WALK</Name>
+    <Compile Include="WALK_tex.png">
+      <Name>WALK_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -816,8 +487,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="XPLODE10.png">
-      <Name>XPLODE10</Name>
+    <Compile Include="XPLODE10_tex.png">
+      <Name>XPLODE10_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -827,8 +498,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="XPLODE11.png">
-      <Name>XPLODE11</Name>
+    <Compile Include="XPLODE11_tex.png">
+      <Name>XPLODE11_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -838,8 +509,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="XPLODE12.png">
-      <Name>XPLODE12</Name>
+    <Compile Include="XPLODE12_tex.png">
+      <Name>XPLODE12_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -849,8 +520,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="XPLODE13.png">
-      <Name>XPLODE13</Name>
+    <Compile Include="XPLODE13_tex.png">
+      <Name>XPLODE13_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -860,8 +531,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="XPLODE14.png">
-      <Name>XPLODE14</Name>
+    <Compile Include="XPLODE14_tex.png">
+      <Name>XPLODE14_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -871,8 +542,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="XPLODE15.png">
-      <Name>XPLODE15</Name>
+    <Compile Include="XPLODE15_tex.png">
+      <Name>XPLODE15_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -882,8 +553,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="XPLODE16.png">
-      <Name>XPLODE16</Name>
+    <Compile Include="XPLODE16_tex.png">
+      <Name>XPLODE16_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -893,8 +564,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="XPLODE17.png">
-      <Name>XPLODE17</Name>
+    <Compile Include="XPLODE17_tex.png">
+      <Name>XPLODE17_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -904,8 +575,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="XPLODE2.png">
-      <Name>XPLODE2</Name>
+    <Compile Include="XPLODE2_tex.png">
+      <Name>XPLODE2_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -915,8 +586,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="XPLODE3.png">
-      <Name>XPLODE3</Name>
+    <Compile Include="XPLODE3_tex.png">
+      <Name>XPLODE3_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -926,8 +597,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="XPLODE4.png">
-      <Name>XPLODE4</Name>
+    <Compile Include="XPLODE4_tex.png">
+      <Name>XPLODE4_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -937,8 +608,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="XPLODE5.png">
-      <Name>XPLODE5</Name>
+    <Compile Include="XPLODE5_tex.png">
+      <Name>XPLODE5_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -948,8 +619,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="XPLODE6.png">
-      <Name>XPLODE6</Name>
+    <Compile Include="XPLODE6_tex.png">
+      <Name>XPLODE6_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -959,8 +630,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="XPLODE7.png">
-      <Name>XPLODE7</Name>
+    <Compile Include="XPLODE7_tex.png">
+      <Name>XPLODE7_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -970,8 +641,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="XPLODE8.png">
-      <Name>XPLODE8</Name>
+    <Compile Include="XPLODE8_tex.png">
+      <Name>XPLODE8_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -981,8 +652,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="XPLODE9.png">
-      <Name>XPLODE9</Name>
+    <Compile Include="XPLODE9_tex.png">
+      <Name>XPLODE9_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>
@@ -992,8 +663,8 @@
       <Importer>AnimationImporter</Importer>
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
-    <Compile Include="ZEN.png">
-      <Name>ZEN</Name>
+    <Compile Include="ZEN_tex.png">
+      <Name>ZEN_tex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <GeneratedByBuilder>true</GeneratedByBuilder>

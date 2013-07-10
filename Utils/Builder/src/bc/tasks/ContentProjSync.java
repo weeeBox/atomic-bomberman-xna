@@ -20,11 +20,15 @@ public class ContentProjSync
 {
 	private static final String ELEMENT_ITEM_GROUP = "ItemGroup";
 	private static final String ELEMENT_COMPILE = "Compile";
+	private static final String ELEMENT_NONE = "None";
 	private static final String ELEMENT_GENERATED_MARKER = "GeneratedByBuilder";
 	private static final String ELEMENT_IMPORTER = "Importer";
 	private static final String ELEMENT_PROCESSOR = "Processor";
 	private static final String ELEMENT_ASSET_NAME = "Name";
 	private static final String ELEMENT_INCLUDE = "Include";
+	private static final String ELEMENT_COPY_TO_OUTPUT = "CopyToOutputDirectory";
+	private static final String COPY_PRESERVE_NEWEST = "PreserveNewest";
+	private static final String COPY_ALWAYS = "Always";
 
 	private List<Asset> resources;
 
@@ -103,6 +107,21 @@ public class ContentProjSync
 
 	private void addResource(Asset res, Element parent)
 	{
+		switch (res.getBuildAction())
+		{
+		case Compile:
+			addCompiledResource(res, parent);
+			break;
+		case None:
+			addRawResource(res, parent);
+			break;
+		default:
+			throw new Error("Not implemented action: " + res.getBuildAction());
+		}
+	}
+
+	private void addCompiledResource(Asset res, Element parent)
+	{
 		Element element = parent.addElement(ELEMENT_COMPILE);
 		element.addAttribute(ELEMENT_INCLUDE, res.getDestFile().getName());
 		element.addElement(ELEMENT_ASSET_NAME).addText(res.getShortName());
@@ -111,6 +130,27 @@ public class ContentProjSync
 		{
 			String processor = res.getProcessor();
 			element.addElement(ELEMENT_PROCESSOR).addText(processor);
+		}
+		element.addElement(ELEMENT_GENERATED_MARKER).addText("true");
+	}
+	
+	private void addRawResource(Asset res, Element parent)
+	{
+		Element element = parent.addElement(ELEMENT_NONE);
+		element.addAttribute(ELEMENT_INCLUDE, res.getDestFile().getName());
+		element.addElement(ELEMENT_ASSET_NAME).addText(res.getShortName());
+		switch (res.getCopyToOutputDirectory())
+		{
+		case DontCopy:
+			break;
+		case IfNewer:
+			element.addElement(ELEMENT_COPY_TO_OUTPUT).addText(COPY_PRESERVE_NEWEST);
+			break;
+		case Always:
+			element.addElement(ELEMENT_COPY_TO_OUTPUT).addText(COPY_ALWAYS);
+			break;
+		default:
+			throw new Error("Unexpected copy setting: " + res.getCopyToOutputDirectory());
 		}
 		element.addElement(ELEMENT_GENERATED_MARKER).addText("true");
 	}

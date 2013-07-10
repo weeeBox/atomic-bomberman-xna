@@ -6,16 +6,31 @@ import bc.tasks.ContentProjTask;
 import bc.utils.filesystem.FileUtils;
 
 public abstract class Asset
-{	
+{
+	public enum BuildAction
+	{
+		None,
+		Compile
+	}
+	
+	public enum CopyToOutputDirectory
+	{
+		DontCopy,
+		IfNewer,
+		Always
+	}
+	
 	private AssetPackage pack;
 	
 	private String name;
 	
 	private File sourceFile;
-	
 	private File destFile;
 	
 	private AssetInfo assetInfo;
+	
+	private BuildAction buildAction = BuildAction.Compile;
+	private CopyToOutputDirectory copyToOutputDirectory = CopyToOutputDirectory.DontCopy;
 	
 	protected Asset(AssetInfo assetInfo)
 	{
@@ -135,6 +150,26 @@ public abstract class Asset
 	public String getResourceTypePrefix()
 	{
 		return assetInfo.getTypePrefix();
+	}
+
+	public BuildAction getBuildAction()
+	{
+		return buildAction;
+	}
+	
+	public void setBuildAction(BuildAction buildAction)
+	{
+		this.buildAction = buildAction;
+	}
+	
+	public CopyToOutputDirectory getCopyToOutputDirectory()
+	{
+		return copyToOutputDirectory;
+	}
+	
+	public void setCopyToOutputDirectory(CopyToOutputDirectory copyToOutputDirectory)
+	{
+		this.copyToOutputDirectory = copyToOutputDirectory;
 	}
 	
 	@Override

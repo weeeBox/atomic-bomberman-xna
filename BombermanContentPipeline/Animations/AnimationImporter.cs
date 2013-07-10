@@ -29,6 +29,7 @@ namespace BombermanContentPipeline.Animations
 
             Animation animation = new Animation();
             animation.name = (String)root.Attribute("name");
+            animation.textureName = (String)root.Attribute("file");
 
             // groups
             IEnumerable<XElement> animationElements = root.Elements("animation");
@@ -58,12 +59,6 @@ namespace BombermanContentPipeline.Animations
                 ++groupIndex;
             }
             animation.groups = groups;
-
-            // texture
-            String parentPath = Directory.GetParent(path).FullName;
-            String textureFilename = (String)root.Attribute("file");
-
-            animation.textureBytes = File.ReadAllBytes(Path.Combine(parentPath, textureFilename));
 
             return animation;
         }
