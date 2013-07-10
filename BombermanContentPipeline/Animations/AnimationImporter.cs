@@ -40,6 +40,8 @@ namespace BombermanContentPipeline.Animations
                 AnimationGroup group = new AnimationGroup();
                 group.name = (String)animationElement.Attribute("name");
 
+                if (group.name == null) throw new ContentImporterException("Group name is null: " + path);
+
                 // frames
                 IEnumerable<XElement> frameElements = animationElement.Elements("frame");
                 AnimationFrame[] frames = new AnimationFrame[CountElements(frameElements)];
@@ -56,6 +58,7 @@ namespace BombermanContentPipeline.Animations
                 }
 
                 group.frames = frames;
+                groups[groupIndex] = group;
                 ++groupIndex;
             }
             animation.groups = groups;
