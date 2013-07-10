@@ -8,6 +8,7 @@ using Assets;
 using BomberEngine.Core.Assets.Loaders;
 using Bomberman.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Bomberman.Content.Loader;
 
 namespace Bomberman
 {
@@ -17,6 +18,7 @@ namespace Bomberman
             : base(contentManager, A.RES_COUNT)
         {
             RegisterReader(typeof(Scheme), new SchemeReader());
+            RegisterLoader(AssetType.Animation, new AnimationLoader());
         }
 
         public void AddPackToLoad(AssetPacks.Packs pack)
