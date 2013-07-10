@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animations name="WALK" file="WALK.png">
+  <animation name="walk north">
+    <frame x="435" y="267" ox="20" oy="61" w="38" h="38"/>
+    <frame x="137" y="0" ox="21" oy="61" w="39" h="39"/>
+    <frame x="176" y="0" ox="19" oy="61" w="39" h="39"/>
+    <frame x="368" y="0" ox="22" oy="60" w="39" h="39"/>
+    <frame x="445" y="0" ox="22" oy="58" w="39" h="39"/>
+    <frame x="283" y="267" ox="20" oy="58" w="39" h="39"/>
+    <frame x="322" y="267" ox="20" oy="61" w="38" h="38"/>
+    <frame x="215" y="0" ox="20" oy="62" w="38" h="38"/>
+    <frame x="123" y="267" ox="19" oy="64" w="38" h="38"/>
+    <frame x="161" y="267" ox="20" oy="63" w="38" h="38"/>
+    <frame x="253" y="0" ox="18" oy="62" w="38" h="38"/>
+    <frame x="291" y="0" ox="19" oy="59" w="38" h="38"/>
+    <frame x="407" y="0" ox="19" oy="61" w="38" h="38"/>
+    <frame x="360" y="267" ox="18" oy="58" w="37" h="37"/>
+    <frame x="397" y="267" ox="19" oy="59" w="38" h="38"/>
+  </animation>
+  <animation name="walk south">
+    <frame x="261" y="61" ox="19" oy="73" w="38" h="38"/>
+    <frame x="0" y="134" ox="19" oy="70" w="38" h="38"/>
+    <frame x="299" y="61" ox="20" oy="72" w="37" h="37"/>
+    <frame x="0" y="61" ox="19" oy="71" w="37" h="37"/>
+    <frame x="336" y="61" ox="19" oy="70" w="37" h="37"/>
+    <frame x="75" y="61" ox="21" oy="70" w="37" h="37"/>
+    <frame x="112" y="61" ox="20" oy="68" w="37" h="37"/>
+    <frame x="410" y="61" ox="20" oy="72" w="38" h="38"/>
+    <frame x="38" y="134" ox="20" oy="70" w="38" h="38"/>
+    <frame x="149" y="61" ox="20" oy="70" w="38" h="38"/>
+    <frame x="187" y="61" ox="19" oy="71" w="37" h="37"/>
+    <frame x="373" y="61" ox="20" oy="71" w="37" h="37"/>
+    <frame x="448" y="61" ox="18" oy="70" w="37" h="37"/>
+    <frame x="224" y="61" ox="19" oy="71" w="37" h="37"/>
+    <frame x="37" y="61" ox="20" oy="72" w="38" h="38"/>
+  </animation>
+  <animation name="walk west">
+    <frame x="383" y="202" ox="14" oy="66" w="36" h="36"/>
+    <frame x="428" y="134" ox="12" oy="66" w="36" h="36"/>
+    <frame x="464" y="134" ox="13" oy="64" w="36" h="36"/>
+    <frame x="419" y="202" ox="16" oy="62" w="39" h="39"/>
+    <frame x="199" y="267" ox="18" oy="61" w="43" h="43"/>
+    <frame x="111" y="202" ox="19" oy="65" w="41" h="41"/>
+    <frame x="283" y="134" ox="15" oy="65" w="36" h="36"/>
+    <frame x="76" y="134" ox="13" oy="67" w="34" h="34"/>
+    <frame x="110" y="134" ox="13" oy="70" w="33" h="33"/>
+    <frame x="319" y="134" ox="14" oy="67" w="35" h="35"/>
+    <frame x="0" y="202" ox="20" oy="64" w="41" h="41"/>
+    <frame x="152" y="202" ox="23" oy="65" w="44" h="44"/>
+    <frame x="47" y="0" ox="21" oy="63" w="45" h="45"/>
+    <frame x="458" y="202" ox="19" oy="63" w="42" h="42"/>
+    <frame x="196" y="202" ox="15" oy="65" w="38" h="38"/>
+  </animation>
+  <animation name="walk east">
+    <frame x="214" y="134" ox="22" oy="69" w="34" h="34"/>
+    <frame x="248" y="134" ox="24" oy="68" w="35" h="35"/>
+    <frame x="354" y="134" ox="22" oy="67" w="35" h="35"/>
+    <frame x="234" y="202" ox="23" oy="66" w="38" h="38"/>
+    <frame x="242" y="267" ox="24" oy="64" w="41" h="41"/>
+    <frame x="272" y="202" ox="25" oy="66" w="40" h="40"/>
+    <frame x="312" y="202" ox="25" oy="66" w="36" h="36"/>
+    <frame x="348" y="202" ox="24" oy="66" w="35" h="35"/>
+    <frame x="41" y="202" ox="22" oy="66" w="35" h="35"/>
+    <frame x="0" y="267" ox="22" oy="65" w="37" h="37"/>
+    <frame x="37" y="267" ox="23" oy="64" w="43" h="43"/>
+    <frame x="92" y="0" ox="22" oy="62" w="45" h="45"/>
+    <frame x="0" y="0" ox="26" oy="63" w="47" h="47"/>
+    <frame x="80" y="267" ox="24" oy="64" w="43" h="43"/>
+    <frame x="389" y="134" ox="24" oy="67" w="39" h="39"/>
+  </animation>
+  <animation name="spin">
+    <frame x="329" y="0" ox="19" oy="61" w="39" h="39"/>
+    <frame x="76" y="202" ox="22" oy="66" w="35" h="35"/>
+    <frame x="143" y="134" ox="20" oy="70" w="38" h="38"/>
+    <frame x="181" y="134" ox="13" oy="70" w="33" h="33"/>
+  </animation>
+</animations>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animations name="KICK" file="KICK.png">
+  <animation name="kick north">
+    <frame x="68" y="191" ox="19" oy="63" w="39" h="39"/>
+    <frame x="34" y="320" ox="23" oy="61" w="46" h="46"/>
+    <frame x="50" y="0" ox="22" oy="55" w="44" h="44"/>
+    <frame x="0" y="564" ox="23" oy="57" w="47" h="47"/>
+    <frame x="47" y="564" ox="23" oy="57" w="46" h="46"/>
+    <frame x="39" y="444" ox="21" oy="59" w="43" h="43"/>
+    <frame x="84" y="622" ox="22" oy="51" w="44" h="44"/>
+    <frame x="0" y="680" ox="23" oy="49" w="47" h="47"/>
+  </animation>
+  <animation name="kick south">
+    <frame x="42" y="125" ox="20" oy="64" w="40" h="40"/>
+    <frame x="34" y="56" ox="23" oy="66" w="46" h="46"/>
+    <frame x="80" y="56" ox="21" oy="66" w="42" h="42"/>
+    <frame x="0" y="125" ox="21" oy="65" w="42" h="42"/>
+    <frame x="82" y="125" ox="18" oy="64" w="36" h="36"/>
+    <frame x="0" y="56" ox="17" oy="68" w="34" h="34"/>
+    <frame x="34" y="256" ox="18" oy="62" w="37" h="37"/>
+    <frame x="0" y="383" ox="21" oy="60" w="43" h="43"/>
+  </animation>
+  <animation name="kick west">
+    <frame x="80" y="320" ox="20" oy="61" w="40" h="40"/>
+    <frame x="32" y="191" ox="18" oy="63" w="36" h="36"/>
+    <frame x="71" y="256" ox="21" oy="62" w="43" h="43"/>
+    <frame x="43" y="383" ox="25" oy="60" w="50" h="50"/>
+    <frame x="0" y="0" ox="25" oy="55" w="50" h="50"/>
+    <frame x="0" y="320" ox="17" oy="62" w="34" h="34"/>
+    <frame x="82" y="444" ox="18" oy="59" w="36" h="36"/>
+    <frame x="87" y="505" ox="19" oy="55" w="38" h="38"/>
+  </animation>
+  <animation name="kick east">
+    <frame x="0" y="444" ox="19" oy="60" w="39" h="39"/>
+    <frame x="0" y="191" ox="16" oy="64" w="32" h="32"/>
+    <frame x="0" y="505" ox="20" oy="58" w="41" h="41"/>
+    <frame x="41" y="505" ox="23" oy="58" w="46" h="46"/>
+    <frame x="0" y="622" ox="24" oy="57" w="48" h="48"/>
+    <frame x="0" y="256" ox="17" oy="63" w="34" h="34"/>
+    <frame x="93" y="383" ox="16" oy="58" w="33" h="33"/>
+    <frame x="48" y="622" ox="18" oy="55" w="36" h="36"/>
+  </animation>
+</animations>

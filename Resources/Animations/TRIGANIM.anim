@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animations name="TRIGANIM" file="TRIGANIM.png">
+  <animation name="bomb trigger green">
+    <frame x="0" y="37" ox="18" oy="38" w="36" h="36"/>
+    <frame x="0" y="74" ox="17" oy="37" w="35" h="35"/>
+    <frame x="0" y="144" ox="17" oy="36" w="34" h="34"/>
+    <frame x="0" y="210" ox="16" oy="35" w="32" h="32"/>
+    <frame x="34" y="144" ox="15" oy="34" w="30" h="30"/>
+    <frame x="36" y="0" ox="14" oy="33" w="28" h="28"/>
+    <frame x="35" y="74" ox="13" oy="32" w="26" h="26"/>
+    <frame x="0" y="242" ox="12" oy="32" w="25" h="25"/>
+    <frame x="0" y="267" ox="12" oy="31" w="24" h="24"/>
+    <frame x="0" y="290" ox="11" oy="30" w="22" h="22"/>
+    <frame x="24" y="267" ox="12" oy="31" w="24" h="24"/>
+    <frame x="25" y="242" ox="12" oy="32" w="25" h="25"/>
+    <frame x="35" y="109" ox="13" oy="32" w="26" h="26"/>
+    <frame x="36" y="37" ox="14" oy="33" w="28" h="28"/>
+    <frame x="34" y="177" ox="15" oy="34" w="30" h="30"/>
+    <frame x="32" y="210" ox="16" oy="35" w="32" h="32"/>
+    <frame x="0" y="177" ox="17" oy="36" w="34" h="34"/>
+    <frame x="0" y="109" ox="17" oy="37" w="35" h="35"/>
+    <frame x="0" y="0" ox="18" oy="38" w="36" h="36"/>
+  </animation>
+</animations>

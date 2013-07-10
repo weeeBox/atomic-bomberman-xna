@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animations name="PUNCH" file="PUNCH.png">
+  <animation name="punch north green">
+    <frame x="94" y="304" ox="22" oy="58" w="35" h="35"/>
+    <frame x="113" y="244" ox="22" oy="58" w="35" h="35"/>
+    <frame x="148" y="244" ox="21" oy="58" w="34" h="34"/>
+    <frame x="182" y="244" ox="19" oy="58" w="33" h="33"/>
+    <frame x="215" y="244" ox="19" oy="58" w="33" h="33"/>
+    <frame x="0" y="304" ox="18" oy="58" w="32" h="32"/>
+    <frame x="32" y="304" ox="17" oy="58" w="31" h="31"/>
+    <frame x="63" y="304" ox="16" oy="58" w="31" h="31"/>
+    <frame x="171" y="304" ox="16" oy="57" w="32" h="32"/>
+    <frame x="128" y="363" ox="16" oy="57" w="34" h="34"/>
+  </animation>
+  <animation name="punch south green">
+    <frame x="0" y="120" ox="15" oy="62" w="33" h="33"/>
+    <frame x="210" y="182" ox="14" oy="62" w="34" h="34"/>
+    <frame x="33" y="120" ox="14" oy="63" w="35" h="35"/>
+    <frame x="165" y="55" ox="14" oy="63" w="34" h="34"/>
+    <frame x="199" y="55" ox="14" oy="63" w="33" h="33"/>
+    <frame x="0" y="55" ox="14" oy="64" w="32" h="32"/>
+    <frame x="32" y="55" ox="14" oy="64" w="32" h="32"/>
+    <frame x="64" y="55" ox="16" oy="64" w="33" h="33"/>
+    <frame x="97" y="55" ox="17" oy="64" w="34" h="34"/>
+    <frame x="131" y="55" ox="17" oy="64" w="34" h="34"/>
+  </animation>
+  <animation name="punch west green">
+    <frame x="203" y="304" ox="27" oy="60" w="48" h="48"/>
+    <frame x="0" y="363" ox="24" oy="60" w="43" h="43"/>
+    <frame x="43" y="363" ox="21" oy="60" w="40" h="40"/>
+    <frame x="0" y="244" ox="19" oy="61" w="37" h="37"/>
+    <frame x="37" y="244" ox="18" oy="61" w="37" h="37"/>
+    <frame x="140" y="182" ox="16" oy="61" w="36" h="36"/>
+    <frame x="176" y="182" ox="13" oy="61" w="34" h="34"/>
+    <frame x="68" y="120" ox="12" oy="61" w="34" h="34"/>
+    <frame x="102" y="120" ox="12" oy="61" w="35" h="35"/>
+    <frame x="137" y="120" ox="11" oy="61" w="35" h="35"/>
+  </animation>
+  <animation name="punch east green">
+    <frame x="0" y="0" ox="21" oy="60" w="50" h="50"/>
+    <frame x="83" y="363" ox="20" oy="61" w="45" h="45"/>
+    <frame x="129" y="304" ox="20" oy="61" w="42" h="42"/>
+    <frame x="74" y="244" ox="19" oy="61" w="39" h="39"/>
+    <frame x="172" y="120" ox="18" oy="61" w="37" h="37"/>
+    <frame x="209" y="120" ox="19" oy="61" w="36" h="36"/>
+    <frame x="0" y="182" ox="20" oy="61" w="35" h="35"/>
+    <frame x="35" y="182" ox="21" oy="61" w="35" h="35"/>
+    <frame x="70" y="182" ox="22" oy="61" w="35" h="35"/>
+    <frame x="105" y="182" ox="23" oy="61" w="35" h="35"/>
+  </animation>
+</animations>
