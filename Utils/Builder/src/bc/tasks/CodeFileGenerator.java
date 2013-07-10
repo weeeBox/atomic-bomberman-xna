@@ -49,7 +49,7 @@ public class CodeFileGenerator
 
 	private void writeResIds(WriteDestination out, List<AssetPackage> packs)
 	{
-		out.writelnf("public class %s", ASSET_NAMES_CLASS);
+		out.writeln("public class %s", ASSET_NAMES_CLASS);
 		out.writeBlockOpen();
 
 		int resIndex = 0;
@@ -60,11 +60,11 @@ public class CodeFileGenerator
 			List<Asset> packResources = pack.getResources();
 			for (Asset res : packResources)
 			{
-				out.writelnf("public const int %s = %d;", res.getLongName(), resIndex++);
+				out.writeln("public const int %s = %d;", res.getLongName(), resIndex++);
 			}
 		}
 		out.writeln("// total resources count");
-		out.writelnf("public const int RES_COUNT = %d;", resIndex);
+		out.writeln("public const int RES_COUNT = %d;", resIndex);
 
 		out.writeBlockClose();
 	}
@@ -79,13 +79,13 @@ public class CodeFileGenerator
 		for (int packIndex = 0; packIndex < packs.size(); packIndex++)
 		{
 			String packName = packs.get(packIndex).getName();
-			out.writelnf("%s%s", packName, packIndex < packs.size() - 1 ? "," : "");
+			out.writeln("%s%s", packName, packIndex < packs.size() - 1 ? "," : "");
 		}
 		out.writeBlockClose();
 		
 		out.writeln();
 		
-		out.writelnf("private static readonly %s[][] PACKS =", ASSET_LOAD_INFO_CLASS);
+		out.writeln("private static readonly %s[][] PACKS =", ASSET_LOAD_INFO_CLASS);
 		out.writeBlockOpen();
 
 		for (AssetPackage pack : packs)
@@ -96,7 +96,7 @@ public class CodeFileGenerator
 		out.writeBlockClose(true);
 		
 		out.writeln();
-		out.writelnf("public static %s[] GetPack(Packs pack)", ASSET_LOAD_INFO_CLASS);
+		out.writeln("public static %s[] GetPack(Packs pack)", ASSET_LOAD_INFO_CLASS);
 		out.writeBlockOpen();
 		out.writeln("return PACKS[(int)pack];");
 		out.writeBlockClose();
@@ -107,7 +107,7 @@ public class CodeFileGenerator
 	private void writePackInfo(WriteDestination out, AssetPackage pack)
 	{
 		out.writeln("// " + pack.getName().toUpperCase());
-		out.writelnf("new %s[]", ASSET_LOAD_INFO_CLASS);
+		out.writeln("new %s[]", ASSET_LOAD_INFO_CLASS);
 		out.writeBlockOpen();
 
 		List<Asset> packResources = pack.getResources();
@@ -120,7 +120,7 @@ public class CodeFileGenerator
 
 	private void writeResInfo(WriteDestination out, Asset res)
 	{
-		out.writelnf("new %s(\"%s\", %s.%s, %s.%s),", ASSET_LOAD_INFO_CLASS, res.getShortName(), ASSET_NAMES_CLASS, res.getLongName(), ASSET_TYPES_CLASS, res.getResourceType());
+		out.writeln("new %s(\"%s\", %s.%s, %s.%s),", ASSET_LOAD_INFO_CLASS, res.getShortName(), ASSET_NAMES_CLASS, res.getLongName(), ASSET_TYPES_CLASS, res.getResourceType());
 	}
 
 	private void writeEnding(WriteDestination out) throws IOException
