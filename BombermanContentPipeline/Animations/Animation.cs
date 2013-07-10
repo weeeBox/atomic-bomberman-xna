@@ -9,7 +9,7 @@ namespace BombermanContentPipeline.Animations
     {
         public String name;
         public AnimationGroup[] groups;
-        public byte[] textureBytes;
+        public String textureName;
     }
 
     public class AnimationGroup

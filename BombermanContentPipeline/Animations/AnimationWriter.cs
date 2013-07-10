@@ -21,6 +21,7 @@ namespace BombermanContentPipeline.Animations
     {
         protected override void Write(ContentWriter output, Animation animation)
         {
+            output.Write(animation.textureName);
             output.Write(animation.name);
 
             AnimationGroup[] groups = animation.groups;

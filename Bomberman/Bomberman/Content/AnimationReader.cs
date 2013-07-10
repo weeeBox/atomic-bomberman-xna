@@ -4,6 +4,8 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using BomberEngine.Game;
+using BomberEngine.Core.Assets.Types;
 
 namespace Bomberman.Content
 {
@@ -28,6 +30,9 @@ namespace Bomberman.Content
             {
                 animation = new Animation();
             }
+
+            String textureName = input.ReadString();
+            animation.texture = Application.Assets().LoadAsset<TextureImage>(textureName);
 
             animation.name = input.ReadString();
             int groupsCount = input.ReadInt32();
