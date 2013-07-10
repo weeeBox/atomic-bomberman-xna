@@ -37,8 +37,47 @@ namespace Assets
 		public const int tex_pow_trig = 27;
 		public const int tex_pow_pooge = 28;
 		public const int tex_pow_rand = 29;
+		public const int ani_BOMBS = 30;
+		public const int ani_BWALK1 = 31;
+		public const int ani_BWALK2 = 32;
+		public const int ani_BWALK3 = 33;
+		public const int ani_BWALK4 = 34;
+		public const int ani_CORNER0 = 35;
+		public const int ani_CORNER1 = 36;
+		public const int ani_CORNER2 = 37;
+		public const int ani_CORNER3 = 38;
+		public const int ani_CORNER4 = 39;
+		public const int ani_CORNER5 = 40;
+		public const int ani_CORNER6 = 41;
+		public const int ani_CORNER7 = 42;
+		public const int ani_KICK = 43;
+		public const int ani_PUNCH = 44;
+		public const int ani_PUP1 = 45;
+		public const int ani_PUP2 = 46;
+		public const int ani_PUP3 = 47;
+		public const int ani_PUP4 = 48;
+		public const int ani_STAND = 49;
+		public const int ani_TRIGANIM = 50;
+		public const int ani_WALK = 51;
+		public const int ani_XPLODE10 = 52;
+		public const int ani_XPLODE11 = 53;
+		public const int ani_XPLODE12 = 54;
+		public const int ani_XPLODE13 = 55;
+		public const int ani_XPLODE14 = 56;
+		public const int ani_XPLODE15 = 57;
+		public const int ani_XPLODE16 = 58;
+		public const int ani_XPLODE17 = 59;
+		public const int ani_XPLODE2 = 60;
+		public const int ani_XPLODE3 = 61;
+		public const int ani_XPLODE4 = 62;
+		public const int ani_XPLODE5 = 63;
+		public const int ani_XPLODE6 = 64;
+		public const int ani_XPLODE7 = 65;
+		public const int ani_XPLODE8 = 66;
+		public const int ani_XPLODE9 = 67;
+		public const int ani_ZEN = 68;
 		// total resources count
-		public const int RES_COUNT = 30;
+		public const int RES_COUNT = 69;
 	}
 	
 	public class AssetPacks
@@ -83,6 +122,45 @@ namespace Assets
 				new AssetLoadInfo("POWTRIG", A.tex_pow_trig, AssetType.Texture),
 				new AssetLoadInfo("PWSPOOGE", A.tex_pow_pooge, AssetType.Texture),
 				new AssetLoadInfo("PWRANDOM", A.tex_pow_rand, AssetType.Texture),
+				new AssetLoadInfo("BOMBS", A.ani_BOMBS, AssetType.Animation),
+				new AssetLoadInfo("BWALK1", A.ani_BWALK1, AssetType.Animation),
+				new AssetLoadInfo("BWALK2", A.ani_BWALK2, AssetType.Animation),
+				new AssetLoadInfo("BWALK3", A.ani_BWALK3, AssetType.Animation),
+				new AssetLoadInfo("BWALK4", A.ani_BWALK4, AssetType.Animation),
+				new AssetLoadInfo("CORNER0", A.ani_CORNER0, AssetType.Animation),
+				new AssetLoadInfo("CORNER1", A.ani_CORNER1, AssetType.Animation),
+				new AssetLoadInfo("CORNER2", A.ani_CORNER2, AssetType.Animation),
+				new AssetLoadInfo("CORNER3", A.ani_CORNER3, AssetType.Animation),
+				new AssetLoadInfo("CORNER4", A.ani_CORNER4, AssetType.Animation),
+				new AssetLoadInfo("CORNER5", A.ani_CORNER5, AssetType.Animation),
+				new AssetLoadInfo("CORNER6", A.ani_CORNER6, AssetType.Animation),
+				new AssetLoadInfo("CORNER7", A.ani_CORNER7, AssetType.Animation),
+				new AssetLoadInfo("KICK", A.ani_KICK, AssetType.Animation),
+				new AssetLoadInfo("PUNCH", A.ani_PUNCH, AssetType.Animation),
+				new AssetLoadInfo("PUP1", A.ani_PUP1, AssetType.Animation),
+				new AssetLoadInfo("PUP2", A.ani_PUP2, AssetType.Animation),
+				new AssetLoadInfo("PUP3", A.ani_PUP3, AssetType.Animation),
+				new AssetLoadInfo("PUP4", A.ani_PUP4, AssetType.Animation),
+				new AssetLoadInfo("STAND", A.ani_STAND, AssetType.Animation),
+				new AssetLoadInfo("TRIGANIM", A.ani_TRIGANIM, AssetType.Animation),
+				new AssetLoadInfo("WALK", A.ani_WALK, AssetType.Animation),
+				new AssetLoadInfo("XPLODE10", A.ani_XPLODE10, AssetType.Animation),
+				new AssetLoadInfo("XPLODE11", A.ani_XPLODE11, AssetType.Animation),
+				new AssetLoadInfo("XPLODE12", A.ani_XPLODE12, AssetType.Animation),
+				new AssetLoadInfo("XPLODE13", A.ani_XPLODE13, AssetType.Animation),
+				new AssetLoadInfo("XPLODE14", A.ani_XPLODE14, AssetType.Animation),
+				new AssetLoadInfo("XPLODE15", A.ani_XPLODE15, AssetType.Animation),
+				new AssetLoadInfo("XPLODE16", A.ani_XPLODE16, AssetType.Animation),
+				new AssetLoadInfo("XPLODE17", A.ani_XPLODE17, AssetType.Animation),
+				new AssetLoadInfo("XPLODE2", A.ani_XPLODE2, AssetType.Animation),
+				new AssetLoadInfo("XPLODE3", A.ani_XPLODE3, AssetType.Animation),
+				new AssetLoadInfo("XPLODE4", A.ani_XPLODE4, AssetType.Animation),
+				new AssetLoadInfo("XPLODE5", A.ani_XPLODE5, AssetType.Animation),
+				new AssetLoadInfo("XPLODE6", A.ani_XPLODE6, AssetType.Animation),
+				new AssetLoadInfo("XPLODE7", A.ani_XPLODE7, AssetType.Animation),
+				new AssetLoadInfo("XPLODE8", A.ani_XPLODE8, AssetType.Animation),
+				new AssetLoadInfo("XPLODE9", A.ani_XPLODE9, AssetType.Animation),
+				new AssetLoadInfo("ZEN", A.ani_ZEN, AssetType.Animation),
 			}
 		};
 		
