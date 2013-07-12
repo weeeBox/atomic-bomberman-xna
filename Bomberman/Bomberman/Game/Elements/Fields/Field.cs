@@ -28,7 +28,8 @@ namespace Bomberman.Game.Elements.Fields
         private LinkedList<MovableCell> movableCells;
         private LinkedList<CellContactList> contacts;
 
-        private LinkedList<FieldCell> updateList;
+        private LinkedList<FieldCell> tempUpdateList;
+        private LinkedList<MovableCell> tempMoveList;
 
         public Field()
         {
@@ -36,7 +37,8 @@ namespace Bomberman.Game.Elements.Fields
             timerManager = new DelayedCallManager();
             players = new PlayerList(CVars.cg_maxPlayers.intValue);
 
-            updateList = new LinkedList<FieldCell>();
+            tempUpdateList = new LinkedList<FieldCell>();
+            tempMoveList = new LinkedList<MovableCell>();
 
             movableCells = new LinkedList<MovableCell>();
             contacts = new LinkedList<CellContactList>();
@@ -255,15 +257,15 @@ namespace Bomberman.Game.Elements.Fields
 
         public void UpdateSlot(float delta, FieldCellSlot slot)
         {
-            slot.GetCells(updateList);
+            slot.GetCells(tempUpdateList);
 
-            if (updateList.Count > 0)
+            if (tempUpdateList.Count > 0)
             {
-                foreach (FieldCell cell in updateList)
+                foreach (FieldCell cell in tempUpdateList)
                 {
                     cell.Update(delta);
                 }
-                updateList.Clear();
+                tempUpdateList.Clear();
             }
         }
 
@@ -281,13 +283,21 @@ namespace Bomberman.Game.Elements.Fields
 
         private void UpdateMoving(float delta)
         {
-            LinkedList<MovableCell> temp = new LinkedList<MovableCell>(movableCells);
-            foreach (MovableCell movable in temp)
-            {   
+            foreach (MovableCell movable in movableCells)
+            {
                 if (movable.IsMoving())
+                {
+                    tempMoveList.AddLast(movable);
+                }
+            }
+
+            if (tempMoveList.Count > 0)
+            {
+                foreach (MovableCell movable in tempMoveList)
                 {
                     UpdateMoving(delta, movable);
                 }
+                tempMoveList.Clear();
             }
         }
 
