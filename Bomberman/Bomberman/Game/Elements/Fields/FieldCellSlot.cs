@@ -119,7 +119,17 @@ namespace Bomberman.Game.Elements.Fields
 
         public Bomb GetBomb()
         {
-            return staticCell != null ? staticCell.AsBomb() : null;
+            LinkedList<MovableCell> list = movableCells.list;
+            for (LinkedListNode<MovableCell> node = list.First; node != null; node = node.Next)
+            {
+                MovableCell cell = node.Value;
+                if (cell.IsBomb())
+                {
+                    return cell.AsBomb();
+                }
+            }
+
+            return null;
         }
 
         //public bool ContainsPlayer()
@@ -149,7 +159,22 @@ namespace Bomberman.Game.Elements.Fields
 
         public bool ContainsObstacle()
         {
-            return staticCell != null && staticCell.IsObstacle();
+            if (staticCell != null)
+            {
+                return staticCell.IsObstacle();
+            }
+
+            LinkedList<MovableCell> list = movableCells.list;
+            for (LinkedListNode<MovableCell> node = list.First; node != null; node = node.Next)
+            {
+                MovableCell cell = node.Value;
+                if (cell.IsObstacle())
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public void GetCells(LinkedList<FieldCell> list)

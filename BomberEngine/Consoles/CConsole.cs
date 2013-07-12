@@ -113,7 +113,10 @@ namespace BomberEngine.Consoles
             keyShiftBindings[KeyCode.OemQuotes] = '|';
             keyShiftBindings[KeyCode.OemSemicolon] = ':';
             keyShiftBindings[KeyCode.OemTilde] = '"';
+        }
 
+        protected override void OnStart()
+        {
             ScheduleCall(OnBlinkTimer, 0.25f, true);
         }
 

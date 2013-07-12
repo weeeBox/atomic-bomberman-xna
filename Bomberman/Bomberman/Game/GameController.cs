@@ -196,6 +196,8 @@ namespace Bomberman.Game
             InitPlayers();
 
             StartScreen(gameScreen);
+
+            GetConsole().TryExecuteCommand("exec game.cfg");
         }
     }
 

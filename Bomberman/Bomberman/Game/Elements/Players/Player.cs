@@ -77,6 +77,7 @@ namespace Bomberman.Game.Elements.Players
             }
 
             diseases.Update(delta);
+            TryPoops();
         }
 
         private void UpdateInput(float delta)
@@ -416,8 +417,7 @@ namespace Bomberman.Game.Elements.Players
         }
 
         public void OnBombBlown(Bomb bomb)
-        {
-            TryPoops();
+        {   
         }
 
         public void OnInfected(Diseases desease)

@@ -96,7 +96,11 @@ namespace Bomberman.Game
             }
             else
             {
-                Print("Wrong powerup index");
+                Print("Powerups:");
+                for (int i = 0; i < Powerups.Count; ++i)
+                {
+                    Print(i + ":" + Powerups.Name(i));
+                }
             }
         }
     }

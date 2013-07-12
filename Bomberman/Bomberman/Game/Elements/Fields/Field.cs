@@ -331,6 +331,14 @@ namespace Bomberman.Game.Elements.Fields
             {
                 powerup.RemoveFromField();
             }
+            else
+            {
+                FlameCell flame = slot.GetFlame();
+                if (flame != null)
+                {
+                    bomb.Blow();
+                }
+            }
         }
 
         /** Should only be called from Bomb.Blow() */
