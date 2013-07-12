@@ -25,71 +25,121 @@ namespace Bomberman.Game.Screens
         }
     }
 
+    public enum InputType
+    {
+        Undefined,
+
+        Keyboard1,
+        Keyboard2,
+        Keyboard3,
+        Keyboard4,
+        Keyboard5,
+        Keyboard6,
+
+        GamePad1,
+        GamePad2,
+        GamePad3,
+        GamePad4,
+
+        Network,
+        Bot,
+
+        Count
+    }
+
     class FooView : View
     {
+        private String[] types;
+        private bool[] typesDisabled;
+
+        private FooRow[] rows;
+
+        private static IDictionary<InputType, String> inputTypeNameLookup;
+
         public FooView(int x, int y, int w, int h)
             : base(x, y, w, h)
         {
+            Font font = Helper.GetFont(A.fnt_button);
+
+            types = new String[(int)InputType.Count];
+            typesDisabled = new bool[(int)InputType.Count];
+
+            for (int i = 0; i < types.Length; ++i)
+            {
+                types[i] = inputType2Str((InputType)i);
+            }
+
             int maxPlayers = CVars.cg_maxPlayers.intValue;
+            rows = new FooRow[maxPlayers];
             for (int i = 0; i < maxPlayers; ++i)
             {
-                AddView(new FooColumn(60, w, 15));
+                FooRow row = new FooRow(font, w, font.FontHeight());
+                row.id = i;
+                row.SetDelegate(OnItemSelected);
+                AddView(row);
+
+                rows[i] = row;
             }
 
             LayoutVer(5);
             ResizeToFitViews();
         }
+
+        private void OnItemSelected(Button button)
+        {
+            FooRow row = rows[button.id];
+
+            Font font = Helper.GetFont(A.fnt_button);
+            PopupList list = new PopupList(font, types, 200);
+            list.x = row.x;
+            list.y = row.y;
+            AddView(list);
+        }
+
+        private string inputType2Str(InputType type)
+        {
+            if (inputTypeNameLookup == null)
+            {
+                inputTypeNameLookup = new Dictionary<InputType, String>();
+                inputTypeNameLookup[InputType.Undefined] = "..........";
+
+                inputTypeNameLookup[InputType.Keyboard1] = "KEYBOARD 1";
+                inputTypeNameLookup[InputType.Keyboard2] = "KEYBOARD 2";
+                inputTypeNameLookup[InputType.Keyboard3] = "KEYBOARD 3";
+                inputTypeNameLookup[InputType.Keyboard4] = "KEYBOARD 4";
+                inputTypeNameLookup[InputType.Keyboard5] = "KEYBOARD 5";
+                inputTypeNameLookup[InputType.Keyboard6] = "KEYBOARD 6";
+
+                inputTypeNameLookup[InputType.GamePad1] = "GAMEPAD 1";
+                inputTypeNameLookup[InputType.GamePad2] = "GAMEPAD 2";
+                inputTypeNameLookup[InputType.GamePad3] = "GAMEPAD 3";
+                inputTypeNameLookup[InputType.GamePad4] = "GAMEPAD 4";
+
+                inputTypeNameLookup[InputType.Network] = "NETWORK";
+                inputTypeNameLookup[InputType.Bot] = "BOT";
+            }
+
+            String name;
+            if (inputTypeNameLookup.TryGetValue(type, out name))
+            {
+                return name;
+            }
+
+            return null;
+        }
     }
 
-    class FooColumn : View
+    class FooRow : Button
     {
-        private enum State
-        {
-            Off,
-            Open,
-            Bot,
-        }
-
-        public enum InputType
-        {
-            Undefined,
-
-            Keyboard1,
-            Keyboard2,
-            Keyboard3,
-            Keyboard4,
-            Keyboard5,
-            Keyboard6,
-
-            GamePad1,
-            GamePad2,
-            GamePad3,
-            GamePad4,
-
-            Network,
-        }
-
-        private State state;
         private InputType type;
 
-        private static IDictionary<State, String> stateNameLookup;
-        private static IDictionary<InputType, String> inputTypeNameLookup;
-
-        public FooColumn(int firstWidth, int width, int height)
+        public FooRow(Font font, int width, int height)
             : base(width, height)
         {   
             focusable = true;
 
-            state = State.Off;
             type = InputType.Undefined;
-
-            Font font = Helper.GetFont(A.fnt_system);
-            TextView stateView = new TextView(font, state2Str(state));
-            AddView(stateView);
-
-            TextView typeView = new TextView(font, inputType2Str(InputType.Keyboard1));
-            typeView.x = firstWidth;
-            typeView.width = width - typeView.x;
+            TextView typeView = new TextView(font, "......");
             AddView(typeView);
         }
 
@@ -110,48 +160,6 @@ namespace Bomberman.Game.Screens
         protected override void OnFocusChanged(bool focused)
         {
             this.color = focused ? Color.Yellow : Color.White;
-        }
-
-        private String state2Str(State state)
-        {
-            if (stateNameLookup == null)
-            {
-                stateNameLookup = new Dictionary<State, String>();
-                stateNameLookup[State.Off]  = "....";
-                stateNameLookup[State.Open] = "OPEN";
-                stateNameLookup[State.Bot] = "BOT";
-            }
-
-            return stateNameLookup[state];
-        }
-
-        private string inputType2Str(InputType type)
-        {
-            if (inputTypeNameLookup == null)
-            {
-                inputTypeNameLookup = new Dictionary<InputType, String>();
-                inputTypeNameLookup[InputType.Keyboard1] = "KEYBOARD 1";
-                inputTypeNameLookup[InputType.Keyboard2] = "KEYBOARD 2";
-                inputTypeNameLookup[InputType.Keyboard3] = "KEYBOARD 3";
-                inputTypeNameLookup[InputType.Keyboard4] = "KEYBOARD 4";
-                inputTypeNameLookup[InputType.Keyboard5] = "KEYBOARD 5";
-                inputTypeNameLookup[InputType.Keyboard6] = "KEYBOARD 6";
-
-                inputTypeNameLookup[InputType.GamePad1] = "GAMEPAD 1";
-                inputTypeNameLookup[InputType.GamePad2] = "GAMEPAD 2";
-                inputTypeNameLookup[InputType.GamePad3] = "GAMEPAD 3";
-                inputTypeNameLookup[InputType.GamePad4] = "GAMEPAD 4";
-
-                inputTypeNameLookup[InputType.Network] = "NETWORK";
-            }
-
-            String name;
-            if (inputTypeNameLookup.TryGetValue(type, out name))
-            {
-                return name;
-            }
-
-            return null;
         }
     }
 }
