@@ -118,6 +118,7 @@
     <Compile Include="Core\IO\BitWriteBuffer.cs" />
     <Compile Include="Core\IO\File.cs" />
     <Compile Include="Core\Visual\Button.cs" />
+    <Compile Include="Core\Visual\PopupList.cs" />
     <Compile Include="Core\Visual\TextButton.cs" />
     <Compile Include="Core\Visual\TextView.cs" />
     <Compile Include="Core\Visual\RectView.cs" />

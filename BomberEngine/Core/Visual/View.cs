@@ -196,6 +196,13 @@ namespace BomberEngine.Core.Visual
 
         #region Hierarchy
 
+        public void AddView(View child, float x, float y)
+        {
+            AddView(child);
+            child.x = x;
+            child.y = y;
+        }
+
         public void AddView(View child)
         {
             if (viewList.IsNull())

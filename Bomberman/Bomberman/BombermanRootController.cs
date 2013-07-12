@@ -68,9 +68,10 @@ namespace Bomberman
                 {
                     case MenuController.ExitCode.SingleStart:
                     {
-                        Scheme scheme = Application.Assets().LoadAsset<Scheme>("Content\\maps\\x.sch");
-                        GameSettings settings = new GameSettings(scheme);
-                        StartController(GameController.Local(settings));
+                        StartController(new GameLobbyController());
+                        //Scheme scheme = Application.Assets().LoadAsset<Scheme>("Content\\maps\\x.sch");
+                        //GameSettings settings = new GameSettings(scheme);
+                        //StartController(GameController.Local(settings));
                         break;
                     }
 

@@ -71,6 +71,9 @@ namespace Bomberman.Menu.Screens
 
             rootView.x = 0.5f * (width - rootView.width);
             rootView.y = 0.5f * (height - rootView.height);
+
+            PopupList list = new PopupList(font, new String[] { "Item1", "Item2", "Item2", "Item4" }, 100);
+            AddView(list);
         }
     }
 }
