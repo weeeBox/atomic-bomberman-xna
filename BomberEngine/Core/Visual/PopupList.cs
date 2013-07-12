@@ -14,6 +14,9 @@ namespace BomberEngine.Core.Visual
 
     public class PopupList : View
     {
+        public PopupListDelegate popupDelegate;
+        public int selectedIndex = -1;
+
         public PopupList(Font font, String[] names, int minWidth)
         {
             RectView back = new RectView(0, 0, 100, 100, Color.Gray, Color.Black);
@@ -22,10 +25,12 @@ namespace BomberEngine.Core.Visual
             View contentView = new View(100, 100);
 
             int w = minWidth;
-            int h = 20;
             for (int i = 0; i < names.Length; ++i)
             {
-                contentView.AddView(new ListItem(font, i, names[i], w, font.FontHeight()));
+                ListItem item = new ListItem(font, names[i], w, font.FontHeight());
+                item.id = i;
+                item.SetDelegate(OnItemSelected);
+                contentView.AddView(item);
             }
 
             contentView.LayoutVer(2);
@@ -47,26 +52,44 @@ namespace BomberEngine.Core.Visual
                 KeyEvent keyEvent = evt as KeyEvent;
                 if (keyEvent.arg.key == KeyCode.Escape)
                 {
+                    if (keyEvent.state == KeyState.Pressed)
+                    {
+                        Hide();
+                    }
                     return true;
                 }
             }
 
             return base.HandleEvent(evt);
         }
+
+        private void OnItemSelected(Button button)
+        {
+            Hide();
+
+            if (popupDelegate != null)
+            {
+                selectedIndex = button.id;
+                popupDelegate(this);
+            }
+        }
+
+        private void Hide()
+        {
+            parent.RemoveView(this);
+        }
     }
 
     class ListItem : Button
-    {
-        private int index;
+    {   
         private string text;
 
         private RectView backView;
         private TextView textView;
 
-        public ListItem(Font font, int index, String text, int width, int height)
+        public ListItem(Font font, String text, int width, int height)
             : base(width, height)
-        {
-            this.index = index;
+        {   
             this.text = text;
 
             backView = new RectView(0, 0, width, height, Color.Black, Color.Black);
