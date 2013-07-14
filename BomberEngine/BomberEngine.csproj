@@ -173,12 +173,6 @@
     <Compile Include="Util\ObjectsList.cs" />
     <Compile Include="Util\StringUtils.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BombermanCommon\BombermanCommon.csproj">
-      <Project>{08E52DD3-F9C0-4C5A-8F1C-3BB6E9B06396}</Project>
-      <Name>BombermanCommon</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

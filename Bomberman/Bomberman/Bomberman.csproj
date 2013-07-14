@@ -120,6 +120,12 @@
     <Compile Include="Content\Loader\AnimationLoader.cs" />
     <Compile Include="Content\Scheme.cs" />
     <Compile Include="Content\SchemeReader.cs" />
+    <Compile Include="Content\Scheme\EnumPowerups.cs" />
+    <Compile Include="Content\Scheme\FieldBlocks.cs" />
+    <Compile Include="Content\Scheme\FieldData.cs" />
+    <Compile Include="Content\Scheme\PlayerLocationInfo.cs" />
+    <Compile Include="Content\Scheme\PowerupInfo.cs" />
+    <Compile Include="Content\Scheme\SchemeInfo.cs" />
     <Compile Include="cvars.cs" />
     <Compile Include="Game\Constant.cs" />
     <Compile Include="Game\Elements\Cells\BrickCell.cs" />
@@ -195,10 +201,6 @@
     <ProjectReference Include="..\..\BomberEngine\BomberEngine.csproj">
       <Project>{EB25DAB8-4089-4C9A-A41B-9ECEF8EC1CEF}</Project>
       <Name>BomberEngine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\BombermanCommon\BombermanCommon.csproj">
-      <Project>{08E52DD3-F9C0-4C5A-8F1C-3BB6E9B06396}</Project>
-      <Name>BombermanCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Lidgren.Network\Lidgren.Network.csproj">
       <Project>{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}</Project>
