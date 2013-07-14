@@ -13,9 +13,14 @@ import bc.assets.ContentWriterContext;
 
 public class Texture extends Asset 
 {
-	private static AssetInfo info; // = new AssetInfo("Texture", "tex", "TextureImporter", "TextureProcessor");
+	private static AssetInfo info;
 	
-	private boolean dxtCompressed;
+	static
+	{
+		info = new AssetInfo();
+		info.importer = new TextureImporter();
+		info.writer = new TextureWriter();
+	}
 	
 	public Texture()
 	{
@@ -25,16 +30,6 @@ public class Texture extends Asset
 	public Texture(String name, File file)
 	{
 		super(info, name, file);
-	}
-	
-	public boolean isDxtCompressed()
-	{
-		return dxtCompressed;
-	}
-
-	public void setDxtCompressed(boolean dxtCompressed)
-	{
-		this.dxtCompressed = dxtCompressed;
 	}
 }
 

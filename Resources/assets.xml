@@ -1,60 +1,57 @@
 <dir name="assets">
 
 	<dir name="gfx">
-		<image name="WLKE0001" file="${dir.gfx}/WLKE0001.png" />
-		<image name="WLKN0001" file="${dir.gfx}/WLKN0001.png" />
-		<image name="WLKS0001" file="${dir.gfx}/WLKS0001.png" />
-		<image name="WLKW0001" file="${dir.gfx}/WLKW0001.png" />
+		<texture name="WLKE0001" file="${dir.gfx}/WLKE0001.png" />
+		<texture name="WLKN0001" file="${dir.gfx}/WLKN0001.png" />
+		<texture name="WLKS0001" file="${dir.gfx}/WLKS0001.png" />
+		<texture name="WLKW0001" file="${dir.gfx}/WLKW0001.png" />
 
-		<image name="PUD" file="${dir.gfx}/BMF0010.png" />
-		<image name="PUL" file="${dir.gfx}/PUL0010.png" />
-		<image name="PUR" file="${dir.gfx}/PUR0010.png" />
-		<image name="PUP" file="${dir.gfx}/PUBN010.png" />
+		<texture name="PUD" file="${dir.gfx}/BMF0010.png" />
+		<texture name="PUL" file="${dir.gfx}/PUL0010.png" />
+		<texture name="PUR" file="${dir.gfx}/PUR0010.png" />
+		<texture name="PUP" file="${dir.gfx}/PUBN010.png" />
 
-		<image name="FIELD7" file="${dir.gfx}/FIELD7.png" />
-		<image name="BMB1001" file="${dir.gfx}/BMB1001.png" />
-		<image name="BMBC1" file="${dir.gfx}/BMBC1.png" />
-		<image name="DIGIB001" file="${dir.gfx}/DIGIB001.png" />
-		<image name="F0BRICK" file="${dir.gfx}/F0BRICK.png" />
-		<image name="F0SOLID" file="${dir.gfx}/F0SOLID.png" />
+		<texture name="FIELD7" file="${dir.gfx}/FIELD7.png" />
+		<texture name="BMB1001" file="${dir.gfx}/BMB1001.png" />
+		<texture name="BMBC1" file="${dir.gfx}/BMBC1.png" />
+		<texture name="DIGIB001" file="${dir.gfx}/DIGIB001.png" />
+		<texture name="F0BRICK" file="${dir.gfx}/F0BRICK.png" />
+		<texture name="F0SOLID" file="${dir.gfx}/F0SOLID.png" />
 
-		<image name="WLKE0001" file="${dir.gfx}/WLKE0001.png" />
-		<image name="WLKN0001" file="${dir.gfx}/WLKN0001.png" />
-		<image name="WLKS0001" file="${dir.gfx}/WLKS0001.png" />
-		<image name="WLKW0001" file="${dir.gfx}/WLKW0001.png" />
+		<texture name="WLKE0001" file="${dir.gfx}/WLKE0001.png" />
+		<texture name="WLKN0001" file="${dir.gfx}/WLKN0001.png" />
+		<texture name="WLKS0001" file="${dir.gfx}/WLKS0001.png" />
+		<texture name="WLKW0001" file="${dir.gfx}/WLKW0001.png" />
 
-		<image name="PUD" file="${dir.gfx}/BMF0010.png" />
-		<image name="PUL" file="${dir.gfx}/PUL0010.png" />
-		<image name="PUR" file="${dir.gfx}/PUR0010.png" />
-		<image name="PUP" file="${dir.gfx}/PUBN010.png" />
+		<texture name="PUD" file="${dir.gfx}/BMF0010.png" />
+		<texture name="PUL" file="${dir.gfx}/PUL0010.png" />
+		<texture name="PUR" file="${dir.gfx}/PUR0010.png" />
+		<texture name="PUP" file="${dir.gfx}/PUBN010.png" />
 
-		<image name="FIELD7" file="${dir.gfx}/FIELD7.png" />
-		<image name="BMB1001" file="${dir.gfx}/BMB1001.png" />
-		<image name="BMBC1" file="${dir.gfx}/BMBC1.png" />
-		<image name="DIGIB001" file="${dir.gfx}/DIGIB001.png" />
-		<image name="F0BRICK" file="${dir.gfx}/F0BRICK.png" />
-		<image name="F0SOLID" file="${dir.gfx}/F0SOLID.png" />
+		<texture name="FIELD7" file="${dir.gfx}/FIELD7.png" />
+		<texture name="BMB1001" file="${dir.gfx}/BMB1001.png" />
+		<texture name="BMBC1" file="${dir.gfx}/BMBC1.png" />
+		<texture name="DIGIB001" file="${dir.gfx}/DIGIB001.png" />
+		<texture name="F0BRICK" file="${dir.gfx}/F0BRICK.png" />
+		<texture name="F0SOLID" file="${dir.gfx}/F0SOLID.png" />
 
 		<dir name="powerups">
-			<image name="pow_bomb" file="${dir.gfx}/Powerups/POWBOMB.png" />
-			<image name="pow_disea" file="${dir.gfx}/Powerups/POWDISEA.png" />
-			<image name="pow_ebola" file="${dir.gfx}/Powerups/POWEBOLA.png" />
-			<image name="pow_flame" file="${dir.gfx}/Powerups/POWFLAME.png" />
-			<image name="pow_gold" file="${dir.gfx}/Powerups/POWGOLD.png" />
-			<image name="pow_grab" file="${dir.gfx}/Powerups/POWGRAB.png" />
-			<image name="pow_jelly" file="${dir.gfx}/Powerups/POWJELLY.png" />
-			<image name="pow_kick" file="${dir.gfx}/Powerups/POWKICK.png" />
-			<image name="pow_punch" file="${dir.gfx}/Powerups/POWPUNCH.png" />
-			<image name="pow_skate" file="${dir.gfx}/Powerups/POWSKATE.png" />
-			<image name="pow_trig" file="${dir.gfx}/Powerups/POWTRIG.png" />
-			<image name="pow_pooge" file="${dir.gfx}/Powerups/PWSPOOGE.png" />
-			<image name="pow_rand" file="${dir.gfx}/Powerups/PWRANDOM.png" />
+			<texture name="pow_bomb" file="${dir.gfx}/Powerups/POWBOMB.png" />
+			<texture name="pow_disea" file="${dir.gfx}/Powerups/POWDISEA.png" />
+			<texture name="pow_ebola" file="${dir.gfx}/Powerups/POWEBOLA.png" />
+			<texture name="pow_flame" file="${dir.gfx}/Powerups/POWFLAME.png" />
+			<texture name="pow_gold" file="${dir.gfx}/Powerups/POWGOLD.png" />
+			<texture name="pow_grab" file="${dir.gfx}/Powerups/POWGRAB.png" />
+			<texture name="pow_jelly" file="${dir.gfx}/Powerups/POWJELLY.png" />
+			<texture name="pow_kick" file="${dir.gfx}/Powerups/POWKICK.png" />
+			<texture name="pow_punch" file="${dir.gfx}/Powerups/POWPUNCH.png" />
+			<texture name="pow_skate" file="${dir.gfx}/Powerups/POWSKATE.png" />
+			<texture name="pow_trig" file="${dir.gfx}/Powerups/POWTRIG.png" />
+			<texture name="pow_pooge" file="${dir.gfx}/Powerups/PWSPOOGE.png" />
+			<texture name="pow_rand" file="${dir.gfx}/Powerups/PWRANDOM.png" />
 		</dir>
 
 		<dir name="fonts">
-			<vectorFont name="system" file="${dir.fonts}/SystemFont.spritefont" />
-			<vectorFont name="console" file="${dir.fonts}/ConsoleFont.spritefont" />
-			<vectorFont name="button" file="${dir.fonts}/ButtonFont.spritefont" />
 		</dir>
 
 		<dir name="animations">
