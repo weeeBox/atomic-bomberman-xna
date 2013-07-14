@@ -40,6 +40,7 @@ public class AnimationInfo extends AssetInfo
 	
 	public AnimationInfo()
 	{
+		super("Animation");
 	}
 	
 	public AnimationInfo(String name, File file)

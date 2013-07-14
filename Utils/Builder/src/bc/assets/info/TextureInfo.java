@@ -28,6 +28,7 @@ public class TextureInfo extends AssetInfo
 	
 	public TextureInfo()
 	{
+		super("TextureImage");
 	}
 	
 	public TextureInfo(String name, File file)

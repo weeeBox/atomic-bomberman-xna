@@ -34,6 +34,8 @@ public class CodeFileGenerator
 		dest.writeln("// This file was generated. Do not modify.");
 		dest.writeln();
 		dest.writeln("using BomberEngine.Core.Assets;");
+		dest.writeln("using BomberEngine.Core.Assets.Types;");
+		dest.writeln("using Bomberman.Content;");
 		dest.writeln();
 		dest.writeln("namespace Assets");
 		dest.writeBlockOpen();
@@ -119,7 +121,7 @@ public class CodeFileGenerator
 
 	private void writeResInfo(WriteDestination out, AssetInfo res)
 	{
-		out.writeln("new %s(%s, typeof(%s), \"%s\"),", ASSET_LOAD_INFO_CLASS, res.getId(), "TextureImage", res.getRelativePath().replace(File.separator, "\\\\"));
+		out.writeln("new %s(%s, typeof(%s), \"%s\"),", ASSET_LOAD_INFO_CLASS, res.getId(), res.getRuntimeType(), res.getRelativePath().replace(File.separator, "\\\\"));
 	}
 
 	private void writeEnding(WriteDestination out) throws IOException

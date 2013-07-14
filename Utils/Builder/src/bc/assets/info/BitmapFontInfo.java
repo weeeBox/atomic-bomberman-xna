@@ -8,6 +8,7 @@ public class BitmapFontInfo extends AssetInfo
 {	
 	public BitmapFontInfo()
 	{
+		super("PixelFont");
 	}
 	
 	public BitmapFontInfo(String name, File file)

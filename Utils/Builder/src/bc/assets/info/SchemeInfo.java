@@ -32,6 +32,7 @@ public class SchemeInfo extends AssetInfo
 
 	public SchemeInfo()
 	{
+		super("Scheme");
 	}
 
 	public SchemeInfo(String name, File file)

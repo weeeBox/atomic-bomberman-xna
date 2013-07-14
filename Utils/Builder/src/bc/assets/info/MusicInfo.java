@@ -8,6 +8,7 @@ public class MusicInfo extends AssetInfo
 {
 	public MusicInfo()
 	{
+		super("Music");
 	}
 	
 	public MusicInfo(String name, File file)

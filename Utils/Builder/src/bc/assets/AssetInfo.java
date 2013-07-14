@@ -6,6 +6,8 @@ import bc.utils.filesystem.FileUtils;
 
 public abstract class AssetInfo
 {
+	private String runtimeType;
+	
 	private String name;
 	private String id;
 	
@@ -13,8 +15,9 @@ public abstract class AssetInfo
 	
 	private String relativePath;
 	
-	protected AssetInfo()
+	protected AssetInfo(String runtimeType)
 	{
+		this.runtimeType = runtimeType;
 	}
 	
 	protected AssetInfo(String name, File file)
@@ -62,6 +65,11 @@ public abstract class AssetInfo
 	public String getId()
 	{
 		return id;
+	}
+	
+	public String getRuntimeType()
+	{
+		return runtimeType;
 	}
 
 	@Override
