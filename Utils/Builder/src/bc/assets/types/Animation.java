@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import bc.assets.Asset;
 import bc.assets.AssetInfo;
+import bc.assets.AssetRegistry;
 import bc.assets.BinaryWriter;
 import bc.assets.ContentImporter;
 import bc.assets.ContentReaderContext;
@@ -14,25 +15,24 @@ import bc.utils.filesystem.FileUtils;
 
 public class Animation extends Asset
 {
-	private static AssetInfo info;// = new AssetInfo("Animation", "ani", "AnimationImporter");
-	
 	static
 	{
-		info = new AssetInfo();
+		AssetInfo info = new AssetInfo();
 		info.importer = new AnimationImporter();
 		info.writer = new AnimationWriter();
+		
+		AssetRegistry.register(Animation.class, info);
 	}
 	
 	private File textureFile;
 	
 	public Animation()
 	{
-		super(info);
 	}
 	
 	public Animation(String name, File file)
 	{
-		super(info, name, file);
+		super(name, file);
 	}
 
 	@Override

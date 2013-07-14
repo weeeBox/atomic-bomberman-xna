@@ -1,8 +1,6 @@
 package bc.tasks;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -13,19 +11,18 @@ public class ContentTask extends Task
 {
 	private File codeFile;
 	private File outputDir;
-	
-	private List<AssetDir> dirList;
+
+	private AssetDir rootDir;
 	
 	public ContentTask()
 	{
-		dirList = new ArrayList<AssetDir>();
 	}
 	
 	@Override
 	public void execute() throws BuildException
 	{
 		checkParams();
-		
+
 	}
 	
 	private void checkParams()
@@ -41,11 +38,17 @@ public class ContentTask extends Task
 		
 		if (outputDir.exists() && !outputDir.isDirectory())
 			throw new BuildException("File is not a directory: " + outputDir);
+
+		if (rootDir == null)
+			throw new BuildException("Add a root dir element");
 	}
 
 	public void addDir(AssetDir dir)
 	{
-		dirList.add(dir);
+		if (rootDir != null)
+			throw new BuildException("Only 1 root dir allowed");
+		
+		rootDir = dir;
 	}
 	
 	public void setCodeFile(File codeFile)

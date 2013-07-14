@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import bc.assets.Asset;
 import bc.assets.AssetInfo;
+import bc.assets.AssetRegistry;
 import bc.assets.BinaryWriter;
 import bc.assets.ContentImporter;
 import bc.assets.ContentReaderContext;
@@ -13,23 +14,22 @@ import bc.assets.ContentWriterContext;
 
 public class Texture extends Asset 
 {
-	private static AssetInfo info;
-	
 	static
 	{
-		info = new AssetInfo();
+		AssetInfo info = new AssetInfo();
 		info.importer = new TextureImporter();
 		info.writer = new TextureWriter();
+		
+		AssetRegistry.register(Texture.class, info);
 	}
 	
 	public Texture()
 	{
-		super(info);
 	}
 	
 	public Texture(String name, File file)
 	{
-		super(info, name, file);
+		super(name, file);
 	}
 }
 

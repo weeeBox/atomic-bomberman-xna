@@ -14,21 +14,12 @@ public abstract class Asset
 	private File sourceFile;
 	private File destFile;
 	
-	private AssetInfo assetInfo;
-	
-	protected Asset(AssetInfo assetInfo)
+	protected Asset()
 	{
-		if (assetInfo == null)
-		{
-			throw new IllegalArgumentException("Asset info is null");
-		}
-		this.assetInfo = assetInfo;
 	}
 	
-	protected Asset(AssetInfo assetInfo, String name, File file)
+	protected Asset(String name, File file)
 	{
-		this(assetInfo);
-		
 		setName(name);
 		setFile(file);
 	}
@@ -104,22 +95,7 @@ public abstract class Asset
 	{
 		this.sourceFile = file;
 	}
-	
-	public ContentImporter<?> getImporter()
-	{
-		return assetInfo.importer;
-	}
-	
-	public ContentProcessor<?, ?> getProcessor()
-	{
-		return assetInfo.processor;
-	}
-	
-	public boolean hasProcessor()
-	{
-		return getProcessor() != null;
-	}
-	
+
 	@Override
 	public String toString() 
 	{

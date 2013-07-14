@@ -1,7 +1,5 @@
 package bc.assets;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,31 +10,14 @@ import bc.assets.types.Scheme;
 import bc.assets.types.Sound;
 import bc.assets.types.Texture;
 
-public class AssetDir extends Asset
+public class AssetDir
 {
-	private static final AssetInfo info;
-	
-	static
-	{
-		info = new AssetInfo();
-		info.importer = new AssetDirImporter();
-	}
-	
+	private List<AssetDir> dirs = new ArrayList<AssetDir>();
 	private List<Asset> assets = new ArrayList<Asset>();
-	
-	public AssetDir()
-	{
-		super(info);
-	}
-	
-	protected AssetDir(String name, File file)
-	{
-		super(info, name, file);
-	}
 	
 	public void addDir(AssetDir assetDir)
 	{
-		add(assetDir);
+		dirs.add(assetDir);
 	}
 	
 	public void addTexture(Texture texture)
@@ -77,14 +58,5 @@ public class AssetDir extends Asset
 	public List<Asset> getAssets()
 	{
 		return assets;
-	}
-}
-
-class AssetDirImporter extends ContentImporter<AssetDir>
-{
-	@Override
-	public AssetDir read(File file, ContentReaderContext context) throws IOException
-	{
-		return null;
 	}
 }
