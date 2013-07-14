@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bc.assets.types.Animation;
-import bc.assets.types.PixelFontRes;
-import bc.assets.types.SchemeAsset;
-import bc.assets.types.TextureAsset;
-import bc.assets.types.MusicAsset;
-import bc.assets.types.SoundAsset;
-import bc.assets.types.VectorFontAsset;
+import bc.assets.types.BitmapFont;
+import bc.assets.types.Music;
+import bc.assets.types.Scheme;
+import bc.assets.types.Sound;
+import bc.assets.types.Texture;
 import bc.tasks.ContentProjTask;
 
 
@@ -55,32 +54,27 @@ public class AssetPackage
 		}
 	}
 
-	public void addImage(TextureAsset image)
+	public void addImage(Texture image)
 	{
 		addResource(image);
 	}
 
-	public void addPixelFont(PixelFontRes font)
+	public void addPixelFont(BitmapFont font)
 	{
 		addResource(font);
 	}
 
-	public void addVectorFont(VectorFontAsset font)
-	{
-		addResource(font);
-	}
-
-	public void addSound(SoundAsset sound)
+	public void addSound(Sound sound)
 	{
 		addResource(sound);
 	}
 
-	public void addMusic(MusicAsset music)
+	public void addMusic(Music music)
 	{
 		addResource(music);
 	}
 	
-	public void addScheme(SchemeAsset scheme)
+	public void addScheme(Scheme scheme)
 	{
 		addResource(scheme);
 	}

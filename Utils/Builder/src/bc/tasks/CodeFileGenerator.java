@@ -49,24 +49,7 @@ public class CodeFileGenerator
 
 	private void writeResIds(WriteDestination out, List<AssetPackage> packs)
 	{
-		out.writeln("public class %s", ASSET_NAMES_CLASS);
-		out.writeBlockOpen();
-
-		int resIndex = 0;
-		for (AssetPackage pack : packs)
-		{
-			out.writeln("// " + pack.getName().toUpperCase());
-
-			List<Asset> packResources = pack.getResources();
-			for (Asset res : packResources)
-			{
-				out.writeln("public const int %s = %d;", res.getLongName(), resIndex++);
-			}
-		}
-		out.writeln("// total resources count");
-		out.writeln("public const int RES_COUNT = %d;", resIndex);
-
-		out.writeBlockClose();
+		
 	}
 
 	private void writeResInfos(WriteDestination out, List<AssetPackage> packs)
@@ -120,7 +103,6 @@ public class CodeFileGenerator
 
 	private void writeResInfo(WriteDestination out, Asset res)
 	{
-		out.writeln("new %s(\"%s\", %s.%s, %s.%s),", ASSET_LOAD_INFO_CLASS, res.getShortName(), ASSET_NAMES_CLASS, res.getLongName(), ASSET_TYPES_CLASS, res.getResourceType());
 	}
 
 	private void writeEnding(WriteDestination out) throws IOException

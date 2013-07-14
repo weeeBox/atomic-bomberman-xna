@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public abstract class ContentStreamReader <T> extends ContentReader<T>
+public abstract class ContentStreamReader <T> extends ContentImporter<T>
 {
 	@Override
 	public T read(File file, ContentReaderContext context) throws IOException

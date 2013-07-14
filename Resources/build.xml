@@ -14,10 +14,8 @@
     <property name="dir.anim" value="${dir.res}/Animations" />
     
     <property name="csproject.name" value="Bomberman"/>
-    <property name="csproject.content" value="../${csproject.name}/${csproject.name}Content" />
-    <property name="csproject.file" value="${csproject.content}/${csproject.name}Content.contentproj" />
-    
-    <property name="cscode.file" value="../${csproject.name}/${csproject.name}/Assets.cs" />
+    <property name="csproject.dir" value="../${csproject.name}/${csproject.name}" />
+    <property name="cscode.file" value="${csproject.dir}/Assets.cs" />
     
     <property name="dir.builder" value="../Utils/Builder"/>
     
@@ -35,16 +33,15 @@
             </fileset>
         </path>
         
-        <taskdef name="content" classname="bc.tasks.ContentProjTask">
+        <taskdef name="content" classname="bc.tasks.ContentTask">
             <classpath path="${dir.builder}/bin"/>
             <classpath refid="libs"/>
         </taskdef>
         
-        <property name="dir.restmp" value="${dir.builder}/tmp/res"/>
     </target>
     
     <target name="run" depends="build">
-        <content projFile="${csproject.file}" codeFile="${cscode.file}" resTemp="${dir.restmp}">            
+        <content codeFile="${cscode.file}" outputDir="${dir.restmp}">            
             &asset_list;
         </content>
     </target>   

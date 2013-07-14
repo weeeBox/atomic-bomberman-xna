@@ -1,14 +1,26 @@
 package bc.assets.types;
 
 import java.io.File;
+import java.io.IOException;
 
 import bc.assets.Asset;
 import bc.assets.AssetInfo;
+import bc.assets.ContentImporter;
+import bc.assets.ContentReaderContext;
+import bc.assets.ContentTypeWriter;
+import bc.assets.ContentWriter;
 import bc.utils.filesystem.FileUtils;
 
 public class Animation extends Asset
 {
-	private static AssetInfo info = new AssetInfo("Animation", "ani", "AnimationImporter");
+	private static AssetInfo info;// = new AssetInfo("Animation", "ani", "AnimationImporter");
+	
+	static
+	{
+		info = new AssetInfo();
+		info.importer = new AnimationImporter();
+		info.writer = new AnimationWriter();
+	}
 	
 	private File textureFile;
 	
@@ -34,7 +46,7 @@ public class Animation extends Asset
 		}
 		
 		String textureName = FileUtils.getFilenameNoExt(textureFile);
-		addChildRes(new TextureAsset(textureName, textureFile));
+		addChildRes(new Texture(textureName, textureFile));
 		
 		postProcess();
 	}
@@ -44,3 +56,22 @@ public class Animation extends Asset
 		this.textureFile = texture;
 	}
 }
+
+class AnimationImporter extends ContentImporter<Animation>
+{
+	@Override
+	public Animation read(File file, ContentReaderContext context) throws IOException
+	{
+		throw new Error("Implement me"); // FIXME
+	}
+}
+
+class AnimationWriter extends ContentTypeWriter<Animation>
+{
+	@Override
+	protected void write(ContentWriter output, Animation t)
+	{
+		throw new Error("Implement me"); // FIXME
+	}
+}
+

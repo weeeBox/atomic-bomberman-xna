@@ -7,19 +7,6 @@ import bc.utils.filesystem.FileUtils;
 
 public abstract class Asset
 {
-	public enum BuildAction
-	{
-		None,
-		Compile
-	}
-	
-	public enum CopyToOutputDirectory
-	{
-		DontCopy,
-		IfNewer,
-		Always
-	}
-	
 	private AssetPackage pack;
 	
 	private String name;
@@ -28,9 +15,6 @@ public abstract class Asset
 	private File destFile;
 	
 	private AssetInfo assetInfo;
-	
-	private BuildAction buildAction = BuildAction.Compile;
-	private CopyToOutputDirectory copyToOutputDirectory = CopyToOutputDirectory.DontCopy;
 	
 	protected Asset(AssetInfo assetInfo)
 	{
@@ -74,7 +58,6 @@ public abstract class Asset
 	protected void addToSync()
 	{
 		ContentProjTask.fileSync.addFile(getDestFile());
-		ContentProjTask.projSync.addResource(this);
 	}
 
 	public AssetPackage getPackage() 
@@ -90,11 +73,6 @@ public abstract class Asset
 	public String getName()
 	{
 		return name;
-	}
-	
-	public String getLongName() 
-	{
-		return getResourceTypePrefix() + "_" + name;
 	}
 	
 	public void setName(String name) 
@@ -127,49 +105,19 @@ public abstract class Asset
 		this.sourceFile = file;
 	}
 	
-	public String getImporter()
+	public ContentImporter<?> getImporter()
 	{
-		return assetInfo.getImporter();
+		return assetInfo.importer;
 	}
 	
-	public String getProcessor()
+	public ContentProcessor<?, ?> getProcessor()
 	{
-		return assetInfo.getProcessor();
+		return assetInfo.processor;
 	}
 	
 	public boolean hasProcessor()
 	{
 		return getProcessor() != null;
-	}
-	
-	public String getResourceType()
-	{
-		return assetInfo.getType();
-	}
-	
-	public String getResourceTypePrefix()
-	{
-		return assetInfo.getTypePrefix();
-	}
-
-	public BuildAction getBuildAction()
-	{
-		return buildAction;
-	}
-	
-	public void setBuildAction(BuildAction buildAction)
-	{
-		this.buildAction = buildAction;
-	}
-	
-	public CopyToOutputDirectory getCopyToOutputDirectory()
-	{
-		return copyToOutputDirectory;
-	}
-	
-	public void setCopyToOutputDirectory(CopyToOutputDirectory copyToOutputDirectory)
-	{
-		this.copyToOutputDirectory = copyToOutputDirectory;
 	}
 	
 	@Override

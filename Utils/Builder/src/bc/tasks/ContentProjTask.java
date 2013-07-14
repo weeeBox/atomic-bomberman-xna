@@ -17,14 +17,12 @@ public class ContentProjTask extends Task
 	private List<AssetPackage> packages = new ArrayList<AssetPackage>();
 
 	public static ProjectFileSync fileSync;
-	public static ContentProjSync projSync;
 	public static File contentDir;
 	public static File resDir;
 
 	public ContentProjTask()
 	{
 		fileSync = new ProjectFileSync();
-		projSync = new ContentProjSync();
 	}
 
 	@Override
@@ -59,7 +57,6 @@ public class ContentProjTask extends Task
 	private void processContentProj()
 	{
 		fileSync.sync(contentDir);
-		projSync.sync(projFile);
 	}
 
 	private void generateResourcesCode(File file)
