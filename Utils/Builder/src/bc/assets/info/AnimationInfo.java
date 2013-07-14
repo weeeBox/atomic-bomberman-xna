@@ -16,7 +16,7 @@ public class AnimationInfo extends AssetInfo
 {
 	static
 	{
-		ContentInfo<Animation> info = new ContentInfo<Animation>();
+		ContentInfo<AnimationInfo, Animation> info = new ContentInfo<AnimationInfo, Animation>();
 		info.importer = new AnimationImporter();
 		info.writer = new AnimationWriter();
 		
@@ -45,12 +45,12 @@ public class AnimationInfo extends AssetInfo
 	}
 }
 
-class AnimationImporter extends ContentImporter<Animation>
+class AnimationImporter extends ContentImporter<AnimationInfo, Animation>
 {
 	@Override
-	public Animation importAsset(File file, AssetContext context) throws IOException
+	public Animation importAsset(AnimationInfo info, AssetContext context) throws IOException
 	{
-		throw new Error("Implement me"); // FIXME
+		return new Animation();
 	}
 }
 

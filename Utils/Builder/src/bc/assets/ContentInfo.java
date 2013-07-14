@@ -1,8 +1,8 @@
 package bc.assets;
 
-public class ContentInfo <T extends Asset>
+public class ContentInfo <I extends AssetInfo, T extends Asset>
 {
-	public ContentImporter<T> importer;
+	public ContentImporter<I, T> importer;
 	public ContentProcessor<T> processor;
 	public ContentWriter<T> writer;
 }

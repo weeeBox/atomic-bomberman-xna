@@ -1,7 +1,10 @@
 package bc.assets.info;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import bc.assets.AssetContext;
 import bc.assets.AssetInfo;
@@ -16,7 +19,7 @@ public class TextureInfo extends AssetInfo
 {
 	static
 	{
-		ContentInfo<Texture> info = new ContentInfo<Texture>();
+		ContentInfo<TextureInfo, Texture> info = new ContentInfo<TextureInfo, Texture>();
 		info.importer = new TextureImporter();
 		info.writer = new TextureWriter();
 		
@@ -33,12 +36,13 @@ public class TextureInfo extends AssetInfo
 	}
 }
 
-class TextureImporter extends ContentImporter<Texture>
+class TextureImporter extends ContentImporter<TextureInfo, Texture>
 {
 	@Override
-	public Texture importAsset(File file, AssetContext context) throws IOException
+	public Texture importAsset(TextureInfo info, AssetContext context) throws IOException
 	{
-		throw new Error("Implement me"); // FIXME
+		BufferedImage image = ImageIO.read(info.getFile());
+		return new Texture(image);
 	}
 }
 

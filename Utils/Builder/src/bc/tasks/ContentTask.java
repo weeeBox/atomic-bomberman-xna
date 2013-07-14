@@ -62,13 +62,9 @@ public class ContentTask extends Task
 	
 	private void process(AssetInfo assetInfo, AssetContext context) throws IOException
 	{
-		ContentInfo<? extends Asset> info = findInfo(assetInfo.getClass());
+		ContentInfo<? extends AssetInfo, ? extends Asset> info = findInfo(assetInfo.getClass());
 		
-		File source = assetInfo.getFile();
-		if (!source.exists()) 
-			throw new BuildException("File not exists: " + source);
-
-		Asset asset = info.importer.importAsset(source, context);
+		Asset asset = info.importer.importContent(assetInfo, context);
 
 		if (info.processor != null)
 			info.processor.processAsset(asset, context);
@@ -113,9 +109,9 @@ public class ContentTask extends Task
 		this.outputDir = outputDir;
 	}
 	
-	private ContentInfo<?> findInfo(Class<?> cls)
+	private ContentInfo<?, ?> findInfo(Class<?> cls)
 	{
-		ContentInfo<?> info = AssetRegistry.find(cls);
+		ContentInfo<?, ?> info = AssetRegistry.find(cls);
 		if (info == null)
 		{
 			throw new BuildException("Can't find asset info for: " + cls);
