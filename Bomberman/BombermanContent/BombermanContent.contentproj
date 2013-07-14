@@ -50,12 +50,6 @@
   </Target>
   -->
   <ItemGroup>
-    <ProjectReference Include="..\..\BombermanContentPipeline\BombermanContentPipeline.csproj">
-      <Project>{416DEC6A-7E49-4EDF-B93A-C149F7F7D95C}</Project>
-      <Name>BombermanContentPipeline</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="SystemFont.spritefont">
       <Name>SystemFont</Name>
       <Importer>FontDescriptionImporter</Importer>
