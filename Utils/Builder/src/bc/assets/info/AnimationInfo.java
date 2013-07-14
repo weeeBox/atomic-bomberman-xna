@@ -1,6 +1,7 @@
 package bc.assets.info;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -157,8 +158,56 @@ class AnimationImporter extends ContentImporter<AnimationInfo, Animation>
 class AnimationWriter extends ContentWriter<Animation>
 {
 	@Override
-	protected void write(BinaryWriter output, Animation t, AssetContext context)
+	protected void write(BinaryWriter output, Animation animation, AssetContext context) throws IOException
 	{
+		output.write(animation.getName());
+
+		List<AnimationGroup> groups = animation.getGroups();
+		write(output, groups);
+		
+		Texture texture = animation.getTexture();
+		write(output, texture);
+	}
+
+	private void write(BinaryWriter output, List<AnimationGroup> groups) throws IOException
+	{
+		output.write(groups.size());
+		for (AnimationGroup group : groups)
+		{
+			write(output, group);
+		}
+	}
+
+	private void write(BinaryWriter output, AnimationGroup group) throws IOException
+	{
+		output.write(group.getName());
+		List<AnimationFrame> frames = group.getFrames();
+		output.write(frames.size());
+		
+		for (AnimationFrame frame : frames)
+		{
+			write(output, frame);
+		}
+	}
+
+	private void write(BinaryWriter output, AnimationFrame frame) throws IOException
+	{
+		output.write(frame.x);
+		output.write(frame.y);
+		output.write(frame.ox);
+		output.write(frame.oy);
+		output.write(frame.w);
+		output.write(frame.h);
+	}
+
+	private void write(BinaryWriter output, Texture texture) throws IOException
+	{
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ImageIO.write(texture.getImage(), "png", bos);
+		
+		byte[] data = bos.toByteArray();
+		output.write(data.length);
+		output.write(data);
 	}
 }
 
