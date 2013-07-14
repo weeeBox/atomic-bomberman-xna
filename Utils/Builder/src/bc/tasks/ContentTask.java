@@ -73,6 +73,8 @@ public class ContentTask extends Task
 		
 		File outputFile = new File(context.getOutputDir(), assetInfo.getName() + ASSET_BIN_EXT);
 		info.writer.write(outputFile, asset, context);
+		
+		System.out.println(outputFile);
 	}
 
 	private void checkParams()
