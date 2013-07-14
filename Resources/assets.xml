@@ -95,7 +95,76 @@
 			<animation name="XPLODE9" file="${dir.anim}/XPLODE9.anim" />
 			<animation name="ZEN" file="${dir.anim}/ZEN.anim" />
 		</dir>
+	</dir>
 
+	<dir name="maps">
+		<scheme name="4corners" file="${dir.schemes}/4corners.sch" />
+		<scheme name="airchaos" file="${dir.schemes}/airchaos.sch" />
+		<scheme name="airmail" file="${dir.schemes}/airmail.sch" />
+		<scheme name="alleys" file="${dir.schemes}/alleys.sch" />
+		<scheme name="alleys2" file="${dir.schemes}/alleys2.sch" />
+		<scheme name="antfarm" file="${dir.schemes}/antfarm.sch" />
+		<scheme name="asylum" file="${dir.schemes}/asylum.sch" />
+		<scheme name="back" file="${dir.schemes}/back.sch" />
+		<scheme name="back2" file="${dir.schemes}/back2.sch" />
+		<scheme name="basic" file="${dir.schemes}/basic.sch" />
+		<scheme name="basicsml" file="${dir.schemes}/basicsml.sch" />
+		<scheme name="bman93" file="${dir.schemes}/bman93.sch" />
+		<scheme name="border" file="${dir.schemes}/border.sch" />
+		<scheme name="bowling" file="${dir.schemes}/bowling.sch" />
+		<scheme name="boxed" file="${dir.schemes}/boxed.sch" />
+		<scheme name="breakout" file="${dir.schemes}/breakout.sch" />
+		<scheme name="bunch" file="${dir.schemes}/bunch.sch" />
+		<scheme name="castle" file="${dir.schemes}/castle.sch" />
+		<scheme name="castle2" file="${dir.schemes}/castle2.sch" />
+		<scheme name="chain" file="${dir.schemes}/chain.sch" />
+		<scheme name="chase" file="${dir.schemes}/chase.sch" />
+		<scheme name="checkers" file="${dir.schemes}/checkers.sch" />
+		<scheme name="chicane" file="${dir.schemes}/chicane.sch" />
+		<scheme name="clear" file="${dir.schemes}/clear.sch" />
+		<scheme name="clearing" file="${dir.schemes}/clearing.sch" />
+		<scheme name="confused" file="${dir.schemes}/confused.sch" />
+		<scheme name="cubic" file="${dir.schemes}/cubic.sch" />
+		<scheme name="cutter" file="${dir.schemes}/cutter.sch" />
+		<scheme name="cutthrot" file="${dir.schemes}/cutthrot.sch" />
+		<scheme name="deadend" file="${dir.schemes}/deadend.sch" />
+		<scheme name="diamond" file="${dir.schemes}/diamond.sch" />
+		<scheme name="dograce" file="${dir.schemes}/dograce.sch" />
+		<scheme name="dome" file="${dir.schemes}/dome.sch" />
+		<scheme name="e_vs_w" file="${dir.schemes}/e_vs_w.sch" />
+		<scheme name="fair" file="${dir.schemes}/fair.sch" />
+		<scheme name="fargo" file="${dir.schemes}/fargo.sch" />
+		<scheme name="fort" file="${dir.schemes}/fort.sch" />
+		<scheme name="freeway" file="${dir.schemes}/freeway.sch" />
+		<scheme name="gridlock" file="${dir.schemes}/gridlock.sch" />
+		<scheme name="happy" file="${dir.schemes}/happy.sch" />
+		<scheme name="jail" file="${dir.schemes}/jail.sch" />
+		<scheme name="leak" file="${dir.schemes}/leak.sch" />
+		<scheme name="neighbor" file="${dir.schemes}/neighbor.sch" />
+		<scheme name="neil" file="${dir.schemes}/neil.sch" />
+		<scheme name="n_vs_s" file="${dir.schemes}/n_vs_s.sch" />
+		<scheme name="obstacle" file="${dir.schemes}/obstacle.sch" />
+		<scheme name="og" file="${dir.schemes}/og.sch" />
+		<scheme name="pattern" file="${dir.schemes}/pattern.sch" />
+		<scheme name="pingpong" file="${dir.schemes}/pingpong.sch" />
+		<scheme name="purist" file="${dir.schemes}/purist.sch" />
+		<scheme name="racer1" file="${dir.schemes}/racer1.sch" />
+		<scheme name="rail1" file="${dir.schemes}/rail1.sch" />
+		<scheme name="railroad" file="${dir.schemes}/railroad.sch" />
+		<scheme name="roommate" file="${dir.schemes}/roommate.sch" />
+		<scheme name="r_garden" file="${dir.schemes}/r_garden.sch" />
+		<scheme name="spiral" file="${dir.schemes}/spiral.sch" />
+		<scheme name="spread" file="${dir.schemes}/spread.sch" />
+		<scheme name="tennis" file="${dir.schemes}/tennis.sch" />
+		<scheme name="thatthis" file="${dir.schemes}/thatthis.sch" />
+		<scheme name="the_rim" file="${dir.schemes}/the_rim.sch" />
+		<scheme name="thisthat" file="${dir.schemes}/thisthat.sch" />
+		<scheme name="tight" file="${dir.schemes}/tight.sch" />
+		<scheme name="toilet" file="${dir.schemes}/toilet.sch" />
+		<scheme name="uturn" file="${dir.schemes}/uturn.sch" />
+		<scheme name="volley" file="${dir.schemes}/volley.sch" />
+		<scheme name="wallybom" file="${dir.schemes}/wallybom.sch" />
+		<scheme name="x" file="${dir.schemes}/x.sch" />
 	</dir>
 
 </dir>

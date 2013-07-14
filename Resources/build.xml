@@ -10,7 +10,7 @@
     <property name="dir.gfx" value="${dir.res}/Gfx" />
     <property name="dir.sound" value="${dir.res}/Sfx" />
     <property name="dir.fonts" value="${dir.res}/Fonts" />
-    <property name="dir.schemes" value="${dir.res}/Data" />
+    <property name="dir.schemes" value="${dir.res}/Maps" />
     <property name="dir.anim" value="${dir.res}/Animations" />
     
     <property name="csproject.name" value="Bomberman"/>
