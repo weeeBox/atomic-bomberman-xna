@@ -48,7 +48,7 @@ public class AnimationInfo extends AssetInfo
 class AnimationImporter extends ContentImporter<Animation>
 {
 	@Override
-	public Animation importContent(File file, AssetContext context) throws IOException
+	public Animation importAsset(File file, AssetContext context) throws IOException
 	{
 		throw new Error("Implement me"); // FIXME
 	}

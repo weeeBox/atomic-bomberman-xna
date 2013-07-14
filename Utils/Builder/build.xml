@@ -5,7 +5,6 @@
 	<property name="dir.tmp" value="tmp" />
 	<property name="dir.source" value="src" />
 	<property name="dir.classes" value="${dir.tmp}/bin" />
-	<property name="dir.restmp" value="${dir.tmp}/res" />
 	
 	<path id="libs">
 		<fileset dir="${dir.lib}">
@@ -13,23 +12,16 @@
 		</fileset>
 	</path>
 
-	<target name="clean">
+	<target name="-clean">
 		<delete dir="${dir.tmp}" />
 	</target>
 	
-	<target name="cleanres">
-		<delete dir="${dir.restmp}" />
-	</target>
-	
-	<target name="build">
+	<target name="-build" depends="-clean">
 		<!-- Build project -->
 		<mkdir dir="${dir.classes}"/>
 		<javac destdir="${dir.classes}" debug="true" encoding="UTF-8">
 		  	<src path="${dir.source}" /> 
 			<classpath refid="libs"/>
 		</javac>		
-		
-		<!-- Res output -->
-		<mkdir dir="${dir.restmp}"/>
 	</target>	
 </project>

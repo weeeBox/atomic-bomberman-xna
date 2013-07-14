@@ -8,7 +8,7 @@ import java.io.InputStream;
 public abstract class ContentStreamReader extends ContentImporter
 {
 	@Override
-	public Asset importContent(File file, AssetContext context) throws IOException
+	public Asset importAsset(File file, AssetContext context) throws IOException
 	{
 		FileInputStream fis = null;
 		try

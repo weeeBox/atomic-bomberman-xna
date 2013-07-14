@@ -36,7 +36,7 @@ public class TextureInfo extends AssetInfo
 class TextureImporter extends ContentImporter<Texture>
 {
 	@Override
-	public Texture importContent(File file, AssetContext context) throws IOException
+	public Texture importAsset(File file, AssetContext context) throws IOException
 	{
 		throw new Error("Implement me"); // FIXME
 	}

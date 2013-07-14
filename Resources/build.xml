@@ -19,12 +19,12 @@
     
     <property name="dir.builder" value="../Utils/Builder"/>
     
-    <target name="clean">
-        <ant antfile="build.xml" target="clean" dir="${dir.builder}"/>
+    <target name="-clean">
+        <ant antfile="build.xml" target="-clean" dir="${dir.builder}"/>
     </target>
     
-    <target name="build">
-        <ant antfile="build.xml" target="build" dir="${dir.builder}"/>
+    <target name="-build" depends="-clean">
+        <ant antfile="build.xml" target="-build" dir="${dir.builder}"/>
         
         <!-- Content task -->
         <path id="libs">
@@ -40,7 +40,7 @@
         
     </target>
     
-    <target name="run" depends="build">
+    <target name="run" depends="-build">
         <content codeFile="${cscode.file}" outputDir="${dir.restmp}">            
             &asset_list;
         </content>

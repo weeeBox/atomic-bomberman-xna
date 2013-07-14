@@ -8,13 +8,11 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 import bc.assets.Asset;
+import bc.assets.AssetContext;
 import bc.assets.AssetDir;
 import bc.assets.AssetInfo;
 import bc.assets.AssetRegistry;
-import bc.assets.ContentImporter;
 import bc.assets.ContentInfo;
-import bc.assets.ContentProcessor;
-import bc.assets.ContentWriter;
 
 public class ContentTask extends Task
 {
@@ -22,8 +20,6 @@ public class ContentTask extends Task
 	private File outputDir;
 
 	private AssetDir rootDir;
-	
-	private List<Asset> assets;
 	
 	public ContentTask()
 	{
@@ -35,7 +31,7 @@ public class ContentTask extends Task
 		checkParams();
 		try
 		{
-			process(rootDir);
+			process(rootDir, outputDir);
 		}
 		catch (IOException e)
 		{
@@ -43,22 +39,28 @@ public class ContentTask extends Task
 		}
 	}
 	
-	private void process(AssetDir assetDir) throws IOException
+	private void process(AssetDir assetDir, File outputDir) throws IOException
+	{
+		AssetContext context = new AssetContext(new File(outputDir, assetDir.getName()));
+		process(assetDir, context);
+	}
+	
+	private void process(AssetDir assetDir, AssetContext context) throws IOException
 	{
 		List<AssetDir> dirs = assetDir.getDirs();
 		for (AssetDir dir : dirs)
 		{
-			process(dir);
+			process(dir, context.createChild(dir.getName()));
 		}
 		
 		List<AssetInfo> assets = assetDir.getAssets();
 		for (AssetInfo asset : assets)
 		{
-			process(asset);
+			process(asset, context);
 		}
 	}
 	
-	private void process(AssetInfo assetInfo) throws IOException
+	private void process(AssetInfo assetInfo, AssetContext context) throws IOException
 	{
 		ContentInfo<? extends Asset> info = findInfo(assetInfo.getClass());
 		
@@ -66,14 +68,13 @@ public class ContentTask extends Task
 		if (!source.exists()) 
 			throw new BuildException("File not exists: " + source);
 
-		ContentImporter<? extends Asset> importer = info.importer;
-		Asset asset = importer.importContent(source, null);
+		Asset asset = info.importer.importAsset(source, context);
 
-		ContentProcessor<? extends Asset> processor = info.processor;
-		if (processor != null)
-			processor.processAsset(asset, null);
+		if (info.processor != null)
+			info.processor.processAsset(asset, context);
 		
-		ContentWriter<? extends Asset> writer = info.writer;
+		File outputFile = new File(context.getOutputDir(), assetInfo.getName());
+		System.out.println(outputFile);
 	}
 
 	private void checkParams()

@@ -12,12 +12,19 @@ import bc.assets.info.TextureInfo;
 
 public class AssetDir
 {
+	private String name;
+	
 	private List<AssetDir> dirs = new ArrayList<AssetDir>();
 	private List<AssetInfo> assets = new ArrayList<AssetInfo>();
 	
 	public void addDir(AssetDir assetDir)
 	{
 		dirs.add(assetDir);
+	}
+	
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 	
 	public void addTexture(TextureInfo texture)
@@ -53,6 +60,11 @@ public class AssetDir
 	private void add(AssetInfo asset)
 	{
 		assets.add(asset);
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 
 	public List<AssetDir> getDirs()
