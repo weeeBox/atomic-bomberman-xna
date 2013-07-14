@@ -5,10 +5,11 @@ import java.io.IOException;
 
 import bc.assets.Asset;
 import bc.assets.AssetInfo;
+import bc.assets.BinaryWriter;
 import bc.assets.ContentImporter;
 import bc.assets.ContentReaderContext;
-import bc.assets.ContentTypeWriter;
 import bc.assets.ContentWriter;
+import bc.assets.ContentWriterContext;
 import bc.utils.filesystem.FileUtils;
 
 public class Animation extends Asset
@@ -66,10 +67,10 @@ class AnimationImporter extends ContentImporter<Animation>
 	}
 }
 
-class AnimationWriter extends ContentTypeWriter<Animation>
+class AnimationWriter extends ContentWriter<Animation>
 {
 	@Override
-	protected void write(ContentWriter output, Animation t)
+	protected void write(BinaryWriter output, Animation t, ContentWriterContext context)
 	{
 		throw new Error("Implement me"); // FIXME
 	}

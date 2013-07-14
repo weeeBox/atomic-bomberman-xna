@@ -5,10 +5,11 @@ import java.io.IOException;
 
 import bc.assets.Asset;
 import bc.assets.AssetInfo;
+import bc.assets.BinaryWriter;
 import bc.assets.ContentImporter;
 import bc.assets.ContentReaderContext;
-import bc.assets.ContentTypeWriter;
 import bc.assets.ContentWriter;
+import bc.assets.ContentWriterContext;
 
 public class Texture extends Asset 
 {
@@ -46,10 +47,10 @@ class TextureImporter extends ContentImporter<Texture>
 	}
 }
 
-class TextureWriter extends ContentTypeWriter<Texture>
+class TextureWriter extends ContentWriter<Texture>
 {
 	@Override
-	protected void write(ContentWriter output, Texture t)
+	protected void write(BinaryWriter output, Texture t, ContentWriterContext context)
 	{
 		throw new Error("Implement me"); // FIXME
 	}
