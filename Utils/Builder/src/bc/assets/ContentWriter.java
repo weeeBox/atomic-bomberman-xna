@@ -29,10 +29,10 @@ public abstract class ContentWriter<T extends Asset>
 	}
 
 	@SuppressWarnings("unchecked")
-	private void writeAsset(BinaryWriter output, Asset asset, AssetContext context)
+	private void writeAsset(BinaryWriter output, Asset asset, AssetContext context) throws IOException
 	{
 		write(output, (T)asset, context);
 	}
 	
-	protected abstract void write(BinaryWriter output, T asset, AssetContext context);
+	protected abstract void write(BinaryWriter output, T asset, AssetContext context) throws IOException;
 }

@@ -49,8 +49,8 @@ class TextureImporter extends ContentImporter<TextureInfo, Texture>
 class TextureWriter extends ContentWriter<Texture>
 {
 	@Override
-	protected void write(BinaryWriter output, Texture t, AssetContext context)
+	protected void write(BinaryWriter output, Texture texture, AssetContext context) throws IOException
 	{
-		throw new Error("Implement me"); // FIXME
+		ImageIO.write(texture.getImage(), "png", output.getStream());
 	}
 }

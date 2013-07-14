@@ -59,7 +59,6 @@ class AnimationWriter extends ContentWriter<Animation>
 	@Override
 	protected void write(BinaryWriter output, Animation t, AssetContext context)
 	{
-		throw new Error("Implement me"); // FIXME
 	}
 }
 
