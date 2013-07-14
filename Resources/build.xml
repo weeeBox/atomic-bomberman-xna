@@ -18,6 +18,7 @@
     <property name="cscode.file" value="${csproject.dir}/Assets.cs" />
     
     <property name="dir.builder" value="../Utils/Builder"/>
+    <property name="dir.assets" value="${csproject.dir}/bin/x86/Debug"/>
     
     <target name="-clean">
         <ant antfile="build.xml" target="-clean" dir="${dir.builder}"/>
@@ -41,7 +42,7 @@
     </target>
     
     <target name="run" depends="-build">
-        <content codeFile="${cscode.file}" outputDir="${dir.restmp}">            
+        <content codeFile="${cscode.file}" outputDir="${dir.assets}">            
             &asset_list;
         </content>
     </target>   

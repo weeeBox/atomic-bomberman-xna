@@ -70,7 +70,7 @@ public class ContentTask extends Task
 			info.processor.processAsset(asset, context);
 		
 		File outputFile = new File(context.getOutputDir(), assetInfo.getName());
-		System.out.println(outputFile);
+		info.writer.write(outputFile, asset, context);
 	}
 
 	private void checkParams()

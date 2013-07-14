@@ -8,6 +8,14 @@ public abstract class ContentWriter<T extends Asset>
 {
 	public void write(File file, Asset asset, AssetContext context) throws IOException
 	{
+		File parent = file.getParentFile();
+		if (!parent.exists())
+		{
+			boolean succeed = parent.mkdirs();
+			if (!succeed)
+				throw new IOException("Can't create directory: " + parent);
+		}
+		
 		BinaryWriter output = null;
 		try
 		{
