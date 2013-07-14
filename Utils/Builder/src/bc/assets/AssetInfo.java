@@ -32,6 +32,11 @@ public abstract class AssetInfo
 		return file;
 	}
 	
+	public File getParentFile()
+	{
+		return file.getParentFile();
+	}
+	
 	public void setFile(File file) 
 	{
 		this.file = file;
