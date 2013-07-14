@@ -97,7 +97,6 @@
     <Compile Include="Consoles\CVar.cs" />
     <Compile Include="Consoles\CVarCommand.cs" />
     <Compile Include="Core\Assets\AssetReader.cs" />
-    <Compile Include="Core\Assets\Loaders\VectorFontLoader.cs" />
     <Compile Include="Core\Assets\Readers\TextureReader.cs" />
     <Compile Include="Core\BaseUpdatableList.cs" />
     <Compile Include="Core\BaseElement.cs" />
@@ -132,7 +131,6 @@
     <Compile Include="Core\Assets\AssetLoadInfo.cs" />
     <Compile Include="Core\Assets\AssetManagerListener.cs" />
     <Compile Include="Core\Assets\AssetTypeBase.cs" />
-    <Compile Include="Core\Assets\Loaders\TextureLoader.cs" />
     <Compile Include="Core\Assets\Types\TextureImage.cs" />
     <Compile Include="Core\Input\KeyboardListenerList.cs" />
     <Compile Include="Core\UpdatableDelegate.cs" />

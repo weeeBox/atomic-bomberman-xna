@@ -7,21 +7,15 @@ namespace BomberEngine.Core.Assets
 {
     public struct AssetLoadInfo
     {
-        public String path;
-        public int index;
-        public int type;
+        public readonly int id;
+        public readonly String path;
+        public readonly Type type;
 
-        public AssetLoadInfo(String path, int index, int type)
+        public AssetLoadInfo(int id, Type type, String path)
         {
-            this.path = path;
-            this.index = index;
+            this.id = id;
             this.type = type;
-        }
-
-        public String GetAssetContentName()
-        {
-            int dotIndex = path.LastIndexOf('.');
-            return dotIndex != -1 ? path.Substring(0, dotIndex) : path;
+            this.path = path;
         }
     }
 }

@@ -11,11 +11,6 @@ public class AssetContext
 		this.outputDir = outputFile;
 	}
 	
-	public AssetContext createChild(String name)
-	{
-		return new AssetContext(new File(outputDir, name));
-	}
-	
 	public File getOutputDir()
 	{
 		return outputDir;

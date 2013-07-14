@@ -1,24 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Assets;
 using BomberEngine.Core.Assets;
-using Microsoft.Xna.Framework.Content;
-using Assets;
-using BomberEngine.Core.Assets.Loaders;
 using Bomberman.Content;
-using Microsoft.Xna.Framework.Graphics;
-using Bomberman.Content.Loader;
+using Microsoft.Xna.Framework.Content;
 
 namespace Bomberman
 {
     public class BombermanAssetManager : AssetManager
     {
         public BombermanAssetManager(ContentManager contentManager)
-            : base(contentManager, A.RES_COUNT)
+            : base(A.RES_COUNT)
         {
             RegisterReader(typeof(Scheme), new SchemeReader());
-            RegisterLoader(AssetType.Animation, new AnimationLoader());
         }
 
         public void AddPackToLoad(AssetPacks.Packs pack)

@@ -1,53 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Content;
+using BomberEngine.Core.Assets.Readers;
+using BomberEngine.Core.Assets.Types;
 using BomberEngine.Debugging;
 using BomberEngine.Game;
-using BomberEngine.Core.Assets.Loaders;
-using BomberEngine.Core.Assets.Types;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using BomberEngine.Core.Visual;
-using BomberEngine.Core.IO;
-using BomberEngine.Core.Assets.Readers;
 
 namespace BomberEngine.Core.Assets
 {
     public abstract class AssetManager
-    {
-        private ContentManager contentManager;
-
+    {   
         private AssetManagerListener listener;
 
-        private Dictionary<int, AssetLoader> loaders;
         private Dictionary<Type, AssetReader> readers;
-
         private Asset[] assets;
 
         private List<AssetLoadInfo> loadingQueue;
-
         private int loadedCount;
         
         private DelayedCall loadingTimer;
 
-        private VectorFont systemFont;
+        public Font SystemFont;
 
-        public AssetManager(ContentManager contentManager, int resourcesCount)
+        public AssetManager(int assetCount)
         {
-            this.contentManager = contentManager;
-
-            assets = new Asset[resourcesCount];
+            assets = new Asset[assetCount];
             loadingQueue = new List<AssetLoadInfo>();
-            InitLoaders();
             InitReaders();
-        }
-
-        private void InitLoaders()
-        {
-            loaders = new Dictionary<int, AssetLoader>();
-            loaders.Add(AssetTypeBase.Texture, new TextureLoader());
-            loaders.Add(AssetTypeBase.VectorFont, new VectorFontLoader());
         }
 
         private void InitReaders()
@@ -58,8 +38,8 @@ namespace BomberEngine.Core.Assets
 
         public void AddToQueue(AssetLoadInfo info)
         {
-            Debug.Assert(!IsAssetLoaded(info.index), "Resource already loaded: " + info.path);
-            Debug.Assert(!loadingQueue.Contains(info), "Resource already in the loading queue: " + info.path);
+            Debug.Assert(!IsAssetLoaded(info.id), "Resource already loaded: " + info.id);
+            Debug.Assert(!loadingQueue.Contains(info), "Resource already in the loading queue: " + info.id);
 
             loadingQueue.Add(info);
         }
@@ -68,7 +48,7 @@ namespace BomberEngine.Core.Assets
         {   
             foreach (AssetLoadInfo info in loadingQueue)
             {
-                LoadResource(info);
+                LoadAsset(info);
             }
             loadingQueue.Clear();
         }
@@ -76,11 +56,6 @@ namespace BomberEngine.Core.Assets
         public void Load()
         {
             Application.ScheduleCall(OnTimer, 0.05f);
-        }
-
-        protected void RegisterLoader(int type, AssetLoader loader)
-        {
-            loaders.Add(type, loader);
         }
 
         protected void RegisterReader(Type type, AssetReader reader)
@@ -103,25 +78,41 @@ namespace BomberEngine.Core.Assets
             return assets[id];
         }
 
-        public T LoadAsset<T>(String path) where T : Asset
+        protected bool LoadAsset(AssetLoadInfo info)
         {
-            Type type = typeof(T);
+            Debug.Assert(!IsAssetLoaded(info.id));
+
+            Asset asset = LoadAsset(info.path, info.type);
+            Debug.Assert(asset != null, "Can't load asset: " + info.path);
+
+            assets[info.id] = asset;
+            return asset != null;
+        }
+
+
+        public T LoadAsset<T>(String path) where T : Asset
+        {   
+            return (T)LoadAsset(path, typeof(T));
+        }
+
+        private Asset LoadAsset(String path, Type type)
+        {
             AssetReader reader;
             if (readers.TryGetValue(type, out reader))
             {
                 using (System.IO.Stream stream = System.IO.File.OpenRead(path))
                 {
-                    return (T) reader.Read(stream);
+                    return reader.Read(stream);
                 }
             }
 
-            return default(T);
+            return null;
         }
 
         private void OnTimer(DelayedCall timer)
         {
             AssetLoadInfo info = loadingQueue[loadedCount];
-            if (LoadResource(info))
+            if (LoadAsset(info))
             {
                 ++loadedCount;
 
@@ -142,42 +133,13 @@ namespace BomberEngine.Core.Assets
             }
             else
             {
-                throw new NotImplementedException();
+                throw new InvalidOperationException("Can't load asset: " + info.path);
             }
-        }
-
-        protected bool LoadResource(AssetLoadInfo info)
-        {
-            AssetLoader loader = loaders.ContainsKey(info.type) ? loaders[info.type] : null;
-
-            if (loader == null)
-            {
-                throw new InvalidOperationException("Loader not found for resource type: " + info.type);
-            }
-
-            Asset asset = loader.LoadAsset(contentManager, info);
-            Debug.Assert(asset != null, "Loader returned null: " + info.path);
-
-            assets[info.index] = asset;
-
-            return asset != null;
         }
 
         private bool IsAssetLoaded(int id)
         {
-            return assets[id] != null;
-        }
-
-        public virtual VectorFont SystemFont
-        {
-            get
-            {
-                if (systemFont == null)
-                {
-                    systemFont = new VectorFont(contentManager.Load<SpriteFont>("SystemFont"));
-                }
-                return systemFont;
-            }
+            return GetAsset(id) != null;
         }
     }
 }

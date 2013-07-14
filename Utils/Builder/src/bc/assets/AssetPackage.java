@@ -10,17 +10,11 @@ import bc.assets.info.SchemeInfo;
 import bc.assets.info.SoundInfo;
 import bc.assets.info.TextureInfo;
 
-public class AssetDir
+public class AssetPackage
 {
 	private String name;
 	
-	private List<AssetDir> dirs = new ArrayList<AssetDir>();
 	private List<AssetInfo> assets = new ArrayList<AssetInfo>();
-	
-	public void addDir(AssetDir assetDir)
-	{
-		dirs.add(assetDir);
-	}
 	
 	public void setName(String name)
 	{
@@ -67,11 +61,6 @@ public class AssetDir
 		return name;
 	}
 
-	public List<AssetDir> getDirs()
-	{
-		return dirs;
-	}
-	
 	public List<AssetInfo> getAssets()
 	{
 		return assets;

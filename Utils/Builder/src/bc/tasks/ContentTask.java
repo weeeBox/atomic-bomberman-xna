@@ -2,6 +2,7 @@ package bc.tasks;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tools.ant.BuildException;
@@ -9,22 +10,21 @@ import org.apache.tools.ant.Task;
 
 import bc.assets.Asset;
 import bc.assets.AssetContext;
-import bc.assets.AssetDir;
 import bc.assets.AssetInfo;
+import bc.assets.AssetPackage;
 import bc.assets.AssetRegistry;
 import bc.assets.ContentInfo;
 
 public class ContentTask extends Task
 {
-	private static final String ASSET_BIN_EXT = ".b";
-	
 	private File codeFile;
 	private File outputDir;
 
-	private AssetDir rootDir;
+	private List<AssetPackage> packs;
 	
 	public ContentTask()
 	{
+		packs = new ArrayList<AssetPackage>();
 	}
 	
 	@Override
@@ -33,28 +33,26 @@ public class ContentTask extends Task
 		checkParams();
 		try
 		{
-			process(rootDir, outputDir);
+			process(outputDir, packs);
+			generateCode(codeFile, packs);
 		}
 		catch (IOException e)
 		{
 			throw new BuildException(e);
 		}
 	}
-	
-	private void process(AssetDir assetDir, File outputDir) throws IOException
+
+	private void process(File outputDir, List<AssetPackage> packs) throws IOException
 	{
-		AssetContext context = new AssetContext(new File(outputDir, assetDir.getName()));
-		process(assetDir, context);
+		AssetContext context = new AssetContext(new File(outputDir, "Assets"));
+		for (AssetPackage pack : packs)
+		{
+			process(pack, context);
+		}
 	}
 	
-	private void process(AssetDir assetDir, AssetContext context) throws IOException
+	private void process(AssetPackage assetDir, AssetContext context) throws IOException
 	{
-		List<AssetDir> dirs = assetDir.getDirs();
-		for (AssetDir dir : dirs)
-		{
-			process(dir, context.createChild(dir.getName()));
-		}
-		
 		List<AssetInfo> assets = assetDir.getAssets();
 		for (AssetInfo asset : assets)
 		{
@@ -71,10 +69,17 @@ public class ContentTask extends Task
 		if (info.processor != null)
 			info.processor.processAsset(asset, context);
 		
-		File outputFile = new File(context.getOutputDir(), assetInfo.getName() + ASSET_BIN_EXT);
+		assetInfo.extractRelativePath(getProject().getBaseDir());
+		
+		File outputFile = new File(context.getOutputDir(), assetInfo.getRelativePath());
 		info.writer.write(outputFile, asset, context);
 		
 		System.out.println(outputFile);
+	}
+	
+	private void generateCode(File file, List<AssetPackage> packs) throws IOException
+	{
+		new CodeFileGenerator().generate(file, packs);
 	}
 
 	private void checkParams()
@@ -90,17 +95,11 @@ public class ContentTask extends Task
 		
 		if (outputDir.exists() && !outputDir.isDirectory())
 			throw new BuildException("File is not a directory: " + outputDir);
-
-		if (rootDir == null)
-			throw new BuildException("Add a root dir element");
 	}
 
-	public void addDir(AssetDir dir)
+	public void addPack(AssetPackage pack)
 	{
-		if (rootDir != null)
-			throw new BuildException("Only 1 root dir allowed");
-		
-		rootDir = dir;
+		packs.add(pack);
 	}
 	
 	public void setCodeFile(File codeFile)

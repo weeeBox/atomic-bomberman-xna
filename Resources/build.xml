@@ -7,11 +7,11 @@
 <project name="Resources" default="run">
     
     <property name="dir.res" value="." />
-    <property name="dir.gfx" value="${dir.res}/Gfx" />
-    <property name="dir.sound" value="${dir.res}/Sfx" />
-    <property name="dir.fonts" value="${dir.res}/Fonts" />
-    <property name="dir.schemes" value="${dir.res}/Maps" />
-    <property name="dir.anim" value="${dir.res}/Animations" />
+    <property name="dir.gfx" value="${dir.res}/gfx" />
+    <property name="dir.sound" value="${dir.res}/sfx" />
+    <property name="dir.fonts" value="${dir.res}/fonts" />
+    <property name="dir.schemes" value="${dir.res}/maps" />
+    <property name="dir.anim" value="${dir.res}/anim" />
     
     <property name="csproject.name" value="Bomberman"/>
     <property name="csproject.dir" value="../${csproject.name}/${csproject.name}" />
