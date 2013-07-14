@@ -16,6 +16,8 @@ import bc.assets.ContentInfo;
 
 public class ContentTask extends Task
 {
+	private static final String ASSET_BIN_EXT = ".b";
+	
 	private File codeFile;
 	private File outputDir;
 
@@ -69,7 +71,7 @@ public class ContentTask extends Task
 		if (info.processor != null)
 			info.processor.processAsset(asset, context);
 		
-		File outputFile = new File(context.getOutputDir(), assetInfo.getName());
+		File outputFile = new File(context.getOutputDir(), assetInfo.getName() + ASSET_BIN_EXT);
 		info.writer.write(outputFile, asset, context);
 	}
 
