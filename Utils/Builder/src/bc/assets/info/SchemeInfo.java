@@ -277,7 +277,39 @@ class SchemeImporter extends ContentImporter<SchemeInfo, Scheme>
 class SchemeWriter extends ContentWriter<Scheme>
 {
 	@Override
-	protected void write(BinaryWriter output, Scheme asset, AssetContext context) throws IOException
+	protected void write(BinaryWriter output, Scheme scheme, AssetContext context) throws IOException
 	{
+		output.write(scheme.name);
+		output.write(scheme.brickDensity);
+
+		FieldData fieldData = scheme.fieldData;
+		output.write(fieldData.getWidth());
+		output.write(fieldData.getHeight());
+
+		FieldBlocks[] blocks = fieldData.getDataArray();
+		for (int i = 0; i < blocks.length; ++i)
+		{
+			output.write(blocks[i].ordinal());
+		}
+
+		PlayerLocationInfo[] playerInfo = scheme.playerLocations;
+		output.write(playerInfo.length);
+		for (int i = 0; i < playerInfo.length; ++i)
+		{
+			output.write(playerInfo[i].x);
+			output.write(playerInfo[i].y);
+			output.write(playerInfo[i].team);
+		}
+
+		PowerupInfo[] powerupInfo = scheme.powerupInfo;
+		output.write(powerupInfo.length);
+		for (int i = 0; i < powerupInfo.length; ++i)
+		{
+			output.write(powerupInfo[i].powerupIndex);
+			output.write(powerupInfo[i].bornWith);
+			output.write(powerupInfo[i].hasOverride);
+			output.write(powerupInfo[i].overrideValue);
+			output.write(powerupInfo[i].forbidden);
+		}
 	}
 }
