@@ -5,10 +5,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public abstract class ContentStreamReader <T> extends ContentImporter<T>
+public abstract class ContentStreamReader extends ContentImporter
 {
 	@Override
-	public T read(File file, ContentReaderContext context) throws IOException
+	public Asset importContent(File file, AssetContext context) throws IOException
 	{
 		FileInputStream fis = null;
 		try
@@ -22,6 +22,6 @@ public abstract class ContentStreamReader <T> extends ContentImporter<T>
 		}
 	}
 
-	protected abstract T read(InputStream stream, ContentReaderContext context) throws IOException;
+	protected abstract Asset read(InputStream stream, AssetContext context) throws IOException;
 
 }

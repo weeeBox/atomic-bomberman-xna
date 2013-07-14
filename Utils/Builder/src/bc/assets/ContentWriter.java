@@ -4,15 +4,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public abstract class ContentWriter<T>
+public abstract class ContentWriter<T extends Asset>
 {
-	public void write(File file, T t, ContentWriterContext context) throws IOException
+	public void write(File file, Asset asset, AssetContext context) throws IOException
 	{
 		BinaryWriter output = null;
 		try
 		{
 			output = new BinaryWriter(new FileOutputStream(file));
-			write(output, t, context);
+			writeAsset(output, asset, context);
 		}
 		finally
 		{
@@ -20,5 +20,11 @@ public abstract class ContentWriter<T>
 		}
 	}
 
-	protected abstract void write(BinaryWriter output, T t, ContentWriterContext context);
+	@SuppressWarnings("unchecked")
+	private void writeAsset(BinaryWriter output, Asset asset, AssetContext context)
+	{
+		write(output, (T)asset, context);
+	}
+	
+	protected abstract void write(BinaryWriter output, T asset, AssetContext context);
 }

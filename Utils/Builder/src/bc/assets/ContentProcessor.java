@@ -1,6 +1,12 @@
 package bc.assets;
 
-public abstract class ContentProcessor <InputType, OutputType>
+public abstract class ContentProcessor <T extends Asset>
 {
-	public abstract OutputType process(InputType input, ContentProcessorContext context);
+	@SuppressWarnings("unchecked")
+	public void processAsset(Asset asset, AssetContext context)
+	{
+		process((T)asset, context);
+	}
+	
+	protected abstract void process(T t, AssetContext context);
 }
