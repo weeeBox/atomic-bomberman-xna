@@ -109,7 +109,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets.cs" />
-    <Compile Include="AssetType.cs" />
     <Compile Include="BombermanApplication.cs" />
     <Compile Include="BombermanAssetManager.cs" />
     <Compile Include="BombermanController.cs" />

@@ -13,6 +13,11 @@ namespace Bomberman.Content
         public AnimationGroup[] groups;
         public TextureImage texture;
 
+        public Animation(String name)
+        {
+            this.name = name;
+        }
+
         protected override void OnDispose()
         {
             texture.Dispose();
@@ -23,6 +28,11 @@ namespace Bomberman.Content
     {
         public String name;
         public AnimationFrame[] frames;
+
+        public AnimationGroup(String name)
+        {
+            this.name = name;
+        }
     }
 
     public struct AnimationFrame

@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
-namespace BomberEngine
+namespace BomberEngine.Game
 {
-    public class Global
+    public class Runtime
     {
         public static GraphicsDevice graphicsDevice;
-
-        public static void Destroy()
-        {
-            graphicsDevice = null;
-        }
+        public static ContentManager contentManager;
     }
 }

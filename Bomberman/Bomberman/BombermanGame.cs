@@ -29,8 +29,6 @@ namespace Bomberman
             graphics.PreferredBackBufferWidth = WIDTH;
             graphics.PreferredBackBufferHeight = HEIGHT;
 
-            Global.graphicsDevice = graphics.GraphicsDevice;
-
             Content.RootDirectory = "Content";
 
             #if WINDOWS
@@ -59,6 +57,9 @@ namespace Bomberman
         /// </summary>
         protected override void LoadContent()
         {
+            Runtime.graphicsDevice = graphics.GraphicsDevice;
+            Runtime.contentManager = Content;
+
             application.Start();
         }
 

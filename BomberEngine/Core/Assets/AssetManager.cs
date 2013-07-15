@@ -6,11 +6,14 @@ using BomberEngine.Debugging;
 using BomberEngine.Game;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 
 namespace BomberEngine.Core.Assets
 {
     public abstract class AssetManager
-    {   
+    {
+        private string baseDir;
+
         private AssetManagerListener listener;
 
         private Dictionary<Type, AssetReader> readers;
@@ -23,8 +26,10 @@ namespace BomberEngine.Core.Assets
 
         public Font SystemFont;
 
-        public AssetManager(int assetCount)
+        public AssetManager(String baseDir, int assetCount)
         {
+            this.baseDir = baseDir;
+
             assets = new Asset[assetCount];
             loadingQueue = new List<AssetLoadInfo>();
             InitReaders();
@@ -33,7 +38,7 @@ namespace BomberEngine.Core.Assets
         private void InitReaders()
         {
             readers = new Dictionary<Type, AssetReader>();
-            readers.Add(typeof(TextureReader), new TextureReader());
+            readers.Add(typeof(TextureImage), new TextureReader());
         }
 
         public void AddToQueue(AssetLoadInfo info)
@@ -83,8 +88,6 @@ namespace BomberEngine.Core.Assets
             Debug.Assert(!IsAssetLoaded(info.id));
 
             Asset asset = LoadAsset(info.path, info.type);
-            Debug.Assert(asset != null, "Can't load asset: " + info.path);
-
             assets[info.id] = asset;
             return asset != null;
         }
@@ -100,13 +103,13 @@ namespace BomberEngine.Core.Assets
             AssetReader reader;
             if (readers.TryGetValue(type, out reader))
             {
-                using (System.IO.Stream stream = System.IO.File.OpenRead(path))
+                using (System.IO.Stream stream = System.IO.File.OpenRead(Path.Combine(baseDir, path)))
                 {
                     return reader.Read(stream);
                 }
             }
 
-            return null;
+            throw new InvalidOperationException("Can't find reader for: " + type);
         }
 
         private void OnTimer(DelayedCall timer)

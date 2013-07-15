@@ -8,9 +8,10 @@ namespace Bomberman
     public class BombermanAssetManager : AssetManager
     {
         public BombermanAssetManager(ContentManager contentManager)
-            : base(A.RES_COUNT)
+            : base("Assets", A.RES_COUNT)
         {
             RegisterReader(typeof(Scheme), new SchemeReader());
+            RegisterReader(typeof(Animation), new AnimationReader());
         }
 
         public void AddPackToLoad(A.Packs pack)
