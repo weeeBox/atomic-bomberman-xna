@@ -212,11 +212,11 @@ namespace BomberEngine.Core.Input
 
             bool connected = currentGamepadStates[gamePadIndex].IsConnected;
 
-            if (IsControllerConnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
+            if (IsGamePadConnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
             {
                 gamePadStateListener.OnGamePadConnected(gamePadIndex);
             }
-            else if (IsControllerDisconnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
+            else if (IsGamePadDisconnected(ref oldState, ref currentGamepadStates[gamePadIndex]))
             {
                 gamePadStateListener.OnGamePadConnected(gamePadIndex);
             }
@@ -235,12 +235,12 @@ namespace BomberEngine.Core.Input
             }
         }
 
-        private bool IsControllerConnected(ref GamePadState oldState, ref GamePadState newState)
+        private bool IsGamePadConnected(ref GamePadState oldState, ref GamePadState newState)
         {
             return newState.IsConnected && !oldState.IsConnected;
         }
 
-        private bool IsControllerDisconnected(ref GamePadState oldState, ref GamePadState newState)
+        private bool IsGamePadDisconnected(ref GamePadState oldState, ref GamePadState newState)
         {
             return !newState.IsConnected && oldState.IsConnected;
         }
@@ -255,7 +255,7 @@ namespace BomberEngine.Core.Input
             return newState.IsButtonUp(button) && oldState.IsButtonDown(button);
         }
 
-        public bool IsControllerConnected(int playerIndex)
+        public bool IsGamePadConnected(int playerIndex)
         {
             return currentGamepadStates[playerIndex].IsConnected;
         }

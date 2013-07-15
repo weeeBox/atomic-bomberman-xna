@@ -25,7 +25,7 @@ namespace Bomberman.Game.Screens
         }
     }
 
-    public enum InputType
+    enum InputType
     {
         Undefined,
 
@@ -47,56 +47,189 @@ namespace Bomberman.Game.Screens
         Count
     }
 
-    class FooView : View
+    enum InputState
     {
-        private String[] types;
-        private bool[] typesDisabled;
+        Available,
+        Selected,
+        Disabled
+    }
 
-        private FooRow[] rows;
-
-        private static IDictionary<InputType, String> inputTypeNameLookup;
-
+    class FooView : View
+    {   
+        private InputState[] inputStates;
+        
         public FooView(int x, int y, int w, int h)
             : base(x, y, w, h)
         {
             Font font = Helper.fontButton;
 
-            types = new String[(int)InputType.Count];
-            typesDisabled = new bool[(int)InputType.Count];
+            inputStates = new InputState[(int)InputType.Count];
 
-            for (int i = 0; i < types.Length; ++i)
-            {
-                types[i] = inputType2Str((InputType)i);
-            }
+            inputStates[(int)InputType.Undefined] = InputState.Available;
+
+            inputStates[(int)InputType.Keyboard1] = InputState.Available;
+            inputStates[(int)InputType.Keyboard2] = InputState.Available;
+            inputStates[(int)InputType.Keyboard3] = InputState.Available;
+            inputStates[(int)InputType.Keyboard4] = InputState.Available;
+            inputStates[(int)InputType.Keyboard5] = InputState.Available;
+            inputStates[(int)InputType.Keyboard6] = InputState.Available;
+
+            InputManager im = Application.Input();
+            inputStates[(int)InputType.GamePad1] = im.IsGamePadConnected(0) ? InputState.Available : InputState.Disabled;
+            inputStates[(int)InputType.GamePad2] = im.IsGamePadConnected(1) ? InputState.Available : InputState.Disabled;
+            inputStates[(int)InputType.GamePad3] = im.IsGamePadConnected(2) ? InputState.Available : InputState.Disabled;
+            inputStates[(int)InputType.GamePad4] = im.IsGamePadConnected(3) ? InputState.Available : InputState.Disabled;
+
+            inputStates[(int)InputType.Network] = InputState.Disabled;
+            inputStates[(int)InputType.Bot] = InputState.Disabled;
 
             int maxPlayers = CVars.cg_maxPlayers.intValue;
-            rows = new FooRow[maxPlayers];
             for (int i = 0; i < maxPlayers; ++i)
             {
-                FooRow row = new FooRow(font, w, font.FontHeight());
-                row.id = i;
-                row.SetDelegate(OnItemSelected);
-                AddView(row);
-
-                rows[i] = row;
+                AddView(new FooRow(font, w, font.FontHeight(), inputStates));
             }
 
             LayoutVer(5);
             ResizeToFitViews();
         }
+    }
 
-        private void OnItemSelected(Button button)
+    class FooRow : View
+    {
+        private static IDictionary<InputType, String> inputTypeNameLookup;
+
+        private int typeIndex;
+        private InputState[] inputStates;
+        private TextView typeView;
+
+        public FooRow(Font font, int width, int height, InputState[] typeUsedFlag)
+            : base(width, height)
         {
-            FooRow row = rows[button.id];
+            this.inputStates = typeUsedFlag;
 
-            Font font = Helper.fontButton;
-            PopupList list = new PopupList(font, types, 200);
-            list.x = row.x;
-            list.y = row.y;
-            AddView(list);
+            focusable = true;
+
+            View leftArrowView = new TextView(font, "<");
+            AddView(leftArrowView);
+
+            View rightArrowView = new TextView(font, ">");
+            rightArrowView.x = width - rightArrowView.width;
+            AddView(rightArrowView);
+
+            typeIndex = (int)InputType.Undefined;
+            typeView = new TextView(font, TypeIndexToString(typeIndex));
+            typeView.alignX = View.ALIGN_CENTER;
+            typeView.x = 0.5f * width;
+            AddView(typeView);
         }
 
-        private string inputType2Str(InputType type)
+        public override bool HandleEvent(Event evt)
+        {
+            if (evt.code == Event.KEY)
+            {
+                KeyEvent keyEvent = evt as KeyEvent;
+                if (keyEvent.arg.key == KeyCode.Left)
+                {
+                    if (keyEvent.state == KeyState.Pressed)
+                        TrySwitchPrev();
+                    return true;
+                }
+
+                if (keyEvent.arg.key == KeyCode.Right)
+                {
+                    if (keyEvent.state == KeyState.Pressed)
+                        TrySwitchNext();
+                    return true;
+                }
+            }
+
+            return base.HandleEvent(evt);
+        }
+
+        private void TrySwitchNext()
+        {
+            int typesCount = (int)InputType.Count;
+            for (int i = 1; i < typesCount; ++i)
+            {
+                int index = (typeIndex + i) % typesCount;
+                InputType type = (InputType)index;
+
+                switch (type)
+                {
+                    case InputType.Undefined:
+                    case InputType.Network:
+                    case InputType.Bot:
+                        break;
+
+                    default:
+                    {
+                        if (inputStates[index] == InputState.Selected)
+                        {
+                            continue;
+                        }
+                        break;
+                    }
+                }
+
+                if (inputStates[index] == InputState.Disabled)
+                {
+                    continue;
+                }
+
+                inputStates[typeIndex] = InputState.Available;
+                inputStates[index] = InputState.Selected;
+                typeIndex = index;
+                typeView.SetText(TypeIndexToString(typeIndex));
+                break;
+            }
+        }
+
+        private void TrySwitchPrev()
+        {
+            int typesCount = (int)InputType.Count;
+            for (int i = 1; i < typesCount; ++i)
+            {
+                int index = (typeIndex - i);
+                if (index < 0) index = typesCount - i;
+
+                InputType type = (InputType)index;
+
+                switch (type)
+                {
+                    case InputType.Undefined:
+                    case InputType.Network:
+                    case InputType.Bot:
+                        break;
+
+                    default:
+                        {
+                            if (inputStates[index] == InputState.Selected)
+                            {
+                                continue;
+                            }
+                            break;
+                        }
+                }
+
+                if (inputStates[index] == InputState.Disabled)
+                {
+                    continue;
+                }
+
+                inputStates[typeIndex] = InputState.Available;
+                inputStates[index] = InputState.Selected;
+                typeIndex = index;
+                typeView.SetText(TypeIndexToString(typeIndex));
+                break;
+            }
+        }
+
+        protected override void OnFocusChanged(bool focused)
+        {
+            this.color = focused ? Color.Yellow : Color.White;
+        }
+
+        private string TypeIndexToString(int index)
         {
             if (inputTypeNameLookup == null)
             {
@@ -120,7 +253,7 @@ namespace Bomberman.Game.Screens
             }
 
             String name;
-            if (inputTypeNameLookup.TryGetValue(type, out name))
+            if (inputTypeNameLookup.TryGetValue((InputType)index, out name))
             {
                 return name;
             }
@@ -129,37 +262,5 @@ namespace Bomberman.Game.Screens
         }
     }
 
-    class FooRow : Button
-    {
-        private InputType type;
 
-        public FooRow(Font font, int width, int height)
-            : base(width, height)
-        {   
-            focusable = true;
-
-            type = InputType.Undefined;
-            TextView typeView = new TextView(font, "......");
-            AddView(typeView);
-        }
-
-        public override bool HandleEvent(Event evt)
-        {
-            if (evt.code == Event.KEY)
-            {
-                KeyEvent keyEvent = evt as KeyEvent;
-                if (keyEvent.arg.key == KeyCode.Up || keyEvent.arg.key == KeyCode.Down)
-                {
-                    return false;
-                }
-            }
-
-            return base.HandleEvent(evt);
-        }
-
-        protected override void OnFocusChanged(bool focused)
-        {
-            this.color = focused ? Color.Yellow : Color.White;
-        }
-    }
 }
