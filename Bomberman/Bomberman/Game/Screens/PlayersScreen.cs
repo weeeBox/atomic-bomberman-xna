@@ -12,9 +12,9 @@ using BomberEngine.Core.Input;
 
 namespace Bomberman.Game.Screens
 {
-    public class GameLobbyScreen : Screen
+    public class PlayersScreen : Screen
     {
-        public GameLobbyScreen()
+        public PlayersScreen()
         {
             View contentView = new View(64, 48, 521, 384);
 

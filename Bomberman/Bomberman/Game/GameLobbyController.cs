@@ -21,7 +21,7 @@ namespace Bomberman.Game
 
         protected override void OnStart()
         {
-            StartScreen(new GameLobbyScreen());
+            StartScreen(new PlayersScreen());
         }
 
         private void Stop(ExitCode code)
