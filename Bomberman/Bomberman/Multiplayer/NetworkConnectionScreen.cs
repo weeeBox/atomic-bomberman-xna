@@ -25,7 +25,7 @@ namespace Bomberman.Multiplayer
 
         public NetworkConnectionScreen(String message = "Connecting...")
         {
-            Font font = Helper.GetFont(A.fnt_button);
+            Font font = Helper.fontButton;
 
             statusTextView = new TextView(font, message);
             statusTextView.alignX = statusTextView.alignY = View.ALIGN_CENTER;

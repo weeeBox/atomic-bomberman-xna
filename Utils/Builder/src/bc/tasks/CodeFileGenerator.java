@@ -43,16 +43,18 @@ public class CodeFileGenerator
 
 	private void writeCode(WriteDestination dest, List<AssetPackage> packs) throws IOException
 	{
+		dest.writeln("public class %s", ASSET_NAMES_CLASS);
+		dest.writeBlockOpen();
+		
 		writeResIds(dest, packs);
 		dest.writeln();
 		writeResInfos(dest, packs);
+		
+		dest.writeBlockClose();
 	}
 
 	private void writeResIds(WriteDestination out, List<AssetPackage> packs)
 	{
-		out.writeln("public class %s", ASSET_NAMES_CLASS);
-		out.writeBlockOpen();
-
 		int resIndex = 0;
 		for (AssetPackage pack : packs)
 		{
@@ -67,14 +69,11 @@ public class CodeFileGenerator
 		out.writeln("// total resources count");
 		out.writeln("public const int RES_COUNT = %d;", resIndex);
 
-		out.writeBlockClose();
+		out.writeln();
 	}
 
 	private void writeResInfos(WriteDestination out, List<AssetPackage> packs)
 	{
-		out.writeln("public class AssetPacks");
-		out.writeBlockOpen();
-		
 		out.writeln("public enum Packs");
 		out.writeBlockOpen();
 		for (int packIndex = 0; packIndex < packs.size(); packIndex++)
@@ -100,8 +99,6 @@ public class CodeFileGenerator
 		out.writeln("public static %s[] GetPack(Packs pack)", ASSET_LOAD_INFO_CLASS);
 		out.writeBlockOpen();
 		out.writeln("return PACKS[(int)pack];");
-		out.writeBlockClose();
-		
 		out.writeBlockClose();
 	}
 

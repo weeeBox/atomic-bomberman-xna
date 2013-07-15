@@ -18,7 +18,7 @@
     <property name="cscode.file" value="${csproject.dir}/Assets.cs" />
     
     <property name="dir.builder" value="../Utils/Builder"/>
-    <property name="dir.assets" value="${csproject.dir}/bin/x86/Debug"/>
+    <property name="dir.assets" value="${csproject.dir}/bin/x86/Debug/Assets"/>
     
     <target name="-clean">
         <ant antfile="build.xml" target="-clean" dir="${dir.builder}"/>

@@ -1,7 +1,6 @@
 package bc.assets.info;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -29,11 +28,6 @@ public class TextureInfo extends AssetInfo
 	public TextureInfo()
 	{
 		super("TextureImage");
-	}
-	
-	public TextureInfo(String name, File file)
-	{
-		super(name, file);
 	}
 }
 

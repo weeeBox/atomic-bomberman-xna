@@ -13,9 +13,9 @@ namespace Bomberman
             RegisterReader(typeof(Scheme), new SchemeReader());
         }
 
-        public void AddPackToLoad(AssetPacks.Packs pack)
+        public void AddPackToLoad(A.Packs pack)
         {
-            AssetLoadInfo[] infos = AssetPacks.GetPack(pack);
+            AssetLoadInfo[] infos = A.GetPack(pack);
             foreach (AssetLoadInfo info in infos)
             {
                 AddToQueue(info);

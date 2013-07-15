@@ -43,11 +43,6 @@ public class AnimationInfo extends AssetInfo
 		super("Animation");
 	}
 	
-	public AnimationInfo(String name, File file)
-	{
-		super(name, file);
-	}
-
 	public void setTexture(File texture)
 	{
 		this.textureFile = texture;

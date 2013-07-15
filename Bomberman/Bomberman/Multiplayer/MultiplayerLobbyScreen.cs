@@ -116,7 +116,7 @@ namespace Bomberman.Multiplayer
 
         private static Font GetDefaultFont()
         {
-            return Helper.GetFont(A.fnt_button);
+            return Helper.fontButton;
         }
     }
 
@@ -124,7 +124,7 @@ namespace Bomberman.Multiplayer
     {
         public ClientInfoView(String name, NetConnection connection)
         {
-            Font font = Helper.GetFont(A.fnt_button);
+            Font font = Helper.fontButton;
 
             TextView textView = new TextView(font, connection.RemoteEndPoint + ": " + name);
             AddView(textView);

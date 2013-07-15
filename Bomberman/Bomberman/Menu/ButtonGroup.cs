@@ -23,7 +23,7 @@ namespace Bomberman.Menu
 
         public void AddButton(String title, int id, ButtonDelegate buttonDelegate)
         {
-            Font font = Helper.GetFont(A.fnt_button);
+            Font font = Helper.fontButton;
 
             TextButton button = new TextButton(title, font, 0, 0, width, font.FontHeight());
             button.id = id;

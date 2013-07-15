@@ -65,7 +65,7 @@ namespace Bomberman.Multiplayer
             screen.AddView(button);
             screen.SetBackButton(button);
 
-            Font font = Helper.GetFont(A.fnt_system);
+            Font font = Helper.fontSystem;
             TextView textView = new TextView(font, mode.ToString());
             textView.alignX = View.ALIGN_CENTER;
             textView.x = 0.5f * screen.width;

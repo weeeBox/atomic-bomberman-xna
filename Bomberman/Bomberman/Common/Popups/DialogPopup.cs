@@ -67,7 +67,7 @@ namespace Bomberman.Common.Popups
             content.width = frameView.width - 2 * 50;
             content.alignX = content.alignY = View.ALIGN_CENTER;
 
-            Font font = Helper.GetFont(A.fnt_system);
+            Font font = Helper.fontSystem;
 
             // title
             TextView titleView = new TextView(font, title);

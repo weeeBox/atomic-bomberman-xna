@@ -26,7 +26,7 @@ namespace Bomberman.Game.Screens
             AddUpdatable(field);
 
             // field background
-            fieldBackground = Helper.CreateImage(A.tex_FIELD7);
+            fieldBackground = Helper.CreateImage(A.gfx_field7);
             AddView(fieldBackground);
 
             // field drawer

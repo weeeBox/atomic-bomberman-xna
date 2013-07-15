@@ -70,19 +70,19 @@ namespace Bomberman.Game.Screens
         {
             powerupImages = new TextureImage[]
             {
-                Helper.GetTexture(A.tex_pow_bomb),
-                Helper.GetTexture(A.tex_pow_flame),
-                Helper.GetTexture(A.tex_pow_disea),
-                Helper.GetTexture(A.tex_pow_kick),
-                Helper.GetTexture(A.tex_pow_skate),
-                Helper.GetTexture(A.tex_pow_punch),
-                Helper.GetTexture(A.tex_pow_grab),
-                Helper.GetTexture(A.tex_pow_pooge),
-                Helper.GetTexture(A.tex_pow_gold),
-                Helper.GetTexture(A.tex_pow_trig),
-                Helper.GetTexture(A.tex_pow_jelly),
-                Helper.GetTexture(A.tex_pow_ebola),
-                Helper.GetTexture(A.tex_pow_rand),
+                Helper.GetTexture(A.gfx_powerups_bomb),
+                Helper.GetTexture(A.gfx_powerups_flame),
+                Helper.GetTexture(A.gfx_powerups_disea),
+                Helper.GetTexture(A.gfx_powerups_kick),
+                Helper.GetTexture(A.gfx_powerups_skate),
+                Helper.GetTexture(A.gfx_powerups_punch),
+                Helper.GetTexture(A.gfx_powerups_grab),
+                Helper.GetTexture(A.gfx_powerups_spooge),
+                Helper.GetTexture(A.gfx_powerups_gold),
+                Helper.GetTexture(A.gfx_powerups_trig),
+                Helper.GetTexture(A.gfx_powerups_jelly),
+                Helper.GetTexture(A.gfx_powerups_ebola),
+                Helper.GetTexture(A.gfx_powerups_random),
             };
         }
     }

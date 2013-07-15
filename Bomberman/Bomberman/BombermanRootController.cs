@@ -28,7 +28,7 @@ namespace Bomberman
         protected override void OnStart()
         {
             BombermanAssetManager manager = (BombermanAssetManager)Application.Assets();
-            manager.AddPackToLoad(AssetPacks.Packs.ALL);
+            manager.AddPackToLoad(A.Packs.all);
             manager.LoadImmediately();
 
             StartMainMenuController();

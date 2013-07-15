@@ -12,6 +12,10 @@ namespace Bomberman.Game
 {
     public class Helper
     {
+        public static Font fontButton;
+        public static Font fontConsole;
+        public static Font fontSystem;
+
         public static TextureImage GetTexture(int id)
         {
             return Application.Assets().GetTexture(id);

@@ -30,7 +30,7 @@ namespace Bomberman.Menu.Screens
             int w = 150;
             int h = 20;
 
-            Font font = Helper.GetFont(A.fnt_button);
+            Font font = Helper.fontButton;
 
             View rootView = new View();
 

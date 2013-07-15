@@ -59,7 +59,7 @@ namespace Bomberman.Game.Screens
         public FooView(int x, int y, int w, int h)
             : base(x, y, w, h)
         {
-            Font font = Helper.GetFont(A.fnt_button);
+            Font font = Helper.fontButton;
 
             types = new String[(int)InputType.Count];
             typesDisabled = new bool[(int)InputType.Count];
@@ -89,7 +89,7 @@ namespace Bomberman.Game.Screens
         {
             FooRow row = rows[button.id];
 
-            Font font = Helper.GetFont(A.fnt_button);
+            Font font = Helper.fontButton;
             PopupList list = new PopupList(font, types, 200);
             list.x = row.x;
             list.y = row.y;

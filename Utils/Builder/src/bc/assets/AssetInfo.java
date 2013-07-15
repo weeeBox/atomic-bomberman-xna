@@ -8,7 +8,6 @@ public abstract class AssetInfo
 {
 	private String runtimeType;
 	
-	private String name;
 	private String id;
 	
 	private File file;
@@ -18,22 +17,6 @@ public abstract class AssetInfo
 	protected AssetInfo(String runtimeType)
 	{
 		this.runtimeType = runtimeType;
-	}
-	
-	protected AssetInfo(String name, File file)
-	{
-		setName(name);
-		setFile(file);
-	}
-	
-	public String getName()
-	{
-		return name;
-	}
-	
-	public void setName(String name) 
-	{
-		this.name = name;
 	}
 	
 	public File getFile() 
@@ -71,10 +54,4 @@ public abstract class AssetInfo
 	{
 		return runtimeType;
 	}
-
-	@Override
-	public String toString() 
-	{
-		return String.format("name='%s' path='%s'", name, file);
-	}	
 }

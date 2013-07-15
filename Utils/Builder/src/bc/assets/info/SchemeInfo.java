@@ -1,6 +1,5 @@
 package bc.assets.info;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -33,11 +32,6 @@ public class SchemeInfo extends AssetInfo
 	public SchemeInfo()
 	{
 		super("Scheme");
-	}
-
-	public SchemeInfo(String name, File file)
-	{
-		super(name, file);
 	}
 }
 

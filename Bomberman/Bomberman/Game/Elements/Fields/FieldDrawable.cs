@@ -58,7 +58,7 @@ namespace Bomberman.Game.Elements.Fields
             Bomb bomb = player.bombInHands;
             if (bomb != null)
             {
-                TextureImage image = Helper.GetTexture(A.tex_BMB1001);
+                TextureImage image = Helper.GetTexture(A.gfx_bmb1001);
 
                 float drawX = player.GetPx() - 0.5f * image.GetWidth();
                 float drawY = player.GetPy() - 1.5f * image.GetHeight();
@@ -68,7 +68,7 @@ namespace Bomberman.Game.Elements.Fields
             List<Bomb> thrownBombs = player.thrownBombs;
             foreach (Bomb b in thrownBombs)
             {
-                TextureImage image = Helper.GetTexture(A.tex_BMB1001);
+                TextureImage image = Helper.GetTexture(A.gfx_bmb1001);
 
                 float drawX = b.GetPx() - 0.5f * image.GetWidth();
                 float drawY = b.GetPy() - 0.5f * image.GetHeight() - b.fallHeight;
@@ -305,38 +305,38 @@ namespace Bomberman.Game.Elements.Fields
         private void TempInitImages()
         {
             playerImages = new Dictionary<Direction, TextureImage>();
-            playerImages.Add(Direction.DOWN, Helper.GetTexture(A.tex_WLKS0001));
-            playerImages.Add(Direction.UP, Helper.GetTexture(A.tex_WLKN0001));
-            playerImages.Add(Direction.LEFT, Helper.GetTexture(A.tex_WLKW0001));
-            playerImages.Add(Direction.RIGHT, Helper.GetTexture(A.tex_WLKE0001));
+            playerImages.Add(Direction.DOWN, Helper.GetTexture(A.gfx_wlks0001));
+            playerImages.Add(Direction.UP, Helper.GetTexture(A.gfx_wlkn0001));
+            playerImages.Add(Direction.LEFT, Helper.GetTexture(A.gfx_wlkw0001));
+            playerImages.Add(Direction.RIGHT, Helper.GetTexture(A.gfx_wlke0001));
 
             playerGrabImages = new Dictionary<Direction, TextureImage>();
-            playerGrabImages.Add(Direction.DOWN, Helper.GetTexture(A.tex_PUD));
-            playerGrabImages.Add(Direction.UP, Helper.GetTexture(A.tex_PUP));
-            playerGrabImages.Add(Direction.LEFT, Helper.GetTexture(A.tex_PUL));
-            playerGrabImages.Add(Direction.RIGHT, Helper.GetTexture(A.tex_PUR));
+            playerGrabImages.Add(Direction.DOWN, Helper.GetTexture(A.gfx_bmf0010));
+            playerGrabImages.Add(Direction.UP, Helper.GetTexture(A.gfx_bmf0010));
+            playerGrabImages.Add(Direction.LEFT, Helper.GetTexture(A.gfx_pul0010));
+            playerGrabImages.Add(Direction.RIGHT, Helper.GetTexture(A.gfx_pur0010));
 
-            solidImage = Helper.GetTexture(A.tex_F0SOLID);
-            breakableImage = Helper.GetTexture(A.tex_F0BRICK);
-            bombImage = Helper.GetTexture(A.tex_BMB1001);
-            bombJellyImage = Helper.GetTexture(A.tex_BMBC1);
-            bombTriggerImage = Helper.GetTexture(A.tex_DIGIB001);
+            solidImage = Helper.GetTexture(A.gfx_f0solid);
+            breakableImage = Helper.GetTexture(A.gfx_f0brick);
+            bombImage = Helper.GetTexture(A.gfx_bmb1001);
+            bombJellyImage = Helper.GetTexture(A.gfx_bmbc1);
+            bombTriggerImage = Helper.GetTexture(A.gfx_digib001);
 
             powerupImages = new TextureImage[]
             {
-                Helper.GetTexture(A.tex_pow_bomb),
-                Helper.GetTexture(A.tex_pow_flame),
-                Helper.GetTexture(A.tex_pow_disea),
-                Helper.GetTexture(A.tex_pow_kick),
-                Helper.GetTexture(A.tex_pow_skate),
-                Helper.GetTexture(A.tex_pow_punch),
-                Helper.GetTexture(A.tex_pow_grab),
-                Helper.GetTexture(A.tex_pow_pooge),
-                Helper.GetTexture(A.tex_pow_gold),
-                Helper.GetTexture(A.tex_pow_trig),
-                Helper.GetTexture(A.tex_pow_jelly),
-                Helper.GetTexture(A.tex_pow_ebola),
-                Helper.GetTexture(A.tex_pow_rand),
+                Helper.GetTexture(A.gfx_powerups_bomb),
+                Helper.GetTexture(A.gfx_powerups_flame),
+                Helper.GetTexture(A.gfx_powerups_disea),
+                Helper.GetTexture(A.gfx_powerups_kick),
+                Helper.GetTexture(A.gfx_powerups_skate),
+                Helper.GetTexture(A.gfx_powerups_punch),
+                Helper.GetTexture(A.gfx_powerups_grab),
+                Helper.GetTexture(A.gfx_powerups_spooge),
+                Helper.GetTexture(A.gfx_powerups_gold),
+                Helper.GetTexture(A.gfx_powerups_trig),
+                Helper.GetTexture(A.gfx_powerups_jelly),
+                Helper.GetTexture(A.gfx_powerups_ebola),
+                Helper.GetTexture(A.gfx_powerups_random),
             };
         }
     }

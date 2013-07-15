@@ -1,157 +1,140 @@
 <pack name="all">
-	<texture name="wlke0001" file="${dir.gfx}/wlke0001.png" />
-	<texture name="wlkn0001" file="${dir.gfx}/wlkn0001.png" />
-	<texture name="wlks0001" file="${dir.gfx}/wlks0001.png" />
-	<texture name="wlkw0001" file="${dir.gfx}/wlkw0001.png" />
+	<texture file="${dir.gfx}/wlke0001.png" />
+	<texture file="${dir.gfx}/wlkn0001.png" />
+	<texture file="${dir.gfx}/wlks0001.png" />
+	<texture file="${dir.gfx}/wlkw0001.png" />
 
-	<texture name="pud" file="${dir.gfx}/bmf0010.png" />
-	<texture name="pul" file="${dir.gfx}/pul0010.png" />
-	<texture name="pur" file="${dir.gfx}/pur0010.png" />
-	<texture name="pup" file="${dir.gfx}/pubn010.png" />
+	<texture file="${dir.gfx}/bmf0010.png" />
+	<texture file="${dir.gfx}/pul0010.png" />
+	<texture file="${dir.gfx}/pur0010.png" />
+	<texture file="${dir.gfx}/pubn010.png" />
 
-	<texture name="field7" file="${dir.gfx}/field7.png" />
-	<texture name="bmb1001" file="${dir.gfx}/bmb1001.png" />
-	<texture name="bmbc1" file="${dir.gfx}/bmbc1.png" />
-	<texture name="digib001" file="${dir.gfx}/digib001.png" />
-	<texture name="f0brick" file="${dir.gfx}/f0brick.png" />
-	<texture name="f0solid" file="${dir.gfx}/f0solid.png" />
+	<texture file="${dir.gfx}/field7.png" />
+	<texture file="${dir.gfx}/bmb1001.png" />
+	<texture file="${dir.gfx}/bmbc1.png" />
+	<texture file="${dir.gfx}/digib001.png" />
+	<texture file="${dir.gfx}/f0brick.png" />
+	<texture file="${dir.gfx}/f0solid.png" />
 
-	<texture name="wlke0001" file="${dir.gfx}/wlke0001.png" />
-	<texture name="wlkn0001" file="${dir.gfx}/wlkn0001.png" />
-	<texture name="wlks0001" file="${dir.gfx}/wlks0001.png" />
-	<texture name="wlkw0001" file="${dir.gfx}/wlkw0001.png" />
+	<texture file="${dir.gfx}/powerups/bomb.png" />
+	<texture file="${dir.gfx}/powerups/disea.png" />
+	<texture file="${dir.gfx}/powerups/ebola.png" />
+	<texture file="${dir.gfx}/powerups/flame.png" />
+	<texture file="${dir.gfx}/powerups/gold.png" />
+	<texture file="${dir.gfx}/powerups/grab.png" />
+	<texture file="${dir.gfx}/powerups/jelly.png" />
+	<texture file="${dir.gfx}/powerups/kick.png" />
+	<texture file="${dir.gfx}/powerups/punch.png" />
+	<texture file="${dir.gfx}/powerups/skate.png" />
+	<texture file="${dir.gfx}/powerups/trig.png" />
+	<texture file="${dir.gfx}/powerups/spooge.png" />
+	<texture file="${dir.gfx}/powerups/random.png" />
 
-	<texture name="pud" file="${dir.gfx}/bmf0010.png" />
-	<texture name="pul" file="${dir.gfx}/pul0010.png" />
-	<texture name="pur" file="${dir.gfx}/pur0010.png" />
-	<texture name="pup" file="${dir.gfx}/pubn010.png" />
+	<animation file="${dir.anim}/bombs.anim" />
+	<animation file="${dir.anim}/bwalk1.anim" />
+	<animation file="${dir.anim}/bwalk2.anim" />
+	<animation file="${dir.anim}/bwalk3.anim" />
+	<animation file="${dir.anim}/bwalk4.anim" />
+	<animation file="${dir.anim}/corner0.anim" />
+	<animation file="${dir.anim}/corner1.anim" />
+	<animation file="${dir.anim}/corner2.anim" />
+	<animation file="${dir.anim}/corner3.anim" />
+	<animation file="${dir.anim}/corner4.anim" />
+	<animation file="${dir.anim}/corner5.anim" />
+	<animation file="${dir.anim}/corner6.anim" />
+	<animation file="${dir.anim}/corner7.anim" />
+	<animation file="${dir.anim}/kick.anim" />
+	<animation file="${dir.anim}/punch.anim" />
+	<animation file="${dir.anim}/pup1.anim" />
+	<animation file="${dir.anim}/pup2.anim" />
+	<animation file="${dir.anim}/pup3.anim" />
+	<animation file="${dir.anim}/pup4.anim" />
+	<animation file="${dir.anim}/stand.anim" />
+	<animation file="${dir.anim}/triganim.anim" />
+	<animation file="${dir.anim}/walk.anim" />
+	<animation file="${dir.anim}/xplode10.anim" />
+	<animation file="${dir.anim}/xplode11.anim" />
+	<animation file="${dir.anim}/xplode12.anim" />
+	<animation file="${dir.anim}/xplode13.anim" />
+	<animation file="${dir.anim}/xplode14.anim" />
+	<animation file="${dir.anim}/xplode15.anim" />
+	<animation file="${dir.anim}/xplode16.anim" />
+	<animation file="${dir.anim}/xplode17.anim" />
+	<animation file="${dir.anim}/xplode2.anim" />
+	<animation file="${dir.anim}/xplode3.anim" />
+	<animation file="${dir.anim}/xplode4.anim" />
+	<animation file="${dir.anim}/xplode5.anim" />
+	<animation file="${dir.anim}/xplode6.anim" />
+	<animation file="${dir.anim}/xplode7.anim" />
+	<animation file="${dir.anim}/xplode8.anim" />
+	<animation file="${dir.anim}/xplode9.anim" />
+	<animation file="${dir.anim}/zen.anim" />
 
-	<texture name="field7" file="${dir.gfx}/field7.png" />
-	<texture name="bmb1001" file="${dir.gfx}/bmb1001.png" />
-	<texture name="bmbc1" file="${dir.gfx}/bmbc1.png" />
-	<texture name="digib001" file="${dir.gfx}/digib001.png" />
-	<texture name="f0brick" file="${dir.gfx}/f0brick.png" />
-	<texture name="f0solid" file="${dir.gfx}/f0solid.png" />
-
-	<texture name="pow_bomb" file="${dir.gfx}/powerups/powbomb.png" />
-	<texture name="pow_disea" file="${dir.gfx}/powerups/powdisea.png" />
-	<texture name="pow_ebola" file="${dir.gfx}/powerups/powebola.png" />
-	<texture name="pow_flame" file="${dir.gfx}/powerups/powflame.png" />
-	<texture name="pow_gold" file="${dir.gfx}/powerups/powgold.png" />
-	<texture name="pow_grab" file="${dir.gfx}/powerups/powgrab.png" />
-	<texture name="pow_jelly" file="${dir.gfx}/powerups/powjelly.png" />
-	<texture name="pow_kick" file="${dir.gfx}/powerups/powkick.png" />
-	<texture name="pow_punch" file="${dir.gfx}/powerups/powpunch.png" />
-	<texture name="pow_skate" file="${dir.gfx}/powerups/powskate.png" />
-	<texture name="pow_trig" file="${dir.gfx}/powerups/powtrig.png" />
-	<texture name="pow_pooge" file="${dir.gfx}/powerups/pwspooge.png" />
-	<texture name="pow_rand" file="${dir.gfx}/powerups/pwrandom.png" />
-
-	<animation name="bombs" file="${dir.anim}/bombs.anim" />
-	<animation name="bwalk1" file="${dir.anim}/bwalk1.anim" />
-	<animation name="bwalk2" file="${dir.anim}/bwalk2.anim" />
-	<animation name="bwalk3" file="${dir.anim}/bwalk3.anim" />
-	<animation name="bwalk4" file="${dir.anim}/bwalk4.anim" />
-	<animation name="corner0" file="${dir.anim}/corner0.anim" />
-	<animation name="corner1" file="${dir.anim}/corner1.anim" />
-	<animation name="corner2" file="${dir.anim}/corner2.anim" />
-	<animation name="corner3" file="${dir.anim}/corner3.anim" />
-	<animation name="corner4" file="${dir.anim}/corner4.anim" />
-	<animation name="corner5" file="${dir.anim}/corner5.anim" />
-	<animation name="corner6" file="${dir.anim}/corner6.anim" />
-	<animation name="corner7" file="${dir.anim}/corner7.anim" />
-	<animation name="kick" file="${dir.anim}/kick.anim" />
-	<animation name="punch" file="${dir.anim}/punch.anim" />
-	<animation name="pup1" file="${dir.anim}/pup1.anim" />
-	<animation name="pup2" file="${dir.anim}/pup2.anim" />
-	<animation name="pup3" file="${dir.anim}/pup3.anim" />
-	<animation name="pup4" file="${dir.anim}/pup4.anim" />
-	<animation name="stand" file="${dir.anim}/stand.anim" />
-	<animation name="triganim" file="${dir.anim}/triganim.anim" />
-	<animation name="walk" file="${dir.anim}/walk.anim" />
-	<animation name="xplode10" file="${dir.anim}/xplode10.anim" />
-	<animation name="xplode11" file="${dir.anim}/xplode11.anim" />
-	<animation name="xplode12" file="${dir.anim}/xplode12.anim" />
-	<animation name="xplode13" file="${dir.anim}/xplode13.anim" />
-	<animation name="xplode14" file="${dir.anim}/xplode14.anim" />
-	<animation name="xplode15" file="${dir.anim}/xplode15.anim" />
-	<animation name="xplode16" file="${dir.anim}/xplode16.anim" />
-	<animation name="xplode17" file="${dir.anim}/xplode17.anim" />
-	<animation name="xplode2" file="${dir.anim}/xplode2.anim" />
-	<animation name="xplode3" file="${dir.anim}/xplode3.anim" />
-	<animation name="xplode4" file="${dir.anim}/xplode4.anim" />
-	<animation name="xplode5" file="${dir.anim}/xplode5.anim" />
-	<animation name="xplode6" file="${dir.anim}/xplode6.anim" />
-	<animation name="xplode7" file="${dir.anim}/xplode7.anim" />
-	<animation name="xplode8" file="${dir.anim}/xplode8.anim" />
-	<animation name="xplode9" file="${dir.anim}/xplode9.anim" />
-	<animation name="zen" file="${dir.anim}/zen.anim" />
-
-	<scheme name="4corners" file="${dir.schemes}/4corners.sch" />
-	<scheme name="airchaos" file="${dir.schemes}/airchaos.sch" />
-	<scheme name="airmail" file="${dir.schemes}/airmail.sch" />
-	<scheme name="alleys" file="${dir.schemes}/alleys.sch" />
-	<scheme name="alleys2" file="${dir.schemes}/alleys2.sch" />
-	<scheme name="antfarm" file="${dir.schemes}/antfarm.sch" />
-	<scheme name="asylum" file="${dir.schemes}/asylum.sch" />
-	<scheme name="back" file="${dir.schemes}/back.sch" />
-	<scheme name="back2" file="${dir.schemes}/back2.sch" />
-	<scheme name="basic" file="${dir.schemes}/basic.sch" />
-	<scheme name="basicsml" file="${dir.schemes}/basicsml.sch" />
-	<scheme name="bman93" file="${dir.schemes}/bman93.sch" />
-	<scheme name="border" file="${dir.schemes}/border.sch" />
-	<scheme name="bowling" file="${dir.schemes}/bowling.sch" />
-	<scheme name="boxed" file="${dir.schemes}/boxed.sch" />
-	<scheme name="breakout" file="${dir.schemes}/breakout.sch" />
-	<scheme name="bunch" file="${dir.schemes}/bunch.sch" />
-	<scheme name="castle" file="${dir.schemes}/castle.sch" />
-	<scheme name="castle2" file="${dir.schemes}/castle2.sch" />
-	<scheme name="chain" file="${dir.schemes}/chain.sch" />
-	<scheme name="chase" file="${dir.schemes}/chase.sch" />
-	<scheme name="checkers" file="${dir.schemes}/checkers.sch" />
-	<scheme name="chicane" file="${dir.schemes}/chicane.sch" />
-	<scheme name="clear" file="${dir.schemes}/clear.sch" />
-	<scheme name="clearing" file="${dir.schemes}/clearing.sch" />
-	<scheme name="confused" file="${dir.schemes}/confused.sch" />
-	<scheme name="cubic" file="${dir.schemes}/cubic.sch" />
-	<scheme name="cutter" file="${dir.schemes}/cutter.sch" />
-	<scheme name="cutthrot" file="${dir.schemes}/cutthrot.sch" />
-	<scheme name="deadend" file="${dir.schemes}/deadend.sch" />
-	<scheme name="diamond" file="${dir.schemes}/diamond.sch" />
-	<scheme name="dograce" file="${dir.schemes}/dograce.sch" />
-	<scheme name="dome" file="${dir.schemes}/dome.sch" />
-	<scheme name="e_vs_w" file="${dir.schemes}/e_vs_w.sch" />
-	<scheme name="fair" file="${dir.schemes}/fair.sch" />
-	<scheme name="fargo" file="${dir.schemes}/fargo.sch" />
-	<scheme name="fort" file="${dir.schemes}/fort.sch" />
-	<scheme name="freeway" file="${dir.schemes}/freeway.sch" />
-	<scheme name="gridlock" file="${dir.schemes}/gridlock.sch" />
-	<scheme name="happy" file="${dir.schemes}/happy.sch" />
-	<scheme name="jail" file="${dir.schemes}/jail.sch" />
-	<scheme name="leak" file="${dir.schemes}/leak.sch" />
-	<scheme name="neighbor" file="${dir.schemes}/neighbor.sch" />
-	<scheme name="neil" file="${dir.schemes}/neil.sch" />
-	<scheme name="n_vs_s" file="${dir.schemes}/n_vs_s.sch" />
-	<scheme name="obstacle" file="${dir.schemes}/obstacle.sch" />
-	<scheme name="og" file="${dir.schemes}/og.sch" />
-	<scheme name="pattern" file="${dir.schemes}/pattern.sch" />
-	<scheme name="pingpong" file="${dir.schemes}/pingpong.sch" />
-	<scheme name="purist" file="${dir.schemes}/purist.sch" />
-	<scheme name="racer1" file="${dir.schemes}/racer1.sch" />
-	<scheme name="rail1" file="${dir.schemes}/rail1.sch" />
-	<scheme name="railroad" file="${dir.schemes}/railroad.sch" />
-	<scheme name="roommate" file="${dir.schemes}/roommate.sch" />
-	<scheme name="r_garden" file="${dir.schemes}/r_garden.sch" />
-	<scheme name="spiral" file="${dir.schemes}/spiral.sch" />
-	<scheme name="spread" file="${dir.schemes}/spread.sch" />
-	<scheme name="tennis" file="${dir.schemes}/tennis.sch" />
-	<scheme name="thatthis" file="${dir.schemes}/thatthis.sch" />
-	<scheme name="the_rim" file="${dir.schemes}/the_rim.sch" />
-	<scheme name="thisthat" file="${dir.schemes}/thisthat.sch" />
-	<scheme name="tight" file="${dir.schemes}/tight.sch" />
-	<scheme name="toilet" file="${dir.schemes}/toilet.sch" />
-	<scheme name="uturn" file="${dir.schemes}/uturn.sch" />
-	<scheme name="volley" file="${dir.schemes}/volley.sch" />
-	<scheme name="wallybom" file="${dir.schemes}/wallybom.sch" />
-	<scheme name="x" file="${dir.schemes}/x.sch" />
+	<scheme file="${dir.schemes}/4corners.sch" />
+	<scheme file="${dir.schemes}/airchaos.sch" />
+	<scheme file="${dir.schemes}/airmail.sch" />
+	<scheme file="${dir.schemes}/alleys.sch" />
+	<scheme file="${dir.schemes}/alleys2.sch" />
+	<scheme file="${dir.schemes}/antfarm.sch" />
+	<scheme file="${dir.schemes}/asylum.sch" />
+	<scheme file="${dir.schemes}/back.sch" />
+	<scheme file="${dir.schemes}/back2.sch" />
+	<scheme file="${dir.schemes}/basic.sch" />
+	<scheme file="${dir.schemes}/basicsml.sch" />
+	<scheme file="${dir.schemes}/bman93.sch" />
+	<scheme file="${dir.schemes}/border.sch" />
+	<scheme file="${dir.schemes}/bowling.sch" />
+	<scheme file="${dir.schemes}/boxed.sch" />
+	<scheme file="${dir.schemes}/breakout.sch" />
+	<scheme file="${dir.schemes}/bunch.sch" />
+	<scheme file="${dir.schemes}/castle.sch" />
+	<scheme file="${dir.schemes}/castle2.sch" />
+	<scheme file="${dir.schemes}/chain.sch" />
+	<scheme file="${dir.schemes}/chase.sch" />
+	<scheme file="${dir.schemes}/checkers.sch" />
+	<scheme file="${dir.schemes}/chicane.sch" />
+	<scheme file="${dir.schemes}/clear.sch" />
+	<scheme file="${dir.schemes}/clearing.sch" />
+	<scheme file="${dir.schemes}/confused.sch" />
+	<scheme file="${dir.schemes}/cubic.sch" />
+	<scheme file="${dir.schemes}/cutter.sch" />
+	<scheme file="${dir.schemes}/cutthrot.sch" />
+	<scheme file="${dir.schemes}/deadend.sch" />
+	<scheme file="${dir.schemes}/diamond.sch" />
+	<scheme file="${dir.schemes}/dograce.sch" />
+	<scheme file="${dir.schemes}/dome.sch" />
+	<scheme file="${dir.schemes}/e_vs_w.sch" />
+	<scheme file="${dir.schemes}/fair.sch" />
+	<scheme file="${dir.schemes}/fargo.sch" />
+	<scheme file="${dir.schemes}/fort.sch" />
+	<scheme file="${dir.schemes}/freeway.sch" />
+	<scheme file="${dir.schemes}/gridlock.sch" />
+	<scheme file="${dir.schemes}/happy.sch" />
+	<scheme file="${dir.schemes}/jail.sch" />
+	<scheme file="${dir.schemes}/leak.sch" />
+	<scheme file="${dir.schemes}/neighbor.sch" />
+	<scheme file="${dir.schemes}/neil.sch" />
+	<scheme file="${dir.schemes}/n_vs_s.sch" />
+	<scheme file="${dir.schemes}/obstacle.sch" />
+	<scheme file="${dir.schemes}/og.sch" />
+	<scheme file="${dir.schemes}/pattern.sch" />
+	<scheme file="${dir.schemes}/pingpong.sch" />
+	<scheme file="${dir.schemes}/purist.sch" />
+	<scheme file="${dir.schemes}/racer1.sch" />
+	<scheme file="${dir.schemes}/rail1.sch" />
+	<scheme file="${dir.schemes}/railroad.sch" />
+	<scheme file="${dir.schemes}/roommate.sch" />
+	<scheme file="${dir.schemes}/r_garden.sch" />
+	<scheme file="${dir.schemes}/spiral.sch" />
+	<scheme file="${dir.schemes}/spread.sch" />
+	<scheme file="${dir.schemes}/tennis.sch" />
+	<scheme file="${dir.schemes}/thatthis.sch" />
+	<scheme file="${dir.schemes}/the_rim.sch" />
+	<scheme file="${dir.schemes}/thisthat.sch" />
+	<scheme file="${dir.schemes}/tight.sch" />
+	<scheme file="${dir.schemes}/toilet.sch" />
+	<scheme file="${dir.schemes}/uturn.sch" />
+	<scheme file="${dir.schemes}/volley.sch" />
+	<scheme file="${dir.schemes}/wallybom.sch" />
+	<scheme file="${dir.schemes}/x.sch" />
 </pack>

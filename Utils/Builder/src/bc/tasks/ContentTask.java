@@ -44,7 +44,7 @@ public class ContentTask extends Task
 
 	private void process(File outputDir, List<AssetPackage> packs) throws IOException
 	{
-		AssetContext context = new AssetContext(new File(outputDir, "Assets"));
+		AssetContext context = new AssetContext(outputDir);
 		for (AssetPackage pack : packs)
 		{
 			process(pack, context);

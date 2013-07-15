@@ -31,7 +31,7 @@ namespace Bomberman.Multiplayer
         {
             this.buttonDelegate = buttonDelegate;
 
-            Font font = Helper.GetFont(A.fnt_button);
+            Font font = Helper.fontButton;
 
             TextView headerText = new TextView(font, "LOCAL SERVERS");
             headerText.alignX = View.ALIGN_CENTER;
@@ -116,7 +116,7 @@ namespace Bomberman.Multiplayer
             }
             else
             {
-                Font font = Helper.GetFont(A.fnt_button);
+                Font font = Helper.fontButton;
 
                 TextView text = new TextView(font, "No servers found.");
                 text.alignX = text.alignY = View.ALIGN_CENTER;
@@ -134,7 +134,7 @@ namespace Bomberman.Multiplayer
         public ServerView(ServerInfo server)
             : base(154, 143)
         {
-            Font font = Helper.GetFont(A.fnt_button);
+            Font font = Helper.fontButton;
 
             nameView = new TextView(font, server.name);
             nameView.alignX = View.ALIGN_CENTER;
