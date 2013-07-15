@@ -63,7 +63,7 @@ namespace Bomberman.Multiplayer
             buttons.alignX = View.ALIGN_CENTER;
             buttons.alignY = View.ALIGN_MAX;
 
-            Button button = new TextButton("BACK", 0, 0, 100, 20);
+            Button button = new TextButton("BACK", font, 0, 0, 100, 20);
             button.SetDelegate(buttonDelegate);
             button.id = (int)ButtonId.Back;
             buttons.AddView(button);
@@ -72,7 +72,7 @@ namespace Bomberman.Multiplayer
             String label = isServer ? "START" : "READY";
             ButtonId buttonId = isServer ? ButtonId.Start : ButtonId.Ready;
 
-            button = new TextButton(label, 0, 0, 100, 20);
+            button = new TextButton(label, font, 0, 0, 100, 20);
             button.SetDelegate(buttonDelegate);
             button.id = (int)buttonId;
             buttons.AddView(button);

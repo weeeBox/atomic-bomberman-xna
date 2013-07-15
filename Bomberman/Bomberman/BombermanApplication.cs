@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Graphics;
 using BomberEngine.Core.Input;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Native;
+using Bomberman.Game;
+using BomberEngine.Core.Assets.Types;
 
 namespace Bomberman
 {
@@ -17,6 +19,15 @@ namespace Bomberman
             : base(nativeInterface, width, height)
         {
             this.contentManager = contentManager;
+        }
+
+        protected override void OnStart()
+        {
+            SpriteFont systemFont = contentManager.Load<SpriteFont>("SystemFont");
+            Helper.fontSystem = new VectorFont(systemFont);
+            Helper.fontButton = new VectorFont(contentManager.Load<SpriteFont>("ButtonFont"));
+
+            context.SetSystemFont(systemFont);
         }
 
         protected override AssetManager CreateAssetManager()

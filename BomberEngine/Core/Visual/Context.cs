@@ -43,6 +43,8 @@ namespace BomberEngine.Core.Visual
         private Vector2 zeroVector = new Vector2(0, 0);
         private Camera camera;
 
+        private SpriteFont systemFont;
+
         private void BeginSpriteBatch(SpriteBatch sb, BlendMode blendMode, Matrix m, BatchMode mode)
         {
             Debug.Assert(mode != BatchMode.None);
@@ -125,6 +127,11 @@ namespace BomberEngine.Core.Visual
         {
             matrix = _matrix;
             EndBatch();
+        }
+
+        public void SetSystemFont(SpriteFont font)
+        {
+            systemFont = font;
         }
 
         public void Begin(GraphicsDevice gd, float width, float height)
@@ -210,9 +217,8 @@ namespace BomberEngine.Core.Visual
         }
 
         public void DrawString(float x, float y, String text)
-        {
-            SpriteFont font = (Application.Assets().SystemFont as VectorFont).Font;
-            DrawString(font, x, y, text);
+        {   
+            DrawString(systemFont, x, y, text);
         }
 
         public void DrawString(SpriteFont font, float x, float y, String text)

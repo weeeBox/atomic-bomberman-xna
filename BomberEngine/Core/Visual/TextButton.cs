@@ -17,14 +17,6 @@ namespace BomberEngine.Core.Visual
         public Color normalColor = Color.White;
         public Color highlightedColor = Color.Yellow;
 
-        public TextButton(String text, float x, float y, float width, float height)
-            : base(x, y, width, height)
-        {
-            font = Application.Assets().SystemFont;
-            AddBackground();
-            SetText(text);
-        }
-
         public TextButton(String text, Font font, float x, float y, float width, float height)
             : base(x, y, width, height)
         {

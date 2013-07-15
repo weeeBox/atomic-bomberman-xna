@@ -24,8 +24,6 @@ namespace BomberEngine.Core.Assets
         
         private DelayedCall loadingTimer;
 
-        public Font SystemFont;
-
         public AssetManager(String baseDir, int assetCount)
         {
             this.baseDir = baseDir;

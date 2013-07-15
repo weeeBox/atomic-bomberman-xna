@@ -34,7 +34,7 @@ namespace Bomberman.Multiplayer
 
             AddView(statusTextView);
 
-            Button cancelButton = new TextButton("Cancel", 0, 0, 100, 20);
+            Button cancelButton = new TextButton("Cancel", font, 0, 0, 100, 20);
             cancelButton.SetDelegate(OnButtonPress);
             cancelButton.id = (int)ButtonId.Cancel;
 

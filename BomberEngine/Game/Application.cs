@@ -16,7 +16,7 @@ namespace BomberEngine.Game
 
         private RootController rootController;
 
-        private Context context;
+        protected Context context;
 
         private bool started;
         private bool stoped;
@@ -84,11 +84,10 @@ namespace BomberEngine.Game
             AddGameObject(rootController);
             
             started = true;
+            OnStart();
 
             inputManager.SetInputListener(rootController);
             rootController.Start();
-
-            OnStart();
         }
 
         public void Stop()

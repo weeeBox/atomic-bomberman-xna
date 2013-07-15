@@ -61,18 +61,18 @@ namespace Bomberman.Multiplayer
 
             View buttonGroup = new View();
 
-            TextButton button = new TextButton("BACK", 0, 0, 100, 20);
+            TextButton button = new TextButton("BACK", font, 0, 0, 100, 20);
             button.SetDelegate(buttonDelegate);
             button.id = (int)ButtonId.Back;
             buttonGroup.AddView(button);
             SetBackButton(button);
 
-            button = new TextButton("REFRESH", 0, 0, 100, 20);
+            button = new TextButton("REFRESH", font, 0, 0, 100, 20);
             button.SetDelegate(buttonDelegate);
             button.id = (int)ButtonId.Refresh;
             buttonGroup.AddView(button);
 
-            button = new TextButton("CREATE", 0, 0, 100, 20);
+            button = new TextButton("CREATE", font, 0, 0, 100, 20);
             button.SetDelegate(buttonDelegate);
             button.id = (int)ButtonId.Create;
             buttonGroup.AddView(button);
