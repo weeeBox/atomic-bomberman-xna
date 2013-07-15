@@ -39,5 +39,15 @@ namespace Bomberman
         {
             return new BombermanRootController(contentManager);
         }
+
+        public static new BombermanAssetManager Assets()
+        {
+            return Application.Assets() as BombermanAssetManager;
+        }
+
+        public static new BombermanRootController RootController()
+        {
+            return Application.RootController() as BombermanRootController;
+        }
     }
 }

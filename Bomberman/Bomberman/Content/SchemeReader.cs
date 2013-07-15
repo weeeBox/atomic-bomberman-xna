@@ -22,9 +22,9 @@ namespace Bomberman.Content
             int width = reader.ReadInt32();
             int height = reader.ReadInt32();
 
-            FieldData fieldData = new FieldData(width, height);
+            scheme.fieldData = new FieldData(width, height);
             
-            FieldBlocks[] blocks = fieldData.GetDataArray();
+            FieldBlocks[] blocks = scheme.fieldData.GetDataArray();
             for (int i = 0; i < blocks.Length; ++i)
             {
                 blocks[i] = (FieldBlocks)reader.ReadInt32();
