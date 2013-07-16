@@ -27,7 +27,7 @@ namespace Bomberman.Menu
 
             TextButton button = new TextButton(title, font, 0, 0, width, font.FontHeight());
             button.id = id;
-            button.SetDelegate(buttonDelegate);
+            button.buttonDelegate = buttonDelegate;
             AddView(button);
 
             LayoutVer(10);

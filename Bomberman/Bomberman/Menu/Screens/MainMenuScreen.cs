@@ -36,17 +36,17 @@ namespace Bomberman.Menu.Screens
 
             TextButton button = new TextButton("Play", font, 0, 0, w, h);
             button.id = (int)ButtonId.Play;
-            button.SetDelegate(buttonDelegate);
+            button.buttonDelegate = buttonDelegate;
             rootView.AddView(button);
 
             button = new TextButton("Join server", font, 0, 0, w, h);
             button.id = (int)ButtonId.DebugStartClient;
-            button.SetDelegate(buttonDelegate);
+            button.buttonDelegate = buttonDelegate;
             rootView.AddView(button);
 
             button = new TextButton("Start server", font, 0, 0, w, h);
             button.id = (int)ButtonId.DebugStartServer;
-            button.SetDelegate(buttonDelegate);
+            button.buttonDelegate = buttonDelegate;
             rootView.AddView(button);
 
             //button = new TextButton("Multiplayer", font, 0, 0, w, h);
@@ -56,12 +56,12 @@ namespace Bomberman.Menu.Screens
 
             button = new TextButton("Settings", font, 0, 0, w, h);
             button.id = (int)ButtonId.Settings;
-            button.SetDelegate(buttonDelegate);
+            button.buttonDelegate = buttonDelegate;
             rootView.AddView(button);
 
             button = new TextButton("Exit", font, 0, 0, w, h);
             button.id = (int)ButtonId.Exit;
-            button.SetDelegate(buttonDelegate);
+            button.buttonDelegate = buttonDelegate;
             rootView.AddView(button);
 
             rootView.LayoutVer(20);

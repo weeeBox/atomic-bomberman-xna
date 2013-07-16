@@ -60,7 +60,7 @@ namespace Bomberman.Multiplayer
             Screen screen = new Screen();
             Button button = new TextButton("Cancel", Helper.fontButton, 0, 0, 100, 20);
             button.id = (int)ButtonId.Cancel;
-            button.SetDelegate(OnCancelButtonPressed);
+            button.buttonDelegate = OnCancelButtonPressed;
             button.alignX = button.alignY = button.parentAlignX = button.parentAlignY = View.ALIGN_CENTER;
             screen.AddView(button);
             screen.SetBackButton(button);

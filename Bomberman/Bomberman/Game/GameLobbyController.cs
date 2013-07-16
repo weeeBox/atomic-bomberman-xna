@@ -8,6 +8,7 @@ using Bomberman.Content;
 using Assets;
 using BomberEngine.Core.Input;
 using BomberEngine.Debugging;
+using BomberEngine.Core.Visual;
 
 namespace Bomberman.Game
 {
@@ -53,7 +54,6 @@ namespace Bomberman.Game
         private InputType[] inputTypes;
         private InputState[] inputStates;
 
-
         public GameLobbyController()
         {   
         }
@@ -63,7 +63,7 @@ namespace Bomberman.Game
             selectedScheme = Assets().GetScheme(A.maps_x);
             InitInputTypes(selectedScheme);
 
-            StartScreen(new PlayersScreen(selectedScheme, inputTypes, InputTypeSelectDelegate));
+            StartScreen(new PlayersScreen(selectedScheme, inputTypes, InputTypeSelectDelegate, PlayersScreenButtonDelegate));
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -204,9 +204,48 @@ namespace Bomberman.Game
 
         #endregion
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Button delegates
+
+        private void PlayersScreenButtonDelegate(Button button)
+        {
+            PlayersScreen.ButtonId buttonId = (PlayersScreen.ButtonId)button.id;
+            switch (buttonId)
+            {
+                case PlayersScreen.ButtonId.Start:
+                    Stop(ExitCode.StartGame);
+                    break;
+            }
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
+        public Scheme GetSelectedScheme()
+        {
+            return selectedScheme;
+        }
+
+        public InputType[] GetInputTypes()
+        {
+            return inputTypes;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Helpers
+
         private void Stop(ExitCode code)
         {
             Stop((int)code);
         }
+
+        #endregion
     }
 }

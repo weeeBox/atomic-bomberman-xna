@@ -30,7 +30,7 @@ namespace Bomberman.Menu.Screens
 
             TextButton button = new TextButton("Back", font, 0, 0, w, h);
             button.id = (int)ButtonId.Back;
-            button.SetDelegate(OnButtonPressed);
+            button.buttonDelegate = OnButtonPressed;
             rootView.AddView(button);
 
             rootView.LayoutVer(20);

@@ -116,6 +116,19 @@ namespace Bomberman
             {
                 StartMainMenuController();
             }
+            else if (controller is GameLobbyController)
+            {
+                GameLobbyController glc = controller as GameLobbyController;
+                Scheme selectedScheme = glc.GetSelectedScheme();
+                InputType[] inputTypes = glc.GetInputTypes();
+
+                for (int i = 0; i < inputTypes.Length; ++i)
+                {
+                    Log.d(inputTypes[i]);
+                }
+
+                StartMainMenuController();
+            }
             else if (controller is DebugMultiplayerController)
             {
                 DebugMultiplayerController.ExitCode exitCode = (DebugMultiplayerController.ExitCode)controller.exitCode;

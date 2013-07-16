@@ -15,7 +15,13 @@ namespace Bomberman.Game.Screens
 {
     public class PlayersScreen : Screen
     {
-        public PlayersScreen(Scheme scheme, InputType[] inputTypes, InputTypeSelectDelegate selectDelegate)
+        public enum ButtonId
+        {
+            Start,
+            Back
+        }
+
+        public PlayersScreen(Scheme scheme, InputType[] inputTypes, InputTypeSelectDelegate selectDelegate, ButtonDelegate buttonDelegate)
         {
             View contentView = new View(64, 48, 521, 363);
 
@@ -43,9 +49,14 @@ namespace Bomberman.Game.Screens
             buttons.alignX = View.ALIGN_CENTER;
 
             Button button = new TextButton("BACK", font, 0, 0, 100, 20);
+            button.id = (int)ButtonId.Back;
+            button.buttonDelegate = buttonDelegate;
+            SetBackButton(button);
             buttons.AddView(button);
 
             button = new TextButton("START!", font, 0, 0, 100, 20);
+            button.id = (int)ButtonId.Start;
+            button.buttonDelegate = buttonDelegate;
             buttons.AddView(button);
 
             buttons.LayoutHor(20);

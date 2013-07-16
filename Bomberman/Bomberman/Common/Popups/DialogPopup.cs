@@ -82,7 +82,7 @@ namespace Bomberman.Common.Popups
             // buttons
             Button button = new TextButton(cancelButton.title, font, 0, 0, 100, 20);
             button.id = (int)cancelButton.id;
-            button.SetDelegate(OnButtonPress);
+            button.buttonDelegate = OnButtonPress;
             button.alignX = View.ALIGN_CENTER;
             button.parentAlignX = View.ALIGN_CENTER;
             SetBackButton(button);

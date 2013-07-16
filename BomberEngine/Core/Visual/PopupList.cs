@@ -32,7 +32,7 @@ namespace BomberEngine.Core.Visual
             {
                 ListItem item = new ListItem(font, names[i], w, font.FontHeight());
                 item.id = i;
-                item.SetDelegate(OnItemSelected);
+                item.buttonDelegate = OnItemSelected;
                 contentView.AddView(item);
                 items[i] = item;
             }
