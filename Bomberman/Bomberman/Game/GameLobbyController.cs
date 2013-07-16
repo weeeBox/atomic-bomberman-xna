@@ -7,6 +7,7 @@ using BombermanCommon.Resources;
 using Bomberman.Content;
 using Assets;
 using BomberEngine.Core.Input;
+using BomberEngine.Debugging;
 
 namespace Bomberman.Game
 {
@@ -88,7 +89,12 @@ namespace Bomberman.Game
             SetInputState(InputType.Network, InputState.Disabled);
             SetInputState(InputType.Bot, InputState.Disabled);
 
-            StartScreen(new PlayersScreen(selectedScheme, InputTypeSelectDelegate));
+            SetInputType(0, InputType.Keyboard1);
+            SetInputType(1, InputType.Keyboard2);
+            SetInputType(2, InputType.Keyboard3);
+            SetInputType(3, InputType.Keyboard4);
+
+            StartScreen(new PlayersScreen(selectedScheme, inputTypes, InputTypeSelectDelegate));
         }
 
         private void InputTypeSelectDelegate(InputTypeView view, bool forward)
@@ -98,7 +104,6 @@ namespace Bomberman.Game
             if (newInputType != inputType)
             {
                 SetInputState(inputType, InputState.Available);
-                SetInputState(newInputType, InputState.Selected);
                 SetInputType(view.index, newInputType);
                 view.SetSelectedType(newInputType);
             }
@@ -178,7 +183,9 @@ namespace Bomberman.Game
 
         private void SetInputType(int slotIndex, InputType type)
         {
+            Debug.Assert(inputStates[(int)type] == InputState.Available);
             inputTypes[slotIndex] = type;
+            SetInputState(type, InputState.Selected);
         }
 
         private void SetInputState(InputType type, InputState state)

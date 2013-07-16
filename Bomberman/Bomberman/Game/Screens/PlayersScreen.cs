@@ -15,7 +15,7 @@ namespace Bomberman.Game.Screens
 {
     public class PlayersScreen : Screen
     {
-        public PlayersScreen(Scheme scheme, InputTypeSelectDelegate selectDelegate)
+        public PlayersScreen(Scheme scheme, InputType[] inputTypes, InputTypeSelectDelegate selectDelegate)
         {
             View contentView = new View(64, 48, 521, 363);
 
@@ -23,12 +23,12 @@ namespace Bomberman.Game.Screens
             contentView.AddView(new SchemeView(scheme));
 
             // input type selector
-            int maxPlayers = scheme.GetMaxPlayersCount();
+            int maxPlayers = inputTypes.Length;
             View inputTypeContainer = new View(226, 0, 286, 0);
             Font font = Helper.fontButton;
             for (int i = 0; i < maxPlayers; ++i)
             {
-                InputTypeView typeView = new InputTypeView(i, font, inputTypeContainer.width, font.FontHeight());
+                InputTypeView typeView = new InputTypeView(i, inputTypes[i], font, inputTypeContainer.width, font.FontHeight());
                 typeView.selectDelegate = selectDelegate;
                 inputTypeContainer.AddView(typeView);
             }
@@ -37,6 +37,20 @@ namespace Bomberman.Game.Screens
             contentView.AddView(inputTypeContainer);
 
             AddView(contentView);
+
+            // buttons
+            View buttons = new View(0.5f * width, contentView.y + contentView.height, 0, 0);
+            buttons.alignX = View.ALIGN_CENTER;
+
+            Button button = new TextButton("BACK", font, 0, 0, 100, 20);
+            buttons.AddView(button);
+
+            button = new TextButton("START!", font, 0, 0, 100, 20);
+            buttons.AddView(button);
+
+            buttons.LayoutHor(20);
+            buttons.ResizeToFitViews();
+            AddView(buttons);
         }
     }
 
@@ -52,10 +66,12 @@ namespace Bomberman.Game.Screens
         public int index;
         public InputTypeSelectDelegate selectDelegate;
 
-        public InputTypeView(int index, Font font, float width, float height)
+        public InputTypeView(int index, InputType inputType, Font font, float width, float height)
             : base(width, height)
         {
             this.index = index;
+            this.inputType = inputType;
+
             focusable = true;
 
             View leftArrowView = new TextView(font, "<");
@@ -65,7 +81,6 @@ namespace Bomberman.Game.Screens
             rightArrowView.x = width - rightArrowView.width;
             AddView(rightArrowView);
 
-            inputType = InputType.None;
             typeView = new TextView(font, ToString(inputType));
             typeView.alignX = View.ALIGN_CENTER;
             typeView.x = 0.5f * width;
