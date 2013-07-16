@@ -297,6 +297,12 @@ namespace BomberEngine.Core.Visual
 
         #region Resize
 
+        public void SetSize(float width, float height)
+        {
+            this.width = width;
+            this.height = height;
+        }
+
         public void ResizeToFitViewsHor()
         {
             ResizeToFitViewsHor(0.0f, 0.0f);

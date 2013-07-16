@@ -85,7 +85,7 @@ namespace Bomberman.Game.Screens
         public SchemeScreen()
         {
             Scheme scheme = BombermanApplication.Assets().GetScheme(A.maps_x);
-            AddView(new SchemeView(scheme));
+            AddView(new SchemeView(scheme, SchemeView.Style.Small));
         }
     }
 }

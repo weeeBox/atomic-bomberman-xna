@@ -20,7 +20,7 @@ namespace Bomberman.Game.Screens
             View contentView = new View(64, 48, 521, 363);
 
             // scheme view
-            contentView.AddView(new SchemeView(scheme));
+            contentView.AddView(new SchemeView(scheme, SchemeView.Style.Large));
 
             // input type selector
             int maxPlayers = inputTypes.Length;

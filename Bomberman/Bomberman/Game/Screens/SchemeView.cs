@@ -7,26 +7,50 @@ using BombermanCommon.Resources.Scheme;
 using Microsoft.Xna.Framework;
 using BomberEngine.Core.Visual.UI;
 using Bomberman.Content;
+using BomberEngine.Core.Assets.Types;
 
 namespace Bomberman.Game.Screens
 {
     public class SchemeView : View
     {
+        public enum Style
+        {
+            Small,
+            Large
+        }
+
         private static readonly Color COLOR_BACK = new Color(115, 89, 166);
 
-        public SchemeView(Scheme scheme) :
-            base(153, 143)
+        public SchemeView(Scheme scheme, Style style)
         {
-            AddView(new RectView(0, 0, width, height, COLOR_BACK, Color.Black));
-
             FieldData data = scheme.GetFieldData();
+            Font nameFont;
+            float dvy = 0.0f;
+
+            if (style == Style.Small)
+            {
+                SetSize(153, 143);
+                AddView(new RectView(0, 0, width, height, COLOR_BACK, Color.Black));
+                nameFont = Helper.fontSystem;
+                dvy = 13.0f;
+            }
+            else if (style == Style.Large)
+            {
+                SetSize(215, 176);
+                nameFont = Helper.fontButton;
+            }
+            else
+            {
+                throw new ArgumentException("Unknown style: " + style);
+            }
+
             FieldDataView dataView = new FieldDataView(data);
             dataView.x = 0.5f * width;
-            dataView.y = 13;
+            dataView.y = dvy;
             dataView.alignX = View.ALIGN_CENTER;
             AddView(dataView);
 
-            TextView nameView = new TextView(Helper.fontSystem, scheme.GetName(), (int)width);
+            TextView nameView = new TextView(nameFont, scheme.GetName(), (int)width);
             nameView.x = 0.5f * width;
             nameView.y = 0.5f * (height + (dataView.y + dataView.height));
             nameView.alignX = nameView.alignY = View.ALIGN_CENTER;
