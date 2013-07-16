@@ -167,6 +167,7 @@
     <Compile Include="Game\Multiplayer\GameStateSnapshot.cs" />
     <Compile Include="Game\Screens\PlayersScreen.cs" />
     <Compile Include="Game\Screens\SchemeScreen.cs" />
+    <Compile Include="Game\Screens\SchemeSelectionView.cs" />
     <Compile Include="Game\Screens\SchemeView.cs" />
     <Compile Include="Multiplayer\DebugMultiplayerController.cs" />
     <Compile Include="Multiplayer\MultiplayerManager.cs" />

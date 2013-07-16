@@ -9,16 +9,18 @@ using BomberEngine.Core.Assets.Types;
 using Microsoft.Xna.Framework;
 using BomberEngine.Core.Events;
 using BomberEngine.Core.Input;
+using Bomberman.Content;
 
 namespace Bomberman.Game.Screens
 {
     public class PlayersScreen : Screen
     {
-        public PlayersScreen()
+        public PlayersScreen(Scheme selectedScheme)
         {
             View contentView = new View(64, 48, 521, 384);
 
             FooView fooView = new FooView(226, 48, 286, 363);
+            
             contentView.AddView(fooView);
 
             AddView(contentView);
@@ -65,23 +67,23 @@ namespace Bomberman.Game.Screens
 
             inputStates = new InputState[(int)InputType.Count];
 
-            inputStates[(int)InputType.Undefined] = InputState.Available;
+            SetInputState(InputType.Undefined, InputState.Available);
 
-            inputStates[(int)InputType.Keyboard1] = InputState.Available;
-            inputStates[(int)InputType.Keyboard2] = InputState.Available;
-            inputStates[(int)InputType.Keyboard3] = InputState.Available;
-            inputStates[(int)InputType.Keyboard4] = InputState.Available;
-            inputStates[(int)InputType.Keyboard5] = InputState.Available;
-            inputStates[(int)InputType.Keyboard6] = InputState.Available;
+            SetInputState(InputType.Keyboard1, InputState.Available);
+            SetInputState(InputType.Keyboard2, InputState.Available);
+            SetInputState(InputType.Keyboard3, InputState.Available);
+            SetInputState(InputType.Keyboard4, InputState.Available);
+            SetInputState(InputType.Keyboard5, InputState.Available);
+            SetInputState(InputType.Keyboard6, InputState.Available);
 
             InputManager im = Application.Input();
-            inputStates[(int)InputType.GamePad1] = im.IsGamePadConnected(0) ? InputState.Available : InputState.Disabled;
-            inputStates[(int)InputType.GamePad2] = im.IsGamePadConnected(1) ? InputState.Available : InputState.Disabled;
-            inputStates[(int)InputType.GamePad3] = im.IsGamePadConnected(2) ? InputState.Available : InputState.Disabled;
-            inputStates[(int)InputType.GamePad4] = im.IsGamePadConnected(3) ? InputState.Available : InputState.Disabled;
+            SetInputState(InputType.GamePad1, im.IsGamePadConnected(0) ? InputState.Available : InputState.Disabled);
+            SetInputState(InputType.GamePad2, im.IsGamePadConnected(1) ? InputState.Available : InputState.Disabled);
+            SetInputState(InputType.GamePad3, im.IsGamePadConnected(2) ? InputState.Available : InputState.Disabled);
+            SetInputState(InputType.GamePad4, im.IsGamePadConnected(3) ? InputState.Available : InputState.Disabled);
 
-            inputStates[(int)InputType.Network] = InputState.Disabled;
-            inputStates[(int)InputType.Bot] = InputState.Disabled;
+            SetInputState(InputType.Network, InputState.Disabled);
+            SetInputState(InputType.Bot, InputState.Disabled);
 
             int maxPlayers = CVars.cg_maxPlayers.intValue;
             for (int i = 0; i < maxPlayers; ++i)
@@ -91,6 +93,11 @@ namespace Bomberman.Game.Screens
 
             LayoutVer(5);
             ResizeToFitViews();
+        }
+
+        private void SetInputState(InputType type, InputState state)
+        {
+            inputStates[(int)type] = state;
         }
     }
 

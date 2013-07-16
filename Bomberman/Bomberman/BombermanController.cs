@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Game;
 using Bomberman.Multiplayer;
+using BomberEngine.Core.Input;
 
 namespace Bomberman
 {
@@ -17,6 +18,16 @@ namespace Bomberman
         protected MultiplayerManager GetMultiplayerManager()
         {
             return GetRootController().GetMultiplayerManager();
+        }
+
+        protected BombermanAssetManager Assets()
+        {
+            return BombermanApplication.Assets();
+        }
+
+        protected InputManager Input()
+        {
+            return BombermanApplication.Input();
         }
     }
 }

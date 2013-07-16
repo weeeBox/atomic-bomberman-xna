@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Bomberman.Game.Screens;
+using BombermanCommon.Resources;
+using Bomberman.Content;
+using Assets;
 
 namespace Bomberman.Game
 {
@@ -14,14 +17,16 @@ namespace Bomberman.Game
             Cancel
         }
 
-        public GameLobbyController()
-        {
+        private Scheme selectedScheme;
 
+        public GameLobbyController()
+        {   
         }
 
         protected override void OnStart()
         {
-            StartScreen(new SchemeScreen());
+            selectedScheme = Assets().GetScheme(A.maps_x);
+            StartScreen(new PlayersScreen(selectedScheme));
         }
 
         private void Stop(ExitCode code)
