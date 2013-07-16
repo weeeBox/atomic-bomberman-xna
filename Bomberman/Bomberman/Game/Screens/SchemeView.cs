@@ -26,6 +26,7 @@ namespace Bomberman.Game.Screens
             FieldData data = scheme.GetFieldData();
             Font nameFont;
             float dvy = 0.0f;
+            FieldDataView.Style dataStyle;
 
             if (style == Style.Small)
             {
@@ -33,18 +34,26 @@ namespace Bomberman.Game.Screens
                 AddView(new RectView(0, 0, width, height, COLOR_BACK, Color.Black));
                 nameFont = Helper.fontSystem;
                 dvy = 13.0f;
+                dataStyle.width = 127;
+                dataStyle.height = 86;
+                dataStyle.iw = 119;
+                dataStyle.ih = 79;
             }
             else if (style == Style.Large)
             {
                 SetSize(215, 176);
-                nameFont = Helper.fontButton;
+                nameFont = Helper.fontSystem;
+                dataStyle.width = 215;
+                dataStyle.height = 145;
+                dataStyle.iw = 201;
+                dataStyle.ih = 132;
             }
             else
             {
                 throw new ArgumentException("Unknown style: " + style);
             }
 
-            FieldDataView dataView = new FieldDataView(data);
+            FieldDataView dataView = new FieldDataView(data, dataStyle);
             dataView.x = 0.5f * width;
             dataView.y = dvy;
             dataView.alignX = View.ALIGN_CENTER;
@@ -60,16 +69,24 @@ namespace Bomberman.Game.Screens
 
     class FieldDataView : View
     {
+        public struct Style
+        {
+            public float width;
+            public float height;
+            public float iw;
+            public float ih;
+        }
+
         private static readonly Color COLOR_SOLID = new Color(123, 123, 123);
         private static readonly Color COLOR_BRICK = new Color(255, 0, 255);
 
-        public FieldDataView(FieldData data)
-            : base(127, 86)
+        public FieldDataView(FieldData data, Style style)
+            : base(style.width, style.height)
         {
             AddView(new RectView(0, 0, width, height, Color.Gray, Color.Black));
 
-            float iw = 119;
-            float ih = 79;
+            float iw = style.iw;
+            float ih = style.ih;
 
             RectView rect = new RectView(0.5f * (width - iw), 0.5f * (height - ih), iw, ih, Color.Green, Color.Green);
             AddView(rect);
