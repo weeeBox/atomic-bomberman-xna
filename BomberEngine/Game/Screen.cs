@@ -69,6 +69,13 @@ namespace BomberEngine.Game
             RootView.AddView(view);
         }
 
+        public void AddView(View view, float x, float y)
+        {
+            AddView(view);
+            view.x = x;
+            view.y = y;
+        }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////

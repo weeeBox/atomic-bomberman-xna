@@ -44,5 +44,10 @@ namespace Bomberman.Content
         {
             return brickDensity;
         }
+
+        public int GetMaxPlayersCount()
+        {
+            return playerLocations.Length;
+        }
     }
 }
