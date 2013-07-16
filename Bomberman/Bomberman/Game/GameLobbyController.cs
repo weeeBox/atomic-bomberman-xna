@@ -61,7 +61,18 @@ namespace Bomberman.Game
         protected override void OnStart()
         {
             selectedScheme = Assets().GetScheme(A.maps_x);
-            int maxPlayers = selectedScheme.GetMaxPlayersCount();
+            InitInputTypes(selectedScheme);
+
+            StartScreen(new PlayersScreen(selectedScheme, inputTypes, InputTypeSelectDelegate));
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Input types
+
+        private void InitInputTypes(Scheme scheme)
+        {
+            int maxPlayers = scheme.GetMaxPlayersCount();
 
             inputTypes = new InputType[maxPlayers];
             for (int i = 0; i < inputTypes.Length; ++i)
@@ -93,8 +104,6 @@ namespace Bomberman.Game
             SetInputType(1, InputType.Keyboard2);
             SetInputType(2, InputType.Keyboard3);
             SetInputType(3, InputType.Keyboard4);
-
-            StartScreen(new PlayersScreen(selectedScheme, inputTypes, InputTypeSelectDelegate));
         }
 
         private void InputTypeSelectDelegate(InputTypeView view, bool forward)
@@ -192,6 +201,8 @@ namespace Bomberman.Game
         {
             inputStates[(int)type] = state;
         }
+
+        #endregion
 
         private void Stop(ExitCode code)
         {
