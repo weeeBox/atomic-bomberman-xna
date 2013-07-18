@@ -118,44 +118,18 @@ namespace Bomberman.Game
             game.SetupField(scheme);
         }
 
-        public override bool HandleEvent(Event evt)
+        public void ShowPauseScreen()
         {
-            if (base.HandleEvent(evt))
-            {
-                return true;
-            }
-
-            if (evt.code == Event.KEY)
-            {
-                KeyEvent keyEvent = evt as KeyEvent;
-                if (keyEvent.state == KeyState.Pressed && OnKeyPressed(keyEvent.arg))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            Debug.Assert(CurrentScreen() is GameScreen);
+            StartNextScreen(new PauseScreen(OnPauseScreenButtonPress));
         }
 
-        private bool OnKeyPressed(KeyEventArg e)
+        public void HidePauseScreen()
         {
-            if (e.key == KeyCode.Escape)
+            if (CurrentScreen() is PauseScreen)
             {
-                Screen screen = CurrentScreen();
-                if (screen is GameScreen)
-                {
-                    StartNextScreen(new PauseScreen(OnPauseScreenButtonPress));
-                    return true;
-                }
-
-                if (screen is PauseScreen)
-                {
-                    screen.Finish();
-                    return true;
-                }
+                CurrentScreen().Finish();
             }
-
-            return false;
         }
 
         private void OnPauseScreenButtonPress(Button button)

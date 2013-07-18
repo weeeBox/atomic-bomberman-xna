@@ -37,5 +37,12 @@ namespace Bomberman.Game.Screens
             group.y = 0.5f * height;
             AddView(group);
         }
+
+        protected override bool OnBackKeyPressed(KeyEventArg arg)
+        {
+            GameController gc = CurrentController as GameController;
+            gc.HidePauseScreen();
+            return true;
+        }
     }
 }

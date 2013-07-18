@@ -314,10 +314,10 @@ namespace Bomberman.Game
             if (input == null)
             {
                 input = new PlayerKeyboardInput();
-                keyboardInputs[index] = input;
+                keyboardInputs[index] = InitKeyboardInput(index, input);
             }
 
-            return InitKeyboardInput(index, input);
+            return input;
         }
 
         private PlayerKeyboardInput InitKeyboardInput(int index, PlayerKeyboardInput input)
