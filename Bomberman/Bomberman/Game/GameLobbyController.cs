@@ -10,6 +10,7 @@ using BomberEngine.Core.Input;
 using BomberEngine.Debugging;
 using BomberEngine.Core.Visual;
 using Bomberman.Game.Elements.Players.Input;
+using Bomberman.Game.Elements.Players;
 
 namespace Bomberman.Game
 {
@@ -314,6 +315,36 @@ namespace Bomberman.Game
             {
                 input = new PlayerKeyboardInput();
                 keyboardInputs[index] = input;
+            }
+
+            return InitKeyboardInput(index, input);
+        }
+
+        private PlayerKeyboardInput InitKeyboardInput(int index, PlayerKeyboardInput input)
+        {
+            // TODO: don't hard code
+            switch (index)
+            {
+                case 0:
+                {
+                    input.Map(KeyCode.W, PlayerAction.Up);
+                    input.Map(KeyCode.A, PlayerAction.Left);
+                    input.Map(KeyCode.S, PlayerAction.Down);
+                    input.Map(KeyCode.D, PlayerAction.Right);
+                    input.Map(KeyCode.OemCloseBrackets, PlayerAction.Bomb);
+                    input.Map(KeyCode.OemOpenBrackets, PlayerAction.Special);
+                    break;
+                }
+                case 1:
+                {
+                    input.Map(KeyCode.Up, PlayerAction.Up);
+                    input.Map(KeyCode.Left, PlayerAction.Left);
+                    input.Map(KeyCode.Down, PlayerAction.Down);
+                    input.Map(KeyCode.Right, PlayerAction.Right);
+                    input.Map(KeyCode.M, PlayerAction.Bomb);
+                    input.Map(KeyCode.N, PlayerAction.Special);
+                    break;
+                }
             }
 
             return input;
