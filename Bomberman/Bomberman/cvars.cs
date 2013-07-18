@@ -8,6 +8,10 @@ namespace Bomberman
 {
     public class CVars
     {
+        /* System config */
+        public static readonly CVar sy_maxControllers = new CVar("sy_maxControllers", 4, CFlags.Hidden);
+        public static readonly CVar sy_maxKeyboards = new CVar("sy_maxKeyboards", 6, CFlags.Hidden);
+
         /* Player */
         public static readonly CVar cg_playerSpeed = new CVar("cg_playerSpeed", 200, CFlags.Readonly);
         public static readonly CVar cg_playerSpeedAdd = new CVar("cg_playerSpeedAdd", 30, CFlags.Readonly);
@@ -156,6 +160,9 @@ namespace Bomberman
 
         public static void Register(CConsole console)
         {
+            console.RegisterCvar(sy_maxControllers);
+            console.RegisterCvar(sy_maxKeyboards);
+
             console.RegisterCvar(name);
 
             console.RegisterCvars(powerupsInitials);

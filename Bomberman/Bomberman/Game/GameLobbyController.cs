@@ -9,6 +9,7 @@ using Assets;
 using BomberEngine.Core.Input;
 using BomberEngine.Debugging;
 using BomberEngine.Core.Visual;
+using Bomberman.Game.Elements.Players.Input;
 
 namespace Bomberman.Game
 {
@@ -237,12 +238,103 @@ namespace Bomberman.Game
             return selectedScheme;
         }
 
-        public InputType[] GetInputTypes()
+        public GameSettings.InputEntry[] CreateInputEntries()
         {
-            return inputTypes;
+            int count = 0;
+            for (int i = 0; i < inputTypes.Length; ++i)
+            {
+                if (inputTypes[i] != InputType.None)
+                {
+                    ++count;
+                }
+            }
+
+            GameSettings.InputEntry[] entries = new GameSettings.InputEntry[count];
+            for (int i = 0, j = 0; i < inputTypes.Length && j < count; ++i)
+            {
+                if (inputTypes[i] != InputType.None)
+                {
+                    PlayerInput input = CreatePlayerInput(inputTypes[i]);
+                    entries[i] = new GameSettings.InputEntry(i, input);
+                }
+            }
+
+            return entries;
         }
 
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        private static PlayerKeyboardInput[] keyboardInputs;
+        private static PlayerGamePadInput[] gamePadInputs;
+
+        private PlayerInput CreatePlayerInput(InputType inputType)
+        {
+            switch (inputType)
+            {
+                case InputType.Keyboard1:
+                case InputType.Keyboard2:
+                case InputType.Keyboard3:
+                case InputType.Keyboard4:
+                case InputType.Keyboard5:
+                case InputType.Keyboard6:
+                {
+                    int index = inputType - InputType.Keyboard1;
+                    return CreateKeyBoardInput(index);
+                }
+
+                case InputType.GamePad1:
+                case InputType.GamePad2:
+                case InputType.GamePad3:
+                case InputType.GamePad4:
+                {
+                    int index = inputType - InputType.GamePad1;
+                    return CreateGamePadInput(index);
+                }
+
+                case InputType.None:
+                {
+                    throw new ArgumentException("Can't create input for 'none' type");
+                }
+            }
+
+            throw new NotImplementedException("Unsupported input type: " + inputType);
+        }
+
+        private PlayerKeyboardInput CreateKeyBoardInput(int index)
+        {
+            if (keyboardInputs == null)
+            {
+                keyboardInputs = new PlayerKeyboardInput[CVars.sy_maxKeyboards.intValue];
+            }
+
+            PlayerKeyboardInput input = keyboardInputs[index];
+            if (input == null)
+            {
+                input = new PlayerKeyboardInput();
+                keyboardInputs[index] = input;
+            }
+
+            return input;
+        }
+
+        private PlayerGamePadInput CreateGamePadInput(int index)
+        {
+            if (gamePadInputs == null)
+            {
+                gamePadInputs = new PlayerGamePadInput[CVars.sy_maxControllers.intValue];
+            }
+
+            PlayerGamePadInput input = gamePadInputs[index];
+            if (input == null)
+            {
+                input = new PlayerGamePadInput(index);
+                gamePadInputs[index] = input;
+            }
+
+            return input;
+        }
 
         //////////////////////////////////////////////////////////////////////////////
 

@@ -139,28 +139,10 @@ namespace Bomberman
                     {
                         GameLobbyController glc = controller as GameLobbyController;
                         Scheme selectedScheme = glc.GetSelectedScheme();
-                        InputType[] inputTypes = glc.GetInputTypes();
-
-                        int count = 0;
-                        for (int i = 0; i < inputTypes.Length; ++i)
-                        {
-                            if (inputTypes[i] != InputType.None)
-                            {
-                                ++count;
-                            }
-                        }
-
-                        GameSettings.InputEntry[] entries = new GameSettings.InputEntry[count];
-                        for (int i = 0, j = 0; i < inputTypes.Length && j < count; ++i)
-                        {
-                            if (inputTypes[i] != InputType.None)
-                            {
-                                PlayerInput input = CreatePlayerInput(inputTypes[i]);
-                                entries[i] = new GameSettings.InputEntry(i, input);
-                            }
-                        }
+                        
 
                         GameSettings settings = new GameSettings(selectedScheme);
+                        settings.inputEntries = glc.CreateInputEntries();
                         StartController(GameController.Local(settings));
                         break;
                     }
@@ -204,6 +186,7 @@ namespace Bomberman
                 }
             }
         }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
