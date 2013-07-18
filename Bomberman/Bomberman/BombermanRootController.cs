@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Content;
 using System.Net;
 using BomberEngine.Debugging;
 using Bomberman.Content;
+using Bomberman.Game.Elements.Players.Input;
 
 namespace Bomberman
 {
@@ -24,6 +25,10 @@ namespace Bomberman
         {
             multiplayerManager = new MultiplayerManager();
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Lifecycle
 
         protected override void OnStart()
         {
@@ -47,11 +52,23 @@ namespace Bomberman
             }
         }
 
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region IUpdatable
+
         public override void Update(float delta)
         {
             base.Update(delta);
             multiplayerManager.Update(delta);
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Child controllers
 
         protected override void OnControllerStop(Controller controller)
         {
@@ -116,7 +133,6 @@ namespace Bomberman
             else if (controller is GameLobbyController)
             {
                 GameLobbyController.ExitCode exitCode = (GameLobbyController.ExitCode)controller.exitCode;
-
                 switch (exitCode)
                 {
                     case GameLobbyController.ExitCode.StartGame:
@@ -125,9 +141,23 @@ namespace Bomberman
                         Scheme selectedScheme = glc.GetSelectedScheme();
                         InputType[] inputTypes = glc.GetInputTypes();
 
+                        int count = 0;
                         for (int i = 0; i < inputTypes.Length; ++i)
                         {
-                            Log.d(inputTypes[i]);
+                            if (inputTypes[i] != InputType.None)
+                            {
+                                ++count;
+                            }
+                        }
+
+                        GameSettings.InputEntry[] entries = new GameSettings.InputEntry[count];
+                        for (int i = 0, j = 0; i < inputTypes.Length && j < count; ++i)
+                        {
+                            if (inputTypes[i] != InputType.None)
+                            {
+                                PlayerInput input = CreatePlayerInput(inputTypes[i]);
+                                entries[i] = new GameSettings.InputEntry(i, input);
+                            }
                         }
 
                         GameSettings settings = new GameSettings(selectedScheme);
@@ -174,6 +204,11 @@ namespace Bomberman
                 }
             }
         }
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Console
 
         protected override CConsole CreateConsole()
         {
@@ -181,6 +216,12 @@ namespace Bomberman
             CVars.Register(console);
             return console;
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Key listener
 
         public override bool OnKeyPressed(KeyEventArg e)
         {
@@ -198,6 +239,12 @@ namespace Bomberman
             return false;
         }
 
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Helpers
+
         private void StartMainMenuController()
         {
             menuController = new MenuController();
@@ -208,5 +255,7 @@ namespace Bomberman
         {
             return multiplayerManager;
         }
+
+        #endregion
     }
 }

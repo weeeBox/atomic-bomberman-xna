@@ -24,9 +24,23 @@ using Bomberman.Game.Multiplayer;
 namespace Bomberman.Game
 {
     public class GameSettings
-    {   
+    {
+        public struct InputEntry
+        {
+            int playerIndex;
+            PlayerInput input;
+
+            public InputEntry(int playerIndex, PlayerInput input)
+            {
+                this.playerIndex = playerIndex;
+                this.input = input;
+            }
+        }
+
         public Scheme scheme;
         public ServerInfo serverInfo;
+
+        public InputEntry[] inputEntries;
 
         public GameSettings(Scheme scheme)
         {
