@@ -5,9 +5,9 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Bomberman
 {
-    public class BombermanAssetManager : AssetManager
+    public class BmAssetManager : AssetManager
     {
-        public BombermanAssetManager(ContentManager contentManager)
+        public BmAssetManager(ContentManager contentManager)
             : base("Assets", A.RES_COUNT)
         {
             RegisterReader(typeof(Scheme), new SchemeReader());

@@ -49,7 +49,7 @@ namespace Bomberman.Game
         }
     }
 
-    public class GameController : BombermanController
+    public class GameController : BmController
     {
         public enum ExitCode
         {

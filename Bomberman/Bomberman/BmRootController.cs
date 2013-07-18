@@ -15,12 +15,12 @@ using Bomberman.Game.Elements.Players.Input;
 
 namespace Bomberman
 {
-    public class BombermanRootController : RootController
+    public class BmRootController : RootController
     {
         private MenuController menuController;
         private MultiplayerManager multiplayerManager;
 
-        public BombermanRootController(ContentManager contentManager)
+        public BmRootController(ContentManager contentManager)
             : base(contentManager)
         {
             multiplayerManager = new MultiplayerManager();
@@ -32,7 +32,7 @@ namespace Bomberman
 
         protected override void OnStart()
         {
-            BombermanAssetManager manager = (BombermanAssetManager)Application.Assets();
+            BmAssetManager manager = (BmAssetManager)Application.Assets();
             manager.AddPackToLoad(A.Packs.all);
             manager.LoadImmediately();
 

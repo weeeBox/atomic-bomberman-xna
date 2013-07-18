@@ -8,11 +8,11 @@ using BomberEngine.Core.Input;
 
 namespace Bomberman
 {
-    public abstract class BombermanController : Controller
+    public abstract class BmController : Controller
     {
-        protected new BombermanRootController GetRootController()
+        protected new BmRootController GetRootController()
         {
-            return base.GetRootController() as BombermanRootController;
+            return base.GetRootController() as BmRootController;
         }
 
         protected MultiplayerManager GetMultiplayerManager()
@@ -20,14 +20,14 @@ namespace Bomberman
             return GetRootController().GetMultiplayerManager();
         }
 
-        protected BombermanAssetManager Assets()
+        protected BmAssetManager Assets()
         {
-            return BombermanApplication.Assets();
+            return BmApplication.Assets();
         }
 
         protected InputManager Input()
         {
-            return BombermanApplication.Input();
+            return BmApplication.Input();
         }
     }
 }

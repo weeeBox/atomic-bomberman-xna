@@ -15,7 +15,7 @@ using BomberEngine.Native;
 
 namespace Bomberman
 {   
-    public class BombermanGame : Microsoft.Xna.Framework.Game, INativeInterface
+    public class BmGame : Microsoft.Xna.Framework.Game, INativeInterface
     {
         private static readonly int WIDTH = 640;
         private static readonly int HEIGHT = 480;
@@ -23,7 +23,7 @@ namespace Bomberman
         private GraphicsDeviceManager graphics;
         private Application application;
 
-        public BombermanGame()
+        public BmGame()
         {
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = WIDTH;
@@ -35,7 +35,7 @@ namespace Bomberman
             IsMouseVisible = true;
             #endif
 
-            application = new BombermanApplication(Content, this, WIDTH, HEIGHT);
+            application = new BmApplication(Content, this, WIDTH, HEIGHT);
         }
 
         /// <summary>

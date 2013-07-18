@@ -16,7 +16,7 @@ using BomberEngine.Core;
 
 namespace Bomberman.Multiplayer
 {
-    public class DebugMultiplayerController : BombermanController, 
+    public class DebugMultiplayerController : BmController, 
         ILocalServersDiscoveryRequestListener, ILocalServersDiscoveryResponseListener,
         IServerListener, IClientListener
     {

@@ -11,11 +11,11 @@ using BomberEngine.Core.Assets.Types;
 
 namespace Bomberman
 {
-    public class BombermanApplication : Application
+    public class BmApplication : Application
     {
         private ContentManager contentManager;
 
-        public BombermanApplication(ContentManager contentManager, INativeInterface nativeInterface, int width, int height)
+        public BmApplication(ContentManager contentManager, INativeInterface nativeInterface, int width, int height)
             : base(nativeInterface, width, height)
         {
             this.contentManager = contentManager;
@@ -32,22 +32,22 @@ namespace Bomberman
 
         protected override AssetManager CreateAssetManager()
         {
-            return new BombermanAssetManager(contentManager);
+            return new BmAssetManager(contentManager);
         }
 
         protected override RootController CreateRootController()
         {
-            return new BombermanRootController(contentManager);
+            return new BmRootController(contentManager);
         }
 
-        public static new BombermanAssetManager Assets()
+        public static new BmAssetManager Assets()
         {
-            return Application.Assets() as BombermanAssetManager;
+            return Application.Assets() as BmAssetManager;
         }
 
-        public static new BombermanRootController RootController()
+        public static new BmRootController RootController()
         {
-            return Application.RootController() as BombermanRootController;
+            return Application.RootController() as BmRootController;
         }
     }
 }

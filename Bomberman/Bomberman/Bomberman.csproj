@@ -109,10 +109,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets.cs" />
-    <Compile Include="BombermanApplication.cs" />
-    <Compile Include="BombermanAssetManager.cs" />
-    <Compile Include="BombermanController.cs" />
-    <Compile Include="BombermanRootController.cs" />
+    <Compile Include="BmApplication.cs" />
+    <Compile Include="BmAssetManager.cs" />
+    <Compile Include="BmController.cs" />
+    <Compile Include="BmRootController.cs" />
     <Compile Include="Common\Popups\DialogPopup.cs" />
     <Compile Include="Content\Animation.cs" />
     <Compile Include="Content\AnimationReader.cs" />
@@ -192,7 +192,7 @@
     <Compile Include="Networking\LocalServersDiscovery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="BombermanGame.cs" />
+    <Compile Include="BmGame.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

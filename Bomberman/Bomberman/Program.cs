@@ -10,7 +10,7 @@ namespace Bomberman
         /// </summary>
         static void Main(string[] args)
         {
-            using (BombermanGame game = new BombermanGame())
+            using (BmGame game = new BmGame())
             {
                 game.Run();
             }

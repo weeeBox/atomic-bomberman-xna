@@ -43,7 +43,7 @@ namespace Bomberman.Game
         Disabled
     }
 
-    public class GameLobbyController : BombermanController
+    public class GameLobbyController : BmController
     {
         public enum ExitCode
         {

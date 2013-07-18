@@ -28,7 +28,7 @@ namespace Bomberman.Game
 
         public static Scheme GetScheme(int id)
         {
-            return ((BombermanAssetManager)Application.Assets()).GetScheme(id);
+            return ((BmAssetManager)Application.Assets()).GetScheme(id);
         }
 
         public static ImageView CreateImage(int id)
