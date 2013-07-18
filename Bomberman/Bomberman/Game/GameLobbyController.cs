@@ -194,7 +194,16 @@ namespace Bomberman.Game
         {
             Debug.Assert(inputStates[(int)type] == InputState.Available);
             inputTypes[slotIndex] = type;
-            SetInputState(type, InputState.Selected);
+            switch (type)
+            {
+                case InputType.None:
+                case InputType.Network:
+                case InputType.Bot:
+                    break;
+                default:
+                    SetInputState(type, InputState.Selected);
+                    break;
+            }
         }
 
         private void SetInputState(InputType type, InputState state)

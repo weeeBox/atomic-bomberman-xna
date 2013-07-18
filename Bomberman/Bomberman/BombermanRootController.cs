@@ -118,16 +118,30 @@ namespace Bomberman
             }
             else if (controller is GameLobbyController)
             {
-                GameLobbyController glc = controller as GameLobbyController;
-                Scheme selectedScheme = glc.GetSelectedScheme();
-                InputType[] inputTypes = glc.GetInputTypes();
+                GameLobbyController.ExitCode exitCode = (GameLobbyController.ExitCode)controller.exitCode;
 
-                for (int i = 0; i < inputTypes.Length; ++i)
+                switch (exitCode)
                 {
-                    Log.d(inputTypes[i]);
-                }
+                    case GameLobbyController.ExitCode.StartGame:
+                    {
+                        GameLobbyController glc = controller as GameLobbyController;
+                        Scheme selectedScheme = glc.GetSelectedScheme();
+                        InputType[] inputTypes = glc.GetInputTypes();
 
-                StartMainMenuController();
+                        for (int i = 0; i < inputTypes.Length; ++i)
+                        {
+                            Log.d(inputTypes[i]);
+                        }
+
+                        break;
+                    }
+
+                    case GameLobbyController.ExitCode.Cancel:
+                    {
+                        StartMainMenuController();
+                        break;
+                    }
+                }
             }
             else if (controller is DebugMultiplayerController)
             {
