@@ -29,6 +29,12 @@ namespace BomberEngine.Debugging
         }
 
         [Conditional("DEBUG")]
+        public static void CheckArgumentNotNull(Object reference)
+        {
+            CheckArgument(reference != null, "Argument is null");
+        }
+
+        [Conditional("DEBUG")]
         public static void CheckArgumentNotNull(String name, Object reference)
         {
             CheckArgument(reference != null, "'{0}' is null", name);

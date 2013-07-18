@@ -27,8 +27,8 @@ namespace Bomberman.Game
     {
         public struct InputEntry
         {
-            int playerIndex;
-            PlayerInput input;
+            public int playerIndex;
+            public PlayerInput input;
 
             public InputEntry(int playerIndex, PlayerInput input)
             {
@@ -108,22 +108,6 @@ namespace Bomberman.Game
             Stop((int)exitCode, data);
         }
 
-        protected void InitPlayers()
-        {
-            List<Player> players = game.GetPlayers().list;
-
-            PlayerKeyboardInput keyboardInput1 = new PlayerKeyboardInput();
-            keyboardInput1.Map(KeyCode.W, PlayerAction.Up);
-            keyboardInput1.Map(KeyCode.A, PlayerAction.Left);
-            keyboardInput1.Map(KeyCode.S, PlayerAction.Down);
-            keyboardInput1.Map(KeyCode.D, PlayerAction.Right);
-            keyboardInput1.Map(KeyCode.OemCloseBrackets, PlayerAction.Bomb);
-            keyboardInput1.Map(KeyCode.OemOpenBrackets, PlayerAction.Special);
-            gameScreen.AddKeyListener(keyboardInput1);
-
-            players[0].SetPlayerInput(keyboardInput1);
-        }
-
         protected void LoadField(Scheme scheme)
         {   
             game.LoadField(scheme); 
@@ -195,6 +179,8 @@ namespace Bomberman.Game
         public LocalGameController(GameSettings settings)
             : base(settings)
         {
+            Debug.CheckArgumentNotNull(settings.inputEntries);
+            Debug.CheckArgument(settings.inputEntries.Length > 0);
         }
 
         protected override void OnStart()
@@ -202,13 +188,17 @@ namespace Bomberman.Game
             base.OnStart();
 
             game = new Game();
-            game.AddPlayer(new Player(0));
+            GameSettings.InputEntry[] entries = settings.inputEntries;
+            for (int i = 0; i < entries.Length; ++i)
+            {
+                Player player = new Player(entries[i].playerIndex);
+                player.SetPlayerInput(entries[i].input);
+                game.AddPlayer(player);
+            }
 
             LoadField(settings.scheme);
 
             gameScreen = new GameScreen();
-
-            InitPlayers();
 
             StartScreen(gameScreen);
 

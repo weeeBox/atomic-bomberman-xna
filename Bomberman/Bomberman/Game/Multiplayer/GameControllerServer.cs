@@ -50,9 +50,11 @@ namespace Bomberman.Game.Multiplayer
 
             gameScreen = new GameScreen();
 
-            InitPlayers();
+            //InitPlayers();
 
-            StartScreen(gameScreen);
+            //StartScreen(gameScreen);
+
+            throw new NotImplementedException();
         }
 
         protected override void OnStop()
