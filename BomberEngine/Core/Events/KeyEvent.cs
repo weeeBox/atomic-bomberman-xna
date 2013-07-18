@@ -31,5 +31,60 @@ namespace BomberEngine.Core.Events
 
             return this;
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Helpers
+
+        public bool IsKeyPressed(KeyCode key)
+        {
+            return IsKeyState(KeyState.Pressed, key);
+        }
+
+        public bool IsKeyRepeated(KeyCode key)
+        {
+            return IsKeyState(KeyState.Repeated, key);
+        }
+
+        public bool IsKeyReleased(KeyCode key)
+        {
+            return IsKeyState(KeyState.Released, key);
+        }
+
+        public bool IsOneOfKeysPressed(params KeyCode[] keys)
+        {
+            return IsOneOfKeysState(KeyState.Pressed, keys);
+        }
+
+        public bool IsOneOfKeysRepeated(params KeyCode[] keys)
+        {
+            return IsOneOfKeysState(KeyState.Repeated, keys);
+        }
+
+        public bool IsOneOfKeysReleased(params KeyCode[] keys)
+        {
+            return IsOneOfKeysState(KeyState.Released, keys);
+        }
+
+        private bool IsKeyState(KeyState s, KeyCode key)
+        {
+            return state == s && arg.key == key;
+        }
+
+        private bool IsOneOfKeysState(KeyState s, KeyCode[] keys)
+        {
+            if (state == s)
+            {
+                for (int i = 0; i < keys.Length; ++i)
+                {
+                    if (keys[i] == arg.key)
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        #endregion
     }
 }
