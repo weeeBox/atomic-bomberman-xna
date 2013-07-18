@@ -30,6 +30,7 @@ namespace Bomberman.Game
 
         public GameSettings(Scheme scheme)
         {
+            Debug.CheckArgumentNotNull("scheme", scheme);
             this.scheme = scheme;
         }
     }

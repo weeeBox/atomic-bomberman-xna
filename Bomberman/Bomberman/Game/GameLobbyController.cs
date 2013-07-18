@@ -102,8 +102,6 @@ namespace Bomberman.Game
 
             SetInputType(0, InputType.Keyboard1);
             SetInputType(1, InputType.Keyboard2);
-            SetInputType(2, InputType.Keyboard3);
-            SetInputType(3, InputType.Keyboard4);
         }
 
         private void InputTypeSelectDelegate(InputTypeView view, bool forward)
