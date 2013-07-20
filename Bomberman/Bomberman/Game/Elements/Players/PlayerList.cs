@@ -5,21 +5,23 @@ using System.Text;
 using BomberEngine.Core;
 using BomberEngine.Core.Input;
 using BomberEngine.Debugging;
+using BomberEngine.Core.Events;
 
 namespace Bomberman.Game.Elements.Players
 {
-    public class PlayerList : IUpdatable, IKeyInputListener
+    public class PlayerList : IUpdatable, IEventHandler
     {
         public List<Player> list;
 
-        private KeyInputListenerList keyListeners;
         private UpdatableList updatables;
+        private EventHandlerList eventHandlers;
 
         public PlayerList(int capacity)
         {
             list = new List<Player>(capacity);
-            keyListeners = new KeyInputListenerList(capacity);
+            
             updatables = new UpdatableList(capacity);
+            eventHandlers = new EventHandlerList(capacity);
         }
 
         public void Update(float delta)
@@ -33,9 +35,9 @@ namespace Bomberman.Game.Elements.Players
             list.Add(player);
 
             updatables.Add(player);
-            if (player.input is IKeyInputListener)
+            if (player.input is IEventHandler)
             {
-                keyListeners.Add(player.input as IKeyInputListener);
+                eventHandlers.Add(player.input as IEventHandler);
             }
         }
 
@@ -58,9 +60,9 @@ namespace Bomberman.Game.Elements.Players
             }
 
             updatables.Remove(player);
-            if (player.input is IKeyInputListener)
+            if (player.input is IEventHandler)
             {
-                keyListeners.Remove(player.input as IKeyInputListener);
+                eventHandlers.Remove(player.input as IEventHandler);
             }
         }
 
@@ -86,21 +88,11 @@ namespace Bomberman.Game.Elements.Players
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region IKeyInputListener
+        #region IEventHandler
 
-        public bool OnKeyPressed(KeyEventArg arg)
+        public bool HandleEvent(Event evt)
         {
-            return keyListeners.OnKeyPressed(arg);
-        }
-
-        public bool OnKeyRepeated(KeyEventArg arg)
-        {
-            return keyListeners.OnKeyRepeated(arg);
-        }
-
-        public bool OnKeyReleased(KeyEventArg arg)
-        {
-            return keyListeners.OnKeyReleased(arg);
+            return eventHandlers.HandleEvent(evt);
         }
 
         #endregion

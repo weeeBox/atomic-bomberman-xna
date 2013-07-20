@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BomberEngine.Core.Input;
-using Microsoft.Xna.Framework.Input;
+using BomberEngine.Core.Events;
 
 namespace Bomberman.Game.Elements.Players.Input
 {
-    public class PlayerKeyboardInput : PlayerInput, IKeyInputListener
+    public class PlayerKeyboardInput : PlayerInput, IEventHandler
     {
         private Dictionary<KeyCode, PlayerAction> actionLookup;
 
@@ -21,7 +21,26 @@ namespace Bomberman.Game.Elements.Players.Input
             actionLookup.Add(key, action);
         }
 
-        public bool OnKeyPressed(KeyEventArg e)
+        public bool HandleEvent(Event evt)
+        {
+            if (evt.code == Event.KEY)
+            {
+                KeyEvent keyEvent = evt as KeyEvent;
+                if (keyEvent.state == KeyState.Pressed)
+                {
+                    return OnKeyPressed(keyEvent.arg);
+                }
+
+                if (keyEvent.state == KeyState.Released)
+                {
+                    return OnKeyReleased(keyEvent.arg);
+                }
+            }
+
+            return false;
+        }
+
+        private bool OnKeyPressed(KeyEventArg e)
         {
             PlayerAction action = GetAction(e.key);
             if (action != PlayerAction.Count)
@@ -33,12 +52,7 @@ namespace Bomberman.Game.Elements.Players.Input
             return false;
         }
 
-        public bool OnKeyRepeated(KeyEventArg e)
-        {
-            return false; // TODO: handle key repeat
-        }
-
-        public bool OnKeyReleased(KeyEventArg e)
+        private bool OnKeyReleased(KeyEventArg e)
         {
             PlayerAction action = GetAction(e.key);
             if (action != PlayerAction.Count)
