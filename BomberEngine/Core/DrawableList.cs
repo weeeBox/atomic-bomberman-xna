@@ -7,7 +7,7 @@ using BomberEngine.Core.Visual;
 
 namespace BomberEngine.Core
 {
-    public class DrawableList : IDrawable, Collection<IDrawable>
+    public class DrawableList : IDrawable, IBaseCollection<IDrawable>
     {
         public static readonly DrawableList Null = new NullDrawbleList();
 

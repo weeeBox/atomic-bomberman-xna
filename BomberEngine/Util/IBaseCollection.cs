@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BomberEngine.Util
 {
-    public interface Collection<T>
+    public interface IBaseCollection<T>
     {
         bool Add(T t);
         bool Remove(T t);

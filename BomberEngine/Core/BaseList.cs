@@ -6,7 +6,7 @@ using BomberEngine.Util;
 
 namespace BomberEngine.Core
 {
-    public abstract class BaseList<T> : Collection<T> where T : class
+    public abstract class BaseList<T> : IBaseCollection<T> where T : class
     {
         protected List<T> list;
 

@@ -160,7 +160,7 @@
     <Compile Include="Game\ScreenManager.cs" />
     <Compile Include="Native\INativeInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util\Collection.cs" />
+    <Compile Include="Util\IBaseCollection.cs" />
     <Compile Include="Util\ConcurrentList.cs" />
     <Compile Include="Util\Constants.cs" />
     <Compile Include="Util\FastLinkedList.cs" />
