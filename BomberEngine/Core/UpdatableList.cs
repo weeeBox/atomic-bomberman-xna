@@ -9,15 +9,15 @@ namespace BomberEngine.Core
     public class UpdatableList : BaseUpdatableList<IUpdatable>, IDestroyable
     {
         public static readonly UpdatableList Null = new NullUpdatableList();
-        private static readonly IUpdatable nullElement = new NullUpdatable();
+        private static readonly IUpdatable nullUpdatable = new NullUpdatable();
 
         public UpdatableList()
-            : base(nullElement) 
+            : base(nullUpdatable) 
         {
         }
 
         public UpdatableList(int capacity)
-            : base(nullElement, capacity)
+            : base(nullUpdatable, capacity)
         {
         }
 

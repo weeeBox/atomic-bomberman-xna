@@ -25,8 +25,6 @@ namespace BomberEngine.Game
         private UpdatableList updatableList;
         private DrawableList drawableList;
 
-        private IKeyInputListenerList keyInputListeners;
-
         public ScreenManager screenManager;
 
         protected bool allowsDrawPrevious;
@@ -47,7 +45,6 @@ namespace BomberEngine.Game
             this.height = height;
 
             callManager = new DelayedCallManager();
-            keyInputListeners = new IKeyInputListenerList();
 
             updatableList = UpdatableList.Null;
             drawableList = DrawableList.Null;
@@ -249,31 +246,12 @@ namespace BomberEngine.Game
         {   
             if (evt.code == Event.KEY)
             {
-                KeyEvent keyEvent = evt as KeyEvent;
-                switch (keyEvent.state)
-                {
-                    case KeyState.Pressed:
-                    {
-                        if (keyInputListeners.OnKeyPressed(keyEvent.arg)) return true;
-                        break;
-                    }
-                    case KeyState.Repeated:
-                    {
-                        if (keyInputListeners.OnKeyRepeated(keyEvent.arg)) return true;
-                        break;
-                    }
-                    case KeyState.Released:
-                    {
-                        if (keyInputListeners.OnKeyReleased(keyEvent.arg)) return true;
-                        break;
-                    }
-                }
-
                 if (mFocusedView != null)
                 {
                     if (mFocusedView.HandleEvent(evt)) return true;
                 }
 
+                KeyEvent keyEvent = evt as KeyEvent;
                 if (keyEvent.state == KeyState.Pressed)
                 {
                     if (keyEvent.arg.key == KeyCode.Escape ||
@@ -295,22 +273,6 @@ namespace BomberEngine.Game
             }
 
             return base.HandleEvent(evt);
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region KeyboardListeners
-
-        public bool AddKeyListener(IKeyInputListener listener)
-        {
-            return keyInputListeners.Add(listener);
-        }
-
-        public bool RemoveKeyboardListener(IKeyInputListener listener)
-        {
-            return keyInputListeners.Remove(listener);
         }
 
         #endregion

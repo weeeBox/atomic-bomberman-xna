@@ -35,21 +35,6 @@ namespace Bomberman.Game.Screens
 
             // field drawer
             AddView(new PowerupsDrawable(field, 0, 0, Constant.FIELD_WIDTH, Constant.FIELD_OFFSET_Y));
-
-            List<Player> players = field.GetPlayers().list;
-            foreach (Player player in players)
-            {
-                if (player.input is PlayerKeyboardInput)
-                {
-                    PlayerKeyboardInput kb = (PlayerKeyboardInput)player.input;
-                    AddKeyListener(kb);
-                }
-                else if (player.input is PlayerGamePadInput)
-                {
-                    PlayerGamePadInput gp = (PlayerGamePadInput)player.input;
-                    AddUpdatable(gp);
-                }
-            }
         }
 
         protected override bool OnBackKeyPressed(KeyEventArg arg)

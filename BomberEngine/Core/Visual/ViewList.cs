@@ -8,15 +8,15 @@ namespace BomberEngine.Core.Visual
     public class ViewList : BaseUpdatableList<View>, IDrawable
     {
         public static readonly ViewList Null = new NullViewList();
-        private static readonly View nullElement = new NullGameObject();
+        private static readonly View nullView = new NullView();
 
         public ViewList()
-            : base(nullElement)
+            : base(nullView)
         {
         }
 
         public ViewList(int capacity)
-            : base(nullElement, capacity)
+            : base(nullView, capacity)
         {
         }
 
@@ -89,7 +89,7 @@ namespace BomberEngine.Core.Visual
         }
     }
 
-    internal sealed class NullGameObject : View
+    internal sealed class NullView : View
     {
         public override void Update(float delta)
         {   

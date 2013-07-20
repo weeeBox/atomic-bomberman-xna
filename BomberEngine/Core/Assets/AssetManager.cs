@@ -14,7 +14,7 @@ namespace BomberEngine.Core.Assets
     {
         private string baseDir;
 
-        private AssetManagerListener listener;
+        public AssetManagerListener listener;
 
         private Dictionary<Type, AssetReader> readers;
         private Asset[] assets;

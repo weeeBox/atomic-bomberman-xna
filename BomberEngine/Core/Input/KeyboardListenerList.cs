@@ -8,9 +8,12 @@ using BomberEngine.Debugging;
 
 namespace BomberEngine.Core.Input
 {
-    public class IKeyInputListenerList : BaseList<IKeyInputListener>, IKeyInputListener
-    {   
-        public IKeyInputListenerList()
+    public class KeyInputListenerList : BaseList<IKeyInputListener>, IKeyInputListener
+    {
+        private static readonly IKeyInputListener nullListener = new NullKeyInputListener();
+
+        public KeyInputListenerList(int capacity)
+            : base(nullListener, capacity)
         {   
         }
 
@@ -63,6 +66,24 @@ namespace BomberEngine.Core.Input
 
             ClearRemoved();
             return handled;
+        }
+    }
+
+    internal class NullKeyInputListener : IKeyInputListener
+    {
+        public bool OnKeyPressed(KeyEventArg arg)
+        {
+            return false;
+        }
+
+        public bool OnKeyRepeated(KeyEventArg arg)
+        {
+            return false;
+        }
+
+        public bool OnKeyReleased(KeyEventArg arg)
+        {
+            return false;
         }
     }
 }

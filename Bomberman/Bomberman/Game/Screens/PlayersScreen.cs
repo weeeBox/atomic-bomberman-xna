@@ -68,8 +68,6 @@ namespace Bomberman.Game.Screens
             buttons.LayoutHor(20);
             buttons.ResizeToFitViews();
             AddView(buttons);
-
-            AddKeyListener(this);
         }
 
         private void ConfirmSelection()

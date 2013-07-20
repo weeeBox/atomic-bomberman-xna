@@ -75,17 +75,6 @@ namespace Bomberman.Game.Multiplayer
                         }
                     }
 
-                    // input
-                    PlayerKeyboardInput keyboardInput1 = new PlayerKeyboardInput();
-                    keyboardInput1.Map(KeyCode.W, PlayerAction.Up);
-                    keyboardInput1.Map(KeyCode.A, PlayerAction.Left);
-                    keyboardInput1.Map(KeyCode.S, PlayerAction.Down);
-                    keyboardInput1.Map(KeyCode.D, PlayerAction.Right);
-                    keyboardInput1.Map(KeyCode.OemCloseBrackets, PlayerAction.Bomb);
-                    keyboardInput1.Map(KeyCode.OemOpenBrackets, PlayerAction.Special);
-                    gameScreen.AddKeyListener(keyboardInput1);
-
-                    localPlayer.SetPlayerInput(keyboardInput1);
                     localPlayer.connection = client.GetServerConnection();
 
                     StartScreen(gameScreen);
