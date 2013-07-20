@@ -99,6 +99,7 @@
     <Compile Include="Core\Assets\AssetBinaryReader.cs" />
     <Compile Include="Core\Assets\AssetReader.cs" />
     <Compile Include="Core\Assets\Readers\TextureReader.cs" />
+    <Compile Include="Core\BaseList.cs" />
     <Compile Include="Core\BaseUpdatableList.cs" />
     <Compile Include="Core\BaseElement.cs" />
     <Compile Include="Core\Events\Event.cs" />
