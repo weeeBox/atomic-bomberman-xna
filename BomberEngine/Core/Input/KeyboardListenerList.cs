@@ -4,61 +4,64 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Util;
+using BomberEngine.Debugging;
 
 namespace BomberEngine.Core.Input
 {
-    public class IKeyInputListenerList : IKeyInputListener
-    {
-        private ConcurrentList<IKeyInputListener> listeners;
-
+    public class IKeyInputListenerList : BaseList<IKeyInputListener>, IKeyInputListener
+    {   
         public IKeyInputListenerList()
-        {
-            listeners = new ConcurrentList<IKeyInputListener>();
+        {   
         }
 
-        public bool Add(IKeyInputListener listener)
+        public override bool Add(IKeyInputListener listener)
         {
-            if (!listeners.Contains(listener))
-            {
-                listeners.Add(listener);
-                return true;
-            }
-            return false;
+            Debug.Assert(!list.Contains(listener));
+            return base.Add(listener);
         }
 
-        public bool Remove(IKeyInputListener listener)
+        public override bool Remove(IKeyInputListener listener)
         {
-            return listeners.Remove(listener);
+            Debug.Assert(list.Contains(listener));
+            return base.Remove(listener);
         }
 
         public bool OnKeyPressed(KeyEventArg arg)
         {
             bool handled = false;
-            foreach (IKeyInputListener l in listeners)
+            int count = list.Count;
+            for (int i = 0; i < count; ++i)
             {
-                handled |= l.OnKeyPressed(arg);
+                handled |= list[i].OnKeyPressed(arg);
             }
+
+            ClearRemoved();
             return handled;
         }
 
-        public bool OnKeyRepeated(KeyEventArg key)
+        public bool OnKeyRepeated(KeyEventArg arg)
         {
             bool handled = false;
-            foreach (IKeyInputListener l in listeners)
+            int count = list.Count;
+            for (int i = 0; i < count; ++i)
             {
-                handled |= l.OnKeyRepeated(key);
+                handled |= list[i].OnKeyRepeated(arg);
             }
+
+            ClearRemoved();
             return handled;
         }
 
-        public bool OnKeyReleased(KeyEventArg key)
+        public bool OnKeyReleased(KeyEventArg arg)
         {
             bool handled = false;
-            foreach (IKeyInputListener l in listeners)
+            int count = list.Count;
+            for (int i = 0; i < count; ++i)
             {
-                handled |= l.OnKeyReleased(key);
+                handled |= list[i].OnKeyReleased(arg);
             }
 
+            ClearRemoved();
             return handled;
         }
     }

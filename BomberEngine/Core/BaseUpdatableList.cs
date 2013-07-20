@@ -29,11 +29,8 @@ namespace BomberEngine.Core
             {
                 list[i].Update(delta);
             }
-
-            if (removedCount > 0)
-            {
-                ClearRemoved();
-            }
+            
+            ClearRemoved();
         }
     }
 }
