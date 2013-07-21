@@ -248,7 +248,12 @@ namespace BomberEngine.Game
         #region Event handler
 
         public override bool HandleEvent(Event evt)
-        {   
+        {
+            if (eventHandlers.HandleEvent(evt))
+            {
+                return true;
+            }
+
             if (evt.code == Event.KEY)
             {
                 if (mFocusedView != null)
@@ -289,7 +294,23 @@ namespace BomberEngine.Game
             return base.HandleEvent(evt);
         }
 
+        protected void AddEventHandler(IEventHandler handler)
+        {
+            if (eventHandlers.IsNull())
+            {
+                eventHandlers = new EventHandlerList();
+            }
 
+            eventHandlers.Add(handler);
+        }
+
+        protected void RemoveEventHandler(IEventHandler handler)
+        {
+            if (!eventHandlers.IsNull())
+            {
+                eventHandlers.Remove(handler);
+            }
+        }
 
         #endregion
 

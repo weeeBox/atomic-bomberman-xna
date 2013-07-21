@@ -26,6 +26,7 @@ namespace Bomberman.Game.Screens
         {
             Field field = Game.Field();
             AddUpdatable(field);
+            AddEventHandler(field);
 
             // field background
             fieldBackground = Helper.CreateImage(A.gfx_field7);
@@ -36,16 +37,6 @@ namespace Bomberman.Game.Screens
 
             // field drawer
             AddView(new PowerupsDrawable(field, 0, 0, Constant.FIELD_WIDTH, Constant.FIELD_OFFSET_Y));
-        }
-
-        public override bool HandleEvent(Event evt)
-        {
-            if (Game.Field().HandleEvent(evt))
-            {
-                return true;
-            }
-
-            return base.HandleEvent(evt);
         }
 
         protected override bool OnCancelPressed(KeyEventArg arg)
