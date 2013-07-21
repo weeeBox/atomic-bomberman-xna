@@ -10,9 +10,9 @@ namespace BomberEngine.Core
     {
         internal double currentTime;
 
-        protected Timer rootCall;
+        protected Timer rootTimer;
 
-        private int callsCount;
+        private int timersCount;
 
         public TimerManager()
         {   
@@ -25,17 +25,17 @@ namespace BomberEngine.Core
         public void Update(float delta)
         {
             currentTime += delta;
-            for (Timer c = rootCall; c != null;)
+            for (Timer t = rootTimer; t != null;)
             {
-                if (c.fireTime > currentTime)
+                if (t.fireTime > currentTime)
                 {
                     break;
                 }
 
-                Timer call = c;
-                c = c.next;
+                Timer timer = t;
+                t = t.next;
 
-                call.Fire();
+                timer.Fire();
             }
         }
 
@@ -79,67 +79,67 @@ namespace BomberEngine.Core
         {
             float timeout = delay < 0 ? 0 : delay;
 
-            Timer call = NextFreeCall();
-            call.callback = callback;
-            call.timeout = timeout;
-            call.numRepeats = numRepeats;
-            call.scheduleTime = currentTime;
-            call.fireTime = currentTime + timeout;
-            call.name = name;
+            Timer timer = NextFreeTimer();
+            timer.callback = callback;
+            timer.timeout = timeout;
+            timer.numRepeats = numRepeats;
+            timer.scheduleTime = currentTime;
+            timer.fireTime = currentTime + timeout;
+            timer.name = name;
 
-            AddCall(call);
+            AddTimer(timer);
         }
 
         public void Cancel(TimerCallback callback)
         {
-            for (Timer call = rootCall; call != null;)
+            for (Timer timer = rootTimer; timer != null;)
             {
-                Timer c = call;
-                call = call.next;
+                Timer t = timer;
+                timer = timer.next;
 
-                if (c.callback == callback)
+                if (t.callback == callback)
                 {
-                    c.Cancel();
+                    t.Cancel();
                 }
             }
         }
 
         public void Cancel(String name)
         {
-            for (Timer call = rootCall; call != null; )
+            for (Timer timer = rootTimer; timer != null; )
             {
-                Timer c = call;
-                call = call.next;
+                Timer t = timer;
+                timer = timer.next;
 
-                if (c.name == name)
+                if (t.name == name)
                 {
-                    c.Cancel();
+                    t.Cancel();
                 }
             }
         }
 
         public void CancelAll(Object target)
         {
-            for (Timer call = rootCall; call != null; )
+            for (Timer timer = rootTimer; timer != null; )
             {
-                Timer c = call;
-                call = call.next;
+                Timer t = timer;
+                timer = timer.next;
 
-                if (c.callback.Target == target)
+                if (t.callback.Target == target)
                 {
-                    c.Cancel();
+                    t.Cancel();
                 }
             }
         }
 
         public void CancelAll()
         {
-            for (Timer call = rootCall; call != null; )
+            for (Timer timer = rootTimer; timer != null; )
             {
-                Timer c = call;
-                call = call.next;
+                Timer t = timer;
+                timer = timer.next;
 
-                c.Cancel();
+                t.Cancel();
             }
         }
 
@@ -158,86 +158,86 @@ namespace BomberEngine.Core
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Call List
+        #region Timer List
 
-        private Timer NextFreeCall()
+        private Timer NextFreeTimer()
         {
-            Timer call = Timer.NextFreeTimer();
-            call.manager = this;
-            return call;
+            Timer timer = Timer.NextFreeTimer();
+            timer.manager = this;
+            return timer;
         }
 
-        private void AddFreeCall(Timer call)
+        private void AddFreeTimer(Timer timer)
         {
-            Timer.AddFreeTimer(call);
+            Timer.AddFreeTimer(timer);
         }
 
-        private void AddCall(Timer call)
+        private void AddTimer(Timer timer)
         {
-            Debug.Assert(call.manager == this);
-            ++callsCount;
+            Debug.Assert(timer.manager == this);
+            ++timersCount;
 
-            if (rootCall != null)
+            if (rootTimer != null)
             {
                 // if timer has the least remaining time - it goes first
-                if (call.fireTime < rootCall.fireTime)
+                if (timer.fireTime < rootTimer.fireTime)
                 {
-                    call.next = rootCall;
-                    rootCall.prev = call;
-                    rootCall = call;
+                    timer.next = rootTimer;
+                    rootTimer.prev = timer;
+                    rootTimer = timer;
 
                     return;
                 }
 
                 // try to insert in a sorted order
-                Timer tail = rootCall;
-                for (Timer c = rootCall.next; c != null; tail = c, c = c.next)
+                Timer tail = rootTimer;
+                for (Timer t = rootTimer.next; t != null; tail = t, t = t.next)
                 {
-                    if (call.fireTime < c.fireTime)
+                    if (timer.fireTime < t.fireTime)
                     {
-                        Timer prev = c.prev;
-                        Timer next = c;
+                        Timer prev = t.prev;
+                        Timer next = t;
 
-                        call.prev = prev;
-                        call.next = next;
+                        timer.prev = prev;
+                        timer.next = next;
 
-                        next.prev = call;
-                        prev.next = call;
+                        next.prev = timer;
+                        prev.next = timer;
 
                         return;
                     }
                 }
 
                 // add timer at the end of the list
-                tail.next = call;
-                call.prev = tail;
+                tail.next = timer;
+                timer.prev = tail;
             }
             else
             {
-                rootCall = call; // timer is root now
+                rootTimer = timer; // timer is root now
             }
         }
 
-        internal void RemoveTimer(Timer call)
+        internal void RemoveTimer(Timer timer)
         {
-            Debug.Assert(call.manager == this);
-            Debug.Assert(callsCount > 0);
-            --callsCount;
+            Debug.Assert(timer.manager == this);
+            Debug.Assert(timersCount > 0);
+            --timersCount;
 
-            Timer prev = call.prev;
-            Timer next = call.next;
+            Timer prev = timer.prev;
+            Timer next = timer.next;
 
             if (prev != null) prev.next = next;
-            else rootCall = next;
+            else rootTimer = next;
 
             if (next != null) next.prev = prev;
 
-            AddFreeCall(call);
+            AddFreeTimer(timer);
         }
 
         public int Count()
         {
-            return callsCount;
+            return timersCount;
         }
 
         #endregion

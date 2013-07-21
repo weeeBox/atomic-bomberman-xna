@@ -276,7 +276,7 @@ namespace BomberEngineTests
     {
         public Timer RootTimer
         {
-            get { return rootCall; }
+            get { return rootTimer; }
         }
     }
 }
