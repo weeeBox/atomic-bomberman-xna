@@ -14,9 +14,13 @@ namespace Bomberman.Game.Elements.Cells
 {
     public class Bomb : MovableCell
     {
-        private const byte STATE_NORMAL = 0;
-        private const byte STATE_GRABBED = 1;
-        private const byte STATE_FLYING = 2;
+        private enum State
+        {
+            Undefined,
+            Normal,
+            Grabbed,
+            Flying
+        }
 
         private static int nextTriggerIndex;
 
@@ -39,7 +43,7 @@ namespace Bomberman.Game.Elements.Cells
         private bool m_jelly;
 
         private bool m_trigger;
-        private byte m_state;
+        private State m_state;
 
         private int m_triggerIndex;
 
@@ -49,6 +53,30 @@ namespace Bomberman.Game.Elements.Cells
            : base(FieldCellType.Bomb, player.GetCx(), player.GetCy())
         {
             m_player = player;
+            m_state = State.Undefined;
+            SetSpeed(CVars.cg_bombRollSpeed.intValue);
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+
+            updater = null;
+            active = false;
+            flySpeed = 0.0f;
+            flyDistance = 0.0f;
+            fallSpeed = 0.0f;
+            fallHeight = 0.0f;
+            fallGravity = 0.0f;
+            radius = 0;
+            remains = 0;
+            dud = false;
+            m_jelly = false;
+            m_trigger = false;
+            m_state = State.Undefined;
+            m_triggerIndex = 0;
+            jellyBounced = false;
+
             SetSpeed(CVars.cg_bombRollSpeed.intValue);
         }
 
@@ -264,7 +292,7 @@ namespace Bomberman.Game.Elements.Cells
             SetCell(player.cx, player.cy);
             radius = player.GetBombRadius();
             remains = player.GetBombTimeout();
-            SetState(STATE_NORMAL);
+            SetState(State.Normal);
             dud = false;
             m_jelly = player.IsJelly();
             m_trigger = player.IsTrigger();
@@ -290,7 +318,7 @@ namespace Bomberman.Game.Elements.Cells
 
         public void Grab()
         {
-            SetState(STATE_GRABBED);
+            SetState(State.Grabbed);
             RemoveFromField();
         }
 
@@ -349,7 +377,7 @@ namespace Bomberman.Game.Elements.Cells
             fallSpeed = 0.5f * fallGravity * flyDistance / flySpeed;
 
             SetDirection(direction);
-            SetState(STATE_FLYING);
+            SetState(State.Flying);
         }
 
         private void EndFlying()
@@ -361,7 +389,7 @@ namespace Bomberman.Game.Elements.Cells
             }
             else
             {   
-                SetState(STATE_NORMAL);
+                SetState(State.Normal);
                 m_player.OnBombLanded(this);
             }
         }
@@ -404,20 +432,20 @@ namespace Bomberman.Game.Elements.Cells
             return false;
         }
 
-        private void SetState(byte state)
+        private void SetState(State state)
         {
             switch (state)
             {
-                case STATE_NORMAL:
+                case State.Normal:
                     updater = UpdateNormal;
                     break;
 
-                case STATE_GRABBED:
-                    Debug.Assert(m_state == STATE_NORMAL);
+                case State.Grabbed:
+                    Debug.Assert(m_state == State.Normal);
                     updater = UpdateGrabbed;
                     break;
 
-                case STATE_FLYING:
+                case State.Flying:
                     updater = UpdateFlying;
                     break;
             }
@@ -467,17 +495,17 @@ namespace Bomberman.Game.Elements.Cells
 
         public bool IsNormal()
         {
-            return m_state == STATE_NORMAL;
+            return m_state == State.Normal;
         }
 
         public bool IsGrabbed()
         {
-            return m_state == STATE_GRABBED;
+            return m_state == State.Grabbed;
         }
 
         public bool IsFlying()
         {
-            return m_state == STATE_FLYING;
+            return m_state == State.Flying;
         }
 
         public Player player

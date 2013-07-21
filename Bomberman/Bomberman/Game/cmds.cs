@@ -135,7 +135,6 @@ namespace Bomberman.Game
 
         public override void Execute()
         {
-
         }
     }
 }

@@ -16,6 +16,8 @@ namespace Bomberman.Game
 
         private static Game current;
 
+        private Scheme currentScheme;
+
         public Game()
         {
             current = this;
@@ -40,13 +42,20 @@ namespace Bomberman.Game
         /* Loads field from scheme: setups bricks, powerups and players */
         public void LoadField(Scheme scheme)
         {
+            currentScheme = scheme;
             field.Load(scheme);
         }
 
         /* Loads field from scheme: setups ONLY bricks */
         public void SetupField(Scheme scheme)
         {
+            currentScheme = scheme;
             field.Setup(scheme);
+        }
+
+        public void Restart()
+        {
+            field.Restart(currentScheme);
         }
 
         public static PlayerList Players()

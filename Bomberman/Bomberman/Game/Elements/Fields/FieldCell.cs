@@ -10,7 +10,7 @@ using BomberEngine.Util;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class FieldCell : IUpdatable
+    public class FieldCell : IUpdatable, IResettable
     {
         public FieldCellType type;
 
@@ -31,6 +31,10 @@ namespace Bomberman.Game.Elements.Fields
 
             slotIndex = -1;
             SetCell(cx, cy);
+        }
+
+        public virtual void Reset()
+        {
         }
 
         public virtual void Update(float delta)

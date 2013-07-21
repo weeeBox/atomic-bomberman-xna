@@ -73,6 +73,23 @@ namespace Bomberman.Game.Elements.Players
             m_thrownBombs = new List<Bomb>();
         }
 
+        public override void Reset()
+        {
+            base.Reset();
+
+            alive = true;
+
+            ResetPowerups();
+            ResetBombs();
+            ResetDiseases();
+            ResetPlayer();
+            
+            m_thrownBombs.Clear();
+            data = null;
+            connection = null;
+            lastAckPacketId = 0;
+        }
+
         public override void Update(float delta)
         {
             base.Update(delta);
@@ -492,6 +509,20 @@ namespace Bomberman.Game.Elements.Players
             }
         }
 
+        private void ResetPowerups()
+        {
+            CVar[] initials = CVars.powerupsInitials;
+            CVar[] max = CVars.powerupsMax;
+
+            int totalCount = initials.Length;
+            for (int powerupIndex = 0; powerupIndex < totalCount; ++powerupIndex)
+            {
+                int initialCount = initials[powerupIndex].intValue;
+                int maxCount = max[powerupIndex].intValue;
+                powerups.Init(powerupIndex, initialCount, maxCount);
+            }
+        }
+
         public bool TryAddPowerup(int powerupIndex)
         {
             bool added = powerups.Inc(powerupIndex);
@@ -688,6 +719,12 @@ namespace Bomberman.Game.Elements.Players
             bombs.SetMaxActiveCount(CalcBombsCount());
         }
 
+        private void ResetBombs()
+        {
+            bombs.Reset();
+            bombs.SetMaxActiveCount(CalcBombsCount());
+        }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
@@ -697,6 +734,11 @@ namespace Bomberman.Game.Elements.Players
         private void InitDiseases()
         {
             diseases = new DiseaseList(this);
+        }
+
+        private void ResetDiseases()
+        {
+            diseases.Reset();
         }
 
         #endregion
@@ -709,6 +751,11 @@ namespace Bomberman.Game.Elements.Players
         {
             SetSpeed(CalcPlayerSpeed());
             state = State.Normal;
+        }
+
+        private void ResetPlayer()
+        {
+            InitPlayer();
         }
 
         #endregion

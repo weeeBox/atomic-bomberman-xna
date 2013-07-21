@@ -5,10 +5,11 @@ using System.Text;
 using BomberEngine.Debugging;
 using BombermanCommon.Resources.Scheme;
 using Bomberman.Game.Elements.Cells;
+using BomberEngine.Core;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class FieldCellArray
+    public class FieldCellArray : IResettable
     {
         public int width;
         public int height;
@@ -29,6 +30,14 @@ namespace Bomberman.Game.Elements.Fields
                 {
                     slots[index++] = new FieldCellSlot(cx, cy);
                 }
+            }
+        }
+
+        public void Reset()
+        {
+            for (int i = 0; i < slots.Length; ++i)
+            {
+                slots[i].Reset();
             }
         }
 

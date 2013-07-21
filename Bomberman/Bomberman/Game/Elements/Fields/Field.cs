@@ -18,7 +18,7 @@ using BomberEngine.Core.Events;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class Field : IEventHandler, IUpdatable, IDestroyable
+    public class Field : IEventHandler, IUpdatable, IDestroyable, IResettable
     {
         private static Field currentField;
 
@@ -45,20 +45,27 @@ namespace Bomberman.Game.Elements.Fields
             contacts = new LinkedList<CellContactList>();
         }
 
+        public void Reset()
+        {
+            timerManager.CancelAll();
+            
+
+            players.Reset();
+            movableCells.Clear();
+            contacts.Clear();
+            tempUpdateList.Clear();
+            tempMoveList.Clear();
+        }
+
         public void Destroy()
         {
             timerManager.CancelAll();
+            currentField = null;
         }
 
         //////////////////////////////////////////////////////////////////////////////
 
         #region Setup
-
-        public void Init(int width, int height)
-        {
-            cells = new FieldCellArray(width, height);
-            movableCells = new LinkedList<MovableCell>();
-        }
 
         public void Load(Scheme scheme)
         {
@@ -70,6 +77,11 @@ namespace Bomberman.Game.Elements.Fields
         public void Setup(Scheme scheme)
         {
             SetupField(scheme.GetFieldData());
+        }
+
+        public void Restart(Scheme scheme)
+        {
+            
         }
 
         private void SetupField(FieldData data, int brickDensity = -1)

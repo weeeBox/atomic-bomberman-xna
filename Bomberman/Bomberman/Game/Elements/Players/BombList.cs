@@ -10,7 +10,7 @@ using BomberEngine.Debugging;
 
 namespace Bomberman.Game.Elements.Items
 {
-    public class BombList
+    public class BombList : IResettable
     {
         public Bomb[] array;
 
@@ -23,6 +23,15 @@ namespace Bomberman.Game.Elements.Items
             {
                 array[i] = new Bomb(player);
             }
+        }
+
+        public void Reset()
+        {
+            for (int i = 0; i < array.Length; ++i)
+            {
+                array[i].Reset();
+            }
+            maxActiveCount = 0;
         }
 
         public void SetMaxActiveCount(int count)

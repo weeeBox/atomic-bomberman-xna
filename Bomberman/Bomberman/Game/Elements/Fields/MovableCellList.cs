@@ -4,16 +4,22 @@ using System.Linq;
 using System.Text;
 using Bomberman.Game.Elements.Cells;
 using BomberEngine.Debugging;
+using BomberEngine.Core;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class MovableCellList
+    public class MovableCellList : IResettable
     {
         public LinkedList<MovableCell> list;
 
         public MovableCellList()
         {
             list = new LinkedList<MovableCell>();
+        }
+
+        public void Reset()
+        {
+            list.Clear();
         }
 
         public void Add(MovableCell cell)

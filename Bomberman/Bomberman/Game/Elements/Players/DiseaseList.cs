@@ -7,7 +7,7 @@ using BomberEngine.Core;
 
 namespace Bomberman.Game.Elements.Players
 {
-    public class DiseaseList : IUpdatable
+    public class DiseaseList : IUpdatable, IResettable
     {
         private Player m_player;
 
@@ -29,6 +29,19 @@ namespace Bomberman.Game.Elements.Players
             oldFlags = new bool[Diseases.Count];
 
             randomIndices = new int[Diseases.Count];
+
+            for (int i = 0; i < randomIndices.Length; ++i)
+            {
+                randomIndices[i] = i;
+            }
+        }
+
+        public void Reset()
+        {
+            ArrayUtils.Clear(flags);
+            ArrayUtils.Clear(oldFlags);
+            ArrayUtils.Clear(remains);
+            m_activeCount = 0;
 
             for (int i = 0; i < randomIndices.Length; ++i)
             {

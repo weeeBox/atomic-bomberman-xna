@@ -7,10 +7,11 @@ using Bomberman.Game.Elements.Players;
 using BomberEngine;
 using BomberEngine.Debugging;
 using BomberEngine.Util;
+using BomberEngine.Core;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class FieldCellSlot
+    public class FieldCellSlot : IResettable
     {
         public int cx;
         public int cy;
@@ -24,6 +25,12 @@ namespace Bomberman.Game.Elements.Fields
             this.cy = cy;
 
             movableCells = new MovableCellList();
+        }
+
+        public void Reset()
+        {
+            staticCell = null;
+            movableCells.Reset();
         }
 
         //////////////////////////////////////////////////////////////////////////////

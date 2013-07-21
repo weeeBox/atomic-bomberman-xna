@@ -40,6 +40,16 @@ namespace Bomberman.Game.Elements.Cells
             oldPy = py;
         }
 
+        public override void Reset()
+        {
+            base.Reset();
+
+            StopMoving();
+            m_direction = Direction.DOWN;
+            m_oldDirection = Direction.DOWN;
+            contactList.Clear();
+        }
+
         public virtual void UpdateMoving(float delta)
         {   
             float offset = m_speed * delta;

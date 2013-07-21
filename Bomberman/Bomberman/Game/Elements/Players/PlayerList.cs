@@ -9,7 +9,7 @@ using BomberEngine.Core.Events;
 
 namespace Bomberman.Game.Elements.Players
 {
-    public class PlayerList : IUpdatable, IEventHandler
+    public class PlayerList : IUpdatable, IEventHandler, IResettable
     {
         public List<Player> list;
 
@@ -29,6 +29,14 @@ namespace Bomberman.Game.Elements.Players
         public void Update(float delta)
         {
             updatables.Update(delta);
+        }
+
+        public void Reset()
+        {
+            for (int i = 0; i < list.Count; ++i)
+            {
+                list[i].Reset();
+            }
         }
 
         public void Add(Player player)
