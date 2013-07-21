@@ -23,7 +23,7 @@ namespace BomberEngine.Core
         public DelayedCall next;
         public DelayedCall prev;
 
-        internal DelayedCallManager manager;
+        internal TimerManager manager;
 
         internal int numRepeats;
         internal int numRepeated;

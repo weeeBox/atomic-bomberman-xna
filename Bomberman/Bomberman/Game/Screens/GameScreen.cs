@@ -26,7 +26,7 @@ namespace Bomberman.Game.Screens
         {
             Field field = Game.Field();
 
-            field.callManager = callManager;
+            field.callManager = timerManager;
             AddUpdatable(field);
             AddEventHandler(field);
 

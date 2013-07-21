@@ -20,7 +20,7 @@ namespace BomberEngine.Game
         private View mRootView;
         private View mFocusedView;
 
-        protected DelayedCallManager callManager;
+        protected TimerManager timerManager;
 
         private UpdatableList updatables;
         private DrawableList drawables;
@@ -48,7 +48,7 @@ namespace BomberEngine.Game
             this.width = width;
             this.height = height;
 
-            callManager = new DelayedCallManager();
+            timerManager = new TimerManager();
 
             updatables = UpdatableList.Null;
             drawables = DrawableList.Null;
@@ -106,7 +106,7 @@ namespace BomberEngine.Game
 
         internal void Stop()
         {
-            callManager.Destroy();
+            timerManager.Destroy();
             updatables.Destroy();
 
             OnStop();
@@ -144,7 +144,7 @@ namespace BomberEngine.Game
             mRootView.Update(delta);
 
             updatables.Update(delta);
-            callManager.Update(delta);
+            timerManager.Update(delta);
         }
 
         public void AddUpdatable(IUpdatable updatable)
@@ -233,12 +233,12 @@ namespace BomberEngine.Game
 
         public void ScheduleCall(DelayedCallback callback, float delay, int numRepeats)
         {
-            callManager.Schedule(callback, delay, numRepeats);
+            timerManager.Schedule(callback, delay, numRepeats);
         }
 
         public void CancelCall(DelayedCallback callback)
         {
-            callManager.Cancel(callback);
+            timerManager.Cancel(callback);
         }
 
         #endregion

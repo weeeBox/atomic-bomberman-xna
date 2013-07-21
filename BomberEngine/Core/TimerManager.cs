@@ -6,7 +6,7 @@ using BomberEngine.Debugging;
 
 namespace BomberEngine.Core
 {
-    public class DelayedCallManager : IUpdatable, IDestroyable
+    public class TimerManager : IUpdatable, IDestroyable
     {
         internal double currentTime;
 
@@ -14,7 +14,7 @@ namespace BomberEngine.Core
 
         private int callsCount;
 
-        public DelayedCallManager()
+        public TimerManager()
         {   
         }
 

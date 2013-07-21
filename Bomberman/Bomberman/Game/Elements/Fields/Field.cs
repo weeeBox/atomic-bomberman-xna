@@ -24,7 +24,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private FieldCellArray cells;
         private PlayerList players;
-        private DelayedCallManager timerManager;
+        private TimerManager timerManager;
 
         private LinkedList<MovableCell> movableCells;
         private LinkedList<CellContactList> contacts;
@@ -32,12 +32,12 @@ namespace Bomberman.Game.Elements.Fields
         private LinkedList<FieldCell> tempUpdateList;
         private LinkedList<MovableCell> tempMoveList;
 
-        public DelayedCallManager callManager;
+        public TimerManager callManager;
 
         public Field()
         {
             currentField = this;
-            timerManager = new DelayedCallManager();
+            timerManager = new TimerManager();
             players = new PlayerList(CVars.cg_maxPlayers.intValue);
 
             tempUpdateList = new LinkedList<FieldCell>();

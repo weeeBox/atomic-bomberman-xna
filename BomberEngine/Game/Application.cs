@@ -21,7 +21,7 @@ namespace BomberEngine.Game
         private bool started;
         private bool stoped;
 
-        private DelayedCallManager timerManager;
+        private TimerManager timerManager;
         private InputManager inputManager;
         private AssetManager assetManager;
 
@@ -49,9 +49,9 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        protected DelayedCallManager CreateTimerManager()
+        protected TimerManager CreateTimerManager()
         {
-            return new DelayedCallManager();
+            return new TimerManager();
         }
 
         protected InputManager CreateInputManager()

@@ -272,7 +272,7 @@ namespace BomberEngineTests
         }
     }
 
-    class TestTimerManager : DelayedCallManager
+    class TestTimerManager : TimerManager
     {
         public DelayedCall RootTimer
         {
