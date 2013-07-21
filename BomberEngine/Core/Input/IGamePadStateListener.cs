@@ -7,7 +7,7 @@ namespace BomberEngine.Core.Input
 {
     public interface IGamePadStateListener
     {
-        void OnGamePadConnected(int playerIndex);
-        void OnGamePadDisconnected(int playerIndex);
+        bool OnGamePadConnected(int playerIndex);
+        bool OnGamePadDisconnected(int playerIndex);
     }
 }

@@ -195,14 +195,14 @@ namespace BomberEngine.Game
             return HandleEvent(keyEvent.Init(arg, KeyState.Released));
         }
 
-        public virtual void OnGamePadConnected(int playerIndex)
+        public virtual bool OnGamePadConnected(int playerIndex)
         {
-            throw new NotImplementedException();
+            return HandleEvent(gamePadConnectivityEvent.Init(playerIndex, GamePadState.Connected));
         }
 
-        public virtual void OnGamePadDisconnected(int playerIndex)
+        public virtual bool OnGamePadDisconnected(int playerIndex)
         {
-            throw new NotImplementedException();
+            return HandleEvent(gamePadConnectivityEvent.Init(playerIndex, GamePadState.Disconnected));
         }
 
         public virtual void OnPointerMoved(int x, int y, int fingerId)

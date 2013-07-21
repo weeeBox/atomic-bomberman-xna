@@ -21,10 +21,12 @@ namespace BomberEngine.Core.Events
         {   
         }
 
-        public void Init(int index, GamePadState state)
+        public GamePadEvent Init(int index, GamePadState state)
         {
             this.index = index;
             this.state = state;
+
+            return this;
         }
     }
 }
