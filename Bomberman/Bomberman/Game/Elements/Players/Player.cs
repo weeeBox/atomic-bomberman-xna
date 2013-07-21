@@ -77,20 +77,23 @@ namespace Bomberman.Game.Elements.Players
         {
             base.Update(delta);
 
-            UpdateInput(delta);
-
-            if (m_bombInHands != null)
+            if (IsAlive())
             {
-                m_bombInHands.Update(delta);
+                UpdateInput(delta);
+
+                if (m_bombInHands != null)
+                {
+                    m_bombInHands.Update(delta);
+                }
+
+                diseases.Update(delta);
+                TryPoops();
             }
 
             for (int bombIndex = 0; bombIndex < m_thrownBombs.Count; ++bombIndex)
             {
                 m_thrownBombs[bombIndex].Update(delta);
             }
-
-            diseases.Update(delta);
-            TryPoops();
         }
 
         private void UpdateInput(float delta)
@@ -433,6 +436,12 @@ namespace Bomberman.Game.Elements.Players
         {
             alive = false;
             deathTimeStamp = Application.CurrentTime();
+            StopMoving();
+            if (m_bombInHands != null)
+            {
+                m_bombInHands.active = false;
+                m_bombInHands = null;
+            }
             GetField().KillPlayer(this);
         }
 
