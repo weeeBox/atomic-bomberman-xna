@@ -63,7 +63,7 @@ namespace Bomberman.Multiplayer
             button.buttonDelegate = OnCancelButtonPressed;
             button.alignX = button.alignY = button.parentAlignX = button.parentAlignY = View.ALIGN_CENTER;
             screen.AddView(button);
-            screen.SetBackButton(button);
+            screen.SetCancelButton(button);
 
             Font font = Helper.fontSystem;
             TextView textView = new TextView(font, mode.ToString());

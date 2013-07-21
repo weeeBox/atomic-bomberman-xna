@@ -37,7 +37,7 @@ namespace Bomberman.Game.Screens
             AddView(new PowerupsDrawable(field, 0, 0, Constant.FIELD_WIDTH, Constant.FIELD_OFFSET_Y));
         }
 
-        protected override bool OnBackKeyPressed(KeyEventArg arg)
+        protected override bool OnCancelPressed(KeyEventArg arg)
         {
             GameController gc = CurrentController as GameController;
             gc.ShowPauseScreen();

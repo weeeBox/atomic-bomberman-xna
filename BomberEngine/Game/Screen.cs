@@ -30,8 +30,11 @@ namespace BomberEngine.Game
         protected bool allowsDrawPrevious;
         protected bool allowsUpdatePrevious;
 
-        private Button backButton;
-        private ButtonDelegate backButtonDelegate;
+        private Button cancelButton;
+        private ButtonDelegate cancelButtonDelegate;
+
+        private Button confirmButton;
+        private ButtonDelegate confirmButtonDelegate;
 
         public Screen(int id = 0)
             : this(Application.GetWidth(), Application.GetHeight())
@@ -254,10 +257,19 @@ namespace BomberEngine.Game
                 KeyEvent keyEvent = evt as KeyEvent;
                 if (keyEvent.state == KeyState.Pressed)
                 {
-                    if (keyEvent.arg.key == KeyCode.Escape ||
-                        keyEvent.arg.key == KeyCode.GP_B || keyEvent.arg.key == KeyCode.GP_Back)
+                    if (keyEvent.IsKeyPressed(KeyCode.Escape) || 
+                        keyEvent.IsKeyPressed(KeyCode.GP_B) || keyEvent.IsKeyPressed(KeyCode.GP_Back))
                     {
-                        if (OnBackKeyPressed(keyEvent.arg))
+                        if (OnCancelPressed(keyEvent.arg))
+                        {
+                            return true;
+                        }
+                    }
+
+                    if (keyEvent.IsKeyPressed(KeyCode.Enter) || 
+                        keyEvent.IsKeyPressed(KeyCode.GP_A) || keyEvent.IsKeyPressed(KeyCode.GP_Start))
+                    {
+                        if (OnConfirmPressed(keyEvent.arg))
                         {
                             return true;
                         }
@@ -274,6 +286,8 @@ namespace BomberEngine.Game
 
             return base.HandleEvent(evt);
         }
+
+
 
         #endregion
 
@@ -495,41 +509,75 @@ namespace BomberEngine.Game
 
         #region Back key/button
 
-        public void SetBackButton(Button button)
+        public void SetCancelButton(Button button)
         {
-            backButton = button;
+            cancelButton = button;
 
             if (button != null)
             {
-                backButtonDelegate = button.buttonDelegate;
-                button.buttonDelegate = OnBackButtonPress;
+                cancelButtonDelegate = button.buttonDelegate;
+                button.buttonDelegate = OnCancelButtonPress;
             }
             else
             {
-                backButtonDelegate = null;
+                cancelButtonDelegate = null;
             }
         }
 
-        protected virtual void OnBackButtonPress(Button button)
+        public void SetConfirmButton(Button button)
+        {
+            confirmButton = button;
+
+            if (button != null)
+            {
+                confirmButtonDelegate = button.buttonDelegate;
+                button.buttonDelegate = OnConfirmButtonPress;
+            }
+            else
+            {
+                confirmButtonDelegate = null;
+            }
+        }
+
+        protected virtual void OnCancelButtonPress(Button button)
         {
             Finish();
-            if (backButtonDelegate != null)
+            if (cancelButtonDelegate != null)
             {
-                backButtonDelegate(button);
+                cancelButtonDelegate(button);
             }
         }
 
-        protected virtual bool OnBackKeyPressed(KeyEventArg arg)
+        protected virtual void OnConfirmButtonPress(Button button)
         {
-            if (backButton != null)
+            if (confirmButtonDelegate != null)
             {
-                OnBackButtonPress(backButton);
+                confirmButtonDelegate(button);
+            }
+        }
+
+        protected virtual bool OnCancelPressed(KeyEventArg arg)
+        {
+            if (cancelButton != null)
+            {
+                OnCancelButtonPress(cancelButton);
             }
             else
             {
                 Finish();
             }
             return true;
+        }
+
+        protected virtual bool OnConfirmPressed(KeyEventArg arg)
+        {
+            if (confirmButton != null)
+            {
+                OnConfirmButtonPress(confirmButton);
+                return true;
+            }
+
+            return false;
         }
 
         #endregion

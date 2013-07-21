@@ -41,7 +41,7 @@ namespace Bomberman.Multiplayer
             cancelButton.alignX = View.ALIGN_CENTER;
             cancelButton.x = 0.5f * width;
             cancelButton.y = statusTextView.y + 1.5f * statusTextView.height + 10;
-            SetBackButton(cancelButton);
+            SetCancelButton(cancelButton);
 
             AddView(cancelButton);
         }

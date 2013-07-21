@@ -56,7 +56,7 @@ namespace Bomberman.Game.Screens
             Button button = new TextButton("BACK", font, 0, 0, 100, 20);
             button.id = (int)ButtonId.Back;
             button.buttonDelegate = buttonDelegate;
-            SetBackButton(button);
+            SetCancelButton(button);
             buttons.AddView(button);
 
             button = new TextButton("START!", font, 0, 0, 100, 20);

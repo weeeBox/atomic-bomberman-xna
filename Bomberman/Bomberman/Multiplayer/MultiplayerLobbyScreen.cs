@@ -67,7 +67,7 @@ namespace Bomberman.Multiplayer
             button.buttonDelegate = buttonDelegate;
             button.id = (int)ButtonId.Back;
             buttons.AddView(button);
-            SetBackButton(button);
+            SetCancelButton(button);
 
             String label = isServer ? "START" : "READY";
             ButtonId buttonId = isServer ? ButtonId.Start : ButtonId.Ready;

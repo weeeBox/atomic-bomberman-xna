@@ -38,7 +38,7 @@ namespace Bomberman.Game.Screens
             AddView(group);
         }
 
-        protected override bool OnBackKeyPressed(KeyEventArg arg)
+        protected override bool OnCancelPressed(KeyEventArg arg)
         {
             GameController gc = CurrentController as GameController;
             gc.HidePauseScreen();
