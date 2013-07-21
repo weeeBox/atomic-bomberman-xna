@@ -22,8 +22,9 @@ namespace BomberEngine.Game
 
         private DelayedCallManager callManager;
 
-        private UpdatableList updatableList;
-        private DrawableList drawableList;
+        private UpdatableList updatables;
+        private DrawableList drawables;
+        private EventHandlerList eventHandlers;
 
         public ScreenManager screenManager;
 
@@ -49,8 +50,9 @@ namespace BomberEngine.Game
 
             callManager = new DelayedCallManager();
 
-            updatableList = UpdatableList.Null;
-            drawableList = DrawableList.Null;
+            updatables = UpdatableList.Null;
+            drawables = DrawableList.Null;
+            eventHandlers = EventHandlerList.Null;
 
             mRootView = CreateRootView();
         }
@@ -105,7 +107,7 @@ namespace BomberEngine.Game
         internal void Stop()
         {
             callManager.Destroy();
-            updatableList.Destroy();
+            updatables.Destroy();
 
             OnStop();
         }
@@ -141,41 +143,41 @@ namespace BomberEngine.Game
         {
             mRootView.Update(delta);
 
-            updatableList.Update(delta);
+            updatables.Update(delta);
             callManager.Update(delta);
         }
 
         public void AddUpdatable(IUpdatable updatable)
         {
-            if (updatableList.IsNull())
+            if (updatables.IsNull())
             {
-                updatableList = new UpdatableList();
+                updatables = new UpdatableList();
             }
-            updatableList.Add(updatable);
+            updatables.Add(updatable);
         }
 
         public void AddUpdatable(UpdatableDelegate updatableDelegate)
         {
-            if (updatableList.IsNull())
+            if (updatables.IsNull())
             {
-                updatableList = new UpdatableList();
+                updatables = new UpdatableList();
             }
-            updatableList.Add(updatableDelegate);
+            updatables.Add(updatableDelegate);
         }
 
         public void RemoveUpdatable(IUpdatable updatable)
         {
-            if (updatableList.Count() > 0)
+            if (updatables.Count() > 0)
             {
-                updatableList.Remove(updatable);
+                updatables.Remove(updatable);
             }
         }
 
         public void RemoveUpdatable(UpdatableDelegate updatable)
         {
-            if (updatableList.Count() > 0)
+            if (updatables.Count() > 0)
             {
-                updatableList.Remove(updatable);
+                updatables.Remove(updatable);
             }
         }
 
@@ -188,23 +190,23 @@ namespace BomberEngine.Game
         public override void Draw(Context context)
         {
             mRootView.Draw(context);
-            drawableList.Draw(context);
+            drawables.Draw(context);
         }
 
         public void AddDrawable(IDrawable drawable)
         {
-            if (drawableList.IsNull())
+            if (drawables.IsNull())
             {
-                drawableList = new DrawableList();
+                drawables = new DrawableList();
             }
-            drawableList.Add(drawable);
+            drawables.Add(drawable);
         }
 
         public void RemoveDrawable(IDrawable drawable)
         {
-            if (drawableList.Count() > 0)
+            if (drawables.Count() > 0)
             {
-                drawableList.Remove(drawable);
+                drawables.Remove(drawable);
             }
         }
 
