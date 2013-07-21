@@ -117,7 +117,7 @@ namespace BomberEngine.Consoles
 
         protected override void OnStart()
         {
-            ScheduleCall(OnBlinkTimer, 0.25f, true);
+            ScheduleTimer(OnBlinkTimer, 0.25f, true);
         }
 
         //////////////////////////////////////////////////////////////////////////////
