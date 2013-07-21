@@ -10,6 +10,8 @@ using BomberEngine.Debugging;
 using BomberEngine.Util;
 using BomberEngine.Consoles;
 using Lidgren.Network;
+using BomberEngine.Game;
+using BomberEngine.Core;
 
 namespace Bomberman.Game.Elements.Players
 {
@@ -25,9 +27,20 @@ namespace Bomberman.Game.Elements.Players
             PlayerAction.Special
         };
 
+        public enum State
+        {
+            Normal,
+            Cornered,
+            Dying,
+            Dead
+        }
+
         private int index;
+        private State state;
 
         private bool alive;
+        public double deathTimeStamp; // TODO
+
         private int triggerBombsCount;
 
         public PlayerInput input;
@@ -405,9 +418,27 @@ namespace Bomberman.Game.Elements.Players
             bomb.Kick(direction);
         }
 
+        public bool TryKill()
+        {
+            if (IsAlive())
+            {
+                Kill();
+                return true;
+            }
+
+            return false;
+        }
+
         public void Kill()
         {
+            alive = false;
+            deathTimeStamp = Application.CurrentTime();
+            GetField().KillPlayer(this);
+        }
 
+        public void DeathCall(DelayedCall call)
+        {
+            GetField().RemoveCell(this);
         }
 
         protected override void OnCellChanged(int oldCx, int oldCy)
@@ -668,6 +699,7 @@ namespace Bomberman.Game.Elements.Players
         private void InitPlayer()
         {
             SetSpeed(CalcPlayerSpeed());
+            state = State.Normal;
         }
 
         #endregion

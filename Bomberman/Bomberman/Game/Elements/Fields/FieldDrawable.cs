@@ -218,9 +218,13 @@ namespace Bomberman.Game.Elements.Fields
                     context.DrawImage(image, drawX, drawY - image.GetHeight() + cellHeight);
                 }
             }
-            else
+            else if (player.IsAlive())
             {
                 context.DrawImage(image, drawX, drawY - image.GetHeight() + cellHeight);
+            }
+            else
+            {   
+                context.DrawImage(playerImages[Direction.DOWN], drawX, drawY - image.GetHeight() + cellHeight, Color.Red);
             }
 
             int stepX = Math.Sign(player.px - player.CellCenterPx());

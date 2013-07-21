@@ -20,7 +20,7 @@ namespace BomberEngine.Game
         private View mRootView;
         private View mFocusedView;
 
-        private DelayedCallManager callManager;
+        protected DelayedCallManager callManager;
 
         private UpdatableList updatables;
         private DrawableList drawables;

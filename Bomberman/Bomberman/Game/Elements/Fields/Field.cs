@@ -32,6 +32,8 @@ namespace Bomberman.Game.Elements.Fields
         private LinkedList<FieldCell> tempUpdateList;
         private LinkedList<MovableCell> tempMoveList;
 
+        public DelayedCallManager callManager;
+
         public Field()
         {
             currentField = this;
@@ -333,6 +335,17 @@ namespace Bomberman.Game.Elements.Fields
             players.Add(player);
         }
 
+        public void RemovePlayer(Player player)
+        {
+            players.Remove(player);
+        }
+
+        public void KillPlayer(Player player)
+        {
+            players.Kill(player);
+            callManager.Schedule(player.DeathCall, 3.0f);
+        }
+
         public PlayerList GetPlayers()
         {
             return players;
@@ -436,7 +449,7 @@ namespace Bomberman.Game.Elements.Fields
                     }
                     else if (cell.IsPlayer())
                     {
-                        cell.AsPlayer().Kill();
+                        cell.AsPlayer().TryKill();
                     }
                 }
             }
