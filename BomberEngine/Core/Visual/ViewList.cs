@@ -20,6 +20,11 @@ namespace BomberEngine.Core.Visual
         {
         }
 
+        protected ViewList(List<View> list, View nullUpdatable)
+            : base(list, nullUpdatable)
+        {
+        }
+
         public virtual void Draw(Context context)
         {
             for (int i = 0; i < list.Count; ++i)
@@ -35,6 +40,11 @@ namespace BomberEngine.Core.Visual
 
     internal sealed class NullViewList : ViewList
     {
+        public NullViewList()
+            : base(null, null)
+        {
+        }
+
         public override void Update(float delta)
         {
         }

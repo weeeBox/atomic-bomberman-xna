@@ -14,6 +14,7 @@ using Bomberman.Game.Elements.Players.Input;
 using Bomberman.Content;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core.Input;
+using BomberEngine.Core.Events;
 
 namespace Bomberman.Game.Screens
 {
@@ -35,6 +36,16 @@ namespace Bomberman.Game.Screens
 
             // field drawer
             AddView(new PowerupsDrawable(field, 0, 0, Constant.FIELD_WIDTH, Constant.FIELD_OFFSET_Y));
+        }
+
+        public override bool HandleEvent(Event evt)
+        {
+            if (Game.Field().HandleEvent(evt))
+            {
+                return true;
+            }
+
+            return base.HandleEvent(evt);
         }
 
         protected override bool OnCancelPressed(KeyEventArg arg)

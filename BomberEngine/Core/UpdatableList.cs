@@ -21,6 +21,11 @@ namespace BomberEngine.Core
         {
         }
 
+        protected UpdatableList(List<IUpdatable> list, IUpdatable nullUpdatable)
+            : base(list, nullUpdatable)
+        {
+        }
+
         public void Add(UpdatableDelegate updatableDelegate)
         {
             Add(UpdatableDelegateClass.Create(updatableDelegate));
@@ -64,6 +69,11 @@ namespace BomberEngine.Core
 
     internal sealed class NullUpdatableList : UpdatableList
     {
+        public NullUpdatableList()
+            : base(null, null)
+        {
+        }
+
         public override void Update(float delta)
         {
         }

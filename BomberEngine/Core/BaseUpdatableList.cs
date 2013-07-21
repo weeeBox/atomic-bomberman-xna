@@ -8,10 +8,6 @@ namespace BomberEngine.Core
 {
     public abstract class BaseUpdatableList<T> : BaseList<T>, IUpdatable where T : class, IUpdatable
     {   
-        protected BaseUpdatableList()
-        {
-        }
-
         protected BaseUpdatableList(T nullElement)
             : base(nullElement, 0)
         {
@@ -20,6 +16,11 @@ namespace BomberEngine.Core
         protected BaseUpdatableList(T nullElement, int capacity)
             : base(nullElement, capacity)
         {   
+        }
+
+        protected BaseUpdatableList(List<T> list, T nullElement)
+            : base(list, nullElement)
+        {
         }
 
         public virtual void Update(float delta)

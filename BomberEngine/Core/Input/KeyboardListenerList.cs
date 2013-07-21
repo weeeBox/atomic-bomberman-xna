@@ -17,6 +17,11 @@ namespace BomberEngine.Core.Input
         {   
         }
 
+        protected KeyInputListenerList(List<IKeyInputListener> list, IKeyInputListener nullListener)
+            : base(list, nullListener)
+        {
+        }
+
         public override bool Add(IKeyInputListener listener)
         {
             Debug.Assert(!list.Contains(listener));

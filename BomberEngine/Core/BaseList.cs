@@ -13,30 +13,31 @@ namespace BomberEngine.Core
         protected T nullElement;
         protected int removedCount;
 
-        protected BaseList()
-        {
-        }
-
         protected BaseList(T nullElement)
             : this(nullElement, 0)
         {
         }
 
         protected BaseList(T nullElement, int capacity)
-        {
-            this.nullElement = nullElement;
-            list = new List<T>(capacity);
+            : this(new List<T>(capacity), nullElement)
+        {   
         }
 
-        public virtual bool Add(T updatable)
+        protected BaseList(List<T> list, T nullElement)
         {
-            list.Add(updatable);
+            this.list = list;
+            this.nullElement = nullElement;
+        }
+
+        public virtual bool Add(T e)
+        {
+            list.Add(e);
             return true;
         }
 
-        public virtual bool Remove(T updatable)
+        public virtual bool Remove(T e)
         {
-            int index = list.IndexOf(updatable);
+            int index = list.IndexOf(e);
             if (index != -1)
             {
                 Remove(index);
@@ -51,9 +52,9 @@ namespace BomberEngine.Core
             return list[index];
         }
 
-        public virtual int IndexOf(T updatable)
+        public virtual int IndexOf(T e)
         {
-            return list.IndexOf(updatable);
+            return list.IndexOf(e);
         }
 
         public virtual void Remove(int index)
@@ -72,9 +73,9 @@ namespace BomberEngine.Core
             return list.Count - removedCount;
         }
 
-        public virtual bool Contains(T updatable)
+        public virtual bool Contains(T e)
         {
-            return list.Contains(updatable);
+            return list.Contains(e);
         }
 
         public virtual bool IsNull()

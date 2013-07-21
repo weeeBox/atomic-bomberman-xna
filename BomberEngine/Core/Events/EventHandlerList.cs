@@ -20,6 +20,11 @@ namespace BomberEngine.Core.Events
         {
         }
 
+        protected EventHandlerList(List<IEventHandler> list, IEventHandler nullElement)
+            : base(list, nullElement)
+        {
+        }
+
         public virtual bool HandleEvent(Event evt)
         {
             bool handled = false;
@@ -37,6 +42,11 @@ namespace BomberEngine.Core.Events
 
     internal class NullEventHandlerList : EventHandlerList
     {
+        public NullEventHandlerList()
+            : base(null, null)
+        {
+        }
+
         public override bool HandleEvent(Event evt)
         {
             return false;
