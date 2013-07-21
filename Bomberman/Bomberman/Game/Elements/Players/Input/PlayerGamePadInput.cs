@@ -11,7 +11,7 @@ using BomberEngine.Core.Events;
 
 namespace Bomberman.Game.Elements.Players.Input
 {
-    public class PlayerGamePadInput : PlayerInput, IEventHandler
+    public class PlayerGamePadInput : PlayerInput, IKeyInputListener
     {
         private const float STICK_DEAD_ZONE = 0.125f;
         private const float STICK_DEAD_ZONE_2 = STICK_DEAD_ZONE * STICK_DEAD_ZONE;
@@ -87,26 +87,7 @@ namespace Bomberman.Game.Elements.Players.Input
             actionLookup.Add(key, action);
         }
 
-        public bool HandleEvent(Event evt)
-        {
-            if (evt.code == Event.KEY)
-            {
-                KeyEvent keyEvent = evt as KeyEvent;
-                if (keyEvent.state == KeyState.Pressed)
-                {
-                    return OnKeyPressed(keyEvent.arg);
-                }
-
-                if (keyEvent.state == KeyState.Released)
-                {
-                    return OnKeyReleased(keyEvent.arg);
-                }
-            }
-
-            return false;
-        }
-
-        private bool OnKeyPressed(KeyEventArg e)
+        public bool OnKeyPressed(KeyEventArg e)
         {
             if (e.playerIndex == playerIndex)
             {
@@ -120,7 +101,12 @@ namespace Bomberman.Game.Elements.Players.Input
             return false;
         }
 
-        private bool OnKeyReleased(KeyEventArg e)
+        public bool OnKeyRepeated(KeyEventArg e)
+        {
+            return e.playerIndex == playerIndex && GetAction(e.key) != PlayerAction.Count;
+        }
+
+        public bool OnKeyReleased(KeyEventArg e)
         {
             if (e.playerIndex == playerIndex)
             {

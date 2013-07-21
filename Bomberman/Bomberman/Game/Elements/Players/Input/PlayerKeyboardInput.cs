@@ -7,7 +7,7 @@ using BomberEngine.Core.Events;
 
 namespace Bomberman.Game.Elements.Players.Input
 {
-    public class PlayerKeyboardInput : PlayerInput, IEventHandler
+    public class PlayerKeyboardInput : PlayerInput, IKeyInputListener
     {
         private Dictionary<KeyCode, PlayerAction> actionLookup;
 
@@ -21,26 +21,7 @@ namespace Bomberman.Game.Elements.Players.Input
             actionLookup.Add(key, action);
         }
 
-        public bool HandleEvent(Event evt)
-        {
-            if (evt.code == Event.KEY)
-            {
-                KeyEvent keyEvent = evt as KeyEvent;
-                if (keyEvent.state == KeyState.Pressed)
-                {
-                    return OnKeyPressed(keyEvent.arg);
-                }
-
-                if (keyEvent.state == KeyState.Released)
-                {
-                    return OnKeyReleased(keyEvent.arg);
-                }
-            }
-
-            return false;
-        }
-
-        private bool OnKeyPressed(KeyEventArg e)
+        public bool OnKeyPressed(KeyEventArg e)
         {
             PlayerAction action = GetAction(e.key);
             if (action != PlayerAction.Count)
@@ -52,7 +33,13 @@ namespace Bomberman.Game.Elements.Players.Input
             return false;
         }
 
-        private bool OnKeyReleased(KeyEventArg e)
+        public bool OnKeyRepeated(KeyEventArg e)
+        {
+            PlayerAction action = GetAction(e.key);
+            return action != PlayerAction.Count;
+        }
+
+        public bool OnKeyReleased(KeyEventArg e)
         {
             PlayerAction action = GetAction(e.key);
             if (action != PlayerAction.Count)

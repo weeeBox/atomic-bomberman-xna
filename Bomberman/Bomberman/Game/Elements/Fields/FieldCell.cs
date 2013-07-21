@@ -34,7 +34,10 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         public virtual void Reset()
-        {
+        {   
+            m_px = m_py = 0.0f;
+            m_oldPx = m_oldPy = 0.0f;
+            slotIndex = -1;
         }
 
         public virtual void Update(float delta)

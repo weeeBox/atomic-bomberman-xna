@@ -14,8 +14,8 @@ namespace Bomberman.Game.Elements.Players
         public List<Player> list;
 
         private UpdatableList updatables;
-        private EventHandlerList eventHandlers;
         private TimerManager timerManager;
+        private KeyInputListenerList keyListeners;
 
         public PlayerList(TimerManager timerManager, int capacity)
         {
@@ -23,7 +23,7 @@ namespace Bomberman.Game.Elements.Players
             list = new List<Player>(capacity);
             
             updatables = new UpdatableList(capacity);
-            eventHandlers = new EventHandlerList(capacity);
+            keyListeners = new KeyInputListenerList(capacity);
         }
 
         public void Update(float delta)
@@ -45,9 +45,9 @@ namespace Bomberman.Game.Elements.Players
             list.Add(player);
 
             updatables.Add(player);
-            if (player.input is IEventHandler)
+            if (player.input is IKeyInputListener)
             {
-                eventHandlers.Add(player.input as IEventHandler);
+                keyListeners.Add(player.input as IKeyInputListener);
             }
         }
 
@@ -71,9 +71,9 @@ namespace Bomberman.Game.Elements.Players
             }
 
             updatables.Remove(player);
-            if (player.input is IEventHandler)
+            if (player.input is IKeyInputListener)
             {
-                eventHandlers.Remove(player.input as IEventHandler);
+                keyListeners.Remove(player.input as IKeyInputListener);
             }
         }
 
@@ -103,7 +103,33 @@ namespace Bomberman.Game.Elements.Players
 
         public bool HandleEvent(Event evt)
         {
-            return eventHandlers.HandleEvent(evt);
+            if (evt.code == Event.KEY)
+            {
+                KeyEvent keyEvent = (KeyEvent)evt;
+                if (keyEvent.state == KeyState.Pressed)
+                {
+                    return OnKeyPressed(keyEvent.arg);
+                }
+
+                if (keyEvent.state == KeyState.Released)
+                {
+                    return OnKeyReleased(keyEvent.arg);
+                }
+
+                return false;
+            }
+
+            return false;
+        }
+
+        private bool OnKeyPressed(KeyEventArg arg)
+        {
+            return keyListeners.OnKeyPressed(arg);
+        }
+
+        private bool OnKeyReleased(KeyEventArg arg)
+        {
+            return keyListeners.OnKeyReleased(arg);
         }
 
         #endregion
