@@ -15,9 +15,11 @@ namespace Bomberman.Game.Elements.Players
 
         private UpdatableList updatables;
         private EventHandlerList eventHandlers;
+        private TimerManager timerManager;
 
-        public PlayerList(int capacity)
+        public PlayerList(TimerManager timerManager, int capacity)
         {
+            this.timerManager = timerManager;
             list = new List<Player>(capacity);
             
             updatables = new UpdatableList(capacity);
@@ -49,6 +51,7 @@ namespace Bomberman.Game.Elements.Players
         public void Kill(Player player)
         {
             Remove(player, false);
+            ScheduleTimer(player.DeathTimerCallback, 3.0f);
         }
 
         private void Remove(Player player, bool removeFromList)
@@ -93,6 +96,17 @@ namespace Bomberman.Game.Elements.Players
         public bool HandleEvent(Event evt)
         {
             return eventHandlers.HandleEvent(evt);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Helpers
+
+        private void ScheduleTimer(TimerCallback callback, float delay = 0.0f)
+        {
+            timerManager.Schedule(callback, delay);
         }
 
         #endregion

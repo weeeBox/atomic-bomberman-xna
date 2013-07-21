@@ -36,7 +36,7 @@ namespace Bomberman.Game.Elements.Fields
         {
             currentField = this;
             timerManager = new TimerManager();
-            players = new PlayerList(CVars.cg_maxPlayers.intValue);
+            players = new PlayerList(timerManager, CVars.cg_maxPlayers.intValue);
 
             tempUpdateList = new LinkedList<FieldCell>();
             tempMoveList = new LinkedList<MovableCell>();
@@ -341,7 +341,6 @@ namespace Bomberman.Game.Elements.Fields
         public void KillPlayer(Player player)
         {
             players.Kill(player);
-            timerManager.Schedule(player.DeathTimerCallback, 3.0f);
         }
 
         public PlayerList GetPlayers()
