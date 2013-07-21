@@ -130,7 +130,7 @@ namespace Bomberman.Multiplayer
             throw new NotImplementedException();
         }
 
-        private void StopDiscoveryCall(DelayedCall call)
+        private void StopDiscoveryCall(Timer call)
         {
             StopDiscovery(true);
         }

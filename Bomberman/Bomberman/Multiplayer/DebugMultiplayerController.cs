@@ -104,7 +104,7 @@ namespace Bomberman.Multiplayer
             Application.CancelCall(OnDiscoveryTimeout);
         }
 
-        private void OnDiscoveryTimeout(DelayedCall call)
+        private void OnDiscoveryTimeout(Timer call)
         {
             Log.d("Discovery timeout");
 

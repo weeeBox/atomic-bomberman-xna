@@ -6,11 +6,11 @@ using BomberEngine.Debugging;
 
 namespace BomberEngine.Core
 {
-    public delegate void DelayedCallback(DelayedCall call);
+    public delegate void TimerCallback(Timer call);
 
-    public class DelayedCall
+    public class Timer
     {
-        public static DelayedCall freeRoot;
+        public static Timer freeRoot;
 
         public bool cancelled;
 
@@ -18,10 +18,10 @@ namespace BomberEngine.Core
         private static int nextId;
         private int id;
 
-        internal DelayedCallback callback;
+        internal TimerCallback callback;
 
-        public DelayedCall next;
-        public DelayedCall prev;
+        public Timer next;
+        public Timer prev;
 
         internal TimerManager manager;
 
@@ -39,7 +39,7 @@ namespace BomberEngine.Core
             cancelled = true;
             if (manager != null)
             {
-                manager.RemoveCall(this);
+                manager.RemoveTimer(this);
                 manager = null;
             }
         }
@@ -83,35 +83,35 @@ namespace BomberEngine.Core
 
         #region Objects pool
 
-        internal static DelayedCall NextFreeCall()
+        internal static Timer NextFreeTimer()
         {
-            DelayedCall call;
+            Timer timer;
             if (freeRoot != null)
             {
-                call = freeRoot;
-                freeRoot = call.next;
+                timer = freeRoot;
+                freeRoot = timer.next;
             }
             else
             {
-                call = new DelayedCall();
+                timer = new Timer();
             }
 
             nextId = nextId == maxId ? 1 : (nextId + 1); // we need non-zero value
-            call.id = nextId;
+            timer.id = nextId;
 
-            return call;
+            return timer;
         }
 
-        internal static void AddFreeCall(DelayedCall call)
+        internal static void AddFreeTimer(Timer timer)
         {
-            call.Reset();
+            timer.Reset();
 
             if (freeRoot != null)
             {
-                call.next = freeRoot;
+                timer.next = freeRoot;
             }
 
-            freeRoot = call;
+            freeRoot = timer;
         }
 
         private void Reset()

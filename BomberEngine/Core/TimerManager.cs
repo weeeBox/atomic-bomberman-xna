@@ -10,7 +10,7 @@ namespace BomberEngine.Core
     {
         internal double currentTime;
 
-        protected DelayedCall rootCall;
+        protected Timer rootCall;
 
         private int callsCount;
 
@@ -25,14 +25,14 @@ namespace BomberEngine.Core
         public void Update(float delta)
         {
             currentTime += delta;
-            for (DelayedCall c = rootCall; c != null;)
+            for (Timer c = rootCall; c != null;)
             {
                 if (c.fireTime > currentTime)
                 {
                     break;
                 }
 
-                DelayedCall call = c;
+                Timer call = c;
                 c = c.next;
 
                 call.Fire();
@@ -45,41 +45,41 @@ namespace BomberEngine.Core
 
         #region Schedule
 
-        public void Schedule(DelayedCallback callback)
+        public void Schedule(TimerCallback callback)
         {
             Schedule(callback, 0.0f, null);
         }
 
-        public void Schedule(DelayedCallback callback, float delay)
+        public void Schedule(TimerCallback callback, float delay)
         {
             Schedule(callback, delay, null);
         }
 
-        public void Schedule(DelayedCallback callback, float delay, String name)
+        public void Schedule(TimerCallback callback, float delay, String name)
         {
             Schedule(callback, delay, false, name);
         }
 
-        public void Schedule(DelayedCallback callback, float delay, bool repeated)
+        public void Schedule(TimerCallback callback, float delay, bool repeated)
         {
             Schedule(callback, delay, repeated, null);
         }
 
-        public void Schedule(DelayedCallback callback, float delay, bool repeated, String name)
+        public void Schedule(TimerCallback callback, float delay, bool repeated, String name)
         {
             Schedule(callback, delay, repeated ? 0 : 1, name);
         }
 
-        public void Schedule(DelayedCallback callback, float delay, int numRepeats)
+        public void Schedule(TimerCallback callback, float delay, int numRepeats)
         {
             Schedule(callback, delay, numRepeats, null);
         }
 
-        public void Schedule(DelayedCallback callback, float delay, int numRepeats, String name)
+        public void Schedule(TimerCallback callback, float delay, int numRepeats, String name)
         {
             float timeout = delay < 0 ? 0 : delay;
 
-            DelayedCall call = NextFreeCall();
+            Timer call = NextFreeCall();
             call.callback = callback;
             call.timeout = timeout;
             call.numRepeats = numRepeats;
@@ -90,11 +90,11 @@ namespace BomberEngine.Core
             AddCall(call);
         }
 
-        public void Cancel(DelayedCallback callback)
+        public void Cancel(TimerCallback callback)
         {
-            for (DelayedCall call = rootCall; call != null;)
+            for (Timer call = rootCall; call != null;)
             {
-                DelayedCall c = call;
+                Timer c = call;
                 call = call.next;
 
                 if (c.callback == callback)
@@ -106,9 +106,9 @@ namespace BomberEngine.Core
 
         public void Cancel(String name)
         {
-            for (DelayedCall call = rootCall; call != null; )
+            for (Timer call = rootCall; call != null; )
             {
-                DelayedCall c = call;
+                Timer c = call;
                 call = call.next;
 
                 if (c.name == name)
@@ -120,9 +120,9 @@ namespace BomberEngine.Core
 
         public void CancelAll(Object target)
         {
-            for (DelayedCall call = rootCall; call != null; )
+            for (Timer call = rootCall; call != null; )
             {
-                DelayedCall c = call;
+                Timer c = call;
                 call = call.next;
 
                 if (c.callback.Target == target)
@@ -134,9 +134,9 @@ namespace BomberEngine.Core
 
         public void CancelAll()
         {
-            for (DelayedCall call = rootCall; call != null; )
+            for (Timer call = rootCall; call != null; )
             {
-                DelayedCall c = call;
+                Timer c = call;
                 call = call.next;
 
                 c.Cancel();
@@ -160,19 +160,19 @@ namespace BomberEngine.Core
 
         #region Call List
 
-        private DelayedCall NextFreeCall()
+        private Timer NextFreeCall()
         {
-            DelayedCall call = DelayedCall.NextFreeCall();
+            Timer call = Timer.NextFreeTimer();
             call.manager = this;
             return call;
         }
 
-        private void AddFreeCall(DelayedCall call)
+        private void AddFreeCall(Timer call)
         {
-            DelayedCall.AddFreeCall(call);
+            Timer.AddFreeTimer(call);
         }
 
-        private void AddCall(DelayedCall call)
+        private void AddCall(Timer call)
         {
             Debug.Assert(call.manager == this);
             ++callsCount;
@@ -190,13 +190,13 @@ namespace BomberEngine.Core
                 }
 
                 // try to insert in a sorted order
-                DelayedCall tail = rootCall;
-                for (DelayedCall c = rootCall.next; c != null; tail = c, c = c.next)
+                Timer tail = rootCall;
+                for (Timer c = rootCall.next; c != null; tail = c, c = c.next)
                 {
                     if (call.fireTime < c.fireTime)
                     {
-                        DelayedCall prev = c.prev;
-                        DelayedCall next = c;
+                        Timer prev = c.prev;
+                        Timer next = c;
 
                         call.prev = prev;
                         call.next = next;
@@ -218,14 +218,14 @@ namespace BomberEngine.Core
             }
         }
 
-        internal void RemoveCall(DelayedCall call)
+        internal void RemoveTimer(Timer call)
         {
             Debug.Assert(call.manager == this);
             Debug.Assert(callsCount > 0);
             --callsCount;
 
-            DelayedCall prev = call.prev;
-            DelayedCall next = call.next;
+            Timer prev = call.prev;
+            Timer next = call.next;
 
             if (prev != null) prev.next = next;
             else rootCall = next;

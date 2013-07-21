@@ -545,7 +545,7 @@ namespace BomberEngine.Consoles
 
         #region Timers
 
-        private void OnBlinkTimer(DelayedCall timer)
+        private void OnBlinkTimer(Timer timer)
         {
             carretVisible = !carretVisible;
         }

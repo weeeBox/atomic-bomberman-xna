@@ -859,12 +859,12 @@ namespace Bomberman.Game.Elements.Fields
 
         #region TimerManager
 
-        public void ScheduleTimer(DelayedCallback callback, float delay)
+        public void ScheduleTimer(TimerCallback callback, float delay)
         {
             ScheduleTimer(callback, delay, false);
         }
 
-        public void ScheduleTimer(DelayedCallback callback, float delay, bool repeated)
+        public void ScheduleTimer(TimerCallback callback, float delay, bool repeated)
         {
             timerManager.Schedule(callback, delay, repeated);
         }

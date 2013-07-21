@@ -22,7 +22,7 @@ namespace BomberEngine.Core.Assets
         private List<AssetLoadInfo> loadingQueue;
         private int loadedCount;
         
-        private DelayedCall loadingTimer;
+        private Timer loadingTimer;
 
         public AssetManager(String baseDir, int assetCount)
         {
@@ -110,7 +110,7 @@ namespace BomberEngine.Core.Assets
             throw new InvalidOperationException("Can't find reader for: " + type);
         }
 
-        private void OnTimer(DelayedCall timer)
+        private void OnTimer(Timer timer)
         {
             AssetLoadInfo info = loadingQueue[loadedCount];
             if (LoadAsset(info))
