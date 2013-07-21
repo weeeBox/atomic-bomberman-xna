@@ -58,7 +58,7 @@ namespace BomberEngine.Core.Assets
 
         public void Load()
         {
-            Application.ScheduleCall(OnTimer, 0.05f);
+            Application.ScheduleTimer(OnTimer, 0.05f);
         }
 
         protected void RegisterReader(Type type, AssetReader reader)

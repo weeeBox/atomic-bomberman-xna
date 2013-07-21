@@ -95,13 +95,13 @@ namespace Bomberman.Multiplayer
         private void StartDiscovery()
         {
             GetMultiplayerManager().StartLocalServerDiscovery(this);
-            Application.ScheduleCall(OnDiscoveryTimeout, 1.0f);
+            Application.ScheduleTimer(OnDiscoveryTimeout, 1.0f);
         }
 
         private void StopDiscovery()
         {
             GetMultiplayerManager().StopLocalServerDiscovery();
-            Application.CancelCall(OnDiscoveryTimeout);
+            Application.CancelTimer(OnDiscoveryTimeout);
         }
 
         private void OnDiscoveryTimeout(Timer call)
