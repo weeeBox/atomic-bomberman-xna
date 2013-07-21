@@ -43,8 +43,8 @@ namespace BomberEngine.Game
             sharedApplication = this;
 
             context = new Context();
-            updatables = new UpdatableList();
-            drawables = new DrawableList();
+            updatables = new UpdatableList(1);
+            drawables = new DrawableList(1);
         }
 
         //////////////////////////////////////////////////////////////////////////////
