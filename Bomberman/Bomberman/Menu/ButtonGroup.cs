@@ -21,7 +21,7 @@ namespace Bomberman.Menu
         {   
         }
 
-        public void AddButton(String title, int id, ButtonDelegate buttonDelegate)
+        public Button AddButton(String title, int id, ButtonDelegate buttonDelegate)
         {
             Font font = Helper.fontButton;
 
@@ -32,6 +32,8 @@ namespace Bomberman.Menu
 
             LayoutVer(10);
             ResizeToFitViewsVer();
+
+            return button;
         }
     }
 }

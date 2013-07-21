@@ -30,19 +30,14 @@ namespace Bomberman.Game.Screens
             AddView(new RectView(0, 0, width, height, backColor, Color.Black));
 
             ButtonGroup group = new ButtonGroup();
-            group.AddButton("Resume", (int)ButtonId.Resume, buttonDelegate);
+            Button resumeButton = group.AddButton("Resume", (int)ButtonId.Resume, buttonDelegate);
             group.AddButton("Exit", (int)ButtonId.Exit, buttonDelegate);
             group.alignX = group.alignY = View.ALIGN_CENTER;
             group.x = 0.5f * width;
             group.y = 0.5f * height;
             AddView(group);
-        }
 
-        protected override bool OnCancelPressed(KeyEventArg arg)
-        {
-            GameController gc = CurrentController as GameController;
-            gc.HidePauseScreen();
-            return true;
+            SetCancelButton(resumeButton);
         }
     }
 }

@@ -13,7 +13,7 @@ using Bomberman.Content;
 
 namespace Bomberman.Game.Screens
 {
-    public class PlayersScreen : Screen, IKeyInputListener
+    public class PlayersScreen : Screen
     {
         public enum ButtonId
         {
@@ -21,13 +21,8 @@ namespace Bomberman.Game.Screens
             Back
         }
 
-        private ButtonDelegate buttonDelegate;
-        private Button startButton;
-
         public PlayersScreen(Scheme scheme, InputType[] inputTypes, InputTypeSelectDelegate selectDelegate, ButtonDelegate buttonDelegate)
         {
-            this.buttonDelegate = buttonDelegate;
-
             View contentView = new View(64, 48, 521, 363);
 
             // scheme view
@@ -62,45 +57,13 @@ namespace Bomberman.Game.Screens
             button = new TextButton("START!", font, 0, 0, 100, 20);
             button.id = (int)ButtonId.Start;
             button.buttonDelegate = buttonDelegate;
+            SetConfirmButton(button);
             buttons.AddView(button);
-            startButton = button;
 
             buttons.LayoutHor(20);
             buttons.ResizeToFitViews();
             AddView(buttons);
         }
-
-        private void ConfirmSelection()
-        {
-            buttonDelegate(startButton);
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region IKeyInputListener
-
-        public bool OnKeyPressed(KeyEventArg arg)
-        {
-            if (arg.key == KeyCode.Enter || (arg.key == KeyCode.GP_B || arg.key == KeyCode.GP_Start) && arg.playerIndex == 0)
-            {
-                ConfirmSelection();
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool OnKeyRepeated(KeyEventArg arg)
-        {
-            return arg.key == KeyCode.Enter || (arg.key == KeyCode.GP_B || arg.key == KeyCode.GP_Start) && arg.playerIndex == 0;
-        }
-
-        public bool OnKeyReleased(KeyEventArg arg)
-        {
-            return arg.key == KeyCode.Enter || (arg.key == KeyCode.GP_B || arg.key == KeyCode.GP_Start) && arg.playerIndex == 0;
-        }
-
-        #endregion
     }
 
     public delegate void InputTypeSelectDelegate(InputTypeView view, bool forward);
