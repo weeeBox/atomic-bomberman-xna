@@ -436,7 +436,7 @@ namespace Bomberman.Game.Elements.Players
             GetField().KillPlayer(this);
         }
 
-        public void DeathCall(Timer call)
+        public void DeathTimerCallback(Timer timer)
         {
             GetField().RemoveCell(this);
         }

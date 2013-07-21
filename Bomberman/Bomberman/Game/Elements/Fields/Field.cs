@@ -343,7 +343,7 @@ namespace Bomberman.Game.Elements.Fields
         public void KillPlayer(Player player)
         {
             players.Kill(player);
-            callManager.Schedule(player.DeathCall, 3.0f);
+            callManager.Schedule(player.DeathTimerCallback, 3.0f);
         }
 
         public PlayerList GetPlayers()
