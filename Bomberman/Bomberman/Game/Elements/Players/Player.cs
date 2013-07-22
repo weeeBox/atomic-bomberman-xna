@@ -89,6 +89,8 @@ namespace Bomberman.Game.Elements.Players
             ResetPlayer();
             
             m_thrownBombs.Clear();
+            winsCount = 0;
+            suicidesCount = 0;
             data = null;
             connection = null;
             lastAckPacketId = 0;
@@ -1082,6 +1084,32 @@ namespace Bomberman.Game.Elements.Players
         public bool IsInfected()
         {
             return diseases.activeCount > 0;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Round
+
+        public void IncWinsCount()
+        {
+            winsCount++;
+        }
+
+        public void IncSuicidesCount()
+        {
+            suicidesCount++;
+        }
+
+        public int GetWinsCount()
+        {
+            return winsCount;
+        }
+
+        public int GetSuicidesCount()
+        {
+            return suicidesCount;
         }
 
         #endregion
