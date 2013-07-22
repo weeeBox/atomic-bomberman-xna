@@ -58,6 +58,11 @@ namespace Bomberman.Game
             field.Restart(currentScheme);
         }
 
+        public void EndRound()
+        {
+
+        }
+
         public static PlayerList Players()
         {
             return current.GetPlayers();

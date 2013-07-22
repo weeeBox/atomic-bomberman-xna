@@ -362,6 +362,22 @@ namespace Bomberman.Game.Elements.Fields
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Round
+
+        private void EndRound()
+        {
+            ScheduleTimer(RoundEndTimerCallback, CVars.winDelay.floatValue);
+        }
+
+        private void RoundEndTimerCallback(Timer timer)
+        {
+            GetGame().EndRound();
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
         #region Players
 
         public void AddPlayer(Player player)
@@ -378,6 +394,11 @@ namespace Bomberman.Game.Elements.Fields
         {
             players.Kill(player);
             DropPowerups(player);
+
+            if (players.GetAlivePlayerCount() < 2)
+            {
+                EndRound();
+            }
         }
 
         public PlayerList GetPlayers()
@@ -910,6 +931,11 @@ namespace Bomberman.Game.Elements.Fields
         public float GetMaxPy()
         {
             return Constant.FIELD_HEIGHT - Constant.CELL_HEIGHT_2;
+        }
+
+        private Game GetGame()
+        {
+            return Game.Current(); // TODO: get rid on singletons
         }
 
         #endregion

@@ -145,6 +145,26 @@ namespace Bomberman.Game.Elements.Players
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Properties
+
+        public int GetAlivePlayerCount()
+        {
+            int count = 0;
+            for (int i = 0; i < list.Count; ++i)
+            {
+                if (list[i].IsAlive())
+                {
+                    ++count;
+                }
+            }
+
+            return count;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
         #region Helpers
 
         private void ScheduleTimer(TimerCallback callback, float delay = 0.0f)

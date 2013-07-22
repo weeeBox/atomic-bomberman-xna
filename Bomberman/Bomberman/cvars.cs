@@ -9,25 +9,26 @@ namespace Bomberman
     public class CVars
     {
         /* System config */
-        public static readonly CVar sy_maxControllers = new CVar("sy_maxControllers", 4, CFlags.Hidden);
-        public static readonly CVar sy_maxKeyboards = new CVar("sy_maxKeyboards", 6, CFlags.Hidden);
+        public static readonly CVar sy_maxControllers = new CVar("sy_maxControllers", 4, CFlags.Hidden);    // max supported controllers
+        public static readonly CVar sy_maxKeyboards = new CVar("sy_maxKeyboards", 6, CFlags.Hidden);        // max supported keyboard players
 
-        /* Match */
-        public static readonly CVar matchLimit = new CVar("matchLimit", 3);
-        public static readonly CVar timeLimit = new CVar("timeLimit", 10);
+        /* Round */
+        public static readonly CVar roundsToWin = new CVar("roundsToWin", 3);   // number of rounds to win
+        public static readonly CVar roundTime = new CVar("roundTime", 10);      // round time (before sudden death)
+        public static readonly CVar winDelay = new CVar("winDelay", 3);         // delay between round end (everyone is dead or single player left) and results screen
 
         /* Player */
-        public static readonly CVar cg_playerSpeed = new CVar("cg_playerSpeed", 200, CFlags.Readonly);
-        public static readonly CVar cg_playerSpeedAdd = new CVar("cg_playerSpeedAdd", 30, CFlags.Readonly);
-        public static readonly CVar name = new CVar("name", "UnnamedPlayer");
+        public static readonly CVar cg_playerSpeed = new CVar("cg_playerSpeed", 200, CFlags.Readonly);      // player's default speed
+        public static readonly CVar cg_playerSpeedAdd = new CVar("cg_playerSpeedAdd", 30, CFlags.Readonly); // player's speed addition (when speed boost is picked)
+        public static readonly CVar name = new CVar("name", "UnnamedPlayer");                               // player's default name
 
         /* Bomb */
-        public static readonly CVar cg_bombRollSpeed = new CVar("cg_bombRollSpeed", 250, CFlags.Readonly);
-        public static readonly CVar cg_bombFlySpeed = new CVar("cg_bombFlySpeed", 300, CFlags.Readonly);
-        public static readonly CVar cg_bombDropGravity = new CVar("cg_bombDropGravity", 4000, CFlags.Readonly);
-        public static readonly CVar cg_bombShortFlame = new CVar("cg_bombShortFlame", 1, CFlags.Readonly);
-        public static readonly CVar cg_bombFlyDistance = new CVar("cg_bombFlyDistance", 3, CFlags.Readonly);
-        public static readonly CVar cg_bombJumpDistance = new CVar("cg_bombJumpDistance", 1, CFlags.Readonly);
+        public static readonly CVar cg_bombRollSpeed = new CVar("cg_bombRollSpeed", 250, CFlags.Readonly);      // kicked bomb rolling speed
+        public static readonly CVar cg_bombFlySpeed = new CVar("cg_bombFlySpeed", 300, CFlags.Readonly);        // affects bomb fly time
+        public static readonly CVar cg_bombDropGravity = new CVar("cg_bombDropGravity", 4000, CFlags.Readonly); // affects bomb throw height
+        public static readonly CVar cg_bombShortFlame = new CVar("cg_bombShortFlame", 1, CFlags.Readonly);      // flame cell radius on "short" bomb
+        public static readonly CVar cg_bombFlyDistance = new CVar("cg_bombFlyDistance", 3, CFlags.Readonly);    // punched/thrown bomb fly distance in cells
+        public static readonly CVar cg_bombJumpDistance = new CVar("cg_bombJumpDistance", 1, CFlags.Readonly);  // punched/thrown bomb jump distance (after landing)
 
         /* Initial powerups count */
         public static readonly CVar cg_initBomb = new CVar("cg_initBomb", 1);
@@ -59,6 +60,7 @@ namespace Bomberman
         public static readonly CVar cg_maxEbola = new CVar("cg_maxEbola", 0, CFlags.Readonly);
         public static readonly CVar cg_maxRandom = new CVar("cg_maxRandom", 0, CFlags.Readonly);
 
+        /* TODO: comment */
         public static readonly CVar cg_fieldBomb = new CVar("cg_fieldBomb", 10);
         public static readonly CVar cg_fieldFlame = new CVar("cg_fieldFlame", 10);
         public static readonly CVar cg_fieldDisease = new CVar("cg_fieldDisease", 10);
@@ -74,12 +76,12 @@ namespace Bomberman
         public static readonly CVar cg_fieldRandom = new CVar("cg_fieldRandom", -2);
 
         /* Game settings */
-        public static readonly CVar cg_maxPlayers = new CVar("cg_maxPlayers", 10);
+        public static readonly CVar cg_maxPlayers = new CVar("cg_maxPlayers", 10);  // max multilayer players count (local/network)
 
         /* Timings */
-        public static readonly CVar cg_fuzeTimeNormal = new CVar("cg_fuzeTimeNormal", 2000);
-        public static readonly CVar cg_fuzeTimeShort = new CVar("cg_fuzeTimeShort", 500);
-        public static readonly CVar cg_timeFlame = new CVar("cg_timeFlame", 500);
+        public static readonly CVar cg_fuzeTimeNormal = new CVar("cg_fuzeTimeNormal", 2000);    // "normal" bomb explosion time
+        public static readonly CVar cg_fuzeTimeShort = new CVar("cg_fuzeTimeShort", 500);       // "short" bomb explosion time (when infected)
+        public static readonly CVar cg_timeFlame = new CVar("cg_timeFlame", 500);               // explosion flame delay
 
         /* Debug */
         public static readonly CVar g_drawGrid = new CVar("g_drawGrid", 0, CFlags.Debug);
@@ -169,8 +171,9 @@ namespace Bomberman
 
             console.RegisterCvar(name);
 
-            console.RegisterCvar(matchLimit);
-            console.RegisterCvar(timeLimit);
+            console.RegisterCvar(roundsToWin);
+            console.RegisterCvar(roundTime);
+            console.RegisterCvar(winDelay);
 
             console.RegisterCvars(powerupsInitials);
             console.RegisterCvars(powerupsMax);
