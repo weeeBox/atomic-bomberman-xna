@@ -16,6 +16,11 @@ namespace Bomberman.Game
         {
         }
 
+        protected Game GetGame()
+        {
+            return Game.Current();
+        }
+
         protected Field GetField()
         {
             return Field.Current();
@@ -135,6 +140,8 @@ namespace Bomberman.Game
 
         public override void Execute()
         {
+            GetGame().Restart();
+            console.TryExecuteCommand("exec game.cfg");
         }
     }
 }

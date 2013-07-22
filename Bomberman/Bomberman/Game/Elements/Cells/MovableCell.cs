@@ -45,8 +45,12 @@ namespace Bomberman.Game.Elements.Cells
             base.Reset();
 
             StopMoving();
+
             m_direction = Direction.DOWN;
             m_oldDirection = Direction.DOWN;
+            m_speed = 0.0f;
+            addedToList = false;
+
             contactList.Clear();
         }
 

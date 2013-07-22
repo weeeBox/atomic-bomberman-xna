@@ -83,7 +83,8 @@ namespace Bomberman.Game.Elements.Fields
 
         public void Restart(Scheme scheme)
         {
-            
+            Reset();
+            Load(scheme); // TODO: reuse objects
         }
 
         private void SetupField(FieldData data, int brickDensity = -1)

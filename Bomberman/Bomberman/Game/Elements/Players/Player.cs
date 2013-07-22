@@ -77,6 +77,8 @@ namespace Bomberman.Game.Elements.Players
         {
             base.Reset();
 
+            SetCell(0, 0);
+
             alive = true;
 
             ResetPowerups();

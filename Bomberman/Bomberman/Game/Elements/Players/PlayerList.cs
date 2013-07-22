@@ -9,11 +9,10 @@ using BomberEngine.Core.Events;
 
 namespace Bomberman.Game.Elements.Players
 {
-    public class PlayerList : IUpdatable, IEventHandler, IResettable
+    public class PlayerList : IEventHandler, IResettable
     {
         public List<Player> list;
 
-        private UpdatableList updatables;
         private TimerManager timerManager;
         private KeyInputListenerList keyListeners;
 
@@ -22,20 +21,22 @@ namespace Bomberman.Game.Elements.Players
             this.timerManager = timerManager;
             list = new List<Player>(capacity);
             
-            updatables = new UpdatableList(capacity);
             keyListeners = new KeyInputListenerList(capacity);
-        }
-
-        public void Update(float delta)
-        {
-            updatables.Update(delta);
         }
 
         public void Reset()
         {
+            keyListeners.Clear();
+            
             for (int i = 0; i < list.Count; ++i)
             {
-                list[i].Reset();
+                Player p = list[i];
+
+                p.Reset();
+                if (p.input is IKeyInputListener)
+                {
+                    keyListeners.Add(p.input as IKeyInputListener);
+                }
             }
         }
 
@@ -44,7 +45,6 @@ namespace Bomberman.Game.Elements.Players
             Debug.Assert(!list.Contains(player));
             list.Add(player);
 
-            updatables.Add(player);
             if (player.input is IKeyInputListener)
             {
                 keyListeners.Add(player.input as IKeyInputListener);
@@ -70,7 +70,6 @@ namespace Bomberman.Game.Elements.Players
                 list.Remove(player);
             }
 
-            updatables.Remove(player);
             if (player.input is IKeyInputListener)
             {
                 keyListeners.Remove(player.input as IKeyInputListener);
@@ -111,6 +110,11 @@ namespace Bomberman.Game.Elements.Players
                     return OnKeyPressed(keyEvent.arg);
                 }
 
+                if (keyEvent.state == KeyState.Repeated)
+                {
+                    return OnKeyRepeated(keyEvent.arg);
+                }
+
                 if (keyEvent.state == KeyState.Released)
                 {
                     return OnKeyReleased(keyEvent.arg);
@@ -125,6 +129,11 @@ namespace Bomberman.Game.Elements.Players
         private bool OnKeyPressed(KeyEventArg arg)
         {
             return keyListeners.OnKeyPressed(arg);
+        }
+
+        private bool OnKeyRepeated(KeyEventArg arg)
+        {
+            return keyListeners.OnKeyRepeated(arg);
         }
 
         private bool OnKeyReleased(KeyEventArg arg)

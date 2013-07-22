@@ -67,5 +67,10 @@ namespace Bomberman.Game
         {
             return current.field;
         }
+
+        public static Game Current()
+        {
+            return current;
+        }
     }
 }
