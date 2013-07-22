@@ -84,6 +84,11 @@ namespace Bomberman.Game.Elements.Fields
         //    return Contains(FieldCellType.Solid);
         //}
 
+        public bool IsEmpty()
+        {
+            return staticCell == null && movableCells.Size() == 0;
+        }
+
         public SolidCell GetSolid()
         {
             return staticCell != null ? staticCell.AsSolid() : null;

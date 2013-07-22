@@ -87,7 +87,7 @@ namespace Bomberman.Game.Elements.Players
                 }
                 else if (count > 1)
                 {
-                    Util.ShuffleArray(randomIndices);
+                    ArrayUtils.Shuffle(randomIndices);
                     for (int i = 0; i < count; ++i)
                     {
                         int index = randomIndices[i];

@@ -243,9 +243,30 @@ namespace Bomberman.Game.Elements.Fields
             return count;
         }
 
+        private int GetEmptySlots(FieldCellSlot[] array)
+        {
+            int count = 0;
+            FieldCellSlot[] slots = cells.slots;
+            for (int i = 0; i < slots.Length; ++i)
+            {
+                FieldCellSlot slot = slots[i];
+                if (slot.IsEmpty())
+                {
+                    array[count++] = slot;
+                }
+            }
+
+            return count;
+        }
+
         private void ShuffleCells(FieldCell[] array, int size)
         {
-            Util.ShuffleArray(array, size);
+            ArrayUtils.Shuffle(array, size);
+        }
+
+        private void ShuffleSlots(FieldCellSlot[] array, int size)
+        {
+            ArrayUtils.Shuffle(array, size);
         }
 
         #endregion
@@ -356,11 +377,37 @@ namespace Bomberman.Game.Elements.Fields
         public void KillPlayer(Player player)
         {
             players.Kill(player);
+            DropPowerups(player);
         }
 
         public PlayerList GetPlayers()
         {
             return players;
+        }
+
+        public void DropPowerups(Player player)
+        {
+            FieldCellSlot[] slots = new FieldCellSlot[GetWidth() * GetHeight()];
+            int slotsCount = GetEmptySlots(slots);
+            if (slotsCount == 0)
+            {
+                return;
+            }
+
+            ShuffleSlots(slots, slotsCount);
+
+            PowerupList powerups = player.powerups;
+            int slotIndex = 0;
+            for (int powerupIndex = 0; powerupIndex < Powerups.Count && slotIndex < slots.Length; ++powerupIndex)
+            {
+                int count = powerups.GetCount(powerupIndex);
+                for (int i = 0; i < count && slotIndex < slots.Length; ++i)
+                {
+                    FieldCellSlot slot = slots[slotIndex++];
+                    PowerupCell cell = new PowerupCell(powerupIndex, slot.cx, slot.cy);
+                    AddCell(cell);
+                }   
+            }
         }
 
         #endregion
