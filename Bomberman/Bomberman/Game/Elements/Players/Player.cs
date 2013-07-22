@@ -39,7 +39,6 @@ namespace Bomberman.Game.Elements.Players
         private State state;
 
         private bool alive;
-        public double deathTimeStamp; // TODO
 
         private int triggerBombsCount;
 
@@ -832,7 +831,7 @@ namespace Bomberman.Game.Elements.Players
         public void Kill()
         {
             alive = false;
-            deathTimeStamp = Application.CurrentTime();
+            
             StopMoving();
             if (m_bombInHands != null)
             {
