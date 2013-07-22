@@ -59,6 +59,9 @@ namespace Bomberman.Game.Elements.Players
 
         public int lastAckPacketId; // last acknowledged packet id
 
+        private int winsCount;
+        private int suicidesCount;
+
         public Player(int index)
             : base(FieldCellType.Player, 0, 0)
         {
@@ -92,6 +95,10 @@ namespace Bomberman.Game.Elements.Players
             lastAckPacketId = 0;
         }
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region IUpdatable
+
         public override void Update(float delta)
         {
             base.Update(delta);
@@ -114,6 +121,12 @@ namespace Bomberman.Game.Elements.Players
                 m_thrownBombs[bombIndex].Update(delta);
             }
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Input
 
         private void UpdateInput(float delta)
         {
@@ -227,6 +240,12 @@ namespace Bomberman.Game.Elements.Players
             }
         }
 
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+        
+        #region Movement
+
         private void StartMovingToDirection(Direction dir)
         {
             SetMoveDirection(dir);
@@ -236,6 +255,12 @@ namespace Bomberman.Game.Elements.Players
         {
             StopMoving();
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Collisions
 
         public override bool HandleWallCollision()
         {
@@ -383,18 +408,6 @@ namespace Bomberman.Game.Elements.Players
             return MoveOutOfCollision(this, bomb);
         }
 
-        private bool TryKick(Bomb bomb)
-        {
-            FieldCellSlot blockingSlot = bomb.NearSlotDir(direction);
-            if (blockingSlot != null && !blockingSlot.ContainsObstacle())
-            {
-                KickBomb(bomb);
-                return true;
-            }
-
-            return false;
-        }
-
         private bool HandleCollision(PowerupCell powerup)
         {
             int powerupIndex = powerup.powerup;
@@ -414,31 +427,9 @@ namespace Bomberman.Game.Elements.Players
             return false;
         }
 
-        private void KickBomb(Bomb bomb)
-        {   
-            switch (direction)
-            {
-                case Direction.RIGHT:
-                case Direction.LEFT:
-                    float overlapX = OverlapX(this, bomb);
-                    if (overlapX > 0)
-                    {
-                        MoveBackX(overlapX);
-                    }
-                    break;
+        #endregion
 
-                case Direction.UP:
-                case Direction.DOWN:
-                    float overlapY = OverlapY(this, bomb);
-                    if (overlapY > 0)
-                    {
-                        MoveBackY(overlapY);
-                    }
-                    break;
-            }
-
-            bomb.Kick(direction);
-        }
+        //////////////////////////////////////////////////////////////////////////////
 
         public bool TryKill()
         {
@@ -473,23 +464,6 @@ namespace Bomberman.Game.Elements.Players
         {
             TryPoops();
             base.OnCellChanged(oldCx, oldCy);
-        }
-
-        public void OnBombBlown(Bomb bomb)
-        {   
-        }
-
-        public void OnInfected(Diseases desease)
-        {
-            if (desease == Diseases.POOPS)
-            {
-                TryPoops();
-            }
-        }
-
-        public void OnCured(Diseases desease)
-        {
-
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -606,6 +580,18 @@ namespace Bomberman.Game.Elements.Players
             }
 
             return true;
+        }
+
+        public void OnInfected(Diseases desease)
+        {
+            if (desease == Diseases.POOPS)
+            {
+                TryPoops();
+            }
+        }
+
+        public void OnCured(Diseases desease)
+        {
         }
 
         public void InfectRandom(int count)
@@ -725,6 +711,48 @@ namespace Bomberman.Game.Elements.Players
         {
             bombs.Reset();
             bombs.SetMaxActiveCount(CalcBombsCount());
+        }
+
+        private bool TryKick(Bomb bomb)
+        {
+            FieldCellSlot blockingSlot = bomb.NearSlotDir(direction);
+            if (blockingSlot != null && !blockingSlot.ContainsObstacle())
+            {
+                KickBomb(bomb);
+                return true;
+            }
+
+            return false;
+        }
+
+        private void KickBomb(Bomb bomb)
+        {
+            switch (direction)
+            {
+                case Direction.RIGHT:
+                case Direction.LEFT:
+                    float overlapX = OverlapX(this, bomb);
+                    if (overlapX > 0)
+                    {
+                        MoveBackX(overlapX);
+                    }
+                    break;
+
+                case Direction.UP:
+                case Direction.DOWN:
+                    float overlapY = OverlapY(this, bomb);
+                    if (overlapY > 0)
+                    {
+                        MoveBackY(overlapY);
+                    }
+                    break;
+            }
+
+            bomb.Kick(direction);
+        }
+
+        public void OnBombBlown(Bomb bomb)
+        {
         }
 
         #endregion
