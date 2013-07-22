@@ -21,6 +21,7 @@ namespace Bomberman.Menu.Screens
             DebugStartServer,
             DebugStartClient,
             Settings,
+            Test,
             Exit
         }
 
@@ -36,6 +37,11 @@ namespace Bomberman.Menu.Screens
 
             TextButton button = new TextButton("Play", font, 0, 0, w, h);
             button.id = (int)ButtonId.Play;
+            button.buttonDelegate = buttonDelegate;
+            rootView.AddView(button);
+
+            button = new TextButton("Test", font, 0, 0, w, h);
+            button.id = (int)ButtonId.Test;
             button.buttonDelegate = buttonDelegate;
             rootView.AddView(button);
 

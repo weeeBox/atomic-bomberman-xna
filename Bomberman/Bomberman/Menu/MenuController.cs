@@ -41,7 +41,7 @@ namespace Bomberman.Menu
         protected override void OnStart()
         {
             Application.SetWindowTitle("");
-            StartScreen(new MainMenuScreen(OnMainMenuButtonPress));
+            StartScreen(new MainMenuScreen(MainMenuScreenButtonDelegate));
         }
 
         #endregion
@@ -50,7 +50,7 @@ namespace Bomberman.Menu
 
         #region Button delegates
 
-        private void OnMainMenuButtonPress(Button button)
+        private void MainMenuScreenButtonDelegate(Button button)
         {   
             MainMenuScreen.ButtonId buttonId = (MainMenuScreen.ButtonId)button.id;
             switch (buttonId)
@@ -73,11 +73,25 @@ namespace Bomberman.Menu
                 case MainMenuScreen.ButtonId.Exit:
                     Stop(ExitCode.Quit);
                     break;
+                case MainMenuScreen.ButtonId.Test:
+                    TestSomething();
+                    break;
             }
         }
 
         private void OnSettingsButtonPress(Button button)
         {
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Testing
+
+        private void TestSomething()
+        {
+
         }
 
         #endregion
