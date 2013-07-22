@@ -753,6 +753,21 @@ namespace Bomberman.Game.Elements.Players
             GetField().SetBomb(bomb);
         }
 
+        public Bomb bombInHands
+        {
+            get { return m_bombInHands; }
+        }
+
+        public List<Bomb> thrownBombs
+        {
+            get { return m_thrownBombs; }
+        }
+
+        public bool IsHoldingBomb()
+        {
+            return m_bombInHands != null;
+        }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
@@ -858,6 +873,8 @@ namespace Bomberman.Game.Elements.Players
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Actions
+
         public void TryAction()
         {
             bool bombSet = TryBomb();
@@ -889,69 +906,6 @@ namespace Bomberman.Game.Elements.Players
                 TryPunchBomb();
             }
         }
-
-        public float GetBombTimeout()
-        {
-            CVar var = IsInfectedShortFuze() ? CVars.cg_fuzeTimeShort : CVars.cg_fuzeTimeNormal;
-            return var.intValue * 0.001f;
-        }
-
-        public int GetBombRadius()
-        {
-            if (IsInfectedShortFlame())
-            {
-                return CVars.cg_bombShortFlame.intValue;
-            }
-            if (powerups.HasPowerup(Powerups.GoldFlame))
-            {
-                return int.MaxValue;
-            }
-            return powerups.GetCount(Powerups.Flame);
-        }
-
-        public bool IsJelly()
-        {
-            return HasPowerup(Powerups.Jelly);
-        }
-
-        public bool IsTrigger()
-        {
-            return HasTrigger() && triggerBombsCount > 0;
-        }
-
-        public bool IsHoldingBomb()
-        {
-            return m_bombInHands != null;
-        }
-
-        public bool IsInfected()
-        {
-            return diseases.activeCount > 0;
-        }
-
-        public Bomb bombInHands
-        {
-            get { return m_bombInHands; }
-        }
-
-        public List<Bomb> thrownBombs
-        {
-            get { return m_thrownBombs; }
-        }
-
-        public bool IsAlive()
-        {
-            return alive;
-        }
-
-        public int GetIndex()
-        {
-            return index;
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Special actions
 
         private void TryStopBomb()
         {
@@ -1124,6 +1078,62 @@ namespace Bomberman.Game.Elements.Players
         public bool TryInfect(int diseaseIndex)
         {
             return diseases.TryInfect(diseaseIndex);
+        }
+
+        public bool IsInfected()
+        {
+            return diseases.activeCount > 0;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
+        public float GetBombTimeout()
+        {
+            CVar var = IsInfectedShortFuze() ? CVars.cg_fuzeTimeShort : CVars.cg_fuzeTimeNormal;
+            return var.intValue * 0.001f;
+        }
+
+        public int GetBombRadius()
+        {
+            if (IsInfectedShortFlame())
+            {
+                return CVars.cg_bombShortFlame.intValue;
+            }
+            if (powerups.HasPowerup(Powerups.GoldFlame))
+            {
+                return int.MaxValue;
+            }
+            return powerups.GetCount(Powerups.Flame);
+        }
+
+        public bool IsJelly()
+        {
+            return HasPowerup(Powerups.Jelly);
+        }
+
+        public bool IsTrigger()
+        {
+            return HasTrigger() && triggerBombsCount > 0;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Getters/Setters
+
+        public bool IsAlive()
+        {
+            return alive;
+        }
+
+        public int GetIndex()
+        {
+            return index;
         }
 
         #endregion
