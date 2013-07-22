@@ -10,6 +10,12 @@ using Bomberman.Content;
 
 namespace Bomberman.Game
 {
+    public interface IGameListener
+    {
+        void OnRoundEnded(Game game);
+        void OnGameEnded(Game game);
+    }
+
     public class Game
     {
         public Field field;
@@ -17,6 +23,10 @@ namespace Bomberman.Game
         private static Game current;
 
         private Scheme currentScheme;
+
+        private int roundIndex;
+
+        public IGameListener listener;
 
         public Game()
         {
@@ -58,10 +68,46 @@ namespace Bomberman.Game
             field.Restart(currentScheme);
         }
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Round
+
         public void EndRound()
         {
-
+            ++roundIndex;
+            if (roundIndex < CVars.roundsToWin.intValue)
+            {
+                NotifyRoundEnded();
+            }
+            else
+            {
+                NotifyGameEnded();
+            }
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Listener's notifications
+
+        private void NotifyRoundEnded()
+        {
+            if (listener != null)
+                listener.OnRoundEnded(this);
+        }
+
+        private void NotifyGameEnded()
+        {
+            if (listener != null)
+                listener.OnGameEnded(this);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Getters/Setters
 
         public static PlayerList Players()
         {
@@ -77,5 +123,7 @@ namespace Bomberman.Game
         {
             return current;
         }
+
+        #endregion
     }
 }
