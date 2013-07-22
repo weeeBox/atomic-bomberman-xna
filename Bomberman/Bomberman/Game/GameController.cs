@@ -49,7 +49,7 @@ namespace Bomberman.Game
         }
     }
 
-    public class GameController : BmController
+    public class GameController : BmController, IGameListener
     {
         public enum ExitCode
         {
@@ -142,6 +142,22 @@ namespace Bomberman.Game
                     break;
             }
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region IGameListener
+
+        public virtual void OnRoundEnded(Game game)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual void OnGameEnded(Game game)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -178,6 +194,21 @@ namespace Bomberman.Game
 
             GetConsole().TryExecuteCommand("exec game.cfg");
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region IGameListener
+
+        public override void OnRoundEnded(Game game)
+        {
+
+        }
+
+        public override void OnGameEnded(Game game)
+        {
+        }
+
+        #endregion
     }
 
     #endregion
