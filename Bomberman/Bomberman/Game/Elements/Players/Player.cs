@@ -431,43 +431,6 @@ namespace Bomberman.Game.Elements.Players
 
         //////////////////////////////////////////////////////////////////////////////
 
-        public bool TryKill()
-        {
-            if (IsAlive())
-            {
-                Kill();
-                return true;
-            }
-
-            return false;
-        }
-
-        public void Kill()
-        {
-            alive = false;
-            deathTimeStamp = Application.CurrentTime();
-            StopMoving();
-            if (m_bombInHands != null)
-            {
-                m_bombInHands.active = false;
-                m_bombInHands = null;
-            }
-            GetField().KillPlayer(this);
-        }
-
-        public void DeathTimerCallback(Timer timer)
-        {
-            GetField().RemoveCell(this);
-        }
-
-        protected override void OnCellChanged(int oldCx, int oldCy)
-        {
-            TryPoops();
-            base.OnCellChanged(oldCx, oldCy);
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
-
         #region Powerups
 
         private void InitPowerups()
@@ -755,6 +718,41 @@ namespace Bomberman.Game.Elements.Players
         {
         }
 
+        private Bomb GetNextBomb()
+        {
+            if (IsInfectedConstipation())
+            {
+                return null;
+            }
+
+            return bombs.GetNextBomb();
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Kicked/Punched bombs
+
+        private void AddThrownBomb(Bomb bomb)
+        {
+            Debug.AssertNotContains(m_thrownBombs, bomb);
+            m_thrownBombs.Add(bomb);
+        }
+
+        private void RemoveThrownBomb(Bomb bomb)
+        {
+            bool removed = m_thrownBombs.Remove(bomb);
+            Debug.Assert(removed);
+        }
+
+        public void OnBombLanded(Bomb bomb)
+        {
+            RemoveThrownBomb(bomb);
+            bomb.SetCell();
+            GetField().SetBomb(bomb);
+        }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
@@ -803,6 +801,49 @@ namespace Bomberman.Game.Elements.Players
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Kill
+
+        public bool TryKill()
+        {
+            if (IsAlive())
+            {
+                Kill();
+                return true;
+            }
+
+            return false;
+        }
+
+        public void Kill()
+        {
+            alive = false;
+            deathTimeStamp = Application.CurrentTime();
+            StopMoving();
+            if (m_bombInHands != null)
+            {
+                m_bombInHands.active = false;
+                m_bombInHands = null;
+            }
+            GetField().KillPlayer(this);
+        }
+
+        public void DeathTimerCallback(Timer timer)
+        {
+            GetField().RemoveCell(this);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Inheritance
+
+        protected override void OnCellChanged(int oldCx, int oldCy)
+        {
+            TryPoops();
+            base.OnCellChanged(oldCx, oldCy);
+        }
+
         public override Player AsPlayer()
         {
             return this;
@@ -813,10 +854,9 @@ namespace Bomberman.Game.Elements.Players
             return true;
         }
 
-        public bool IsAlive()
-        {
-            return alive;
-        }
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
 
         public void TryAction()
         {
@@ -850,25 +890,10 @@ namespace Bomberman.Game.Elements.Players
             }
         }
 
-        private Bomb GetNextBomb()
-        {
-            if (IsInfectedConstipation())
-            {
-                return null;
-            }
-
-            return bombs.GetNextBomb();
-        }
-
         public float GetBombTimeout()
         {
             CVar var = IsInfectedShortFuze() ? CVars.cg_fuzeTimeShort : CVars.cg_fuzeTimeNormal;
             return var.intValue * 0.001f;
-        }
-
-        public int GetIndex()
-        {
-            return index;
         }
 
         public int GetBombRadius()
@@ -914,30 +939,15 @@ namespace Bomberman.Game.Elements.Players
             get { return m_thrownBombs; }
         }
 
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Kicked/Punched bombs
-
-        private void AddThrownBomb(Bomb bomb)
+        public bool IsAlive()
         {
-            Debug.AssertNotContains(m_thrownBombs, bomb);
-            m_thrownBombs.Add(bomb);
+            return alive;
         }
 
-        private void RemoveThrownBomb(Bomb bomb)
+        public int GetIndex()
         {
-            bool removed = m_thrownBombs.Remove(bomb);
-            Debug.Assert(removed);
+            return index;
         }
-
-        public void OnBombLanded(Bomb bomb)
-        {
-            RemoveThrownBomb(bomb);
-            bomb.SetCell();
-            GetField().SetBomb(bomb);
-        }
-
-        #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 
