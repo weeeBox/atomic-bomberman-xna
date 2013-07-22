@@ -23,7 +23,7 @@ namespace Bomberman.Game.Screens
             // table
             View tableView = new View(0, 25, contentView.width, 330);
 
-            float nameColWidth = 348;
+            float nameColWidth = 320;
             float winsColWidth = 0.5f * (tableView.width - nameColWidth);
             float suicidesColWidth = winsColWidth;
 
@@ -47,17 +47,17 @@ namespace Bomberman.Game.Screens
             contentView.AddView(tableView);
 
             // buttons
-            View buttons = new View(0.5f * contentView.width, contentView.y + contentView.height, 0, 0);
+            View buttons = new View(0.5f * contentView.width, contentView.height, 0, 0);
             buttons.alignX = View.ALIGN_CENTER;
             buttons.alignY = View.ALIGN_MAX;
 
-            Button button = new TextButton("EXIT", font, 0, 0, 100, 20);
+            Button button = new TextButton("EXIT", Helper.fontButton, 0, 0, 100, 20);
             button.id = (int)ButtonId.Exit;
             button.buttonDelegate = buttonDelegate;
             SetCancelButton(button);
             buttons.AddView(button);
 
-            button = new TextButton("START!", font, 0, 0, 100, 20);
+            button = new TextButton("START!", Helper.fontButton, 0, 0, 100, 20);
             button.id = (int)ButtonId.Continue; ;
             button.buttonDelegate = buttonDelegate;
             SetConfirmButton(button);
