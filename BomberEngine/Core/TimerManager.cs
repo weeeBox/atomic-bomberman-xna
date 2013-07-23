@@ -6,8 +6,10 @@ using BomberEngine.Debugging;
 
 namespace BomberEngine.Core
 {
-    public class TimerManager : IUpdatable, IDestroyable
+    public class TimerManager : ITimerManager
     {
+        public static readonly ITimerManager Null = new NullTimerManager();
+
         internal double currentTime;
 
         protected Timer rootTimer;
@@ -15,7 +17,7 @@ namespace BomberEngine.Core
         private int timersCount;
 
         public TimerManager()
-        {   
+        {
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -75,6 +77,44 @@ namespace BomberEngine.Core
             Schedule(callback, delay, numRepeats, null);
         }
 
+        public void ScheduleOnce(TimerCallback callback)
+        {
+            ScheduleOnce(callback, 0.0f, null);
+        }
+
+        public void ScheduleOnce(TimerCallback callback, float delay)
+        {
+            ScheduleOnce(callback, delay, null);
+        }
+
+        public void ScheduleOnce(TimerCallback callback, float delay, String name)
+        {
+            ScheduleOnce(callback, delay, false, name);
+        }
+
+        public void ScheduleOnce(TimerCallback callback, float delay, bool repeated)
+        {
+            ScheduleOnce(callback, delay, repeated, null);
+        }
+
+        public void ScheduleOnce(TimerCallback callback, float delay, bool repeated, String name)
+        {
+            ScheduleOnce(callback, delay, repeated ? 0 : 1, name);
+        }
+
+        public void ScheduleOnce(TimerCallback callback, float delay, int numRepeats)
+        {
+            ScheduleOnce(callback, delay, numRepeats, null);
+        }
+
+        public void ScheduleOnce(TimerCallback callback, float delay, int numRepeats, String name)
+        {
+            if (!IsScheduled(callback))
+            {
+                ScheduleOnce(callback, delay, numRepeats, name);
+            }
+        }
+
         public void Schedule(TimerCallback callback, float delay, int numRepeats, String name)
         {
             float timeout = delay < 0 ? 0 : delay;
@@ -88,6 +128,24 @@ namespace BomberEngine.Core
             timer.name = name;
 
             AddTimer(timer);
+        }
+
+        public Timer FindTimer(TimerCallback callback)
+        {
+            for (Timer timer = rootTimer; timer != null; timer = timer.next)
+            {
+                if (timer.callback == callback)
+                {
+                    return timer;
+                }
+            }
+
+            return null;
+        }
+
+        public bool IsScheduled(TimerCallback callback)
+        {
+            return FindTimer(callback) != null;
         }
 
         public void Cancel(TimerCallback callback)
@@ -241,5 +299,117 @@ namespace BomberEngine.Core
         }
 
         #endregion
+    }
+
+    internal class NullTimerManager : ITimerManager
+    {
+        public void Schedule(TimerCallback callback)
+        {
+            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
+        }
+
+        public void Schedule(TimerCallback callback, float delay)
+        {
+            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
+        }
+
+        public void Schedule(TimerCallback callback, float delay, bool repeated)
+        {
+            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
+        }
+
+        public void Schedule(TimerCallback callback, float delay, bool repeated, string name)
+        {
+            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
+        }
+
+        public void Schedule(TimerCallback callback, float delay, int numRepeats)
+        {
+            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
+        }
+
+        public void Schedule(TimerCallback callback, float delay, int numRepeats, string name)
+        {
+            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
+        }
+
+        public void Schedule(TimerCallback callback, float delay, string name)
+        {
+            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
+        }
+
+        public void ScheduleOnce(TimerCallback callback)
+        {
+            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
+        }
+
+        public void ScheduleOnce(TimerCallback callback, float delay)
+        {
+            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
+        }
+
+        public void ScheduleOnce(TimerCallback callback, float delay, bool repeated)
+        {
+            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
+        }
+
+        public void ScheduleOnce(TimerCallback callback, float delay, bool repeated, string name)
+        {
+            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
+        }
+
+        public void ScheduleOnce(TimerCallback callback, float delay, int numRepeats)
+        {
+            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
+        }
+
+        public void ScheduleOnce(TimerCallback callback, float delay, int numRepeats, string name)
+        {
+            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
+        }
+
+        public void ScheduleOnce(TimerCallback callback, float delay, string name)
+        {
+            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
+        }
+
+        public void Cancel(TimerCallback callback)
+        {
+        }
+
+        public void Cancel(string name)
+        {
+        }
+
+        public void CancelAll()
+        {
+        }
+
+        public void CancelAll(object target)
+        {   
+        }
+
+        public Timer FindTimer(TimerCallback callback)
+        {
+            return null;
+        }
+
+        public bool IsScheduled(TimerCallback callback)
+        {
+            return false;
+        }
+
+        public int Count()
+        {
+            return 0;
+        }
+
+        public void Update(float delta)
+        {
+        }
+
+        public void Destroy()
+        {   
+        }
     }
 }

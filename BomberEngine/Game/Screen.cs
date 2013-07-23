@@ -20,7 +20,7 @@ namespace BomberEngine.Game
         private View mRootView;
         private View mFocusedView;
 
-        protected TimerManager timerManager;
+        private ITimerManager timerManager;
 
         private UpdatableList updatables;
         private DrawableList drawables;
@@ -48,7 +48,7 @@ namespace BomberEngine.Game
             this.width = width;
             this.height = height;
 
-            timerManager = new TimerManager();
+            timerManager = TimerManager.Null;
 
             updatables = UpdatableList.Null;
             drawables = DrawableList.Null;
@@ -233,6 +233,10 @@ namespace BomberEngine.Game
 
         public void ScheduleTimer(TimerCallback callback, float delay, int numRepeats)
         {
+            if (timerManager == TimerManager.Null)
+            {
+                timerManager = new TimerManager();
+            }
             timerManager.Schedule(callback, delay, numRepeats);
         }
 
@@ -523,7 +527,7 @@ namespace BomberEngine.Game
 
         protected Controller CurrentController
         {
-            get { return Application.RootController().CurrentController; }
+            get { return Application.RootController().GetCurrentController(); }
         }
 
         #endregion

@@ -231,9 +231,9 @@ namespace BomberEngine.Game
 
         #region Properties
 
-        public Controller CurrentController
+        public Controller GetCurrentController()
         {
-            get { return currentController; }
+            return currentController;
         }
 
         #endregion

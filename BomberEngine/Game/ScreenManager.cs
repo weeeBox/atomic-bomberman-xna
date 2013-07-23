@@ -95,6 +95,11 @@ namespace BomberEngine.Game
             {
                 if (replaceCurrent)
                 {
+                    currentScreen.screenManager = null;
+                    updatables.Remove(currentScreen);
+                    drawables.Remove(currentScreen);
+                    screens.Remove(currentScreen);
+
                     Stop(currentScreen);
                 }
                 else

@@ -6,6 +6,7 @@ using BomberEngine.Consoles;
 using Bomberman.Game.Elements.Fields;
 using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements;
+using BomberEngine.Game;
 
 namespace Bomberman.Game
 {
@@ -14,6 +15,16 @@ namespace Bomberman.Game
         public GameCCommand(String name)
             : base(name)
         {
+        }
+
+        protected GameController GetGameController()
+        {
+            return GetCurrentController() as GameController;
+        }
+
+        protected Controller GetCurrentController()
+        {
+            return Application.RootController().GetCurrentController();
         }
 
         protected Game GetGame()
@@ -140,8 +151,11 @@ namespace Bomberman.Game
 
         public override void Execute()
         {
-            GetGame().Restart();
-            console.TryExecuteCommand("exec game.cfg");
+            GameController gc = GetGameController();
+            if (gc != null)
+            {
+                gc.Restart();
+            }
         }
     }
 }

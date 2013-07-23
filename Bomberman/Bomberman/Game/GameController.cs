@@ -108,6 +108,17 @@ namespace Bomberman.Game
             Stop((int)exitCode, data);
         }
 
+        public void Restart()
+        {
+            game.Restart();
+            GetConsole().TryExecuteCommand("exec game.cfg");
+        }
+
+        protected void StartNextRound()
+        {   
+            game.StartNextRound();
+        }
+
         protected void LoadField(Scheme scheme)
         {   
             game.LoadField(scheme); 
@@ -149,12 +160,27 @@ namespace Bomberman.Game
 
         public virtual void OnRoundEnded(Game game)
         {
-            throw new NotImplementedException();
+            StartNextScreen(new RoundResultScreen(RoundResultScreenButtonDelegate));
         }
 
         public virtual void OnGameEnded(Game game)
         {
-            throw new NotImplementedException();
+            // TODO:
+        }
+
+        private void RoundResultScreenButtonDelegate(Button button)
+        {
+            RoundResultScreen.ButtonId buttonId = (RoundResultScreen.ButtonId)button.id;
+            switch (buttonId)
+            {
+                case RoundResultScreen.ButtonId.Continue:
+                    Screen currentScreen = CurrentScreen();
+                    Debug.Assert(currentScreen is RoundResultScreen);
+                    currentScreen.Finish();
+                    
+                    StartNextRound();
+                    break;
+            }
         }
 
         #endregion
@@ -178,6 +204,8 @@ namespace Bomberman.Game
             base.OnStart();
 
             game = new Game();
+            game.listener = this;
+
             GameSettings.InputEntry[] entries = settings.inputEntries;
             for (int i = 0; i < entries.Length; ++i)
             {
@@ -194,21 +222,6 @@ namespace Bomberman.Game
 
             GetConsole().TryExecuteCommand("exec game.cfg");
         }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region IGameListener
-
-        public override void OnRoundEnded(Game game)
-        {
-
-        }
-
-        public override void OnGameEnded(Game game)
-        {
-        }
-
-        #endregion
     }
 
     #endregion

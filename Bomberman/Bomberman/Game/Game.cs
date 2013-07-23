@@ -7,6 +7,7 @@ using Bomberman.Game.Elements;
 using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements.Fields;
 using Bomberman.Content;
+using BomberEngine.Debugging;
 
 namespace Bomberman.Game
 {
@@ -66,6 +67,14 @@ namespace Bomberman.Game
         public void Restart()
         {
             field.Restart(currentScheme);
+        }
+
+        public void StartNextRound()
+        {
+            Debug.Assert(roundIndex < CVars.roundsToWin.intValue - 1);
+            ++roundIndex;
+
+            Restart();
         }
 
         //////////////////////////////////////////////////////////////////////////////

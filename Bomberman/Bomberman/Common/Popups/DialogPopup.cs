@@ -121,7 +121,7 @@ namespace Bomberman.Common.Popups
         {
             String message = StringUtils.TryFormat(format, args);
             DialogPopup popup = new DialogPopup(popupDelegate, "Message", message, ButtonOk);
-            Application.RootController().CurrentController.StartPopup(popup);
+            Application.RootController().GetCurrentController().StartPopup(popup);
         }
 
         private static void DefaultDialogPopupDelegate(DialogPopup popup, int buttonId)
