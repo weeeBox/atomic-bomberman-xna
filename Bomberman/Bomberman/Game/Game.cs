@@ -83,8 +83,7 @@ namespace Bomberman.Game
 
         public void EndRound()
         {
-            ++roundIndex;
-            if (roundIndex < CVars.roundsToWin.intValue)
+            if (roundIndex < CVars.roundsToWin.intValue - 1)
             {
                 NotifyRoundEnded();
             }

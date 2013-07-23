@@ -165,6 +165,7 @@
     <Compile Include="Game\Multiplayer\GameControllerServer.cs" />
     <Compile Include="Game\Multiplayer\GamePacketServer.cs" />
     <Compile Include="Game\Multiplayer\GameStateSnapshot.cs" />
+    <Compile Include="Game\Screens\GameResultScreen.cs" />
     <Compile Include="Game\Screens\PlayersScreen.cs" />
     <Compile Include="Game\Screens\RoundResultScreen.cs" />
     <Compile Include="Game\Screens\SchemeScreen.cs" />

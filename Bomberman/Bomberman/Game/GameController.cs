@@ -165,7 +165,7 @@ namespace Bomberman.Game
 
         public virtual void OnGameEnded(Game game)
         {
-            // TODO:
+            StartNextScreen(new GameResultScreen(GameResultScreenButtonDelegate));
         }
 
         private void RoundResultScreenButtonDelegate(Button button)
@@ -179,6 +179,17 @@ namespace Bomberman.Game
                     currentScreen.Finish();
                     
                     StartNextRound();
+                    break;
+            }
+        }
+
+        private void GameResultScreenButtonDelegate(Button button)
+        {
+            GameResultScreen.ButtonId buttonId = (GameResultScreen.ButtonId)button.id;
+            switch (buttonId)
+            {
+                case GameResultScreen.ButtonId.Exit:
+                    Stop(ExitCode.Exit);
                     break;
             }
         }
