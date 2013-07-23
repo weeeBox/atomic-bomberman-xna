@@ -58,6 +58,7 @@ namespace Bomberman.Game.Elements.Players
 
         public void Kill(Player player)
         {
+            player.Kill();
             Remove(player, false);
             ScheduleTimer(player.DeathTimerCallback, 3.0f);
         }

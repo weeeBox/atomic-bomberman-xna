@@ -819,19 +819,10 @@ namespace Bomberman.Game.Elements.Players
 
         #region Kill
 
-        public bool TryKill()
+        // should be only called from PlayeList
+        internal void Kill()
         {
-            if (IsAlive())
-            {
-                Kill();
-                return true;
-            }
-
-            return false;
-        }
-
-        public void Kill()
-        {
+            Debug.Assert(alive);
             alive = false;
             
             StopMoving();
@@ -840,10 +831,9 @@ namespace Bomberman.Game.Elements.Players
                 m_bombInHands.active = false;
                 m_bombInHands = null;
             }
-            GetField().KillPlayer(this);
         }
 
-        public void DeathTimerCallback(Timer timer)
+        internal void DeathTimerCallback(Timer timer)
         {
             GetField().RemoveCell(this);
         }

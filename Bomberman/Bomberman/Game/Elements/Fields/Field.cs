@@ -369,6 +369,19 @@ namespace Bomberman.Game.Elements.Fields
             ScheduleTimer(RoundEndTimerCallback, CVars.winDelay.floatValue);
         }
 
+        private void ScheduleRoundEndCheck()
+        {
+            ScheduleTimerOnce(RoundEndCheckTimerCallback);
+        }
+
+        private void RoundEndCheckTimerCallback(Timer timer)
+        {
+            if (players.GetAlivePlayerCount() < 2)
+            {
+                EndRound();
+            }
+        }
+
         private void RoundEndTimerCallback(Timer timer)
         {
             GetGame().EndRound();
@@ -392,12 +405,12 @@ namespace Bomberman.Game.Elements.Fields
 
         public void KillPlayer(Player player)
         {
-            players.Kill(player);
-            DropPowerups(player);
-
-            if (players.GetAlivePlayerCount() < 2)
+            if (player.IsAlive())
             {
-                EndRound();
+                players.Kill(player);
+                DropPowerups(player);
+
+                ScheduleRoundEndCheck();
             }
         }
 
@@ -529,7 +542,7 @@ namespace Bomberman.Game.Elements.Fields
                     }
                     else if (cell.IsPlayer())
                     {
-                        cell.AsPlayer().TryKill();
+                        KillPlayer(cell.AsPlayer());
                     }
                 }
             }
@@ -944,14 +957,14 @@ namespace Bomberman.Game.Elements.Fields
 
         #region TimerManager
 
-        public void ScheduleTimer(TimerCallback callback, float delay)
-        {
-            ScheduleTimer(callback, delay, false);
-        }
-
-        public void ScheduleTimer(TimerCallback callback, float delay, bool repeated)
+        public void ScheduleTimer(TimerCallback callback, float delay = 0.0f, bool repeated = false)
         {
             timerManager.Schedule(callback, delay, repeated);
+        }
+
+        public void ScheduleTimerOnce(TimerCallback callback, float delay = 0.0f, bool repeated = false)
+        {
+            timerManager.ScheduleOnce(callback, delay, repeated);
         }
 
         #endregion

@@ -111,7 +111,7 @@ namespace BomberEngine.Core
         {
             if (!IsScheduled(callback))
             {
-                ScheduleOnce(callback, delay, numRepeats, name);
+                Schedule(callback, delay, numRepeats, name);
             }
         }
 
