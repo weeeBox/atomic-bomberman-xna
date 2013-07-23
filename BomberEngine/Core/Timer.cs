@@ -14,10 +14,6 @@ namespace BomberEngine.Core
 
         public bool cancelled;
 
-        private const int maxId = 2000000000;
-        private static int nextId;
-        private int id;
-
         internal TimerCallback callback;
 
         public Timer next;
@@ -35,22 +31,20 @@ namespace BomberEngine.Core
         public String name;
 
         public void Cancel()
-        {
-            cancelled = true;
-            if (manager != null)
+        {   
+            if (!cancelled)
             {
-                manager.RemoveTimer(this);
+                cancelled = true;
+                manager.CancelTimer(this);
                 manager = null;
             }
         }
 
         internal void Fire()
         {
-            int oldId = id;
-
             callback(this);
 
-            if (oldId == id) // timer may be cancelled inside callback call and then reused: check if it's the same time (not a reused instance)
+            if (!cancelled)
             {
                 ++numRepeated;
                 if (numRepeated == numRepeats)
@@ -90,14 +84,12 @@ namespace BomberEngine.Core
             {
                 timer = freeRoot;
                 freeRoot = timer.next;
+                timer.prev = timer.next = null;
             }
             else
             {
                 timer = new Timer();
             }
-
-            nextId = nextId == maxId ? 1 : (nextId + 1); // we need non-zero value
-            timer.id = nextId;
 
             return timer;
         }
@@ -116,7 +108,6 @@ namespace BomberEngine.Core
 
         private void Reset()
         {
-            id = 0;
             next = prev = null;
             manager = null;
             callback = null;

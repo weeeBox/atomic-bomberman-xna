@@ -14,7 +14,11 @@ namespace BomberEngine.Core
 
         protected Timer rootTimer;
 
+        protected Timer delayedAddRootTimer; // timers which were scheduled while iterating the list
+        protected Timer delayedFreeRootTimer; // timers which were cancelled while iterating the list
+
         private int timersCount;
+        private bool updating;
 
         public TimerManager()
         {
@@ -27,17 +31,49 @@ namespace BomberEngine.Core
         public void Update(float delta)
         {
             currentTime += delta;
-            for (Timer t = rootTimer; t != null;)
+
+            if (timersCount > 0)
             {
-                if (t.fireTime > currentTime)
+                updating = true;
+                for (Timer t = rootTimer; t != null; )
                 {
-                    break;
+                    if (t.fireTime > currentTime)
+                    {
+                        break;
+                    }
+
+                    Timer timer = t;
+                    t = t.next;
+
+                    timer.Fire();
+                }
+                updating = false;
+                
+                // Put timers which were cancelled during this update back into the pool
+                if (delayedFreeRootTimer != null)
+                {
+                    for (Timer t = delayedFreeRootTimer; t != null; )
+                    {
+                        Timer timer = t;
+                        t = t.next;
+
+                        AddFreeTimer(timer);
+                    }
+                    delayedFreeRootTimer = null;
                 }
 
-                Timer timer = t;
-                t = t.next;
+                // Add timers which were scheduled during this update
+                if (delayedAddRootTimer != null)
+                {
+                    for (Timer t = delayedAddRootTimer; t != null; )
+                    {
+                        Timer timer = t;
+                        t = t.next;
 
-                timer.Fire();
+                        AddTimer(timer);
+                    }
+                    delayedAddRootTimer = null;
+                }
             }
         }
 
@@ -127,7 +163,14 @@ namespace BomberEngine.Core
             timer.fireTime = currentTime + timeout;
             timer.name = name;
 
-            AddTimer(timer);
+            if (updating)
+            {
+                AddTimerDelayed(timer);
+            }
+            else
+            {
+                AddTimer(timer);
+            }
         }
 
         public Timer FindTimer(TimerCallback callback)
@@ -225,6 +268,30 @@ namespace BomberEngine.Core
             return timer;
         }
 
+        private void AddTimerDelayed(Timer timer)
+        {
+            timer.next = null;
+            timer.prev = null;
+
+            if (delayedAddRootTimer != null)
+            {
+                delayedAddRootTimer.next = timer;
+            }
+            delayedAddRootTimer = timer;
+        }
+
+        private void AddFreeTimerDelayed(Timer timer)
+        {
+            timer.next = null;
+            timer.prev = null;
+
+            if (delayedFreeRootTimer != null)
+            {
+                delayedFreeRootTimer.next = timer;
+            }
+            delayedFreeRootTimer = timer;
+        }
+
         private void AddFreeTimer(Timer timer)
         {
             Timer.AddFreeTimer(timer);
@@ -276,8 +343,8 @@ namespace BomberEngine.Core
             }
         }
 
-        internal void RemoveTimer(Timer timer)
-        {
+        internal void CancelTimer(Timer timer)
+        {   
             Debug.Assert(timer.manager == this);
             Debug.Assert(timersCount > 0);
             --timersCount;
@@ -290,7 +357,15 @@ namespace BomberEngine.Core
 
             if (next != null) next.prev = prev;
 
-            AddFreeTimer(timer);
+            if (updating)
+            {
+                AddFreeTimerDelayed(timer);
+            }
+            else
+            {
+                AddFreeTimer(timer);
+            }
+            
         }
 
         public int Count()
@@ -377,7 +452,7 @@ namespace BomberEngine.Core
         {
         }
 
-        public void Cancel(string name)
+        public void Cancel(String name)
         {
         }
 

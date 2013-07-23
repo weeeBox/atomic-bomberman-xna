@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BomberEngine.Util;
+using BomberEngine.Debugging;
 
 namespace BomberEngine.Core
 {
@@ -31,6 +32,7 @@ namespace BomberEngine.Core
 
         public virtual bool Add(T e)
         {
+            Debug.Assert(!list.Contains(e));
             list.Add(e);
             return true;
         }
