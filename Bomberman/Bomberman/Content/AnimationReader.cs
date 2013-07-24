@@ -19,12 +19,11 @@ namespace Bomberman.Content
             Animation animation = new Animation(name);
 
             int groupsCount = input.ReadInt32();
-            AnimationGroup[] groups = new AnimationGroup[groupsCount];
 
             for (int groupIndex = 0; groupIndex < groupsCount; ++groupIndex)
             {
                 String groupName = input.ReadString();
-                AnimationGroup g = new AnimationGroup(groupName);
+                AnimationGroup group = new AnimationGroup(groupName);
                 
                 int framesCount = input.ReadInt32();
 
@@ -37,11 +36,13 @@ namespace Bomberman.Content
                     frames[frameIndex].oy = input.ReadInt32();
                     frames[frameIndex].w = input.ReadInt32();
                     frames[frameIndex].h = input.ReadInt32();
+                    frames[frameIndex].duration = 0.05f;
                 }
 
-                g.frames = frames;
+                group.frames = frames;
+
+                animation.Add(group);
             }
-            animation.groups = groups;
 
             return animation;
         }

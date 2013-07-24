@@ -115,6 +115,7 @@
     <Compile Include="BmRootController.cs" />
     <Compile Include="Common\Popups\DialogPopup.cs" />
     <Compile Include="Content\Animation.cs" />
+    <Compile Include="Content\AnimationInstance.cs" />
     <Compile Include="Content\AnimationReader.cs" />
     <Compile Include="Content\Scheme.cs" />
     <Compile Include="Content\SchemeReader.cs" />
