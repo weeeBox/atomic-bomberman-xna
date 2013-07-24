@@ -42,7 +42,7 @@ namespace BomberEngine.Core
             int index = list.IndexOf(e);
             if (index != -1)
             {
-                Remove(index);
+                RemoveAt(index);
                 return true;
             }
 
@@ -59,7 +59,7 @@ namespace BomberEngine.Core
             return list.IndexOf(e);
         }
 
-        public virtual void Remove(int index)
+        public virtual void RemoveAt(int index)
         {
             ++removedCount;
             list[index] = nullElement;
@@ -87,7 +87,7 @@ namespace BomberEngine.Core
 
         protected void ClearRemoved()
         {
-            for (int i = list.Count; removedCount > 0 && i >= 0; --i)
+            for (int i = list.Count - 1; removedCount > 0 && i >= 0; --i)
             {
                 if (list[i] == nullElement)
                 {

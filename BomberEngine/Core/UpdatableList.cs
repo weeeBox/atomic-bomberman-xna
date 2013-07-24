@@ -38,7 +38,7 @@ namespace BomberEngine.Core
                 UpdatableDelegateClass delegateObj = list[i] as UpdatableDelegateClass;
                 if (delegateObj != null && delegateObj.updatableDelegate == updatableDelegate)
                 {
-                    Remove(i);
+                    RemoveAt(i);
                     break;
                 }
             }
@@ -88,7 +88,7 @@ namespace BomberEngine.Core
             throw new InvalidOperationException("Can't remove element from unmodifiable updatable list");
         }
 
-        public override void Remove(int index)
+        public override void RemoveAt(int index)
         {
             throw new InvalidOperationException("Can't remove element from unmodifiable updatable list");
         }

@@ -73,7 +73,7 @@ namespace BomberEngine.Core.Visual
             return -1;
         }
 
-        public override void Remove(int index)
+        public override void RemoveAt(int index)
         {
             throw new InvalidOperationException("Can't remove element from null list");
         }

@@ -62,7 +62,7 @@ namespace BomberEngine.Core.Events
             throw new InvalidOperationException("Can't remove element from unmodifiable handler list");
         }
 
-        public override void Remove(int index)
+        public override void RemoveAt(int index)
         {
             throw new InvalidOperationException("Can't remove element from unmodifiable handler list");
         }

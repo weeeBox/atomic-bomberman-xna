@@ -151,9 +151,29 @@ namespace BomberEngine.Game
             ScheduleTimer(callback, delay, repeated ? 0 : 1);
         }
 
+        public static void ScheduleTimerOnce(TimerCallback callback)
+        {
+            ScheduleTimerOnce(callback, 0.0f);
+        }
+
+        public static void ScheduleTimerOnce(TimerCallback callback, float delay)
+        {
+            ScheduleTimerOnce(callback, delay, false);
+        }
+
+        public static void ScheduleTimerOnce(TimerCallback callback, float delay, Boolean repeated)
+        {
+            ScheduleTimerOnce(callback, delay, repeated ? 0 : 1);
+        }
+
         public static void ScheduleTimer(TimerCallback callback, float delay, int numRepeats)
         {
             sharedApplication.timerManager.Schedule(callback, delay, numRepeats);
+        }
+
+        public static void ScheduleTimerOnce(TimerCallback callback, float delay, int numRepeats)
+        {
+            sharedApplication.timerManager.ScheduleOnce(callback, delay, numRepeats);
         }
 
         public static void CancelTimer(TimerCallback callback)
