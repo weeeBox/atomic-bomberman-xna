@@ -8,13 +8,21 @@ using BomberEngine.Debugging;
 
 namespace BomberEngine.Util
 {
-    public class ObjectsPool<T> : IDestroyable where T : ObjectPoolEntry<T>, new()
+    public class ObjectsPool<T> : IDestroyable where T : ObjectsPoolEntry<T>, new()
     {
         private FastLinkedList<T> m_list;
         private FastLinkedList<T> m_recycleList; // put object here if it should be recycled later
 
+        private TimerManager m_timerManager;
+
         public ObjectsPool()
+            : this(Application.TimerManager())
         {
+        }
+
+        public ObjectsPool(TimerManager timerManager)
+        {
+            m_timerManager = timerManager;
             m_list = new FastLinkedList<T>();
         }
 
@@ -31,7 +39,7 @@ namespace BomberEngine.Util
         public void RecycleObject(T t)
         {
             t.RecycleObject();
-            m_list.AddFirstItem(t);
+            m_list.AddLastItem(t);
         }
 
         public void RecycleObjectLater(T t)
@@ -71,12 +79,12 @@ namespace BomberEngine.Util
 
         private void ScheduleRecycle()
         {
-            Application.ScheduleTimerOnce(RecycleObjectLaterCallback);
+            m_timerManager.ScheduleOnce(RecycleObjectLaterCallback);
         }
 
         private void CancelRecycle()
         {
-            Application.CancelTimer(RecycleObjectLaterCallback);
+            m_timerManager.Cancel(RecycleObjectLaterCallback);
         }
 
         private void RecycleObjectLaterCallback(Timer timer)
@@ -105,7 +113,7 @@ namespace BomberEngine.Util
         #endregion
     }
 
-    public class ObjectPoolEntry<T> : FastLinkedListNode<T>
+    public class ObjectsPoolEntry<T> : FastLinkedListNode<T>
     {
         internal void RecycleObject()
         {

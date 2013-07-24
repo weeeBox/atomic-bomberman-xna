@@ -26,7 +26,7 @@ namespace BomberEngine.Core.Events
         {
             m_timerManager = timerManager;
             m_registerMap = new Dictionary<String, NotificationDelegateList>();
-            m_notificatoinsPool = new ObjectsPool<Notification>();
+            m_notificatoinsPool = new ObjectsPool<Notification>(timerManager);
         }
 
         public void Destroy()
@@ -150,7 +150,7 @@ namespace BomberEngine.Core.Events
         }
     }
 
-    public class Notification : ObjectPoolEntry<Notification>
+    public class Notification : ObjectsPoolEntry<Notification>
     {
         private String m_name;
         private Object m_data;
