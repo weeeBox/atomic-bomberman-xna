@@ -90,13 +90,12 @@ namespace BomberEngine.Util
         private void RecycleObjectLaterCallback(Timer timer)
         {
             Debug.Assert(m_recycleList != null && m_recycleList.size > 0);
-            for (T t = m_recycleList.listFirst; t != null; )
+
+            T t;
+            while ((t = m_recycleList.RemoveFirstItem()) != null)
             {
-                T next = t.listNext;
                 RecycleObject(t);
-                t = next;
             }
-            m_recycleList.Clear();
         }
 
         #endregion
