@@ -36,6 +36,7 @@
     <animation file="${dir.anim}/bomb_jelly_green.anim" />
     <animation file="${dir.anim}/bomb_regular_green.anim" />
     <animation file="${dir.anim}/bomb_regular_green_dud.anim" />
+    <animation file="${dir.anim}/bomb_trigger_green.anim" />
     <animation file="${dir.anim}/cornerhead_0.anim" />
     <animation file="${dir.anim}/cornerhead_1.anim" />
     <animation file="${dir.anim}/cornerhead_10.anim" />

@@ -127,6 +127,7 @@
     <Compile Include="Content\Scheme\SchemeInfo.cs" />
     <Compile Include="cvars.cs" />
     <Compile Include="Game\Constant.cs" />
+    <Compile Include="Game\Elements\Cells\BombAnimations.cs" />
     <Compile Include="Game\Elements\Cells\BrickCell.cs" />
     <Compile Include="Game\Elements\Cells\FlameCell.cs" />
     <Compile Include="Game\Elements\Cells\MovableCell.cs" />
