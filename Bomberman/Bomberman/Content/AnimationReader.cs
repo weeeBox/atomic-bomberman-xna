@@ -36,12 +36,21 @@ namespace Bomberman.Content
                     frames[frameIndex].oy = input.ReadInt32();
                     frames[frameIndex].w = input.ReadInt32();
                     frames[frameIndex].h = input.ReadInt32();
-                    frames[frameIndex].duration = 0.05f;
+                    frames[frameIndex].duration = 0.02f;
                 }
 
                 group.frames = frames;
 
                 animation.Add(group);
+            }
+
+            int textureSize = input.ReadInt32();
+            byte[] data = input.ReadBytes(textureSize);
+
+            using (MemoryStream stream = new MemoryStream(data))
+            {
+                Texture2D texture = Texture2D.FromStream(Runtime.graphicsDevice, stream);
+                animation.texture = new TextureImage(texture);
             }
 
             return animation;

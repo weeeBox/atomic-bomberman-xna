@@ -27,5 +27,10 @@ namespace Bomberman
         {
             return (Scheme)GetAsset(id);
         }
+
+        public Animation GetAnimation(int id)
+        {
+            return (Animation)GetAsset(id);
+        }
     }
 }

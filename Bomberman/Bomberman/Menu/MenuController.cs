@@ -8,6 +8,7 @@ using BomberEngine.Core.Visual;
 using Bomberman.Game;
 using Bomberman.Networking;
 using BomberEngine.Debugging;
+using Bomberman.Game.Screens;
 
 namespace Bomberman.Menu
 {
@@ -91,7 +92,7 @@ namespace Bomberman.Menu
 
         private void TestSomething()
         {
-
+            StartNextScreen(new TestScreen());
         }
 
         #endregion

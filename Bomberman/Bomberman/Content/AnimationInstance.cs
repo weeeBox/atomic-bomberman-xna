@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Core;
 using BomberEngine.Debugging;
+using BomberEngine.Core.Assets.Types;
 
 namespace Bomberman.Content
 {
@@ -15,8 +16,8 @@ namespace Bomberman.Content
             Looped,
         }
 
-        private Animation m_Animation;
         private AnimationGroup m_Group;
+        private TextureImage m_Texture;
 
         private float m_FrameTime;
         private int m_FrameIndex;
@@ -24,10 +25,12 @@ namespace Bomberman.Content
 
         private Mode m_Mode;
 
-        public void Init(Animation animation)
+        public void Init(AnimationGroup group, TextureImage texture)
         {
-            m_Animation = animation;
             Reset();
+
+            m_Group = group;
+            m_Texture = texture;
         }
 
         public void Update(float delta)
@@ -41,15 +44,11 @@ namespace Bomberman.Content
                     if (m_Mode == Mode.Looped)
                         m_FrameIndex = 0;
                 }
+                else
+                {
+                    ++m_FrameIndex;
+                }
             }
-        }
-
-        public void Play(String name)
-        {
-            Reset();
-
-            AnimationGroup group = m_Animation.Group(name);
-            Debug.Assert(group != null, "Can't find group: " + name);
         }
 
         public void Reset()
@@ -57,8 +56,9 @@ namespace Bomberman.Content
             m_FrameIndex = 0;
             m_FrameTime = 0.0f;
             m_Group = null;
+            m_Texture = null;
             m_SpeedMultiplier = 1.0f;
-            m_Mode = Mode.Normal;
+            m_Mode = Mode.Looped;
         }
 
         public AnimationGroup Group
@@ -66,7 +66,12 @@ namespace Bomberman.Content
             get { return m_Group; }
         }
 
-        public float FrameIndex
+        public TextureImage Texture
+        {
+            get { return m_Texture; }
+        }
+
+        public int FrameIndex
         {
             get { return m_FrameIndex; }
         }

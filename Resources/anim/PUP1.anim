@@ -2,15 +2,15 @@
 
 <animations name="PUP1" file="PUP1.png">
   <animation name="pickup west">
-    <frame x="45" y="140" ox="13" oy="69" w="39" h="39"/>
-    <frame x="68" y="67" ox="19" oy="71" w="36" h="36"/>
-    <frame x="0" y="67" ox="23" oy="72" w="33" h="33"/>
-    <frame x="33" y="67" ox="28" oy="72" w="35" h="35"/>
-    <frame x="0" y="140" ox="33" oy="71" w="45" h="45"/>
-    <frame x="0" y="212" ox="34" oy="68" w="55" h="55"/>
-    <frame x="0" y="0" ox="32" oy="66" w="59" h="59"/>
-    <frame x="59" y="0" ox="29" oy="66" w="58" h="58"/>
-    <frame x="55" y="212" ox="23" oy="68" w="51" h="51"/>
-    <frame x="84" y="140" ox="15" oy="68" w="42" h="42"/>
+    <frame x="45" y="140" ox="13" oy="69" w="39" h="70"/>
+    <frame x="68" y="67" ox="19" oy="71" w="36" h="72"/>
+    <frame x="0" y="67" ox="23" oy="72" w="33" h="73"/>
+    <frame x="33" y="67" ox="28" oy="72" w="35" h="73"/>
+    <frame x="0" y="140" ox="33" oy="71" w="45" h="72"/>
+    <frame x="0" y="212" ox="34" oy="68" w="55" h="69"/>
+    <frame x="0" y="0" ox="32" oy="66" w="59" h="67"/>
+    <frame x="59" y="0" ox="29" oy="66" w="58" h="67"/>
+    <frame x="55" y="212" ox="23" oy="68" w="51" h="69"/>
+    <frame x="84" y="140" ox="15" oy="68" w="42" h="69"/>
   </animation>
 </animations>

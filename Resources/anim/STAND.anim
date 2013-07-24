@@ -2,15 +2,15 @@
 
 <animations name="STAND" file="STAND.png">
   <animation name="stand north">
-    <frame x="0" y="0" ox="21" oy="59" w="39" h="39"/>
+    <frame x="0" y="0" ox="21" oy="59" w="39" h="60"/>
   </animation>
   <animation name="stand south">
-    <frame x="0" y="60" ox="19" oy="69" w="38" h="38"/>
+    <frame x="0" y="60" ox="19" oy="69" w="38" h="68"/>
   </animation>
   <animation name="stand west">
-    <frame x="0" y="128" ox="13" oy="63" w="36" h="36"/>
+    <frame x="0" y="128" ox="13" oy="63" w="36" h="65"/>
   </animation>
   <animation name="stand east">
-    <frame x="0" y="193" ox="22" oy="67" w="35" h="35"/>
+    <frame x="0" y="193" ox="22" oy="67" w="35" h="67"/>
   </animation>
 </animations>
