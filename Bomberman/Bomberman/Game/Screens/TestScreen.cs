@@ -61,7 +61,7 @@ namespace Bomberman.Game.Screens
             animationLookup[AnimationId.Kick] = container;
             
             groupInstance = new AnimationInstance();
-            groupInstance.Init(animationLookup[AnimationId.Walk].down);
+            groupInstance.Init(GetAnimation(A.anim_die_green_1));
         }
 
         public override void Update(float delta)

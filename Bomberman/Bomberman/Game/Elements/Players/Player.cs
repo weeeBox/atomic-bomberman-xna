@@ -27,16 +27,6 @@ namespace Bomberman.Game.Elements.Players
             PlayerAction.Special
         };
 
-        public enum State
-        {
-            Normal,
-            Cornered,
-            Dying,
-            Dead
-        }
-
-        private State m_State;
-
         private int m_Index;
         private int m_TriggerBombsCount;
 
@@ -52,13 +42,14 @@ namespace Bomberman.Game.Elements.Players
         /* Kicked/Punched bombs */
         private List<Bomb> m_ThrownBombs;
 
-        private Object m_Data;
         private NetConnection m_Connection;
 
         private int m_LastAckPacketId; // last acknowledged packet id
 
         private int m_WinsCount;
         private int m_SuicidesCount;
+
+        private PlayerAnimations m_Animations;
 
         public Player(int index)
             : base(FieldCellType.Player, 0, 0)
@@ -92,7 +83,6 @@ namespace Bomberman.Game.Elements.Players
             m_ThrownBombs.Clear();
             m_WinsCount = 0;
             m_SuicidesCount = 0;
-            m_Data = null;
             m_Connection = null;
             m_LastAckPacketId = 0;
         }
@@ -793,7 +783,6 @@ namespace Bomberman.Game.Elements.Players
         private void InitPlayer()
         {
             SetSpeed(CalcPlayerSpeed());
-            m_State = State.Normal;
         }
 
         private void ResetPlayer()
@@ -1105,6 +1094,14 @@ namespace Bomberman.Game.Elements.Players
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Animations
+
+        
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
         #region Properties
 
         public float GetBombTimeout()
@@ -1166,6 +1163,12 @@ namespace Bomberman.Game.Elements.Players
         {
             get { return m_LastAckPacketId; }
             set { m_LastAckPacketId = value; }
+        }
+
+        public PlayerAnimations animations
+        {
+            get { return m_Animations; }
+            set { m_Animations = animations; }
         }
 
         #endregion

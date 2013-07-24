@@ -10,6 +10,8 @@ namespace Bomberman.Game.Elements
         UP,
         DOWN,
         LEFT,
-        RIGHT
+        RIGHT,
+
+        Count
     }
 }

@@ -32,6 +32,8 @@ namespace Bomberman.Game.Elements.Fields
         private LinkedList<FieldCell> tempUpdateList;
         private LinkedList<MovableCell> tempMoveList;
 
+        private PlayerAnimations m_PlayerAnimations;
+
         public Field()
         {
             currentField = this;
@@ -43,6 +45,8 @@ namespace Bomberman.Game.Elements.Fields
 
             movableCells = new LinkedList<MovableCell>();
             contacts = new LinkedList<CellContactList>();
+
+            m_PlayerAnimations = new PlayerAnimations();
         }
 
         public void Reset()
@@ -384,11 +388,13 @@ namespace Bomberman.Game.Elements.Fields
         public void AddPlayer(Player player)
         {
             players.Add(player);
+            player.animations = m_PlayerAnimations;
         }
 
         public void RemovePlayer(Player player)
         {
             players.Remove(player);
+            player.animations = null;
         }
 
         public void KillPlayer(Player player)
