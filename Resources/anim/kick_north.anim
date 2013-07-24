@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="kick_north" file="kick_north.png">
+  <frame x="0" y="396" ox="19" oy="63" w="39" h="64"/>
+  <frame x="0" y="108" ox="23" oy="61" w="46" h="62"/>
+  <frame x="0" y="228" ox="22" oy="55" w="44" h="56"/>
+  <frame x="0" y="50" ox="23" oy="57" w="47" h="58"/>
+  <frame x="0" y="170" ox="23" oy="57" w="46" h="58"/>
+  <frame x="0" y="336" ox="21" oy="59" w="43" h="60"/>
+  <frame x="0" y="284" ox="22" oy="51" w="44" h="52"/>
+  <frame x="0" y="0" ox="23" oy="49" w="47" h="50"/>
+</animation>

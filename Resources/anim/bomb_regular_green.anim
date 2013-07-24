@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="bomb_regular_green" file="bomb_regular_green.png">
+  <frame x="0" y="0" ox="18" oy="36" w="36" h="37"/>
+  <frame x="0" y="37" ox="17" oy="34" w="35" h="35"/>
+  <frame x="0" y="107" ox="17" oy="32" w="34" h="33"/>
+  <frame x="0" y="173" ox="16" oy="31" w="32" h="32"/>
+  <frame x="34" y="107" ox="15" oy="29" w="30" h="30"/>
+  <frame x="36" y="0" ox="14" oy="27" w="28" h="28"/>
+  <frame x="35" y="72" ox="13" oy="25" w="26" h="26"/>
+  <frame x="26" y="205" ox="12" oy="24" w="25" h="25"/>
+  <frame x="25" y="231" ox="12" oy="22" w="24" h="23"/>
+  <frame x="24" y="256" ox="11" oy="21" w="22" h="22"/>
+  <frame x="0" y="256" ox="12" oy="22" w="24" h="23"/>
+  <frame x="0" y="231" ox="12" oy="24" w="25" h="25"/>
+  <frame x="0" y="205" ox="13" oy="25" w="26" h="26"/>
+  <frame x="35" y="37" ox="14" oy="27" w="28" h="28"/>
+  <frame x="34" y="140" ox="15" oy="29" w="30" h="30"/>
+  <frame x="32" y="173" ox="16" oy="31" w="32" h="32"/>
+  <frame x="0" y="140" ox="17" oy="32" w="34" h="33"/>
+  <frame x="0" y="72" ox="17" oy="34" w="35" h="35"/>
+</animation>

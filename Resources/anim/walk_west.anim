@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="walk_west" file="walk_west.png">
+  <frame x="0" y="702" ox="14" oy="66" w="36" h="63"/>
+  <frame x="0" y="506" ox="12" oy="66" w="36" h="65"/>
+  <frame x="0" y="571" ox="13" oy="64" w="36" h="65"/>
+  <frame x="0" y="379" ox="16" oy="62" w="39" h="63"/>
+  <frame x="0" y="125" ox="18" oy="61" w="43" h="62"/>
+  <frame x="0" y="250" ox="19" oy="65" w="41" h="64"/>
+  <frame x="0" y="636" ox="15" oy="65" w="36" h="66"/>
+  <frame x="0" y="831" ox="13" oy="67" w="34" h="68"/>
+  <frame x="0" y="899" ox="13" oy="70" w="33" h="68"/>
+  <frame x="0" y="765" ox="14" oy="67" w="35" h="66"/>
+  <frame x="0" y="314" ox="20" oy="64" w="41" h="65"/>
+  <frame x="0" y="61" ox="23" oy="65" w="44" h="64"/>
+  <frame x="0" y="0" ox="21" oy="63" w="45" h="61"/>
+  <frame x="0" y="187" ox="19" oy="63" w="42" h="63"/>
+  <frame x="0" y="442" ox="15" oy="65" w="38" h="64"/>
+</animation>

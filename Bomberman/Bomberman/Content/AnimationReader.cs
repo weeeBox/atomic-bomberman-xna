@@ -17,32 +17,22 @@ namespace Bomberman.Content
         {
             String name = input.ReadString();
             Animation animation = new Animation(name);
-
-            int groupsCount = input.ReadInt32();
-
-            for (int groupIndex = 0; groupIndex < groupsCount; ++groupIndex)
-            {
-                String groupName = input.ReadString();
-                AnimationGroup group = new AnimationGroup(groupName);
                 
-                int framesCount = input.ReadInt32();
+            int framesCount = input.ReadInt32();
 
-                AnimationFrame[] frames = new AnimationFrame[framesCount];
-                for (int frameIndex = 0; frameIndex < frames.Length; ++frameIndex)
-                {
-                    frames[frameIndex].x = input.ReadInt32();
-                    frames[frameIndex].y = input.ReadInt32();
-                    frames[frameIndex].ox = input.ReadInt32();
-                    frames[frameIndex].oy = input.ReadInt32();
-                    frames[frameIndex].w = input.ReadInt32();
-                    frames[frameIndex].h = input.ReadInt32();
-                    frames[frameIndex].duration = 0.02f;
-                }
-
-                group.frames = frames;
-
-                animation.Add(group);
+            AnimationFrame[] frames = new AnimationFrame[framesCount];
+            for (int frameIndex = 0; frameIndex < frames.Length; ++frameIndex)
+            {
+                frames[frameIndex].x = input.ReadInt32();
+                frames[frameIndex].y = input.ReadInt32();
+                frames[frameIndex].ox = input.ReadInt32();
+                frames[frameIndex].oy = input.ReadInt32();
+                frames[frameIndex].w = input.ReadInt32();
+                frames[frameIndex].h = input.ReadInt32();
+                frames[frameIndex].duration = 0.02f;
             }
+
+            animation.frames = frames;
 
             int textureSize = input.ReadInt32();
             byte[] data = input.ReadBytes(textureSize);

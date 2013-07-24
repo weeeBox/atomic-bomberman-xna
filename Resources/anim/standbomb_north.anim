@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="standbomb_north" file="standbomb_north.png">
+  <frame x="0" y="0" ox="29" oy="60" w="61" h="58"/>
+</animation>

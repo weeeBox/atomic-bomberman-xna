@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="punch_east_green" file="punch_east_green.png">
+  <frame x="0" y="0" ox="21" oy="60" w="50" h="55"/>
+  <frame x="81" y="179" ox="20" oy="61" w="45" h="58"/>
+  <frame x="39" y="179" ox="20" oy="61" w="42" h="59"/>
+  <frame x="0" y="179" ox="19" oy="61" w="39" h="60"/>
+  <frame x="0" y="55" ox="18" oy="61" w="37" h="62"/>
+  <frame x="37" y="55" ox="19" oy="61" w="36" h="62"/>
+  <frame x="73" y="55" ox="20" oy="61" w="35" h="62"/>
+  <frame x="0" y="117" ox="21" oy="61" w="35" h="62"/>
+  <frame x="35" y="117" ox="22" oy="61" w="35" h="62"/>
+  <frame x="70" y="117" ox="23" oy="61" w="35" h="62"/>
+</animation>

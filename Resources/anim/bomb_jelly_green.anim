@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="bomb_jelly_green" file="bomb_jelly_green.png">
+  <frame x="129" y="32" ox="20" oy="31" w="33" h="32"/>
+  <frame x="0" y="32" ox="19" oy="31" w="33" h="32"/>
+  <frame x="33" y="0" ox="17" oy="31" w="32" h="32"/>
+  <frame x="65" y="0" ox="16" oy="31" w="32" h="32"/>
+  <frame x="97" y="0" ox="15" oy="31" w="32" h="32"/>
+  <frame x="129" y="0" ox="14" oy="31" w="32" h="32"/>
+  <frame x="161" y="0" ox="13" oy="31" w="32" h="32"/>
+  <frame x="193" y="0" ox="14" oy="31" w="32" h="32"/>
+  <frame x="33" y="32" ox="15" oy="31" w="32" h="32"/>
+  <frame x="65" y="32" ox="16" oy="31" w="32" h="32"/>
+  <frame x="97" y="32" ox="17" oy="31" w="32" h="32"/>
+  <frame x="0" y="0" ox="19" oy="31" w="33" h="32"/>
+</animation>

@@ -8,45 +8,60 @@ using Bomberman.Content;
 using Assets;
 using BomberEngine.Core.Assets.Types;
 using Microsoft.Xna.Framework;
+using BomberEngine.Core.Events;
+using BomberEngine.Core.Input;
 
 namespace Bomberman.Game.Screens
 {
     public class TestScreen : Screen
     {
-        private enum Animations
+        private class AnimationContainer
         {
-            StillUp,
-            StillDown,
-            StillLeft,
-            StillRight,
-
-            WalkUp,
-            WalkDown,
-            WalkLeft,
-            WalkRight,
+            public Animation up;
+            public Animation down;
+            public Animation left;
+            public Animation right;
         }
 
-        private IDictionary<Animations, AnimationGroup> groupLookup;
+        public enum AnimationId
+        {
+            Stand,
+            Walk,
+            Kick,
+        }
+
+        private IDictionary<AnimationId, AnimationContainer> animationLookup;
         private AnimationInstance groupInstance;
 
         public TestScreen()
         {
-            groupLookup = new Dictionary<Animations, AnimationGroup>();
+            animationLookup = new Dictionary<AnimationId, AnimationContainer>();
 
-            Animation animation = GetAnimation(A.anim_stand);
-            groupLookup[Animations.StillUp] = animation.Group("stand north");
-            groupLookup[Animations.StillDown] = animation.Group("stand south");
-            groupLookup[Animations.StillLeft] = animation.Group("stand west");
-            groupLookup[Animations.StillRight] = animation.Group("stand east");
+            AnimationContainer container;
 
-            animation = GetAnimation(A.anim_walk);
-            groupLookup[Animations.WalkUp] = animation.Group("walk north");
-            groupLookup[Animations.WalkDown] = animation.Group("walk south");
-            groupLookup[Animations.WalkLeft] = animation.Group("walk west");
-            groupLookup[Animations.WalkRight] = animation.Group("walk east");
+            container = new AnimationContainer();
+            container.up = GetAnimation(A.anim_stand_north);
+            container.down = GetAnimation(A.anim_stand_south);
+            container.left = GetAnimation(A.anim_stand_west);
+            container.right = GetAnimation(A.anim_stand_east);
+            animationLookup[AnimationId.Stand] = container;
 
+            container = new AnimationContainer();
+            container.up = GetAnimation(A.anim_walk_north);
+            container.down = GetAnimation(A.anim_walk_south);
+            container.left = GetAnimation(A.anim_walk_west);
+            container.right = GetAnimation(A.anim_walk_east);
+            animationLookup[AnimationId.Walk] = container;
+
+            container = new AnimationContainer();
+            container.up = GetAnimation(A.anim_kick_north);
+            container.down = GetAnimation(A.anim_kick_south);
+            container.left = GetAnimation(A.anim_kick_west);
+            container.right = GetAnimation(A.anim_kick_east);
+            animationLookup[AnimationId.Kick] = container;
+            
             groupInstance = new AnimationInstance();
-            groupInstance.Init(groupLookup[Animations.WalkDown], animation.texture);
+            groupInstance.Init(animationLookup[AnimationId.Walk].down);
         }
 
         public override void Update(float delta)
@@ -56,9 +71,18 @@ namespace Bomberman.Game.Screens
 
         public override void Draw(Context context)
         {
-            int frameIndex = groupInstance.FrameIndex;
-            TextureImage texture = groupInstance.Texture;
-            AnimationGroup group = groupInstance.Group;
+            int x = 100;
+            int y = 100;
+
+            DrawAnim(context, groupInstance, x, y);
+        }
+
+        private void DrawAnim(Context context, AnimationInstance instance, int x, int y)
+        {
+            int frameIndex = instance.FrameIndex;
+            TextureImage texture = instance.Texture;
+
+            Animation group = instance.Animation;
 
             Rectangle src;
             int ox = group.frames[frameIndex].ox;
@@ -69,15 +93,27 @@ namespace Bomberman.Game.Screens
             src.Width = group.frames[frameIndex].w;
             src.Height = group.frames[frameIndex].h;
 
-            int x = 100 - ox;
-            int y = 100 - oy;
-
-            context.DrawImagePart(texture, src, x, y);
+            context.DrawImagePart(texture, src, x - ox, y - oy);
         }
 
         private Animation GetAnimation(int id)
         {
             return BmApplication.Assets().GetAnimation(id);
+        }
+
+        public override bool HandleEvent(Event evt)
+        {
+            if (evt.code == Event.KEY)
+            {
+                KeyEvent keyEvent = (KeyEvent)evt;
+                if (keyEvent.IsKeyPressed(KeyCode.Up))
+                {
+                    
+                    return true;
+                }
+            }
+
+            return base.HandleEvent(evt);
         }
     }
 }

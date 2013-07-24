@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="bombwalk_north_green" file="bombwalk_north_green.png">
+  <frame x="0" y="799" ox="30" oy="103" w="58" h="103"/>
+  <frame x="58" y="690" ox="31" oy="103" w="58" h="106"/>
+  <frame x="0" y="690" ox="31" oy="104" w="58" h="109"/>
+  <frame x="58" y="0" ox="31" oy="107" w="58" h="113"/>
+  <frame x="0" y="465" ox="32" oy="107" w="58" h="113"/>
+  <frame x="0" y="349" ox="32" oy="111" w="58" h="116"/>
+  <frame x="0" y="578" ox="32" oy="111" w="58" h="112"/>
+  <frame x="58" y="578" ox="32" oy="110" w="58" h="112"/>
+  <frame x="58" y="465" ox="30" oy="109" w="58" h="113"/>
+  <frame x="0" y="232" ox="30" oy="109" w="58" h="117"/>
+  <frame x="0" y="114" ox="30" oy="109" w="58" h="118"/>
+  <frame x="58" y="114" ox="29" oy="111" w="58" h="118"/>
+  <frame x="58" y="232" ox="30" oy="112" w="58" h="117"/>
+  <frame x="58" y="349" ox="29" oy="112" w="58" h="116"/>
+  <frame x="0" y="0" ox="30" oy="114" w="58" h="114"/>
+</animation>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="bomb_regular_green_dud" file="bomb_regular_green_dud.png">
+  <frame x="0" y="333" ox="18" oy="36" w="37" h="37"/>
+  <frame x="0" y="37" ox="18" oy="36" w="37" h="37"/>
+  <frame x="0" y="74" ox="18" oy="36" w="37" h="37"/>
+  <frame x="0" y="111" ox="18" oy="36" w="37" h="37"/>
+  <frame x="0" y="148" ox="18" oy="36" w="37" h="37"/>
+  <frame x="0" y="185" ox="18" oy="36" w="37" h="37"/>
+  <frame x="0" y="222" ox="18" oy="36" w="37" h="37"/>
+  <frame x="0" y="259" ox="18" oy="36" w="37" h="37"/>
+  <frame x="0" y="296" ox="18" oy="36" w="37" h="37"/>
+  <frame x="0" y="0" ox="18" oy="36" w="37" h="37"/>
+</animation>

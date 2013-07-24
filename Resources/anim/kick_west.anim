@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="kick_west" file="kick_west.png">
+  <frame x="43" y="117" ox="20" oy="61" w="40" h="62"/>
+  <frame x="0" y="180" ox="18" oy="63" w="36" h="64"/>
+  <frame x="0" y="117" ox="21" oy="62" w="43" h="63"/>
+  <frame x="0" y="56" ox="25" oy="60" w="50" h="61"/>
+  <frame x="0" y="0" ox="25" oy="55" w="50" h="56"/>
+  <frame x="36" y="180" ox="17" oy="62" w="34" h="63"/>
+  <frame x="50" y="56" ox="18" oy="59" w="36" h="60"/>
+  <frame x="50" y="0" ox="19" oy="55" w="38" h="56"/>
+</animation>

@@ -9,13 +9,13 @@ public class Animation extends Asset
 {
 	private String name;
 	private Texture texture;
-	private List<AnimationGroup> groups;
+	private List<AnimationFrame> frames;
 
 	public Animation(String name, Texture texture)
 	{
 		this.name = name;
 		this.texture = texture;
-		groups = new ArrayList<AnimationGroup>();
+		frames = new ArrayList<AnimationFrame>();
 	}
 	
 	public String getName()
@@ -28,43 +28,16 @@ public class Animation extends Asset
 		return texture;
 	}
 	
-	public void addGroup(AnimationGroup group)
+	public void addFrame(AnimationFrame frame)
 	{
-		groups.add(group);
+		frames.add(frame);
 	}
 	
-	public List<AnimationGroup> getGroups()
+	public List<AnimationFrame> getFrames()
 	{
-		return groups;
+		return frames;
 	}
 	
-	public static class AnimationGroup
-	{
-		private String name;
-		private List<AnimationFrame> frames;
-		
-		public AnimationGroup(String name)
-		{
-			this.name = name;
-			frames = new ArrayList<AnimationFrame>();
-		}
-		
-		public void addFrame(AnimationFrame frame)
-		{
-			frames.add(frame);
-		}
-		
-		public List<AnimationFrame> getFrames()
-		{
-			return frames;
-		}
-		
-		public String getName()
-		{
-			return name;
-		}
-	}
-
 	public static class AnimationFrame
 	{
 		public int x;

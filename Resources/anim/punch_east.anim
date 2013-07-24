@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="punch_east" file="punch_east.png">
+  <frame x="0" y="0" ox="24" oy="58" w="56" h="52"/>
+  <frame x="0" y="52" ox="23" oy="62" w="50" h="56"/>
+  <frame x="0" y="108" ox="23" oy="66" w="47" h="60"/>
+  <frame x="0" y="168" ox="22" oy="69" w="44" h="63"/>
+  <frame x="0" y="231" ox="22" oy="70" w="42" h="64"/>
+  <frame x="0" y="295" ox="21" oy="70" w="40" h="67"/>
+  <frame x="0" y="362" ox="21" oy="69" w="38" h="70"/>
+  <frame x="0" y="432" ox="24" oy="67" w="38" h="70"/>
+  <frame x="0" y="502" ox="24" oy="68" w="37" h="73"/>
+  <frame x="0" y="575" ox="24" oy="69" w="36" h="73"/>
+</animation>

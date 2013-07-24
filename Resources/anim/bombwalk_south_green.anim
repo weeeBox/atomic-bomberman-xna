@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="bombwalk_south_green" file="bombwalk_south_green.png">
+  <frame x="56" y="746" ox="27" oy="106" w="56" h="110"/>
+  <frame x="0" y="858" ox="27" oy="106" w="56" h="107"/>
+  <frame x="0" y="746" ox="27" oy="104" w="56" h="112"/>
+  <frame x="56" y="506" ox="28" oy="109" w="56" h="119"/>
+  <frame x="0" y="506" ox="27" oy="111" w="56" h="121"/>
+  <frame x="0" y="256" ox="27" oy="116" w="56" h="125"/>
+  <frame x="56" y="381" ox="26" oy="116" w="58" h="123"/>
+  <frame x="0" y="627" ox="27" oy="117" w="56" h="119"/>
+  <frame x="56" y="627" ox="27" oy="116" w="56" h="119"/>
+  <frame x="56" y="256" ox="26" oy="118" w="58" h="125"/>
+  <frame x="0" y="128" ox="25" oy="118" w="58" h="128"/>
+  <frame x="58" y="128" ox="25" oy="117" w="56" h="127"/>
+  <frame x="0" y="0" ox="26" oy="118" w="59" h="128"/>
+  <frame x="59" y="0" ox="25" oy="119" w="56" h="128"/>
+  <frame x="0" y="381" ox="25" oy="117" w="56" h="125"/>
+</animation>

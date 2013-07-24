@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="punch_north_green" file="punch_north_green.png">
+  <frame x="0" y="59" ox="22" oy="58" w="35" h="59"/>
+  <frame x="0" y="0" ox="22" oy="58" w="35" h="59"/>
+  <frame x="35" y="0" ox="21" oy="58" w="34" h="59"/>
+  <frame x="69" y="0" ox="19" oy="58" w="33" h="59"/>
+  <frame x="35" y="59" ox="19" oy="58" w="33" h="59"/>
+  <frame x="68" y="59" ox="18" oy="58" w="32" h="59"/>
+  <frame x="0" y="118" ox="17" oy="58" w="31" h="59"/>
+  <frame x="31" y="118" ox="16" oy="58" w="31" h="59"/>
+  <frame x="62" y="118" ox="16" oy="57" w="32" h="58"/>
+  <frame x="94" y="118" ox="16" oy="57" w="34" h="56"/>
+</animation>

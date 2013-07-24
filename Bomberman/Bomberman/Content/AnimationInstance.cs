@@ -16,8 +16,7 @@ namespace Bomberman.Content
             Looped,
         }
 
-        private AnimationGroup m_Group;
-        private TextureImage m_Texture;
+        private Animation m_Animation;
 
         private float m_FrameTime;
         private int m_FrameIndex;
@@ -25,21 +24,19 @@ namespace Bomberman.Content
 
         private Mode m_Mode;
 
-        public void Init(AnimationGroup group, TextureImage texture)
+        public void Init(Animation animation)
         {
             Reset();
-
-            m_Group = group;
-            m_Texture = texture;
+            m_Animation = animation;
         }
 
         public void Update(float delta)
         {
             m_FrameTime += delta * m_SpeedMultiplier;
-            if (m_FrameTime >= m_Group.frames[m_FrameIndex].duration) // TODO: handle skipped frames
+            if (m_FrameTime >= m_Animation.frames[m_FrameIndex].duration) // TODO: handle skipped frames
             {
                 m_FrameTime = 0.0f;
-                if (m_FrameIndex == m_Group.frames.Length - 1)
+                if (m_FrameIndex == m_Animation.frames.Length - 1)
                 {
                     if (m_Mode == Mode.Looped)
                         m_FrameIndex = 0;
@@ -55,20 +52,19 @@ namespace Bomberman.Content
         {
             m_FrameIndex = 0;
             m_FrameTime = 0.0f;
-            m_Group = null;
-            m_Texture = null;
+            m_Animation = null;
             m_SpeedMultiplier = 1.0f;
             m_Mode = Mode.Looped;
         }
 
-        public AnimationGroup Group
+        public Animation Animation
         {
-            get { return m_Group; }
+            get { return m_Animation; }
         }
 
         public TextureImage Texture
         {
-            get { return m_Texture; }
+            get { return m_Animation.texture; }
         }
 
         public int FrameIndex

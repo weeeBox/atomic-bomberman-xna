@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="die_green_8" file="die_green_8.png">
+  <frame x="173" y="300" ox="18" oy="72" w="37" h="74"/>
+  <frame x="181" y="0" ox="20" oy="72" w="41" h="86"/>
+  <frame x="0" y="108" ox="23" oy="89" w="73" h="104"/>
+  <frame x="89" y="212" ox="26" oy="68" w="78" h="83"/>
+  <frame x="91" y="300" ox="29" oy="62" w="82" h="77"/>
+  <frame x="73" y="108" ox="32" oy="80" w="87" h="95"/>
+  <frame x="160" y="108" ox="34" oy="77" w="89" h="92"/>
+  <frame x="0" y="300" ox="36" oy="66" w="91" h="81"/>
+  <frame x="94" y="0" ox="38" oy="88" w="87" h="103"/>
+  <frame x="0" y="0" ox="39" oy="93" w="94" h="108"/>
+  <frame x="0" y="212" ox="40" oy="73" w="89" h="88"/>
+  <frame x="167" y="212" ox="33" oy="64" w="87" h="79"/>
+</animation>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="kick_east" file="kick_east.png">
+  <frame x="66" y="58" ox="19" oy="60" w="39" h="61"/>
+  <frame x="0" y="58" ox="16" oy="64" w="32" h="65"/>
+  <frame x="0" y="123" ox="20" oy="58" w="41" h="59"/>
+  <frame x="41" y="123" ox="23" oy="58" w="46" h="59"/>
+  <frame x="0" y="0" ox="24" oy="57" w="48" h="58"/>
+  <frame x="32" y="58" ox="17" oy="63" w="34" h="64"/>
+  <frame x="87" y="123" ox="16" oy="58" w="33" h="59"/>
+  <frame x="48" y="0" ox="18" oy="55" w="36" h="56"/>
+</animation>

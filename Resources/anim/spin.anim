@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="spin" file="spin.png">
+  <frame x="0" y="0" ox="19" oy="61" w="39" h="60"/>
+  <frame x="0" y="128" ox="22" oy="66" w="35" h="65"/>
+  <frame x="0" y="60" ox="20" oy="70" w="38" h="68"/>
+  <frame x="0" y="193" ox="13" oy="70" w="33" h="68"/>
+</animation>

@@ -22,7 +22,6 @@ import bc.assets.ContentInfo;
 import bc.assets.ContentWriter;
 import bc.assets.types.Animation;
 import bc.assets.types.Animation.AnimationFrame;
-import bc.assets.types.Animation.AnimationGroup;
 import bc.assets.types.Texture;
 
 public class AnimationInfo extends AssetInfo
@@ -66,10 +65,10 @@ class AnimationImporter extends ContentImporter<AnimationInfo, Animation>
 		String name = attributeString(root, "name");
 		Animation animation = new Animation(name, texture);
 		
-		List<Element> animationElements = root.elements("animation");
-		for (Element animationElement : animationElements)
+		List<Element> frameElements = root.elements("frame");
+		for (Element frameElement : frameElements)
 		{
-			animation.addGroup(readGroup(animationElement));
+			animation.addFrame(readFrame(frameElement));
 		}
 		
 		return animation;
@@ -87,21 +86,6 @@ class AnimationImporter extends ContentImporter<AnimationInfo, Animation>
 		return texture;
 	}
 
-	private AnimationGroup readGroup(Element element)
-	{
-		String name = attributeString(element, "name");
-		
-		AnimationGroup group = new AnimationGroup(name);
-		
-		List<Element> frameElements = element.elements("frame");
-		for (Element frameElement : frameElements)
-		{
-			group.addFrame(readFrame(frameElement));
-		}
-		
-		return group;
-	}
-	
 	private AnimationFrame readFrame(Element element)
 	{
 		AnimationFrame frame = new AnimationFrame();
@@ -157,33 +141,16 @@ class AnimationWriter extends ContentWriter<Animation>
 	protected void write(BinaryWriter output, Animation animation, AssetContext context) throws IOException
 	{
 		output.write(animation.getName());
-
-		List<AnimationGroup> groups = animation.getGroups();
-		write(output, groups);
-		
-		Texture texture = animation.getTexture();
-		write(output, texture);
-	}
-
-	private void write(BinaryWriter output, List<AnimationGroup> groups) throws IOException
-	{
-		output.write(groups.size());
-		for (AnimationGroup group : groups)
-		{
-			write(output, group);
-		}
-	}
-
-	private void write(BinaryWriter output, AnimationGroup group) throws IOException
-	{
-		output.write(group.getName());
-		List<AnimationFrame> frames = group.getFrames();
+		List<AnimationFrame> frames = animation.getFrames();
 		output.write(frames.size());
 		
 		for (AnimationFrame frame : frames)
 		{
 			write(output, frame);
 		}
+		
+		Texture texture = animation.getTexture();
+		write(output, texture);
 	}
 
 	private void write(BinaryWriter output, AnimationFrame frame) throws IOException

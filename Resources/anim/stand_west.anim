@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="stand_west" file="stand_west.png">
+  <frame x="0" y="0" ox="13" oy="63" w="36" h="65"/>
+</animation>

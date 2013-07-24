@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="punch_south" file="punch_south.png">
+  <frame x="0" y="424" ox="17" oy="62" w="37" h="59"/>
+  <frame x="0" y="143" ox="15" oy="66" w="37" h="64"/>
+  <frame x="0" y="75" ox="15" oy="69" w="38" h="68"/>
+  <frame x="0" y="207" ox="15" oy="71" w="37" h="70"/>
+  <frame x="0" y="483" ox="15" oy="72" w="36" h="72"/>
+  <frame x="0" y="555" ox="15" oy="72" w="35" h="73"/>
+  <frame x="0" y="628" ox="16" oy="72" w="35" h="73"/>
+  <frame x="0" y="277" ox="18" oy="71" w="37" h="73"/>
+  <frame x="0" y="350" ox="19" oy="72" w="37" h="74"/>
+  <frame x="0" y="0" ox="20" oy="73" w="38" h="75"/>
+</animation>

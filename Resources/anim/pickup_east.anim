@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="pickup_east" file="pickup_east.png">
+  <frame x="44" y="140" ox="25" oy="67" w="38" h="70"/>
+  <frame x="0" y="67" ox="17" oy="69" w="36" h="73"/>
+  <frame x="36" y="67" ox="10" oy="70" w="33" h="73"/>
+  <frame x="69" y="67" ox="7" oy="70" w="34" h="73"/>
+  <frame x="0" y="140" ox="12" oy="69" w="44" h="72"/>
+  <frame x="0" y="212" ox="20" oy="66" w="55" h="69"/>
+  <frame x="0" y="0" ox="27" oy="64" w="60" h="67"/>
+  <frame x="60" y="0" ox="28" oy="64" w="58" h="67"/>
+  <frame x="55" y="212" ox="28" oy="66" w="52" h="69"/>
+  <frame x="82" y="140" ox="27" oy="66" w="44" h="69"/>
+</animation>

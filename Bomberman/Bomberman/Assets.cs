@@ -36,114 +36,152 @@ namespace Assets
 		public const int gfx_powerups_trig = 24;
 		public const int gfx_powerups_spooge = 25;
 		public const int gfx_powerups_random = 26;
-		public const int anim_bombs = 27;
-		public const int anim_bwalk1 = 28;
-		public const int anim_bwalk2 = 29;
-		public const int anim_bwalk3 = 30;
-		public const int anim_bwalk4 = 31;
-		public const int anim_corner0 = 32;
-		public const int anim_corner1 = 33;
-		public const int anim_corner2 = 34;
-		public const int anim_corner3 = 35;
-		public const int anim_corner4 = 36;
-		public const int anim_corner5 = 37;
-		public const int anim_corner6 = 38;
-		public const int anim_corner7 = 39;
-		public const int anim_kick = 40;
-		public const int anim_punch = 41;
-		public const int anim_pup1 = 42;
-		public const int anim_pup2 = 43;
-		public const int anim_pup3 = 44;
-		public const int anim_pup4 = 45;
-		public const int anim_stand = 46;
-		public const int anim_triganim = 47;
-		public const int anim_walk = 48;
-		public const int anim_xplode10 = 49;
-		public const int anim_xplode11 = 50;
-		public const int anim_xplode12 = 51;
-		public const int anim_xplode13 = 52;
-		public const int anim_xplode14 = 53;
-		public const int anim_xplode15 = 54;
-		public const int anim_xplode16 = 55;
-		public const int anim_xplode17 = 56;
-		public const int anim_xplode2 = 57;
-		public const int anim_xplode3 = 58;
-		public const int anim_xplode4 = 59;
-		public const int anim_xplode5 = 60;
-		public const int anim_xplode6 = 61;
-		public const int anim_xplode7 = 62;
-		public const int anim_xplode8 = 63;
-		public const int anim_xplode9 = 64;
-		public const int anim_zen = 65;
-		public const int maps_4corners = 66;
-		public const int maps_airchaos = 67;
-		public const int maps_airmail = 68;
-		public const int maps_alleys = 69;
-		public const int maps_alleys2 = 70;
-		public const int maps_antfarm = 71;
-		public const int maps_asylum = 72;
-		public const int maps_back = 73;
-		public const int maps_back2 = 74;
-		public const int maps_basic = 75;
-		public const int maps_basicsml = 76;
-		public const int maps_bman93 = 77;
-		public const int maps_border = 78;
-		public const int maps_bowling = 79;
-		public const int maps_boxed = 80;
-		public const int maps_breakout = 81;
-		public const int maps_bunch = 82;
-		public const int maps_castle = 83;
-		public const int maps_castle2 = 84;
-		public const int maps_chain = 85;
-		public const int maps_chase = 86;
-		public const int maps_checkers = 87;
-		public const int maps_chicane = 88;
-		public const int maps_clear = 89;
-		public const int maps_clearing = 90;
-		public const int maps_confused = 91;
-		public const int maps_cubic = 92;
-		public const int maps_cutter = 93;
-		public const int maps_cutthrot = 94;
-		public const int maps_deadend = 95;
-		public const int maps_diamond = 96;
-		public const int maps_dograce = 97;
-		public const int maps_dome = 98;
-		public const int maps_e_vs_w = 99;
-		public const int maps_fair = 100;
-		public const int maps_fargo = 101;
-		public const int maps_fort = 102;
-		public const int maps_freeway = 103;
-		public const int maps_gridlock = 104;
-		public const int maps_happy = 105;
-		public const int maps_jail = 106;
-		public const int maps_leak = 107;
-		public const int maps_neighbor = 108;
-		public const int maps_neil = 109;
-		public const int maps_n_vs_s = 110;
-		public const int maps_obstacle = 111;
-		public const int maps_og = 112;
-		public const int maps_pattern = 113;
-		public const int maps_pingpong = 114;
-		public const int maps_purist = 115;
-		public const int maps_racer1 = 116;
-		public const int maps_rail1 = 117;
-		public const int maps_railroad = 118;
-		public const int maps_roommate = 119;
-		public const int maps_r_garden = 120;
-		public const int maps_spiral = 121;
-		public const int maps_spread = 122;
-		public const int maps_tennis = 123;
-		public const int maps_thatthis = 124;
-		public const int maps_the_rim = 125;
-		public const int maps_thisthat = 126;
-		public const int maps_tight = 127;
-		public const int maps_toilet = 128;
-		public const int maps_uturn = 129;
-		public const int maps_volley = 130;
-		public const int maps_wallybom = 131;
-		public const int maps_x = 132;
+		public const int anim_bombwalk_east_green = 27;
+		public const int anim_bombwalk_north_green = 28;
+		public const int anim_bombwalk_south_green = 29;
+		public const int anim_bomb_jelly_green = 30;
+		public const int anim_bomb_regular_green = 31;
+		public const int anim_bomb_regular_green_dud = 32;
+		public const int anim_cornerhead_0 = 33;
+		public const int anim_cornerhead_1 = 34;
+		public const int anim_cornerhead_10 = 35;
+		public const int anim_cornerhead_11 = 36;
+		public const int anim_cornerhead_12 = 37;
+		public const int anim_cornerhead_2 = 38;
+		public const int anim_cornerhead_3 = 39;
+		public const int anim_cornerhead_4 = 40;
+		public const int anim_cornerhead_5 = 41;
+		public const int anim_cornerhead_6 = 42;
+		public const int anim_cornerhead_7 = 43;
+		public const int anim_cornerhead_8 = 44;
+		public const int anim_cornerhead_9 = 45;
+		public const int anim_die_green_1 = 46;
+		public const int anim_die_green_10 = 47;
+		public const int anim_die_green_11 = 48;
+		public const int anim_die_green_12 = 49;
+		public const int anim_die_green_13 = 50;
+		public const int anim_die_green_14 = 51;
+		public const int anim_die_green_15 = 52;
+		public const int anim_die_green_16 = 53;
+		public const int anim_die_green_17 = 54;
+		public const int anim_die_green_18 = 55;
+		public const int anim_die_green_19 = 56;
+		public const int anim_die_green_2 = 57;
+		public const int anim_die_green_20 = 58;
+		public const int anim_die_green_21 = 59;
+		public const int anim_die_green_22 = 60;
+		public const int anim_die_green_23 = 61;
+		public const int anim_die_green_24 = 62;
+		public const int anim_die_green_3 = 63;
+		public const int anim_die_green_4 = 64;
+		public const int anim_die_green_5 = 65;
+		public const int anim_die_green_6 = 66;
+		public const int anim_die_green_7 = 67;
+		public const int anim_die_green_8 = 68;
+		public const int anim_die_green_9 = 69;
+		public const int anim_kick_east = 70;
+		public const int anim_kick_north = 71;
+		public const int anim_kick_south = 72;
+		public const int anim_kick_west = 73;
+		public const int anim_pickup_east = 74;
+		public const int anim_pickup_north = 75;
+		public const int anim_pickup_south = 76;
+		public const int anim_pickup_west = 77;
+		public const int anim_punch_east = 78;
+		public const int anim_punch_east_green = 79;
+		public const int anim_punch_north = 80;
+		public const int anim_punch_north_green = 81;
+		public const int anim_punch_south = 82;
+		public const int anim_punch_south_green = 83;
+		public const int anim_punch_west = 84;
+		public const int anim_punch_west_green = 85;
+		public const int anim_spin = 86;
+		public const int anim_standbomb_east = 87;
+		public const int anim_standbomb_north = 88;
+		public const int anim_standbomb_south = 89;
+		public const int anim_standbomb_west = 90;
+		public const int anim_stand_east = 91;
+		public const int anim_stand_north = 92;
+		public const int anim_stand_south = 93;
+		public const int anim_stand_west = 94;
+		public const int anim_Unnamed = 95;
+		public const int anim_walkbomb_east = 96;
+		public const int anim_walkbomb_north = 97;
+		public const int anim_walkbomb_south = 98;
+		public const int anim_walkbomb_west = 99;
+		public const int anim_walk_east = 100;
+		public const int anim_walk_north = 101;
+		public const int anim_walk_south = 102;
+		public const int anim_walk_west = 103;
+		public const int maps_4corners = 104;
+		public const int maps_airchaos = 105;
+		public const int maps_airmail = 106;
+		public const int maps_alleys = 107;
+		public const int maps_alleys2 = 108;
+		public const int maps_antfarm = 109;
+		public const int maps_asylum = 110;
+		public const int maps_back = 111;
+		public const int maps_back2 = 112;
+		public const int maps_basic = 113;
+		public const int maps_basicsml = 114;
+		public const int maps_bman93 = 115;
+		public const int maps_border = 116;
+		public const int maps_bowling = 117;
+		public const int maps_boxed = 118;
+		public const int maps_breakout = 119;
+		public const int maps_bunch = 120;
+		public const int maps_castle = 121;
+		public const int maps_castle2 = 122;
+		public const int maps_chain = 123;
+		public const int maps_chase = 124;
+		public const int maps_checkers = 125;
+		public const int maps_chicane = 126;
+		public const int maps_clear = 127;
+		public const int maps_clearing = 128;
+		public const int maps_confused = 129;
+		public const int maps_cubic = 130;
+		public const int maps_cutter = 131;
+		public const int maps_cutthrot = 132;
+		public const int maps_deadend = 133;
+		public const int maps_diamond = 134;
+		public const int maps_dograce = 135;
+		public const int maps_dome = 136;
+		public const int maps_e_vs_w = 137;
+		public const int maps_fair = 138;
+		public const int maps_fargo = 139;
+		public const int maps_fort = 140;
+		public const int maps_freeway = 141;
+		public const int maps_gridlock = 142;
+		public const int maps_happy = 143;
+		public const int maps_jail = 144;
+		public const int maps_leak = 145;
+		public const int maps_neighbor = 146;
+		public const int maps_neil = 147;
+		public const int maps_n_vs_s = 148;
+		public const int maps_obstacle = 149;
+		public const int maps_og = 150;
+		public const int maps_pattern = 151;
+		public const int maps_pingpong = 152;
+		public const int maps_purist = 153;
+		public const int maps_racer1 = 154;
+		public const int maps_rail1 = 155;
+		public const int maps_railroad = 156;
+		public const int maps_roommate = 157;
+		public const int maps_r_garden = 158;
+		public const int maps_spiral = 159;
+		public const int maps_spread = 160;
+		public const int maps_tennis = 161;
+		public const int maps_thatthis = 162;
+		public const int maps_the_rim = 163;
+		public const int maps_thisthat = 164;
+		public const int maps_tight = 165;
+		public const int maps_toilet = 166;
+		public const int maps_uturn = 167;
+		public const int maps_volley = 168;
+		public const int maps_wallybom = 169;
+		public const int maps_x = 170;
 		// total resources count
-		public const int RES_COUNT = 133;
+		public const int RES_COUNT = 171;
 		
 		
 		public enum Packs
@@ -183,45 +221,83 @@ namespace Assets
 				new AssetLoadInfo(gfx_powerups_trig, typeof(TextureImage), "gfx\\powerups\\trig.png"),
 				new AssetLoadInfo(gfx_powerups_spooge, typeof(TextureImage), "gfx\\powerups\\spooge.png"),
 				new AssetLoadInfo(gfx_powerups_random, typeof(TextureImage), "gfx\\powerups\\random.png"),
-				new AssetLoadInfo(anim_bombs, typeof(Animation), "anim\\bombs.anim"),
-				new AssetLoadInfo(anim_bwalk1, typeof(Animation), "anim\\bwalk1.anim"),
-				new AssetLoadInfo(anim_bwalk2, typeof(Animation), "anim\\bwalk2.anim"),
-				new AssetLoadInfo(anim_bwalk3, typeof(Animation), "anim\\bwalk3.anim"),
-				new AssetLoadInfo(anim_bwalk4, typeof(Animation), "anim\\bwalk4.anim"),
-				new AssetLoadInfo(anim_corner0, typeof(Animation), "anim\\corner0.anim"),
-				new AssetLoadInfo(anim_corner1, typeof(Animation), "anim\\corner1.anim"),
-				new AssetLoadInfo(anim_corner2, typeof(Animation), "anim\\corner2.anim"),
-				new AssetLoadInfo(anim_corner3, typeof(Animation), "anim\\corner3.anim"),
-				new AssetLoadInfo(anim_corner4, typeof(Animation), "anim\\corner4.anim"),
-				new AssetLoadInfo(anim_corner5, typeof(Animation), "anim\\corner5.anim"),
-				new AssetLoadInfo(anim_corner6, typeof(Animation), "anim\\corner6.anim"),
-				new AssetLoadInfo(anim_corner7, typeof(Animation), "anim\\corner7.anim"),
-				new AssetLoadInfo(anim_kick, typeof(Animation), "anim\\kick.anim"),
-				new AssetLoadInfo(anim_punch, typeof(Animation), "anim\\punch.anim"),
-				new AssetLoadInfo(anim_pup1, typeof(Animation), "anim\\pup1.anim"),
-				new AssetLoadInfo(anim_pup2, typeof(Animation), "anim\\pup2.anim"),
-				new AssetLoadInfo(anim_pup3, typeof(Animation), "anim\\pup3.anim"),
-				new AssetLoadInfo(anim_pup4, typeof(Animation), "anim\\pup4.anim"),
-				new AssetLoadInfo(anim_stand, typeof(Animation), "anim\\stand.anim"),
-				new AssetLoadInfo(anim_triganim, typeof(Animation), "anim\\triganim.anim"),
-				new AssetLoadInfo(anim_walk, typeof(Animation), "anim\\walk.anim"),
-				new AssetLoadInfo(anim_xplode10, typeof(Animation), "anim\\xplode10.anim"),
-				new AssetLoadInfo(anim_xplode11, typeof(Animation), "anim\\xplode11.anim"),
-				new AssetLoadInfo(anim_xplode12, typeof(Animation), "anim\\xplode12.anim"),
-				new AssetLoadInfo(anim_xplode13, typeof(Animation), "anim\\xplode13.anim"),
-				new AssetLoadInfo(anim_xplode14, typeof(Animation), "anim\\xplode14.anim"),
-				new AssetLoadInfo(anim_xplode15, typeof(Animation), "anim\\xplode15.anim"),
-				new AssetLoadInfo(anim_xplode16, typeof(Animation), "anim\\xplode16.anim"),
-				new AssetLoadInfo(anim_xplode17, typeof(Animation), "anim\\xplode17.anim"),
-				new AssetLoadInfo(anim_xplode2, typeof(Animation), "anim\\xplode2.anim"),
-				new AssetLoadInfo(anim_xplode3, typeof(Animation), "anim\\xplode3.anim"),
-				new AssetLoadInfo(anim_xplode4, typeof(Animation), "anim\\xplode4.anim"),
-				new AssetLoadInfo(anim_xplode5, typeof(Animation), "anim\\xplode5.anim"),
-				new AssetLoadInfo(anim_xplode6, typeof(Animation), "anim\\xplode6.anim"),
-				new AssetLoadInfo(anim_xplode7, typeof(Animation), "anim\\xplode7.anim"),
-				new AssetLoadInfo(anim_xplode8, typeof(Animation), "anim\\xplode8.anim"),
-				new AssetLoadInfo(anim_xplode9, typeof(Animation), "anim\\xplode9.anim"),
-				new AssetLoadInfo(anim_zen, typeof(Animation), "anim\\zen.anim"),
+				new AssetLoadInfo(anim_bombwalk_east_green, typeof(Animation), "anim\\bombwalk_east_green.anim"),
+				new AssetLoadInfo(anim_bombwalk_north_green, typeof(Animation), "anim\\bombwalk_north_green.anim"),
+				new AssetLoadInfo(anim_bombwalk_south_green, typeof(Animation), "anim\\bombwalk_south_green.anim"),
+				new AssetLoadInfo(anim_bomb_jelly_green, typeof(Animation), "anim\\bomb_jelly_green.anim"),
+				new AssetLoadInfo(anim_bomb_regular_green, typeof(Animation), "anim\\bomb_regular_green.anim"),
+				new AssetLoadInfo(anim_bomb_regular_green_dud, typeof(Animation), "anim\\bomb_regular_green_dud.anim"),
+				new AssetLoadInfo(anim_cornerhead_0, typeof(Animation), "anim\\cornerhead_0.anim"),
+				new AssetLoadInfo(anim_cornerhead_1, typeof(Animation), "anim\\cornerhead_1.anim"),
+				new AssetLoadInfo(anim_cornerhead_10, typeof(Animation), "anim\\cornerhead_10.anim"),
+				new AssetLoadInfo(anim_cornerhead_11, typeof(Animation), "anim\\cornerhead_11.anim"),
+				new AssetLoadInfo(anim_cornerhead_12, typeof(Animation), "anim\\cornerhead_12.anim"),
+				new AssetLoadInfo(anim_cornerhead_2, typeof(Animation), "anim\\cornerhead_2.anim"),
+				new AssetLoadInfo(anim_cornerhead_3, typeof(Animation), "anim\\cornerhead_3.anim"),
+				new AssetLoadInfo(anim_cornerhead_4, typeof(Animation), "anim\\cornerhead_4.anim"),
+				new AssetLoadInfo(anim_cornerhead_5, typeof(Animation), "anim\\cornerhead_5.anim"),
+				new AssetLoadInfo(anim_cornerhead_6, typeof(Animation), "anim\\cornerhead_6.anim"),
+				new AssetLoadInfo(anim_cornerhead_7, typeof(Animation), "anim\\cornerhead_7.anim"),
+				new AssetLoadInfo(anim_cornerhead_8, typeof(Animation), "anim\\cornerhead_8.anim"),
+				new AssetLoadInfo(anim_cornerhead_9, typeof(Animation), "anim\\cornerhead_9.anim"),
+				new AssetLoadInfo(anim_die_green_1, typeof(Animation), "anim\\die_green_1.anim"),
+				new AssetLoadInfo(anim_die_green_10, typeof(Animation), "anim\\die_green_10.anim"),
+				new AssetLoadInfo(anim_die_green_11, typeof(Animation), "anim\\die_green_11.anim"),
+				new AssetLoadInfo(anim_die_green_12, typeof(Animation), "anim\\die_green_12.anim"),
+				new AssetLoadInfo(anim_die_green_13, typeof(Animation), "anim\\die_green_13.anim"),
+				new AssetLoadInfo(anim_die_green_14, typeof(Animation), "anim\\die_green_14.anim"),
+				new AssetLoadInfo(anim_die_green_15, typeof(Animation), "anim\\die_green_15.anim"),
+				new AssetLoadInfo(anim_die_green_16, typeof(Animation), "anim\\die_green_16.anim"),
+				new AssetLoadInfo(anim_die_green_17, typeof(Animation), "anim\\die_green_17.anim"),
+				new AssetLoadInfo(anim_die_green_18, typeof(Animation), "anim\\die_green_18.anim"),
+				new AssetLoadInfo(anim_die_green_19, typeof(Animation), "anim\\die_green_19.anim"),
+				new AssetLoadInfo(anim_die_green_2, typeof(Animation), "anim\\die_green_2.anim"),
+				new AssetLoadInfo(anim_die_green_20, typeof(Animation), "anim\\die_green_20.anim"),
+				new AssetLoadInfo(anim_die_green_21, typeof(Animation), "anim\\die_green_21.anim"),
+				new AssetLoadInfo(anim_die_green_22, typeof(Animation), "anim\\die_green_22.anim"),
+				new AssetLoadInfo(anim_die_green_23, typeof(Animation), "anim\\die_green_23.anim"),
+				new AssetLoadInfo(anim_die_green_24, typeof(Animation), "anim\\die_green_24.anim"),
+				new AssetLoadInfo(anim_die_green_3, typeof(Animation), "anim\\die_green_3.anim"),
+				new AssetLoadInfo(anim_die_green_4, typeof(Animation), "anim\\die_green_4.anim"),
+				new AssetLoadInfo(anim_die_green_5, typeof(Animation), "anim\\die_green_5.anim"),
+				new AssetLoadInfo(anim_die_green_6, typeof(Animation), "anim\\die_green_6.anim"),
+				new AssetLoadInfo(anim_die_green_7, typeof(Animation), "anim\\die_green_7.anim"),
+				new AssetLoadInfo(anim_die_green_8, typeof(Animation), "anim\\die_green_8.anim"),
+				new AssetLoadInfo(anim_die_green_9, typeof(Animation), "anim\\die_green_9.anim"),
+				new AssetLoadInfo(anim_kick_east, typeof(Animation), "anim\\kick_east.anim"),
+				new AssetLoadInfo(anim_kick_north, typeof(Animation), "anim\\kick_north.anim"),
+				new AssetLoadInfo(anim_kick_south, typeof(Animation), "anim\\kick_south.anim"),
+				new AssetLoadInfo(anim_kick_west, typeof(Animation), "anim\\kick_west.anim"),
+				new AssetLoadInfo(anim_pickup_east, typeof(Animation), "anim\\pickup_east.anim"),
+				new AssetLoadInfo(anim_pickup_north, typeof(Animation), "anim\\pickup_north.anim"),
+				new AssetLoadInfo(anim_pickup_south, typeof(Animation), "anim\\pickup_south.anim"),
+				new AssetLoadInfo(anim_pickup_west, typeof(Animation), "anim\\pickup_west.anim"),
+				new AssetLoadInfo(anim_punch_east, typeof(Animation), "anim\\punch_east.anim"),
+				new AssetLoadInfo(anim_punch_east_green, typeof(Animation), "anim\\punch_east_green.anim"),
+				new AssetLoadInfo(anim_punch_north, typeof(Animation), "anim\\punch_north.anim"),
+				new AssetLoadInfo(anim_punch_north_green, typeof(Animation), "anim\\punch_north_green.anim"),
+				new AssetLoadInfo(anim_punch_south, typeof(Animation), "anim\\punch_south.anim"),
+				new AssetLoadInfo(anim_punch_south_green, typeof(Animation), "anim\\punch_south_green.anim"),
+				new AssetLoadInfo(anim_punch_west, typeof(Animation), "anim\\punch_west.anim"),
+				new AssetLoadInfo(anim_punch_west_green, typeof(Animation), "anim\\punch_west_green.anim"),
+				new AssetLoadInfo(anim_spin, typeof(Animation), "anim\\spin.anim"),
+				new AssetLoadInfo(anim_standbomb_east, typeof(Animation), "anim\\standbomb_east.anim"),
+				new AssetLoadInfo(anim_standbomb_north, typeof(Animation), "anim\\standbomb_north.anim"),
+				new AssetLoadInfo(anim_standbomb_south, typeof(Animation), "anim\\standbomb_south.anim"),
+				new AssetLoadInfo(anim_standbomb_west, typeof(Animation), "anim\\standbomb_west.anim"),
+				new AssetLoadInfo(anim_stand_east, typeof(Animation), "anim\\stand_east.anim"),
+				new AssetLoadInfo(anim_stand_north, typeof(Animation), "anim\\stand_north.anim"),
+				new AssetLoadInfo(anim_stand_south, typeof(Animation), "anim\\stand_south.anim"),
+				new AssetLoadInfo(anim_stand_west, typeof(Animation), "anim\\stand_west.anim"),
+				new AssetLoadInfo(anim_Unnamed, typeof(Animation), "anim\\Unnamed.anim"),
+				new AssetLoadInfo(anim_walkbomb_east, typeof(Animation), "anim\\walkbomb_east.anim"),
+				new AssetLoadInfo(anim_walkbomb_north, typeof(Animation), "anim\\walkbomb_north.anim"),
+				new AssetLoadInfo(anim_walkbomb_south, typeof(Animation), "anim\\walkbomb_south.anim"),
+				new AssetLoadInfo(anim_walkbomb_west, typeof(Animation), "anim\\walkbomb_west.anim"),
+				new AssetLoadInfo(anim_walk_east, typeof(Animation), "anim\\walk_east.anim"),
+				new AssetLoadInfo(anim_walk_north, typeof(Animation), "anim\\walk_north.anim"),
+				new AssetLoadInfo(anim_walk_south, typeof(Animation), "anim\\walk_south.anim"),
+				new AssetLoadInfo(anim_walk_west, typeof(Animation), "anim\\walk_west.anim"),
 				new AssetLoadInfo(maps_4corners, typeof(Scheme), "maps\\4corners.sch"),
 				new AssetLoadInfo(maps_airchaos, typeof(Scheme), "maps\\airchaos.sch"),
 				new AssetLoadInfo(maps_airmail, typeof(Scheme), "maps\\airmail.sch"),

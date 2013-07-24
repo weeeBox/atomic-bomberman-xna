@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="kick_south" file="kick_south.png">
+  <frame x="0" y="261" ox="20" oy="64" w="40" h="65"/>
+  <frame x="0" y="0" ox="23" oy="66" w="46" h="67"/>
+  <frame x="0" y="128" ox="21" oy="66" w="42" h="67"/>
+  <frame x="0" y="195" ox="21" oy="65" w="42" h="66"/>
+  <frame x="0" y="389" ox="18" oy="64" w="36" h="65"/>
+  <frame x="0" y="454" ox="17" oy="68" w="34" h="69"/>
+  <frame x="0" y="326" ox="18" oy="62" w="37" h="63"/>
+  <frame x="0" y="67" ox="21" oy="60" w="43" h="61"/>
+</animation>

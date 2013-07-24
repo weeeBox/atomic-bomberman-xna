@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="punch_west" file="punch_west.png">
+  <frame x="0" y="0" ox="31" oy="57" w="53" h="54"/>
+  <frame x="0" y="54" ox="27" oy="62" w="49" h="60"/>
+  <frame x="43" y="114" ox="24" oy="66" w="45" h="64"/>
+  <frame x="0" y="114" ox="22" oy="68" w="43" h="67"/>
+  <frame x="0" y="181" ox="20" oy="69" w="40" h="68"/>
+  <frame x="0" y="249" ox="18" oy="69" w="38" h="69"/>
+  <frame x="38" y="249" ox="15" oy="68" w="36" h="69"/>
+  <frame x="40" y="181" ox="14" oy="67" w="38" h="68"/>
+  <frame x="36" y="318" ox="13" oy="68" w="37" h="70"/>
+  <frame x="0" y="318" ox="12" oy="69" w="36" h="72"/>
+</animation>

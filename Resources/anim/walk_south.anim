@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="walk_south" file="walk_south.png">
+  <frame x="75" y="0" ox="19" oy="73" w="38" h="71"/>
+  <frame x="37" y="288" ox="19" oy="70" w="38" h="68"/>
+  <frame x="0" y="217" ox="20" oy="72" w="37" h="71"/>
+  <frame x="38" y="0" ox="19" oy="71" w="37" h="73"/>
+  <frame x="37" y="217" ox="19" oy="70" w="37" h="71"/>
+  <frame x="38" y="73" ox="21" oy="70" w="37" h="72"/>
+  <frame x="75" y="73" ox="20" oy="68" w="37" h="72"/>
+  <frame x="74" y="145" ox="20" oy="72" w="38" h="70"/>
+  <frame x="75" y="288" ox="20" oy="70" w="38" h="68"/>
+  <frame x="0" y="73" ox="20" oy="70" w="38" h="72"/>
+  <frame x="0" y="145" ox="19" oy="71" w="37" h="72"/>
+  <frame x="74" y="217" ox="20" oy="71" w="37" h="71"/>
+  <frame x="0" y="288" ox="18" oy="70" w="37" h="70"/>
+  <frame x="37" y="145" ox="19" oy="71" w="37" h="72"/>
+  <frame x="0" y="0" ox="20" oy="72" w="38" h="73"/>
+</animation>

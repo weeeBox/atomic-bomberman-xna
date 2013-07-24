@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="walkbomb_west" file="walkbomb_west.png">
+  <frame x="0" y="784" ox="13" oy="66" w="36" h="65"/>
+  <frame x="0" y="519" ox="13" oy="65" w="36" h="66"/>
+  <frame x="0" y="585" ox="13" oy="65" w="36" h="67"/>
+  <frame x="0" y="387" ox="16" oy="65" w="40" h="66"/>
+  <frame x="0" y="128" ox="18" oy="64" w="43" h="65"/>
+  <frame x="0" y="258" ox="17" oy="65" w="42" h="65"/>
+  <frame x="0" y="652" ox="13" oy="66" w="36" h="66"/>
+  <frame x="0" y="849" ox="13" oy="67" w="35" h="67"/>
+  <frame x="0" y="916" ox="13" oy="67" w="34" h="68"/>
+  <frame x="0" y="718" ox="14" oy="65" w="36" h="66"/>
+  <frame x="0" y="323" ox="19" oy="63" w="41" h="64"/>
+  <frame x="0" y="64" ox="21" oy="63" w="44" h="64"/>
+  <frame x="0" y="0" ox="20" oy="63" w="45" h="64"/>
+  <frame x="0" y="193" ox="18" oy="64" w="43" h="65"/>
+  <frame x="0" y="453" ox="14" oy="66" w="38" h="66"/>
+</animation>
