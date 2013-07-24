@@ -136,44 +136,44 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        public static void ScheduleTimer(TimerCallback callback)
+        public static Timer ScheduleTimer(TimerCallback callback)
         {
-            ScheduleTimer(callback, 0.0f);
+            return ScheduleTimer(callback, 0.0f);
         }
 
-        public static void ScheduleTimer(TimerCallback callback, float delay)
+        public static Timer ScheduleTimer(TimerCallback callback, float delay)
         {
-            ScheduleTimer(callback, delay, false);
+            return ScheduleTimer(callback, delay, false);
         }
 
-        public static void ScheduleTimer(TimerCallback callback, float delay, Boolean repeated)
+        public static Timer ScheduleTimer(TimerCallback callback, float delay, Boolean repeated)
         {
-            ScheduleTimer(callback, delay, repeated ? 0 : 1);
+            return ScheduleTimer(callback, delay, repeated ? 0 : 1);
         }
 
-        public static void ScheduleTimerOnce(TimerCallback callback)
+        public static Timer ScheduleTimerOnce(TimerCallback callback)
         {
-            ScheduleTimerOnce(callback, 0.0f);
+            return ScheduleTimerOnce(callback, 0.0f);
         }
 
-        public static void ScheduleTimerOnce(TimerCallback callback, float delay)
+        public static Timer ScheduleTimerOnce(TimerCallback callback, float delay)
         {
-            ScheduleTimerOnce(callback, delay, false);
+            return ScheduleTimerOnce(callback, delay, false);
         }
 
-        public static void ScheduleTimerOnce(TimerCallback callback, float delay, Boolean repeated)
+        public static Timer ScheduleTimerOnce(TimerCallback callback, float delay, Boolean repeated)
         {
-            ScheduleTimerOnce(callback, delay, repeated ? 0 : 1);
+            return ScheduleTimerOnce(callback, delay, repeated ? 0 : 1);
         }
 
-        public static void ScheduleTimer(TimerCallback callback, float delay, int numRepeats)
+        public static Timer ScheduleTimer(TimerCallback callback, float delay, int numRepeats)
         {
-            sharedApplication.timerManager.Schedule(callback, delay, numRepeats);
+            return sharedApplication.timerManager.Schedule(callback, delay, numRepeats);
         }
 
-        public static void ScheduleTimerOnce(TimerCallback callback, float delay, int numRepeats)
+        public static Timer ScheduleTimerOnce(TimerCallback callback, float delay, int numRepeats)
         {
-            sharedApplication.timerManager.ScheduleOnce(callback, delay, numRepeats);
+            return sharedApplication.timerManager.ScheduleOnce(callback, delay, numRepeats);
         }
 
         public static void CancelTimer(TimerCallback callback)

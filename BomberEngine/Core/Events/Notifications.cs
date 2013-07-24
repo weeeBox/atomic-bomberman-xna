@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Util;
 using BomberEngine.Debugging;
+using BomberEngine.Game;
 
 namespace BomberEngine.Core.Events
 {
@@ -12,11 +13,12 @@ namespace BomberEngine.Core.Events
     public class Notifications
     {
         private IDictionary<String, NotificationDelegateList> m_registerMap;
-        private FastLinkedList<Notification> m_notificationQueue;
+        private ObjectsPool<Notification> m_notificatoinsPool;
 
         public Notifications()
         {
             m_registerMap = new Dictionary<String, NotificationDelegateList>();
+            m_notificatoinsPool = new ObjectsPool<Notification>();
         }
 
         public void Register(String name, NotificationDelegate del)
@@ -67,20 +69,29 @@ namespace BomberEngine.Core.Events
             return removed;
         }
 
-        public void Post(Notification notification)
+        public void Post(String name, Object data)
         {
-            if (m_notificationQueue == null)
+            NotificationDelegateList list = FindList(name);
+            if (list != null && list.Count() > 0)
             {
-                m_notificationQueue = new FastLinkedList<Notification>();
+                Notification notification = m_notificatoinsPool.NextObject();
+                notification.Init(name, data);
+
+                SchedulePost(notification);
             }
-            m_notificationQueue.AddLastItem(notification);
         }
 
-        public void Cancel(Notification notification)
-        {
-            if (m_notificationQueue != null)
+        public void PostImmediately(String name, Object data)
+        {   
+            NotificationDelegateList list = FindList(name);
+            if (list != null && list.Count() > 0)
             {
-                m_notificationQueue.RemoveItem(notification);
+                Notification notification = m_notificatoinsPool.NextObject();
+                notification.Init(name, data);
+
+                list.NotifyDelegates(notification);
+
+                m_notificatoinsPool.RecycleObject(notification);
             }
         }
 
@@ -92,6 +103,7 @@ namespace BomberEngine.Core.Events
             {
                 list.NotifyDelegates(notification);
             }
+            m_notificatoinsPool.RecycleObject(notification);
         }
 
         private NotificationDelegateList FindList(String name)
@@ -104,6 +116,25 @@ namespace BomberEngine.Core.Events
 
             return null;
         }
+
+        private void SchedulePost(Notification notification)
+        {
+            Timer timer = Application.ScheduleTimerOnce(PostCallback);
+            timer.userData = notification;
+        }
+
+        private void CancelScheduledPosts()
+        {
+            Application.CancelTimer(PostCallback);
+        }
+
+        private void PostCallback(Timer timer)
+        {
+            Notification notification = timer.userData as Notification;
+            Debug.Assert(notification != null);
+
+            PostImmediately(notification);
+        }
     }
 
     public class Notification : ObjectPoolEntry<Notification>
@@ -111,9 +142,10 @@ namespace BomberEngine.Core.Events
         private String m_name;
         private Object m_data;
 
-        internal void Init(String name)
+        internal void Init(String name, Object data)
         {
             m_name = name;
+            m_data = data;
         }
 
         protected override void OnRecycleObject()

@@ -29,6 +29,7 @@ namespace BomberEngine.Core
         internal double scheduleTime;
 
         public String name;
+        public Object userData;
 
         public void Cancel()
         {   
@@ -117,6 +118,7 @@ namespace BomberEngine.Core
             scheduleTime = 0;
             cancelled = false;
             name = null;
+            userData = null;
         }
 
         #endregion

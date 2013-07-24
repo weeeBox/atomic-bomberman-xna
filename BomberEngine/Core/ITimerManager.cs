@@ -3,20 +3,20 @@ namespace BomberEngine.Core
 {
     public interface ITimerManager : IUpdatable, IDestroyable
     {   
-        void Schedule(TimerCallback callback);
-        void Schedule(TimerCallback callback, float delay);
-        void Schedule(TimerCallback callback, float delay, bool repeated);
-        void Schedule(TimerCallback callback, float delay, bool repeated, string name);
-        void Schedule(TimerCallback callback, float delay, int numRepeats);
-        void Schedule(TimerCallback callback, float delay, int numRepeats, string name);
-        void Schedule(TimerCallback callback, float delay, string name);
-        void ScheduleOnce(TimerCallback callback);
-        void ScheduleOnce(TimerCallback callback, float delay);
-        void ScheduleOnce(TimerCallback callback, float delay, bool repeated);
-        void ScheduleOnce(TimerCallback callback, float delay, bool repeated, string name);
-        void ScheduleOnce(TimerCallback callback, float delay, int numRepeats);
-        void ScheduleOnce(TimerCallback callback, float delay, int numRepeats, string name);
-        void ScheduleOnce(TimerCallback callback, float delay, string name);
+        Timer Schedule(TimerCallback callback);
+        Timer Schedule(TimerCallback callback, float delay);
+        Timer Schedule(TimerCallback callback, float delay, bool repeated);
+        Timer Schedule(TimerCallback callback, float delay, bool repeated, string name);
+        Timer Schedule(TimerCallback callback, float delay, int numRepeats);
+        Timer Schedule(TimerCallback callback, float delay, int numRepeats, string name);
+        Timer Schedule(TimerCallback callback, float delay, string name);
+        Timer ScheduleOnce(TimerCallback callback);
+        Timer ScheduleOnce(TimerCallback callback, float delay);
+        Timer ScheduleOnce(TimerCallback callback, float delay, bool repeated);
+        Timer ScheduleOnce(TimerCallback callback, float delay, bool repeated, string name);
+        Timer ScheduleOnce(TimerCallback callback, float delay, int numRepeats);
+        Timer ScheduleOnce(TimerCallback callback, float delay, int numRepeats, string name);
+        Timer ScheduleOnce(TimerCallback callback, float delay, string name);
 
         void Cancel(TimerCallback callback);
         void Cancel(string name);
