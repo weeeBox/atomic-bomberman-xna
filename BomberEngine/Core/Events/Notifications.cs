@@ -10,15 +10,28 @@ namespace BomberEngine.Core.Events
 {
     public delegate void NotificationDelegate(Notification notification);
 
-    public class Notifications
+    public class Notifications : IDestroyable
     {
+        private TimerManager m_timerManager;
+
         private IDictionary<String, NotificationDelegateList> m_registerMap;
         private ObjectsPool<Notification> m_notificatoinsPool;
 
         public Notifications()
+            : this(Application.TimerManager())
         {
+        }
+
+        public Notifications(TimerManager timerManager)
+        {
+            m_timerManager = timerManager;
             m_registerMap = new Dictionary<String, NotificationDelegateList>();
             m_notificatoinsPool = new ObjectsPool<Notification>();
+        }
+
+        public void Destroy()
+        {
+            CancelScheduledPosts();
         }
 
         public void Register(String name, NotificationDelegate del)
@@ -119,13 +132,13 @@ namespace BomberEngine.Core.Events
 
         private void SchedulePost(Notification notification)
         {
-            Timer timer = Application.ScheduleTimerOnce(PostCallback);
+            Timer timer = m_timerManager.Schedule(PostCallback);
             timer.userData = notification;
         }
 
         private void CancelScheduledPosts()
         {
-            Application.CancelTimer(PostCallback);
+            m_timerManager.Cancel(PostCallback);
         }
 
         private void PostCallback(Timer timer)

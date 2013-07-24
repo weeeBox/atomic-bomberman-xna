@@ -255,6 +255,11 @@ namespace BomberEngine.Game
             return sharedApplication.rootController;
         }
 
+        public static TimerManager TimerManager()
+        {
+            return sharedApplication.timerManager;
+        }
+
         public bool IsRunning()
         {
             return !stoped;
