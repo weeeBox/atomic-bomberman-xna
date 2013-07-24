@@ -110,6 +110,7 @@
     <Compile Include="Core\Events\MouseEvent.cs" />
     <Compile Include="Core\Assets\Types\Font.cs" />
     <Compile Include="Core\Assets\Types\VectorFont.cs" />
+    <Compile Include="Core\Events\Notifications.cs" />
     <Compile Include="Core\IDestroyable.cs" />
     <Compile Include="Core\Input\IKeyInputListener.cs" />
     <Compile Include="Core\Input\KeyCode.cs" />
@@ -165,12 +166,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\ArrayUtils.cs" />
     <Compile Include="Util\IBaseCollection.cs" />
-    <Compile Include="Util\ConcurrentList.cs" />
     <Compile Include="Util\Constants.cs" />
-    <Compile Include="Util\FastLinkedList.cs" />
-    <Compile Include="Util\FastLinkedListIterator.cs" />
     <Compile Include="Util\OutResult.cs" />
-    <Compile Include="Util\ListNode.cs" />
     <Compile Include="Util\MathHelp.cs" />
     <Compile Include="Util\ObjectsList.cs" />
     <Compile Include="Util\StringUtils.cs" />

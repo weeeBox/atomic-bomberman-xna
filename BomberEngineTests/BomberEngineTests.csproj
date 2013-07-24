@@ -46,7 +46,6 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FastLinkedListTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimerManagerTests.cs" />
     <Compile Include="SceneFocusTests.cs" />

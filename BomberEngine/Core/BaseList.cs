@@ -87,7 +87,7 @@ namespace BomberEngine.Core
 
         protected void ClearRemoved()
         {
-            for (int i = 0; removedCount > 0 && i < list.Count; ++i)
+            for (int i = list.Count; removedCount > 0 && i >= 0; --i)
             {
                 if (list[i] == nullElement)
                 {
