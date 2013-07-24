@@ -79,6 +79,8 @@ namespace Bomberman.Game.Elements.Players
         {
             base.Reset();
 
+            input.Reset();
+
             SetCell(0, 0);
 
             alive = true;
@@ -150,8 +152,6 @@ namespace Bomberman.Game.Elements.Players
                     OnActionReleased(input, action);
                 }
             }
-
-            input.SaveState();
         }
 
         public void OnActionPressed(PlayerInput playerInput, PlayerAction action)

@@ -128,22 +128,9 @@ namespace Bomberman.Game.Multiplayer
                     int actions = packet.actions;
                     int actionsCount = (int)PlayerAction.Count;
                     for (int i = 0; i < actionsCount; ++i)
-                    {
-                        PlayerAction action = (PlayerAction)i;
-                        if ((actions & (1 << i)) == 0)
-                        {
-                            input.OnActionReleased(action);
-                        }
+                    {   
+                        input.SetActionFlag(i, (actions & (1 << i)) != 0);
                     }
-                    for (int i = 0; i < actionsCount; ++i)
-                    {
-                        PlayerAction action = (PlayerAction)i;
-                        if ((actions & (1 << i)) != 0)
-                        {
-                            input.OnActionPressed(action);
-                        }
-                    }
-
                     break;
                 }
             }

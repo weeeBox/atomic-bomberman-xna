@@ -9,34 +9,23 @@ using BomberEngine.Core.Events;
 
 namespace Bomberman.Game.Elements.Players
 {
-    public class PlayerList : IEventHandler, IResettable
+    public class PlayerList : IResettable
     {
         public List<Player> list;
 
         private TimerManager timerManager;
-        private KeyInputListenerList keyListeners;
 
         public PlayerList(TimerManager timerManager, int capacity)
         {
             this.timerManager = timerManager;
             list = new List<Player>(capacity);
-            
-            keyListeners = new KeyInputListenerList(capacity);
         }
 
         public void Reset()
         {
-            keyListeners.Clear();
-            
             for (int i = 0; i < list.Count; ++i)
             {
-                Player p = list[i];
-
-                p.Reset();
-                if (p.input is IKeyInputListener)
-                {
-                    keyListeners.Add(p.input as IKeyInputListener);
-                }
+                list[i].Reset();
             }
         }
 
@@ -44,11 +33,6 @@ namespace Bomberman.Game.Elements.Players
         {
             Debug.Assert(!list.Contains(player));
             list.Add(player);
-
-            if (player.input is IKeyInputListener)
-            {
-                keyListeners.Add(player.input as IKeyInputListener);
-            }
         }
 
         public void Remove(Player player)
@@ -69,11 +53,6 @@ namespace Bomberman.Game.Elements.Players
             if (removeFromList)
             {
                 list.Remove(player);
-            }
-
-            if (player.input is IKeyInputListener)
-            {
-                keyListeners.Remove(player.input as IKeyInputListener);
             }
         }
 
@@ -96,53 +75,6 @@ namespace Bomberman.Game.Elements.Players
         {
             return list.Count;
         }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region IEventHandler
-
-        public bool HandleEvent(Event evt)
-        {
-            if (evt.code == Event.KEY)
-            {
-                KeyEvent keyEvent = (KeyEvent)evt;
-                if (keyEvent.state == KeyState.Pressed)
-                {
-                    return OnKeyPressed(keyEvent.arg);
-                }
-
-                if (keyEvent.state == KeyState.Repeated)
-                {
-                    return OnKeyRepeated(keyEvent.arg);
-                }
-
-                if (keyEvent.state == KeyState.Released)
-                {
-                    return OnKeyReleased(keyEvent.arg);
-                }
-
-                return false;
-            }
-
-            return false;
-        }
-
-        private bool OnKeyPressed(KeyEventArg arg)
-        {
-            return keyListeners.OnKeyPressed(arg);
-        }
-
-        private bool OnKeyRepeated(KeyEventArg arg)
-        {
-            return keyListeners.OnKeyRepeated(arg);
-        }
-
-        private bool OnKeyReleased(KeyEventArg arg)
-        {
-            return keyListeners.OnKeyReleased(arg);
-        }
-
-        #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 

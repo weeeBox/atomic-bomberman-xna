@@ -18,7 +18,7 @@ using BomberEngine.Core.Events;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class Field : IEventHandler, IUpdatable, IDestroyable, IResettable
+    public class Field : IUpdatable, IDestroyable, IResettable
     {
         private static Field currentField;
 
@@ -267,18 +267,6 @@ namespace Bomberman.Game.Elements.Fields
         private void ShuffleSlots(FieldCellSlot[] array, int size)
         {
             ArrayUtils.Shuffle(array, size);
-        }
-
-        #endregion
-
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region IEventHandler
-
-        public bool HandleEvent(Event evt)
-        {
-            return players.HandleEvent(evt);
         }
 
         #endregion

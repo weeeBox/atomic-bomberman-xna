@@ -267,7 +267,7 @@ namespace Bomberman.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        private static PlayerKeyboardInput[] keyboardInputs;
+        private static PlayerKeyInput[] keyboardInputs;
         private static PlayerGamePadInput[] gamePadInputs;
 
         private PlayerInput CreatePlayerInput(InputType inputType)
@@ -303,24 +303,24 @@ namespace Bomberman.Game
             throw new NotImplementedException("Unsupported input type: " + inputType);
         }
 
-        private PlayerKeyboardInput CreateKeyBoardInput(int index)
+        private PlayerKeyInput CreateKeyBoardInput(int index)
         {
             if (keyboardInputs == null)
             {
-                keyboardInputs = new PlayerKeyboardInput[CVars.sy_maxKeyboards.intValue];
+                keyboardInputs = new PlayerKeyInput[CVars.sy_maxKeyboards.intValue];
             }
 
-            PlayerKeyboardInput input = keyboardInputs[index];
+            PlayerKeyInput input = keyboardInputs[index];
             if (input == null)
             {
-                input = new PlayerKeyboardInput();
+                input = new PlayerKeyInput();
                 keyboardInputs[index] = InitKeyboardInput(index, input);
             }
 
             return input;
         }
 
-        private PlayerKeyboardInput InitKeyboardInput(int index, PlayerKeyboardInput input)
+        private PlayerKeyInput InitKeyboardInput(int index, PlayerKeyInput input)
         {
             // TODO: don't hard code
             switch (index)

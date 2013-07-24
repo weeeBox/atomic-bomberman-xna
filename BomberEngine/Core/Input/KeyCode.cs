@@ -203,47 +203,92 @@ namespace BomberEngine.Core.Input
 
     public class KeyCodeHelper
     {
-        private static Dictionary<Buttons, KeyCode> lookup;
+        private static Dictionary<Buttons, KeyCode> lookup1;
+        private static Dictionary<KeyCode, Buttons> lookup2;
 
         static KeyCodeHelper()
         {
-            lookup = new Dictionary<Buttons, KeyCode>();
-            lookup.Add(Buttons.DPadUp, KeyCode.GP_DPadUp);
-            lookup.Add(Buttons.DPadDown, KeyCode.GP_DPadDown);
-            lookup.Add(Buttons.DPadLeft, KeyCode.GP_DPadLeft);
-            lookup.Add(Buttons.DPadRight, KeyCode.GP_DPadRight);
-            lookup.Add(Buttons.Start, KeyCode.GP_Start);
-            lookup.Add(Buttons.Back, KeyCode.GP_Back);
-            lookup.Add(Buttons.LeftStick, KeyCode.GP_LeftStick);
-            lookup.Add(Buttons.RightStick, KeyCode.GP_RightStick);
-            lookup.Add(Buttons.LeftShoulder, KeyCode.GP_LeftShoulder);
-            lookup.Add(Buttons.RightShoulder, KeyCode.GP_RightShoulder);
-            lookup.Add(Buttons.BigButton, KeyCode.GP_BigButton);
-            lookup.Add(Buttons.A, KeyCode.GP_A);
-            lookup.Add(Buttons.B, KeyCode.GP_B);
-            lookup.Add(Buttons.X, KeyCode.GP_X);
-            lookup.Add(Buttons.Y, KeyCode.GP_Y);
-            lookup.Add(Buttons.LeftThumbstickLeft, KeyCode.GP_LeftThumbstickLeft);
-            lookup.Add(Buttons.RightTrigger, KeyCode.GP_RightTrigger);
-            lookup.Add(Buttons.LeftTrigger, KeyCode.GP_LeftTrigger);
-            lookup.Add(Buttons.RightThumbstickUp, KeyCode.GP_RightThumbstickUp);
-            lookup.Add(Buttons.RightThumbstickDown, KeyCode.GP_RightThumbstickDown);
-            lookup.Add(Buttons.RightThumbstickRight, KeyCode.GP_RightThumbstickRight);
-            lookup.Add(Buttons.RightThumbstickLeft, KeyCode.GP_RightThumbstickLeft);
-            lookup.Add(Buttons.LeftThumbstickUp, KeyCode.GP_LeftThumbstickUp);
-            lookup.Add(Buttons.LeftThumbstickDown, KeyCode.GP_LeftThumbstickDown);
-            lookup.Add(Buttons.LeftThumbstickRight, KeyCode.GP_LeftThumbstickRight);
+            lookup1 = new Dictionary<Buttons, KeyCode>();
+            lookup1.Add(Buttons.DPadUp, KeyCode.GP_DPadUp);
+            lookup1.Add(Buttons.DPadDown, KeyCode.GP_DPadDown);
+            lookup1.Add(Buttons.DPadLeft, KeyCode.GP_DPadLeft);
+            lookup1.Add(Buttons.DPadRight, KeyCode.GP_DPadRight);
+            lookup1.Add(Buttons.Start, KeyCode.GP_Start);
+            lookup1.Add(Buttons.Back, KeyCode.GP_Back);
+            lookup1.Add(Buttons.LeftStick, KeyCode.GP_LeftStick);
+            lookup1.Add(Buttons.RightStick, KeyCode.GP_RightStick);
+            lookup1.Add(Buttons.LeftShoulder, KeyCode.GP_LeftShoulder);
+            lookup1.Add(Buttons.RightShoulder, KeyCode.GP_RightShoulder);
+            lookup1.Add(Buttons.BigButton, KeyCode.GP_BigButton);
+            lookup1.Add(Buttons.A, KeyCode.GP_A);
+            lookup1.Add(Buttons.B, KeyCode.GP_B);
+            lookup1.Add(Buttons.X, KeyCode.GP_X);
+            lookup1.Add(Buttons.Y, KeyCode.GP_Y);
+            lookup1.Add(Buttons.LeftThumbstickLeft, KeyCode.GP_LeftThumbstickLeft);
+            lookup1.Add(Buttons.RightTrigger, KeyCode.GP_RightTrigger);
+            lookup1.Add(Buttons.LeftTrigger, KeyCode.GP_LeftTrigger);
+            lookup1.Add(Buttons.RightThumbstickUp, KeyCode.GP_RightThumbstickUp);
+            lookup1.Add(Buttons.RightThumbstickDown, KeyCode.GP_RightThumbstickDown);
+            lookup1.Add(Buttons.RightThumbstickRight, KeyCode.GP_RightThumbstickRight);
+            lookup1.Add(Buttons.RightThumbstickLeft, KeyCode.GP_RightThumbstickLeft);
+            lookup1.Add(Buttons.LeftThumbstickUp, KeyCode.GP_LeftThumbstickUp);
+            lookup1.Add(Buttons.LeftThumbstickDown, KeyCode.GP_LeftThumbstickDown);
+            lookup1.Add(Buttons.LeftThumbstickRight, KeyCode.GP_LeftThumbstickRight);
+
+            lookup2 = new Dictionary<KeyCode, Buttons>();
+            lookup2.Add(KeyCode.GP_DPadUp, Buttons.DPadUp);
+            lookup2.Add(KeyCode.GP_DPadDown, Buttons.DPadDown);
+            lookup2.Add(KeyCode.GP_DPadLeft, Buttons.DPadLeft);
+            lookup2.Add(KeyCode.GP_DPadRight, Buttons.DPadRight);
+            lookup2.Add(KeyCode.GP_Start, Buttons.Start);
+            lookup2.Add(KeyCode.GP_Back, Buttons.Back);
+            lookup2.Add(KeyCode.GP_LeftStick, Buttons.LeftStick);
+            lookup2.Add(KeyCode.GP_RightStick, Buttons.RightStick);
+            lookup2.Add(KeyCode.GP_LeftShoulder, Buttons.LeftShoulder);
+            lookup2.Add(KeyCode.GP_RightShoulder, Buttons.RightShoulder);
+            lookup2.Add(KeyCode.GP_BigButton, Buttons.BigButton);
+            lookup2.Add(KeyCode.GP_A, Buttons.A);
+            lookup2.Add(KeyCode.GP_B, Buttons.B);
+            lookup2.Add(KeyCode.GP_X, Buttons.X);
+            lookup2.Add(KeyCode.GP_Y, Buttons.Y);
+            lookup2.Add(KeyCode.GP_LeftThumbstickLeft, Buttons.LeftThumbstickLeft);
+            lookup2.Add(KeyCode.GP_RightTrigger, Buttons.RightTrigger);
+            lookup2.Add(KeyCode.GP_LeftTrigger, Buttons.LeftTrigger);
+            lookup2.Add(KeyCode.GP_RightThumbstickUp, Buttons.RightThumbstickUp);
+            lookup2.Add(KeyCode.GP_RightThumbstickDown, Buttons.RightThumbstickDown);
+            lookup2.Add(KeyCode.GP_RightThumbstickRight, Buttons.RightThumbstickRight);
+            lookup2.Add(KeyCode.GP_RightThumbstickLeft, Buttons.RightThumbstickLeft);
+            lookup2.Add(KeyCode.GP_LeftThumbstickUp, Buttons.LeftThumbstickUp);
+            lookup2.Add(KeyCode.GP_LeftThumbstickDown, Buttons.LeftThumbstickDown);
+            lookup2.Add(KeyCode.GP_LeftThumbstickRight, Buttons.LeftThumbstickRight);
         }
 
         public static KeyCode FromButton(Buttons button)
         {   
-            return lookup[button];
+            return lookup1[button];
         }
 
         public static KeyCode FromKey(Keys key)
         {
             int intValue = (int)(key);
             return (KeyCode)intValue;
+        }
+
+        public static Keys ToKey(KeyCode code)
+        {
+            int intValue = (int)code;
+            return (Keys)intValue;
+        }
+
+        public static Buttons ToButton(KeyCode code)
+        {
+            Buttons button;
+            if (lookup2.TryGetValue(code, out button))
+            {
+                return button;
+            }
+
+            return (Buttons)(-1);
         }
     }
 }

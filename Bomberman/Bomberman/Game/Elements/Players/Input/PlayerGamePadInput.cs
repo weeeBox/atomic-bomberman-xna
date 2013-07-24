@@ -11,7 +11,7 @@ using BomberEngine.Core.Events;
 
 namespace Bomberman.Game.Elements.Players.Input
 {
-    public class PlayerGamePadInput : PlayerInput, IKeyInputListener
+    public class PlayerGamePadInput : PlayerKeyInput
     {
         private const float STICK_DEAD_ZONE = 0.125f;
         private const float STICK_DEAD_ZONE_2 = STICK_DEAD_ZONE * STICK_DEAD_ZONE;
@@ -19,21 +19,14 @@ namespace Bomberman.Game.Elements.Players.Input
         private const float STICK_LIMIT_MIN = 0.75f;
         private const float STICK_LIMIT_MAX = 0.75f;
 
-        private Dictionary<KeyCode, PlayerAction> actionLookup;
         private int playerIndex;
 
         private float m_dx;
         private float m_dy;
 
-        private bool up;
-        private bool down;
-        private bool left;
-        private bool right;
-
         public PlayerGamePadInput(int playerIndex)
         {
             this.playerIndex = playerIndex;
-            actionLookup = new Dictionary<KeyCode, PlayerAction>();
         }
 
         public override void Update(float delta)
@@ -46,12 +39,10 @@ namespace Bomberman.Game.Elements.Players.Input
 
             if (dx != m_dx || dy != m_dy)
             {
-                bool oldUp = up;
-                bool oldDown = down;
-                bool oldLeft = left;
-                bool oldRight = right;
-
-                up = down = left = right = false;
+                bool up = false;
+                bool down = false;
+                bool left = false;
+                bool right = false;
 
                 float len2 = dx * dx + dy * dy;
                 if (len2 > STICK_DEAD_ZONE_2)
@@ -72,73 +63,14 @@ namespace Bomberman.Game.Elements.Players.Input
                     down = dy < 0 && adx <= limit; 
                 }
 
-                TryNofityAction(oldUp, up, PlayerAction.Up);
-                TryNofityAction(oldDown, down, PlayerAction.Down);
-                TryNofityAction(oldLeft, left, PlayerAction.Left);
-                TryNofityAction(oldRight, right, PlayerAction.Right);
+                SetActionPressed(PlayerAction.Up, up);
+                SetActionPressed(PlayerAction.Down, down);
+                SetActionPressed(PlayerAction.Left, left);
+                SetActionPressed(PlayerAction.Right, right);
 
                 m_dx = dx;
                 m_dy = dy;
             }
-        }
-
-        public void Map(KeyCode key, PlayerAction action)
-        {
-            actionLookup.Add(key, action);
-        }
-
-        public bool OnKeyPressed(KeyEventArg e)
-        {
-            if (e.playerIndex == playerIndex)
-            {
-                PlayerAction action = GetAction(e.key);
-                if (action != PlayerAction.Count)
-                {
-                    NotifyActionPressed(action);
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public bool OnKeyRepeated(KeyEventArg e)
-        {
-            return e.playerIndex == playerIndex && GetAction(e.key) != PlayerAction.Count;
-        }
-
-        public bool OnKeyReleased(KeyEventArg e)
-        {
-            if (e.playerIndex == playerIndex)
-            {
-                PlayerAction action = GetAction(e.key);
-                if (action != PlayerAction.Count)
-                {
-                    NotifyActionReleased(action);
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private void TryNofityAction(bool oldFlag, bool flag, PlayerAction action)
-        {
-            if (!oldFlag && flag)
-            {
-                NotifyActionPressed(action);
-            }
-            else if (oldFlag && !flag)
-            {
-                NotifyActionReleased(action);
-            }
-        }
-
-        private PlayerAction GetAction(KeyCode key)
-        {
-            if (actionLookup.ContainsKey(key))
-            {
-                return actionLookup[key];
-            }
-            return PlayerAction.Count;
         }
     }
 }

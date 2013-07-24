@@ -255,6 +255,11 @@ namespace BomberEngine.Core.Input
             return newState.IsButtonUp(button) && oldState.IsButtonDown(button);
         }
 
+        public bool IsButtonPressed(int playerIndex, KeyCode code)
+        {
+            return currentGamepadStates[playerIndex].IsButtonDown(KeyCodeHelper.ToButton(code));
+        }
+
         public bool IsGamePadConnected(int playerIndex)
         {
             return currentGamepadStates[playerIndex].IsConnected;
@@ -322,9 +327,9 @@ namespace BomberEngine.Core.Input
             }
         }
 
-        public bool IsKeyPressed(Keys key)
+        public bool IsKeyPressed(KeyCode code)
         {
-            return currentKeyboardState.IsKeyDown(key);
+            return currentKeyboardState.IsKeyDown(KeyCodeHelper.ToKey(code));
         }
 
         #endregion
