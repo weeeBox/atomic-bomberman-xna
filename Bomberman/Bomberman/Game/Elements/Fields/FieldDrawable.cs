@@ -10,6 +10,7 @@ using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements.Cells;
 using Microsoft.Xna.Framework.Graphics;
 using BomberEngine.Game;
+using Bomberman.Content;
 
 namespace Bomberman.Game.Elements.Fields
 {
@@ -218,13 +219,10 @@ namespace Bomberman.Game.Elements.Fields
                     context.DrawImage(image, drawX, drawY - image.GetHeight() + cellHeight);
                 }
             }
-            else if (player.IsAlive())
-            {
-                context.DrawImage(image, drawX, drawY - image.GetHeight() + cellHeight);
-            }
             else
             {   
-                context.DrawImage(playerImages[Direction.DOWN], drawX, drawY - image.GetHeight() + cellHeight, Color.Red);
+                AnimationInstance anim = player.currentAnimation;
+                anim.Draw(context, drawX + 0.5f * cellWidth, drawY + cellHeight);
             }
 
             int stepX = Math.Sign(player.px - player.CellCenterPx());

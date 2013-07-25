@@ -5,6 +5,8 @@ using System.Text;
 using BomberEngine.Core.Assets;
 using BomberEngine.Core.Assets.Types;
 using BomberEngine.Debugging;
+using BomberEngine.Core.Visual;
+using Microsoft.Xna.Framework;
 
 namespace Bomberman.Content
 {
@@ -18,6 +20,20 @@ namespace Bomberman.Content
         public Animation(String name)
         {
             this.name = name;
+        }
+
+        public void Draw(Context context, int frameIndex, float x, float y)
+        {
+            Rectangle src;
+            int ox = frames[frameIndex].ox;
+            int oy = frames[frameIndex].oy;
+
+            src.X = frames[frameIndex].x;
+            src.Y = frames[frameIndex].y;
+            src.Width = frames[frameIndex].w;
+            src.Height = frames[frameIndex].h;
+
+            context.DrawImagePart(texture, src, x - ox, y - oy);
         }
 
         protected override void OnDispose()

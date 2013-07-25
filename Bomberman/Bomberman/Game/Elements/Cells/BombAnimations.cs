@@ -36,9 +36,9 @@ namespace Bomberman.Game.Elements.Cells
         {
             m_Animations = new Animation[(int)AnimationType.Count];
             m_Animations[(int)AnimationType.Default] = GetAnimation(A.anim_bomb_regular_green);
-            m_Animations[(int)AnimationType.Jelly] = GetAnimation(A.anim_bomb_jelly_green);
+            m_Animations[(int)AnimationType.Jelly]   = GetAnimation(A.anim_bomb_jelly_green);
             m_Animations[(int)AnimationType.Trigger] = GetAnimation(A.anim_bomb_trigger_green);
-            m_Animations[(int)AnimationType.Dud] = GetAnimation(A.anim_bomb_regular_green_dud);
+            m_Animations[(int)AnimationType.Dud]     = GetAnimation(A.anim_bomb_regular_green_dud);
         }
 
         private Animation GetAnimation(int id)

@@ -12,6 +12,7 @@ using BomberEngine.Consoles;
 using Lidgren.Network;
 using BomberEngine.Game;
 using BomberEngine.Core;
+using Bomberman.Content;
 
 namespace Bomberman.Game.Elements.Players
 {
@@ -27,64 +28,65 @@ namespace Bomberman.Game.Elements.Players
             PlayerAction.Special
         };
 
-        private int m_Index;
-        private int m_TriggerBombsCount;
+        private int m_index;
+        private int m_triggerBombsCount;
 
-        private bool m_Alive;
+        private bool m_alive;
 
-        private PlayerInput m_Input;
-        private BombList m_Bombs;
-        private PowerupList m_Powerups;
-        private DiseaseList m_Diseases;
+        private PlayerInput m_input;
+        private BombList m_bombs;
+        private PowerupList m_powerups;
+        private DiseaseList m_diseases;
 
-        private Bomb m_BombInHands;
+        private Bomb m_bombInHands;
 
         /* Kicked/Punched bombs */
-        private List<Bomb> m_ThrownBombs;
+        private List<Bomb> m_thrownBombs;
 
-        private NetConnection m_Connection;
+        private NetConnection m_connection;
 
-        private int m_LastAckPacketId; // last acknowledged packet id
+        private int m_lastAckPacketId; // last acknowledged packet id
 
-        private int m_WinsCount;
-        private int m_SuicidesCount;
+        private int m_winsCount;
+        private int m_suicidesCount;
 
-        private PlayerAnimations m_Animations;
+        private PlayerAnimations m_animations;
+        private AnimationInstance m_currentAnimation;
 
         public Player(int index)
             : base(FieldCellType.Player, 0, 0)
         {
-            m_Index = index;
-            m_Alive = true;
+            m_index = index;
+            m_alive = true;
 
             InitPowerups();
             InitBombs();
             InitDiseases();
             InitPlayer();
 
-            m_ThrownBombs = new List<Bomb>();
+            m_thrownBombs = new List<Bomb>();
         }
 
         public override void Reset()
         {
             base.Reset();
 
-            m_Input.Reset();
+            m_input.Reset();
 
             SetCell(0, 0);
 
-            m_Alive = true;
+            m_alive = true;
 
             ResetPowerups();
             ResetBombs();
             ResetDiseases();
             ResetPlayer();
             
-            m_ThrownBombs.Clear();
-            m_WinsCount = 0;
-            m_SuicidesCount = 0;
-            m_Connection = null;
-            m_LastAckPacketId = 0;
+            m_thrownBombs.Clear();
+            m_winsCount = 0;
+            m_suicidesCount = 0;
+            m_connection = null;
+            m_lastAckPacketId = 0;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -99,18 +101,18 @@ namespace Bomberman.Game.Elements.Players
             {
                 UpdateInput(delta);
 
-                if (m_BombInHands != null)
+                if (m_bombInHands != null)
                 {
-                    m_BombInHands.Update(delta);
+                    m_bombInHands.Update(delta);
                 }
 
-                m_Diseases.Update(delta);
+                m_diseases.Update(delta);
                 TryPoops();
             }
 
-            for (int bombIndex = 0; bombIndex < m_ThrownBombs.Count; ++bombIndex)
+            for (int bombIndex = 0; bombIndex < m_thrownBombs.Count; ++bombIndex)
             {
-                m_ThrownBombs[bombIndex].Update(delta);
+                m_thrownBombs[bombIndex].Update(delta);
             }
         }
 
@@ -122,23 +124,23 @@ namespace Bomberman.Game.Elements.Players
 
         private void UpdateInput(float delta)
         {
-            m_Input.Update(delta);
+            m_input.Update(delta);
 
             for (int i = 0; i < ACTIONS.Length; ++i)
             {
                 PlayerAction action = ACTIONS[i];
-                if (m_Input.IsActionJustPressed(action))
+                if (m_input.IsActionJustPressed(action))
                 {
-                    OnActionPressed(m_Input, action);
+                    OnActionPressed(m_input, action);
                 }
             }
 
             for (int i = 0; i < ACTIONS.Length; ++i)
             {
                 PlayerAction action = ACTIONS[i];
-                if (m_Input.IsActionJustReleased(action))
+                if (m_input.IsActionJustReleased(action))
                 {
-                    OnActionReleased(m_Input, action);
+                    OnActionReleased(m_input, action);
                 }
             }
         }
@@ -429,12 +431,12 @@ namespace Bomberman.Game.Elements.Players
             CVar[] max = CVars.powerupsMax;
 
             int totalCount = initials.Length;
-            m_Powerups = new PowerupList(totalCount);
+            m_powerups = new PowerupList(totalCount);
             for (int powerupIndex = 0; powerupIndex < totalCount; ++powerupIndex)
             {
                 int initialCount = initials[powerupIndex].intValue;
                 int maxCount = max[powerupIndex].intValue;
-                m_Powerups.Init(powerupIndex, initialCount, maxCount);
+                m_powerups.Init(powerupIndex, initialCount, maxCount);
             }
         }
 
@@ -448,13 +450,13 @@ namespace Bomberman.Game.Elements.Players
             {
                 int initialCount = initials[powerupIndex].intValue;
                 int maxCount = max[powerupIndex].intValue;
-                m_Powerups.Init(powerupIndex, initialCount, maxCount);
+                m_powerups.Init(powerupIndex, initialCount, maxCount);
             }
         }
 
         public bool TryAddPowerup(int powerupIndex)
         {
-            bool added = m_Powerups.Inc(powerupIndex);
+            bool added = m_powerups.Inc(powerupIndex);
             if (!added)
             {
                 return false;
@@ -464,11 +466,11 @@ namespace Bomberman.Game.Elements.Players
             {
                 case Powerups.Bomb:
                     {
-                        m_Bombs.IncMaxActiveCount();
+                        m_bombs.IncMaxActiveCount();
 
                         if (HasTrigger())
                         {
-                            ++m_TriggerBombsCount;
+                            ++m_triggerBombsCount;
                         }
 
                         break;
@@ -489,7 +491,7 @@ namespace Bomberman.Game.Elements.Players
                 // Trigger will drop Jelly and Boxing Glove
                 case Powerups.Trigger:
                     {
-                        m_TriggerBombsCount = m_Bombs.GetMaxActiveCount();
+                        m_triggerBombsCount = m_bombs.GetMaxActiveCount();
 
                         TryGivePowerupBack(Powerups.Jelly);
                         TryGivePowerupBack(Powerups.Punch);
@@ -549,7 +551,7 @@ namespace Bomberman.Game.Elements.Players
 
         public void InfectRandom(int count)
         {
-            m_Diseases.InfectRandom(count);
+            m_diseases.InfectRandom(count);
         }
 
         public bool HasKick()
@@ -579,17 +581,17 @@ namespace Bomberman.Game.Elements.Players
 
         private bool HasPowerup(int powerupIndex)
         {
-            return m_Powerups.HasPowerup(powerupIndex);
+            return m_powerups.HasPowerup(powerupIndex);
         }
 
         private void TryGivePowerupBack(int powerupIndex)
         {
-            if (m_Powerups.HasPowerup(powerupIndex))
+            if (m_powerups.HasPowerup(powerupIndex))
             {
                 switch (powerupIndex)
                 {
                     case Powerups.Trigger:
-                        m_TriggerBombsCount = 0;
+                        m_triggerBombsCount = 0;
                         break;
                 }
 
@@ -599,8 +601,8 @@ namespace Bomberman.Game.Elements.Players
 
         private void GivePowerupBack(int powerupIndex)
         {
-            Debug.Assert(m_Powerups.GetCount(powerupIndex) == 1);
-            m_Powerups.SetCount(powerupIndex, 0);
+            Debug.Assert(m_powerups.GetCount(powerupIndex) == 1);
+            m_powerups.SetCount(powerupIndex, 0);
 
             GetField().PlacePowerup(powerupIndex);
         }
@@ -627,19 +629,19 @@ namespace Bomberman.Game.Elements.Players
 
         private bool IsInfected(Diseases disease)
         {
-            return m_Diseases.IsInfected(disease);
+            return m_diseases.IsInfected(disease);
         }
 
         private int CalcPlayerSpeed()
         {
             int speedBase = CVars.cg_playerSpeed.intValue;
             int speedAdd = CVars.cg_playerSpeedAdd.intValue;
-            return speedBase + speedAdd * m_Powerups.GetCount(Powerups.Speed);
+            return speedBase + speedAdd * m_powerups.GetCount(Powerups.Speed);
         }
 
         private int CalcBombsCount()
         {
-            return m_Powerups.GetCount(Powerups.Bomb);
+            return m_powerups.GetCount(Powerups.Bomb);
         }
 
         private float CalcBombTimeout()
@@ -656,14 +658,14 @@ namespace Bomberman.Game.Elements.Players
         private void InitBombs()
         {
             int maxBombs = CVars.cg_maxBomb.intValue;
-            m_Bombs = new BombList(this, maxBombs);
-            m_Bombs.SetMaxActiveCount(CalcBombsCount());
+            m_bombs = new BombList(this, maxBombs);
+            m_bombs.SetMaxActiveCount(CalcBombsCount());
         }
 
         private void ResetBombs()
         {
-            m_Bombs.Reset();
-            m_Bombs.SetMaxActiveCount(CalcBombsCount());
+            m_bombs.Reset();
+            m_bombs.SetMaxActiveCount(CalcBombsCount());
         }
 
         private bool TryKick(Bomb bomb)
@@ -715,7 +717,7 @@ namespace Bomberman.Game.Elements.Players
                 return null;
             }
 
-            return m_Bombs.GetNextBomb();
+            return m_bombs.GetNextBomb();
         }
 
         #endregion
@@ -726,13 +728,13 @@ namespace Bomberman.Game.Elements.Players
 
         private void AddThrownBomb(Bomb bomb)
         {
-            Debug.AssertNotContains(m_ThrownBombs, bomb);
-            m_ThrownBombs.Add(bomb);
+            Debug.AssertNotContains(m_thrownBombs, bomb);
+            m_thrownBombs.Add(bomb);
         }
 
         private void RemoveThrownBomb(Bomb bomb)
         {
-            bool removed = m_ThrownBombs.Remove(bomb);
+            bool removed = m_thrownBombs.Remove(bomb);
             Debug.Assert(removed);
         }
 
@@ -745,17 +747,17 @@ namespace Bomberman.Game.Elements.Players
 
         public Bomb bombInHands
         {
-            get { return m_BombInHands; }
+            get { return m_bombInHands; }
         }
 
         public List<Bomb> thrownBombs
         {
-            get { return m_ThrownBombs; }
+            get { return m_thrownBombs; }
         }
 
         public bool IsHoldingBomb()
         {
-            return m_BombInHands != null;
+            return m_bombInHands != null;
         }
 
         #endregion
@@ -766,12 +768,12 @@ namespace Bomberman.Game.Elements.Players
 
         private void InitDiseases()
         {
-            m_Diseases = new DiseaseList(this);
+            m_diseases = new DiseaseList(this);
         }
 
         private void ResetDiseases()
         {
-            m_Diseases.Reset();
+            m_diseases.Reset();
         }
 
         #endregion
@@ -798,7 +800,7 @@ namespace Bomberman.Game.Elements.Players
 
         public void SetPlayerInput(PlayerInput input)
         {
-            this.m_Input = input;
+            this.m_input = input;
         }
 
         #endregion
@@ -810,14 +812,14 @@ namespace Bomberman.Game.Elements.Players
         // should be only called from PlayeList
         internal void Kill()
         {
-            Debug.Assert(m_Alive);
-            m_Alive = false;
+            Debug.Assert(m_alive);
+            m_alive = false;
             
             StopMoving();
-            if (m_BombInHands != null)
+            if (m_bombInHands != null)
             {
-                m_BombInHands.active = false;
-                m_BombInHands = null;
+                m_bombInHands.active = false;
+                m_bombInHands = null;
             }
         }
 
@@ -888,7 +890,7 @@ namespace Bomberman.Game.Elements.Players
 
         private void TryStopBomb()
         {
-            Bomb kickedBomb = m_Bombs.GetFirstKickedBomb();
+            Bomb kickedBomb = m_bombs.GetFirstKickedBomb();
             if (kickedBomb != null)
             {
                 kickedBomb.TryStopKicked();
@@ -959,7 +961,7 @@ namespace Bomberman.Game.Elements.Players
 
         private bool TryTriggerBomb()
         {
-            Bomb triggerBomb = m_Bombs.GetFirstTriggerBomb();
+            Bomb triggerBomb = m_bombs.GetFirstTriggerBomb();
             if (triggerBomb != null)
             {
                 triggerBomb.Blow();
@@ -977,9 +979,9 @@ namespace Bomberman.Game.Elements.Players
                 if (bomb != null)
                 {
                     GetField().SetBomb(bomb);
-                    if (HasTrigger() && m_TriggerBombsCount > 0)
+                    if (HasTrigger() && m_triggerBombsCount > 0)
                     {
-                        --m_TriggerBombsCount;
+                        --m_triggerBombsCount;
                     }
                     return true;
                 }
@@ -993,7 +995,7 @@ namespace Bomberman.Game.Elements.Players
             if (underlyingBomb != null)
             {
                 underlyingBomb.Grab();
-                m_BombInHands = underlyingBomb;
+                m_bombInHands = underlyingBomb;
                 return true;
             }
             return false;
@@ -1003,9 +1005,9 @@ namespace Bomberman.Game.Elements.Players
         {
             if (IsHoldingBomb())
             {
-                AddThrownBomb(m_BombInHands);
-                m_BombInHands.Throw();
-                m_BombInHands = null;
+                AddThrownBomb(m_bombInHands);
+                m_bombInHands.Throw();
+                m_bombInHands = null;
                 return true;
             }
             return false;
@@ -1056,12 +1058,12 @@ namespace Bomberman.Game.Elements.Players
 
         public bool TryInfect(int diseaseIndex)
         {
-            return m_Diseases.TryInfect(diseaseIndex);
+            return m_diseases.TryInfect(diseaseIndex);
         }
 
         public bool IsInfected()
         {
-            return m_Diseases.activeCount > 0;
+            return m_diseases.activeCount > 0;
         }
 
         #endregion
@@ -1072,22 +1074,22 @@ namespace Bomberman.Game.Elements.Players
 
         public void IncWinsCount()
         {
-            m_WinsCount++;
+            m_winsCount++;
         }
 
         public void IncSuicidesCount()
         {
-            m_SuicidesCount++;
+            m_suicidesCount++;
         }
 
         public int GetWinsCount()
         {
-            return m_WinsCount;
+            return m_winsCount;
         }
 
         public int GetSuicidesCount()
         {
-            return m_SuicidesCount;
+            return m_suicidesCount;
         }
 
         #endregion
@@ -1096,7 +1098,13 @@ namespace Bomberman.Game.Elements.Players
 
         #region Animations
 
-        
+        private void InitAnimation()
+        {
+            m_currentAnimation = new AnimationInstance();
+
+            Animation animation = m_animations.Find(PlayerAnimations.AnimationType.Stand, direction);
+            m_currentAnimation.Init(animation);
+        }
 
         #endregion
 
@@ -1116,11 +1124,11 @@ namespace Bomberman.Game.Elements.Players
             {
                 return CVars.cg_bombShortFlame.intValue;
             }
-            if (m_Powerups.HasPowerup(Powerups.GoldFlame))
+            if (m_powerups.HasPowerup(Powerups.GoldFlame))
             {
                 return int.MaxValue;
             }
-            return m_Powerups.GetCount(Powerups.Flame);
+            return m_powerups.GetCount(Powerups.Flame);
         }
 
         public bool IsJelly()
@@ -1130,45 +1138,57 @@ namespace Bomberman.Game.Elements.Players
 
         public bool IsTrigger()
         {
-            return HasTrigger() && m_TriggerBombsCount > 0;
+            return HasTrigger() && m_triggerBombsCount > 0;
         }
 
         public PowerupList powerups
         {
-            get { return m_Powerups; }
+            get { return m_powerups; }
         }
 
         public BombList bombs
         {
-            get { return m_Bombs; }
+            get { return m_bombs; }
         }
 
         public PlayerInput input
         {
-            get { return m_Input; }
+            get { return m_input; }
         }
 
         public NetConnection connection
         {
-            get { return m_Connection; }
-            set { m_Connection = value; }
+            get { return m_connection; }
+            set { m_connection = value; }
         }
 
         public DiseaseList diseases
         {
-            get { return m_Diseases; }
+            get { return m_diseases; }
         }
 
         public int lastAckPacketId
         {
-            get { return m_LastAckPacketId; }
-            set { m_LastAckPacketId = value; }
+            get { return m_lastAckPacketId; }
+            set { m_lastAckPacketId = value; }
         }
 
         public PlayerAnimations animations
         {
-            get { return m_Animations; }
-            set { m_Animations = animations; }
+            get { return m_animations; }
+            set 
+            { 
+                m_animations = value;
+                if (m_animations != null)
+                {
+                    InitAnimation();
+                }
+            }
+        }
+
+        public AnimationInstance currentAnimation
+        {
+            get { return m_currentAnimation; }
         }
 
         #endregion
@@ -1179,12 +1199,12 @@ namespace Bomberman.Game.Elements.Players
 
         public bool IsAlive()
         {
-            return m_Alive;
+            return m_alive;
         }
 
         public int GetIndex()
         {
-            return m_Index;
+            return m_index;
         }
 
         #endregion

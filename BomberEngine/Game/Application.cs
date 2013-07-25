@@ -7,6 +7,7 @@ using BomberEngine.Debugging;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Native;
+using BomberEngine.Core.Events;
 
 namespace BomberEngine.Game
 {
@@ -24,6 +25,7 @@ namespace BomberEngine.Game
         private TimerManager timerManager;
         private InputManager inputManager;
         private AssetManager assetManager;
+        private Notifications notifications;
 
         private UpdatableList updatables;
         private DrawableList drawables;
@@ -54,6 +56,11 @@ namespace BomberEngine.Game
             return new TimerManager();
         }
 
+        private Notifications CreateNotifications(TimerManager timerManager)
+        {
+            return new Notifications(timerManager);
+        }
+
         protected InputManager CreateInputManager()
         {
             return new InputManager();
@@ -74,6 +81,7 @@ namespace BomberEngine.Game
             }
 
             timerManager = CreateTimerManager();
+            notifications = CreateNotifications(timerManager);
 
             inputManager = CreateInputManager();
             AddUpdatable(inputManager);
@@ -193,6 +201,28 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
+        public static void RegisterNotification(String name, NotificationDelegate del)
+        {
+            sharedApplication.notifications.Register(name, del);
+        }
+
+        public static void UnregisterNotification(String name, NotificationDelegate del)
+        {
+            sharedApplication.notifications.Remove(name, del);
+        }
+
+        public static void UnregisterNotifications(NotificationDelegate del)
+        {
+            sharedApplication.notifications.Remove(del);
+        }
+
+        public static void UnregisterNotifications(Object target)
+        {
+            sharedApplication.notifications.RemoveAll(target);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
         protected void AddUpdatable(IUpdatable updatable)
         {
             updatables.Add(updatable);
@@ -258,6 +288,11 @@ namespace BomberEngine.Game
         public static TimerManager TimerManager()
         {
             return sharedApplication.timerManager;
+        }
+
+        public static Notifications Notifications()
+        {
+            return sharedApplication.notifications;
         }
 
         public bool IsRunning()
