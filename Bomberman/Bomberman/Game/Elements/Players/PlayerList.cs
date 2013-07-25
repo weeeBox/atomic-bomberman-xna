@@ -44,7 +44,6 @@ namespace Bomberman.Game.Elements.Players
         {
             player.Kill();
             Remove(player, false);
-            ScheduleTimer(player.DeathTimerCallback, 3.0f);
         }
 
         private void Remove(Player player, bool removeFromList)

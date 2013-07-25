@@ -81,6 +81,7 @@ namespace Bomberman.Game.Elements.Players
             ResetBombs();
             ResetDiseases();
             ResetPlayer();
+            ResetAnimation();
             
             m_thrownBombs.Clear();
             m_winsCount = 0;
@@ -108,6 +109,11 @@ namespace Bomberman.Game.Elements.Players
 
                 m_diseases.Update(delta);
                 TryPoops();
+            }
+
+            if (m_currentAnimation != null)
+            {
+                m_currentAnimation.Update(delta);
             }
 
             for (int bombIndex = 0; bombIndex < m_thrownBombs.Count; ++bombIndex)
@@ -241,11 +247,13 @@ namespace Bomberman.Game.Elements.Players
         private void StartMovingToDirection(Direction dir)
         {
             SetMoveDirection(dir);
+            UpdateAnimation();
         }
 
         private void StopMovingToDirection(Direction dir)
         {
             StopMoving();
+            UpdateAnimation();
         }
 
         #endregion
@@ -821,11 +829,8 @@ namespace Bomberman.Game.Elements.Players
                 m_bombInHands.active = false;
                 m_bombInHands = null;
             }
-        }
 
-        internal void DeathTimerCallback(Timer timer)
-        {
-            GetField().RemoveCell(this);
+            UpdateAnimation();
         }
 
         #endregion
@@ -1101,9 +1106,46 @@ namespace Bomberman.Game.Elements.Players
         private void InitAnimation()
         {
             m_currentAnimation = new AnimationInstance();
+            UpdateAnimation();
+        }
 
-            Animation animation = m_animations.Find(PlayerAnimations.AnimationType.Stand, direction);
+        private void UpdateAnimation()
+        {
+            PlayerAnimations.AnimationType type;
+            if (IsAlive())
+            {
+                if (IsMoving())
+                {
+                    type = PlayerAnimations.AnimationType.Walk;
+                }
+                else
+                {
+                    type = PlayerAnimations.AnimationType.Stand;
+                }
+            }
+            else
+            {
+                type = PlayerAnimations.AnimationType.Die;
+            }
+
+            Animation animation = m_animations.Find(type, direction);
             m_currentAnimation.Init(animation);
+
+            if (!IsAlive())
+            {
+                m_currentAnimation.mode = AnimationInstance.Mode.Normal;
+                m_currentAnimation.animationDelegate = PlayerDieAnimationCallback;
+            }
+        }
+
+        private void ResetAnimation()
+        {
+            UpdateAnimation();
+        }
+
+        private void PlayerDieAnimationCallback(AnimationInstance animation)
+        {
+            RemoveFromField();
         }
 
         #endregion
