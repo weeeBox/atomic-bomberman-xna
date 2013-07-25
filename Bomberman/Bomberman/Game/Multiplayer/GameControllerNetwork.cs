@@ -243,7 +243,7 @@ namespace Bomberman.Game.Multiplayer
             msg.Write(b.active);
             if (b.active)
             {
-                msg.WriteTime(NetTime.Now + b.remains, false);
+                msg.WriteTime(NetTime.Now + b.timeRemains, false);
                 msg.Write(b.px);
                 msg.Write(b.py);
                 msg.Write((byte)b.direction);
@@ -392,7 +392,7 @@ namespace Bomberman.Game.Multiplayer
                     game.field.SetBomb(b);
                 }
 
-                b.remains = remains;
+                b.timeRemains = remains;
                 b.SetPos(px, py);
                 b.SetSpeed(speed);
                 b.SetJelly(jelly);

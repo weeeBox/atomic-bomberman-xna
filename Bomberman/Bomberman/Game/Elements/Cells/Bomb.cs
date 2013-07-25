@@ -22,24 +22,24 @@ namespace Bomberman.Game.Elements.Cells
             Flying
         }
 
-        private static int nextTriggerIndex;
+        private static int s_nextTriggerIndex;
 
         private Player m_player;
-        private UpdatableDelegate updater;
+        private UpdatableDelegate m_updater;
 
-        public bool active;
+        private bool m_active;
 
-        private float flySpeed;
-        private float flyDistance;
+        private float m_flySpeed;
+        private float m_flyDistance;
 
-        private float fallSpeed;
-        public float fallHeight;
-        private float fallGravity;
+        private float m_fallSpeed;
+        private float m_fallHeight;
+        private float m_fallGravity;
 
-        private int radius;
-        public float remains;
+        private int m_radius;
+        private float m_timeRemains;
 
-        private bool dud;
+        private bool m_dudFlag;
         private bool m_jelly;
 
         private bool m_trigger;
@@ -47,7 +47,7 @@ namespace Bomberman.Game.Elements.Cells
 
         private int m_triggerIndex;
 
-        public bool jellyBounced;
+        private bool m_jellyBounced;
 
         public Bomb(Player player)
            : base(FieldCellType.Bomb, player.GetCx(), player.GetCy())
@@ -61,21 +61,21 @@ namespace Bomberman.Game.Elements.Cells
         {
             base.Reset();
 
-            updater = null;
-            active = false;
-            flySpeed = 0.0f;
-            flyDistance = 0.0f;
-            fallSpeed = 0.0f;
-            fallHeight = 0.0f;
-            fallGravity = 0.0f;
-            radius = 0;
-            remains = 0;
-            dud = false;
+            m_updater = null;
+            m_active = false;
+            m_flySpeed = 0.0f;
+            m_flyDistance = 0.0f;
+            m_fallSpeed = 0.0f;
+            m_fallHeight = 0.0f;
+            m_fallGravity = 0.0f;
+            m_radius = 0;
+            m_timeRemains = 0;
+            m_dudFlag = false;
             m_jelly = false;
             m_trigger = false;
             m_state = State.Undefined;
             m_triggerIndex = 0;
-            jellyBounced = false;
+            m_jellyBounced = false;
 
             SetSpeed(CVars.cg_bombRollSpeed.intValue);
         }
@@ -83,15 +83,15 @@ namespace Bomberman.Game.Elements.Cells
         public override void Update(float delta)
         {
             base.Update(delta);
-            updater(delta);            
+            m_updater(delta);            
         }
 
         private void UpdateNormal(float delta)
         {
             if (!IsTrigger())
             {
-                remains -= delta;
-                if (remains <= 0)
+                m_timeRemains -= delta;
+                if (m_timeRemains <= 0)
                 {
                     Blow();
                 }
@@ -99,7 +99,7 @@ namespace Bomberman.Game.Elements.Cells
 
             if (IsJelly())
             {
-                jellyBounced = false;
+                m_jellyBounced = false;
             }
         }
 
@@ -109,46 +109,46 @@ namespace Bomberman.Game.Elements.Cells
 
         private void UpdateFlying(float delta)
         {
-            float shift = flyDistance;
+            float shift = m_flyDistance;
 
             switch (direction)
             {
                 case Direction.UP:
                 {
-                    shift = Math.Max(flySpeed * delta, shift);
+                    shift = Math.Max(m_flySpeed * delta, shift);
                     MoveY(shift);
                     break;
                 }
 
                 case Direction.DOWN:
                 {
-                    shift = Math.Min(flySpeed * delta, shift);
+                    shift = Math.Min(m_flySpeed * delta, shift);
                     MoveY(shift);
                     break;
                 }
 
                 case Direction.LEFT:
                 {
-                    shift = Math.Max(flySpeed * delta, shift);
+                    shift = Math.Max(m_flySpeed * delta, shift);
                     MoveX(shift);
                     break;
                 }
 
                 case Direction.RIGHT:
                 {
-                    shift = Math.Min(flySpeed * delta, shift);
+                    shift = Math.Min(m_flySpeed * delta, shift);
                     MoveX(shift);
                     break;
                 }
             }
 
-            fallHeight += fallSpeed * delta;
-            fallSpeed -= fallGravity * delta;
+            m_fallHeight += m_fallSpeed * delta;
+            m_fallSpeed -= m_fallGravity * delta;
 
-            flyDistance -= shift;
-            if (flyDistance == 0)
+            m_flyDistance -= shift;
+            if (m_flyDistance == 0)
             {
-                fallHeight = 0;
+                m_fallHeight = 0;
                 EndFlying();
             }
         }
@@ -288,17 +288,17 @@ namespace Bomberman.Game.Elements.Cells
 
         public void Activate()
         {   
-            active = true;
+            m_active = true;
             SetCell(player.cx, player.cy);
-            radius = player.GetBombRadius();
-            remains = player.GetBombTimeout();
+            m_radius = player.GetBombRadius();
+            m_timeRemains = player.GetBombTimeout();
             SetState(State.Normal);
-            dud = false;
+            m_dudFlag = false;
             m_jelly = player.IsJelly();
             m_trigger = player.IsTrigger();
             if (m_trigger)
             {
-                m_triggerIndex = nextTriggerIndex++;
+                m_triggerIndex = s_nextTriggerIndex++;
             }
         }
 
@@ -306,7 +306,7 @@ namespace Bomberman.Game.Elements.Cells
         {
             SetCell();
             StopMoving();
-            active = false;
+            m_active = false;
 
             GetField().BlowBomb(this);
         }
@@ -331,7 +331,7 @@ namespace Bomberman.Game.Elements.Cells
             SetPos(fromPx, fromPy);
 
             Fly(fromPx, fromPy, direction);
-            remains = m_player.GetBombTimeout();
+            m_timeRemains = m_player.GetBombTimeout();
         }
 
         private void Fly(float fromPx, float fromPy, Direction direction)
@@ -349,32 +349,32 @@ namespace Bomberman.Game.Elements.Cells
             int fromCx = Util.Px2Cx(fromPx);
             int fromCy = Util.Py2Cy(fromPy);
 
-            flySpeed = CVars.cg_bombFlySpeed.intValue;
+            m_flySpeed = CVars.cg_bombFlySpeed.intValue;
 
             switch (direction)
             {
                 case Direction.LEFT:
-                    flySpeed = -flySpeed;
-                    flyDistance = Util.TravelDistanceX(fromPx, fromCx - numCells);
+                    m_flySpeed = -m_flySpeed;
+                    m_flyDistance = Util.TravelDistanceX(fromPx, fromCx - numCells);
                     break;
 
                 case Direction.RIGHT:
-                    flyDistance = Util.TravelDistanceX(fromPx, fromCx + numCells);
+                    m_flyDistance = Util.TravelDistanceX(fromPx, fromCx + numCells);
                     break;
 
                 case Direction.UP:
-                    flySpeed = -flySpeed;
-                    flyDistance = Util.TravelDistanceY(fromPy, fromCy - numCells);
+                    m_flySpeed = -m_flySpeed;
+                    m_flyDistance = Util.TravelDistanceY(fromPy, fromCy - numCells);
                     break;
 
                 case Direction.DOWN:
-                    flyDistance = Util.TravelDistanceY(fromPy, fromCy + numCells);
+                    m_flyDistance = Util.TravelDistanceY(fromPy, fromCy + numCells);
                     break;
             }
 
-            fallHeight = 0;
-            fallGravity = CVars.cg_bombDropGravity.intValue;
-            fallSpeed = 0.5f * fallGravity * flyDistance / flySpeed;
+            m_fallHeight = 0;
+            m_fallGravity = CVars.cg_bombDropGravity.intValue;
+            m_fallSpeed = 0.5f * m_fallGravity * m_flyDistance / m_flySpeed;
 
             SetDirection(direction);
             SetState(State.Flying);
@@ -417,14 +417,14 @@ namespace Bomberman.Game.Elements.Cells
 
         private bool TryJellyOnObstacle()
         {
-            if (jellyBounced)
+            if (m_jellyBounced)
             {
                 return true;
             }
 
             if (IsJelly())
             {   
-                jellyBounced = true;
+                m_jellyBounced = true;
                 SetMoveDirection(Util.Opposite(direction));
                 return true;
             }
@@ -437,16 +437,16 @@ namespace Bomberman.Game.Elements.Cells
             switch (state)
             {
                 case State.Normal:
-                    updater = UpdateNormal;
+                    m_updater = UpdateNormal;
                     break;
 
                 case State.Grabbed:
                     Debug.Assert(m_state == State.Normal);
-                    updater = UpdateGrabbed;
+                    m_updater = UpdateGrabbed;
                     break;
 
                 case State.Flying:
-                    updater = UpdateFlying;
+                    m_updater = UpdateFlying;
                     break;
             }
 
@@ -455,17 +455,12 @@ namespace Bomberman.Game.Elements.Cells
 
         public int GetRadius()
         {
-            return radius;
-        }
-
-        public float GetTimeout()
-        {
-            return remains;
+            return m_radius;
         }
 
         public bool IsDud()
         {
-            return dud;
+            return m_dudFlag;
         }
 
         public bool IsJelly()
@@ -522,6 +517,28 @@ namespace Bomberman.Game.Elements.Cells
         public int triggerIndex
         {
             get { return m_triggerIndex; }
+        }
+
+        public bool active
+        {
+            get { return m_active; }
+            set { m_active = value; }
+        }
+
+        public float timeRemains
+        {
+            get { return m_timeRemains; }
+            set { m_timeRemains = value; }
+        }
+
+        public float fallHeight
+        {
+            get { return m_fallHeight; }
+        }
+
+        public bool jellyBounced
+        {
+            get { return m_jellyBounced; }
         }
     }
 }

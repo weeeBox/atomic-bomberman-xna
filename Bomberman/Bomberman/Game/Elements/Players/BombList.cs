@@ -65,7 +65,7 @@ namespace Bomberman.Game.Elements.Items
                 Bomb bomb = array[i];
                 if (bomb.active)
                 {
-                    if (bomb.IsMoving() && (kickedBomb == null || kickedBomb.remains > bomb.remains))
+                    if (bomb.IsMoving() && (kickedBomb == null || kickedBomb.timeRemains > bomb.timeRemains))
                     {
                         kickedBomb = bomb;
                     }
