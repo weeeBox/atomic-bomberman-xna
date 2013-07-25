@@ -63,7 +63,7 @@ namespace Bomberman.Game.Elements.Items
             for (int i = 0; i < array.Length; ++i)
             {
                 Bomb bomb = array[i];
-                if (bomb.active)
+                if (bomb.isActive)
                 {
                     if (bomb.IsMoving() && (kickedBomb == null || kickedBomb.timeRemains > bomb.timeRemains))
                     {
@@ -82,7 +82,7 @@ namespace Bomberman.Game.Elements.Items
             for (int i = 0; i < array.Length; ++i)
             {
                 Bomb bomb = array[i];
-                if (bomb.active)
+                if (bomb.isActive)
                 {
                     if (bomb.CanTrigger() && (triggerBomb == null || triggerBomb.triggerIndex > bomb.triggerIndex))
                     {
@@ -102,7 +102,7 @@ namespace Bomberman.Game.Elements.Items
             for (int i = 0; i < array.Length; ++i)
             {
                 Bomb bomb = array[i];
-                if (bomb.active)
+                if (bomb.isActive)
                 {   
                     if (++activeCount == maxActiveCount)
                     {

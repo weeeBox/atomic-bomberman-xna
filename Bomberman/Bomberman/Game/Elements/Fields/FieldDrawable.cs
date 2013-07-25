@@ -159,16 +159,12 @@ namespace Bomberman.Game.Elements.Fields
 
         private void DrawBomb(Context context, Bomb bomb)
         {
-            TextureImage image = bombImage;
-            if (bomb.IsJelly())
-            {
-                image = bombJellyImage;
-            }
-            else if (bomb.IsTrigger())
-            {
-                image = bombTriggerImage;
-            }
-            DrawCellImage(context, bomb, image);
+            float drawX = bomb.GetPx();
+            float drawY = bomb.GetPy();
+
+            AnimationInstance anim = bomb.currentAnimation;
+            anim.Draw(context, drawX, drawY + 0.5f * cellHeight);
+            
             context.DrawRect(bomb.cx * cellWidth, bomb.cy * cellHeight, cellWidth, cellHeight, Color.White);
             context.DrawRect(bomb.px - 0.5f * cellWidth, bomb.py - 0.5f * cellHeight, cellWidth, cellHeight, Color.Red);
         }

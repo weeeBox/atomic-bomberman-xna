@@ -9,6 +9,7 @@ using BomberEngine.Core;
 using BomberEngine;
 using BomberEngine.Debugging;
 using Bomberman.Game.Elements.Fields;
+using Bomberman.Content;
 
 namespace Bomberman.Game.Elements.Cells
 {
@@ -49,6 +50,9 @@ namespace Bomberman.Game.Elements.Cells
 
         private bool m_jellyBounced;
 
+        private BombAnimations m_animations;
+        private AnimationInstance m_currentAnimation;
+
         public Bomb(Player player)
            : base(FieldCellType.Bomb, player.GetCx(), player.GetCy())
         {
@@ -83,7 +87,12 @@ namespace Bomberman.Game.Elements.Cells
         public override void Update(float delta)
         {
             base.Update(delta);
-            m_updater(delta);            
+            m_updater(delta);
+
+            if (m_currentAnimation != null)
+            {
+                m_currentAnimation.Update(delta);
+            }
         }
 
         private void UpdateNormal(float delta)
@@ -300,6 +309,7 @@ namespace Bomberman.Game.Elements.Cells
             {
                 m_triggerIndex = s_nextTriggerIndex++;
             }
+            UpdateAnimation();
         }
 
         public void Blow()
@@ -503,13 +513,42 @@ namespace Bomberman.Game.Elements.Cells
             return m_state == State.Flying;
         }
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        private void InitAnimations()
+        {
+            m_currentAnimation = new AnimationInstance();
+        }
+
+        private void UpdateAnimation()
+        {
+            BombAnimations.AnimationType type;
+            if (isTrigger)
+            {
+                type = BombAnimations.AnimationType.Trigger;
+            }
+            else if (IsJelly())
+            {
+                type = BombAnimations.AnimationType.Jelly;
+            }
+            else
+            {
+                type = BombAnimations.AnimationType.Default;
+            }
+
+            Animation animation = m_animations.Find(type);
+            m_currentAnimation.Init(animation);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
         public Player player
         {
             get { return m_player; }
             set { m_player = value; }
         }
 
-        public bool trigger
+        public bool isTrigger
         {
             get { return m_trigger; }
         }
@@ -519,7 +558,7 @@ namespace Bomberman.Game.Elements.Cells
             get { return m_triggerIndex; }
         }
 
-        public bool active
+        public bool isActive
         {
             get { return m_active; }
             set { m_active = value; }
@@ -536,9 +575,27 @@ namespace Bomberman.Game.Elements.Cells
             get { return m_fallHeight; }
         }
 
-        public bool jellyBounced
+        public bool isJellyBounced
         {
             get { return m_jellyBounced; }
+        }
+
+        public BombAnimations animations
+        {
+            get { return m_animations; }
+            set
+            {
+                m_animations = value;
+                if (m_animations != null)
+                {
+                    InitAnimations();
+                }
+            }
+        }
+
+        public AnimationInstance currentAnimation
+        {
+            get { return m_currentAnimation; }
         }
     }
 }

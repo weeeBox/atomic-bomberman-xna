@@ -29,7 +29,7 @@ namespace Bomberman.Content
                 frames[frameIndex].oy = input.ReadInt32();
                 frames[frameIndex].w = input.ReadInt32();
                 frames[frameIndex].h = input.ReadInt32();
-                frames[frameIndex].duration = 0.02f;
+                frames[frameIndex].duration = 0.05f;
             }
 
             animation.frames = frames;

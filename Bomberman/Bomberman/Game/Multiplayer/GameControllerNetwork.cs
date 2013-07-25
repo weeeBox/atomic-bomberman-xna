@@ -240,8 +240,8 @@ namespace Bomberman.Game.Multiplayer
 
         private void WriteServerPacket(NetBuffer msg, Bomb b)
         {
-            msg.Write(b.active);
-            if (b.active)
+            msg.Write(b.isActive);
+            if (b.isActive)
             {
                 msg.WriteTime(NetTime.Now + b.timeRemains, false);
                 msg.Write(b.px);
@@ -385,7 +385,7 @@ namespace Bomberman.Game.Multiplayer
                 bool jelly = msg.ReadBoolean();
                 bool trigger = msg.ReadBoolean();
 
-                if (!b.active)
+                if (!b.isActive)
                 {
                     b.player = p;
                     b.Activate();

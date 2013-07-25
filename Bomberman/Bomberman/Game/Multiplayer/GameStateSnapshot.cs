@@ -86,7 +86,7 @@ namespace Bomberman.Game.Multiplayer
 
         public void SetFrom(Bomb b)
         {
-            active = b.active;
+            active = b.isActive;
             if (active)
             {
                 direction = b.direction;

@@ -321,7 +321,7 @@ namespace Bomberman.Game.Elements.Players
         /* Player and bomb are moving */
         private bool HandleBombCollision(Bomb bomb)
         {
-            if (bomb.jellyBounced)
+            if (bomb.isJellyBounced)
             {
                 return MoveOutOfCollision(bomb);
             }
@@ -826,7 +826,7 @@ namespace Bomberman.Game.Elements.Players
             StopMoving();
             if (m_bombInHands != null)
             {
-                m_bombInHands.active = false;
+                m_bombInHands.isActive = false;
                 m_bombInHands = null;
             }
 
@@ -1224,6 +1224,17 @@ namespace Bomberman.Game.Elements.Players
                 if (m_animations != null)
                 {
                     InitAnimation();
+                }
+            }
+        }
+
+        public BombAnimations bombAnimations
+        {
+            set
+            {
+                for (int i = 0; i < bombs.array.Length; ++i)
+                {
+                    bombs.array[i].animations = value;
                 }
             }
         }
