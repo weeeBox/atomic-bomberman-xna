@@ -195,6 +195,17 @@ namespace Bomberman.Game
         }
 
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
+        protected Field Field
+        {
+            get { return Game.Current.Field; }
+        }
+
+        #endregion
     }
 
     //////////////////////////////////////////////////////////////////////////////

@@ -362,7 +362,7 @@ namespace Bomberman.Game.Multiplayer
             }
             else if (p.IsAlive())
             {
-                p.Kill();
+                Field.KillPlayer(p);
             }
 
             Bomb[] bombs = p.bombs.array;

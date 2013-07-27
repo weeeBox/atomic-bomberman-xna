@@ -212,7 +212,8 @@ namespace Bomberman.Game.Elements.Fields
                 blink = !blink;
                 if (blink)
                 {
-                    context.DrawImage(image, drawX, drawY - image.GetHeight() + cellHeight);
+                    AnimationInstance anim = player.currentAnimation;
+                    anim.Draw(context, drawX + 0.5f * cellWidth, drawY + cellHeight);
                 }
             }
             else

@@ -420,7 +420,7 @@ namespace Bomberman.Game.Elements.Players
         {
             if (IsAlive())
             {
-                Kill();
+                GetField().KillPlayer(this);
                 return true;
             }
 
