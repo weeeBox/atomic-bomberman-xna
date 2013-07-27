@@ -19,60 +19,57 @@ namespace Bomberman.Game
 
     public class Game
     {
-        public Field field;
+        private static Game s_current;
 
-        private static Game current;
-
-        private Scheme currentScheme;
-
-        private int roundIndex;
-
-        public IGameListener listener;
+        private Field m_field;
+        private Scheme m_currentScheme;
+        private int m_roundIndex;
+        private IGameListener m_listener;
 
         public Game()
         {
-            current = this;
-            field = new Field();
+            s_current = this;
+            m_field = new Field();
         }
 
         public void AddPlayer(Player player)
         {
-            field.AddPlayer(player);
+            m_field.AddPlayer(player);
         }
 
         public PlayerList GetPlayers()
         {
-            return field.GetPlayers();
+            return m_field.GetPlayers();
         }
 
         public int GetPlayersCount()
         {
-            return field.GetPlayers().GetCount();
+            return m_field.GetPlayers().GetCount();
         }
 
         /* Loads field from scheme: setups bricks, powerups and players */
         public void LoadField(Scheme scheme)
         {
-            currentScheme = scheme;
-            field.Load(scheme);
+            m_currentScheme = scheme;
+            m_field.Load(scheme);
         }
 
         /* Loads field from scheme: setups ONLY bricks */
         public void SetupField(Scheme scheme)
         {
-            currentScheme = scheme;
-            field.Setup(scheme);
+            m_currentScheme = scheme;
+            m_field.Setup(scheme);
         }
 
         public void Restart()
         {
-            field.Restart(currentScheme);
+            m_field.Restart(m_currentScheme);
         }
 
         public void StartNextRound()
         {
-            Debug.Assert(roundIndex < CVars.roundsToWin.intValue - 1);
-            ++roundIndex;
+            Debug.Assert(m_roundIndex < CVars.roundsToWin.intValue - 1);
+            ++m_roundIndex;
 
             Restart();
         }
@@ -83,7 +80,7 @@ namespace Bomberman.Game
 
         public void EndRound()
         {
-            if (roundIndex < CVars.roundsToWin.intValue - 1)
+            if (m_roundIndex < CVars.roundsToWin.intValue - 1)
             {
                 NotifyRoundEnded();
             }
@@ -101,14 +98,14 @@ namespace Bomberman.Game
 
         private void NotifyRoundEnded()
         {
-            if (listener != null)
-                listener.OnRoundEnded(this);
+            if (m_listener != null)
+                m_listener.OnRoundEnded(this);
         }
 
         private void NotifyGameEnded()
         {
-            if (listener != null)
-                listener.OnGameEnded(this);
+            if (m_listener != null)
+                m_listener.OnGameEnded(this);
         }
 
         #endregion
@@ -117,19 +114,25 @@ namespace Bomberman.Game
 
         #region Getters/Setters
 
+        public static Game Current
+        {
+            get { return s_current; }
+        }
+
         public static PlayerList Players()
         {
-            return current.GetPlayers();
+            return s_current.GetPlayers();
         }
 
-        public static Field Field()
+        public Field Field
         {
-            return current.field;
+            get { return m_field; }
         }
 
-        public static Game Current()
+        public IGameListener listener
         {
-            return current;
+            get { return m_listener; }
+            set { m_listener = value; }
         }
 
         #endregion

@@ -29,7 +29,7 @@ namespace Bomberman.Game
 
         protected Game GetGame()
         {
-            return Game.Current();
+            return Game.Current;
         }
 
         protected Field GetField()

@@ -53,7 +53,7 @@ namespace Bomberman.Game.Multiplayer
 
         protected void WriteFieldState(NetOutgoingMessage response, Player senderPlayer)
         {
-            Field field = game.field;
+            Field field = game.Field;
             Debug.Assert(field != null);
 
             // powerups
@@ -85,7 +85,7 @@ namespace Bomberman.Game.Multiplayer
 
         protected void ReadFieldState(NetIncomingMessage response)
         {
-            Field field = game.field;
+            Field field = game.Field;
             Debug.Assert(field != null);
 
             // powerups
@@ -140,7 +140,7 @@ namespace Bomberman.Game.Multiplayer
         {
             buffer.WriteTime(false);
 
-            WriteServerPacket(buffer, game.field);
+            WriteServerPacket(buffer, game.Field);
 
             List<Player> players = game.GetPlayers().list;
             for (int i = 0; i < players.Count; ++i)
@@ -260,7 +260,7 @@ namespace Bomberman.Game.Multiplayer
             packet.lastAckId = msg.ReadInt32();
             packet.timeStamp = (float)msg.ReadTime(false);
 
-            ReadServerPacket(msg, game.field);
+            ReadServerPacket(msg, game.Field);
 
             List<Player> players = game.GetPlayers().list;
             for (int i = 0; i < players.Count; ++i)
@@ -389,7 +389,7 @@ namespace Bomberman.Game.Multiplayer
                 {
                     b.player = p;
                     b.Activate();
-                    game.field.SetBomb(b);
+                    game.Field.SetBomb(b);
                 }
 
                 b.timeRemains = remains;

@@ -946,7 +946,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private Game GetGame()
         {
-            return Game.Current(); // TODO: get rid on singletons
+            return Game.Current; // TODO: get rid on singletons
         }
 
         #endregion

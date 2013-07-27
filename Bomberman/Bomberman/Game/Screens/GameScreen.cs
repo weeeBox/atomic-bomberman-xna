@@ -24,7 +24,7 @@ namespace Bomberman.Game.Screens
 
         public GameScreen()
         {
-            Field field = Game.Field();
+            Field field = Game.Current.Field;
             
             AddUpdatable(field);
 
