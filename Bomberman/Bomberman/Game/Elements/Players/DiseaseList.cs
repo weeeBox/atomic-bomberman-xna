@@ -38,10 +38,7 @@ namespace Bomberman.Game.Elements.Players
 
         public void Reset()
         {
-            ArrayUtils.Clear(flags);
-            ArrayUtils.Clear(oldFlags);
-            ArrayUtils.Clear(remains);
-            m_activeCount = 0;
+            CureAll();
 
             for (int i = 0; i < randomIndices.Length; ++i)
             {
@@ -147,6 +144,14 @@ namespace Bomberman.Game.Elements.Players
             UpdateFlagsChanges();
 
             return infected;
+        }
+
+        public void CureAll()
+        {
+            ArrayUtils.Clear(flags);
+            ArrayUtils.Clear(oldFlags);
+            ArrayUtils.Clear(remains);
+            m_activeCount = 0;
         }
 
         public bool TryCure(Diseases disease)

@@ -830,6 +830,8 @@ namespace Bomberman.Game.Elements.Players
                 m_bombInHands = null;
             }
 
+            m_diseases.CureAll();
+
             UpdateAnimation();
         }
 
