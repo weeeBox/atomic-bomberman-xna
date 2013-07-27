@@ -20,6 +20,7 @@ namespace Bomberman.Content
             Looped,
         }
 
+        private int m_id;
         private Animation m_animation;
 
         private float m_frameTime;
@@ -30,10 +31,11 @@ namespace Bomberman.Content
         private AnimationInstanceDelegate m_delegate;
         private Object m_userData;
 
-        public void Init(Animation animation)
+        public void Init(Animation animation, Mode mode = Mode.Normal)
         {
             Reset();
             m_animation = animation;
+            m_mode = mode;
         }
 
         public void Update(float delta)
@@ -76,6 +78,7 @@ namespace Bomberman.Content
             m_speedMultiplier = 1.0f;
             m_mode = Mode.Looped;
             m_delegate = null;
+            m_id = 0;
             m_userData = null;
         }
 
@@ -103,13 +106,18 @@ namespace Bomberman.Content
         public Mode mode
         {
             get { return m_mode; }
-            set { m_mode = value; }
         }
 
         public AnimationInstanceDelegate animationDelegate
         {
             get { return m_delegate; }
             set { m_delegate = value; }
+        }
+
+        public int id
+        {
+            get { return m_id; }
+            set { m_id = value; }
         }
 
         public Object userData

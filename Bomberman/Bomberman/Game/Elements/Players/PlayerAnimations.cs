@@ -11,7 +11,7 @@ namespace Bomberman.Game.Elements.Players
 {
     public class PlayerAnimations
     {
-        public enum AnimationType
+        public enum Id
         {
             Undefined,
             Stand,
@@ -25,15 +25,15 @@ namespace Bomberman.Game.Elements.Players
             Die,
         }
 
-        private IDictionary<AnimationType, DirectionalAnimationGroup> m_Directionals;
-        private IDictionary<AnimationType, Animation[]> m_Singles;
+        private IDictionary<Id, DirectionalAnimationGroup> m_Directionals;
+        private IDictionary<Id, Animation[]> m_Singles;
 
         public PlayerAnimations()
         {
             InitAnimations();
         }
 
-        public Animation Find(AnimationType type, Direction dir)
+        public Animation Find(Id type, Direction dir)
         {
             DirectionalAnimationGroup directional;
             if (m_Directionals.TryGetValue(type, out directional))
@@ -54,58 +54,58 @@ namespace Bomberman.Game.Elements.Players
         private void InitAnimations()
         {
             // directional animations
-            m_Directionals = new Dictionary<AnimationType, DirectionalAnimationGroup>();
+            m_Directionals = new Dictionary<Id, DirectionalAnimationGroup>();
 
             DirectionalAnimationGroup group = new DirectionalAnimationGroup();
             group.Set(Direction.UP, GetAnimation(A.anim_stand_north));
             group.Set(Direction.DOWN, GetAnimation(A.anim_stand_south));
             group.Set(Direction.LEFT, GetAnimation(A.anim_stand_west));
             group.Set(Direction.RIGHT, GetAnimation(A.anim_stand_east));
-            m_Directionals[AnimationType.Stand] = group;
+            m_Directionals[Id.Stand] = group;
 
             group = new DirectionalAnimationGroup();
             group.Set(Direction.UP, GetAnimation(A.anim_walk_north));
             group.Set(Direction.DOWN, GetAnimation(A.anim_walk_south));
             group.Set(Direction.LEFT, GetAnimation(A.anim_walk_west));
             group.Set(Direction.RIGHT, GetAnimation(A.anim_walk_east));
-            m_Directionals[AnimationType.Walk] = group;
+            m_Directionals[Id.Walk] = group;
 
             group = new DirectionalAnimationGroup();
             group.Set(Direction.UP, GetAnimation(A.anim_kick_north));
             group.Set(Direction.DOWN, GetAnimation(A.anim_kick_south));
             group.Set(Direction.LEFT, GetAnimation(A.anim_kick_west));
             group.Set(Direction.RIGHT, GetAnimation(A.anim_kick_east));
-            m_Directionals[AnimationType.KickBomb] = group;
+            m_Directionals[Id.KickBomb] = group;
 
             group = new DirectionalAnimationGroup();
             group.Set(Direction.UP, GetAnimation(A.anim_punch_north));
             group.Set(Direction.DOWN, GetAnimation(A.anim_punch_south));
             group.Set(Direction.LEFT, GetAnimation(A.anim_punch_west));
             group.Set(Direction.RIGHT, GetAnimation(A.anim_punch_east));
-            m_Directionals[AnimationType.PunchBomb] = group;
+            m_Directionals[Id.PunchBomb] = group;
 
             group = new DirectionalAnimationGroup();
             group.Set(Direction.UP, GetAnimation(A.anim_pickup_north));
             group.Set(Direction.DOWN, GetAnimation(A.anim_pickup_south));
             group.Set(Direction.LEFT, GetAnimation(A.anim_pickup_west));
             group.Set(Direction.RIGHT, GetAnimation(A.anim_pickup_east));
-            m_Directionals[AnimationType.PickupBomb] = group;
+            m_Directionals[Id.PickupBomb] = group;
 
             group = new DirectionalAnimationGroup();
             group.Set(Direction.UP, GetAnimation(A.anim_standbomb_north));
             group.Set(Direction.DOWN, GetAnimation(A.anim_standbomb_south));
             group.Set(Direction.LEFT, GetAnimation(A.anim_standbomb_west));
             group.Set(Direction.RIGHT, GetAnimation(A.anim_standbomb_east));
-            m_Directionals[AnimationType.StandBomb] = group;
+            m_Directionals[Id.StandBomb] = group;
 
             group = new DirectionalAnimationGroup();
             group.Set(Direction.UP, GetAnimation(A.anim_walkbomb_north));
             group.Set(Direction.DOWN, GetAnimation(A.anim_walkbomb_south));
             group.Set(Direction.LEFT, GetAnimation(A.anim_walkbomb_west));
             group.Set(Direction.RIGHT, GetAnimation(A.anim_walkbomb_east));
-            m_Directionals[AnimationType.WalkBomb] = group;
+            m_Directionals[Id.WalkBomb] = group;
 
-            m_Singles = new Dictionary<AnimationType, Animation[]>();
+            m_Singles = new Dictionary<Id, Animation[]>();
 
             // cornerhead
             Animation[] array = new Animation[]
@@ -124,7 +124,7 @@ namespace Bomberman.Game.Elements.Players
                 GetAnimation(A.anim_cornerhead_11),
                 GetAnimation(A.anim_cornerhead_12),
             };
-            m_Singles[AnimationType.Cornerhead] = array;
+            m_Singles[Id.Cornerhead] = array;
 
             // die
             array = new Animation[]
@@ -154,7 +154,7 @@ namespace Bomberman.Game.Elements.Players
                 GetAnimation(A.anim_die_green_23),
                 GetAnimation(A.anim_die_green_24),
             };
-            m_Singles[AnimationType.Die] = array;
+            m_Singles[Id.Die] = array;
         }
 
         private Animation GetAnimation(int id)

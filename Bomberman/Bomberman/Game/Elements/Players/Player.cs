@@ -1113,31 +1113,29 @@ namespace Bomberman.Game.Elements.Players
 
         private void UpdateAnimation()
         {
-            PlayerAnimations.AnimationType type;
+            PlayerAnimations.Id id;
+            AnimationInstance.Mode mode = AnimationInstance.Mode.Normal;
+
             if (IsAlive())
             {
                 if (IsMoving())
                 {
-                    type = PlayerAnimations.AnimationType.Walk;
+                    id = PlayerAnimations.Id.Walk;
                 }
                 else
                 {
-                    type = PlayerAnimations.AnimationType.Stand;
+                    id = PlayerAnimations.Id.Stand;
                 }
             }
             else
             {
-                type = PlayerAnimations.AnimationType.Die;
+                id = PlayerAnimations.Id.Die;
+                mode = AnimationInstance.Mode.Looped;
             }
 
-            Animation animation = m_animations.Find(type, direction);
-            m_currentAnimation.Init(animation);
-
-            if (!IsAlive())
-            {
-                m_currentAnimation.mode = AnimationInstance.Mode.Normal;
-                m_currentAnimation.animationDelegate = PlayerDieAnimationCallback;
-            }
+            Animation animation = m_animations.Find(id, direction);
+            m_currentAnimation.Init(animation, mode);
+            m_currentAnimation.id = (int)id;
         }
 
         private void ResetAnimation()
@@ -1145,9 +1143,15 @@ namespace Bomberman.Game.Elements.Players
             UpdateAnimation();
         }
 
-        private void PlayerDieAnimationCallback(AnimationInstance animation)
+        private void AnimationEndCallback(AnimationInstance animation)
         {
-            RemoveFromField();
+            PlayerAnimations.Id id = (PlayerAnimations.Id)animation.id;
+            switch (id)
+            {
+                case PlayerAnimations.Id.Die:
+                    RemoveFromField();
+                    break;
+            }
         }
 
         #endregion
