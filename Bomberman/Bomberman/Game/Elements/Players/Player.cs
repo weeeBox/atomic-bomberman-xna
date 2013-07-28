@@ -54,6 +54,7 @@ namespace Bomberman.Game.Elements.Players
         private AnimationInstance m_currentAnimation;
 
         private bool m_punchingBomb; // true if player is in the middle of punching a bomb (animation is playing)
+        private bool m_pickingBomb; // true if player is in the middle of picking a bomb (animation is playing)
 
         public Player(int index)
             : base(FieldCellType.Player, 0, 0)
@@ -90,8 +91,6 @@ namespace Bomberman.Game.Elements.Players
             m_suicidesCount = 0;
             m_connection = null;
             m_lastAckPacketId = 0;
-
-            m_punchingBomb = false;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -1007,6 +1006,8 @@ namespace Bomberman.Game.Elements.Players
             {
                 underlyingBomb.Grab();
                 m_bombInHands = underlyingBomb;
+
+                IsPickingUpBomb = true;
                 return true;
             }
             return false;
@@ -1019,6 +1020,8 @@ namespace Bomberman.Game.Elements.Players
                 AddThrownBomb(m_bombInHands);
                 m_bombInHands.Throw();
                 m_bombInHands = null;
+
+                IsPickingUpBomb = false;
                 return true;
             }
             return false;
@@ -1040,8 +1043,7 @@ namespace Bomberman.Game.Elements.Players
         
         private bool TryPunchBomb()
         {
-            m_punchingBomb = true;
-            UpdateAnimation();
+            IsPunchingBomb = true;
 
             FieldCellSlot slot = NearSlotDir(direction);
             Bomb bomb = slot != null ? slot.GetBomb() : null;
@@ -1126,7 +1128,7 @@ namespace Bomberman.Game.Elements.Players
 
             if (IsAlive())
             {
-                if (m_punchingBomb)
+                if (IsPunchingBomb)
                 {
                     if (currentId == PlayerAnimations.Id.PunchBomb)
                     {
@@ -1134,6 +1136,16 @@ namespace Bomberman.Game.Elements.Players
                     }
 
                     id = PlayerAnimations.Id.PunchBomb;
+                    mode = AnimationInstance.Mode.Normal;
+                }
+                else if (IsPickingUpBomb)
+                {
+                    id = PlayerAnimations.Id.PickupBomb;
+                    mode = AnimationInstance.Mode.Normal;
+                }
+                else if (IsHoldingBomb())
+                {
+                    id = IsMoving() ? PlayerAnimations.Id.WalkBomb : PlayerAnimations.Id.StandBomb;
                     mode = AnimationInstance.Mode.Normal;
                 }
                 else if (IsMoving())
@@ -1169,6 +1181,9 @@ namespace Bomberman.Game.Elements.Players
 
         private void ResetAnimation()
         {
+            m_pickingBomb = false;
+            m_punchingBomb = false;
+
             UpdateAnimation();
         }
 
@@ -1186,14 +1201,37 @@ namespace Bomberman.Game.Elements.Players
 
                 case PlayerAnimations.Id.PunchBomb:
                 {
-                    Debug.Assert(m_punchingBomb);
-                    m_punchingBomb = false;
-                    ScheduleAnimationUpdate();
+                    IsPunchingBomb = false;
+                    break;
+                }
+
+                case PlayerAnimations.Id.PickupBomb:
+                {
+                    IsPickingUpBomb = false;
                     break;
                 }
             }
         }
 
+        private bool IsPickingUpBomb
+        {
+            get { return m_pickingBomb; }
+            set
+            {   
+                m_pickingBomb = value;
+                ScheduleAnimationUpdate();
+            }
+        }
+
+        private bool IsPunchingBomb
+        {
+            get { return m_punchingBomb; }
+            set
+            {   
+                m_punchingBomb = value;
+                ScheduleAnimationUpdate();
+            }
+        }
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
