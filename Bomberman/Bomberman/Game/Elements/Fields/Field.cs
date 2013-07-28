@@ -399,6 +399,7 @@ namespace Bomberman.Game.Elements.Fields
             players.Remove(player);
             player.animations = null;
             player.bombAnimations = null;
+            CancelAllTimers(player);
         }
 
         public void KillPlayer(Player player)
@@ -621,12 +622,13 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         public void RemoveCell(FieldCell cell)
-        {
+        {   
             cells.Remove(cell);
             if (cell.IsMovable())
             {
                 RemoveMovable(cell.AsMovable());
             }
+            CancelAllTimers(cell);
         }
 
         private void ClearBrick(int cx, int cy)
@@ -963,6 +965,16 @@ namespace Bomberman.Game.Elements.Fields
         public void ScheduleTimerOnce(TimerCallback callback, float delay = 0.0f, bool repeated = false)
         {
             timerManager.ScheduleOnce(callback, delay, repeated);
+        }
+
+        public void CancelTimer(TimerCallback callback)
+        {
+            timerManager.Cancel(callback);
+        }
+
+        public void CancelAllTimers(Object target)
+        {
+            timerManager.CancelAll(target);
         }
 
         #endregion

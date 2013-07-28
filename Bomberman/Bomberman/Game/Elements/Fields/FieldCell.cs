@@ -217,10 +217,36 @@ namespace Bomberman.Game.Elements.Fields
             return GetField().GetSlot(cx, cy);
         }
 
-        /* This is a bit tricky: I'm not gonna use properties or any other C# specific
-           stuff. Just keep them to check if some code is trying to assign "readonly" public
-           field.
-         */
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region TimerManager
+
+        protected void ScheduleTimer(TimerCallback callback, float delay = 0.0f, bool repeated = false)
+        {
+            GetField().ScheduleTimer(callback, delay, repeated);
+        }
+
+        protected void ScheduleTimerOnce(TimerCallback callback, float delay = 0.0f, bool repeated = false)
+        {
+            GetField().ScheduleTimerOnce(callback, delay, repeated);
+        }
+
+        protected void CancelTimer(TimerCallback callback)
+        {
+            GetField().CancelTimer(callback);
+        }
+
+        protected void CancelAllTimers()
+        {
+            GetField().CancelAllTimers(this);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
         public int cx
         {
             get { return Util.Px2Cx(px); }
@@ -262,6 +288,8 @@ namespace Bomberman.Game.Elements.Fields
         {
             get { return m_py - m_oldPy; }
         }
+
+        #endregion
 
         public int GetPriority()
         {

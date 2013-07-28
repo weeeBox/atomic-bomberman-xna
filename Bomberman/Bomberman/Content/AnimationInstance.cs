@@ -7,6 +7,7 @@ using BomberEngine.Debugging;
 using BomberEngine.Core.Assets.Types;
 using BomberEngine.Core.Visual;
 using Microsoft.Xna.Framework;
+using BomberEngine.Game;
 
 namespace Bomberman.Content
 {
@@ -38,6 +39,10 @@ namespace Bomberman.Content
             m_mode = mode;
         }
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Update
+
         public void Update(float delta)
         {
             m_frameTime += delta * m_speedMultiplier;
@@ -65,10 +70,22 @@ namespace Bomberman.Content
             }
         }
 
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Draw
+
         public void Draw(Context context, float x, float y)
         {
             m_animation.Draw(context, m_frameIndex, x, y);
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+        
+        #region Resetable
 
         public void Reset()
         {
@@ -81,6 +98,12 @@ namespace Bomberman.Content
             m_id = 0;
             m_userData = null;
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
 
         public Animation Animation
         {
@@ -125,5 +148,7 @@ namespace Bomberman.Content
             get { return m_userData; }
             set { m_userData = value; }
         }
+
+        #endregion
     }
 }

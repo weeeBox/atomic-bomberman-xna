@@ -53,6 +53,8 @@ namespace Bomberman.Game.Elements.Players
         private PlayerAnimations m_animations;
         private AnimationInstance m_currentAnimation;
 
+        private bool m_punchingBomb; // true if player is in the middle of punching a bomb (animation is playing)
+
         public Player(int index)
             : base(FieldCellType.Player, 0, 0)
         {
@@ -88,6 +90,8 @@ namespace Bomberman.Game.Elements.Players
             m_suicidesCount = 0;
             m_connection = null;
             m_lastAckPacketId = 0;
+
+            m_punchingBomb = false;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -1036,6 +1040,9 @@ namespace Bomberman.Game.Elements.Players
         
         private bool TryPunchBomb()
         {
+            m_punchingBomb = true;
+            UpdateAnimation();
+
             FieldCellSlot slot = NearSlotDir(direction);
             Bomb bomb = slot != null ? slot.GetBomb() : null;
             if (bomb != null)
@@ -1114,11 +1121,22 @@ namespace Bomberman.Game.Elements.Players
         private void UpdateAnimation()
         {
             PlayerAnimations.Id id;
+            PlayerAnimations.Id currentId = (PlayerAnimations.Id)m_currentAnimation.id;
             AnimationInstance.Mode mode = AnimationInstance.Mode.Looped;
 
             if (IsAlive())
             {
-                if (IsMoving())
+                if (m_punchingBomb)
+                {
+                    if (currentId == PlayerAnimations.Id.PunchBomb)
+                    {
+                        return; // don't play animation again
+                    }
+
+                    id = PlayerAnimations.Id.PunchBomb;
+                    mode = AnimationInstance.Mode.Normal;
+                }
+                else if (IsMoving())
                 {
                     id = PlayerAnimations.Id.Walk;
                 }
@@ -1136,6 +1154,17 @@ namespace Bomberman.Game.Elements.Players
             Animation animation = m_animations.Find(id, direction);
             m_currentAnimation.Init(animation, mode);
             m_currentAnimation.id = (int)id;
+            m_currentAnimation.animationDelegate = AnimationFinishedCallback;
+        }
+
+        private void ScheduleAnimationUpdate()
+        {
+            ScheduleTimerOnce(UpdateAnimationCallback);
+        }
+
+        private void UpdateAnimationCallback(Timer timer)
+        {
+            UpdateAnimation();
         }
 
         private void ResetAnimation()
@@ -1143,14 +1172,25 @@ namespace Bomberman.Game.Elements.Players
             UpdateAnimation();
         }
 
-        private void AnimationEndCallback(AnimationInstance animation)
+        private void AnimationFinishedCallback(AnimationInstance animation)
         {
             PlayerAnimations.Id id = (PlayerAnimations.Id)animation.id;
             switch (id)
             {
                 case PlayerAnimations.Id.Die:
+                {
+                    Debug.Assert(!IsAlive());
                     RemoveFromField();
                     break;
+                }
+
+                case PlayerAnimations.Id.PunchBomb:
+                {
+                    Debug.Assert(m_punchingBomb);
+                    m_punchingBomb = false;
+                    ScheduleAnimationUpdate();
+                    break;
+                }
             }
         }
 
