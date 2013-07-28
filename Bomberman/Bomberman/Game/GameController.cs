@@ -119,6 +119,7 @@ namespace Bomberman.Game
         protected void StartNextRound()
         {   
             game.StartNextRound();
+            GetConsole().TryExecuteCommand("exec game.cfg");
         }
 
         protected void LoadField(Scheme scheme)
@@ -210,6 +211,9 @@ namespace Bomberman.Game
                     currentScreen.Finish();
                     
                     StartNextRound();
+                    break;
+                case RoundResultScreen.ButtonId.Exit:
+                    Stop(ExitCode.Exit);
                     break;
             }
         }

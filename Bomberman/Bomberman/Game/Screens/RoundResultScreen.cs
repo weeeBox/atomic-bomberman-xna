@@ -60,6 +60,8 @@ namespace Bomberman.Game.Screens
             button = new TextButton("START!", Helper.fontButton, 0, 0, 100, 20);
             button.id = (int)ButtonId.Continue; ;
             button.buttonDelegate = buttonDelegate;
+            FocusView(button);
+
             SetConfirmButton(button);
             buttons.AddView(button);
 

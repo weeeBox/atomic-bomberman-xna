@@ -88,7 +88,7 @@ namespace BomberEngine.Game
         {
             OnStart();
 
-            if (mRootView != null)
+            if (mRootView != null && mFocusedView == null)
             {
                 TryMoveFocus(FocusDirection.Down);
             }
@@ -434,7 +434,7 @@ namespace BomberEngine.Game
             return null;
         }
 
-        private bool FocusView(View view)
+        protected bool FocusView(View view)
         {
             if (view != mFocusedView)
             {

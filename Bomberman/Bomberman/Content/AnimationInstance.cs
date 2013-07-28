@@ -31,7 +31,7 @@ namespace Bomberman.Content
         private AnimationInstanceDelegate m_delegate;
         private Object m_userData;
 
-        public void Init(Animation animation, Mode mode = Mode.Normal)
+        public void Init(Animation animation, Mode mode = Mode.Looped)
         {
             Reset();
             m_animation = animation;
