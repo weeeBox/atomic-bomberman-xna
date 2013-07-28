@@ -137,7 +137,6 @@
     <Compile Include="Core\Assets\AssetManagerListener.cs" />
     <Compile Include="Core\Assets\Types\TextureImage.cs" />
     <Compile Include="Core\Input\KeyboardListenerList.cs" />
-    <Compile Include="Core\UpdatableDelegate.cs" />
     <Compile Include="Core\Visual\Camera.cs" />
     <Compile Include="Core\Visual\Context.cs" />
     <Compile Include="Core\IDrawable.cs" />

@@ -156,24 +156,7 @@ namespace BomberEngine.Game
             updatables.Add(updatable);
         }
 
-        public void AddUpdatable(UpdatableDelegate updatableDelegate)
-        {
-            if (updatables.IsNull())
-            {
-                updatables = new UpdatableList();
-            }
-            updatables.Add(updatableDelegate);
-        }
-
         public void RemoveUpdatable(IUpdatable updatable)
-        {
-            if (updatables.Count() > 0)
-            {
-                updatables.Remove(updatable);
-            }
-        }
-
-        public void RemoveUpdatable(UpdatableDelegate updatable)
         {
             if (updatables.Count() > 0)
             {

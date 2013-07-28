@@ -6,6 +6,8 @@ using BomberEngine.Util;
 
 namespace BomberEngine.Core
 {
+    public delegate void UpdatableDelegate(float delta);
+
     public class UpdatableList : BaseUpdatableList<IUpdatable>, IDestroyable
     {
         public static readonly UpdatableList Null = new NullUpdatableList();
@@ -24,38 +26,6 @@ namespace BomberEngine.Core
         protected UpdatableList(List<IUpdatable> list, IUpdatable nullUpdatable)
             : base(list, nullUpdatable)
         {
-        }
-
-        public void Add(UpdatableDelegate updatableDelegate)
-        {
-            Add(UpdatableDelegateClass.Create(updatableDelegate));
-        }
-
-        public void Remove(UpdatableDelegate updatableDelegate)
-        {
-            for (int i = 0; i < list.Count; ++i)
-            {
-                UpdatableDelegateClass delegateObj = list[i] as UpdatableDelegateClass;
-                if (delegateObj != null && delegateObj.updatableDelegate == updatableDelegate)
-                {
-                    RemoveAt(i);
-                    break;
-                }
-            }
-        }
-
-        public override void Clear()
-        {
-            for (int i = 0; i < list.Count; ++i)
-            {
-                UpdatableDelegateClass delegateObj = list[i] as UpdatableDelegateClass;
-                if (delegateObj != null)
-                {
-                    delegateObj.Destroy();
-                }
-            }
-
-            base.Clear();
         }
 
         public void Destroy()
