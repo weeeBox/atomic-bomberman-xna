@@ -49,7 +49,7 @@ namespace Bomberman.Game
         }
     }
 
-    public class GameController : BmController, IGameListener
+    public class GameController : BmController
     {
         public enum ExitCode
         {
@@ -96,11 +96,13 @@ namespace Bomberman.Game
         protected override void OnStart()
         {
             GetConsole().RegisterCommands(gameCommands);
+            RegisterNotifications();
         }
 
         protected override void OnStop()
         {   
             GetConsole().UnregisterCommands(gameCommands);
+            UnregisterNotifications();
         }
 
         protected void Stop(ExitCode exitCode, Object data = null)
@@ -156,15 +158,44 @@ namespace Bomberman.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region IGameListener
+        #region Notifications
 
-        public virtual void OnRoundEnded(Game game)
+        protected virtual void RegisterNotifications()
         {
+            RegisterNotification(GameNotifications.RoundEnded, RoundEndedNotification);
+            RegisterNotification(GameNotifications.GameEnded, GameEndedNotification);
+        }
+
+        protected virtual void UnregisterNotifications()
+        {
+            Application.Notifications().UnregisterAll(this);
+        }
+
+        protected void RegisterNotification(String name, NotificationDelegate del)
+        {
+            Application.Notifications().Register(name, del);
+        }
+
+        protected void UnregisterNotification(String name, NotificationDelegate del)
+        {
+            Application.Notifications().Unregister(name, del);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Game notifications
+
+        private void RoundEndedNotification(Notification notification)
+        {
+            Log.d("Round ended");
             StartNextScreen(new RoundResultScreen(RoundResultScreenButtonDelegate));
         }
 
-        public virtual void OnGameEnded(Game game)
+        private void GameEndedNotification(Notification notification)
         {
+            Log.d("Game ended");
             StartNextScreen(new GameResultScreen(GameResultScreenButtonDelegate));
         }
 
@@ -226,7 +257,6 @@ namespace Bomberman.Game
             base.OnStart();
 
             game = new Game();
-            game.listener = this;
 
             GameSettings.InputEntry[] entries = settings.inputEntries;
             for (int i = 0; i < entries.Length; ++i)

@@ -25,7 +25,7 @@ namespace BomberEngine.Game
         private TimerManager timerManager;
         private InputManager inputManager;
         private AssetManager assetManager;
-        private Notifications notifications;
+        private NotificationCenter notifications;
 
         private UpdatableList updatables;
         private DrawableList drawables;
@@ -56,9 +56,9 @@ namespace BomberEngine.Game
             return new TimerManager();
         }
 
-        private Notifications CreateNotifications(TimerManager timerManager)
+        private NotificationCenter CreateNotifications(TimerManager timerManager)
         {
-            return new Notifications(timerManager);
+            return new NotificationCenter(timerManager);
         }
 
         protected InputManager CreateInputManager()
@@ -208,17 +208,17 @@ namespace BomberEngine.Game
 
         public static void UnregisterNotification(String name, NotificationDelegate del)
         {
-            sharedApplication.notifications.Remove(name, del);
+            sharedApplication.notifications.Unregister(name, del);
         }
 
         public static void UnregisterNotifications(NotificationDelegate del)
         {
-            sharedApplication.notifications.Remove(del);
+            sharedApplication.notifications.UnregisterAll(del);
         }
 
         public static void UnregisterNotifications(Object target)
         {
-            sharedApplication.notifications.RemoveAll(target);
+            sharedApplication.notifications.UnregisterAll(target);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -290,7 +290,7 @@ namespace BomberEngine.Game
             return sharedApplication.timerManager;
         }
 
-        public static Notifications Notifications()
+        public static NotificationCenter Notifications()
         {
             return sharedApplication.notifications;
         }

@@ -10,19 +10,19 @@ namespace BomberEngine.Core.Events
 {
     public delegate void NotificationDelegate(Notification notification);
 
-    public class Notifications : IDestroyable
+    public class NotificationCenter : IDestroyable
     {
         private TimerManager m_timerManager;
 
         private IDictionary<String, NotificationDelegateList> m_registerMap;
         private ObjectsPool<Notification> m_notificatoinsPool;
 
-        public Notifications()
+        public NotificationCenter()
             : this(Application.TimerManager())
         {
         }
 
-        public Notifications(TimerManager timerManager)
+        public NotificationCenter(TimerManager timerManager)
         {
             m_timerManager = timerManager;
             m_registerMap = new Dictionary<String, NotificationDelegateList>();
@@ -49,7 +49,7 @@ namespace BomberEngine.Core.Events
             list.Add(del);
         }
 
-        public bool Remove(String name, NotificationDelegate del)
+        public bool Unregister(String name, NotificationDelegate del)
         {
             NotificationDelegateList list = FindList(name);
             if (list != null)
@@ -60,7 +60,7 @@ namespace BomberEngine.Core.Events
             return false;
         }
 
-        public bool Remove(NotificationDelegate del)
+        public bool UnregisterAll(NotificationDelegate del)
         {
             bool removed = false;
             foreach (KeyValuePair<String, NotificationDelegateList> e in m_registerMap)
@@ -71,7 +71,7 @@ namespace BomberEngine.Core.Events
             return removed;
         }
 
-        public bool RemoveAll(Object target)
+        public bool UnregisterAll(Object target)
         {
             bool removed = false;
             foreach (KeyValuePair<String, NotificationDelegateList> e in m_registerMap)

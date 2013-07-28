@@ -1114,7 +1114,7 @@ namespace Bomberman.Game.Elements.Players
         private void UpdateAnimation()
         {
             PlayerAnimations.Id id;
-            AnimationInstance.Mode mode = AnimationInstance.Mode.Normal;
+            AnimationInstance.Mode mode = AnimationInstance.Mode.Looped;
 
             if (IsAlive())
             {
@@ -1130,7 +1130,7 @@ namespace Bomberman.Game.Elements.Players
             else
             {
                 id = PlayerAnimations.Id.Die;
-                mode = AnimationInstance.Mode.Looped;
+                mode = AnimationInstance.Mode.Normal;
             }
 
             Animation animation = m_animations.Find(id, direction);

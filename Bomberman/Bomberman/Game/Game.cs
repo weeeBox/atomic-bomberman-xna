@@ -8,13 +8,14 @@ using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements.Fields;
 using Bomberman.Content;
 using BomberEngine.Debugging;
+using BomberEngine.Game;
 
 namespace Bomberman.Game
 {
-    public interface IGameListener
+    public class GameNotifications
     {
-        void OnRoundEnded(Game game);
-        void OnGameEnded(Game game);
+        public static readonly String RoundEnded = "Game Ended";
+        public static readonly String GameEnded  = "Round Ended";
     }
 
     public class Game
@@ -24,7 +25,6 @@ namespace Bomberman.Game
         private Field m_field;
         private Scheme m_currentScheme;
         private int m_roundIndex;
-        private IGameListener m_listener;
 
         public Game()
         {
@@ -98,14 +98,23 @@ namespace Bomberman.Game
 
         private void NotifyRoundEnded()
         {
-            if (m_listener != null)
-                m_listener.OnRoundEnded(this);
+            PostNotification(GameNotifications.RoundEnded);
         }
 
         private void NotifyGameEnded()
         {
-            if (m_listener != null)
-                m_listener.OnGameEnded(this);
+            PostNotification(GameNotifications.GameEnded);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Helpers
+
+        private void PostNotification(String name)
+        {
+            Application.Notifications().Post(name, this);
         }
 
         #endregion
@@ -127,12 +136,6 @@ namespace Bomberman.Game
         public Field Field
         {
             get { return m_field; }
-        }
-
-        public IGameListener listener
-        {
-            get { return m_listener; }
-            set { m_listener = value; }
         }
 
         #endregion
