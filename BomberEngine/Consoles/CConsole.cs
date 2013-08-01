@@ -37,25 +37,31 @@ namespace BomberEngine.Consoles
 
         private bool carretVisible;
 
+        private List<String> tempList = new List<String>();
+        private StringBuilder tempBuffer = new StringBuilder();
+
         private Dictionary<KeyCode, char> keyBindings;
         private Dictionary<KeyCode, char> keyShiftBindings;
 
-        public CConsole(Font font)
-            : base(Application.GetWidth(), 0.5f * Application.GetHeight())
+        protected CConsole(float width, float height)
+            : base(width, height)
         {
-            this.font = font;
-
-            AllowsDrawPrevious = true;
-            AllowsUpdatePrevious = true;
-
             commands = new CRegistery();
-
             commandBuffer = new StringBuilder();
 
             history = new CConsoleHistory(128);
             output = new CConsoleOutput(512);
 
             suggestedCommands = new LinkedList<CCommand>();
+        }
+
+        public CConsole(Font font)
+            : this(Application.GetWidth(), 0.5f * Application.GetHeight())
+        {
+            this.font = font;
+
+            AllowsDrawPrevious = true;
+            AllowsUpdatePrevious = true;
 
             charWidth = font.StringWidth("W");
             lineHeight = font.FontHeight();
@@ -225,9 +231,9 @@ namespace BomberEngine.Consoles
 
         private void TryExecuteCommand(String commandString, bool manual)
         {
-            String[] args = commandString.Split(' ');
+            List<String> args = extractArgs(commandString);
 
-            if (args.Length > 0)
+            if (args.Count > 0)
             {
                 String name = args[0];
 
@@ -243,7 +249,7 @@ namespace BomberEngine.Consoles
                         Print(PROMPT_CMD_STRING + commandString);
                     }
 
-                    if (args.Length > 1)
+                    if (args.Count > 1)
                     {
                         command.Execute();
                     }
@@ -262,6 +268,46 @@ namespace BomberEngine.Consoles
                     PushHistory(commandString);
                 }
             }
+        }
+
+        protected List<String> extractArgs(String str)
+        {
+            tempList.Clear();
+
+            bool insideParenthesis = false;
+            for (int i = 0; i < str.Length; ++i)
+            {
+                char chr = str[i];
+                if (chr == ' ' && !insideParenthesis)
+                {
+                    if (tempBuffer.Length > 0)
+                    {
+                        tempList.Add(tempBuffer.ToString());
+                        tempBuffer.Clear();
+                    }
+                }
+                else if (chr == '"')
+                {
+                    if (insideParenthesis)
+                    {
+                        tempList.Add(tempBuffer.ToString());
+                        tempBuffer.Clear();
+                    }
+                    insideParenthesis = !insideParenthesis;
+                }
+                else
+                {
+                    tempBuffer.Append(chr);
+                }
+            }
+
+            if (tempBuffer.Length > 0)
+            {
+                tempList.Add(tempBuffer.ToString());
+                tempBuffer.Clear();
+            }
+
+            return insideParenthesis ? null : tempList;
         }
 
         private void DoAutoComplete()

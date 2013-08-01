@@ -12,7 +12,7 @@ namespace BomberEngine.Consoles
         public CConsole console;
 
         public String name;
-        public String[] args;
+        public List<String> args;
         public bool manual;
 
         protected CCommand(String name)
@@ -67,7 +67,7 @@ namespace BomberEngine.Consoles
 
         protected String StrArg(int index, String defValue)
         {
-            if (index >= 0 && index < args.Length - 1)
+            if (index >= 0 && index < args.Count - 1)
             {
                 return args[index + 1];
             }
@@ -77,7 +77,7 @@ namespace BomberEngine.Consoles
 
         protected int ArgsCount()
         {
-            return args.Length - 1;
+            return args.Count - 1;
         }
 
         #endregion

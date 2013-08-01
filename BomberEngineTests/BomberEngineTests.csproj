@@ -46,6 +46,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CConsoleTests.cs" />
     <Compile Include="FastLinkedListTests.cs" />
     <Compile Include="NotificationsTest.cs" />
     <Compile Include="ObjectsPoolTest.cs" />
