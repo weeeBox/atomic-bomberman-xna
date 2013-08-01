@@ -152,8 +152,18 @@ namespace BomberEngine.Consoles
                 }
             }
 
+            List<CKeyBinding> bindlist = GetRootController().GetKeyBindings().ListBindings();
+            if (bindlist.Count > 0)
+            {
+                lines.Add("");
+                lines.Add("// bindings");
+                for (int i = 0; i < bindlist.Count; ++i)
+                {
+                    lines.Add("bind " + bindlist[i].name + " \"" + bindlist[i].cmd + "\"");
+                }
+            }
+
             File.Write(filename, lines);
-            console.Print("Config saved " + filename);
         }
     }
 

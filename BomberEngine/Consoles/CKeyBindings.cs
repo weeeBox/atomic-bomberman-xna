@@ -37,6 +37,7 @@ namespace BomberEngine.Consoles
             if (bindings[index] == null)
             {
                 ++bindingsCount;
+                ScheduleConfigUpdate();
             }
 
             bindings[index] = cmd;
@@ -49,6 +50,7 @@ namespace BomberEngine.Consoles
             {
                 Debug.Assert(bindingsCount > 0);
                 --bindingsCount;
+                ScheduleConfigUpdate();
             }
             bindings[index] = null;
         }
@@ -57,6 +59,7 @@ namespace BomberEngine.Consoles
         {
             ArrayUtils.Clear(bindings);
             bindingsCount = 0;
+            ScheduleConfigUpdate();
         }
 
         public String FindCmd(KeyCode code)
@@ -110,6 +113,11 @@ namespace BomberEngine.Consoles
         private void TryExecuteCommand(String cmd)
         {
             Application.RootController().console.TryExecuteCommand(cmd);
+        }
+
+        private void ScheduleConfigUpdate()
+        {
+            Application.RootController().console.ScheduleConfigUpdate();
         }
     }
 }
