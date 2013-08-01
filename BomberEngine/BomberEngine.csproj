@@ -94,6 +94,7 @@
   <ItemGroup>
     <Compile Include="Consoles\CConsoleHistory.cs" />
     <Compile Include="Consoles\CConsoleOutput.cs" />
+    <Compile Include="Consoles\CKeyBindings.cs" />
     <Compile Include="Consoles\CVar.cs" />
     <Compile Include="Consoles\CVarCommand.cs" />
     <Compile Include="Core\Assets\AssetBinaryReader.cs" />

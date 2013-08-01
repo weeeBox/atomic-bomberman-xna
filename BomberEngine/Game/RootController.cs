@@ -18,9 +18,12 @@ namespace BomberEngine.Game
         public Controller currentController;
         public CConsole console;
 
+        private CKeyBindings keyBindings;
+
         public RootController(ContentManager contentManager)
         {
             this.contentManager = contentManager;
+            keyBindings = new CKeyBindings();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -134,6 +137,10 @@ namespace BomberEngine.Game
             console.RegisterCommand(new Cmd_listcvars());
             console.RegisterCommand(new Cmd_exec());
             console.RegisterCommand(new Cmd_write());
+            console.RegisterCommand(new Cmd_bind());
+            console.RegisterCommand(new Cmd_unbind());
+            console.RegisterCommand(new Cmd_unbind_all());
+            console.RegisterCommand(new Cmd_bindlist());
 
             console.RegisterCvar(CVars.g_drawViewBorders);
 
@@ -235,6 +242,11 @@ namespace BomberEngine.Game
         public Controller GetCurrentController()
         {
             return currentController;
+        }
+
+        public CKeyBindings GetKeyBindings()
+        {
+            return keyBindings;
         }
 
         #endregion

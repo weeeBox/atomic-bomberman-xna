@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BomberEngine.Util;
+using BomberEngine.Game;
 
 namespace BomberEngine.Consoles
 {
@@ -105,6 +106,8 @@ namespace BomberEngine.Consoles
             console.PrintIndent(format, args);
         }
 
+        #endregion
+
         //////////////////////////////////////////////////////////////////////////////
 
         #region Helpers
@@ -127,7 +130,10 @@ namespace BomberEngine.Consoles
             return false;
         }
 
-        #endregion
+        protected RootController GetRootController()
+        {
+            return Application.RootController();
+        }
 
         #endregion
     }

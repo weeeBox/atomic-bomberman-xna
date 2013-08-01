@@ -5,6 +5,7 @@ using System.Text;
 using BomberEngine.Game;
 using BomberEngine.Consoles;
 using BomberEngine.Core.IO;
+using BomberEngine.Core.Input;
 
 namespace BomberEngine.Consoles
 {
@@ -153,6 +154,118 @@ namespace BomberEngine.Consoles
 
             File.Write(filename, lines);
             console.Print("Config saved " + filename);
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    public class Cmd_bind : CCommand
+    {
+        public Cmd_bind()
+            : base("bind")
+        {
+        }
+
+        public override void Execute()
+        {
+            if (ArgsCount() != 2)
+            {
+                Print("usage: " + name + " <key> <command>");
+                return;
+            }
+
+            String codeValue = StrArg(0);
+            KeyCode code = KeyCodeHelper.FromString(codeValue);
+            if (code == KeyCode.None)
+            {
+                Print("Invalid key '" + codeValue + "'");
+                return;
+            }
+
+            String cmd = StrArg(1);
+
+            CKeyBindings bindings = GetRootController().GetKeyBindings();
+            bindings.Bind(code, cmd);
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    public class Cmd_unbind : CCommand
+    {
+        public Cmd_unbind()
+            : base("unbind")
+        {
+        }
+
+        public override void Execute()
+        {
+            if (ArgsCount() != 1)
+            {
+                Print("usage: " + name + " <key>");
+                return;
+            }
+
+            String codeValue = StrArg(0).ToUpper();
+            KeyCode code = KeyCodeHelper.FromString(codeValue);
+            if (code == KeyCode.None)
+            {
+                Print("Invalid key '" + codeValue + "'");
+                return;
+            }
+
+            CKeyBindings bindings = GetRootController().GetKeyBindings();
+            bindings.Unbind(code);
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    public class Cmd_unbind_all : CCommand
+    {
+        public Cmd_unbind_all()
+            : base("unbind_all")
+        {
+        }
+
+        public override void Execute()
+        {
+            if (ArgsCount() != 0)
+            {
+                Print("usage: " + name);
+                return;
+            }
+
+            CKeyBindings bindings = GetRootController().GetKeyBindings();
+            bindings.UnbindAll();
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    public class Cmd_bindlist : CCommand
+    {
+        public Cmd_bindlist()
+            : base("bindlist")
+        {
+        }
+
+        public override void Execute()
+        {
+            if (ArgsCount() != 0)
+            {
+                Print("usage: " + name);
+                return;
+            }
+
+            CKeyBindings bindings = GetRootController().GetKeyBindings();
+            List<CKeyBinding> list = bindings.ListBindings();
+            for (int i = 0; i < list.Count; ++i)
+            {
+                String cmd = list[i].cmd;
+                String name = list[i].name;
+                Print(name + " \"" + cmd + "\"");
+            }
         }
     }
 

@@ -203,69 +203,222 @@ namespace BomberEngine.Core.Input
 
     public class KeyCodeHelper
     {
-        private static Dictionary<Buttons, KeyCode> lookup1;
-        private static Dictionary<KeyCode, Buttons> lookup2;
+        private struct GPBinding
+        {
+            public Buttons button;
+            public KeyCode code;
+
+            public GPBinding(Buttons button, KeyCode code)
+            {
+                this.button = button;
+                this.code = code;
+            }
+        }
+
+        private struct NameBinding
+        {
+            public String name;
+            public KeyCode code;
+
+            public NameBinding(String name, KeyCode code)
+            {
+                this.name = name;
+                this.code = code;
+            }
+        }
+
+        #region name-keycode bindings
+
+        private static readonly NameBinding[] nameBindings = 
+        {
+            new NameBinding("TAB", KeyCode.Tab),
+            new NameBinding("ENTER", KeyCode.Enter),
+            new NameBinding("PAUSE", KeyCode.Pause),
+            new NameBinding("CAPSLOCK", KeyCode.CapsLock),
+            new NameBinding("ESCAPE", KeyCode.Escape),
+            new NameBinding("PAGEUP", KeyCode.PageUp),
+            new NameBinding("PAGEDOWN", KeyCode.PageDown),
+            new NameBinding("END", KeyCode.End),
+            new NameBinding("HOME", KeyCode.Home),
+            new NameBinding("LEFT", KeyCode.Left),
+            new NameBinding("UP", KeyCode.Up),
+            new NameBinding("RIGHT", KeyCode.Right),
+            new NameBinding("DOWN", KeyCode.Down),
+            new NameBinding("INSERT", KeyCode.Insert),
+            new NameBinding("DELETE", KeyCode.Delete),
+            new NameBinding("D0", KeyCode.D0),
+            new NameBinding("D1", KeyCode.D1),
+            new NameBinding("D2", KeyCode.D2),
+            new NameBinding("D3", KeyCode.D3),
+            new NameBinding("D4", KeyCode.D4),
+            new NameBinding("D5", KeyCode.D5),
+            new NameBinding("D6", KeyCode.D6),
+            new NameBinding("D7", KeyCode.D7),
+            new NameBinding("D8", KeyCode.D8),
+            new NameBinding("D9", KeyCode.D9),
+            new NameBinding("A", KeyCode.A),
+            new NameBinding("B", KeyCode.B),
+            new NameBinding("C", KeyCode.C),
+            new NameBinding("D", KeyCode.D),
+            new NameBinding("E", KeyCode.E),
+            new NameBinding("F", KeyCode.F),
+            new NameBinding("G", KeyCode.G),
+            new NameBinding("H", KeyCode.H),
+            new NameBinding("I", KeyCode.I),
+            new NameBinding("J", KeyCode.J),
+            new NameBinding("K", KeyCode.K),
+            new NameBinding("L", KeyCode.L),
+            new NameBinding("M", KeyCode.M),
+            new NameBinding("N", KeyCode.N),
+            new NameBinding("O", KeyCode.O),
+            new NameBinding("P", KeyCode.P),
+            new NameBinding("Q", KeyCode.Q),
+            new NameBinding("R", KeyCode.R),
+            new NameBinding("S", KeyCode.S),
+            new NameBinding("T", KeyCode.T),
+            new NameBinding("U", KeyCode.U),
+            new NameBinding("V", KeyCode.V),
+            new NameBinding("W", KeyCode.W),
+            new NameBinding("X", KeyCode.X),
+            new NameBinding("Y", KeyCode.Y),
+            new NameBinding("Z", KeyCode.Z),
+            new NameBinding("NUMPAD1", KeyCode.NumPad1),
+            new NameBinding("NUMPAD2", KeyCode.NumPad2),
+            new NameBinding("NUMPAD3", KeyCode.NumPad3),
+            new NameBinding("NUMPAD4", KeyCode.NumPad4),
+            new NameBinding("NUMPAD5", KeyCode.NumPad5),
+            new NameBinding("NUMPAD6", KeyCode.NumPad6),
+            new NameBinding("NUMPAD7", KeyCode.NumPad7),
+            new NameBinding("NUMPAD8", KeyCode.NumPad8),
+            new NameBinding("NUMPAD9", KeyCode.NumPad9),
+            new NameBinding("MULTIPLY", KeyCode.Multiply),
+            new NameBinding("ADD", KeyCode.Add),
+            new NameBinding("SEPARATOR", KeyCode.Separator),
+            new NameBinding("SUBTRACT", KeyCode.Subtract),
+            new NameBinding("DECIMAL", KeyCode.Decimal),
+            new NameBinding("DIVIDE", KeyCode.Divide),
+            new NameBinding("F1", KeyCode.F1),
+            new NameBinding("F2", KeyCode.F2),
+            new NameBinding("F3", KeyCode.F3),
+            new NameBinding("F4", KeyCode.F4),
+            new NameBinding("F5", KeyCode.F5),
+            new NameBinding("F6", KeyCode.F6),
+            new NameBinding("F7", KeyCode.F7),
+            new NameBinding("F8", KeyCode.F8),
+            new NameBinding("F9", KeyCode.F9),
+            new NameBinding("F10", KeyCode.F10),
+            new NameBinding("F11", KeyCode.F11),
+            new NameBinding("F12", KeyCode.F12),
+            new NameBinding("F13", KeyCode.F13),
+            new NameBinding("F14", KeyCode.F14),
+            new NameBinding("F15", KeyCode.F15),
+            new NameBinding("F16", KeyCode.F16),
+            new NameBinding("F17", KeyCode.F17),
+            new NameBinding("F18", KeyCode.F18),
+            new NameBinding("F19", KeyCode.F19),
+            new NameBinding("F20", KeyCode.F20),
+            new NameBinding("F21", KeyCode.F21),
+            new NameBinding("F22", KeyCode.F22),
+            new NameBinding("F23", KeyCode.F23),
+            new NameBinding("F24", KeyCode.F24),
+            new NameBinding("RIGHTSHIFT", KeyCode.RightShift),
+            new NameBinding("LEFTCONTROL", KeyCode.LeftControl),
+            new NameBinding("RIGHTCONTROL", KeyCode.RightControl),
+            new NameBinding("LEFTALT", KeyCode.LeftAlt),
+            new NameBinding("RIGHTALT", KeyCode.RightAlt),
+            new NameBinding("PLUS", KeyCode.OemPlus),
+            new NameBinding("COMMA", KeyCode.OemComma),
+            new NameBinding("MINUS", KeyCode.OemMinus),
+            new NameBinding("PERIOD", KeyCode.OemPeriod),
+            new NameBinding("QUESTION", KeyCode.OemQuestion),
+            new NameBinding("TILDE", KeyCode.OemTilde),
+            new NameBinding("OPENBRACKETS", KeyCode.OemOpenBrackets),
+            new NameBinding("CLOSEBRACKETS", KeyCode.OemCloseBrackets),
+            new NameBinding("QUOTES", KeyCode.OemQuotes),
+
+            new NameBinding("JOY_UP", KeyCode.GP_DPadUp),
+            new NameBinding("JOY_DOWN", KeyCode.GP_DPadDown),
+            new NameBinding("JOY_LEFT", KeyCode.GP_DPadLeft),
+            new NameBinding("JOY_RIGHT", KeyCode.GP_DPadRight),
+            new NameBinding("JOY_START", KeyCode.GP_Start),
+            new NameBinding("JOY_BACK", KeyCode.GP_Back),
+            new NameBinding("JOY_LS", KeyCode.GP_LeftStick),
+            new NameBinding("JOY_RS", KeyCode.GP_RightStick),
+            new NameBinding("JOY_LB", KeyCode.GP_LeftShoulder),
+            new NameBinding("JOY_RB", KeyCode.GP_RightShoulder),
+            new NameBinding("JOY_A", KeyCode.GP_A),
+            new NameBinding("JOY_B", KeyCode.GP_B),
+            new NameBinding("JOY_X", KeyCode.GP_X),
+            new NameBinding("JOY_Y", KeyCode.GP_Y),
+            new NameBinding("JOY_RT", KeyCode.GP_RightTrigger),
+            new NameBinding("JOY_LT", KeyCode.GP_LeftTrigger),
+        };
+#endregion
+
+        #region button-keycode bindings
+
+        private static readonly GPBinding[] gpBindings =
+        {
+            new GPBinding(Buttons.DPadUp, KeyCode.GP_DPadUp),
+            new GPBinding(Buttons.DPadDown, KeyCode.GP_DPadDown),
+            new GPBinding(Buttons.DPadLeft, KeyCode.GP_DPadLeft),
+            new GPBinding(Buttons.DPadRight, KeyCode.GP_DPadRight),
+            new GPBinding(Buttons.Start, KeyCode.GP_Start),
+            new GPBinding(Buttons.Back, KeyCode.GP_Back),
+            new GPBinding(Buttons.LeftStick, KeyCode.GP_LeftStick),
+            new GPBinding(Buttons.RightStick, KeyCode.GP_RightStick),
+            new GPBinding(Buttons.LeftShoulder, KeyCode.GP_LeftShoulder),
+            new GPBinding(Buttons.RightShoulder, KeyCode.GP_RightShoulder),
+            new GPBinding(Buttons.BigButton, KeyCode.GP_BigButton),
+            new GPBinding(Buttons.A, KeyCode.GP_A),
+            new GPBinding(Buttons.B, KeyCode.GP_B),
+            new GPBinding(Buttons.X, KeyCode.GP_X),
+            new GPBinding(Buttons.Y, KeyCode.GP_Y),
+            new GPBinding(Buttons.LeftThumbstickLeft, KeyCode.GP_LeftThumbstickLeft),
+            new GPBinding(Buttons.RightTrigger, KeyCode.GP_RightTrigger),
+            new GPBinding(Buttons.LeftTrigger, KeyCode.GP_LeftTrigger),
+            new GPBinding(Buttons.RightThumbstickUp, KeyCode.GP_RightThumbstickUp),
+            new GPBinding(Buttons.RightThumbstickDown, KeyCode.GP_RightThumbstickDown),
+            new GPBinding(Buttons.RightThumbstickRight, KeyCode.GP_RightThumbstickRight),
+            new GPBinding(Buttons.RightThumbstickLeft, KeyCode.GP_RightThumbstickLeft),
+            new GPBinding(Buttons.LeftThumbstickUp, KeyCode.GP_LeftThumbstickUp),
+            new GPBinding(Buttons.LeftThumbstickDown, KeyCode.GP_LeftThumbstickDown),
+            new GPBinding(Buttons.LeftThumbstickRight, KeyCode.GP_LeftThumbstickRight),
+        };
+
+        #endregion
+
+        private static Dictionary<Buttons, KeyCode> buttonKeyLookup;
+        private static Dictionary<KeyCode, Buttons> keyButtonLookup;
+        private static Dictionary<String, KeyCode> nameKeyLookup;
+        private static Dictionary<KeyCode, String> keyNameLookup;
 
         static KeyCodeHelper()
         {
-            lookup1 = new Dictionary<Buttons, KeyCode>();
-            lookup1.Add(Buttons.DPadUp, KeyCode.GP_DPadUp);
-            lookup1.Add(Buttons.DPadDown, KeyCode.GP_DPadDown);
-            lookup1.Add(Buttons.DPadLeft, KeyCode.GP_DPadLeft);
-            lookup1.Add(Buttons.DPadRight, KeyCode.GP_DPadRight);
-            lookup1.Add(Buttons.Start, KeyCode.GP_Start);
-            lookup1.Add(Buttons.Back, KeyCode.GP_Back);
-            lookup1.Add(Buttons.LeftStick, KeyCode.GP_LeftStick);
-            lookup1.Add(Buttons.RightStick, KeyCode.GP_RightStick);
-            lookup1.Add(Buttons.LeftShoulder, KeyCode.GP_LeftShoulder);
-            lookup1.Add(Buttons.RightShoulder, KeyCode.GP_RightShoulder);
-            lookup1.Add(Buttons.BigButton, KeyCode.GP_BigButton);
-            lookup1.Add(Buttons.A, KeyCode.GP_A);
-            lookup1.Add(Buttons.B, KeyCode.GP_B);
-            lookup1.Add(Buttons.X, KeyCode.GP_X);
-            lookup1.Add(Buttons.Y, KeyCode.GP_Y);
-            lookup1.Add(Buttons.LeftThumbstickLeft, KeyCode.GP_LeftThumbstickLeft);
-            lookup1.Add(Buttons.RightTrigger, KeyCode.GP_RightTrigger);
-            lookup1.Add(Buttons.LeftTrigger, KeyCode.GP_LeftTrigger);
-            lookup1.Add(Buttons.RightThumbstickUp, KeyCode.GP_RightThumbstickUp);
-            lookup1.Add(Buttons.RightThumbstickDown, KeyCode.GP_RightThumbstickDown);
-            lookup1.Add(Buttons.RightThumbstickRight, KeyCode.GP_RightThumbstickRight);
-            lookup1.Add(Buttons.RightThumbstickLeft, KeyCode.GP_RightThumbstickLeft);
-            lookup1.Add(Buttons.LeftThumbstickUp, KeyCode.GP_LeftThumbstickUp);
-            lookup1.Add(Buttons.LeftThumbstickDown, KeyCode.GP_LeftThumbstickDown);
-            lookup1.Add(Buttons.LeftThumbstickRight, KeyCode.GP_LeftThumbstickRight);
+            buttonKeyLookup = new Dictionary<Buttons, KeyCode>(gpBindings.Length);
+            keyButtonLookup = new Dictionary<KeyCode, Buttons>(gpBindings.Length);
+            for (int i = 0; i < gpBindings.Length; ++i)
+            {
+                Buttons button = gpBindings[i].button;
+                KeyCode code = gpBindings[i].code;
+                buttonKeyLookup[button] = code;
+                keyButtonLookup[code] = button;
+            }
 
-            lookup2 = new Dictionary<KeyCode, Buttons>();
-            lookup2.Add(KeyCode.GP_DPadUp, Buttons.DPadUp);
-            lookup2.Add(KeyCode.GP_DPadDown, Buttons.DPadDown);
-            lookup2.Add(KeyCode.GP_DPadLeft, Buttons.DPadLeft);
-            lookup2.Add(KeyCode.GP_DPadRight, Buttons.DPadRight);
-            lookup2.Add(KeyCode.GP_Start, Buttons.Start);
-            lookup2.Add(KeyCode.GP_Back, Buttons.Back);
-            lookup2.Add(KeyCode.GP_LeftStick, Buttons.LeftStick);
-            lookup2.Add(KeyCode.GP_RightStick, Buttons.RightStick);
-            lookup2.Add(KeyCode.GP_LeftShoulder, Buttons.LeftShoulder);
-            lookup2.Add(KeyCode.GP_RightShoulder, Buttons.RightShoulder);
-            lookup2.Add(KeyCode.GP_BigButton, Buttons.BigButton);
-            lookup2.Add(KeyCode.GP_A, Buttons.A);
-            lookup2.Add(KeyCode.GP_B, Buttons.B);
-            lookup2.Add(KeyCode.GP_X, Buttons.X);
-            lookup2.Add(KeyCode.GP_Y, Buttons.Y);
-            lookup2.Add(KeyCode.GP_LeftThumbstickLeft, Buttons.LeftThumbstickLeft);
-            lookup2.Add(KeyCode.GP_RightTrigger, Buttons.RightTrigger);
-            lookup2.Add(KeyCode.GP_LeftTrigger, Buttons.LeftTrigger);
-            lookup2.Add(KeyCode.GP_RightThumbstickUp, Buttons.RightThumbstickUp);
-            lookup2.Add(KeyCode.GP_RightThumbstickDown, Buttons.RightThumbstickDown);
-            lookup2.Add(KeyCode.GP_RightThumbstickRight, Buttons.RightThumbstickRight);
-            lookup2.Add(KeyCode.GP_RightThumbstickLeft, Buttons.RightThumbstickLeft);
-            lookup2.Add(KeyCode.GP_LeftThumbstickUp, Buttons.LeftThumbstickUp);
-            lookup2.Add(KeyCode.GP_LeftThumbstickDown, Buttons.LeftThumbstickDown);
-            lookup2.Add(KeyCode.GP_LeftThumbstickRight, Buttons.LeftThumbstickRight);
+            nameKeyLookup = new Dictionary<String, KeyCode>(nameBindings.Length);
+            keyNameLookup = new Dictionary<KeyCode, String>(nameBindings.Length);
+            for (int i = 0; i < nameBindings.Length; ++i)
+            {
+                String name = nameBindings[i].name;
+                KeyCode code = nameBindings[i].code;
+                nameKeyLookup[name] = code;
+                keyNameLookup[code] = name;
+            }
         }
 
         public static KeyCode FromButton(Buttons button)
-        {   
-            return lookup1[button];
+        {
+            return buttonKeyLookup[button];
         }
 
         public static KeyCode FromKey(Keys key)
@@ -283,12 +436,34 @@ namespace BomberEngine.Core.Input
         public static Buttons ToButton(KeyCode code)
         {
             Buttons button;
-            if (lookup2.TryGetValue(code, out button))
+            if (keyButtonLookup.TryGetValue(code, out button))
             {
                 return button;
             }
 
             return (Buttons)(-1);
+        }
+
+        public static KeyCode FromString(String value)
+        {
+            KeyCode code;
+            if (nameKeyLookup.TryGetValue(value, out code))
+            {
+                return code;
+            }
+
+            return KeyCode.None;
+        }
+
+        public static String ToString(KeyCode code)
+        {
+            String value;
+            if (keyNameLookup.TryGetValue(code, out value))
+            {
+                return value;
+            }
+
+            return null;
         }
     }
 }
