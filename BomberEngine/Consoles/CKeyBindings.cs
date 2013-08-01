@@ -5,6 +5,7 @@ using System.Text;
 using BomberEngine.Core.Input;
 using BomberEngine.Util;
 using BomberEngine.Debugging;
+using BomberEngine.Game;
 
 namespace BomberEngine.Consoles
 {
@@ -20,7 +21,7 @@ namespace BomberEngine.Consoles
         }
     }
 
-    public class CKeyBindings
+    public class CKeyBindings : IKeyInputListener
     {
         private String[] bindings;
         private int bindingsCount;
@@ -79,6 +80,36 @@ namespace BomberEngine.Consoles
             }
 
             return list;
+        }
+
+        public bool OnKeyPressed(KeyEventArg arg)
+        {
+            KeyCode code = arg.key;
+            String cmd = FindCmd(code);
+            if (cmd != null)
+            {
+                TryExecuteCommand(cmd);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool OnKeyRepeated(KeyEventArg arg)
+        {
+            KeyCode code = arg.key;
+            return FindCmd(code) != null;
+        }
+
+        public bool OnKeyReleased(KeyEventArg arg)
+        {
+            KeyCode code = arg.key;
+            return FindCmd(code) != null;
+        }
+
+        private void TryExecuteCommand(String cmd)
+        {
+            Application.RootController().console.TryExecuteCommand(cmd);
         }
     }
 }

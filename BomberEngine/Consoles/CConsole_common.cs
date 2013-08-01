@@ -174,7 +174,7 @@ namespace BomberEngine.Consoles
                 return;
             }
 
-            String codeValue = StrArg(0);
+            String codeValue = StrArg(0).ToUpper();
             KeyCode code = KeyCodeHelper.FromString(codeValue);
             if (code == KeyCode.None)
             {

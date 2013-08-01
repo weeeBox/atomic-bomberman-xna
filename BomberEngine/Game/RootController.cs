@@ -190,6 +190,7 @@ namespace BomberEngine.Game
 
         public virtual bool OnKeyPressed(KeyEventArg arg)
         {
+            keyBindings.OnKeyPressed(arg);
             return HandleEvent(keyEvent.Init(arg, KeyState.Pressed));
         }
 
@@ -200,6 +201,7 @@ namespace BomberEngine.Game
 
         public virtual bool OnKeyReleased(KeyEventArg arg)
         {
+            keyBindings.OnKeyReleased(arg);
             return HandleEvent(keyEvent.Init(arg, KeyState.Released));
         }
 
