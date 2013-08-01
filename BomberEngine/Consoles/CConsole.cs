@@ -223,7 +223,7 @@ namespace BomberEngine.Consoles
             TryExecuteCommand(commandString, false);
         }
 
-        private void TryExecuteCommand(String commandString, bool verbose)
+        private void TryExecuteCommand(String commandString, bool manual)
         {
             String[] args = commandString.Split(' ');
 
@@ -236,8 +236,9 @@ namespace BomberEngine.Consoles
                 {
                     command.console = this;
                     command.args = args;
+                    command.manual = manual;
 
-                    if (verbose)
+                    if (manual)
                     {
                         Print(PROMPT_CMD_STRING + commandString);
                     }
@@ -256,7 +257,7 @@ namespace BomberEngine.Consoles
                     Append("Unknown command: '" + name + "'");
                 }
 
-                if (verbose)
+                if (manual)
                 {
                     PushHistory(commandString);
                 }
@@ -548,6 +549,22 @@ namespace BomberEngine.Consoles
         private void OnBlinkTimer(Timer timer)
         {
             carretVisible = !carretVisible;
+        }
+
+        private void OnSaveCvarsTimerCallback(Timer timer)
+        {
+            TryExecuteCommand("write default.cfg");
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Save config
+
+        internal void ScheduleConfigUpdate()
+        {
+            ScheduleTimerOnce(OnSaveCvarsTimerCallback);
         }
 
         #endregion

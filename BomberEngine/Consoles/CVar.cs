@@ -22,15 +22,15 @@ namespace BomberEngine.Consoles
             Float
         }
 
-        public String name;
+        private String m_name;
 
-        public String value;
-        public String defaultValue;
+        private String m_value;
+        private String m_defaultValue;
 
-        public int intValue;
-        public float floatValue;
+        private int m_intValue;
+        private float m_floatValue;
 
-        protected VarType type;
+        private VarType m_type;
 
         public CVar(String name, int defaultValue, CFlags flags = 0)
             : this(name, StringUtils.ToString(defaultValue), VarType.Integer, flags)
@@ -54,18 +54,18 @@ namespace BomberEngine.Consoles
                 throw new NullReferenceException("Name is null");
             }
 
-            this.name = name;
-            this.defaultValue = defaultValue;
-            this.type = type;
+            m_name = name;
+            m_defaultValue = defaultValue;
+            m_type = type;
 
             SetValue(defaultValue);
         }
 
         public void SetValue(String value)
         {
-            this.value = value;
+            m_value = value;
 
-            if (type != VarType.String)
+            if (m_type != VarType.String)
             {
                 TrySetFloat(value);
                 TrySetInt(value);
@@ -74,21 +74,21 @@ namespace BomberEngine.Consoles
 
         public void SetValue(int v)
         {
-            value = StringUtils.ToString(v);
-            intValue = v;
-            floatValue = v;
+            m_value = StringUtils.ToString(v);
+            m_intValue = v;
+            m_floatValue = v;
         }
 
         public void SetValue(float v)
         {
-            value = StringUtils.ToString(v);
-            intValue = (int)v;
-            floatValue = v;
+            m_value = StringUtils.ToString(v);
+            m_intValue = (int)v;
+            m_floatValue = v;
         }
 
         public void Reset()
         {
-            SetValue(defaultValue);
+            SetValue(m_defaultValue);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ namespace BomberEngine.Consoles
             int result;
             if (int.TryParse(value, out result))
             {
-                intValue = result;
+                m_intValue = result;
                 return true;
             }
 
@@ -110,7 +110,7 @@ namespace BomberEngine.Consoles
             float result;
             if (float.TryParse(value, out result))
             {
-                floatValue = result;
+                m_floatValue = result;
                 return true;
             }
 
@@ -119,24 +119,54 @@ namespace BomberEngine.Consoles
 
         //////////////////////////////////////////////////////////////////////////////
 
-        public bool boolValue()
+        public String name
         {
-            return intValue != 0;
+            get { return m_name; }
+        }
+
+        public String value
+        {
+            get { return m_value; }
+        }
+
+        public String defaultValue
+        {
+            get { return m_defaultValue; }
+        }
+
+        public int intValue
+        {
+            get { return m_intValue; }
+        }
+
+        public float floatValue
+        {
+            get { return m_floatValue; }
+        }
+
+        public bool boolValue
+        {
+            get { return m_intValue != 0; }
         }
 
         public bool IsString()
         {
-            return type == VarType.String;
+            return m_type == VarType.String;
         }
 
         public bool IsInt()
         {
-            return type == VarType.Integer;
+            return m_type == VarType.Integer;
         }
 
         public bool IsFloat()
         {
-            return type == VarType.Float;
+            return m_type == VarType.Float;
+        }
+
+        public bool IsDefault()
+        {
+            return m_value == m_defaultValue;
         }
     }
 }

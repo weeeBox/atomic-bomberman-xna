@@ -184,7 +184,7 @@ namespace BomberEngine.Core.Visual
         [System.Diagnostics.Conditional("DEBUG")]
         private void DrawBorders(Context context)
         {
-            if (CVars.g_drawViewBorders.boolValue())
+            if (CVars.g_drawViewBorders.boolValue)
             {   
                 context.DrawRect(0, 0, width, height, Color.White);
             }

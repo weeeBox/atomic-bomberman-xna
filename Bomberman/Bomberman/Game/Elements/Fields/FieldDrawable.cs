@@ -81,7 +81,7 @@ namespace Bomberman.Game.Elements.Fields
         {
             FieldCellSlot[] slots = field.GetSlots();
 
-            bool drawSlotSize = CVars.g_drawSlotSize.boolValue();
+            bool drawSlotSize = CVars.g_drawSlotSize.boolValue;
             foreach (FieldCellSlot slot in slots)
             {
                 FieldCell cell = slot.staticCell;
@@ -139,7 +139,7 @@ namespace Bomberman.Game.Elements.Fields
         {
             DrawCellImage(context, cell, breakableImage);
 
-            if (CVars.g_drawHiddenPowerups.boolValue())
+            if (CVars.g_drawHiddenPowerups.boolValue)
             {
                 int powerup = cell.powerup;
                 if (powerup != Powerups.None)
@@ -197,12 +197,12 @@ namespace Bomberman.Game.Elements.Fields
             float drawX = player.GetPx() - 0.5f * cellWidth;
             float drawY = player.GetPy() - 0.5f * cellHeight;
 
-            if (CVars.g_drawPlayerCell.boolValue())
+            if (CVars.g_drawPlayerCell.boolValue)
             {
                 context.DrawRect(player.GetCx() * cellWidth, player.GetCy() * cellHeight, cellWidth, cellHeight, Color.White);
             }
 
-            if (CVars.g_drawPlayerMovable.boolValue())
+            if (CVars.g_drawPlayerMovable.boolValue)
             {
                 context.DrawRect(drawX, drawY, cellWidth, cellHeight, Color.Yellow);
             }
@@ -266,7 +266,7 @@ namespace Bomberman.Game.Elements.Fields
         
         private void DrawGrid(Context context)
         {
-            if (CVars.g_drawGrid.boolValue())
+            if (CVars.g_drawGrid.boolValue)
             {
                 for (int i = 0; i <= field.GetWidth(); ++i)
                 {

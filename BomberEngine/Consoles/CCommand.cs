@@ -12,6 +12,7 @@ namespace BomberEngine.Consoles
 
         public String name;
         public String[] args;
+        public bool manual;
 
         protected CCommand(String name)
         {

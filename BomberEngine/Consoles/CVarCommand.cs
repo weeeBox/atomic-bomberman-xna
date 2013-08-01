@@ -38,6 +38,7 @@ namespace BomberEngine.Consoles
                 if (result.succeed)
                 {
                     cvar.SetValue(value);
+                    TryUpdateConfig();
                 }
                 else
                 {
@@ -52,6 +53,7 @@ namespace BomberEngine.Consoles
                 if (result.succeed)
                 {
                     cvar.SetValue(value);
+                    TryUpdateConfig();
                 }
                 else
                 {
@@ -62,7 +64,19 @@ namespace BomberEngine.Consoles
             {
                 String value = StrArg(0);
                 cvar.SetValue(value);
+                TryUpdateConfig();
             }
+        }
+
+        private bool TryUpdateConfig()
+        {
+            if (manual)
+            {
+                console.ScheduleConfigUpdate();
+                return true;
+            }
+
+            return false;
         }
     }
 }
