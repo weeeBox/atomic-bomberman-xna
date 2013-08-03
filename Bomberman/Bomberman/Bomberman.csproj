@@ -182,7 +182,7 @@
     <Compile Include="Multiplayer\MultiplayerScreen.cs" />
     <Compile Include="Multiplayer\NetworkConnectionScreen.cs" />
     <Compile Include="Game\Screens\PauseScreen.cs" />
-    <Compile Include="Game\Screens\PowerupsDrawable.cs" />
+    <Compile Include="Game\Screens\PowerupsView.cs" />
     <Compile Include="Game\Helper.cs" />
     <Compile Include="Game\Screens\GameScreen.cs" />
     <Compile Include="Game\StartupController.cs" />

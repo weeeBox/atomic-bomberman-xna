@@ -13,14 +13,14 @@ using Microsoft.Xna.Framework;
 
 namespace Bomberman.Game.Screens
 {
-    public class PowerupsDrawable : View
+    public class PowerupsView : View
     {   
         private TextureImage[] powerupImages;
         private Field field;
 
         private Color innactiveColor;
 
-        public PowerupsDrawable(Field field, int x, int y, int width, int height)
+        public PowerupsView(Field field, int x, int y, int width, int height)
             : base(x, y, width, height)
         {
             this.field = field;

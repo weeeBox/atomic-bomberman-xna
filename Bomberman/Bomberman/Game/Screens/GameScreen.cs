@@ -37,7 +37,7 @@ namespace Bomberman.Game.Screens
             AddView(new FieldDrawable(field, Constant.FIELD_OFFSET_X, Constant.FIELD_OFFSET_Y, Constant.FIELD_WIDTH, Constant.FIELD_HEIGHT));
 
             // field drawer
-            AddView(new PowerupsDrawable(field, 0, 0, Constant.FIELD_WIDTH, Constant.FIELD_OFFSET_Y));
+            AddView(new PowerupsView(field, 0, 0, Constant.FIELD_WIDTH, Constant.FIELD_OFFSET_Y));
 
             // HACK: disable updating keyboard input when console is showing
             SetKeyboardInputActive(!Application.RootController().Console.IsVisible);
