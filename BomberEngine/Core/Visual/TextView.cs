@@ -5,6 +5,7 @@ using System.Text;
 using BomberEngine.Debugging;
 using BomberEngine.Util;
 using BomberEngine.Core.Assets.Types;
+using Microsoft.Xna.Framework;
 
 namespace BomberEngine.Core.Visual
 {
@@ -32,8 +33,12 @@ namespace BomberEngine.Core.Visual
             }
         }
 
-        public String text;
-        public Font font;
+        private String m_text;
+        private Font m_font;
+        private int m_wrapWidth;
+
+        private Color m_backColor;
+        private bool m_hasBackColor;
 
         protected FormattedString[] formattedStrings;
 
@@ -42,40 +47,41 @@ namespace BomberEngine.Core.Visual
         {
         }
 
-        public TextView(Font font, String text, int textWidth)
+        public TextView(Font font, String text, int wrapWidth = Int32.MaxValue)
         {
             Debug.Assert(font != null);
 
-            this.font = font;
-            SetText(text, textWidth);
+            m_font = font;
+            SetText(text, wrapWidth);
         }
 
         public virtual void SetText(String newString)
         {
-            SetText(newString, Int32.MaxValue);
+            SetText(newString, m_wrapWidth);
         }
 
         public virtual void SetText(String newString, int wrapWidth)
         {
-            text = newString;
+            m_text = newString;
+            m_wrapWidth = wrapWidth;
 
-            String[] strings = font.WrapString(text, wrapWidth);
+            String[] strings = m_font.WrapString(m_text, wrapWidth);
             int stringsCount = strings.Length;
             formattedStrings = new FormattedString[stringsCount];
             for (int i = 0; i < stringsCount; ++i)
             {
                 String str = strings[i];
-                int strWidth = font.StringWidth(str);
+                int strWidth = m_font.StringWidth(str);
                 if (strWidth > width)
                     width = strWidth;
                 formattedStrings[i] = new FormattedString(str, strWidth);
             }
-            height = (font.FontHeight() + font.LineOffset()) * formattedStrings.Length - font.LineOffset();
+            height = (m_font.FontHeight() + m_font.LineOffset()) * formattedStrings.Length - m_font.LineOffset();
         }
 
         public String getString()
         {
-            return text;
+            return m_text;
         }
 
         public void setAlign(TextAlign textAlign)
@@ -113,17 +119,41 @@ namespace BomberEngine.Core.Visual
 
             float dx;
             float dy = 0;
-            int itemHeight = font.FontHeight();
+            int itemHeight = m_font.FontHeight();
+
+            if (m_hasBackColor)
+            {
+                context.FillRect(0, 0, width, height, m_backColor);
+            }
 
             for (int i = 0; i < formattedStrings.Length; i++)
             {
                 FormattedString str = formattedStrings[i];
                 dx = alignX * (width - str.width);
-                font.DrawString(context, str.text, dx, dy);
-                dy += itemHeight + font.LineOffset();
+                m_font.DrawString(context, str.text, dx, dy);
+                dy += itemHeight + m_font.LineOffset();
             }
 
             PostDraw(context);
+        }
+
+        public String text
+        {
+            get { return m_text; }
+            set
+            {
+                SetText(value);
+            }
+        }
+
+        public Color backColor
+        {
+            get { return m_backColor; }
+            set
+            {
+                m_hasBackColor = value.A > 0.0f;
+                m_backColor = value;
+            }
         }
     }
 }

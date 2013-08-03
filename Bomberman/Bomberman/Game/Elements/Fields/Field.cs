@@ -404,7 +404,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public void KillPlayer(Player player)
         {
-            if (player.IsAlive())
+            if (player.IsAlive() && !CVars.c_noKills.boolValue)
             {
                 players.Kill(player);
                 DropPowerups(player);

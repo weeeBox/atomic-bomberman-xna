@@ -96,6 +96,8 @@ namespace Bomberman
         public static readonly CVar sv_appId = new CVar("sv_appId", "bomberman");
         public static readonly CVar sv_hostname = new CVar("sv_hostname", "noname");
 
+        public static readonly CVar c_noKills = new CVar("c_noKills", 1);
+
         public static readonly CVar[] powerupsInitials = 
         {
 	        cg_initBomb,
@@ -157,6 +159,11 @@ namespace Bomberman
             g_startupMultiplayerMode,
         };
 
+        private static readonly CVar[] cheatVars =
+        {
+            c_noKills,
+        };
+
         private static readonly CVar[] serverVars =
         {
             sv_appId,
@@ -180,6 +187,7 @@ namespace Bomberman
             console.RegisterCvars(powerupsCount);
             console.RegisterCvars(debugVars);
             console.RegisterCvars(serverVars);
+            console.RegisterCvars(cheatVars);
 
             console.RegisterCvar(cg_fuzeTimeNormal);
             console.RegisterCvar(cg_fuzeTimeShort);

@@ -111,7 +111,6 @@ namespace Bomberman.Game.Elements.Players
                 }
 
                 m_diseases.Update(delta);
-                TryPoops();
             }
 
             if (m_currentAnimation != null)
@@ -442,7 +441,7 @@ namespace Bomberman.Game.Elements.Players
             CVar[] max = CVars.powerupsMax;
 
             int totalCount = initials.Length;
-            m_powerups = new PowerupList(totalCount);
+            m_powerups = new PowerupList(this, totalCount);
             for (int powerupIndex = 0; powerupIndex < totalCount; ++powerupIndex)
             {
                 int initialCount = initials[powerupIndex].intValue;

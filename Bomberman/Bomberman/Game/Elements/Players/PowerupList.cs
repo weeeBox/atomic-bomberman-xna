@@ -13,8 +13,13 @@ namespace Bomberman.Game.Elements.Players
         public int[] powerups;
         public int[] maxCount;
 
-        public PowerupList(int totalCount)
+        private Player m_player;
+
+        public PowerupList(Player player, int totalCount)
         {
+            Debug.Assert(player != null);
+            m_player = player;
+
             powerups = new int[totalCount];
             maxCount = new int[totalCount];
         }
@@ -58,6 +63,11 @@ namespace Bomberman.Game.Elements.Players
             }
 
             return false;
+        }
+
+        public Player player
+        {
+            get { return m_player; }
         }
     }
 }
