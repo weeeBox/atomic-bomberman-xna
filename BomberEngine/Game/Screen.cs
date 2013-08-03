@@ -7,7 +7,7 @@ using BomberEngine.Core.Events;
 
 namespace BomberEngine.Game
 {
-    public class Screen : BaseElement
+    public class Screen : BaseElement, IDestroyable
     {
         protected enum FocusDirection
         {
@@ -55,6 +55,13 @@ namespace BomberEngine.Game
             eventHandlers = EventHandlerList.Null;
 
             mRootView = CreateRootView();
+        }
+
+        public void Destroy()
+        {
+            timerManager.Destroy();
+            updatables.Destroy();
+            Application.Notifications().UnregisterAll(this);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -105,11 +112,9 @@ namespace BomberEngine.Game
         }
 
         internal void Stop()
-        {
-            timerManager.Destroy();
-            updatables.Destroy();
-
+        {   
             OnStop();
+            Destroy();
         }
 
         public void Finish()
@@ -595,5 +600,12 @@ namespace BomberEngine.Game
         }
 
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        protected void RegisterNotification(String name, NotificationDelegate del)
+        {
+            Application.Notifications().Register(name, del);
+        }
     }
 }

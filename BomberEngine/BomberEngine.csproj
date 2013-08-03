@@ -112,6 +112,7 @@
     <Compile Include="Core\Assets\Types\Font.cs" />
     <Compile Include="Core\Assets\Types\VectorFont.cs" />
     <Compile Include="Core\Events\NotificationCenter.cs" />
+    <Compile Include="Core\Events\Notifications.cs" />
     <Compile Include="Core\IDestroyable.cs" />
     <Compile Include="Core\Input\IKeyInputListener.cs" />
     <Compile Include="Core\Input\KeyCode.cs" />

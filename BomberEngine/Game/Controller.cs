@@ -12,7 +12,7 @@ using BomberEngine.Consoles;
 
 namespace BomberEngine.Game
 {
-    public class Controller : BaseElement, IScreenManagerListener
+    public class Controller : BaseElement, IScreenManagerListener, IDestroyable
     {
         protected ScreenManager screenManager;
 
@@ -26,6 +26,13 @@ namespace BomberEngine.Game
         {   
             screenManager = new ScreenManager();
             screenManager.listener = this;
+        }
+
+        public void Destroy()
+        {
+            screenManager.Destroy();
+            exitData = null;
+            exitCode = 0;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -60,8 +67,7 @@ namespace BomberEngine.Game
         }
 
         public void Stop()
-        {
-            screenManager.Destroy();
+        {   
             Stop(exitCode);
         }
 
@@ -84,7 +90,7 @@ namespace BomberEngine.Game
             OnStop();
             Application.RootController().ControllerStopped(this);
 
-            this.exitData = null;
+            Destroy();
         }
 
         public void Suspend()

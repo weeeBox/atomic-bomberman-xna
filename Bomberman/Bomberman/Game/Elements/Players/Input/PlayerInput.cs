@@ -10,21 +10,23 @@ namespace Bomberman.Game.Elements.Players.Input
 {
     public abstract class PlayerInput : IUpdatable, IResettable
     {
-        private int stateBits;
-        private int stateBitsOld;
+        private int m_stateBits;
+        private int m_stateBitsOld;
 
-        private int pressedCount;
+        private int m_pressedCount;
+        private bool m_active;
 
         public virtual void Update(float delta)
         {
-            stateBitsOld = stateBits;
+            m_stateBitsOld = m_stateBits;
         }
 
         public void Reset()
         {
-            stateBits = 0;
-            stateBitsOld = 0;
-            pressedCount = 0;
+            m_stateBits = 0;
+            m_stateBitsOld = 0;
+            m_pressedCount = 0;
+            m_active = true;
         }
 
         protected void SetActionPressed(PlayerAction action, bool flag)
@@ -37,19 +39,19 @@ namespace Bomberman.Game.Elements.Players.Input
         {
             if (flag)
             {
-                stateBits |= 1 << index;
+                m_stateBits |= 1 << index;
                 if (IsActionJustPressed(index))
                 {
-                    ++pressedCount;
+                    ++m_pressedCount;
                 }
             }
             else
             {
-                stateBits &= ~(1 << index);
+                m_stateBits &= ~(1 << index);
                 if (IsActionJustReleased(index))
                 {
-                    Debug.Assert(pressedCount > 0);
-                    --pressedCount;
+                    Debug.Assert(m_pressedCount > 0);
+                    --m_pressedCount;
                 }
             }
         }
@@ -74,17 +76,17 @@ namespace Bomberman.Game.Elements.Players.Input
 
         public bool IsActionPressed(int index)
         {
-            return IsActionPressed(stateBits, index);
+            return IsActionPressed(m_stateBits, index);
         }
 
         public bool IsActionJustPressed(int index)
         {
-            return IsActionPressed(stateBits, index) && !IsActionPressed(stateBitsOld, index);
+            return IsActionPressed(m_stateBits, index) && !IsActionPressed(m_stateBitsOld, index);
         }
 
         public bool IsActionJustReleased(int index)
         {
-            return !IsActionPressed(stateBits, index) && IsActionPressed(stateBitsOld, index);
+            return !IsActionPressed(m_stateBits, index) && IsActionPressed(m_stateBitsOld, index);
         }
 
         private bool IsActionPressed(int bits, int index)
@@ -104,7 +106,13 @@ namespace Bomberman.Game.Elements.Players.Input
 
         public int GetPressedActionCount()
         {
-            return pressedCount;
+            return m_pressedCount;
+        }
+
+        public bool IsActive
+        {
+            get { return m_active; }
+            set { m_active = value; }
         }
     }
 }

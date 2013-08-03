@@ -15,12 +15,13 @@ using Bomberman.Content;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core.Input;
 using BomberEngine.Core.Events;
+using BomberEngine.Debugging;
 
 namespace Bomberman.Game.Screens
 {
     public class GameScreen : Screen
     {
-        private ImageView fieldBackground;
+        private ImageView fieldBackground;        
 
         public GameScreen()
         {
@@ -37,6 +38,14 @@ namespace Bomberman.Game.Screens
 
             // field drawer
             AddView(new PowerupsDrawable(field, 0, 0, Constant.FIELD_WIDTH, Constant.FIELD_OFFSET_Y));
+
+            // HACK: disable updating keyboard input when console is showing
+            SetKeyboardInputActive(!Application.RootController().Console.IsVisible);
+        }
+
+        protected override void OnStart()
+        {
+            RegisterNotification(Notifications.ConsoleVisiblityChanged, ConsoleVisiblityChangedNotification);
         }
 
         protected override bool OnCancelPressed(KeyEventArg arg)
@@ -44,6 +53,26 @@ namespace Bomberman.Game.Screens
             GameController gc = CurrentController as GameController;
             gc.ShowPauseScreen();
             return true;
+        }
+
+        private void ConsoleVisiblityChangedNotification(Notification notification)
+        {
+            bool visible = notification.boolData;
+            SetKeyboardInputActive(!visible);
+        }
+
+        private static void SetKeyboardInputActive(bool active)
+        {
+            Field field = Field.Current();
+            List<Player> players = field.GetPlayers().list;
+            foreach (Player player in players)
+            {
+                PlayerInput input = player.input;
+                if (input is PlayerKeyInput)
+                {
+                    input.IsActive = active;
+                }
+            }
         }
     }
 }

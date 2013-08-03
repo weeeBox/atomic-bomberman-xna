@@ -849,7 +849,7 @@ namespace BomberEngine.Consoles
 
         public void ToggleVisible()
         {
-            m_visible = !m_visible;
+            IsVisible = !IsVisible;
         }
 
         #endregion
@@ -861,7 +861,15 @@ namespace BomberEngine.Consoles
         public bool IsVisible
         {
             get { return m_visible; }
-            set { m_visible = value; }
+            set 
+            {
+                bool changed = m_visible != value;
+                m_visible = value;
+                if (changed)
+                {
+                    Application.Notifications().Post(Notifications.ConsoleVisiblityChanged, value);
+                }
+            }
         }
 
         #endregion

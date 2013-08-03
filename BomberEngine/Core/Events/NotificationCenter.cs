@@ -177,6 +177,26 @@ namespace BomberEngine.Core.Events
             get { return m_data; }
             set { m_data = value; }
         }
+
+        public bool boolData
+        {
+            get { return (bool)m_data; }
+        }
+
+        public int intData
+        {
+            get { return (int)m_data; }
+        }
+
+        public float floatData
+        {
+            get { return (float)m_data; }
+        }
+
+        public String stringData
+        {
+            get { return (String)m_data; }
+        }
     }
 
     internal class NotificationDelegateList : BaseList<NotificationDelegate>

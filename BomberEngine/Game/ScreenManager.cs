@@ -239,6 +239,11 @@ namespace BomberEngine.Game
         public void Destroy()
         {
             updatables.Destroy();
+            foreach (Screen screen in screens)
+            {
+                screen.Destroy();
+            }
+            screens.Clear();
         }
 
         #endregion
