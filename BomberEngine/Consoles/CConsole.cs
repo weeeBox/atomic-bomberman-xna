@@ -43,6 +43,8 @@ namespace BomberEngine.Consoles
         private Dictionary<KeyCode, char> keyBindings;
         private Dictionary<KeyCode, char> keyShiftBindings;
 
+        private bool m_visible;
+
         protected CConsole(float width, float height)
             : base(width, height)
         {
@@ -119,10 +121,7 @@ namespace BomberEngine.Consoles
             keyShiftBindings[KeyCode.OemQuotes] = '|';
             keyShiftBindings[KeyCode.OemSemicolon] = ':';
             keyShiftBindings[KeyCode.OemTilde] = '"';
-        }
 
-        protected override void OnStart()
-        {
             ScheduleTimer(OnBlinkTimer, 0.25f, true);
         }
 
@@ -840,6 +839,29 @@ namespace BomberEngine.Consoles
         private bool OnKeyReleased(ref KeyEventArg e)
         {
             return false;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Helpers
+
+        public void ToggleVisible()
+        {
+            m_visible = !m_visible;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
+        public bool IsVisible
+        {
+            get { return m_visible; }
+            set { m_visible = value; }
         }
 
         #endregion

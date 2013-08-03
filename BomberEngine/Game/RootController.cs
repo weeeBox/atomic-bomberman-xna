@@ -13,17 +13,17 @@ namespace BomberEngine.Game
 {
     public abstract class RootController : BaseElement, IInputListener
     {
-        protected ContentManager contentManager;
+        private ContentManager m_contentManager;
 
-        public Controller currentController;
-        public CConsole console;
+        private Controller m_currentController;
+        private CConsole m_console;
 
-        private CKeyBindings keyBindings;
+        private CKeyBindings m_keyBindings;
 
         public RootController(ContentManager contentManager)
         {
-            this.contentManager = contentManager;
-            keyBindings = new CKeyBindings();
+            this.m_contentManager = contentManager;
+            m_keyBindings = new CKeyBindings();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -32,8 +32,8 @@ namespace BomberEngine.Game
 
         public void Start()
         {
-            console = CreateConsole();
-            console.TryExecuteCommand("exec default.cfg");
+            m_console = CreateConsole();
+            m_console.TryExecuteCommand("exec default.cfg");
 
             OnStart();
         }
@@ -59,7 +59,11 @@ namespace BomberEngine.Game
 
         public override void Update(float delta)
         {
-            currentController.Update(delta);
+            m_currentController.Update(delta);
+            if (m_console.IsVisible)
+            {
+                m_console.Update(delta);
+            }
         }
 
         #endregion
@@ -70,7 +74,11 @@ namespace BomberEngine.Game
 
         public override void Draw(Context context)
         {
-            currentController.Draw(context);
+            m_currentController.Draw(context);
+            if (m_console.IsVisible)
+            {
+                m_console.Draw(context);
+            }
         }
 
         #endregion
@@ -86,32 +94,32 @@ namespace BomberEngine.Game
                 throw new ArgumentException("Controller is null");
             }
 
-            if (currentController != null)
+            if (m_currentController != null)
             {
-                if (controller == currentController)
+                if (controller == m_currentController)
                 {
                     throw new InvalidOperationException("Controller already set as current: " + controller);
                 }
 
-                if (controller.ParentController == currentController)
+                if (controller.ParentController == m_currentController)
                 {
-                    currentController.Suspend();
+                    m_currentController.Suspend();
                 }
                 else
                 {
-                    currentController.Stop();
+                    m_currentController.Stop();
                 }
                 
             }
 
-            currentController = controller;
-            currentController.Start();
+            m_currentController = controller;
+            m_currentController.Start();
         }
 
         internal void ControllerStopped(Controller controller)
         {
-            Debug.Assert(controller == currentController);
-            currentController = null;
+            Debug.Assert(controller == m_currentController);
+            m_currentController = null;
 
             OnControllerStop(controller);
         }
@@ -129,7 +137,7 @@ namespace BomberEngine.Game
 
         protected virtual CConsole CreateConsole()
         {
-            Font consoleFont = new VectorFont(contentManager.Load<SpriteFont>("ConsoleFont"));
+            Font consoleFont = new VectorFont(m_contentManager.Load<SpriteFont>("ConsoleFont"));
             CConsole console = new CConsole(consoleFont);
 
             console.RegisterCommand(new Cmd_exit());
@@ -149,17 +157,7 @@ namespace BomberEngine.Game
 
         protected void ToggleConsole()
         {
-            if (console != null)
-            {
-                if (currentController.IsCurrentScreen(console))
-                {
-                    console.Finish();
-                }
-                else
-                {
-                    currentController.StartNextScreen(console);
-                }
-            }
+            m_console.ToggleVisible();
         }
 
         #endregion
@@ -170,7 +168,12 @@ namespace BomberEngine.Game
 
         public override bool HandleEvent(Event evt)
         {
-            return currentController.HandleEvent(evt);
+            if (m_console.IsVisible && m_console.HandleEvent(evt))
+            {
+                return true;
+            }
+
+            return m_currentController.HandleEvent(evt);
         }
 
         #endregion
@@ -190,7 +193,7 @@ namespace BomberEngine.Game
 
         public virtual bool OnKeyPressed(KeyEventArg arg)
         {
-            keyBindings.OnKeyPressed(arg);
+            m_keyBindings.OnKeyPressed(arg);
             return HandleEvent(keyEvent.Init(arg, KeyState.Pressed));
         }
 
@@ -201,7 +204,7 @@ namespace BomberEngine.Game
 
         public virtual bool OnKeyReleased(KeyEventArg arg)
         {
-            keyBindings.OnKeyReleased(arg);
+            m_keyBindings.OnKeyReleased(arg);
             return HandleEvent(keyEvent.Init(arg, KeyState.Released));
         }
 
@@ -241,14 +244,19 @@ namespace BomberEngine.Game
 
         #region Properties
 
+        public CConsole Console
+        {
+            get { return m_console; }
+        }
+
         public Controller GetCurrentController()
         {
-            return currentController;
+            return m_currentController;
         }
 
         public CKeyBindings GetKeyBindings()
         {
-            return keyBindings;
+            return m_keyBindings;
         }
 
         #endregion

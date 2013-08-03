@@ -224,7 +224,7 @@ namespace BomberEngine.Game
 
         protected virtual CConsole GetConsole()
         {
-            return GetRootController().console;
+            return GetRootController().Console;
         }
 
         #endregion

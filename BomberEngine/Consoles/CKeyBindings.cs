@@ -112,12 +112,12 @@ namespace BomberEngine.Consoles
 
         private void TryExecuteCommand(String cmd)
         {
-            Application.RootController().console.TryExecuteCommand(cmd);
+            Application.RootController().Console.TryExecuteCommand(cmd);
         }
 
         private void ScheduleConfigUpdate()
         {
-            Application.RootController().console.ScheduleConfigUpdate();
+            Application.RootController().Console.ScheduleConfigUpdate();
         }
     }
 }
