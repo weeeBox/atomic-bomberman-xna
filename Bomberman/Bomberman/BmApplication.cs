@@ -15,8 +15,8 @@ namespace Bomberman
     {
         private ContentManager contentManager;
 
-        public BmApplication(ContentManager contentManager, INativeInterface nativeInterface, int width, int height)
-            : base(nativeInterface, width, height)
+        public BmApplication(ContentManager contentManager, ApplicationInfo info)
+            : base(info)
         {
             this.contentManager = contentManager;
         }

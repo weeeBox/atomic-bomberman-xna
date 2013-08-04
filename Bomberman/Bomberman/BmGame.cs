@@ -20,22 +20,38 @@ namespace Bomberman
         private static readonly int WIDTH = 640;
         private static readonly int HEIGHT = 480;
 
+        #if DEBUG_VIEW
+            private static readonly int WIDTH_EX = 640;
+        #else
+            private static readonly int WIDTH_EX = 0;
+        #endif
+
         private GraphicsDeviceManager graphics;
         private Application application;
 
         public BmGame()
         {
+            int width = WIDTH;
+            int height = HEIGHT;
+
+            int realWidth = width + WIDTH_EX;
+            int realHeight = height;
+
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = WIDTH;
-            graphics.PreferredBackBufferHeight = HEIGHT;
+            graphics.PreferredBackBufferWidth = realWidth;
+            graphics.PreferredBackBufferHeight = realHeight;
 
             Content.RootDirectory = "Content";
 
+            ApplicationInfo info = new ApplicationInfo(width, height);
             #if WINDOWS
+            info.nativeInterface = this;
+            info.realWidth = realWidth;
+            info.realHeight = realHeight;
             IsMouseVisible = true;
             #endif
 
-            application = new BmApplication(Content, this, WIDTH, HEIGHT);
+            application = new BmApplication(Content, info);
         }
 
         /// <summary>

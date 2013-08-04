@@ -45,6 +45,9 @@ namespace BomberEngine.Core.Visual
 
         private SpriteFont systemFont;
 
+        private VertexPositionColor[] vertexData = new VertexPositionColor[128];
+        private short[] indexData = new short[128];
+
         private void BeginSpriteBatch(SpriteBatch sb, BlendMode blendMode, Matrix m, BatchMode mode)
         {
             Debug.Assert(mode != BatchMode.None);
@@ -134,7 +137,7 @@ namespace BomberEngine.Core.Visual
             systemFont = font;
         }
 
-        public void Begin(GraphicsDevice gd, float width, float height)
+        public void Begin(GraphicsDevice gd)
         {
             Debug.Assert(batchMode == BatchMode.None, "Bad batch mode: " + batchMode);
 
@@ -149,6 +152,9 @@ namespace BomberEngine.Core.Visual
                 graphicsDevice = gd;
                 spriteBatch = new SpriteBatch(graphicsDevice);
                 basicEffect = new BasicEffect(graphicsDevice);
+
+                int width = gd.Viewport.Width;
+                int height = gd.Viewport.Height;
 
                 Matrix worldMatrix = Matrix.Identity;
                 Matrix viewMatrix = Matrix.CreateLookAt(new Vector3(0.0f, 0.0f, 1.0f), Vector3.Zero, Vector3.Up);
@@ -323,8 +329,7 @@ namespace BomberEngine.Core.Visual
         {
             GetSpriteBatch(BatchMode.Geometry);
 
-            int numVertex = 10;
-            VertexPositionColor[] vertexData = new VertexPositionColor[numVertex];
+            int numVertex = vertexData.Length;
             float da = MathHelper.TwoPi / (numVertex - 1);
             float angle = 0;
             for (int i = 0; i < numVertex - 1; ++i)
@@ -342,12 +347,16 @@ namespace BomberEngine.Core.Visual
         {
             GetSpriteBatch(BatchMode.Geometry);
 
-            VertexPositionColor[] vertexData = new VertexPositionColor[4];
             vertexData[0] = new VertexPositionColor(new Vector3(x, y, 0), color);
             vertexData[1] = new VertexPositionColor(new Vector3(x + width, y, 0), color);
             vertexData[2] = new VertexPositionColor(new Vector3(x + width, y + height, 0), color);
             vertexData[3] = new VertexPositionColor(new Vector3(x, y + height, 0), color);
-            short[] indexData = new short[] { 0, 1, 2, 3, 0 };
+
+            indexData[0] = 0;
+            indexData[1] = 1;
+            indexData[2] = 2;
+            indexData[3] = 3;
+            indexData[4] = 0;
 
             graphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.LineStrip, vertexData, 0, 4, indexData, 0, 4);
         }
@@ -356,7 +365,6 @@ namespace BomberEngine.Core.Visual
         {
             GetSpriteBatch(BatchMode.Geometry);
 
-            VertexPositionColor[] vertexData = new VertexPositionColor[2];
             vertexData[0] = new VertexPositionColor(new Vector3(x1, y1, 0), color);
             vertexData[1] = new VertexPositionColor(new Vector3(x2, y2, 0), color);
 
@@ -367,7 +375,6 @@ namespace BomberEngine.Core.Visual
         {
             GetSpriteBatch(BatchMode.Geometry);
 
-            VertexPositionColor[] vertexData = new VertexPositionColor[4];
             vertexData[0] = new VertexPositionColor(new Vector3(x, y, 0), color);
             vertexData[1] = new VertexPositionColor(new Vector3(x + width, y, 0), color);
             vertexData[2] = new VertexPositionColor(new Vector3(x, y + height, 0), color);

@@ -17,6 +17,7 @@ namespace BomberEngine.Game
 
         private Controller m_currentController;
         private CConsole m_console;
+        private View m_debugView;
 
         private CKeyBindings m_keyBindings;
 
@@ -24,6 +25,8 @@ namespace BomberEngine.Game
         {
             this.m_contentManager = contentManager;
             m_keyBindings = new CKeyBindings();
+
+            InitDebugView();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -60,10 +63,8 @@ namespace BomberEngine.Game
         public override void Update(float delta)
         {
             m_currentController.Update(delta);
-            if (m_console.IsVisible)
-            {
-                m_console.Update(delta);
-            }
+            UpdateDebugView(delta);
+            UpdateConsole(delta);
         }
 
         #endregion
@@ -75,10 +76,8 @@ namespace BomberEngine.Game
         public override void Draw(Context context)
         {
             m_currentController.Draw(context);
-            if (m_console.IsVisible)
-            {
-                m_console.Draw(context);
-            }
+            DrawDebugView(context);
+            DrawConsole(context);
         }
 
         #endregion
@@ -155,6 +154,31 @@ namespace BomberEngine.Game
             return console;
         }
 
+        #if NO_CONSOLE
+        [System.Diagnostics.Conditional("FALSE")]
+        #endif
+        private void UpdateConsole(float delta)
+        {
+            if (m_console.IsVisible)
+            {
+                m_console.Update(delta);
+            }
+        }
+
+        #if NO_CONSOLE
+        [System.Diagnostics.Conditional("FALSE")]
+        #endif
+        private void DrawConsole(Context context)
+        {
+            if (m_console.IsVisible)
+            {
+                m_console.Draw(context);
+            }
+        }
+
+        #if NO_CONSOLE
+        [System.Diagnostics.Conditional("FALSE")]
+        #endif
         protected void ToggleConsole()
         {
             m_console.ToggleVisible();
@@ -261,5 +285,43 @@ namespace BomberEngine.Game
 
         #endregion
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Debug
+
+        [System.Diagnostics.Conditional("DEBUG_VIEW")]
+        private void InitDebugView()
+        {
+            int appWidth = Application.GetWidth();
+            int appHeight = Application.GetHeight();
+            int realWidth = Application.GetRealWidth();
+            int realHeight = Application.GetRealHeight();
+
+            int width = realWidth - appWidth;
+            int height = realHeight;
+
+            m_debugView = new View(appWidth, 0, width, height);
+        }
+
+        [System.Diagnostics.Conditional("DEBUG_VIEW")]
+        private void UpdateDebugView(float delta)
+        {
+            m_debugView.Update(delta);
+        }
+
+        [System.Diagnostics.Conditional("DEBUG_VIEW")]
+        private void DrawDebugView(Context context)
+        {
+            m_debugView.Draw(context);
+        }
+
+        [System.Diagnostics.Conditional("DEBUG_VIEW")]
+        public void AddDebugView(View view)
+        {
+            m_debugView.AddView(view);
+            m_debugView.LayoutVer(0);
+        }
+
+        #endregion
     }
 }

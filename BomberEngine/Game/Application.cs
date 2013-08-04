@@ -11,6 +11,26 @@ using BomberEngine.Core.Events;
 
 namespace BomberEngine.Game
 {
+    public struct ApplicationInfo
+    {
+        public INativeInterface nativeInterface;
+
+        public int width;
+        public int height;
+        public int realWidth;
+        public int realHeight;
+
+        public ApplicationInfo(int width, int height)
+        {
+            this.width = width;
+            this.height = height;
+            realWidth = width;
+            realHeight = height;
+
+            nativeInterface = null;
+        }
+    }
+
     public abstract class Application
     {
         public static Application sharedApplication;
@@ -33,14 +53,18 @@ namespace BomberEngine.Game
         private INativeInterface nativeInterface;
         private int width;
         private int height;
+        private int realWidth;
+        private int realHeight;
 
         private double currentTime;
 
-        public Application(INativeInterface nativeBridge, int width, int height)
+        public Application(ApplicationInfo info)
         {
-            this.nativeInterface = nativeBridge;
-            this.width = width;
-            this.height = height;
+            nativeInterface = info.nativeInterface;
+            width = info.width;
+            height = info.height;
+            realWidth = info.realWidth;
+            realHeight = info.realHeight;
 
             sharedApplication = this;
 
@@ -137,7 +161,7 @@ namespace BomberEngine.Game
 
         public void Draw(GraphicsDevice graphicsDevice)
         {
-            context.Begin(graphicsDevice, width, height);
+            context.Begin(graphicsDevice);
             drawables.Draw(context);
             context.End();
         }
@@ -308,6 +332,16 @@ namespace BomberEngine.Game
         public static int GetHeight()
         {
             return sharedApplication.height;
+        }
+
+        public static int GetRealWidth()
+        {
+            return sharedApplication.realWidth;
+        }
+
+        public static int GetRealHeight()
+        {
+            return sharedApplication.realWidth;
         }
 
         public static double CurrentTime()
