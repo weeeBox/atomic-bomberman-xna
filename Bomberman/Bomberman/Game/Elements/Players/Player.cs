@@ -721,6 +721,7 @@ namespace Bomberman.Game.Elements.Players
 
         public void OnBombBlown(Bomb bomb)
         {
+            TrySchedulePoops();
         }
 
         private Bomb GetNextBomb()
@@ -1072,6 +1073,22 @@ namespace Bomberman.Game.Elements.Players
             }
 
             return false;
+        }
+
+        private bool TrySchedulePoops()
+        {
+            if (IsInfectedPoops())
+            {
+                ScheduleTimerOnce(TrySchedulePoopsCallback);
+                return true;
+            }
+
+            return false;
+        }
+
+        private void TrySchedulePoopsCallback(Timer timer)
+        {
+            TryPoops();
         }
 
         public bool TryInfect(int diseaseIndex)
