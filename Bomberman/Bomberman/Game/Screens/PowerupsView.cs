@@ -10,65 +10,48 @@ using Bomberman.Game.Elements.Fields;
 using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements;
 using Microsoft.Xna.Framework;
+using BomberEngine.Core.Visual.UI;
 
 namespace Bomberman.Game.Screens
 {
     public class PowerupsView : View
-    {   
-        private TextureImage[] powerupImages;
-        private Field field;
+    {
+        private PowerupView[] m_powerupViews;
+        private Field m_field;
 
-        private Color innactiveColor;
+        private Color m_innactiveColor;
 
         public PowerupsView(Field field, int x, int y, int width, int height)
             : base(x, y, width, height)
         {
-            this.field = field;
-            innactiveColor = new Color(0, 0, 0, 0.5f);
+            m_field = field;
+            m_innactiveColor = new Color(0, 0, 0, 0.5f);
 
-            InitPowerupImages();
-        }
+            PowerupList powerups = Field.GetPlayer(0).powerups;
 
-        public override void Draw(Context context)
-        {
-            PreDraw(context);
-
-            int drawX = 0;
-            int drawY = 0;
-
-            Player player = field.GetPlayers().list[0];
-            int[] powerups = player.powerups.powerups;
-
-            int powerup = 0;
-            foreach (int count in powerups)
+            TextureImage[] images = InitPowerupImages();
+            m_powerupViews = new PowerupView[images.Length];
+            for (int i = 0; i < images.Length; ++i)
             {
-                TextureImage image = powerupImages[powerup];
-                drawY = 0;
-
-                context.DrawImage(image, drawX, drawY);
-
-                for (int i = 1; i < count; ++i)
-                {
-                    context.DrawImage(image, drawX, drawY);
-                    drawX += 2;
-                    drawY += 2;
-                }
-
-                if (count == 0)
-                {
-                    context.FillRect(drawX, drawY, image.GetWidth(), image.GetHeight(), innactiveColor);
-                }
-
-                drawX += image.GetWidth();
-                ++powerup;
+                PowerupView pw = new PowerupView(images[i], powerups.GetCount(i));
+                AddView(pw, i * pw.width, 0.0f);
+                m_powerupViews[i] = pw;
             }
-
-            PostDraw(context);
         }
 
-        private void InitPowerupImages()
+        public override void Update(float delta)
         {
-            powerupImages = new TextureImage[]
+            List<Player> players = Field.PlayersList;
+            PowerupList powerups = players[0].powerups;
+            for (int i = 0; i < Powerups.Count; ++i)
+            {
+                m_powerupViews[i].Count = powerups.GetCount(i);
+            }
+        }
+
+        private TextureImage[] InitPowerupImages()
+        {
+            return new TextureImage[]
             {
                 Helper.GetTexture(A.gfx_powerups_bomb),
                 Helper.GetTexture(A.gfx_powerups_flame),
@@ -84,6 +67,50 @@ namespace Bomberman.Game.Screens
                 Helper.GetTexture(A.gfx_powerups_ebola),
                 Helper.GetTexture(A.gfx_powerups_random),
             };
+        }
+    }
+
+    internal class PowerupView : View
+    {
+        private int m_count;
+        private TextView m_countTextView;
+        private RectView m_dimmingView;
+
+        public PowerupView(TextureImage tex, int count)
+            : base(tex.GetWidth(), tex.GetHeight())
+        {
+            ImageView view = new ImageView(tex);
+            AddView(view);
+
+            m_countTextView = new TextView(Helper.fontSystem, "");
+            m_countTextView.backColor = Color.Black;
+            AddView(m_countTextView);
+
+            m_dimmingView = new RectView(0, 0, width, height, new Color(0, 0, 0, 0.5f), Color.Black);
+            AddView(m_dimmingView);
+
+            SetCount(count);
+        }
+
+        public int Count
+        {
+            get { return m_count; }
+            set
+            {
+                if (m_count != value)
+                {
+                    SetCount(value);
+                }
+            }
+        }
+
+        private void SetCount(int count)
+        {
+            m_countTextView.text = count.ToString();
+            m_count = count;
+
+            m_countTextView.visible = m_count > 0;
+            m_dimmingView.visible = m_count == 0;
         }
     }
 }

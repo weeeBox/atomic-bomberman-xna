@@ -916,6 +916,21 @@ namespace Bomberman.Game.Elements.Fields
             return currentField;
         }
 
+        public static PlayerList Players
+        {
+            get { return currentField.players; }
+        }
+
+        public static List<Player> PlayersList
+        {
+            get { return Players.list; }
+        }
+
+        public static Player GetPlayer(int index)
+        {
+            return PlayersList[index];
+        }
+
         public int GetWidth()
         {
             return cells.GetWidth();
