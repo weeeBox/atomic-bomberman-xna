@@ -161,6 +161,7 @@
     <Compile Include="Game\GameController.cs" />
     <Compile Include="Game\Game.cs" />
     <Compile Include="Game\GameLobbyController.cs" />
+    <Compile Include="Game\InputMapping.cs" />
     <Compile Include="Game\Multiplayer\GameControllerClient.cs" />
     <Compile Include="Game\Multiplayer\GamePacketClient.cs" />
     <Compile Include="Game\Multiplayer\GamePacket.cs" />
