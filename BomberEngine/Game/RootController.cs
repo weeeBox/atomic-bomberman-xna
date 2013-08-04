@@ -322,6 +322,13 @@ namespace BomberEngine.Game
             m_debugView.LayoutVer(0);
         }
 
+        [System.Diagnostics.Conditional("DEBUG_VIEW")]
+        public void RemoveDebugView(View view)
+        {
+            m_debugView.RemoveView(view);
+            m_debugView.LayoutVer(0);
+        }
+
         #endregion
     }
 }

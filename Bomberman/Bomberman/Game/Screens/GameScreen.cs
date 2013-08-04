@@ -36,8 +36,8 @@ namespace Bomberman.Game.Screens
             // field drawer
             AddView(new FieldDrawable(field, Constant.FIELD_OFFSET_X, Constant.FIELD_OFFSET_Y, Constant.FIELD_WIDTH, Constant.FIELD_HEIGHT));
 
-            // field drawer
-            AddView(new PowerupsView(field, 0, 0, Constant.FIELD_WIDTH, Constant.FIELD_OFFSET_Y));
+            // powerups info
+            AddPowerupsView();
 
             // HACK: disable updating keyboard input when console is showing
             SetKeyboardInputActive(!Application.RootController().Console.IsVisible);
@@ -53,6 +53,20 @@ namespace Bomberman.Game.Screens
             GameController gc = CurrentController as GameController;
             gc.ShowPauseScreen();
             return true;
+        }
+
+        [System.Diagnostics.Conditional("DEBUG_VIEW")]
+        private void AddPowerupsView()
+        {
+            View container = new View();
+            List<Player> players = Field.PlayersList;
+            for (int i = 0; i < players.Count; ++i)
+            {
+                container.AddView(new PowerupsView(players[i].powerups));
+            }
+            container.LayoutVer(0);
+            container.ResizeToFitViews();
+            AddDebugView(container);
         }
 
         private void ConsoleVisiblityChangedNotification(Notification notification)

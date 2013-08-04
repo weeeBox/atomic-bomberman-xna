@@ -17,19 +17,17 @@ namespace Bomberman.Game.Screens
     public class PowerupsView : View
     {
         private PowerupView[] m_powerupViews;
-        private Field m_field;
 
+        private PowerupList m_powerups;
         private Color m_innactiveColor;
 
-        public PowerupsView(Field field, int x, int y, int width, int height)
-            : base(x, y, width, height)
+        public PowerupsView(PowerupList powerups)
         {
-            m_field = field;
+            m_powerups = powerups;
             m_innactiveColor = new Color(0, 0, 0, 0.5f);
 
-            PowerupList powerups = Field.GetPlayer(0).powerups;
-
             TextureImage[] images = InitPowerupImages();
+            
             m_powerupViews = new PowerupView[images.Length];
             for (int i = 0; i < images.Length; ++i)
             {
@@ -37,15 +35,15 @@ namespace Bomberman.Game.Screens
                 AddView(pw, i * pw.width, 0.0f);
                 m_powerupViews[i] = pw;
             }
+
+            ResizeToFitViews();
         }
 
         public override void Update(float delta)
-        {
-            List<Player> players = Field.PlayersList;
-            PowerupList powerups = players[0].powerups;
+        {   
             for (int i = 0; i < Powerups.Count; ++i)
             {
-                m_powerupViews[i].Count = powerups.GetCount(i);
+                m_powerupViews[i].Count = m_powerups.GetCount(i);
             }
         }
 
