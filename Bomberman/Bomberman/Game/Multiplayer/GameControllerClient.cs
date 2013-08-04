@@ -71,6 +71,7 @@ namespace Bomberman.Game.Multiplayer
                         if (players[i].input == null)
                         {
                             localPlayer = players[i];
+                            localPlayer.SetPlayerInput(InputMapping.CreatePlayerInput(InputType.Keyboard1));
                             break;
                         }
                     }

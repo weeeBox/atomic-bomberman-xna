@@ -131,7 +131,7 @@ namespace Bomberman.Multiplayer
         {
             String hostName = CVars.sv_hostname.value;
 
-            Scheme scheme = Application.Assets().LoadAsset<Scheme>("Content\\maps\\x.sch");
+            Scheme scheme = BmApplication.Assets().GetScheme(A.maps_x);
             serverInfo = new ServerInfo(hostName);
             serverInfo.scheme = scheme;
 

@@ -31,7 +31,15 @@ namespace Bomberman.Game.Multiplayer
             GetMultiplayerManager().SetServerListener(this);
 
             game = new Game();
-            game.AddPlayer(new Player(0));
+
+            int playerIndex = 0;
+            GameSettings.InputEntry[] entries = settings.inputEntries;
+            for (; playerIndex < entries.Length; ++playerIndex)
+            {
+                Player player = new Player(entries[playerIndex].playerIndex);
+                player.SetPlayerInput(entries[playerIndex].input);
+                game.AddPlayer(player);
+            }
 
             networkPlayersLookup = new Dictionary<NetConnection, Player>();
             networkPlayers = new List<Player>();
@@ -39,7 +47,7 @@ namespace Bomberman.Game.Multiplayer
             List<NetConnection> connections = GetServer().GetConnections();
             for (int i = 0; i < connections.Count; ++i)
             {
-                Player player = new Player(i + i);
+                Player player = new Player(playerIndex + i);
                 player.SetPlayerInput(new PlayerNetworkInput());
                 game.AddPlayer(player);
 
@@ -49,12 +57,9 @@ namespace Bomberman.Game.Multiplayer
             LoadField(settings.scheme);
 
             gameScreen = new GameScreen();
+            StartScreen(gameScreen);
 
-            //InitPlayers();
-
-            //StartScreen(gameScreen);
-
-            throw new NotImplementedException();
+            GetConsole().TryExecuteCommand("exec game.cfg");
         }
 
         protected override void OnStop()

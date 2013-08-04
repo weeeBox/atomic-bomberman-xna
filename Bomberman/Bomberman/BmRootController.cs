@@ -12,6 +12,7 @@ using System.Net;
 using BomberEngine.Debugging;
 using Bomberman.Content;
 using Bomberman.Game.Elements.Players.Input;
+using Bomberman.Game.Elements.Players;
 
 namespace Bomberman
 {
@@ -139,7 +140,6 @@ namespace Bomberman
                     {
                         GameLobbyController glc = controller as GameLobbyController;
                         Scheme selectedScheme = glc.GetSelectedScheme();
-                        
 
                         GameSettings settings = new GameSettings(selectedScheme);
                         settings.inputEntries = glc.CreateInputEntries();
@@ -180,6 +180,10 @@ namespace Bomberman
                         Debug.Assert(info != null);
 
                         GameSettings settings = new GameSettings(info.scheme);
+                        settings.inputEntries = new GameSettings.InputEntry[]
+                        {
+                            new GameSettings.InputEntry(0, InputMapping.CreatePlayerInput(InputType.Keyboard1))
+                        };
                         StartController(GameController.Server(settings));
                         break;
                     }
