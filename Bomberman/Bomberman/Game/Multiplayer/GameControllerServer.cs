@@ -153,6 +153,11 @@ namespace Bomberman.Game.Multiplayer
 
             RemovePlayerConnection(connection);
             // TODO: notify gameplay
+
+            if (CVars.g_startupMultiplayerMode.value != "server")
+            {
+                Application.sharedApplication.Stop();
+            }
         }
 
         #endregion

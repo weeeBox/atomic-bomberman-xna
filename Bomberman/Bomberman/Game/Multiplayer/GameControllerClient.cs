@@ -101,6 +101,10 @@ namespace Bomberman.Game.Multiplayer
 
         public void OnDisconnectedFromServer(Client client)
         {
+            if (CVars.g_startupMultiplayerMode.value != "client")
+            {
+                Application.sharedApplication.Stop();
+            }
         }
 
         #endregion

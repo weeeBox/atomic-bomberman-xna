@@ -203,16 +203,10 @@ namespace Bomberman.Game.Elements.Players
             switch (action)
             {
                 case PlayerAction.Left:
-                    StopMovingToDirection(Direction.LEFT);
-                    break;
                 case PlayerAction.Right:
-                    StopMovingToDirection(Direction.RIGHT);
-                    break;
                 case PlayerAction.Up:
-                    StopMovingToDirection(Direction.UP);
-                    break;
                 case PlayerAction.Down:
-                    StopMovingToDirection(Direction.DOWN);
+                    StopMoving();
                     break;
             }
 
@@ -255,9 +249,9 @@ namespace Bomberman.Game.Elements.Players
             UpdateAnimation();
         }
 
-        private void StopMovingToDirection(Direction dir)
+        public override void StopMoving()
         {
-            StopMoving();
+            base.StopMoving();
             UpdateAnimation();
         }
 
@@ -1251,6 +1245,37 @@ namespace Bomberman.Game.Elements.Players
                 ScheduleAnimationUpdate();
             }
         }
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Network
+
+        /* Sets player state received from the server as a part of game packet */
+        internal void UpdateFromNetwork(float newPx, float newPy, Direction newDir, float newSpeed)
+        {
+            if (px != newPx || py != newPy)
+            {
+                SetPos(newPx, newPy);
+            }
+
+            if (newSpeed == 0.0f)
+            {
+                if (IsMoving())
+                {
+                    StopMoving();
+                }
+            }
+            else
+            {
+                SetSpeed(newSpeed);
+                if (newDir != direction)
+                {
+                    StartMovingToDirection(newDir);
+                }
+            }
+        }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////

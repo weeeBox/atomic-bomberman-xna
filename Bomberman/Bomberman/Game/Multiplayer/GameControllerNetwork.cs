@@ -323,9 +323,7 @@ namespace Bomberman.Game.Multiplayer
                 Direction direction = (Direction)msg.ReadByte();
                 float speed = msg.ReadFloat();
 
-                p.SetPos(px, py);
-                p.SetSpeed(speed);
-                p.SetDirection(direction);
+                p.UpdateFromNetwork(px, py, direction, speed);
 
                 // powerups
                 int powerupsCount = (int)Powerups.Count;

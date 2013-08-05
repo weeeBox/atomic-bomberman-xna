@@ -288,7 +288,7 @@ namespace Bomberman.Game.Elements.Cells
             }
         }
 
-        public void StopMoving()
+        public virtual void StopMoving()
         {
             m_moving = false;
             m_moveKx = 0;
@@ -388,7 +388,7 @@ namespace Bomberman.Game.Elements.Cells
 
         public void SetSpeed(float speed)
         {
-            this.m_speed = speed;
+            m_speed = speed;
         }
 
         public void IncSpeed(float amount)
