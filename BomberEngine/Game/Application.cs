@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Native;
 using BomberEngine.Core.Events;
+using BomberEngine.Core.Storage;
 
 namespace BomberEngine.Game
 {
@@ -46,6 +47,7 @@ namespace BomberEngine.Game
         private InputManager inputManager;
         private AssetManager assetManager;
         private NotificationCenter notifications;
+        private SharedStorage sharedStorage;
 
         private UpdatableList updatables;
         private DrawableList drawables;
@@ -89,6 +91,11 @@ namespace BomberEngine.Game
         {
             return new InputManager();
         }
+
+        protected SharedStorage CreateSharedStorage(String filename, TimerManager timerManager)
+        {
+            return new SharedStorage(filename, timerManager);
+        }
         
         protected abstract AssetManager CreateAssetManager();
         protected abstract RootController CreateRootController();
@@ -106,6 +113,7 @@ namespace BomberEngine.Game
 
             timerManager = CreateTimerManager();
             notifications = CreateNotifications(timerManager);
+            sharedStorage = CreateSharedStorage("storage",  timerManager);
 
             inputManager = CreateInputManager();
             AddUpdatable(inputManager);
@@ -136,6 +144,9 @@ namespace BomberEngine.Game
 
             rootController.Stop();
             OnStop();
+
+            sharedStorage.Destroy();
+            timerManager.Destroy();
         }
 
         protected virtual void OnStart()

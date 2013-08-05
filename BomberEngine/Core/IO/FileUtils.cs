@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BomberEngine.Debugging;
+using System.IO;
 
 namespace BomberEngine.Core.IO
 {
-    using SystemFile = System.IO.File;
-
-    public class File
+    public class FileUtils
     {
         public static List<String> Read(String path)
         {
             try
             {
-                String absolutePath = AbsolutePath(path);
+                String absolutePath = GetAbsolutePath(path);
 
-                if (!SystemFile.Exists(absolutePath))
+                if (!File.Exists(absolutePath))
                 {
                     Log.e("File does not exist: " + path);
                     return null;
@@ -46,7 +45,7 @@ namespace BomberEngine.Core.IO
         {
             try
             {
-                using (System.IO.StreamWriter writer = new System.IO.StreamWriter(AbsolutePath(path), false, Encoding.UTF8))
+                using (System.IO.StreamWriter writer = new System.IO.StreamWriter(GetAbsolutePath(path), false, Encoding.UTF8))
                 {
                     foreach (String line in lines)
                     {
@@ -65,16 +64,34 @@ namespace BomberEngine.Core.IO
 
         public static bool Delete(String path)
         {
-            String absolutePath = AbsolutePath(path);
-            if (SystemFile.Exists(absolutePath))
+            String absolutePath = GetAbsolutePath(path);
+            if (File.Exists(absolutePath))
             {
-                SystemFile.Delete(absolutePath);
+                File.Delete(absolutePath);
             }
 
             return false;
         }
 
-        private static String AbsolutePath(String path)
+        public static bool FileExists(String path)
+        {
+            String absolutePath = GetAbsolutePath(path);
+            return File.Exists(absolutePath);
+        }
+
+        public static Stream OpenRead(String path)
+        {
+            String absolutePath = GetAbsolutePath(path);
+            return File.OpenRead(absolutePath);
+        }
+
+        public static Stream OpenWrite(String path)
+        {
+            String absolutePath = GetAbsolutePath(path);
+            return File.OpenWrite(absolutePath);
+        }
+
+        private static String GetAbsolutePath(String path)
         {
             return path;
         }

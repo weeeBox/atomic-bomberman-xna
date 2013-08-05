@@ -51,6 +51,7 @@
     <Compile Include="NotificationsTest.cs" />
     <Compile Include="ObjectsPoolTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SharedStorageTest.cs" />
     <Compile Include="TimerManagerTests.cs" />
     <Compile Include="SceneFocusTests.cs" />
   </ItemGroup>

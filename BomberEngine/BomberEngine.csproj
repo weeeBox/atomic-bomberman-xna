@@ -121,9 +121,10 @@
     <Compile Include="Core\IO\BitBuffer.cs" />
     <Compile Include="Core\IO\BitReadBuffer.cs" />
     <Compile Include="Core\IO\BitWriteBuffer.cs" />
-    <Compile Include="Core\IO\File.cs" />
+    <Compile Include="Core\IO\FileUtils.cs" />
     <Compile Include="Core\IResettable.cs" />
     <Compile Include="Core\ITimerManager.cs" />
+    <Compile Include="Core\Storage\SharedStorage.cs" />
     <Compile Include="Core\Visual\Button.cs" />
     <Compile Include="Core\Visual\PopupList.cs" />
     <Compile Include="Core\Visual\TextButton.cs" />

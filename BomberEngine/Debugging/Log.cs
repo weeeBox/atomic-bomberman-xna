@@ -17,6 +17,15 @@ namespace BomberEngine.Debugging
         }
 
         [Conditional("DEBUG")]
+        public static void d(bool condition, Object format, params Object[] args)
+        {
+            if (condition)
+            {
+                d(format, args);
+            }
+        }
+
+        [Conditional("DEBUG")]
         public static void e(Object format, params Object[] args)
         {
             String message = Format(format, args);

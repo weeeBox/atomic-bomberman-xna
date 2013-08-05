@@ -98,7 +98,7 @@ namespace BomberEngine.Consoles
             }
 
             String filename = StrArg(0);
-            List<String> lines = File.Read(filename);
+            List<String> lines = FileUtils.Read(filename);
 
             if (lines == null)
             {
@@ -163,7 +163,7 @@ namespace BomberEngine.Consoles
                 }
             }
 
-            File.Write(filename, lines);
+            FileUtils.Write(filename, lines);
         }
     }
 
