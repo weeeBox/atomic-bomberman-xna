@@ -203,6 +203,7 @@ namespace Bomberman.Game.Multiplayer
             {
                 buffer.Write(p.px);
                 buffer.Write(p.py);
+                buffer.Write(p.IsMoving());
                 buffer.Write((byte)p.direction);
                 buffer.Write(p.GetSpeed());
 
@@ -320,11 +321,12 @@ namespace Bomberman.Game.Multiplayer
             {
                 float px = msg.ReadFloat();
                 float py = msg.ReadFloat();
+                bool moving = msg.ReadBoolean();
                 Direction direction = (Direction)msg.ReadByte();
                 float speed = msg.ReadFloat();
 
                 // player state
-                p.UpdateFromNetwork(px, py, direction, speed);
+                p.UpdateFromNetwork(px, py, moving, direction, speed);
 
                 // powerups
                 int powerupsCount = (int)Powerups.Count;

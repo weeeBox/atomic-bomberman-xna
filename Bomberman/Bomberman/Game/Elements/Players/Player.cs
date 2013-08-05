@@ -1164,6 +1164,11 @@ namespace Bomberman.Game.Elements.Players
                 else if (IsMoving())
                 {
                     id = PlayerAnimations.Id.Walk;
+                    Animation newAnimation = m_animations.Find(id, direction);
+                    if (m_currentAnimation.Animation == newAnimation)
+                    {
+                        return;
+                    }
                 }
                 else
                 {
@@ -1252,14 +1257,14 @@ namespace Bomberman.Game.Elements.Players
         #region Network
 
         /* Sets player state received from the server as a part of game packet */
-        internal void UpdateFromNetwork(float newPx, float newPy, Direction newDir, float newSpeed)
+        internal void UpdateFromNetwork(float newPx, float newPy, bool moving, Direction newDir, float newSpeed)
         {
             if (px != newPx || py != newPy)
             {
                 SetPos(newPx, newPy);
             }
 
-            if (newSpeed == 0.0f)
+            if (!moving)
             {
                 if (IsMoving())
                 {

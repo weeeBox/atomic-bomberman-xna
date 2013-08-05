@@ -325,6 +325,11 @@ namespace BomberEngine.Game
             return sharedApplication.timerManager;
         }
 
+        public static SharedStorage Storage()
+        {
+            return sharedApplication.sharedStorage;
+        }
+
         public static NotificationCenter Notifications()
         {
             return sharedApplication.notifications;
