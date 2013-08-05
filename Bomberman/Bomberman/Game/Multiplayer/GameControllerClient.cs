@@ -8,6 +8,7 @@ using Bomberman.Game.Screens;
 using Bomberman.Networking;
 using Lidgren.Network;
 using BomberEngine.Debugging;
+using BomberEngine.Core.Visual;
 
 namespace Bomberman.Game.Multiplayer
 {
@@ -79,6 +80,8 @@ namespace Bomberman.Game.Multiplayer
                     localPlayer.connection = client.GetServerConnection();
 
                     StartScreen(gameScreen);
+                    gameScreen.AddDebugView(new NetworkTraceView(client.GetServerConnection()));
+
                     break;
                 }
 
@@ -173,5 +176,59 @@ namespace Bomberman.Game.Multiplayer
         }
 
         #endregion
+
+        private class NetworkTraceView : View
+        {
+            private NetConnection m_connection;
+
+            private TextView m_roundTripView;
+            private TextView m_remoteTimeOffsetView;
+            private TextView m_sentPacketsView;
+            private TextView m_receivedPacketsView;
+            private TextView m_sentBytesView;
+            private TextView m_receivedBytesView;
+
+            public NetworkTraceView(NetConnection connection)
+            {
+                m_connection = connection;
+
+                m_roundTripView = AddTextView();
+                m_remoteTimeOffsetView = AddTextView();
+                m_sentPacketsView = AddTextView();
+                m_receivedPacketsView = AddTextView();
+                m_sentBytesView = AddTextView();
+                m_receivedBytesView = AddTextView();
+
+                LayoutVer(0);
+                ResizeToFitViews();
+            }
+
+            public override void Update(float delta)
+            {
+                m_roundTripView.SetText("Round trip: " + m_connection.AverageRoundtripTime);
+                m_remoteTimeOffsetView.SetText("Remote time offset: " + m_connection.RemoteTimeOffset);
+
+                NetConnectionStatistics stats = m_connection.Statistics;
+                m_sentPacketsView.SetText("Sent packet: " + stats.SentPackets);
+                m_receivedPacketsView.SetText("Received packet: " + stats.ReceivedPackets);
+                m_sentBytesView.SetText("Sent bytes: " + stats.SentBytes);
+                m_receivedBytesView.SetText("Received bytes: " + stats.ReceivedBytes);
+            }
+
+            private TextView AddTextView()
+            {
+                TextView view = new TextView(Helper.fontSystem, null);
+                AddView(view);
+                return view;
+            }
+        }
+
+        private class DebugPacketView : TextView
+        {
+            public DebugPacketView()
+                : base(Helper.fontSystem, "")
+            {
+            }
+        }
     }
 }

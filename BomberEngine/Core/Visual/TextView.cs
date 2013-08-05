@@ -67,26 +67,29 @@ namespace BomberEngine.Core.Visual
 
         public virtual void SetText(Object obj, int wrapWidth)
         {
-            SetText(obj != null ? obj.ToString() : "null");
+            SetText(obj != null ? obj.ToString() : "null", wrapWidth);
         }
 
         public virtual void SetText(String newString, int wrapWidth)
         {
-            m_text = newString;
-            m_wrapWidth = wrapWidth;
-
-            String[] strings = m_font.WrapString(m_text, wrapWidth);
-            int stringsCount = strings.Length;
-            formattedStrings = new FormattedString[stringsCount];
-            for (int i = 0; i < stringsCount; ++i)
+            if (m_text != newString || m_wrapWidth != wrapWidth || formattedStrings == null)
             {
-                String str = strings[i];
-                int strWidth = m_font.StringWidth(str);
-                if (strWidth > width)
-                    width = strWidth;
-                formattedStrings[i] = new FormattedString(str, strWidth);
+                m_text = newString;
+                m_wrapWidth = wrapWidth;
+
+                String[] strings = m_font.WrapString(m_text, wrapWidth);
+                int stringsCount = strings.Length;
+                formattedStrings = new FormattedString[stringsCount];
+                for (int i = 0; i < stringsCount; ++i)
+                {
+                    String str = strings[i];
+                    int strWidth = m_font.StringWidth(str);
+                    if (strWidth > width)
+                        width = strWidth;
+                    formattedStrings[i] = new FormattedString(str, strWidth);
+                }
+                height = (m_font.FontHeight() + m_font.LineOffset()) * formattedStrings.Length - m_font.LineOffset();
             }
-            height = (m_font.FontHeight() + m_font.LineOffset()) * formattedStrings.Length - m_font.LineOffset();
         }
 
         public String getString()

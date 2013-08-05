@@ -608,7 +608,7 @@ namespace BomberEngine.Game
         private List<View> m_debugViews;
 
         [System.Diagnostics.Conditional("DEBUG_VIEW")]
-        protected void AddDebugView(View view)
+        public void AddDebugView(View view)
         {
             Application.RootController().AddDebugView(view);
             if (m_debugViews == null)
@@ -619,7 +619,7 @@ namespace BomberEngine.Game
         }
 
         [System.Diagnostics.Conditional("DEBUG_VIEW")]
-        protected void RemoveDebugView(View view)
+        public void RemoveDebugView(View view)
         {
             Application.RootController().RemoveDebugView(view);
             m_debugViews.Remove(view);
