@@ -400,6 +400,10 @@ namespace Bomberman.Game.Multiplayer
                 b.SetTrigger(trigger);
                 // TODO: jelly & trigger
             }
+            else if (b.isActive)
+            {
+                b.Blow();
+            }
         }
 
         #endregion
