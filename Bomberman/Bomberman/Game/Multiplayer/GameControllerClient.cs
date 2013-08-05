@@ -77,10 +77,12 @@ namespace Bomberman.Game.Multiplayer
                         }
                     }
 
+                    Debug.Assert(localPlayer != null);
                     localPlayer.connection = client.GetServerConnection();
 
                     StartScreen(gameScreen);
                     gameScreen.AddDebugView(new NetworkTraceView(client.GetServerConnection()));
+                    gameScreen.AddDebugView(new DebugPacketView(localPlayer));
 
                     break;
                 }
@@ -225,9 +227,17 @@ namespace Bomberman.Game.Multiplayer
 
         private class DebugPacketView : TextView
         {
-            public DebugPacketView()
-                : base(Helper.fontSystem, "")
+            private Player m_player;
+
+            public DebugPacketView(Player player)
+                : base(Helper.fontSystem, null)
             {
+                m_player = player;
+            }
+
+            public override void Update(float delta)
+            {
+                SetText("Last acc packet id: " + m_player.lastAckPacketId);
             }
         }
     }
