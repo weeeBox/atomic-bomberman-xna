@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Input;
 using BomberEngine.Native;
 using BomberEngine.Core.Events;
 using BomberEngine.Core.Storage;
+using BomberEngine.Util;
 
 namespace BomberEngine.Game
 {
@@ -110,6 +111,8 @@ namespace BomberEngine.Game
             {
                 throw new InvalidOperationException("Application already started");
             }
+
+            MathHelp.InitRandom();
 
             timerManager = CreateTimerManager();
             notifications = CreateNotifications(timerManager);

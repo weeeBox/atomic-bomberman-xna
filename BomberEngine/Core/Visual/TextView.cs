@@ -42,22 +42,32 @@ namespace BomberEngine.Core.Visual
 
         protected FormattedString[] formattedStrings;
 
-        public TextView(Font font, String text)
-            : this(font, text, Int32.MaxValue)
+        public TextView(Font font, Object obj)
+            : this(font, obj, Int32.MaxValue)
         {
         }
 
-        public TextView(Font font, String text, int wrapWidth = Int32.MaxValue)
+        public TextView(Font font, Object obj, int wrapWidth = Int32.MaxValue)
         {
             Debug.Assert(font != null);
 
             m_font = font;
-            SetText(text, wrapWidth);
+            SetText(obj, wrapWidth);
+        }
+
+        public virtual void SetText(Object obj)
+        {
+            SetText(obj != null ? obj.ToString() : "null");
         }
 
         public virtual void SetText(String newString)
         {
             SetText(newString, m_wrapWidth);
+        }
+
+        public virtual void SetText(Object obj, int wrapWidth)
+        {
+            SetText(obj != null ? obj.ToString() : "null");
         }
 
         public virtual void SetText(String newString, int wrapWidth)
