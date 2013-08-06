@@ -114,7 +114,7 @@ namespace Bomberman.Game
 
         private void PostNotification(String name)
         {
-            Application.Notifications().Post(name, this);
+            Application.NotificationCenter().Post(name, this);
         }
 
         #endregion

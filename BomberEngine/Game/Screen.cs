@@ -62,7 +62,7 @@ namespace BomberEngine.Game
         {
             timerManager.Destroy();
             updatables.Destroy();
-            Application.Notifications().UnregisterAll(this);
+            Application.NotificationCenter().UnregisterAll(this);
             RemoveDebugViews();
         }
 
@@ -642,7 +642,7 @@ namespace BomberEngine.Game
 
         protected void RegisterNotification(String name, NotificationDelegate del)
         {
-            Application.Notifications().Register(name, del);
+            Application.NotificationCenter().Register(name, del);
         }
     }
 }

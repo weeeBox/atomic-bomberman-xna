@@ -15,6 +15,7 @@ namespace Bomberman.Game
         public static Font fontButton;
         public static Font fontConsole;
         public static Font fontSystem;
+        public static Font fontFPS;
 
         public static TextureImage GetTexture(int id)
         {

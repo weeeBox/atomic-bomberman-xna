@@ -69,4 +69,11 @@
       <GeneratedByBuilder>true</GeneratedByBuilder>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FPSFont.spritefont">
+      <Name>FPSFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+  </ItemGroup>
 </Project>

@@ -169,17 +169,17 @@ namespace Bomberman.Game
 
         protected virtual void UnregisterNotifications()
         {
-            Application.Notifications().UnregisterAll(this);
+            Application.NotificationCenter().UnregisterAll(this);
         }
 
         protected void RegisterNotification(String name, NotificationDelegate del)
         {
-            Application.Notifications().Register(name, del);
+            Application.NotificationCenter().Register(name, del);
         }
 
         protected void UnregisterNotification(String name, NotificationDelegate del)
         {
-            Application.Notifications().Unregister(name, del);
+            Application.NotificationCenter().Unregister(name, del);
         }
 
         #endregion

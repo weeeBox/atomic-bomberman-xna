@@ -8,6 +8,9 @@ using Microsoft.Xna.Framework.Input;
 using BomberEngine.Native;
 using Bomberman.Game;
 using BomberEngine.Core.Assets.Types;
+using BomberEngine.Core.Events;
+using BomberEngine.Consoles;
+using BomberEngine.Core.Visual;
 
 namespace Bomberman
 {
@@ -26,8 +29,11 @@ namespace Bomberman
             SpriteFont systemFont = contentManager.Load<SpriteFont>("SystemFont");
             Helper.fontSystem = new VectorFont(systemFont);
             Helper.fontButton = new VectorFont(contentManager.Load<SpriteFont>("ButtonFont"));
+            Helper.fontFPS = new VectorFont(contentManager.Load<SpriteFont>("FPSFont"));
 
             context.SetSystemFont(systemFont);
+
+            InitFPS();
         }
 
         protected override AssetManager CreateAssetManager()
@@ -49,5 +55,30 @@ namespace Bomberman
         {
             return Application.RootController() as BmRootController;
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        protected override void OnDrawDebug(Context context)
+        {
+            if (CVars.g_drawFPS.boolValue)
+            {
+                m_fpsDrawable.NextFrame();
+                m_fpsDrawable.Draw(context);
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region FPS
+
+        private FPSDrawable m_fpsDrawable;
+
+        [System.Diagnostics.Conditional("DEBUG")]
+        private void InitFPS()
+        {
+            m_fpsDrawable = new FPSDrawable(Helper.fontFPS, 0.2f);
+        }
+
+        #endregion
     }
 }

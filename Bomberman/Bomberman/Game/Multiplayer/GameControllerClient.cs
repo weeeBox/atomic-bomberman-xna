@@ -82,7 +82,7 @@ namespace Bomberman.Game.Multiplayer
 
                     StartScreen(gameScreen);
                     gameScreen.AddDebugView(new NetworkTraceView(client.GetServerConnection()));
-                    gameScreen.AddDebugView(new DebugPacketView(localPlayer));
+                    gameScreen.AddDebugView(new LocalPlayerView(localPlayer));
 
                     break;
                 }
@@ -225,19 +225,22 @@ namespace Bomberman.Game.Multiplayer
             }
         }
 
-        private class DebugPacketView : TextView
+        private class LocalPlayerView : View
         {
             private Player m_player;
+            private TextView m_cordErrView;
 
-            public DebugPacketView(Player player)
-                : base(Helper.fontSystem, null)
+            public LocalPlayerView(Player player)
             {
                 m_player = player;
+
+                AddView(m_cordErrView = new TextView(Helper.fontSystem, null));
+                ResizeToFitViews();
             }
 
             public override void Update(float delta)
             {
-                SetText("Last acc packet id: " + m_player.lastAckPacketId);
+                m_cordErrView.SetText("px: " + m_player.errDx + "\npy: " + m_player.errDy);
             }
         }
     }

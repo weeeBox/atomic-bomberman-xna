@@ -46,6 +46,8 @@ namespace Bomberman.Game.Elements.Players
         private NetConnection m_connection;
 
         private int m_lastAckPacketId; // last acknowledged packet id
+        private float m_errDx;
+        private float m_errDy;
 
         private int m_winsCount;
         private int m_suicidesCount;
@@ -1259,8 +1261,11 @@ namespace Bomberman.Game.Elements.Players
         /* Sets player state received from the server as a part of game packet */
         internal void UpdateFromNetwork(float newPx, float newPy, bool moving, Direction newDir, float newSpeed)
         {
+            m_errDx = px - newPx;
+            m_errDy = py - newPy;
+
             if (px != newPx || py != newPy)
-            {
+            {   
                 SetPos(newPx, newPy);
             }
 
@@ -1391,6 +1396,16 @@ namespace Bomberman.Game.Elements.Players
         public int GetIndex()
         {
             return m_index;
+        }
+
+        public float errDx
+        {
+            get { return m_errDx; }
+        }
+
+        public float errDy
+        {
+            get { return m_errDy; }
         }
 
         #endregion

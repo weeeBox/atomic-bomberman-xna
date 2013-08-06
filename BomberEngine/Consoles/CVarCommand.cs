@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BomberEngine.Util;
+using BomberEngine.Game;
+using BomberEngine.Core.Events;
 
 namespace BomberEngine.Consoles
 {
@@ -37,8 +39,7 @@ namespace BomberEngine.Consoles
                 float value = FloatArg(0, result);
                 if (result.succeed)
                 {
-                    cvar.SetValue(value);
-                    TryUpdateConfig();
+                    SetValue(value);
                 }
                 else
                 {
@@ -52,8 +53,7 @@ namespace BomberEngine.Consoles
                 int value = IntArg(0, result);
                 if (result.succeed)
                 {
-                    cvar.SetValue(value);
-                    TryUpdateConfig();
+                    SetValue(value);
                 }
                 else
                 {
@@ -63,16 +63,43 @@ namespace BomberEngine.Consoles
             else
             {
                 String value = StrArg(0);
-                cvar.SetValue(value);
-                TryUpdateConfig();
+                SetValue(value);
             }
         }
 
-        private bool TryUpdateConfig()
+        private void SetValue(float value)
+        {
+            if (cvar.floatValue != value)
+            {
+                cvar.SetValue(value);
+                TryScheduleConfigChanges();
+            }
+        }
+
+        private void SetValue(int value)
+        {
+            if (cvar.intValue != value)
+            {
+                cvar.SetValue(value);
+                TryScheduleConfigChanges();
+            }
+        }
+
+        private void SetValue(String value)
+        {
+            if (cvar.value != value)
+            {
+                cvar.SetValue(value);
+                TryScheduleConfigChanges();
+            }
+        }
+
+        private bool TryScheduleConfigChanges()
         {
             if (manual)
             {
                 console.ScheduleConfigUpdate();
+                Application.NotificationCenter().Post(Notifications.ConsoleVariableChanged, cvar);
                 return true;
             }
 

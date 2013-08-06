@@ -10,6 +10,7 @@ using BomberEngine.Native;
 using BomberEngine.Core.Events;
 using BomberEngine.Core.Storage;
 using BomberEngine.Util;
+using BomberEngine.Consoles;
 
 namespace BomberEngine.Game
 {
@@ -59,7 +60,8 @@ namespace BomberEngine.Game
         private int realWidth;
         private int realHeight;
 
-        private double currentTime;
+        private float m_currentTime;
+        private float m_frameTime;
 
         public Application(ApplicationInfo info)
         {
@@ -168,16 +170,30 @@ namespace BomberEngine.Game
 
         public void Update(float delta)
         {
-            currentTime += delta;
+            m_currentTime += delta;
+            m_frameTime = delta;
+
             updatables.Update(delta);
             timerManager.Update(delta);
+            OnUpdateDebug(delta);
         }
 
         public void Draw(GraphicsDevice graphicsDevice)
         {
             context.Begin(graphicsDevice);
             drawables.Draw(context);
+            OnDrawDebug(context);
             context.End();
+        }
+
+        [System.Diagnostics.Conditional("DEBUG")]
+        protected virtual void OnUpdateDebug(float delta)
+        {
+        }
+
+        [System.Diagnostics.Conditional("DEBUG")]
+        protected virtual void OnDrawDebug(Context context)
+        {
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -333,7 +349,7 @@ namespace BomberEngine.Game
             return sharedApplication.sharedStorage;
         }
 
-        public static NotificationCenter Notifications()
+        public static NotificationCenter NotificationCenter()
         {
             return sharedApplication.notifications;
         }
@@ -363,9 +379,14 @@ namespace BomberEngine.Game
             return sharedApplication.realWidth;
         }
 
-        public static double CurrentTime()
+        public static float CurrentTime
         {
-            return sharedApplication.currentTime;
+            get { return sharedApplication.m_currentTime; }
+        }
+
+        public static float frameTime
+        {
+            get { return sharedApplication.m_frameTime; }
         }
 
         #endregion

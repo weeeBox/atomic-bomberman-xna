@@ -92,11 +92,11 @@ namespace BomberEngine.Core.Input
         private struct KeyRepeatInfo
         {
             public KeyEventArg eventArg;
-            public double timestamp;
+            public float timestamp;
 
-            public static readonly KeyRepeatInfo None = new KeyRepeatInfo(new KeyEventArg(KeyCode.None), Double.MaxValue);
+            public static readonly KeyRepeatInfo None = new KeyRepeatInfo(new KeyEventArg(KeyCode.None), Single.MaxValue);
 
-            public KeyRepeatInfo(KeyEventArg eventArg, double timestamp)
+            public KeyRepeatInfo(KeyEventArg eventArg, float timestamp)
             {
                 this.eventArg = eventArg;
                 this.timestamp = timestamp;
@@ -167,20 +167,20 @@ namespace BomberEngine.Core.Input
 
         private void UpdateRepeats(float delta)
         {
-            double currentTime = Application.CurrentTime();
+            float currentTime = Application.CurrentTime;
             for (int i = 0; i < keyRepeats.Length; ++i)
             {
                 if (keyRepeats[i].timestamp < currentTime)
                 {
                     keyListener.OnKeyRepeated(keyRepeats[i].eventArg);
-                    keyRepeats[i].timestamp = currentTime + 0.03;
+                    keyRepeats[i].timestamp = currentTime + 0.03f;
                 }
             }
         }
 
         private void SetKeyRepeat(ref KeyEventArg eventArg, int index)
         {   
-            keyRepeats[index] = new KeyRepeatInfo(eventArg, Application.CurrentTime() + 0.5);
+            keyRepeats[index] = new KeyRepeatInfo(eventArg, Application.CurrentTime + 0.5f);
         }
 
         private void ClearKeyRepeat(ref KeyEventArg eventArg, int index)

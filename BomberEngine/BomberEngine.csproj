@@ -156,6 +156,7 @@
     <Compile Include="Core\Visual\View.cs" />
     <Compile Include="Core\Visual\ImageView.cs" />
     <Compile Include="Debugging\Debug.cs" />
+    <Compile Include="Debugging\FPSDrawable.cs" />
     <Compile Include="Debugging\Log.cs" />
     <Compile Include="Game\Application.cs" />
     <Compile Include="Game\Controller.cs" />
