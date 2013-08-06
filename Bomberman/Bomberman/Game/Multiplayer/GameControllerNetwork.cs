@@ -15,7 +15,7 @@ namespace Bomberman.Game.Multiplayer
     public struct ClientPacket
     {
         public int id;
-        public int lastAckId;
+        public int lastAckServerPacketId;
         public float timeStamp;
         public int actions;
     }
@@ -23,7 +23,7 @@ namespace Bomberman.Game.Multiplayer
     public struct ServerPacket
     {
         public int id;
-        public int lastAckId;
+        public int lastAckClientPacketId;
         public float timeStamp;
     }
 
@@ -117,25 +117,28 @@ namespace Bomberman.Game.Multiplayer
             }
         }
 
+        /* a client sends data to the server */
         protected void WriteClientPacket(NetOutgoingMessage msg, ref ClientPacket packet)
         {
             msg.Write(packet.id);
-            msg.Write(packet.lastAckId);
+            msg.Write(packet.lastAckServerPacketId);
             msg.WriteTime(packet.timeStamp, false);
             msg.Write(packet.actions, (int)PlayerAction.Count);
         }
 
+        /* the server reads data from a client */
         protected ClientPacket ReadClientPacket(NetIncomingMessage msg)
         {
             ClientPacket packet;
             packet.id = msg.ReadInt32();
-            packet.lastAckId = msg.ReadInt32();
+            packet.lastAckServerPacketId = msg.ReadInt32();
             packet.timeStamp = (float)msg.ReadTime(false);
             packet.actions = msg.ReadInt32((int)PlayerAction.Count);
 
             return packet;
         }
 
+        /* the server sends data to a client */
         protected void WriteServerPacket(NetBuffer buffer)
         {
             buffer.WriteTime(false);
@@ -254,11 +257,12 @@ namespace Bomberman.Game.Multiplayer
             }
         }
 
+        /* a client reads data from the server */
         protected ServerPacket ReadServerPacket(NetIncomingMessage msg)
         {
             ServerPacket packet;
             packet.id = msg.ReadInt32();
-            packet.lastAckId = msg.ReadInt32();
+            packet.lastAckClientPacketId = msg.ReadInt32();
             packet.timeStamp = (float)msg.ReadTime(false);
 
             ReadServerPacket(msg, game.Field);

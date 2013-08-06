@@ -41,6 +41,8 @@ namespace Bomberman
             graphics.PreferredBackBufferWidth = realWidth;
             graphics.PreferredBackBufferHeight = realHeight;
 
+            IsFixedTimeStep = true;
+
             Content.RootDirectory = "Content";
 
             ApplicationInfo info = new ApplicationInfo(width, height);

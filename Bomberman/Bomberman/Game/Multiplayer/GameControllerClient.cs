@@ -15,11 +15,10 @@ namespace Bomberman.Game.Multiplayer
     public class GameControllerClient : GameControllerNetwork, IClientListener
     {
         private const int SENT_HISTORY_SIZE = 32;
-        private const int SENT_HISTORY_MASK = SENT_HISTORY_SIZE - 1;
-
+        
         private Player localPlayer;
         private ClientPacket[] sentPackets;
-        private int nextPacketId;
+        private int lastSentPacketId;
 
         public GameControllerClient(GameSettings settings)
             : base(settings)
@@ -73,6 +72,7 @@ namespace Bomberman.Game.Multiplayer
                         {
                             localPlayer = players[i];
                             localPlayer.SetPlayerInput(InputMapping.CreatePlayerInput(InputType.Keyboard1));
+                            localPlayer.input.IsActive = true; // TODO: handle console
                             break;
                         }
                     }
@@ -92,11 +92,30 @@ namespace Bomberman.Game.Multiplayer
                     if (game != null)
                     {
                         ServerPacket packet = ReadServerPacket(message);
-                        localPlayer.lastAckPacketId = packet.id;
-
+                        localPlayer.lastAckPacketId = packet.lastAckClientPacketId;
+                        ReplayPlayerActions(localPlayer);
                     }
                     break;
                 }
+            }
+        }
+
+        private void ReplayPlayerActions(Player player)
+        {
+            float delta = Application.frameTime;
+            player.input.Reset();
+
+            for (int id = player.lastAckPacketId; id <= lastSentPacketId; ++id)
+            {
+                ClientPacket packet = GetPacket(id);
+                int actions = packet.actions;
+                int actionsCount = (int)PlayerAction.Count;
+                for (int i = 0; i < actionsCount; ++i)
+                {
+                    player.input.SetActionPressed(i, (actions & (1 << i)) != 0);
+                }
+
+                player.UpdateMoving(delta);
             }
         }
 
@@ -128,13 +147,13 @@ namespace Bomberman.Game.Multiplayer
                 }
             }
 
+            player.lastSentPacketId = ++lastSentPacketId;
+
             ClientPacket packet;
-            packet.id = nextPacketId;
-            packet.lastAckId = player.lastAckPacketId;
+            packet.id = player.lastSentPacketId;
+            packet.lastAckServerPacketId = player.lastAckPacketId;
             packet.timeStamp = (float)NetTime.Now;
             packet.actions = actions;
-
-            ++nextPacketId;
 
             NetOutgoingMessage msg = CreateMessage(NetworkMessageId.ClientPacket);
             WriteClientPacket(msg, ref packet);
@@ -166,13 +185,13 @@ namespace Bomberman.Game.Multiplayer
 
         private void PushPacket(ref ClientPacket packet)
         {
-            int index = packet.id & SENT_HISTORY_MASK;
+            int index = packet.id % SENT_HISTORY_SIZE;
             sentPackets[index] = packet;
         }
 
         private ClientPacket GetPacket(int id)
         {
-            int index = id & SENT_HISTORY_MASK;
+            int index = id % SENT_HISTORY_SIZE;
             Debug.Assert(sentPackets[index].id == id);
             return sentPackets[index];
         }
@@ -229,18 +248,29 @@ namespace Bomberman.Game.Multiplayer
         {
             private Player m_player;
             private TextView m_cordErrView;
+            private TextView m_packetDiffView;
 
             public LocalPlayerView(Player player)
             {
                 m_player = player;
 
-                AddView(m_cordErrView = new TextView(Helper.fontSystem, null));
+                m_packetDiffView = AddTextView();
+                m_cordErrView = AddTextView("px: 0\npy: 0"); // HACK: need to adjust height
+                LayoutVer(0);
                 ResizeToFitViews();
+            }
+
+            private TextView AddTextView(String text = null)
+            {
+                TextView view = new TextView(Helper.fontSystem, text);
+                AddView(view);
+                return view;
             }
 
             public override void Update(float delta)
             {
                 m_cordErrView.SetText("px: " + m_player.errDx + "\npy: " + m_player.errDy);
+                m_packetDiffView.SetText("packet diff: " + m_player.networkPackageDiff);
             }
         }
     }

@@ -29,13 +29,13 @@ namespace Bomberman.Game.Elements.Players.Input
             m_active = true;
         }
 
-        protected void SetActionPressed(PlayerAction action, bool flag)
+        public void SetActionPressed(PlayerAction action, bool flag)
         {
             int index = GetActionIndex(action);
             SetActionPressed(index, flag);
         }
 
-        protected void SetActionPressed(int index, bool flag)
+        public void SetActionPressed(int index, bool flag)
         {
             if (flag)
             {

@@ -46,6 +46,8 @@ namespace Bomberman.Game.Elements.Players
         private NetConnection m_connection;
 
         private int m_lastAckPacketId; // last acknowledged packet id
+        private int m_lastSentPacketId; // last acknowledged packet id
+
         private float m_errDx;
         private float m_errDy;
 
@@ -1351,6 +1353,17 @@ namespace Bomberman.Game.Elements.Players
         {
             get { return m_lastAckPacketId; }
             set { m_lastAckPacketId = value; }
+        }
+
+        public int lastSentPacketId
+        {
+            get { return m_lastSentPacketId; }
+            set { m_lastSentPacketId = value; }
+        }
+
+        public int networkPackageDiff
+        {
+            get { return m_lastSentPacketId - m_lastAckPacketId; }
         }
 
         public PlayerAnimations animations
