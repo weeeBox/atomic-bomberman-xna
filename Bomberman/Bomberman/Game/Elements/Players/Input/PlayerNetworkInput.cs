@@ -8,10 +8,22 @@ namespace Bomberman.Game.Elements.Players.Input
 {
     public class PlayerNetworkInput : PlayerInput
     {
-        public void SetActionFlag(int index, bool flag)
+        private int m_netActionBits;
+
+        public override void Update(float delta)
         {
-            Debug.Assert(index >= 0 && index < (int)PlayerAction.Count);
-            SetActionPressed(index, flag);
+            base.Update(delta);
+
+            int actionsCount = (int)PlayerAction.Count;
+            for (int i = 0; i < actionsCount; ++i)
+            {
+                SetActionPressed(i, (m_netActionBits & (1 << i)) != 0);
+            }
+        }
+
+        public void SetNetActionBits(int bits)
+        {
+            m_netActionBits = bits;
         }
     }
 }

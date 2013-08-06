@@ -221,14 +221,14 @@ namespace Bomberman.Game.Elements.Fields
 
         #region TimerManager
 
-        protected void ScheduleTimer(TimerCallback callback, float delay = 0.0f, bool repeated = false)
+        protected Timer ScheduleTimer(TimerCallback callback, float delay = 0.0f, bool repeated = false)
         {
-            GetField().ScheduleTimer(callback, delay, repeated);
+            return GetField().ScheduleTimer(callback, delay, repeated);
         }
 
-        protected void ScheduleTimerOnce(TimerCallback callback, float delay = 0.0f, bool repeated = false)
+        protected Timer ScheduleTimerOnce(TimerCallback callback, float delay = 0.0f, bool repeated = false)
         {
-            GetField().ScheduleTimerOnce(callback, delay, repeated);
+            return GetField().ScheduleTimerOnce(callback, delay, repeated);
         }
 
         protected void CancelTimer(TimerCallback callback)

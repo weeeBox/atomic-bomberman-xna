@@ -19,6 +19,7 @@ namespace Bomberman.Game.Elements.Players.Input
         public virtual void Update(float delta)
         {
             m_stateBitsOld = m_stateBits;
+            m_active = true;
         }
 
         public void Reset()
@@ -37,10 +38,11 @@ namespace Bomberman.Game.Elements.Players.Input
 
         public void SetActionPressed(int index, bool flag)
         {
+            bool wasPressed = IsActionPressed(index);
             if (flag)
-            {
+            {   
                 m_stateBits |= 1 << index;
-                if (IsActionJustPressed(index))
+                if (!wasPressed)
                 {
                     ++m_pressedCount;
                 }
@@ -48,7 +50,7 @@ namespace Bomberman.Game.Elements.Players.Input
             else
             {
                 m_stateBits &= ~(1 << index);
-                if (IsActionJustReleased(index))
+                if (wasPressed)
                 {
                     Debug.Assert(m_pressedCount > 0);
                     --m_pressedCount;

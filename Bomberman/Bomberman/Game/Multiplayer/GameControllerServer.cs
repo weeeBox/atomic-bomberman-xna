@@ -130,14 +130,7 @@ namespace Bomberman.Game.Multiplayer
                     PlayerNetworkInput input = player.input as PlayerNetworkInput;
                     Debug.Assert(input != null);
 
-                    // TODO: "move" the world back in time and replay the simulation
-
-                    int actions = packet.actions;
-                    int actionsCount = (int)PlayerAction.Count;
-                    for (int i = 0; i < actionsCount; ++i)
-                    {   
-                        input.SetActionFlag(i, (actions & (1 << i)) != 0);
-                    }
+                    input.SetNetActionBits(packet.actions);
                     break;
                 }
             }

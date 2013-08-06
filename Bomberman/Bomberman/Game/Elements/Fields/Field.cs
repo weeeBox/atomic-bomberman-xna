@@ -972,14 +972,14 @@ namespace Bomberman.Game.Elements.Fields
 
         #region TimerManager
 
-        public void ScheduleTimer(TimerCallback callback, float delay = 0.0f, bool repeated = false)
+        public Timer ScheduleTimer(TimerCallback callback, float delay = 0.0f, bool repeated = false)
         {
-            timerManager.Schedule(callback, delay, repeated);
+            return timerManager.Schedule(callback, delay, repeated);
         }
 
-        public void ScheduleTimerOnce(TimerCallback callback, float delay = 0.0f, bool repeated = false)
+        public Timer ScheduleTimerOnce(TimerCallback callback, float delay = 0.0f, bool repeated = false)
         {
-            timerManager.ScheduleOnce(callback, delay, repeated);
+            return timerManager.ScheduleOnce(callback, delay, repeated);
         }
 
         public void CancelTimer(TimerCallback callback)
