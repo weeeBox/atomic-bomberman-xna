@@ -16,10 +16,14 @@ namespace Bomberman.Game.Elements.Players.Input
         private int m_pressedCount;
         private bool m_active;
 
+        public PlayerInput()
+        {
+            m_active = true;
+        }
+
         public virtual void Update(float delta)
         {
             m_stateBitsOld = m_stateBits;
-            m_active = true;
         }
 
         public void Reset()
