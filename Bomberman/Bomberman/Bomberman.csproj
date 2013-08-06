@@ -163,11 +163,9 @@
     <Compile Include="Game\GameLobbyController.cs" />
     <Compile Include="Game\InputMapping.cs" />
     <Compile Include="Game\Multiplayer\GameControllerClient.cs" />
-    <Compile Include="Game\Multiplayer\GamePacketClient.cs" />
     <Compile Include="Game\Multiplayer\GamePacket.cs" />
     <Compile Include="Game\Multiplayer\GameControllerNetwork.cs" />
     <Compile Include="Game\Multiplayer\GameControllerServer.cs" />
-    <Compile Include="Game\Multiplayer\GamePacketServer.cs" />
     <Compile Include="Game\Multiplayer\GameStateSnapshot.cs" />
     <Compile Include="Game\Screens\GameResultScreen.cs" />
     <Compile Include="Game\Screens\PlayersScreen.cs" />

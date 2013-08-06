@@ -7,6 +7,9 @@ using Bomberman.Game.Elements.Players.Input;
 using Bomberman.Game.Screens;
 using Bomberman.Networking;
 using Lidgren.Network;
+using BomberEngine.Core;
+using BomberEngine.Core.Events;
+using BomberEngine.Consoles;
 
 namespace Bomberman.Game.Multiplayer
 {
@@ -60,22 +63,37 @@ namespace Bomberman.Game.Multiplayer
             StartScreen(gameScreen);
 
             GetConsole().TryExecuteCommand("exec game.cfg");
+
+            SetPacketRate(CVars.sv_packetRate.intValue);
+            Application.NotificationCenter().Register(Notifications.ConsoleVariableChanged, ServerRateVarChangedCallback);
         }
 
         protected override void OnStop()
         {
             networkPlayersLookup = null;
             networkPlayers = null;
+            game.Field.CancelAllTimers(this);
+            Application.NotificationCenter().UnregisterAll(this);
+
             base.OnStop();
         }
 
-        public override void Update(float delta)
+        private void SetPacketRate(int packetRate)
         {
-            base.Update(delta);
-            SendServerPacket(delta);
+            float packetDelay = 1.0f / packetRate;
+            game.Field.CancelTimer(SendServerPacketCallback);
+            game.Field.ScheduleTimer(SendServerPacketCallback, packetDelay, true);
         }
 
-        private void SendServerPacket(float delta)
+        private void ServerRateVarChangedCallback(Notification notification)
+        {
+            CVar var = notification.data as CVar;
+            Debug.AssertNotNull(var);
+
+            SetPacketRate(var.intValue);
+        }
+
+        private void SendServerPacketCallback(Timer timer)
         {
             NetOutgoingMessage payloadMessage = CreateMessage();
             WriteServerPacket(payloadMessage);
