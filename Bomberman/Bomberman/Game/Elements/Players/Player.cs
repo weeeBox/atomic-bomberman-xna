@@ -138,21 +138,24 @@ namespace Bomberman.Game.Elements.Players
                 m_input.Update(delta);
             }
 
-            for (int i = 0; i < ACTIONS.Length; ++i)
+            if (GetField().IsSimulationEnabled || IsNetworkPlayer)
             {
-                PlayerAction action = ACTIONS[i];
-                if (m_input.IsActionJustPressed(action))
+                for (int i = 0; i < ACTIONS.Length; ++i)
                 {
-                    OnActionPressed(m_input, action);
+                    PlayerAction action = ACTIONS[i];
+                    if (m_input.IsActionJustPressed(action))
+                    {
+                        OnActionPressed(m_input, action);
+                    }
                 }
-            }
 
-            for (int i = 0; i < ACTIONS.Length; ++i)
-            {
-                PlayerAction action = ACTIONS[i];
-                if (m_input.IsActionJustReleased(action))
+                for (int i = 0; i < ACTIONS.Length; ++i)
                 {
-                    OnActionReleased(m_input, action);
+                    PlayerAction action = ACTIONS[i];
+                    if (m_input.IsActionJustReleased(action))
+                    {
+                        OnActionReleased(m_input, action);
+                    }
                 }
             }
         }
@@ -1409,6 +1412,11 @@ namespace Bomberman.Game.Elements.Players
         public bool IsAlive()
         {
             return m_alive;
+        }
+
+        public bool IsNetworkPlayer
+        {
+            get { return m_input is PlayerNetworkInput; }
         }
 
         public int GetIndex()
