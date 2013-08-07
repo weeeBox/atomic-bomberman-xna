@@ -35,6 +35,8 @@ namespace Bomberman.Game.Elements.Fields
         private PlayerAnimations m_playerAnimations;
         private BombAnimations m_bombAnimations;
 
+        private bool m_updatesEnabled;
+
         public Field()
         {
             currentField = this;
@@ -49,6 +51,8 @@ namespace Bomberman.Game.Elements.Fields
 
             m_playerAnimations = new PlayerAnimations();
             m_bombAnimations = new BombAnimations();
+
+            m_updatesEnabled = true;
         }
 
         public void Reset()
@@ -63,6 +67,8 @@ namespace Bomberman.Game.Elements.Fields
             
             tempUpdateList.Clear();
             tempMoveList.Clear();
+
+            m_updatesEnabled = true;
         }
 
         public void Destroy()
@@ -285,8 +291,11 @@ namespace Bomberman.Game.Elements.Fields
         {
             timerManager.Update(delta);
 
-            UpdateCells(delta);
-            UpdatePhysics(delta);
+            if (m_updatesEnabled)
+            {
+                UpdateCells(delta);
+                UpdatePhysics(delta);
+            }
         }
 
         private void UpdateCells(float delta)
@@ -990,6 +999,12 @@ namespace Bomberman.Game.Elements.Fields
         public void CancelAllTimers(Object target)
         {
             timerManager.CancelAll(target);
+        }
+
+        public bool IsUpdatesEnabled
+        {
+            get { return m_updatesEnabled; }
+            set { m_updatesEnabled = value; }
         }
 
         #endregion

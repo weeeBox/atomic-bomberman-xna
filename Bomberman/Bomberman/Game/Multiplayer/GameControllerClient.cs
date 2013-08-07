@@ -84,6 +84,8 @@ namespace Bomberman.Game.Multiplayer
                     gameScreen.AddDebugView(new NetworkTraceView(client.GetServerConnection()));
                     gameScreen.AddDebugView(new LocalPlayerView(localPlayer));
 
+                    game.Field.IsUpdatesEnabled = !CVars.sv_dumbClient.boolValue;
+
                     break;
                 }
 
