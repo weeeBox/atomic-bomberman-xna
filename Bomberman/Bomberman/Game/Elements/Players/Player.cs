@@ -138,7 +138,7 @@ namespace Bomberman.Game.Elements.Players
                 m_input.Update(delta);
             }
 
-            if (GetField().IsSimulationEnabled || IsNetworkPlayer)
+            if (!GetField().IsGameDumbMuliplayerClient || IsNetworkPlayer)
             {
                 for (int i = 0; i < ACTIONS.Length; ++i)
                 {

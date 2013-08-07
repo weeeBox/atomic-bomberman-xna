@@ -22,6 +22,8 @@ namespace Bomberman.Game.Elements.Fields
     {
         private static Field currentField;
 
+        private Game m_game;
+
         private FieldCellArray cells;
         private PlayerList players;
         private TimerManager timerManager;
@@ -35,10 +37,10 @@ namespace Bomberman.Game.Elements.Fields
         private PlayerAnimations m_playerAnimations;
         private BombAnimations m_bombAnimations;
 
-        private bool m_simulationEnabled;
-
-        public Field()
+        public Field(Game game)
         {
+            m_game = game;
+
             currentField = this;
             timerManager = new TimerManager();
             players = new PlayerList(timerManager, CVars.cg_maxPlayers.intValue);
@@ -51,8 +53,6 @@ namespace Bomberman.Game.Elements.Fields
 
             m_playerAnimations = new PlayerAnimations();
             m_bombAnimations = new BombAnimations();
-
-            m_simulationEnabled = true;
         }
 
         public void Reset()
@@ -67,8 +67,6 @@ namespace Bomberman.Game.Elements.Fields
             
             m_tempCellsList.Clear();
             tempMoveList.Clear();
-
-            m_simulationEnabled = true;
         }
 
         public void Destroy()
@@ -291,14 +289,15 @@ namespace Bomberman.Game.Elements.Fields
         {
             timerManager.Update(delta);
 
-            if (m_simulationEnabled)
+            if (IsGameDumbMuliplayerClient)
             {
-                UpdateCells(delta);
-                UpdatePhysics(delta);
+                UpdateAnimations(delta);
+                // the server sends game state: no need to calculate it
             }
             else
             {
-                UpdateAnimations(delta);
+                UpdateCells(delta);
+                UpdatePhysics(delta);
             }
         }
 
@@ -439,11 +438,12 @@ namespace Bomberman.Game.Elements.Fields
             {
                 players.Kill(player);
 
-                if (IsSimulationEnabled)
-                {
+                if (!IsGameDumbMuliplayerClient)
+                {   
                     DropPowerups(player);
-                    ScheduleRoundEndCheck();
                 }
+
+                ScheduleRoundEndCheck();
             }
         }
 
@@ -986,7 +986,32 @@ namespace Bomberman.Game.Elements.Fields
 
         private Game GetGame()
         {
-            return Game.Current; // TODO: get rid on singletons
+            return m_game;
+        }
+
+        public bool IsGameMuliplayerClient
+        {
+            get { return m_game.IsMuliplayerClient; }
+        }
+
+        public bool IsGameMuliplayerServer
+        {
+            get { return m_game.IsMuliplayerServer; }
+        }
+
+        public bool IsGameNetworkMultiplayer
+        {
+            get { return m_game.IsNetworkMultiplayer; }
+        }
+
+        public bool IsGameLocal
+        {
+            get { return m_game.IsLocal; }
+        }
+
+        public bool IsGameDumbMuliplayerClient
+        {
+            get { return m_game.IsMuliplayerClient && CVars.sv_dumbClient.boolValue; }
         }
 
         #endregion
@@ -1013,12 +1038,6 @@ namespace Bomberman.Game.Elements.Fields
         public void CancelAllTimers(Object target)
         {
             timerManager.CancelAll(target);
-        }
-
-        public bool IsSimulationEnabled
-        {
-            get { return m_simulationEnabled; }
-            set { m_simulationEnabled = value; }
         }
 
         #endregion

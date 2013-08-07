@@ -18,18 +18,29 @@ namespace Bomberman.Game
         public static readonly String GameEnded  = "Round Ended";
     }
 
+    public enum MultiplayerMode
+    {
+        None,
+        Client,
+        Server,
+    }
+
     public class Game
     {
         private static Game s_current;
 
         private Field m_field;
+        private MultiplayerMode m_multiplayerMode;
+
         private Scheme m_currentScheme;
         private int m_roundIndex;
 
-        public Game()
+        public Game(MultiplayerMode mode)
         {
             s_current = this;
-            m_field = new Field();
+
+            m_multiplayerMode = mode;
+            m_field = new Field(this);
         }
 
         public void AddPlayer(Player player)
@@ -136,6 +147,26 @@ namespace Bomberman.Game
         public Field Field
         {
             get { return m_field; }
+        }
+
+        public bool IsMuliplayerClient
+        {
+            get { return m_multiplayerMode == MultiplayerMode.Client; }
+        }
+
+        public bool IsMuliplayerServer
+        {
+            get { return m_multiplayerMode == MultiplayerMode.Server; }
+        }
+
+        public bool IsNetworkMultiplayer
+        {
+            get { return IsMuliplayerClient || IsMuliplayerServer; }
+        }
+
+        public bool IsLocal
+        {
+            get { return m_multiplayerMode == MultiplayerMode.None; }
         }
 
         #endregion

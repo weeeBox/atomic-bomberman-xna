@@ -10,6 +10,7 @@ using Lidgren.Network;
 using BomberEngine.Core;
 using BomberEngine.Core.Events;
 using BomberEngine.Consoles;
+using Bomberman.Game.Elements.Fields;
 
 namespace Bomberman.Game.Multiplayer
 {
@@ -33,7 +34,7 @@ namespace Bomberman.Game.Multiplayer
 
             GetMultiplayerManager().SetServerListener(this);
 
-            game = new Game();
+            game = new Game(MultiplayerMode.Server);
 
             int playerIndex = 0;
             GameSettings.InputEntry[] entries = settings.inputEntries;
@@ -65,7 +66,8 @@ namespace Bomberman.Game.Multiplayer
             GetConsole().TryExecuteCommand("exec game.cfg");
 
             SetPacketRate(CVars.sv_packetRate.intValue);
-            Application.NotificationCenter().Register(Notifications.ConsoleVariableChanged, ServerRateVarChangedCallback);
+
+            RegisterNotification(Notifications.ConsoleVariableChanged, ServerRateVarChangedCallback);
         }
 
         protected override void OnStop()
@@ -73,7 +75,6 @@ namespace Bomberman.Game.Multiplayer
             networkPlayersLookup = null;
             networkPlayers = null;
             game.Field.CancelAllTimers(this);
-            Application.NotificationCenter().UnregisterAll(this);
 
             base.OnStop();
         }

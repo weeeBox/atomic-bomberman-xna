@@ -9,6 +9,7 @@ using Bomberman.Networking;
 using Lidgren.Network;
 using BomberEngine.Debugging;
 using BomberEngine.Core.Visual;
+using Bomberman.Game.Elements.Fields;
 
 namespace Bomberman.Game.Multiplayer
 {
@@ -56,7 +57,7 @@ namespace Bomberman.Game.Multiplayer
             {
                 case NetworkMessageId.FieldState:
                 {
-                    game = new Game();
+                    game = new Game(MultiplayerMode.Client);
 
                     SetupField(settings.scheme);
 
@@ -84,7 +85,7 @@ namespace Bomberman.Game.Multiplayer
                     gameScreen.AddDebugView(new NetworkTraceView(client.GetServerConnection()));
                     gameScreen.AddDebugView(new LocalPlayerView(m_localPlayer));
 
-                    game.Field.IsSimulationEnabled = !CVars.sv_dumbClient.boolValue;
+                    
 
                     break;
                 }

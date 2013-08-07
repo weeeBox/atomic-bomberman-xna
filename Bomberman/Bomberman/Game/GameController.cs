@@ -96,13 +96,15 @@ namespace Bomberman.Game
         protected override void OnStart()
         {
             GetConsole().RegisterCommands(gameCommands);
-            RegisterNotifications();
+
+            RegisterNotification(GameNotifications.RoundEnded, RoundEndedNotification);
+            RegisterNotification(GameNotifications.GameEnded, GameEndedNotification);
         }
 
         protected override void OnStop()
-        {   
+        {
             GetConsole().UnregisterCommands(gameCommands);
-            UnregisterNotifications();
+            base.OnStop();
         }
 
         protected void Stop(ExitCode exitCode, Object data = null)
@@ -159,45 +161,18 @@ namespace Bomberman.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Notifications
-
-        protected virtual void RegisterNotifications()
-        {
-            RegisterNotification(GameNotifications.RoundEnded, RoundEndedNotification);
-            RegisterNotification(GameNotifications.GameEnded, GameEndedNotification);
-        }
-
-        protected virtual void UnregisterNotifications()
-        {
-            Application.NotificationCenter().UnregisterAll(this);
-        }
-
-        protected void RegisterNotification(String name, NotificationDelegate del)
-        {
-            Application.NotificationCenter().Register(name, del);
-        }
-
-        protected void UnregisterNotification(String name, NotificationDelegate del)
-        {
-            Application.NotificationCenter().Unregister(name, del);
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
         #region Game notifications
 
         private void RoundEndedNotification(Notification notification)
         {
             Log.d("Round ended");
-            StartNextScreen(new RoundResultScreen(RoundResultScreenButtonDelegate));
+            OnRoundEnded();
         }
 
         private void GameEndedNotification(Notification notification)
         {
             Log.d("Game ended");
-            StartNextScreen(new GameResultScreen(GameResultScreenButtonDelegate));
+            OnGameEnded();
         }
 
         private void RoundResultScreenButtonDelegate(Button button)
@@ -233,6 +208,18 @@ namespace Bomberman.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
+        protected virtual void OnRoundEnded()
+        {
+            StartNextScreen(new RoundResultScreen(RoundResultScreenButtonDelegate));
+        }
+
+        protected virtual void OnGameEnded()
+        {
+            StartNextScreen(new GameResultScreen(GameResultScreenButtonDelegate));
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
         #region Properties
 
         protected Field Field
@@ -260,7 +247,7 @@ namespace Bomberman.Game
         {
             base.OnStart();
 
-            game = new Game();
+            game = new Game(MultiplayerMode.None);
 
             GameSettings.InputEntry[] entries = settings.inputEntries;
             for (int i = 0; i < entries.Length; ++i)
