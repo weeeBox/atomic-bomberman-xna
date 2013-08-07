@@ -16,14 +16,14 @@ namespace Bomberman.Game.Multiplayer
     {
         private const int SENT_HISTORY_SIZE = 32;
         
-        private Player localPlayer;
-        private ClientPacket[] sentPackets;
-        private int lastSentPacketId;
+        private Player m_localPlayer; // TODO: don't store the reference (multiplay local players may exist)
+        private ClientPacket[] m_sentPackets;
+        private int m_lastSentPacketId;
 
         public GameControllerClient(GameSettings settings)
             : base(settings)
         {
-            sentPackets = new ClientPacket[SENT_HISTORY_SIZE];
+            m_sentPackets = new ClientPacket[SENT_HISTORY_SIZE];
         }
 
         protected override void OnStart()
@@ -42,7 +42,7 @@ namespace Bomberman.Game.Multiplayer
 
             if (game != null)
             {
-                SendClientPacket(localPlayer);
+                SendClientPacket(m_localPlayer);
             }
         }
 
@@ -64,25 +64,25 @@ namespace Bomberman.Game.Multiplayer
 
                     gameScreen = new GameScreen();
 
-                    localPlayer = null;
+                    m_localPlayer = null;
                     List<Player> players = game.GetPlayers().list;
                     for (int i = 0; i < players.Count; ++i)
                     {
                         if (players[i].input == null)
                         {
-                            localPlayer = players[i];
-                            localPlayer.SetPlayerInput(InputMapping.CreatePlayerInput(InputType.Keyboard1));
-                            localPlayer.input.IsActive = true; // TODO: handle console
+                            m_localPlayer = players[i];
+                            m_localPlayer.SetPlayerInput(InputMapping.CreatePlayerInput(InputType.Keyboard1));
+                            m_localPlayer.input.IsActive = true; // TODO: handle console
                             break;
                         }
                     }
 
-                    Debug.Assert(localPlayer != null);
-                    localPlayer.connection = client.GetServerConnection();
+                    Debug.Assert(m_localPlayer != null);
+                    m_localPlayer.connection = client.GetServerConnection();
 
                     StartScreen(gameScreen);
                     gameScreen.AddDebugView(new NetworkTraceView(client.GetServerConnection()));
-                    gameScreen.AddDebugView(new LocalPlayerView(localPlayer));
+                    gameScreen.AddDebugView(new LocalPlayerView(m_localPlayer));
 
                     game.Field.IsSimulationEnabled = !CVars.sv_dumbClient.boolValue;
 
@@ -94,11 +94,11 @@ namespace Bomberman.Game.Multiplayer
                     if (game != null)
                     {
                         ServerPacket packet = ReadServerPacket(message);
-                        localPlayer.lastAckPacketId = packet.lastAckClientPacketId;
+                        m_localPlayer.lastAckPacketId = packet.lastAckClientPacketId;
 
                         if (!CVars.sv_dumbClient.boolValue)
                         {
-                            ReplayPlayerActions(localPlayer);
+                            ReplayPlayerActions(m_localPlayer);
                         }
                     }
                     break;
@@ -111,7 +111,7 @@ namespace Bomberman.Game.Multiplayer
             float delta = Application.frameTime;
             player.input.Reset();
 
-            for (int id = player.lastAckPacketId; id <= lastSentPacketId; ++id)
+            for (int id = player.lastAckPacketId; id <= m_lastSentPacketId; ++id)
             {
                 ClientPacket packet = GetPacket(id);
                 int actions = packet.actions;
@@ -153,7 +153,7 @@ namespace Bomberman.Game.Multiplayer
                 }
             }
 
-            player.lastSentPacketId = ++lastSentPacketId;
+            player.lastSentPacketId = ++m_lastSentPacketId;
 
             ClientPacket packet;
             packet.id = player.lastSentPacketId;
@@ -192,14 +192,14 @@ namespace Bomberman.Game.Multiplayer
         private void PushPacket(ref ClientPacket packet)
         {
             int index = packet.id % SENT_HISTORY_SIZE;
-            sentPackets[index] = packet;
+            m_sentPackets[index] = packet;
         }
 
         private ClientPacket GetPacket(int id)
         {
             int index = id % SENT_HISTORY_SIZE;
-            Debug.Assert(sentPackets[index].id == id);
-            return sentPackets[index];
+            Debug.Assert(m_sentPackets[index].id == id);
+            return m_sentPackets[index];
         }
 
         #endregion

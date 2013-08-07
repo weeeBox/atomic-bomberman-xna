@@ -65,6 +65,12 @@ namespace BomberEngine.Debugging
         }
 
         [Conditional("DEBUG")]
+        public static void AssertNull(Object o)
+        {
+            System.Diagnostics.Debug.Assert(o == null, "Assertion failed: object is not null");
+        }
+
+        [Conditional("DEBUG")]
         public static void Assert(bool condition)
         {
             System.Diagnostics.Debug.Assert(condition, "Assertion failed");

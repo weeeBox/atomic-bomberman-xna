@@ -438,9 +438,12 @@ namespace Bomberman.Game.Elements.Fields
             if (player.IsAlive() && !CVars.c_noKills.boolValue)
             {
                 players.Kill(player);
-                DropPowerups(player);
 
-                ScheduleRoundEndCheck();
+                if (IsSimulationEnabled)
+                {
+                    DropPowerups(player);
+                    ScheduleRoundEndCheck();
+                }
             }
         }
 
@@ -802,17 +805,6 @@ namespace Bomberman.Game.Elements.Fields
 
             if (contacts.Count > 0)
             {
-                //Console.WriteLine("Contacts: " + contacts.Count);
-                //for (LinkedListNode<CellContactList> node = contacts.First; node != null; node = node.Next)
-                //{
-                //    LinkedList<MovableCell> cells = node.Value.cells;
-                //    Console.WriteLine("\t" + cells.Count);
-                //    foreach (MovableCell cell in cells)
-                //    {
-                //        Console.WriteLine("\t\t" + cell.type);
-                //    }
-                //}
-
                 for (LinkedListNode<CellContactList> node = contacts.First; node != null; node = node.Next)
                 {
                     CellContactList contactList = node.Value;
