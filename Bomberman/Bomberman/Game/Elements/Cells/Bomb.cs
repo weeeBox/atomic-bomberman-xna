@@ -89,10 +89,7 @@ namespace Bomberman.Game.Elements.Cells
             base.Update(delta);
             m_updater(delta);
 
-            if (m_currentAnimation != null)
-            {
-                m_currentAnimation.Update(delta);
-            }
+            UpdateAnimation(delta);
         }
 
         private void UpdateNormal(float delta)
@@ -518,6 +515,14 @@ namespace Bomberman.Game.Elements.Cells
         private void InitAnimations()
         {
             m_currentAnimation = new AnimationInstance();
+        }
+
+        public override void UpdateAnimation(float delta)
+        {
+            if (m_currentAnimation != null)
+            {
+                m_currentAnimation.Update(delta);
+            }
         }
 
         private void UpdateAnimation()

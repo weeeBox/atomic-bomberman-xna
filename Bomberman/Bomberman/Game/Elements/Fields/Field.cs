@@ -29,13 +29,13 @@ namespace Bomberman.Game.Elements.Fields
         private LinkedList<MovableCell> movableCells;
         private LinkedList<CellContactList> contacts;
 
-        private LinkedList<FieldCell> tempUpdateList;
+        private LinkedList<FieldCell> m_tempCellsList;
         private LinkedList<MovableCell> tempMoveList;
 
         private PlayerAnimations m_playerAnimations;
         private BombAnimations m_bombAnimations;
 
-        private bool m_updatesEnabled;
+        private bool m_simulationEnabled;
 
         public Field()
         {
@@ -43,7 +43,7 @@ namespace Bomberman.Game.Elements.Fields
             timerManager = new TimerManager();
             players = new PlayerList(timerManager, CVars.cg_maxPlayers.intValue);
 
-            tempUpdateList = new LinkedList<FieldCell>();
+            m_tempCellsList = new LinkedList<FieldCell>();
             tempMoveList = new LinkedList<MovableCell>();
 
             movableCells = new LinkedList<MovableCell>();
@@ -52,7 +52,7 @@ namespace Bomberman.Game.Elements.Fields
             m_playerAnimations = new PlayerAnimations();
             m_bombAnimations = new BombAnimations();
 
-            m_updatesEnabled = true;
+            m_simulationEnabled = true;
         }
 
         public void Reset()
@@ -65,10 +65,10 @@ namespace Bomberman.Game.Elements.Fields
             movableCells.Clear();
             contacts.Clear();
             
-            tempUpdateList.Clear();
+            m_tempCellsList.Clear();
             tempMoveList.Clear();
 
-            m_updatesEnabled = true;
+            m_simulationEnabled = true;
         }
 
         public void Destroy()
@@ -291,10 +291,32 @@ namespace Bomberman.Game.Elements.Fields
         {
             timerManager.Update(delta);
 
-            if (m_updatesEnabled)
+            if (m_simulationEnabled)
             {
                 UpdateCells(delta);
                 UpdatePhysics(delta);
+            }
+            else
+            {
+                UpdateAnimations(delta);
+            }
+        }
+
+        private void UpdateAnimations(float delta)
+        {
+            FieldCellSlot[] slots = cells.slots;
+            foreach (FieldCellSlot slot in slots)
+            {
+                slot.GetCells(m_tempCellsList);
+            }
+
+            if (m_tempCellsList.Count > 0)
+            {
+                foreach (FieldCell cell in m_tempCellsList)
+                {
+                    cell.Update(delta);
+                }
+                m_tempCellsList.Clear();
             }
         }
 
@@ -309,15 +331,15 @@ namespace Bomberman.Game.Elements.Fields
 
         public void UpdateSlot(float delta, FieldCellSlot slot)
         {
-            slot.GetCells(tempUpdateList);
+            slot.GetCells(m_tempCellsList);
 
-            if (tempUpdateList.Count > 0)
+            if (m_tempCellsList.Count > 0)
             {
-                foreach (FieldCell cell in tempUpdateList)
+                foreach (FieldCell cell in m_tempCellsList)
                 {
                     cell.Update(delta);
                 }
-                tempUpdateList.Clear();
+                m_tempCellsList.Clear();
             }
         }
 
@@ -1001,10 +1023,10 @@ namespace Bomberman.Game.Elements.Fields
             timerManager.CancelAll(target);
         }
 
-        public bool IsUpdatesEnabled
+        public bool IsSimulationEnabled
         {
-            get { return m_updatesEnabled; }
-            set { m_updatesEnabled = value; }
+            get { return m_simulationEnabled; }
+            set { m_simulationEnabled = value; }
         }
 
         #endregion

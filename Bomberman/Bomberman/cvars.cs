@@ -96,7 +96,7 @@ namespace Bomberman
         public static readonly CVar sv_port = new CVar("sv_port", 1334);
         public static readonly CVar sv_appId = new CVar("sv_appId", "bomberman");
         public static readonly CVar sv_hostname = new CVar("sv_hostname", "noname");
-        public static readonly CVar sv_packetRate = new CVar("sv_packetRate", 20);
+        public static readonly CVar sv_packetRate = new CVar("sv_packetRate", 60); // TODO: set the value to 20 (60 is way to high)
         public static readonly CVar sv_dumbClient = new CVar("sv_dumbClient", 1);
 
         public static readonly CVar c_noKills = new CVar("c_noKills", 0);

@@ -84,7 +84,7 @@ namespace Bomberman.Game.Multiplayer
                     gameScreen.AddDebugView(new NetworkTraceView(client.GetServerConnection()));
                     gameScreen.AddDebugView(new LocalPlayerView(localPlayer));
 
-                    game.Field.IsUpdatesEnabled = !CVars.sv_dumbClient.boolValue;
+                    game.Field.IsSimulationEnabled = !CVars.sv_dumbClient.boolValue;
 
                     break;
                 }
@@ -95,7 +95,11 @@ namespace Bomberman.Game.Multiplayer
                     {
                         ServerPacket packet = ReadServerPacket(message);
                         localPlayer.lastAckPacketId = packet.lastAckClientPacketId;
-                        ReplayPlayerActions(localPlayer);
+
+                        if (!CVars.sv_dumbClient.boolValue)
+                        {
+                            ReplayPlayerActions(localPlayer);
+                        }
                     }
                     break;
                 }

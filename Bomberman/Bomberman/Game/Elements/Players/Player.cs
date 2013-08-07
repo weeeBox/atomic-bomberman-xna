@@ -117,10 +117,7 @@ namespace Bomberman.Game.Elements.Players
                 m_diseases.Update(delta);
             }
 
-            if (m_currentAnimation != null)
-            {
-                m_currentAnimation.Update(delta);
-            }
+            UpdateAnimation(delta);
 
             for (int bombIndex = 0; bombIndex < m_thrownBombs.Count; ++bombIndex)
             {
@@ -1135,6 +1132,14 @@ namespace Bomberman.Game.Elements.Players
         {
             m_currentAnimation = new AnimationInstance();
             UpdateAnimation();
+        }
+
+        public override void UpdateAnimation(float delta)
+        {
+            if (m_currentAnimation != null)
+            {
+                m_currentAnimation.Update(delta);
+            }
         }
 
         private void UpdateAnimation()
