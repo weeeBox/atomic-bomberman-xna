@@ -124,6 +124,7 @@
     <Compile Include="Core\IO\FileUtils.cs" />
     <Compile Include="Core\IResettable.cs" />
     <Compile Include="Core\ITimerManager.cs" />
+    <Compile Include="Core\Operations\BaseOperation.cs" />
     <Compile Include="Core\Storage\SharedStorage.cs" />
     <Compile Include="Core\Visual\Button.cs" />
     <Compile Include="Core\Visual\PopupList.cs" />
