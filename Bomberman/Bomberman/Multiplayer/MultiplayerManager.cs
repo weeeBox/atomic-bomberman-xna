@@ -10,6 +10,18 @@ using Lidgren.Network;
 
 namespace Bomberman.Multiplayer
 {
+    public class NetworkNotifications
+    {
+        public static readonly String ClientConnected = "ClientConnected";
+        public static readonly String ClientDisconnected = "ClientDisconnected";
+
+        public static readonly String ConnectedToServer = "ConnectedToServer";
+        public static readonly String DisconnectedFromServer = "DisconnectedFromServer";
+
+        public static readonly String LocalClientDiscovered = "LocalClientDiscovered";
+        public static readonly String LocalServerDiscovered = "LocalServerDiscovered";
+    }
+
     public class MultiplayerManager : IUpdatable, IClientListener, IServerListener
     {
         private Peer networkPeer;
@@ -37,14 +49,14 @@ namespace Bomberman.Multiplayer
 
         #region Local server discovery
 
-        public void StartLocalServerDiscovery(ILocalServersDiscoveryResponseListener listener)
+        public void StartLocalServerDiscovery()
         {
             Debug.Assert(serverDiscovery == null);
 
             String appId = CVars.sv_appId.value;
             int port = CVars.sv_port.intValue;
 
-            serverDiscovery = new LocalServersDiscovery(listener, appId, port);
+            serverDiscovery = new LocalServersDiscovery(appId, port);
             serverDiscovery.Start();
 
             Log.i("Started local servers discovery...");
@@ -61,9 +73,9 @@ namespace Bomberman.Multiplayer
             }
         }
 
-        public void StartListeningForServerDiscovery(ILocalServersDiscoveryRequestListener listener)
-        {
-            GetServer().StartListeningDiscoveryRequests(listener);
+        public void StartListeningForServerDiscovery()
+        {   
+            GetServer().StartListeningDiscoveryRequests();
         }
 
         public void StopListeningForServerDiscovery()
@@ -197,22 +209,6 @@ namespace Bomberman.Multiplayer
             }
         }
 
-        public void OnConnectedToServer(Client client, NetConnection serverConnection)
-        {
-            if (clientListener != null)
-            {
-                clientListener.OnConnectedToServer(client, serverConnection);
-            }
-        }
-
-        public void OnDisconnectedFromServer(Client client)
-        {
-            if (clientListener != null)
-            {
-                clientListener.OnDisconnectedFromServer(client);
-            }
-        }
-
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
@@ -224,22 +220,6 @@ namespace Bomberman.Multiplayer
             if (serverListener != null)
             {
                 serverListener.OnMessageReceived(server, messageId, message);
-            }
-        }
-
-        public void OnClientConnected(Server server, string name, NetConnection connection)
-        {
-            if (serverListener != null)
-            {
-                serverListener.OnClientConnected(server, name, connection);
-            }
-        }
-
-        public void OnClientDisconnected(Server server, NetConnection connection)
-        {
-            if (serverListener != null)
-            {
-                serverListener.OnClientDisconnected(server, connection);
             }
         }
 

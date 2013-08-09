@@ -7,6 +7,7 @@ using Lidgren.Network;
 using System.Net;
 using BomberEngine.Core.IO;
 using BomberEngine.Debugging;
+using BomberEngine.Game;
 
 namespace Bomberman.Networking
 {
@@ -171,6 +172,22 @@ namespace Bomberman.Networking
             return (NetworkMessageId)id;
         }
             
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Helpers
+
+        protected void PostNotification(String name)
+        {
+            Application.NotificationCenter().Post(name, this);
+        }
+
+        protected void PostNotificationImmediately(String name, Object data)
+        {
+            Application.NotificationCenter().PostImmediately(name, data);
+        }
+
         #endregion
     }
 }

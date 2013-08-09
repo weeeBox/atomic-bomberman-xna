@@ -9,24 +9,23 @@ using Bomberman.Game.Elements.Fields;
 using BomberEngine.Core.IO;
 using Bomberman.Game.Elements.Cells;
 using Bomberman.Game.Elements;
+using Bomberman.Multiplayer;
 
 namespace Bomberman.Networking
 {
     public interface IServerListener
     {
         void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message);
-        void OnClientConnected(Server server, String name, NetConnection connection);
-        void OnClientDisconnected(Server server, NetConnection connection);
     }
 
     public class Server : Peer
     {
         public IServerListener listener;
 
-        private ILocalServersDiscoveryRequestListener discoveryRequestListener;
         private int nextClientIndex;
-
         private List<NetConnection> connections;
+
+        private bool m_respondsToDiscovery;
 
         public Server(String name, int port)
             : base(name, port)
@@ -62,14 +61,14 @@ namespace Bomberman.Networking
             }
         }
 
-        public void StartListeningDiscoveryRequests(ILocalServersDiscoveryRequestListener listener)
+        public void StartListeningDiscoveryRequests()
         {
-            discoveryRequestListener = listener;
+            m_respondsToDiscovery = true;
         }
 
         public void StopListeningDiscoveryRequests()
         {
-            discoveryRequestListener = null;
+            m_respondsToDiscovery = false;
         }
 
         #endregion
@@ -89,18 +88,16 @@ namespace Bomberman.Networking
             {
                 case NetIncomingMessageType.DiscoveryRequest:
                 {
-                    if (discoveryRequestListener != null)
+                    if (m_respondsToDiscovery)
                     {
                         NetOutgoingMessage message = peer.CreateMessage();
-                        discoveryRequestListener.OnServerDiscoveryRequest(message);
+
+                        PostNotificationImmediately(NetworkNotifications.LocalClientDiscovered, message);
                         peer.SendDiscoveryResponse(message, msg.SenderEndPoint);
-                    }
-                    else
-                    {
-                        Log.d("Discovery request ignored");
+                        return true;
                     }
 
-                    return true;
+                    return false;
                 }
             }
 
@@ -123,14 +120,14 @@ namespace Bomberman.Networking
             }
 
             AddConnection(connection);
-            listener.OnClientConnected(this, name, connection);
+            PostNotification(NetworkNotifications.ClientConnected);
         }
 
         protected override void OnPeerDisconnected(NetConnection connection)
         {   
             Log.i("Client disconnected: " + connection);
             RemoveConnection(connection);
-            listener.OnClientDisconnected(this, connection);
+            PostNotification(NetworkNotifications.ClientDisconnected);
         }
 
         protected override void OnMessageReceive(NetworkMessageId messageId, NetIncomingMessage message)

@@ -88,9 +88,7 @@ namespace Bomberman.Game.Multiplayer
 
         private void ServerRateVarChangedCallback(Notification notification)
         {
-            CVar var = notification.data as CVar;
-            Debug.AssertNotNull(var);
-
+            CVar var = notification.GetNotNullData<CVar>();
             SetPacketRate(var.intValue);
         }
 

@@ -13,6 +13,7 @@ using Lidgren.Network;
 using BombermanCommon.Resources.Scheme;
 using System.Net;
 using Bomberman.Common.Popups;
+using BomberEngine.Core.Events;
 
 namespace Bomberman.Multiplayer
 {
@@ -231,10 +232,12 @@ namespace Bomberman.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region LocalServersDiscoveryListener
+        #region Notifications
 
-        public void OnServerDiscoveryResponse(LocalServersDiscovery serverDiscovery, NetIncomingMessage msg)
+        private void LocalServerDiscoveredNotification(Notification notification)
         {
+            NetIncomingMessage msg = notification.GetData<NetIncomingMessage>();
+            
             ServerInfo info = ReadServerInfo(msg);
             OnLocalServerFound(info);
         }

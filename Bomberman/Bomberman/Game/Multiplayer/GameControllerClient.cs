@@ -10,6 +10,8 @@ using Lidgren.Network;
 using BomberEngine.Debugging;
 using BomberEngine.Core.Visual;
 using Bomberman.Game.Elements.Fields;
+using BomberEngine.Core.Events;
+using Bomberman.Multiplayer;
 
 namespace Bomberman.Game.Multiplayer
 {
@@ -35,6 +37,9 @@ namespace Bomberman.Game.Multiplayer
 
             GetMultiplayerManager().SetClientListener(this);
             RequestFieldState();
+
+            RegisterNotification(NetworkNotifications.ConnectedToServer, ConnectedToServerNotification);
+            RegisterNotification(NetworkNotifications.DisconnectedFromServer, DisconnectedFromServerNotification);
         }
 
         public override void Update(float delta)
@@ -126,19 +131,19 @@ namespace Bomberman.Game.Multiplayer
             }
         }
 
-        public void OnConnectedToServer(Client client, NetConnection serverConnection)
-        {
-        }
-
-        public void OnDisconnectedFromServer(Client client)
-        {
-            if (CVars.g_startupMultiplayerMode.value != "client")
-            {
-                Application.sharedApplication.Stop();
-            }
-        }
-
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        private void ConnectedToServerNotification(Notification notification)
+        {
+            // TODO
+        }
+
+        private void DisconnectedFromServerNotification(Notification notification)
+        {
+            // TODO
+        }
 
         //////////////////////////////////////////////////////////////////////////////
 

@@ -6,14 +6,13 @@ using Lidgren.Network;
 using System.Net;
 using BomberEngine.Debugging;
 using BomberEngine.Core.IO;
+using Bomberman.Multiplayer;
 
 namespace Bomberman.Networking
 {
     public interface IClientListener
     {
         void OnMessageReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message);
-        void OnConnectedToServer(Client client, NetConnection serverConnection);
-        void OnDisconnectedFromServer(Client client);
     }
 
     public class Client : Peer
@@ -72,7 +71,7 @@ namespace Bomberman.Networking
             Debug.Assert(serverConnection == null);
             serverConnection = connection;
 
-            listener.OnConnectedToServer(this, serverConnection);
+            PostNotification(NetworkNotifications.ConnectedToServer);
         }
 
         protected override void OnPeerDisconnected(NetConnection connection)
@@ -81,7 +80,8 @@ namespace Bomberman.Networking
             Debug.Assert(serverConnection == connection);
 
             serverConnection = null;
-            listener.OnDisconnectedFromServer(this);
+
+            PostNotification(NetworkNotifications.DisconnectedFromServer);
         }
 
         protected override void OnMessageReceive(NetworkMessageId messageId, NetIncomingMessage message)

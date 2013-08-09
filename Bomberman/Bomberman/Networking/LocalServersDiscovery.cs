@@ -8,27 +8,15 @@ using Bomberman.Game.Elements.Fields;
 using BomberEngine.Core.IO;
 using Bomberman.Content;
 using BombermanCommon.Resources.Scheme;
+using Bomberman.Multiplayer;
 
 namespace Bomberman.Networking
 {
-    public interface ILocalServersDiscoveryRequestListener
-    {
-        void OnServerDiscoveryRequest(NetOutgoingMessage msg);
-    }
-
-    public interface ILocalServersDiscoveryResponseListener
-    {
-        void OnServerDiscoveryResponse(NetIncomingMessage msg);
-    }
-
     public class LocalServersDiscovery : Peer
     {   
-        private ILocalServersDiscoveryResponseListener listener;
-
-        public LocalServersDiscovery(ILocalServersDiscoveryResponseListener listener, String name, int port)
+        public LocalServersDiscovery(String name, int port)
             : base(name, port)
         {
-            this.listener = listener;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -71,8 +59,8 @@ namespace Bomberman.Networking
             switch (msg.MessageType)
             {
                 case NetIncomingMessageType.DiscoveryResponse:
-                {
-                    listener.OnServerDiscoveryResponse(msg);
+                {   
+                    PostNotificationImmediately(NetworkNotifications.LocalServerDiscovered, msg);
                     return true;
                 }
             }

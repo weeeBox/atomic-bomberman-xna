@@ -14,12 +14,11 @@ using Bomberman.Game;
 using Assets;
 using BomberEngine.Core;
 using Bomberman.UI;
+using BomberEngine.Core.Events;
 
 namespace Bomberman.Multiplayer
 {
-    public class DebugMultiplayerController : BmController, 
-        ILocalServersDiscoveryRequestListener, ILocalServersDiscoveryResponseListener,
-        IServerListener, IClientListener
+    public class DebugMultiplayerController : BmController, IServerListener, IClientListener
     {
         public enum Mode
         {
@@ -51,10 +50,13 @@ namespace Bomberman.Multiplayer
         {
             if (mode == Mode.Client)
             {
+                RegisterNotification(NetworkNotifications.ConnectedToServer, ConnectedToServerNotification);
                 StartDiscovery();
             }
             else if (mode == Mode.Server)
             {
+                RegisterNotification(NetworkNotifications.ClientConnected, ClientConnectedNotification);
+                RegisterNotification(NetworkNotifications.LocalClientDiscovered, LocalClientDiscoveredNotification);
                 StartServer();
             }
 
@@ -95,12 +97,16 @@ namespace Bomberman.Multiplayer
 
         private void StartDiscovery()
         {
-            GetMultiplayerManager().StartLocalServerDiscovery(this);
+            RegisterNotification(NetworkNotifications.LocalServerDiscovered, LocalServerDiscoveredNotification);
+
+            GetMultiplayerManager().StartLocalServerDiscovery();
             Application.ScheduleTimer(OnDiscoveryTimeout, 1.0f);
         }
 
         private void StopDiscovery()
         {
+            UnregisterNotification(NetworkNotifications.LocalServerDiscovered, LocalServerDiscoveredNotification);
+
             GetMultiplayerManager().StopLocalServerDiscovery();
             Application.CancelTimer(OnDiscoveryTimeout);
         }
@@ -137,7 +143,7 @@ namespace Bomberman.Multiplayer
             serverInfo.scheme = scheme;
 
             GetMultiplayerManager().StartServer(this);
-            GetMultiplayerManager().StartListeningForServerDiscovery(this);
+            GetMultiplayerManager().StartListeningForServerDiscovery();
         }
 
         private void StartClient(IPEndPoint remoteEndPoint)
@@ -161,14 +167,9 @@ namespace Bomberman.Multiplayer
         {
         }
 
-        public void OnClientConnected(Server server, string name, Lidgren.Network.NetConnection connection)
-        {
-            Log.d("Client connected: name=" + name + " endpoint=" + connection.RemoteEndPoint);
+        public void ClientConnectedNotification(Notification notification)
+        {   
             Stop(ExitCode.ServerStarted, serverInfo);
-        }
-
-        public void OnClientDisconnected(Server server, Lidgren.Network.NetConnection connection)
-        {
         }
 
         #endregion
@@ -181,26 +182,24 @@ namespace Bomberman.Multiplayer
         {
         }
 
-        public void OnConnectedToServer(Client client, Lidgren.Network.NetConnection serverConnection)
+        public void ConnectedToServerNotification(Notification notification)
         {
             Stop(ExitCode.ClientStarted, serverInfo);
-        }
-
-        public void OnDisconnectedFromServer(Client client)
-        {
         }
 
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 
-        public void OnServerDiscoveryRequest(NetOutgoingMessage msg)
+        private void LocalClientDiscoveredNotification(Notification notification)
         {
+            NetOutgoingMessage msg = notification.GetNotNullData<NetOutgoingMessage>();
             MultiplayerController.WriteServerInfo(msg, serverInfo);
         }
 
-        public void OnServerDiscoveryResponse(NetIncomingMessage msg)
+        private void LocalServerDiscoveredNotification(Notification notification)
         {
+            NetIncomingMessage msg = notification.GetNotNullData<NetIncomingMessage>();
             ServerInfo info = MultiplayerController.ReadServerInfo(msg);
             OnLocalServerFound(info);
         }

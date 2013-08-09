@@ -82,7 +82,7 @@ namespace BomberEngine.Core.Events
             return removed;
         }
 
-        public void Post(String name, Object data)
+        public void Post(String name, Object data = null)
         {
             NotificationDelegateList list = FindList(name);
             if (list != null && list.Count() > 0)
@@ -94,7 +94,7 @@ namespace BomberEngine.Core.Events
             }
         }
 
-        public void PostImmediately(String name, Object data)
+        public void PostImmediately(String name, Object data = null)
         {   
             NotificationDelegateList list = FindList(name);
             if (list != null && list.Count() > 0)
@@ -154,6 +154,7 @@ namespace BomberEngine.Core.Events
     {
         private String m_name;
         private Object m_data;
+        private IDictionary<String, Object> m_dictionary;
 
         internal void Init(String name, Object data)
         {
@@ -170,6 +171,18 @@ namespace BomberEngine.Core.Events
         public String name
         {
             get { return m_name; }
+        }
+
+        public T GetData<T>()
+        {   
+            return (T)m_data;
+        }
+
+        public T GetNotNullData<T>()
+        {
+            T t = GetData<T>();
+            Debug.AssertNotNull(t);
+            return t;
         }
 
         public Object data
