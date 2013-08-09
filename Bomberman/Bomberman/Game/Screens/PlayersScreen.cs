@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 using BomberEngine.Core.Events;
 using BomberEngine.Core.Input;
 using Bomberman.Content;
+using Bomberman.UI;
 
 namespace Bomberman.Game.Screens
 {
@@ -48,13 +49,13 @@ namespace Bomberman.Game.Screens
             View buttons = new View(0.5f * width, contentView.y + contentView.height, 0, 0);
             buttons.alignX = View.ALIGN_CENTER;
 
-            Button button = new TextButton("BACK", font, 0, 0, 100, 20);
+            Button button = new TempButton("BACK");
             button.id = (int)ButtonId.Back;
             button.buttonDelegate = buttonDelegate;
             SetCancelButton(button);
             buttons.AddView(button);
 
-            button = new TextButton("START!", font, 0, 0, 100, 20);
+            button = new TempButton("START!");
             button.id = (int)ButtonId.Start;
             button.buttonDelegate = buttonDelegate;
             FocusView(button);

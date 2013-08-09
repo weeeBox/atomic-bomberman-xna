@@ -5,6 +5,7 @@ using System.Text;
 using BomberEngine.Game;
 using BomberEngine.Core.Visual;
 using BomberEngine.Core.Assets.Types;
+using Bomberman.UI;
 
 namespace Bomberman.Game.Screens
 {
@@ -51,13 +52,13 @@ namespace Bomberman.Game.Screens
             buttons.alignX = View.ALIGN_CENTER;
             buttons.alignY = View.ALIGN_MAX;
 
-            Button button = new TextButton("EXIT", Helper.fontButton, 0, 0, 100, 20);
+            Button button = new TempButton("EXIT");
             button.id = (int)ButtonId.Exit;
             button.buttonDelegate = buttonDelegate;
             SetCancelButton(button);
             buttons.AddView(button);
 
-            button = new TextButton("START!", Helper.fontButton, 0, 0, 100, 20);
+            button = new TempButton("START!");
             button.id = (int)ButtonId.Continue; ;
             button.buttonDelegate = buttonDelegate;
             FocusView(button);

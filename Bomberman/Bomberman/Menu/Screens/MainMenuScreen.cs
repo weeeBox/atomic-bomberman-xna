@@ -9,6 +9,7 @@ using BomberEngine.Core.Visual;
 using Bomberman.Game;
 using Assets;
 using BomberEngine.Core.Assets.Types;
+using Bomberman.UI;
 
 namespace Bomberman.Menu.Screens
 {
@@ -35,37 +36,37 @@ namespace Bomberman.Menu.Screens
 
             View rootView = new View();
 
-            TextButton button = new TextButton("Play", font, 0, 0, w, h);
+            TextButton button = new TempButton("Play");
             button.id = (int)ButtonId.Play;
             button.buttonDelegate = buttonDelegate;
             rootView.AddView(button);
 
-            button = new TextButton("Test", font, 0, 0, w, h);
+            button = new TempButton("Test");
             button.id = (int)ButtonId.Test;
             button.buttonDelegate = buttonDelegate;
             rootView.AddView(button);
 
-            button = new TextButton("Join server", font, 0, 0, w, h);
+            button = new TempButton("Join server");
             button.id = (int)ButtonId.DebugStartClient;
             button.buttonDelegate = buttonDelegate;
             rootView.AddView(button);
 
-            button = new TextButton("Start server", font, 0, 0, w, h);
+            button = new TempButton("Start server");
             button.id = (int)ButtonId.DebugStartServer;
             button.buttonDelegate = buttonDelegate;
             rootView.AddView(button);
 
-            //button = new TextButton("Multiplayer", font, 0, 0, w, h);
+            //button = new TempButton("Multiplayer", font, 0, 0, w, h);
             //button.id = (int)ButtonId.Multiplayer;
             //button.SetDelegate(buttonDelegate);
             //rootView.AddView(button);
 
-            button = new TextButton("Settings", font, 0, 0, w, h);
+            button = new TempButton("Settings");
             button.id = (int)ButtonId.Settings;
             button.buttonDelegate = buttonDelegate;
             rootView.AddView(button);
 
-            button = new TextButton("Exit", font, 0, 0, w, h);
+            button = new TempButton("Exit");
             button.id = (int)ButtonId.Exit;
             button.buttonDelegate = buttonDelegate;
             rootView.AddView(button);

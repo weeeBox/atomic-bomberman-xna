@@ -10,6 +10,7 @@ using Bomberman.Networking;
 using Bomberman.Game;
 using Microsoft.Xna.Framework;
 using BomberEngine.Core.Visual.UI;
+using Bomberman.UI;
 
 namespace Bomberman.Multiplayer
 {
@@ -61,18 +62,18 @@ namespace Bomberman.Multiplayer
 
             View buttonGroup = new View();
 
-            TextButton button = new TextButton("BACK", font, 0, 0, 100, 20);
+            Button button = new TempButton("BACK");
             button.buttonDelegate = buttonDelegate;
             button.id = (int)ButtonId.Back;
             buttonGroup.AddView(button);
             SetCancelButton(button);
 
-            button = new TextButton("REFRESH", font, 0, 0, 100, 20);
+            button = new TempButton("REFRESH");
             button.buttonDelegate = buttonDelegate;
             button.id = (int)ButtonId.Refresh;
             buttonGroup.AddView(button);
 
-            button = new TextButton("CREATE", font, 0, 0, 100, 20);
+            button = new TempButton("CREATE");
             button.buttonDelegate = buttonDelegate;
             button.id = (int)ButtonId.Create;
             buttonGroup.AddView(button);

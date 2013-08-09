@@ -11,6 +11,7 @@ using BomberEngine.Core.Assets.Types;
 using Bomberman.Game;
 using Assets;
 using Bomberman.Menu;
+using Bomberman.UI;
 
 namespace Bomberman.Common.Popups
 {
@@ -80,7 +81,7 @@ namespace Bomberman.Common.Popups
             content.AddView(messageView);
 
             // buttons
-            Button button = new TextButton(cancelButton.title, font, 0, 0, 100, 20);
+            Button button = new TempButton(cancelButton.title);
             button.id = (int)cancelButton.id;
             button.buttonDelegate = OnButtonPress;
             button.alignX = View.ALIGN_CENTER;

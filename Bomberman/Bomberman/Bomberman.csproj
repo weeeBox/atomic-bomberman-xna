@@ -167,6 +167,7 @@
     <Compile Include="Game\Multiplayer\GameControllerNetwork.cs" />
     <Compile Include="Game\Multiplayer\GameControllerServer.cs" />
     <Compile Include="Game\Multiplayer\GameStateSnapshot.cs" />
+    <Compile Include="Game\Screens\BlockingScreen.cs" />
     <Compile Include="Game\Screens\GameResultScreen.cs" />
     <Compile Include="Game\Screens\PlayersScreen.cs" />
     <Compile Include="Game\Screens\RoundResultScreen.cs" />
@@ -197,6 +198,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="BmGame.cs" />
+    <Compile Include="UI\TempButton.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

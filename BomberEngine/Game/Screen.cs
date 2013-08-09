@@ -29,8 +29,8 @@ namespace BomberEngine.Game
 
         public ScreenManager screenManager;
 
-        protected bool allowsDrawPrevious;
-        protected bool allowsUpdatePrevious;
+        private bool allowsDrawPrevious;
+        private bool allowsUpdatePrevious;
 
         private Button cancelButton;
         private ButtonDelegate cancelButtonDelegate;
@@ -58,7 +58,7 @@ namespace BomberEngine.Game
             mRootView = CreateRootView();
         }
 
-        public void Destroy()
+        public virtual void Destroy()
         {
             timerManager.Destroy();
             updatables.Destroy();

@@ -7,6 +7,7 @@ using BomberEngine.Core.Visual;
 using Assets;
 using BomberEngine.Core.Assets.Types;
 using Bomberman.Game;
+using Bomberman.UI;
 
 namespace Bomberman.Multiplayer
 {
@@ -34,7 +35,7 @@ namespace Bomberman.Multiplayer
 
             AddView(statusTextView);
 
-            Button cancelButton = new TextButton("Cancel", font, 0, 0, 100, 20);
+            Button cancelButton = new TempButton("Cancel");
             cancelButton.buttonDelegate = OnButtonPress;
             cancelButton.id = (int)ButtonId.Cancel;
 

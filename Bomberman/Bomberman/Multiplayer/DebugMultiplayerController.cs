@@ -13,6 +13,7 @@ using BomberEngine.Core.Assets.Types;
 using Bomberman.Game;
 using Assets;
 using BomberEngine.Core;
+using Bomberman.UI;
 
 namespace Bomberman.Multiplayer
 {
@@ -58,7 +59,7 @@ namespace Bomberman.Multiplayer
             }
 
             Screen screen = new Screen();
-            Button button = new TextButton("Cancel", Helper.fontButton, 0, 0, 100, 20);
+            Button button = new TempButton("Cancel");
             button.id = (int)ButtonId.Cancel;
             button.buttonDelegate = OnCancelButtonPressed;
             button.alignX = button.alignY = button.parentAlignX = button.parentAlignY = View.ALIGN_CENTER;

@@ -46,7 +46,7 @@ namespace BomberEngine.Core.Operations
 
         #region Lifecycle
 
-        public void Start()
+        public void Start(bool immediately = false)
         {
             Debug.Assert(m_state == State.Started);
             m_state = State.Started;
@@ -54,7 +54,10 @@ namespace BomberEngine.Core.Operations
             OnStart();
             NotifyStarted();
 
-            m_timerManager.ScheduleOnce(StartTimerCallback);
+            if (!immediately)
+            {
+                m_timerManager.ScheduleOnce(StartTimerCallback);
+            }
         }
 
         public void Finish()
@@ -123,13 +126,13 @@ namespace BomberEngine.Core.Operations
 
         #region Delegates
 
-        public void AddDelegate(IBaseOperationListener listener)
+        public void AddListener(IBaseOperationListener listener)
         {
             Debug.Assert(!m_listeners.Contains(listener));
             m_listeners.Add(listener);
         }
 
-        public void RemoveDelegate(IBaseOperationListener listener)
+        public void RemoveListener(IBaseOperationListener listener)
         {
             Debug.Assert(m_listeners.Contains(listener));
             m_listeners.Remove(listener);

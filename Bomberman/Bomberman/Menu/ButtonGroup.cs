@@ -6,6 +6,7 @@ using BomberEngine.Core.Visual;
 using BomberEngine.Core.Assets.Types;
 using Bomberman.Game;
 using Assets;
+using Bomberman.UI;
 
 namespace Bomberman.Menu
 {
@@ -23,9 +24,7 @@ namespace Bomberman.Menu
 
         public Button AddButton(String title, int id, ButtonDelegate buttonDelegate)
         {
-            Font font = Helper.fontButton;
-
-            TextButton button = new TextButton(title, font, 0, 0, width, font.FontHeight());
+            Button button = new TempButton(title);
             button.id = id;
             button.buttonDelegate = buttonDelegate;
             AddView(button);

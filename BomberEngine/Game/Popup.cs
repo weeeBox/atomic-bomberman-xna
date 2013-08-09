@@ -9,8 +9,8 @@ namespace BomberEngine.Game
     {
         public Popup()
         {
-            allowsDrawPrevious = true;
-            allowsUpdatePrevious = true;
+            AllowsDrawPrevious = true;
+            AllowsUpdatePrevious = true;
         }
     }
 }
