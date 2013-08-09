@@ -167,6 +167,7 @@
     <Compile Include="Game\Multiplayer\GameControllerNetwork.cs" />
     <Compile Include="Game\Multiplayer\GameControllerServer.cs" />
     <Compile Include="Game\Multiplayer\GameStateSnapshot.cs" />
+    <Compile Include="Game\Screens\BlockingOperationScreen.cs" />
     <Compile Include="Game\Screens\BlockingScreen.cs" />
     <Compile Include="Game\Screens\GameResultScreen.cs" />
     <Compile Include="Game\Screens\PlayersScreen.cs" />

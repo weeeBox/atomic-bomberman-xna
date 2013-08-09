@@ -13,6 +13,8 @@ namespace BomberEngine.Core.Visual
 {
     public class BlockingScreen : Screen
     {
+        private ButtonDelegate m_delegate;
+
         public BlockingScreen(String text, ButtonDelegate buttonDelegate = null)
             : this(new TextView(Helper.fontButton, text), buttonDelegate)
         {
@@ -22,6 +24,8 @@ namespace BomberEngine.Core.Visual
         {
             AllowsDrawPrevious = true;
             AllowsUpdatePrevious = true;
+
+            m_delegate = buttonDelegate;
 
             View contentView = new RectView(0, 0, 366, 182, Color.Black, Color.White);
             contentView.x = 0.5f * width;
@@ -38,12 +42,29 @@ namespace BomberEngine.Core.Visual
             cancelButton.y = contentView.height - 12;
             cancelButton.alignX = View.ALIGN_CENTER;
             cancelButton.alignY = View.ALIGN_MAX;
-            cancelButton.buttonDelegate = buttonDelegate;
+            cancelButton.buttonDelegate = CancelButtonDelegate;
             SetCancelButton(cancelButton);
 
             contentView.AddView(cancelButton);
 
             AddView(contentView);
+        }
+
+        private void CancelButtonDelegate(Button button)
+        {
+            if (m_delegate != null)
+            {
+                m_delegate(button);
+            }
+            else
+            {
+                OnCancel();
+            }
+        }
+
+        protected virtual void OnCancel()
+        {
+            Finish();
         }
     }
 }

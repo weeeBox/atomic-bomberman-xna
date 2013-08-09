@@ -9,8 +9,8 @@ namespace BomberEngine.Core.Operations
 {
     public interface IBaseOperationListener
     {
-        void OnOpetaionStarted(BaseOperation op);
-        void OnOpetaionFinished(BaseOperation op);
+        void OnOperationStarted(BaseOperation op);
+        void OnOperationFinished(BaseOperation op);
     }
 
     public abstract class BaseOperation
@@ -142,7 +142,7 @@ namespace BomberEngine.Core.Operations
         {
             for (int i = 0; i < m_listeners.Count; ++i)
             {
-                m_listeners[i].OnOpetaionStarted(this);
+                m_listeners[i].OnOperationStarted(this);
             }
         }
 
@@ -150,7 +150,7 @@ namespace BomberEngine.Core.Operations
         {
             for (int i = 0; i < m_listeners.Count; ++i)
             {
-                m_listeners[i].OnOpetaionFinished(this);
+                m_listeners[i].OnOperationFinished(this);
             }
         }
 
