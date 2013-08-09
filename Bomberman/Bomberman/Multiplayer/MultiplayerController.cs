@@ -36,7 +36,7 @@ namespace Bomberman.Multiplayer
         }
     }
 
-    public class MultiplayerController : BmController, IClientListener, IServerListener
+    public class MultiplayerController : BmController, IServerListener
     {
         public enum ScreenId
         {
@@ -152,7 +152,7 @@ namespace Bomberman.Multiplayer
         private void StartClient(IPEndPoint remoteEndPoint)
         {
             StartConnectionScreen(OnServerConnectionCancelled, "Connecting to " + remoteEndPoint + "...");
-            GetMultiplayerManager().StartClient(remoteEndPoint, this);
+            GetMultiplayerManager().StartClient(remoteEndPoint);
         }
 
         private void StopPeer()
@@ -164,11 +164,6 @@ namespace Bomberman.Multiplayer
         //////////////////////////////////////////////////////////////////////////////
 
         #region ClientListener
-
-        public void OnMessageReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message)
-        {
-            
-        }
 
         public void OnConnectedToServer(Client client, NetConnection serverConnection)
         {

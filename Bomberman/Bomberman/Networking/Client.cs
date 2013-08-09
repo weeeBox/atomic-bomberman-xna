@@ -10,22 +10,19 @@ using Bomberman.Multiplayer;
 
 namespace Bomberman.Networking
 {
-    public interface IClientListener
-    {
-        void OnMessageReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message);
-    }
+    public delegate void ServerMessageReceivedDelegate(Client client, NetworkMessageId messageId, NetIncomingMessage message);
 
     public class Client : Peer
     {
-        public IClientListener listener;
-
         private IPEndPoint remoteEndPoint;
         private NetConnection serverConnection;
+        private IDictionary<NetworkMessageId, ServerMessageReceivedDelegateList> m_delegatesMap;
 
         public Client(String name, IPEndPoint remoteEndPoint)
             : base(name, remoteEndPoint.Port)
         {
             this.remoteEndPoint = remoteEndPoint;
+            m_delegatesMap = new Dictionary<NetworkMessageId, ServerMessageReceivedDelegateList>();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -86,7 +83,52 @@ namespace Bomberman.Networking
 
         protected override void OnMessageReceive(NetworkMessageId messageId, NetIncomingMessage message)
         {
-            listener.OnMessageReceived(this, messageId, message);
+            NotifyMessageReceived(messageId, message);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Message delegates
+
+        public void AddMessageDelegate(NetworkMessageId messageId, ServerMessageReceivedDelegate del)
+        {
+            ServerMessageReceivedDelegateList list = FindList(messageId);
+            if (list == null)
+            {
+                list = new ServerMessageReceivedDelegateList();
+                m_delegatesMap[messageId] = list;
+            }
+            list.Add(del);
+        }
+
+        public void RemoveMessageDelegate(NetworkMessageId messageId, ServerMessageReceivedDelegate del)
+        {
+            ServerMessageReceivedDelegateList list = FindList(messageId);
+            if (list != null)
+            {
+                list.Remove(del);
+            }
+        }
+
+        private void NotifyMessageReceived(NetworkMessageId messageId, NetIncomingMessage message)
+        {
+            ServerMessageReceivedDelegateList list = FindList(messageId);
+            if (list != null)
+            {
+                list.NotifyMessageReceived(this, messageId, message);
+            }
+        }
+
+        private ServerMessageReceivedDelegateList FindList(NetworkMessageId messageId)
+        {
+            ServerMessageReceivedDelegateList list;
+            if (m_delegatesMap.TryGetValue(messageId, out list))
+            {
+                return list;
+            }
+            return null;
         }
 
         #endregion
@@ -95,12 +137,12 @@ namespace Bomberman.Networking
 
         #region Messages
 
-        public override void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.UnreliableSequenced)
+        public override void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
         {
             SendMessage(message, serverConnection, method);
         }
 
-        public override void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.UnreliableSequenced)
+        public override void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
         {   
             SendMessage(messageId, serverConnection, method);
         }

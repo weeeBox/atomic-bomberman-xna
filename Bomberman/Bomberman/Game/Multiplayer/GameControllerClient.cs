@@ -15,11 +15,11 @@ using Bomberman.Multiplayer;
 
 namespace Bomberman.Game.Multiplayer
 {
-    public class GameControllerClient : GameControllerNetwork, IClientListener
+    public class GameControllerClient : GameControllerNetwork
     {
         private const int SENT_HISTORY_SIZE = 32;
         
-        private Player m_localPlayer; // TODO: don't store the reference (multiplay local players may exist)
+        private Player m_localPlayer; // TODO: don't store the reference (multiplayer local players may exist)
         private ClientPacket[] m_sentPackets;
         private int m_lastSentPacketId;
 
@@ -35,7 +35,6 @@ namespace Bomberman.Game.Multiplayer
 
             Application.SetWindowTitle("Client");
 
-            GetMultiplayerManager().SetClientListener(this);
             RequestFieldState();
 
             RegisterNotification(NetworkNotifications.ConnectedToServer, ConnectedToServerNotification);
@@ -54,60 +53,52 @@ namespace Bomberman.Game.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Client listener
+        #region Server messages delegates
 
-        public void OnMessageReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message)
+        private void OnFieldStateReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message)
         {
-            switch (messageId)
+            game = new Game(MultiplayerMode.Client);
+
+            SetupField(settings.scheme);
+
+            ReadFieldState(message);
+
+            gameScreen = new GameScreen();
+
+            m_localPlayer = null;
+            List<Player> players = game.GetPlayers().list;
+            for (int i = 0; i < players.Count; ++i)
             {
-                case NetworkMessageId.FieldState:
+                if (players[i].input == null)
                 {
-                    game = new Game(MultiplayerMode.Client);
-
-                    SetupField(settings.scheme);
-
-                    ReadFieldState(message);
-
-                    gameScreen = new GameScreen();
-
-                    m_localPlayer = null;
-                    List<Player> players = game.GetPlayers().list;
-                    for (int i = 0; i < players.Count; ++i)
-                    {
-                        if (players[i].input == null)
-                        {
-                            m_localPlayer = players[i];
-                            m_localPlayer.SetPlayerInput(InputMapping.CreatePlayerInput(InputType.Keyboard1));
-                            m_localPlayer.input.IsActive = true; // TODO: handle console
-                            break;
-                        }
-                    }
-
-                    Debug.Assert(m_localPlayer != null);
-                    m_localPlayer.connection = client.GetServerConnection();
-
-                    StartScreen(gameScreen);
-                    gameScreen.AddDebugView(new NetworkTraceView(client.GetServerConnection()));
-                    gameScreen.AddDebugView(new LocalPlayerView(m_localPlayer));
-
-                    
-
+                    m_localPlayer = players[i];
+                    m_localPlayer.SetPlayerInput(InputMapping.CreatePlayerInput(InputType.Keyboard1));
+                    m_localPlayer.input.IsActive = true; // TODO: handle console
                     break;
                 }
+            }
 
-                case NetworkMessageId.ServerPacket:
+            Debug.Assert(m_localPlayer != null);
+            m_localPlayer.connection = client.GetServerConnection();
+
+            StartScreen(gameScreen);
+            gameScreen.AddDebugView(new NetworkTraceView(client.GetServerConnection()));
+            gameScreen.AddDebugView(new LocalPlayerView(m_localPlayer));
+
+            GetMultiplayerManager().RemoveServerMessageDelegates(messageId, OnFieldStateReceived);
+            GetMultiplayerManager().AddServerMessageDelegate(NetworkMessageId.ServerPacket, OnServerPacketReceived);
+        }
+
+        private void OnServerPacketReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message)
+        {   
+            if (game != null)
+            {
+                ServerPacket packet = ReadServerPacket(message);
+                m_localPlayer.lastAckPacketId = packet.lastAckClientPacketId;
+
+                if (!CVars.sv_dumbClient.boolValue)
                 {
-                    if (game != null)
-                    {
-                        ServerPacket packet = ReadServerPacket(message);
-                        m_localPlayer.lastAckPacketId = packet.lastAckClientPacketId;
-
-                        if (!CVars.sv_dumbClient.boolValue)
-                        {
-                            ReplayPlayerActions(m_localPlayer);
-                        }
-                    }
-                    break;
+                    ReplayPlayerActions(m_localPlayer);
                 }
             }
         }
@@ -180,6 +171,8 @@ namespace Bomberman.Game.Multiplayer
 
         private void RequestFieldState()
         {
+            GetMultiplayerManager().AddServerMessageDelegate(NetworkMessageId.FieldState, OnFieldStateReceived);
+
             SendMessage(NetworkMessageId.FieldState, NetDeliveryMethod.ReliableSequenced);
             StartConnectionScreen(OnRequestFieldStateCancelled, "Waiting for the server...");
         }

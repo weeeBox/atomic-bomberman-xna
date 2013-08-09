@@ -18,7 +18,7 @@ using BomberEngine.Core.Events;
 
 namespace Bomberman.Multiplayer
 {
-    public class DebugMultiplayerController : BmController, IServerListener, IClientListener
+    public class DebugMultiplayerController : BmController, IServerListener
     {
         public enum Mode
         {
@@ -148,7 +148,7 @@ namespace Bomberman.Multiplayer
 
         private void StartClient(IPEndPoint remoteEndPoint)
         {
-            GetMultiplayerManager().StartClient(remoteEndPoint, this);
+            GetMultiplayerManager().StartClient(remoteEndPoint);
         }
 
         private void StopPeer()
@@ -176,11 +176,7 @@ namespace Bomberman.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Client listener
-
-        public void OnMessageReceived(Client client, NetworkMessageId messageId, Lidgren.Network.NetIncomingMessage message)
-        {
-        }
+        #region Notifications
 
         public void ConnectedToServerNotification(Notification notification)
         {

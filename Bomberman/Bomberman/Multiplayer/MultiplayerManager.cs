@@ -22,12 +22,11 @@ namespace Bomberman.Multiplayer
         public static readonly String LocalServerDiscovered = "LocalServerDiscovered";
     }
 
-    public class MultiplayerManager : IUpdatable, IClientListener, IServerListener
+    public class MultiplayerManager : IUpdatable, IServerListener
     {
         private Peer networkPeer;
         private LocalServersDiscovery serverDiscovery;
 
-        private IClientListener clientListener;
         private IServerListener serverListener;
 
         private NetConnection serverConnection;
@@ -99,13 +98,12 @@ namespace Bomberman.Multiplayer
             Start();
         }
 
-        public void StartClient(IPEndPoint remoteEndPoint, IClientListener listener)
+        public void StartClient(IPEndPoint remoteEndPoint)
         {
             String appId = CVars.sv_appId.value;
             int port = CVars.sv_port.intValue;
 
             CreateClient(appId, remoteEndPoint, port);
-            SetClientListener(listener);
             Start();
         }
 
@@ -122,9 +120,7 @@ namespace Bomberman.Multiplayer
         private void CreateClient(String appIdetifier, IPEndPoint remoteEndPoint, int port)
         {
             Debug.Assert(networkPeer == null);
-            Client client = new Client(appIdetifier, remoteEndPoint);
-            client.listener = this;
-            networkPeer = client;
+            networkPeer = new Client(appIdetifier, remoteEndPoint);
 
             Log.d("Created network client");
         }
@@ -149,7 +145,6 @@ namespace Bomberman.Multiplayer
                 Log.d("Stopped network peer");
             }
 
-            clientListener = null;
             serverListener = null;
         }
 
@@ -199,20 +194,6 @@ namespace Bomberman.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Client listener
-
-        public void OnMessageReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message)
-        {
-            if (clientListener != null)
-            {
-                clientListener.OnMessageReceived(client, messageId, message);
-            }
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
         #region Server listener
 
         public void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
@@ -227,16 +208,21 @@ namespace Bomberman.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Properties
+        #region Network messages delegates
+
+        public void AddServerMessageDelegate(NetworkMessageId messageId, ServerMessageReceivedDelegate del)
+        {
+            GetClient().AddMessageDelegate(messageId, del);
+        }
+
+        public void RemoveServerMessageDelegates(NetworkMessageId messageId, ServerMessageReceivedDelegate del)
+        {
+            GetClient().RemoveMessageDelegate(messageId, del);
+        }
 
         public void SetServerListener(IServerListener listener)
         {
             serverListener = listener;
-        }
-
-        public void SetClientListener(IClientListener listener)
-        {
-            clientListener = listener;
         }
 
         #endregion

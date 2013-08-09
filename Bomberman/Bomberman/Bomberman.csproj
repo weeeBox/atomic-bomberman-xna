@@ -197,6 +197,7 @@
     <Compile Include="Networking\Server.cs" />
     <Compile Include="Networking\Peer.cs" />
     <Compile Include="Networking\LocalServersDiscovery.cs" />
+    <Compile Include="Networking\ServerMessageReceivedDelegateList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="BmGame.cs" />
