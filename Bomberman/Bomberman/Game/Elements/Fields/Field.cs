@@ -18,7 +18,7 @@ using BomberEngine.Core.Events;
 
 namespace Bomberman.Game.Elements.Fields
 {
-    public class Field : IUpdatable, IDestroyable, IResettable
+    public class Field : BaseObject, IUpdatable, IDestroyable, IResettable
     {
         private static Field currentField;
 

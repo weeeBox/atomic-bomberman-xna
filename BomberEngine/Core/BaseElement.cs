@@ -9,7 +9,7 @@ using BomberEngine.Core.Events;
 
 namespace BomberEngine.Core
 {
-    public abstract class BaseElement : IUpdatable, IDrawable, IEventHandler
+    public abstract class BaseElement : BaseObject, IUpdatable, IDrawable, IEventHandler
     {
         public int id;
 

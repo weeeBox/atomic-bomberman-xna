@@ -10,7 +10,7 @@ using System.IO;
 
 namespace BomberEngine.Core.Assets
 {
-    public abstract class AssetManager
+    public abstract class AssetManager : BaseObject
     {
         private string baseDir;
 

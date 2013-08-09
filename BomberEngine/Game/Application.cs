@@ -198,32 +198,12 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        public static Timer ScheduleTimer(TimerCallback callback)
-        {
-            return ScheduleTimer(callback, 0.0f);
-        }
-
-        public static Timer ScheduleTimer(TimerCallback callback, float delay)
-        {
-            return ScheduleTimer(callback, delay, false);
-        }
-
-        public static Timer ScheduleTimer(TimerCallback callback, float delay, Boolean repeated)
+        public static Timer ScheduleTimer(TimerCallback callback, float delay = 0.0f, bool repeated = false)
         {
             return ScheduleTimer(callback, delay, repeated ? 0 : 1);
         }
 
-        public static Timer ScheduleTimerOnce(TimerCallback callback)
-        {
-            return ScheduleTimerOnce(callback, 0.0f);
-        }
-
-        public static Timer ScheduleTimerOnce(TimerCallback callback, float delay)
-        {
-            return ScheduleTimerOnce(callback, delay, false);
-        }
-
-        public static Timer ScheduleTimerOnce(TimerCallback callback, float delay, Boolean repeated)
+        public static Timer ScheduleTimerOnce(TimerCallback callback, float delay = 0.0f, bool repeated = false)
         {
             return ScheduleTimerOnce(callback, delay, repeated ? 0 : 1);
         }
@@ -254,29 +234,6 @@ namespace BomberEngine.Game
         }
 
         //////////////////////////////////////////////////////////////////////////////
-
-        public static void RegisterNotification(String name, NotificationDelegate del)
-        {
-            sharedApplication.notifications.Register(name, del);
-        }
-
-        public static void UnregisterNotification(String name, NotificationDelegate del)
-        {
-            sharedApplication.notifications.Unregister(name, del);
-        }
-
-        public static void UnregisterNotifications(NotificationDelegate del)
-        {
-            sharedApplication.notifications.UnregisterAll(del);
-        }
-
-        public static void UnregisterNotifications(Object target)
-        {
-            sharedApplication.notifications.UnregisterAll(target);
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
-
         protected void AddUpdatable(IUpdatable updatable)
         {
             updatables.Add(updatable);

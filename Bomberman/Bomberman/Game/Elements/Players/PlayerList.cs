@@ -9,7 +9,7 @@ using BomberEngine.Core.Events;
 
 namespace Bomberman.Game.Elements.Players
 {
-    public class PlayerList : IResettable
+    public class PlayerList : BaseObject, IResettable
     {
         public List<Player> list;
 

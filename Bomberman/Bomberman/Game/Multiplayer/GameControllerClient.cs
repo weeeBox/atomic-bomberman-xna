@@ -182,11 +182,6 @@ namespace Bomberman.Game.Multiplayer
             StartScreen(new BlockingOperationScreen("Waiting for the server...", fieldRequest));
         }
 
-        private void OnRequestFieldStateCancelled()
-        {
-            throw new NotImplementedException();
-        }
-
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////

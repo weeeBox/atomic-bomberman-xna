@@ -82,25 +82,25 @@ namespace BomberEngine.Core.Events
             return removed;
         }
 
-        public void Post(String name, Object data = null, Object data2 = null, Object data3 = null, Object data4 = null)
+        public void Post(Object sender, String name, Object data = null, Object data2 = null, Object data3 = null, Object data4 = null)
         {
             NotificationDelegateList list = FindList(name);
             if (list != null && list.Count() > 0)
             {
                 Notification notification = m_notificatoinsPool.NextObject();
-                notification.Init(name, data, data2, data3, data4);
+                notification.Init(sender, name, data, data2, data3, data4);
 
                 SchedulePost(notification);
             }
         }
 
-        public void PostImmediately(String name, Object data = null, Object data2 = null, Object data3 = null, Object data4 = null)
+        public void PostImmediately(Object sender, String name, Object data = null, Object data2 = null, Object data3 = null, Object data4 = null)
         {   
             NotificationDelegateList list = FindList(name);
             if (list != null && list.Count() > 0)
             {
                 Notification notification = m_notificatoinsPool.NextObject();
-                notification.Init(name, data, data2, data3, data4);
+                notification.Init(sender, name, data, data2, data3, data4);
 
                 list.NotifyDelegates(notification);
 
@@ -152,6 +152,7 @@ namespace BomberEngine.Core.Events
 
     public class Notification : ObjectsPoolEntry<Notification>
     {
+        private Object m_sender;
         private String m_name;
 
         private Object m_data;
@@ -159,8 +160,9 @@ namespace BomberEngine.Core.Events
         private Object m_data3;
         private Object m_data4;
 
-        internal void Init(String name, Object data = null, Object data2 = null, Object data3 = null, Object data4 = null)
+        internal void Init(Object sender, String name, Object data = null, Object data2 = null, Object data3 = null, Object data4 = null)
         {
+            m_sender = sender;
             m_name = name;
 
             m_data = data;
@@ -171,6 +173,7 @@ namespace BomberEngine.Core.Events
 
         protected override void OnRecycleObject()
         {
+            m_sender = null;
             m_name = null;
 
             m_data = null;

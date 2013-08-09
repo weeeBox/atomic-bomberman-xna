@@ -4,16 +4,11 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Debugging;
 using BomberEngine.Game;
+using BomberEngine.Util;
 
 namespace BomberEngine.Core.Operations
 {
-    public interface IBaseOperationListener
-    {
-        void OnOperationStarted(BaseOperation op);
-        void OnOperationFinished(BaseOperation op);
-    }
-
-    public abstract class BaseOperation
+    public class BaseOperation : ObjectsPoolEntry<BaseOperation>
     {
         private enum State
         {
@@ -27,19 +22,9 @@ namespace BomberEngine.Core.Operations
         private State m_state;
         private String m_errorMessage;
 
-        private ITimerManager m_timerManager;
-        private List<IBaseOperationListener> m_listeners;
-
         public BaseOperation()
-            : this(Application.TimerManager())
         {
-        }
-
-        public BaseOperation(ITimerManager timerManager)
-        {
-            m_listeners = new List<IBaseOperationListener>();
             m_state = State.Created;
-            m_timerManager = timerManager;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -52,12 +37,6 @@ namespace BomberEngine.Core.Operations
             m_state = State.Started;
 
             OnStart();
-            NotifyStarted();
-
-            if (!immediately)
-            {
-                ScheduleTimerOnce(StartTimerCallback);
-            }
         }
 
         public void Finish()
@@ -65,7 +44,7 @@ namespace BomberEngine.Core.Operations
             Debug.Assert(m_state == State.Started);
             m_state = State.Finished;
 
-            RunFinish();
+            OnFinish();
         }
 
         public void Cancel()
@@ -73,8 +52,7 @@ namespace BomberEngine.Core.Operations
             if (m_state == State.Started)
             {   
                 m_state = State.Cancelled;
-
-                RunFinish();
+                OnFinish();
             }
         }
 
@@ -84,20 +62,7 @@ namespace BomberEngine.Core.Operations
             m_state = State.Failed;
             m_errorMessage = message;
 
-            RunFinish();
-        }
-
-        private void RunFinish()
-        {
             OnFinish();
-
-            CancelTimers();
-            NotifyFinished();
-        }
-
-        private void StartTimerCallback(Timer timer)
-        {
-            DoWork();
         }
 
         #endregion
@@ -106,7 +71,9 @@ namespace BomberEngine.Core.Operations
 
         #region Inheritance
 
-        protected abstract void DoWork();
+        protected virtual void DoWork()
+        {
+        }
 
         protected virtual void OnStart()
         {
@@ -117,57 +84,6 @@ namespace BomberEngine.Core.Operations
         }
 
         #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Delegates
-
-        public void AddListener(IBaseOperationListener listener)
-        {
-            Debug.Assert(!m_listeners.Contains(listener));
-            m_listeners.Add(listener);
-        }
-
-        public void RemoveListener(IBaseOperationListener listener)
-        {
-            Debug.Assert(m_listeners.Contains(listener));
-            m_listeners.Remove(listener);
-        }
-
-        private void NotifyStarted()
-        {
-            for (int i = 0; i < m_listeners.Count; ++i)
-            {
-                m_listeners[i].OnOperationStarted(this);
-            }
-        }
-
-        private void NotifyFinished()
-        {
-            for (int i = 0; i < m_listeners.Count; ++i)
-            {
-                m_listeners[i].OnOperationFinished(this);
-            }
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        protected void ScheduleTimerOnce(TimerCallback cb, float delay = 0.0f)
-        {
-            m_timerManager.ScheduleOnce(cb, delay);
-        }
-
-        protected void CancelTimer(TimerCallback cb)
-        {
-            m_timerManager.Cancel(cb);
-        }
-
-        protected void CancelTimers()
-        {
-            m_timerManager.CancelAll(this);
-        }
 
         //////////////////////////////////////////////////////////////////////////////
 

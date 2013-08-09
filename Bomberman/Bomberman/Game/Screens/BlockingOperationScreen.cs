@@ -7,7 +7,7 @@ using BomberEngine.Core.Operations;
 
 namespace Bomberman.Game.Screens
 {
-    public class BlockingOperationScreen : BlockingScreen, IBaseOperationListener
+    public class BlockingOperationScreen : BlockingScreen
     {
         private BaseOperation m_operation;
 
@@ -15,12 +15,11 @@ namespace Bomberman.Game.Screens
             : base(message)
         {
             m_operation = op;
-            m_operation.AddListener(this);
+            
         }
 
         public override void Destroy()
         {
-            m_operation.RemoveListener(this);
             base.Destroy();
         }
 

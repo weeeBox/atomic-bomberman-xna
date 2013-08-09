@@ -18,27 +18,6 @@ namespace Bomberman
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Notifications
-
-        protected void RegisterNotification(String name, NotificationDelegate del)
-        {
-            Application.RegisterNotification(name, del);
-        }
-
-        protected void UnregisterNotification(String name, NotificationDelegate del)
-        {
-            Application.UnregisterNotification(name, del);
-        }
-
-        private void UnregisterNotifications()
-        {
-            Application.UnregisterNotifications(this);
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
         #region Helpers
 
         protected new BmRootController GetRootController()

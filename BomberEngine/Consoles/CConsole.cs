@@ -867,7 +867,7 @@ namespace BomberEngine.Consoles
                 m_visible = value;
                 if (changed)
                 {
-                    Application.NotificationCenter().Post(Notifications.ConsoleVisiblityChanged, value);
+                    PostNotification(Notifications.ConsoleVisiblityChanged, value);
                 }
             }
         }

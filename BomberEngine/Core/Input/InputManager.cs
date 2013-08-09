@@ -51,7 +51,7 @@ namespace BomberEngine.Core.Input
         }
     }
 
-    public class InputManager : IUpdatable
+    public class InputManager : BaseObject, IUpdatable
     {
         private static PlayerIndex[] PLAYERS_INDICES = 
         { 
@@ -299,12 +299,12 @@ namespace BomberEngine.Core.Input
 
         private void NotifyGamePadConnected(int playerIndex)
         {
-            Application.NotificationCenter().Post(Notifications.GamePadConnected, playerIndex);
+            PostNotification(Notifications.GamePadConnected, playerIndex);
         }
 
         private void NotifyGamePadDisconnected(int playerIndex)
         {
-            Application.NotificationCenter().Post(Notifications.GamePadDisconnected, playerIndex);
+            PostNotification(Notifications.GamePadDisconnected, playerIndex);
         }
 
         #endregion

@@ -19,7 +19,7 @@ namespace BomberEngineTests
             List<String> result = new List<String>();
 
             notifications = new NotificationCenter(new TimerManager());
-            notifications.PostImmediately("name", result);
+            notifications.PostImmediately(this, "name", result);
 
             Check(result);
         }
@@ -34,7 +34,7 @@ namespace BomberEngineTests
             notifications.Register("name", Callback2);
             notifications.Register("name", Callback3);
 
-            notifications.PostImmediately("name", result);
+            notifications.PostImmediately(this, "name", result);
 
             Check(result, "Callback1", "Callback2", "Callback3");
         }
@@ -53,7 +53,7 @@ namespace BomberEngineTests
             notifications.Register("name2", Callback2);
             notifications.Register("name2", Callback1);
 
-            notifications.PostImmediately("name2", result);
+            notifications.PostImmediately(this, "name2", result);
 
             Check(result, "Callback3", "Callback2", "Callback1");
         }
@@ -68,7 +68,7 @@ namespace BomberEngineTests
             notifications.Register("name1", Callback2);
             notifications.Register("name1", Callback3);
 
-            notifications.PostImmediately("name2", result);
+            notifications.PostImmediately(this, "name2", result);
 
             Check(result);
         }
@@ -85,7 +85,7 @@ namespace BomberEngineTests
 
             notifications.UnregisterAll(Callback1);
             
-            notifications.PostImmediately("name", result);
+            notifications.PostImmediately(this, "name", result);
 
             Check(result, "Callback2", "Callback3");
         }
@@ -102,7 +102,7 @@ namespace BomberEngineTests
 
             notifications.UnregisterAll(this);
 
-            notifications.PostImmediately("name", result);
+            notifications.PostImmediately(this, "name", result);
 
             Check(result);
         }
@@ -122,12 +122,12 @@ namespace BomberEngineTests
             notifications.Register("name", Callback3);
             notifications.Register("name", dummy.Callback3);
 
-            notifications.PostImmediately("name", result);
+            notifications.PostImmediately(this, "name", result);
 
             Check(result, "Callback1", "Dummy1", "Callback2", "Dummy2", "Callback3", "Dummy3");
             notifications.UnregisterAll(this);
 
-            notifications.PostImmediately("name", result);
+            notifications.PostImmediately(this, "name", result);
             Check(result, "Dummy1", "Dummy2", "Dummy3");
         }
 
@@ -142,7 +142,7 @@ namespace BomberEngineTests
             notifications.Register("name", Callback5);
             notifications.Register("name", Callback3);
             
-            notifications.PostImmediately("name", result);
+            notifications.PostImmediately(this, "name", result);
 
             Check(result, "Callback4", "Callback5");
         }
@@ -159,7 +159,7 @@ namespace BomberEngineTests
             notifications.Register("name", Callback2);
             notifications.Register("name", Callback3);
 
-            notifications.Post("name", result);
+            notifications.Post(this, "name", result);
 
             Check(result);
             Assert.AreEqual(timerManager.Count(), 1);
@@ -182,9 +182,9 @@ namespace BomberEngineTests
             notifications.Register("name2", Callback2);
             notifications.Register("name3", Callback3);
 
-            notifications.Post("name1", result);
-            notifications.Post("name2", result);
-            notifications.Post("name3", result);
+            notifications.Post(this, "name1", result);
+            notifications.Post(this, "name2", result);
+            notifications.Post(this, "name3", result);
 
             Check(result);
             Assert.AreEqual(timerManager.Count(), 3);
@@ -207,9 +207,9 @@ namespace BomberEngineTests
             notifications.Register("name2", Callback2);
             notifications.Register("name3", Callback3);
 
-            notifications.Post("name1", result);
-            notifications.Post("name1", result);
-            notifications.Post("name1", result);
+            notifications.Post(this, "name1", result);
+            notifications.Post(this, "name1", result);
+            notifications.Post(this, "name1", result);
 
             Check(result);
             Assert.AreEqual(timerManager.Count(), 3);
@@ -231,7 +231,7 @@ namespace BomberEngineTests
             notifications.Register("name1", Callback6);
             notifications.Register("name2", Callback7);
 
-            notifications.Post("name1", result);
+            notifications.Post(this, "name1", result);
             
             Check(result);
             Assert.AreEqual(timerManager.Count(), 1);
@@ -258,9 +258,9 @@ namespace BomberEngineTests
             notifications.Register("name2", Callback2);
             notifications.Register("name3", Callback3);
 
-            notifications.Post("name1", result);
-            notifications.Post("name2", result);
-            notifications.Post("name3", result);
+            notifications.Post(this, "name1", result);
+            notifications.Post(this, "name2", result);
+            notifications.Post(this, "name3", result);
 
             Check(result);
             Assert.AreEqual(timerManager.Count(), 3);
@@ -311,7 +311,7 @@ namespace BomberEngineTests
             List<String> result = notification.data as List<String>;
             result.Add("Callback6");
 
-            notifications.Post("name2", result);
+            notifications.Post(this, "name2", result);
         }
 
         private void Callback7(Notification notification)

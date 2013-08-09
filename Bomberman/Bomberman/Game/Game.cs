@@ -25,7 +25,7 @@ namespace Bomberman.Game
         Server,
     }
 
-    public class Game
+    public class Game : BaseObject
     {
         private static Game s_current;
 
@@ -115,17 +115,6 @@ namespace Bomberman.Game
         private void NotifyGameEnded()
         {
             PostNotification(GameNotifications.GameEnded);
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Helpers
-
-        private void PostNotification(String name)
-        {
-            Application.NotificationCenter().Post(name, this);
         }
 
         #endregion

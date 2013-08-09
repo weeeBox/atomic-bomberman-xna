@@ -99,7 +99,7 @@ namespace BomberEngine.Consoles
             if (manual)
             {
                 console.ScheduleConfigUpdate();
-                Application.NotificationCenter().Post(Notifications.ConsoleVariableChanged, cvar);
+                PostNotification(Notifications.ConsoleVariableChanged, cvar);
                 return true;
             }
 

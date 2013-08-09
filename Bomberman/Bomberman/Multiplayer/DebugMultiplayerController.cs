@@ -179,13 +179,13 @@ namespace Bomberman.Multiplayer
 
         private void LocalClientDiscoveredNotification(Notification notification)
         {
-            NetOutgoingMessage msg = notification.GetNotNullData2<NetOutgoingMessage>();
+            NetOutgoingMessage msg = notification.GetNotNullData<NetOutgoingMessage>();
             MultiplayerController.WriteServerInfo(msg, serverInfo);
         }
 
         private void LocalServerDiscoveredNotification(Notification notification)
         {
-            NetIncomingMessage msg = notification.GetNotNullData2<NetIncomingMessage>();
+            NetIncomingMessage msg = notification.GetNotNullData<NetIncomingMessage>();
             ServerInfo info = MultiplayerController.ReadServerInfo(msg);
             OnLocalServerFound(info);
         }

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Util;
 using BomberEngine.Game;
+using BomberEngine.Core;
 
 namespace BomberEngine.Consoles
 {
-    public abstract class CCommand
+    public abstract class CCommand : BaseObject
     {
         public CConsole console;
 
