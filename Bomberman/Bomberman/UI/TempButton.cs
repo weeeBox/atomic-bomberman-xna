@@ -10,7 +10,7 @@ namespace Bomberman.UI
 {
     public class TempButton : TextButton
     {
-        private const int DefaultWidth = 100;
+        private const int DefaultWidth = 150;
 
         public TempButton(String text)
             : base(text, DefaultFont, 0, 0, DefaultWidth, DefaultFont.FontHeight())
