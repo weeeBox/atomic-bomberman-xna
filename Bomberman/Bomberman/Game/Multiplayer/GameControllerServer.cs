@@ -70,7 +70,7 @@ namespace Bomberman.Game.Multiplayer
             RegisterNotification(NetworkNotifications.ClientConnected, ClientConnectedNotification);
             RegisterNotification(NetworkNotifications.ClientDisconnected, ClientDisconnectedNotification);
 
-            GetMultiplayerManager().StartListeningClientMessages(NetworkMessageId.FieldState, OnFieldStateRequestReceived);
+            GetMultiplayerManager().StartListeningClientMessages(NetworkMessageId.Request, OnClientRequest);
         }
 
         protected override void OnStop()
@@ -124,17 +124,30 @@ namespace Bomberman.Game.Multiplayer
 
         #region Server listener
 
-        private void OnFieldStateRequestReceived(Peer server, NetworkMessageId messageId, NetIncomingMessage message)
+        private void OnClientRequest(Peer server, NetworkMessageId messageId, NetIncomingMessage message)
         {
-            Player player = FindPlayer(message.SenderConnection);
-            Debug.Assert(player != null);
+            NetworkRequestId requestId = (NetworkRequestId) message.ReadByte();
+            switch (requestId)
+            {
+                case NetworkRequestId.RoundStart:
+                {
+                    Player player = FindPlayer(message.SenderConnection);
+                    Debug.Assert(player != null);
 
-            NetOutgoingMessage response = CreateMessage(messageId);
-            WriteFieldState(response, player);
-            SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableSequenced);
+                    NetOutgoingMessage response = CreateMessage(NetworkMessageId.Response);
+                    response.Write((byte)requestId);
 
-            GetMultiplayerManager().StopListeningClientMessages(OnFieldStateRequestReceived);
-            GetMultiplayerManager().StartListeningClientMessages(NetworkMessageId.ClientPacket, OnClientPacketReceived);
+                    WriteFieldState(response, player);
+                    SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableSequenced);
+
+                    GetMultiplayerManager().StartListeningClientMessages(NetworkMessageId.ClientPacket, OnClientPacketReceived);
+                    break;
+                }
+
+                default:
+                    Debug.Fail("Unexpected request id: " + requestId);
+                    break;
+            }
         }
 
         private void OnClientPacketReceived(Peer server, NetworkMessageId messageId, NetIncomingMessage message)

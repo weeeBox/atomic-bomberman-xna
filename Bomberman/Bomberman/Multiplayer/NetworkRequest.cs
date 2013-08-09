@@ -17,7 +17,7 @@ namespace Bomberman.Multiplayer
         GameEnd,
     }
 
-    public delegate void NetworkRequestDelegate(NetworkRequest request);
+    public delegate void NetworkRequestDelegate(NetworkRequest request, NetIncomingMessage message);
 
     public class NetworkRequest : BaseOperation
     {
@@ -25,9 +25,8 @@ namespace Bomberman.Multiplayer
         private NetworkRequestId m_requestId;
         private NetOutgoingMessage m_payloadMessage;
         private NetworkRequestDelegate m_delegate;
-        private float m_timeout;
 
-        public NetworkRequest(Peer peer, NetworkRequestId requestId, NetOutgoingMessage payloadMessage, float timeout = 0.0f)
+        public NetworkRequest(Peer peer, NetworkRequestId requestId, NetOutgoingMessage payloadMessage = null)
         {
             m_peer = peer;
             m_requestId = requestId;
@@ -36,19 +35,16 @@ namespace Bomberman.Multiplayer
 
         protected override void DoWork()
         {
-            NetOutgoingMessage msg = m_peer.CreateMessage(NetworkMessageId.Request);
-            msg.Write((byte)m_requestId);
-            msg.Write(m_payloadMessage);
-
             m_peer.AddMessageDelegate(NetworkMessageId.Response, ResponseReceived);
 
-            m_peer.RecycleMessage(m_payloadMessage);
-            m_peer.SendMessage(msg, NetDeliveryMethod.ReliableUnordered);
-
-            if (m_timeout > 0)
+            NetOutgoingMessage msg = m_peer.CreateMessage(NetworkMessageId.Request);
+            msg.Write((byte)m_requestId);
+            if (m_payloadMessage != null)
             {
-                ScheduleTimerOnce(TimeoutCallback, m_timeout);
+                msg.Write(m_payloadMessage); 
             }
+
+            m_peer.SendMessage(msg, NetDeliveryMethod.ReliableUnordered);
         }
 
         protected override void OnFinish()
@@ -64,7 +60,7 @@ namespace Bomberman.Multiplayer
             {
                 if (m_delegate != null)
                 {
-                    m_delegate(this);
+                    m_delegate(this, message);
                 }
                 Finish();
             }

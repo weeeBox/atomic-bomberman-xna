@@ -61,12 +61,11 @@ namespace Bomberman.Game.Multiplayer
 
         #region Server messages delegates
 
-        private void OnFieldStateReceived(Peer client, NetworkMessageId messageId, NetIncomingMessage message)
+        private void OnFieldStateReceived(NetworkRequest request, NetIncomingMessage message)
         {
             game = new Game(MultiplayerMode.Client);
 
             SetupField(settings.scheme);
-
             ReadFieldState(message);
 
             gameScreen = new GameScreen();
@@ -84,6 +83,8 @@ namespace Bomberman.Game.Multiplayer
                 }
             }
 
+            Client client = request.peer as Client;
+
             Debug.Assert(m_localPlayer != null);
             m_localPlayer.connection = client.RemoteConnection;
 
@@ -91,7 +92,6 @@ namespace Bomberman.Game.Multiplayer
             gameScreen.AddDebugView(new NetworkTraceView(client.RemoteConnection));
             gameScreen.AddDebugView(new LocalPlayerView(m_localPlayer));
 
-            GetMultiplayerManager().StopListeningServerMessages(OnFieldStateReceived);
             GetMultiplayerManager().StartListeningServerMessages(NetworkMessageId.ServerPacket, OnServerPacketReceived);
         }
 
@@ -174,10 +174,12 @@ namespace Bomberman.Game.Multiplayer
 
         private void RequestFieldState()
         {
-            GetMultiplayerManager().StartListeningServerMessages(NetworkMessageId.FieldState, OnFieldStateReceived);
+            Client client = GetMultiplayerManager().GetClient();
+            NetworkRequest fieldRequest = new NetworkRequest(client, NetworkRequestId.RoundStart);
+            fieldRequest.requestDelegate = OnFieldStateReceived;
+            fieldRequest.Start();
 
-            SendMessage(NetworkMessageId.FieldState, NetDeliveryMethod.ReliableSequenced);
-            StartConnectionScreen(OnRequestFieldStateCancelled, "Waiting for the server...");
+            StartScreen(new BlockingOperationScreen("Waiting for the server...", fieldRequest));
         }
 
         private void OnRequestFieldStateCancelled()

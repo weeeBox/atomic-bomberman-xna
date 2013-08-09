@@ -48,7 +48,7 @@ namespace BomberEngine.Core.Operations
 
         public void Start(bool immediately = false)
         {
-            Debug.Assert(m_state == State.Started);
+            Debug.Assert(m_state == State.Created);
             m_state = State.Started;
 
             OnStart();
