@@ -219,7 +219,7 @@ namespace Bomberman.Multiplayer
 
         public void RemoveServerMessageDelegates(Object target)
         {
-            GetClient().RemoveDelegates(target);
+            GetClient().RemoveMessageDelegates(target);
         }
 
         public void SetServerListener(IServerListener listener)

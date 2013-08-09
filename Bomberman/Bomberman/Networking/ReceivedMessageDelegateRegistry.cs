@@ -15,7 +15,7 @@ namespace Bomberman.Networking
             m_map = new Dictionary<NetworkMessageId, ReceivedMessageDelegateList<T>>();
         }
 
-        public void AddMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate<T> del)
+        public void Add(NetworkMessageId messageId, ReceivedMessageDelegate<T> del)
         {
             ReceivedMessageDelegateList<T> list = FindList(messageId);
             if (list == null)
@@ -26,7 +26,7 @@ namespace Bomberman.Networking
             list.Add(del);
         }
 
-        public void RemoveMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate<T> del)
+        public void Remove(NetworkMessageId messageId, ReceivedMessageDelegate<T> del)
         {
             ReceivedMessageDelegateList<T> list = FindList(messageId);
             if (list != null)
@@ -35,7 +35,16 @@ namespace Bomberman.Networking
             }
         }
 
-        public void RemoveDelegates(Object target)
+        public void Remove(ReceivedMessageDelegate<T> del)
+        {
+            foreach (KeyValuePair<NetworkMessageId, ReceivedMessageDelegateList<T>> e in m_map)
+            {
+                ReceivedMessageDelegateList<T> list = e.Value;
+                list.Remove(del);
+            }
+        }
+
+        public void RemoveAll(Object target)
         {
             foreach (KeyValuePair<NetworkMessageId, ReceivedMessageDelegateList<T>> e in m_map)
             {

@@ -96,17 +96,22 @@ namespace Bomberman.Networking
 
         public void AddMessageDelegate(NetworkMessageId messageId, ClientReceivedMessageDelegate del)
         {
-            m_delegateRegistry.AddMessageDelegate(messageId, del);
+            m_delegateRegistry.Add(messageId, del);
         }
 
         public void RemoveMessageDelegate(NetworkMessageId messageId, ClientReceivedMessageDelegate del)
         {
-            m_delegateRegistry.RemoveMessageDelegate(messageId, del);
+            m_delegateRegistry.Remove(messageId, del);
         }
 
-        public void RemoveDelegates(Object target)
+        public void RemoveMessageDelegate(ClientReceivedMessageDelegate del)
         {
-            m_delegateRegistry.RemoveDelegates(target);
+            m_delegateRegistry.Remove(del);
+        }
+
+        public void RemoveMessageDelegates(Object target)
+        {
+            m_delegateRegistry.RemoveAll(target);
         }
 
         #endregion
