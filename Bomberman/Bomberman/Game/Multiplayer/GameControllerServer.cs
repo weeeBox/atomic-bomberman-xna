@@ -124,7 +124,7 @@ namespace Bomberman.Game.Multiplayer
 
         #region Server listener
 
-        private void OnFieldStateRequestReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
+        private void OnFieldStateRequestReceived(Peer server, NetworkMessageId messageId, NetIncomingMessage message)
         {
             Player player = FindPlayer(message.SenderConnection);
             Debug.Assert(player != null);
@@ -137,7 +137,7 @@ namespace Bomberman.Game.Multiplayer
             GetMultiplayerManager().StartListeningClientMessages(NetworkMessageId.ClientPacket, OnClientPacketReceived);
         }
 
-        private void OnClientPacketReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
+        private void OnClientPacketReceived(Peer server, NetworkMessageId messageId, NetIncomingMessage message)
         {
             Player player = FindPlayer(message.SenderConnection);
             Debug.Assert(player != null);

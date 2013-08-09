@@ -76,7 +76,8 @@ namespace BomberEngine.Core.Operations
                 m_timerManager.Cancel(StartTimerCallback);
 
                 m_state = State.Cancelled;
-                OnCancel();
+
+                OnFinish();
                 NotifyFinished();
             }
         }
@@ -87,7 +88,7 @@ namespace BomberEngine.Core.Operations
             m_state = State.Failed;
             m_errorMessage = message;
 
-            OnFail();
+            OnFinish();
             NotifyFinished();
         }
 
@@ -109,14 +110,6 @@ namespace BomberEngine.Core.Operations
         }
 
         protected virtual void OnFinish()
-        {
-        }
-
-        protected virtual void OnCancel()
-        {
-        }
-
-        protected virtual void OnFail()
         {
         }
 

@@ -13,8 +13,8 @@ using Bomberman.Multiplayer;
 
 namespace Bomberman.Networking
 {
-    using ServerReceivedMessageDelegate = ReceivedMessageDelegate<Server>;
-    using ServerReceivedMessageDelegateRegistry = ReceivedMessageDelegateRegistry<Server>;
+    using ServerReceivedMessageDelegate = ReceivedMessageDelegate;
+    using ServerReceivedMessageDelegateRegistry = ReceivedMessageDelegateRegistry;
 
     public class Server : Peer
     {
@@ -37,25 +37,25 @@ namespace Bomberman.Networking
 
         public override void Start()
         {
-            if (peer != null)
+            if (m_peer != null)
             {
                 throw new InvalidOperationException("Server already started");
             }
 
-            NetPeerConfiguration config = new NetPeerConfiguration(name);
+            NetPeerConfiguration config = new NetPeerConfiguration(m_name);
             config.EnableMessageType(NetIncomingMessageType.DiscoveryRequest);
-            config.Port = port;
+            config.Port = m_port;
             
-            peer = new NetServer(config);
-            peer.Start();
+            m_peer = new NetServer(config);
+            m_peer.Start();
         }
 
         public override void Stop()
         {
-            if (peer != null)
+            if (m_peer != null)
             {
-                peer.Shutdown("shutdown");
-                peer = null;
+                m_peer.Shutdown("shutdown");
+                m_peer = null;
             }
         }
 

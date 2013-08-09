@@ -13,6 +13,9 @@ namespace Bomberman.Networking
 {
     public enum NetworkMessageId
     {   
+        Request,
+        Response,
+
         FieldState,
         RoundEnded,
         GameEnded,
@@ -23,15 +26,15 @@ namespace Bomberman.Networking
 
     public abstract class Peer : IUpdatable
     {
-        protected String name;
-        protected int port;
+        protected String m_name;
+        protected int m_port;
 
-        protected NetPeer peer;
+        protected NetPeer m_peer;
 
         protected Peer(String name, int port)
         {
-            this.name = name;
-            this.port = port;
+            m_name = name;
+            m_port = port;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -50,9 +53,9 @@ namespace Bomberman.Networking
         public void Update(float delta)
         {
             NetIncomingMessage msg;
-            while (peer != null && (msg = peer.ReadMessage()) != null)
+            while (m_peer != null && (msg = m_peer.ReadMessage()) != null)
             {
-                HandleMessage(peer, msg);
+                HandleMessage(m_peer, msg);
             }
         }
 
@@ -116,13 +119,13 @@ namespace Bomberman.Networking
 
         public void SendMessage(NetOutgoingMessage message, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
         {
-            peer.SendMessage(message, recipient, method);
+            m_peer.SendMessage(message, recipient, method);
         }
 
         public void SendMessage(NetworkMessageId messageId, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
         {
             NetOutgoingMessage message = CreateMessage(messageId);
-            peer.SendMessage(message, recipient, method);
+            m_peer.SendMessage(message, recipient, method);
         }
 
         public abstract void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable);
@@ -130,7 +133,7 @@ namespace Bomberman.Networking
         
         public NetOutgoingMessage CreateMessage()
         {
-            return peer.CreateMessage();
+            return m_peer.CreateMessage();
         }
 
         public NetOutgoingMessage CreateMessage(NetworkMessageId messageId)
@@ -142,7 +145,7 @@ namespace Bomberman.Networking
 
         public NetOutgoingMessage CreateMessage(int initialCapacity)
         {
-            return peer.CreateMessage(initialCapacity);
+            return m_peer.CreateMessage(initialCapacity);
         }
 
         public NetOutgoingMessage CreateMessage(NetworkMessageId messageId, int initialCapacity)
@@ -154,12 +157,12 @@ namespace Bomberman.Networking
 
         public void RecycleMessage(NetOutgoingMessage msg)
         {
-            peer.Recycle(msg);
+            m_peer.Recycle(msg);
         }
 
         public void RecycleMessage(NetIncomingMessage msg)
         {
-            peer.Recycle(msg);
+            m_peer.Recycle(msg);
         }
 
         private void WriteMessageId(NetworkMessageId messageId, NetOutgoingMessage message)
@@ -191,5 +194,10 @@ namespace Bomberman.Networking
         }
 
         #endregion
+
+        public virtual NetConnection RemoteConnection
+        {
+            get { throw new NotImplementedException("Should be implemented in a subclass");  }
+        }
     }
 }

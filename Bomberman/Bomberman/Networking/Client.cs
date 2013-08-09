@@ -10,20 +10,20 @@ using Bomberman.Multiplayer;
 
 namespace Bomberman.Networking
 {
-    using ClientReceivedMessageDelegate         = ReceivedMessageDelegate<Client>;
-    using ClientReceivedMessageDelegateRegistry = ReceivedMessageDelegateRegistry<Client>;
+    using ClientReceivedMessageDelegate         = ReceivedMessageDelegate;
+    using ClientReceivedMessageDelegateRegistry = ReceivedMessageDelegateRegistry;
 
     public class Client : Peer
     {
-        private IPEndPoint remoteEndPoint;
-        private NetConnection serverConnection;
+        private IPEndPoint m_remoteEndPoint;
+        private NetConnection m_remoteConnection;
 
         private ClientReceivedMessageDelegateRegistry m_delegateRegistry;
 
         public Client(String name, IPEndPoint remoteEndPoint)
             : base(name, remoteEndPoint.Port)
         {
-            this.remoteEndPoint = remoteEndPoint;
+            this.m_remoteEndPoint = remoteEndPoint;
             m_delegateRegistry = new ClientReceivedMessageDelegateRegistry();
         }
 
@@ -33,28 +33,28 @@ namespace Bomberman.Networking
 
         public override void Start()
         {
-            if (peer != null)
+            if (m_peer != null)
             {
                 throw new InvalidOperationException("Client already running");
             }
 
-            NetPeerConfiguration config = new NetPeerConfiguration(name);
+            NetPeerConfiguration config = new NetPeerConfiguration(m_name);
 
-            peer = new NetClient(config);
-            peer.Start();
+            m_peer = new NetClient(config);
+            m_peer.Start();
 
-            NetOutgoingMessage hailMessage = peer.CreateMessage();
+            NetOutgoingMessage hailMessage = m_peer.CreateMessage();
             hailMessage.Write(CVars.name.value);
-            peer.Connect(remoteEndPoint, hailMessage);
+            m_peer.Connect(m_remoteEndPoint, hailMessage);
         }
 
         public override void Stop()
         {
-            if (peer != null)
+            if (m_peer != null)
             {
-                peer.Shutdown("disconnect");
-                peer = null;
-                serverConnection = null;
+                m_peer.Shutdown("disconnect");
+                m_peer = null;
+                m_remoteConnection = null;
             }
         }
 
@@ -67,8 +67,8 @@ namespace Bomberman.Networking
         protected override void OnPeerConnected(NetConnection connection)
         {
             Log.i("Connected to the server: " + connection.RemoteEndPoint);
-            Debug.Assert(serverConnection == null);
-            serverConnection = connection;
+            Debug.Assert(m_remoteConnection == null);
+            m_remoteConnection = connection;
 
             PostNotification(NetworkNotifications.ConnectedToServer, connection);
         }
@@ -76,8 +76,8 @@ namespace Bomberman.Networking
         protected override void OnPeerDisconnected(NetConnection connection)
         {
             Log.i("Disconnected from the server: " + connection.RemoteEndPoint);
-            Debug.Assert(serverConnection == connection);
-            serverConnection = null;
+            Debug.Assert(m_remoteConnection == connection);
+            m_remoteConnection = null;
 
             PostNotification(NetworkNotifications.DisconnectedFromServer, connection);
         }
@@ -121,12 +121,12 @@ namespace Bomberman.Networking
 
         public override void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
         {
-            SendMessage(message, serverConnection, method);
+            SendMessage(message, m_remoteConnection, method);
         }
 
         public override void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
         {   
-            SendMessage(messageId, serverConnection, method);
+            SendMessage(messageId, m_remoteConnection, method);
         }
 
         #endregion
@@ -135,9 +135,9 @@ namespace Bomberman.Networking
 
         #region Properties
 
-        public NetConnection GetServerConnection()
+        public override NetConnection RemoteConnection
         {
-            return serverConnection;
+            get { return m_remoteConnection; } // TODO: use internal peer representation
         }
 
         #endregion

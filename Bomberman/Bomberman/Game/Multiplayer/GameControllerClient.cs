@@ -61,7 +61,7 @@ namespace Bomberman.Game.Multiplayer
 
         #region Server messages delegates
 
-        private void OnFieldStateReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message)
+        private void OnFieldStateReceived(Peer client, NetworkMessageId messageId, NetIncomingMessage message)
         {
             game = new Game(MultiplayerMode.Client);
 
@@ -85,27 +85,24 @@ namespace Bomberman.Game.Multiplayer
             }
 
             Debug.Assert(m_localPlayer != null);
-            m_localPlayer.connection = client.GetServerConnection();
+            m_localPlayer.connection = client.RemoteConnection;
 
             StartScreen(gameScreen);
-            gameScreen.AddDebugView(new NetworkTraceView(client.GetServerConnection()));
+            gameScreen.AddDebugView(new NetworkTraceView(client.RemoteConnection));
             gameScreen.AddDebugView(new LocalPlayerView(m_localPlayer));
 
             GetMultiplayerManager().StopListeningServerMessages(OnFieldStateReceived);
             GetMultiplayerManager().StartListeningServerMessages(NetworkMessageId.ServerPacket, OnServerPacketReceived);
         }
 
-        private void OnServerPacketReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message)
+        private void OnServerPacketReceived(Peer client, NetworkMessageId messageId, NetIncomingMessage message)
         {   
-            if (game != null)
-            {
-                ServerPacket packet = ReadServerPacket(message);
-                m_localPlayer.lastAckPacketId = packet.lastAckClientPacketId;
+            ServerPacket packet = ReadServerPacket(message);
+            m_localPlayer.lastAckPacketId = packet.lastAckClientPacketId;
 
-                if (!CVars.sv_dumbClient.boolValue)
-                {
-                    ReplayPlayerActions(m_localPlayer);
-                }
+            if (!CVars.sv_dumbClient.boolValue)
+            {
+                ReplayPlayerActions(m_localPlayer);
             }
         }
 

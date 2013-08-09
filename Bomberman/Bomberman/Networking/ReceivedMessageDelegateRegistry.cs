@@ -6,65 +6,65 @@ using Lidgren.Network;
 
 namespace Bomberman.Networking
 {
-    public class ReceivedMessageDelegateRegistry<T>
+    public class ReceivedMessageDelegateRegistry
     {
-        private IDictionary<NetworkMessageId, ReceivedMessageDelegateList<T>> m_map;
+        private IDictionary<NetworkMessageId, ReceivedMessageDelegateList> m_map;
 
         public ReceivedMessageDelegateRegistry()
         {
-            m_map = new Dictionary<NetworkMessageId, ReceivedMessageDelegateList<T>>();
+            m_map = new Dictionary<NetworkMessageId, ReceivedMessageDelegateList>();
         }
 
-        public void Add(NetworkMessageId messageId, ReceivedMessageDelegate<T> del)
+        public void Add(NetworkMessageId messageId, ReceivedMessageDelegate del)
         {
-            ReceivedMessageDelegateList<T> list = FindList(messageId);
+            ReceivedMessageDelegateList list = FindList(messageId);
             if (list == null)
             {
-                list = new ReceivedMessageDelegateList<T>();
+                list = new ReceivedMessageDelegateList();
                 m_map[messageId] = list;
             }
             list.Add(del);
         }
 
-        public void Remove(NetworkMessageId messageId, ReceivedMessageDelegate<T> del)
+        public void Remove(NetworkMessageId messageId, ReceivedMessageDelegate del)
         {
-            ReceivedMessageDelegateList<T> list = FindList(messageId);
+            ReceivedMessageDelegateList list = FindList(messageId);
             if (list != null)
             {
                 list.Remove(del);
             }
         }
 
-        public void Remove(ReceivedMessageDelegate<T> del)
+        public void Remove(ReceivedMessageDelegate del)
         {
-            foreach (KeyValuePair<NetworkMessageId, ReceivedMessageDelegateList<T>> e in m_map)
+            foreach (KeyValuePair<NetworkMessageId, ReceivedMessageDelegateList> e in m_map)
             {
-                ReceivedMessageDelegateList<T> list = e.Value;
+                ReceivedMessageDelegateList list = e.Value;
                 list.Remove(del);
             }
         }
 
         public void RemoveAll(Object target)
         {
-            foreach (KeyValuePair<NetworkMessageId, ReceivedMessageDelegateList<T>> e in m_map)
+            foreach (KeyValuePair<NetworkMessageId, ReceivedMessageDelegateList> e in m_map)
             {
-                ReceivedMessageDelegateList<T> list = e.Value;
+                ReceivedMessageDelegateList list = e.Value;
                 list.RemoveAll(target);
             }
         }
 
-        public void NotifyMessageReceived(T peer, NetworkMessageId messageId, NetIncomingMessage message)
+        public void NotifyMessageReceived(Peer peer, NetworkMessageId messageId, NetIncomingMessage message)
         {
-            ReceivedMessageDelegateList<T> list = FindList(messageId);
+            ReceivedMessageDelegateList list = FindList(messageId);
             if (list != null)
             {
                 list.NotifyMessageReceived(peer, messageId, message);
             }
         }
 
-        private ReceivedMessageDelegateList<T> FindList(NetworkMessageId messageId)
+        private ReceivedMessageDelegateList FindList(NetworkMessageId messageId)
         {
-            ReceivedMessageDelegateList<T> list;
+            ReceivedMessageDelegateList list;
             if (m_map.TryGetValue(messageId, out list))
             {
                 return list;

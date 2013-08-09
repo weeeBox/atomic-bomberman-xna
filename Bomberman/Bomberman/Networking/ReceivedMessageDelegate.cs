@@ -6,5 +6,5 @@ using Lidgren.Network;
 
 namespace Bomberman.Networking
 {
-    public delegate void ReceivedMessageDelegate<T>(T peer, NetworkMessageId messageId, NetIncomingMessage message);
+    public delegate void ReceivedMessageDelegate(Peer peer, NetworkMessageId messageId, NetIncomingMessage message);
 }

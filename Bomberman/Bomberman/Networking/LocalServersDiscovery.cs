@@ -25,26 +25,26 @@ namespace Bomberman.Networking
 
         public override void Start()
         {
-            if (peer != null)
+            if (m_peer != null)
             {
                 throw new InvalidOperationException("Client already running");
             }
 
-            NetPeerConfiguration config = new NetPeerConfiguration(name);
+            NetPeerConfiguration config = new NetPeerConfiguration(m_name);
             config.EnableMessageType(NetIncomingMessageType.DiscoveryResponse);
 
-            peer = new NetClient(config);
-            peer.Start();
+            m_peer = new NetClient(config);
+            m_peer.Start();
 
-            peer.DiscoverLocalPeers(port);
+            m_peer.DiscoverLocalPeers(m_port);
         }
 
         public override void Stop()
         {
-            if (peer != null)
+            if (m_peer != null)
             {
-                peer.Shutdown("disconnect");
-                peer = null;
+                m_peer.Shutdown("disconnect");
+                m_peer = null;
             }
         }
 
