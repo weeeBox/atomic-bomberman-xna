@@ -56,7 +56,7 @@ namespace BomberEngine.Core.Operations
 
             if (!immediately)
             {
-                m_timerManager.ScheduleOnce(StartTimerCallback);
+                ScheduleTimerOnce(StartTimerCallback);
             }
         }
 
@@ -65,20 +65,16 @@ namespace BomberEngine.Core.Operations
             Debug.Assert(m_state == State.Started);
             m_state = State.Finished;
 
-            OnFinish();
-            NotifyFinished();
+            RunFinish();
         }
 
         public void Cancel()
         {
             if (m_state == State.Started)
-            {
-                m_timerManager.Cancel(StartTimerCallback);
-
+            {   
                 m_state = State.Cancelled;
 
-                OnFinish();
-                NotifyFinished();
+                RunFinish();
             }
         }
 
@@ -88,7 +84,14 @@ namespace BomberEngine.Core.Operations
             m_state = State.Failed;
             m_errorMessage = message;
 
+            RunFinish();
+        }
+
+        private void RunFinish()
+        {
             OnFinish();
+
+            CancelTimers();
             NotifyFinished();
         }
 
@@ -148,6 +151,23 @@ namespace BomberEngine.Core.Operations
         }
 
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        protected void ScheduleTimerOnce(TimerCallback cb, float delay = 0.0f)
+        {
+            m_timerManager.ScheduleOnce(cb, delay);
+        }
+
+        protected void CancelTimer(TimerCallback cb)
+        {
+            m_timerManager.Cancel(cb);
+        }
+
+        protected void CancelTimers()
+        {
+            m_timerManager.CancelAll(this);
+        }
 
         //////////////////////////////////////////////////////////////////////////////
 
