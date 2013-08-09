@@ -16,11 +16,6 @@ namespace Bomberman.Networking
     using ServerReceivedMessageDelegate = ReceivedMessageDelegate<Server>;
     using ServerReceivedMessageDelegateRegistry = ReceivedMessageDelegateRegistry<Server>;
 
-    public interface IServerListener
-    {
-        void OnClientPacketReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message);
-    }
-
     public class Server : Peer
     {
         private int nextClientIndex;

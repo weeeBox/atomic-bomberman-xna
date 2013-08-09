@@ -22,12 +22,10 @@ namespace Bomberman.Multiplayer
         public static readonly String LocalServerDiscovered     = "LocalServerDiscovered";  // peer:Client, msg:NetIncomingMessage
     }
 
-    public class MultiplayerManager : IUpdatable, IServerListener
+    public class MultiplayerManager : IUpdatable
     {
         private Peer networkPeer;
         private LocalServersDiscovery serverDiscovery;
-
-        private IServerListener serverListener;
 
         public void Update(float delta)
         {
@@ -85,7 +83,7 @@ namespace Bomberman.Multiplayer
 
         #region Net peer
 
-        public void StartServer(IServerListener listener)
+        public void StartServer()
         {
             String appId = CVars.sv_appId.value;
             int port = CVars.sv_port.intValue;
@@ -138,8 +136,6 @@ namespace Bomberman.Multiplayer
 
                 Log.d("Stopped network peer");
             }
-
-            serverListener = null;
         }
 
         #endregion
@@ -185,20 +181,6 @@ namespace Bomberman.Multiplayer
         {
             networkPeer.RecycleMessage(msg);
         }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Server listener
-
-        public void OnClientPacketReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
-        {
-            if (serverListener != null)
-            {
-                serverListener.OnClientPacketReceived(server, messageId, message);
-            }
-        }
-
-        #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 

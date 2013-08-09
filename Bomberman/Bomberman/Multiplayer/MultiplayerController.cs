@@ -36,7 +36,7 @@ namespace Bomberman.Multiplayer
         }
     }
 
-    public class MultiplayerController : BmController, IServerListener
+    public class MultiplayerController : BmController
     {
         public enum ScreenId
         {
@@ -146,7 +146,7 @@ namespace Bomberman.Multiplayer
 
         private void StartServer()
         {   
-            GetMultiplayerManager().StartServer(this);
+            GetMultiplayerManager().StartServer();
         }
         
         private void StartClient(IPEndPoint remoteEndPoint)
