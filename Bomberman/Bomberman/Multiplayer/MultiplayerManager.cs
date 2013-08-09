@@ -29,9 +29,6 @@ namespace Bomberman.Multiplayer
 
         private IServerListener serverListener;
 
-        private NetConnection serverConnection;
-        private List<NetConnection> clientConnection;
-
         public void Update(float delta)
         {
             if (networkPeer != null)

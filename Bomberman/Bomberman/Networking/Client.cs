@@ -10,20 +10,21 @@ using Bomberman.Multiplayer;
 
 namespace Bomberman.Networking
 {
-    using ClientReceivedMessageDelegate     = ReceivedMessageDelegate<Client>;
-    using ClientReceivedMessageDelegateList = ReceivedMessageDelegateList<Client>;
+    using ClientReceivedMessageDelegate         = ReceivedMessageDelegate<Client>;
+    using ClientReceivedMessageDelegateRegistry = ReceivedMessageDelegateRegistry<Client>;
 
     public class Client : Peer
     {
         private IPEndPoint remoteEndPoint;
         private NetConnection serverConnection;
-        private IDictionary<NetworkMessageId, ClientReceivedMessageDelegateList> m_delegatesMap;
+
+        private ClientReceivedMessageDelegateRegistry m_delegateRegistry;
 
         public Client(String name, IPEndPoint remoteEndPoint)
             : base(name, remoteEndPoint.Port)
         {
             this.remoteEndPoint = remoteEndPoint;
-            m_delegatesMap = new Dictionary<NetworkMessageId, ClientReceivedMessageDelegateList>();
+            m_delegateRegistry = new ClientReceivedMessageDelegateRegistry();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -84,7 +85,7 @@ namespace Bomberman.Networking
 
         protected override void OnMessageReceive(NetworkMessageId messageId, NetIncomingMessage message)
         {
-            NotifyMessageReceived(messageId, message);
+            m_delegateRegistry.NotifyMessageReceived(this, messageId, message);
         }
 
         #endregion
@@ -95,50 +96,17 @@ namespace Bomberman.Networking
 
         public void AddMessageDelegate(NetworkMessageId messageId, ClientReceivedMessageDelegate del)
         {
-            ClientReceivedMessageDelegateList list = FindList(messageId);
-            if (list == null)
-            {
-                list = new ClientReceivedMessageDelegateList();
-                m_delegatesMap[messageId] = list;
-            }
-            list.Add(del);
+            m_delegateRegistry.AddMessageDelegate(messageId, del);
         }
 
         public void RemoveMessageDelegate(NetworkMessageId messageId, ClientReceivedMessageDelegate del)
         {
-            ClientReceivedMessageDelegateList list = FindList(messageId);
-            if (list != null)
-            {
-                list.Remove(del);
-            }
+            m_delegateRegistry.RemoveMessageDelegate(messageId, del);
         }
 
         public void RemoveDelegates(Object target)
         {
-            foreach (KeyValuePair<NetworkMessageId, ClientReceivedMessageDelegateList> e in m_delegatesMap)
-            {
-                ClientReceivedMessageDelegateList list = e.Value;
-                list.RemoveAll(target);
-            }
-        }
-
-        private void NotifyMessageReceived(NetworkMessageId messageId, NetIncomingMessage message)
-        {
-            ClientReceivedMessageDelegateList list = FindList(messageId);
-            if (list != null)
-            {
-                list.NotifyMessageReceived(this, messageId, message);
-            }
-        }
-
-        private ClientReceivedMessageDelegateList FindList(NetworkMessageId messageId)
-        {
-            ClientReceivedMessageDelegateList list;
-            if (m_delegatesMap.TryGetValue(messageId, out list))
-            {
-                return list;
-            }
-            return null;
+            m_delegateRegistry.RemoveDelegates(target);
         }
 
         #endregion
