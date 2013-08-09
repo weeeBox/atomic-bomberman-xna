@@ -186,42 +186,32 @@ namespace Bomberman.Multiplayer
 
         #region Network messages delegates
 
-        public void AddClientMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate<Client> del)
+        public void StartListeningServerMessages(NetworkMessageId messageId, ReceivedMessageDelegate<Client> del)
         {
             GetClient().AddMessageDelegate(messageId, del);
         }
 
-        public void RemoveClientMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate<Client> del)
-        {
-            GetClient().RemoveMessageDelegate(messageId, del);
-        }
-
-        public void RemoveClientMessageDelegate(ReceivedMessageDelegate<Client> del)
+        public void StopListeningServerMessages(ReceivedMessageDelegate<Client> del)
         {
             GetClient().RemoveMessageDelegate(del);
         }
 
-        public void RemoveClientMessageDelegates(Object target)
+        public void StopListeningAllServerMessages(Object target)
         {
             GetClient().RemoveMessageDelegates(target);
         }
 
-        public void AddServerMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate<Server> del)
+        public void StartListeningClientMessages(NetworkMessageId messageId, ReceivedMessageDelegate<Server> del)
         {
             GetServer().AddMessageDelegate(messageId, del);
         }
 
-        public void RemoveServerMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate<Server> del)
-        {
-            GetServer().RemoveMessageDelegate(messageId, del);
-        }
-
-        public void RemoveServerMessageDelegate(ReceivedMessageDelegate<Server> del)
+        public void StopListeningClientMessages(ReceivedMessageDelegate<Server> del)
         {
             GetServer().RemoveMessageDelegate(del);
         }
 
-        public void RemoveServerMessageDelegates(Object target)
+        public void StopListeningAllClientMessages(Object target)
         {
             GetServer().RemoveMessageDelegates(target);
         }
