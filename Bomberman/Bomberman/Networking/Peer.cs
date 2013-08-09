@@ -180,14 +180,14 @@ namespace Bomberman.Networking
 
         #region Helpers
 
-        protected void PostNotification(String name)
+        protected void PostNotification(String name, Object data2 = null, Object data3 = null, Object data4 = null)
         {
-            Application.NotificationCenter().Post(name, this);
+            Application.NotificationCenter().Post(name, this, data2, data3, data4);
         }
 
-        protected void PostNotificationImmediately(String name, Object data)
+        protected void PostNotificationImmediately(String name, Object data2 = null, Object data3 = null, Object data4 = null)
         {
-            Application.NotificationCenter().PostImmediately(name, data);
+            Application.NotificationCenter().PostImmediately(name, this, data2, data3, data4);
         }
 
         #endregion

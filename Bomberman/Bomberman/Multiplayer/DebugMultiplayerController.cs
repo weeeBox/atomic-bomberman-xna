@@ -163,7 +163,7 @@ namespace Bomberman.Multiplayer
 
         #region Server listener
 
-        public void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
+        public void OnClientPacketReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
         {
         }
 
@@ -189,13 +189,13 @@ namespace Bomberman.Multiplayer
 
         private void LocalClientDiscoveredNotification(Notification notification)
         {
-            NetOutgoingMessage msg = notification.GetNotNullData<NetOutgoingMessage>();
+            NetOutgoingMessage msg = notification.GetNotNullData2<NetOutgoingMessage>();
             MultiplayerController.WriteServerInfo(msg, serverInfo);
         }
 
         private void LocalServerDiscoveredNotification(Notification notification)
         {
-            NetIncomingMessage msg = notification.GetNotNullData<NetIncomingMessage>();
+            NetIncomingMessage msg = notification.GetNotNullData2<NetIncomingMessage>();
             ServerInfo info = MultiplayerController.ReadServerInfo(msg);
             OnLocalServerFound(info);
         }

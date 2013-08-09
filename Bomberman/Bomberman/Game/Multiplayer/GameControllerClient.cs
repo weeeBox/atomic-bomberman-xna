@@ -44,7 +44,7 @@ namespace Bomberman.Game.Multiplayer
         protected override void OnStop()
         {
             base.OnStop();
-            GetMultiplayerManager().RemoveServerMessageDelegates(this);
+            GetMultiplayerManager().RemoveClientMessageDelegates(this);
         }
 
         public override void Update(float delta)
@@ -91,8 +91,8 @@ namespace Bomberman.Game.Multiplayer
             gameScreen.AddDebugView(new NetworkTraceView(client.GetServerConnection()));
             gameScreen.AddDebugView(new LocalPlayerView(m_localPlayer));
 
-            GetMultiplayerManager().RemoveServerMessageDelegate(messageId, OnFieldStateReceived);
-            GetMultiplayerManager().AddServerMessageDelegate(NetworkMessageId.ServerPacket, OnServerPacketReceived);
+            GetMultiplayerManager().RemoveClientMessageDelegate(messageId, OnFieldStateReceived);
+            GetMultiplayerManager().AddClientMessageDelegate(NetworkMessageId.ServerPacket, OnServerPacketReceived);
         }
 
         private void OnServerPacketReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message)
@@ -177,7 +177,7 @@ namespace Bomberman.Game.Multiplayer
 
         private void RequestFieldState()
         {
-            GetMultiplayerManager().AddServerMessageDelegate(NetworkMessageId.FieldState, OnFieldStateReceived);
+            GetMultiplayerManager().AddClientMessageDelegate(NetworkMessageId.FieldState, OnFieldStateReceived);
 
             SendMessage(NetworkMessageId.FieldState, NetDeliveryMethod.ReliableSequenced);
             StartConnectionScreen(OnRequestFieldStateCancelled, "Waiting for the server...");

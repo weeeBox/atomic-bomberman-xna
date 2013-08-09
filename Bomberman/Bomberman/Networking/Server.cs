@@ -13,24 +13,27 @@ using Bomberman.Multiplayer;
 
 namespace Bomberman.Networking
 {
+    using ServerReceivedMessageDelegate = ReceivedMessageDelegate<Server>;
+    using ServerReceivedMessageDelegateRegistry = ReceivedMessageDelegateRegistry<Server>;
+
     public interface IServerListener
     {
-        void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message);
+        void OnClientPacketReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message);
     }
 
     public class Server : Peer
     {
-        public IServerListener listener;
-
         private int nextClientIndex;
         private List<NetConnection> connections;
 
         private bool m_respondsToDiscovery;
+        private ServerReceivedMessageDelegateRegistry m_delegateRegistry;
 
         public Server(String name, int port)
             : base(name, port)
         {
             connections = new List<NetConnection>();
+            m_delegateRegistry = new ServerReceivedMessageDelegateRegistry();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -120,19 +123,45 @@ namespace Bomberman.Networking
             }
 
             AddConnection(connection);
-            PostNotification(NetworkNotifications.ClientConnected);
+            PostNotification(NetworkNotifications.ClientConnected, connection, name);
         }
 
         protected override void OnPeerDisconnected(NetConnection connection)
         {   
             Log.i("Client disconnected: " + connection);
             RemoveConnection(connection);
-            PostNotification(NetworkNotifications.ClientDisconnected);
+            PostNotification(NetworkNotifications.ClientDisconnected, connection);
         }
 
         protected override void OnMessageReceive(NetworkMessageId messageId, NetIncomingMessage message)
         {
-            listener.OnMessageReceived(this, messageId, message);
+            m_delegateRegistry.NotifyMessageReceived(this, messageId, message);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Message delegates
+
+        public void AddMessageDelegate(NetworkMessageId messageId, ServerReceivedMessageDelegate del)
+        {
+            m_delegateRegistry.Add(messageId, del);
+        }
+
+        public void RemoveMessageDelegate(NetworkMessageId messageId, ServerReceivedMessageDelegate del)
+        {
+            m_delegateRegistry.Remove(messageId, del);
+        }
+
+        public void RemoveMessageDelegate(ServerReceivedMessageDelegate del)
+        {
+            m_delegateRegistry.Remove(del);
+        }
+
+        public void RemoveMessageDelegates(Object target)
+        {
+            m_delegateRegistry.RemoveAll(target);
         }
 
         #endregion

@@ -201,7 +201,7 @@ namespace Bomberman.Multiplayer
 
         #region ServerListener
 
-        public void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
+        public void OnClientPacketReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
         {   
         }
 

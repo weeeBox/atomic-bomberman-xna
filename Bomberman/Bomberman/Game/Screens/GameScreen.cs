@@ -71,7 +71,7 @@ namespace Bomberman.Game.Screens
 
         private void ConsoleVisiblityChangedNotification(Notification notification)
         {
-            bool visible = notification.boolData;
+            bool visible = notification.GetData<bool>();
             SetKeyboardInputActive(!visible);
         }
 

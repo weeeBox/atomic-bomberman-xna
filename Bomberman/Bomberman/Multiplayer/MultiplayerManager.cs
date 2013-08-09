@@ -12,14 +12,14 @@ namespace Bomberman.Multiplayer
 {
     public class NetworkNotifications
     {
-        public static readonly String ClientConnected = "ClientConnected";
-        public static readonly String ClientDisconnected = "ClientDisconnected";
+        public static readonly String ClientConnected           = "ClientConnected";        // peer:Server, clientConnection:NetConnection, clientName:String
+        public static readonly String ClientDisconnected        = "ClientDisconnected";     // peer:Server, clientConnection:NetConnection
 
-        public static readonly String ConnectedToServer = "ConnectedToServer";
-        public static readonly String DisconnectedFromServer = "DisconnectedFromServer";
+        public static readonly String ConnectedToServer         = "ConnectedToServer";      // peer:Client, serverConnection:NetConnection
+        public static readonly String DisconnectedFromServer    = "DisconnectedFromServer"; // peer:Client, serverConnection:NetConnection
 
-        public static readonly String LocalClientDiscovered = "LocalClientDiscovered";
-        public static readonly String LocalServerDiscovered = "LocalServerDiscovered";
+        public static readonly String LocalClientDiscovered     = "LocalClientDiscovered";  // peer:Server, msg:NetOutgoingMessage
+        public static readonly String LocalServerDiscovered     = "LocalServerDiscovered";  // peer:Client, msg:NetIncomingMessage
     }
 
     public class MultiplayerManager : IUpdatable, IServerListener
@@ -91,7 +91,6 @@ namespace Bomberman.Multiplayer
             int port = CVars.sv_port.intValue;
 
             CreateServer(appId, port);
-            SetServerListener(listener);
             Start();
         }
 
@@ -107,9 +106,7 @@ namespace Bomberman.Multiplayer
         private void CreateServer(String appIdentifier, int port)
         {
             Debug.Assert(networkPeer == null);
-            Server server = new Server(appIdentifier, port);
-            server.listener = this;
-            networkPeer = server;
+            networkPeer = new Server(appIdentifier, port); ;
 
             Log.d("Created network server");
         }
@@ -193,11 +190,11 @@ namespace Bomberman.Multiplayer
 
         #region Server listener
 
-        public void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
+        public void OnClientPacketReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
         {
             if (serverListener != null)
             {
-                serverListener.OnMessageReceived(server, messageId, message);
+                serverListener.OnClientPacketReceived(server, messageId, message);
             }
         }
 
@@ -207,24 +204,44 @@ namespace Bomberman.Multiplayer
 
         #region Network messages delegates
 
-        public void AddServerMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate<Client> del)
+        public void AddClientMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate<Client> del)
         {
             GetClient().AddMessageDelegate(messageId, del);
         }
 
-        public void RemoveServerMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate<Client> del)
+        public void RemoveClientMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate<Client> del)
         {
             GetClient().RemoveMessageDelegate(messageId, del);
         }
 
-        public void RemoveServerMessageDelegates(Object target)
+        public void RemoveClientMessageDelegate(ReceivedMessageDelegate<Client> del)
+        {
+            GetClient().RemoveMessageDelegate(del);
+        }
+
+        public void RemoveClientMessageDelegates(Object target)
         {
             GetClient().RemoveMessageDelegates(target);
         }
 
-        public void SetServerListener(IServerListener listener)
+        public void AddServerMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate<Server> del)
         {
-            serverListener = listener;
+            GetServer().AddMessageDelegate(messageId, del);
+        }
+
+        public void RemoveServerMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate<Server> del)
+        {
+            GetServer().RemoveMessageDelegate(messageId, del);
+        }
+
+        public void RemoveServerMessageDelegate(ReceivedMessageDelegate<Server> del)
+        {
+            GetServer().RemoveMessageDelegate(del);
+        }
+
+        public void RemoveServerMessageDelegates(Object target)
+        {
+            GetServer().RemoveMessageDelegates(target);
         }
 
         #endregion

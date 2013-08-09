@@ -82,25 +82,25 @@ namespace BomberEngine.Core.Events
             return removed;
         }
 
-        public void Post(String name, Object data = null)
+        public void Post(String name, Object data = null, Object data2 = null, Object data3 = null, Object data4 = null)
         {
             NotificationDelegateList list = FindList(name);
             if (list != null && list.Count() > 0)
             {
                 Notification notification = m_notificatoinsPool.NextObject();
-                notification.Init(name, data);
+                notification.Init(name, data, data2, data3, data4);
 
                 SchedulePost(notification);
             }
         }
 
-        public void PostImmediately(String name, Object data = null)
+        public void PostImmediately(String name, Object data = null, Object data2 = null, Object data3 = null, Object data4 = null)
         {   
             NotificationDelegateList list = FindList(name);
             if (list != null && list.Count() > 0)
             {
                 Notification notification = m_notificatoinsPool.NextObject();
-                notification.Init(name, data);
+                notification.Init(name, data, data2, data3, data4);
 
                 list.NotifyDelegates(notification);
 
@@ -153,19 +153,30 @@ namespace BomberEngine.Core.Events
     public class Notification : ObjectsPoolEntry<Notification>
     {
         private String m_name;
-        private Object m_data;
-        private IDictionary<String, Object> m_dictionary;
 
-        internal void Init(String name, Object data)
+        private Object m_data;
+        private Object m_data2;
+        private Object m_data3;
+        private Object m_data4;
+
+        internal void Init(String name, Object data = null, Object data2 = null, Object data3 = null, Object data4 = null)
         {
             m_name = name;
+
             m_data = data;
+            m_data2 = data2;
+            m_data3 = data3;
+            m_data4 = data4;
         }
 
         protected override void OnRecycleObject()
         {
             m_name = null;
+
             m_data = null;
+            m_data2 = null;
+            m_data3 = null;
+            m_data4 = null;
         }
 
         public String name
@@ -180,7 +191,43 @@ namespace BomberEngine.Core.Events
 
         public T GetNotNullData<T>()
         {
-            T t = GetData<T>();
+            T t = (T)m_data;
+            Debug.AssertNotNull(t);
+            return t;
+        }
+
+        public T GetData2<T>()
+        {
+            return (T)m_data2;
+        }
+
+        public T GetNotNullData2<T>()
+        {
+            T t = (T)m_data2;
+            Debug.AssertNotNull(t);
+            return t;
+        }
+
+        public T GetData3<T>()
+        {
+            return (T)m_data3;
+        }
+
+        public T GetNotNullData3<T>()
+        {
+            T t = (T)m_data3;
+            Debug.AssertNotNull(t);
+            return t;
+        }
+
+        public T GetData4<T>()
+        {
+            return (T)m_data4;
+        }
+
+        public T GetNotNullData4<T>()
+        {
+            T t = (T)m_data4;
             Debug.AssertNotNull(t);
             return t;
         }
@@ -191,24 +238,22 @@ namespace BomberEngine.Core.Events
             set { m_data = value; }
         }
 
-        public bool boolData
+        public Object data2
         {
-            get { return (bool)m_data; }
+            get { return m_data2; }
+            set { m_data2 = value; }
         }
 
-        public int intData
+        public Object data3
         {
-            get { return (int)m_data; }
+            get { return m_data3; }
+            set { m_data3 = value; }
         }
 
-        public float floatData
+        public Object data4
         {
-            get { return (float)m_data; }
-        }
-
-        public String stringData
-        {
-            get { return (String)m_data; }
+            get { return m_data4; }
+            set { m_data4 = value; }
         }
     }
 

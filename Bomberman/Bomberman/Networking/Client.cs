@@ -70,17 +70,16 @@ namespace Bomberman.Networking
             Debug.Assert(serverConnection == null);
             serverConnection = connection;
 
-            PostNotification(NetworkNotifications.ConnectedToServer);
+            PostNotification(NetworkNotifications.ConnectedToServer, connection);
         }
 
         protected override void OnPeerDisconnected(NetConnection connection)
         {
             Log.i("Disconnected from the server: " + connection.RemoteEndPoint);
             Debug.Assert(serverConnection == connection);
-
             serverConnection = null;
 
-            PostNotification(NetworkNotifications.DisconnectedFromServer);
+            PostNotification(NetworkNotifications.DisconnectedFromServer, connection);
         }
 
         protected override void OnMessageReceive(NetworkMessageId messageId, NetIncomingMessage message)

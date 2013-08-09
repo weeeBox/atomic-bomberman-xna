@@ -11,10 +11,11 @@ using BomberEngine.Core;
 using BomberEngine.Core.Events;
 using BomberEngine.Consoles;
 using Bomberman.Game.Elements.Fields;
+using Bomberman.Multiplayer;
 
 namespace Bomberman.Game.Multiplayer
 {
-    public class GameControllerServer : GameControllerNetwork, IServerListener
+    public class GameControllerServer : GameControllerNetwork
     {
         private IDictionary<NetConnection, Player> networkPlayersLookup;
         private List<Player> networkPlayers;
@@ -31,8 +32,6 @@ namespace Bomberman.Game.Multiplayer
             base.OnStart();
 
             Application.SetWindowTitle("Server");
-
-            GetMultiplayerManager().SetServerListener(this);
 
             game = new Game(MultiplayerMode.Server);
 
@@ -68,6 +67,10 @@ namespace Bomberman.Game.Multiplayer
             SetPacketRate(CVars.sv_packetRate.intValue);
 
             RegisterNotification(Notifications.ConsoleVariableChanged, ServerRateVarChangedCallback);
+            RegisterNotification(NetworkNotifications.ClientConnected, ClientConnectedNotification);
+            RegisterNotification(NetworkNotifications.ClientDisconnected, ClientDisconnectedNotification);
+
+            GetMultiplayerManager().AddServerMessageDelegate(NetworkMessageId.FieldState, OnFieldStateRequestReceived);
         }
 
         protected override void OnStop()
@@ -121,45 +124,45 @@ namespace Bomberman.Game.Multiplayer
 
         #region Server listener
 
-        public void OnMessageReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
+        private void OnFieldStateRequestReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
         {
-            switch (messageId)
-            {
-                case NetworkMessageId.FieldState:
-                {
-                    Player player = FindPlayer(message.SenderConnection);
-                    Debug.Assert(player != null);
+            Player player = FindPlayer(message.SenderConnection);
+            Debug.Assert(player != null);
 
-                    NetOutgoingMessage response = CreateMessage(NetworkMessageId.FieldState);
-                    WriteFieldState(response, player);
-                    SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableSequenced);
-                    break;
-                }
+            NetOutgoingMessage response = CreateMessage(messageId);
+            WriteFieldState(response, player);
+            SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableSequenced);
 
-                case NetworkMessageId.ClientPacket:
-                {
-                    Player player = FindPlayer(message.SenderConnection);
-                    Debug.Assert(player != null);
-
-                    ClientPacket packet = ReadClientPacket(message);
-                    player.lastAckPacketId = packet.id;
-
-                    PlayerNetworkInput input = player.input as PlayerNetworkInput;
-                    Debug.Assert(input != null);
-
-                    input.SetNetActionBits(packet.actions);
-                    break;
-                }
-            }
+            GetMultiplayerManager().RemoveServerMessageDelegate(OnFieldStateRequestReceived);
+            GetMultiplayerManager().AddServerMessageDelegate(NetworkMessageId.ClientPacket, OnClientPacketReceived);
         }
 
-        public void OnClientConnected(Server server, string name, NetConnection connection)
+        private void OnClientPacketReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
         {
+            Player player = FindPlayer(message.SenderConnection);
+            Debug.Assert(player != null);
+
+            ClientPacket packet = ReadClientPacket(message);
+            player.lastAckPacketId = packet.id;
+
+            PlayerNetworkInput input = player.input as PlayerNetworkInput;
+            Debug.Assert(input != null);
+
+            input.SetNetActionBits(packet.actions);
+        }
+
+        private void ClientConnectedNotification(Notification notification)
+        {
+            NetConnection connection = notification.GetData2<NetConnection>();
+            String name = notification.GetData3<String>();
+
             throw new NotImplementedException(); // clients can't join in progress game yet
         }
 
-        public void OnClientDisconnected(Server server, NetConnection connection)
+        private void ClientDisconnectedNotification(Notification notification)
         {
+            NetConnection connection = notification.GetData2<NetConnection>();
+
             Player player = FindPlayer(connection);
             Debug.Assert(player != null);
 
