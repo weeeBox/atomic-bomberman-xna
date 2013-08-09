@@ -426,22 +426,22 @@ namespace Bomberman.Game.Multiplayer
             return GetMultiplayerManager().CreateMessage(messageId);
         }
 
-        protected void SendMessage(NetOutgoingMessage message, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        protected void SendMessage(NetOutgoingMessage message, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.UnreliableSequenced)
         {
             GetMultiplayerManager().SendMessage(message, recipient, method);
         }
 
-        protected void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        protected void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.UnreliableSequenced)
         {
             GetMultiplayerManager().SendMessage(messageId, method);
         }
 
-        protected void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        protected void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.UnreliableSequenced)
         {
             GetMultiplayerManager().SendMessage(message, method);
         }
 
-        protected void SendMessage(NetworkMessageId messageId, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        protected void SendMessage(NetworkMessageId messageId, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.UnreliableSequenced)
         {
             GetMultiplayerManager().SendMessage(messageId, recipient, method);
         }

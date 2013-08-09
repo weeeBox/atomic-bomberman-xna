@@ -95,12 +95,12 @@ namespace Bomberman.Networking
 
         #region Messages
 
-        public override void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        public override void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.UnreliableSequenced)
         {
             SendMessage(message, serverConnection, method);
         }
 
-        public override void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        public override void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.UnreliableSequenced)
         {   
             SendMessage(messageId, serverConnection, method);
         }
