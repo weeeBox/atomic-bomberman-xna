@@ -180,7 +180,7 @@ namespace Bomberman.Game.Multiplayer
 
         private void RequestFieldState()
         {
-            SendMessage(NetworkMessageId.FieldState, NetDeliveryMethod.ReliableOrdered);
+            SendMessage(NetworkMessageId.FieldState, NetDeliveryMethod.ReliableSequenced);
             StartConnectionScreen(OnRequestFieldStateCancelled, "Waiting for the server...");
         }
 

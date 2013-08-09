@@ -132,7 +132,7 @@ namespace Bomberman.Game.Multiplayer
 
                     NetOutgoingMessage response = CreateMessage(NetworkMessageId.FieldState);
                     WriteFieldState(response, player);
-                    SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableOrdered);
+                    SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableSequenced);
                     break;
                 }
 

@@ -58,6 +58,8 @@ namespace Bomberman.Networking
 
         protected virtual bool HandleMessage(NetPeer peer, NetIncomingMessage msg)
         {
+            Log.d(msg.MessageType != NetIncomingMessageType.Data, "Message received: " + msg.MessageType);
+
             switch (msg.MessageType)
             {
                 case NetIncomingMessageType.StatusChanged:
@@ -112,19 +114,19 @@ namespace Bomberman.Networking
             OnMessageReceive(message, msg);
         }
 
-        public void SendMessage(NetOutgoingMessage message, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        public void SendMessage(NetOutgoingMessage message, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.UnreliableSequenced)
         {
             peer.SendMessage(message, recipient, method);
         }
 
-        public void SendMessage(NetworkMessageId messageId, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        public void SendMessage(NetworkMessageId messageId, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.UnreliableSequenced)
         {
             NetOutgoingMessage message = CreateMessage(messageId);
             peer.SendMessage(message, recipient, method);
         }
 
-        public abstract void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable);
-        public abstract void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable);
+        public abstract void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.UnreliableSequenced);
+        public abstract void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.UnreliableSequenced);
         
         public NetOutgoingMessage CreateMessage()
         {
