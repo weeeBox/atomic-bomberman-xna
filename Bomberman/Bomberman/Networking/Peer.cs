@@ -30,11 +30,14 @@ namespace Bomberman.Networking
         protected int m_port;
 
         protected NetPeer m_peer;
+        private ReceivedMessageDelegateRegistry m_delegateRegistry;
 
         protected Peer(String name, int port)
         {
             m_name = name;
             m_port = port;
+
+            m_delegateRegistry = new ReceivedMessageDelegateRegistry();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -103,6 +106,7 @@ namespace Bomberman.Networking
 
         protected virtual void OnMessageReceive(NetworkMessageId messageId, NetIncomingMessage message)
         {
+            m_delegateRegistry.NotifyMessageReceived(this, messageId, message);
         }
 
         #endregion
@@ -177,6 +181,32 @@ namespace Bomberman.Networking
             return (NetworkMessageId)id;
         }
             
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Message delegates
+
+        public void AddMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate del)
+        {
+            m_delegateRegistry.Add(messageId, del);
+        }
+
+        public void RemoveMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate del)
+        {
+            m_delegateRegistry.Remove(messageId, del);
+        }
+
+        public void RemoveMessageDelegate(ReceivedMessageDelegate del)
+        {
+            m_delegateRegistry.Remove(del);
+        }
+
+        public void RemoveMessageDelegates(Object target)
+        {
+            m_delegateRegistry.RemoveAll(target);
+        }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////

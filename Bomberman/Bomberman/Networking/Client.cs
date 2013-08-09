@@ -15,13 +15,10 @@ namespace Bomberman.Networking
         private IPEndPoint m_remoteEndPoint;
         private NetConnection m_remoteConnection;
 
-        private ReceivedMessageDelegateRegistry m_delegateRegistry;
-
         public Client(String name, IPEndPoint remoteEndPoint)
             : base(name, remoteEndPoint.Port)
         {
             this.m_remoteEndPoint = remoteEndPoint;
-            m_delegateRegistry = new ReceivedMessageDelegateRegistry();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -77,37 +74,6 @@ namespace Bomberman.Networking
             m_remoteConnection = null;
 
             PostNotification(NetworkNotifications.DisconnectedFromServer, connection);
-        }
-
-        protected override void OnMessageReceive(NetworkMessageId messageId, NetIncomingMessage message)
-        {
-            m_delegateRegistry.NotifyMessageReceived(this, messageId, message);
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Message delegates
-
-        public void AddMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate del)
-        {
-            m_delegateRegistry.Add(messageId, del);
-        }
-
-        public void RemoveMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate del)
-        {
-            m_delegateRegistry.Remove(messageId, del);
-        }
-
-        public void RemoveMessageDelegate(ReceivedMessageDelegate del)
-        {
-            m_delegateRegistry.Remove(del);
-        }
-
-        public void RemoveMessageDelegates(Object target)
-        {
-            m_delegateRegistry.RemoveAll(target);
         }
 
         #endregion

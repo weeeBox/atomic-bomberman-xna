@@ -19,13 +19,11 @@ namespace Bomberman.Networking
         private List<NetConnection> connections;
 
         private bool m_respondsToDiscovery;
-        private ReceivedMessageDelegateRegistry m_delegateRegistry;
 
         public Server(String name, int port)
             : base(name, port)
         {
             connections = new List<NetConnection>();
-            m_delegateRegistry = new ReceivedMessageDelegateRegistry();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -123,37 +121,6 @@ namespace Bomberman.Networking
             Log.i("Client disconnected: " + connection);
             RemoveConnection(connection);
             PostNotification(NetworkNotifications.ClientDisconnected, connection);
-        }
-
-        protected override void OnMessageReceive(NetworkMessageId messageId, NetIncomingMessage message)
-        {
-            m_delegateRegistry.NotifyMessageReceived(this, messageId, message);
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Message delegates
-
-        public void AddMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate del)
-        {
-            m_delegateRegistry.Add(messageId, del);
-        }
-
-        public void RemoveMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate del)
-        {
-            m_delegateRegistry.Remove(messageId, del);
-        }
-
-        public void RemoveMessageDelegate(ReceivedMessageDelegate del)
-        {
-            m_delegateRegistry.Remove(del);
-        }
-
-        public void RemoveMessageDelegates(Object target)
-        {
-            m_delegateRegistry.RemoveAll(target);
         }
 
         #endregion
