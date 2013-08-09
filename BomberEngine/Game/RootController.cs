@@ -207,8 +207,7 @@ namespace BomberEngine.Game
         #region Events
 
         private KeyEvent keyEvent = new KeyEvent();
-        private GamePadEvent gamePadConnectivityEvent = new GamePadEvent();
-
+        
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
@@ -230,16 +229,6 @@ namespace BomberEngine.Game
         {
             m_keyBindings.OnKeyReleased(arg);
             return HandleEvent(keyEvent.Init(arg, KeyState.Released));
-        }
-
-        public virtual bool OnGamePadConnected(int playerIndex)
-        {
-            return HandleEvent(gamePadConnectivityEvent.Init(playerIndex, GamePadState.Connected));
-        }
-
-        public virtual bool OnGamePadDisconnected(int playerIndex)
-        {
-            return HandleEvent(gamePadConnectivityEvent.Init(playerIndex, GamePadState.Disconnected));
         }
 
         public virtual void OnPointerMoved(int x, int y, int fingerId)

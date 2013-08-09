@@ -105,7 +105,6 @@
     <Compile Include="Core\BaseElement.cs" />
     <Compile Include="Core\Events\Event.cs" />
     <Compile Include="Core\Events\EventHandlerList.cs" />
-    <Compile Include="Core\Events\GamePadEvent.cs" />
     <Compile Include="Core\Events\IEventHandler.cs" />
     <Compile Include="Core\Events\KeyEvent.cs" />
     <Compile Include="Core\Events\MouseEvent.cs" />
@@ -145,7 +144,6 @@
     <Compile Include="Core\Visual\Context.cs" />
     <Compile Include="Core\IDrawable.cs" />
     <Compile Include="Core\DrawableList.cs" />
-    <Compile Include="Core\Input\IGamePadStateListener.cs" />
     <Compile Include="Core\Input\IInputListener.cs" />
     <Compile Include="Core\Input\InputManager.cs" />
     <Compile Include="Core\Input\ITouchInputListener.cs" />
