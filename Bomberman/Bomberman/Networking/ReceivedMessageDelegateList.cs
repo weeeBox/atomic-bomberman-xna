@@ -8,8 +8,6 @@ using BomberEngine.Debugging;
 
 namespace Bomberman.Networking
 {
-    public delegate void ReceivedMessageDelegate<T>(T peer, NetworkMessageId messageId, NetIncomingMessage message);
-
     public class ReceivedMessageDelegateList<T> : BaseList<ReceivedMessageDelegate<T>>
     {
         public ReceivedMessageDelegateList()
