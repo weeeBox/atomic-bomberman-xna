@@ -13,22 +13,19 @@ using Bomberman.Multiplayer;
 
 namespace Bomberman.Networking
 {
-    using ServerReceivedMessageDelegate = ReceivedMessageDelegate;
-    using ServerReceivedMessageDelegateRegistry = ReceivedMessageDelegateRegistry;
-
     public class Server : Peer
     {
         private int nextClientIndex;
         private List<NetConnection> connections;
 
         private bool m_respondsToDiscovery;
-        private ServerReceivedMessageDelegateRegistry m_delegateRegistry;
+        private ReceivedMessageDelegateRegistry m_delegateRegistry;
 
         public Server(String name, int port)
             : base(name, port)
         {
             connections = new List<NetConnection>();
-            m_delegateRegistry = new ServerReceivedMessageDelegateRegistry();
+            m_delegateRegistry = new ReceivedMessageDelegateRegistry();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -139,17 +136,17 @@ namespace Bomberman.Networking
 
         #region Message delegates
 
-        public void AddMessageDelegate(NetworkMessageId messageId, ServerReceivedMessageDelegate del)
+        public void AddMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate del)
         {
             m_delegateRegistry.Add(messageId, del);
         }
 
-        public void RemoveMessageDelegate(NetworkMessageId messageId, ServerReceivedMessageDelegate del)
+        public void RemoveMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate del)
         {
             m_delegateRegistry.Remove(messageId, del);
         }
 
-        public void RemoveMessageDelegate(ServerReceivedMessageDelegate del)
+        public void RemoveMessageDelegate(ReceivedMessageDelegate del)
         {
             m_delegateRegistry.Remove(del);
         }
