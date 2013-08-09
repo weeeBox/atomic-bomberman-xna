@@ -41,6 +41,12 @@ namespace Bomberman.Game.Multiplayer
             RegisterNotification(NetworkNotifications.DisconnectedFromServer, DisconnectedFromServerNotification);
         }
 
+        protected override void OnStop()
+        {
+            base.OnStop();
+            GetMultiplayerManager().RemoveServerMessageDelegates(this);
+        }
+
         public override void Update(float delta)
         {
             base.Update(delta);
@@ -85,7 +91,7 @@ namespace Bomberman.Game.Multiplayer
             gameScreen.AddDebugView(new NetworkTraceView(client.GetServerConnection()));
             gameScreen.AddDebugView(new LocalPlayerView(m_localPlayer));
 
-            GetMultiplayerManager().RemoveServerMessageDelegates(messageId, OnFieldStateReceived);
+            GetMultiplayerManager().RemoveServerMessageDelegate(messageId, OnFieldStateReceived);
             GetMultiplayerManager().AddServerMessageDelegate(NetworkMessageId.ServerPacket, OnServerPacketReceived);
         }
 

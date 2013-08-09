@@ -21,6 +21,19 @@ namespace Bomberman.Networking
             return base.Add(e);
         }
 
+        public void RemoveAll(Object target)
+        {
+            int elementsCount = list.Count;
+            for (int i = 0; i < elementsCount; ++i)
+            {
+                ServerMessageReceivedDelegate del = list[i];
+                if (del.Target == target)
+                {
+                    RemoveAt(i);
+                }
+            }
+        }
+
         public void NotifyMessageReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message)
         {
             int elementsCount = list.Count;

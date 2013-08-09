@@ -112,6 +112,15 @@ namespace Bomberman.Networking
             }
         }
 
+        public void RemoveDelegates(Object target)
+        {
+            foreach (KeyValuePair<NetworkMessageId, ServerMessageReceivedDelegateList> e in m_delegatesMap)
+            {
+                ServerMessageReceivedDelegateList list = e.Value;
+                list.RemoveAll(target);
+            }
+        }
+
         private void NotifyMessageReceived(NetworkMessageId messageId, NetIncomingMessage message)
         {
             ServerMessageReceivedDelegateList list = FindList(messageId);
