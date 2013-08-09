@@ -8,14 +8,16 @@ using BomberEngine.Debugging;
 
 namespace Bomberman.Networking
 {
-    public class ServerMessageReceivedDelegateList : BaseList<ServerMessageReceivedDelegate>
+    public delegate void ReceivedMessageDelegate<T>(T peer, NetworkMessageId messageId, NetIncomingMessage message);
+
+    public class ReceivedMessageDelegateList<T> : BaseList<ReceivedMessageDelegate<T>>
     {
-        public ServerMessageReceivedDelegateList()
+        public ReceivedMessageDelegateList()
             : base(NullDelegate, 1)
         {
         }
 
-        public override bool Add(ServerMessageReceivedDelegate e)
+        public override bool Add(ReceivedMessageDelegate<T> e)
         {
             Debug.Assert(!Contains(e));
             return base.Add(e);
@@ -26,7 +28,7 @@ namespace Bomberman.Networking
             int elementsCount = list.Count;
             for (int i = 0; i < elementsCount; ++i)
             {
-                ServerMessageReceivedDelegate del = list[i];
+                ReceivedMessageDelegate<T> del = list[i];
                 if (del.Target == target)
                 {
                     RemoveAt(i);
@@ -34,15 +36,15 @@ namespace Bomberman.Networking
             }
         }
 
-        public void NotifyMessageReceived(Client client, NetworkMessageId messageId, NetIncomingMessage message)
+        public void NotifyMessageReceived(T peer, NetworkMessageId messageId, NetIncomingMessage message)
         {
             int elementsCount = list.Count;
             for (int i = 0; i < elementsCount; ++i)
             {
                 long readPos = message.Position;
 
-                ServerMessageReceivedDelegate del = list[i];
-                del(client, messageId, message);
+                ReceivedMessageDelegate<T> del = list[i];
+                del(peer, messageId, message);
 
                 message.Position = readPos;
             }
@@ -50,7 +52,7 @@ namespace Bomberman.Networking
             ClearRemoved();
         }
 
-        private static void NullDelegate(Client client, NetworkMessageId messageId, NetIncomingMessage message)
+        private static void NullDelegate(T peer, NetworkMessageId messageId, NetIncomingMessage message)
         {
         }
     }

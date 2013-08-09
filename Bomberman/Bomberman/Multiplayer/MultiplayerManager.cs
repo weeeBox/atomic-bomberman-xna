@@ -210,12 +210,12 @@ namespace Bomberman.Multiplayer
 
         #region Network messages delegates
 
-        public void AddServerMessageDelegate(NetworkMessageId messageId, ServerMessageReceivedDelegate del)
+        public void AddServerMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate<Client> del)
         {
             GetClient().AddMessageDelegate(messageId, del);
         }
 
-        public void RemoveServerMessageDelegate(NetworkMessageId messageId, ServerMessageReceivedDelegate del)
+        public void RemoveServerMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate<Client> del)
         {
             GetClient().RemoveMessageDelegate(messageId, del);
         }
