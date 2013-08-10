@@ -7,6 +7,7 @@ using BomberEngine.Core;
 using Bomberman.Networking;
 using Lidgren.Network;
 using BomberEngine.Debugging;
+using BomberEngine.Game;
 
 namespace Bomberman.Multiplayer
 {
@@ -33,6 +34,11 @@ namespace Bomberman.Multiplayer
             m_payloadMessage = payloadMessage;
         }
 
+        protected override void OnStart()
+        {
+            Application.ScheduleTimerOnce(DoWorkCallback);
+        }
+
         protected override void DoWork()
         {
             m_peer.AddMessageDelegate(NetworkMessageId.Response, ResponseReceived);
@@ -50,6 +56,7 @@ namespace Bomberman.Multiplayer
         protected override void OnFinish()
         {
             m_peer.RemoveMessageDelegates(this);
+            Application.CancelAllTimers(this);
         }
 
         private void ResponseReceived(Peer peer, NetworkMessageId messageId, NetIncomingMessage message)
@@ -66,9 +73,9 @@ namespace Bomberman.Multiplayer
             }
         }
 
-        private void TimeoutCallback(Timer timer)
+        private void DoWorkCallback(Timer timer)
         {
-            Cancel();
+            DoWork();
         }
 
         public Peer peer

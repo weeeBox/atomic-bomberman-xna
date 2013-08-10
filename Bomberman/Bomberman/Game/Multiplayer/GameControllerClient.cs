@@ -61,40 +61,6 @@ namespace Bomberman.Game.Multiplayer
 
         #region Server messages delegates
 
-        private void OnFieldStateReceived(NetworkRequest request, NetIncomingMessage message)
-        {
-            game = new Game(MultiplayerMode.Client);
-
-            SetupField(settings.scheme);
-            ReadFieldState(message);
-
-            gameScreen = new GameScreen();
-
-            m_localPlayer = null;
-            List<Player> players = game.GetPlayers().list;
-            for (int i = 0; i < players.Count; ++i)
-            {
-                if (players[i].input == null)
-                {
-                    m_localPlayer = players[i];
-                    m_localPlayer.SetPlayerInput(InputMapping.CreatePlayerInput(InputType.Keyboard1));
-                    m_localPlayer.input.IsActive = true; // TODO: handle console
-                    break;
-                }
-            }
-
-            Client client = request.peer as Client;
-
-            Debug.Assert(m_localPlayer != null);
-            m_localPlayer.connection = client.RemoteConnection;
-
-            StartScreen(gameScreen);
-            gameScreen.AddDebugView(new NetworkTraceView(client.RemoteConnection));
-            gameScreen.AddDebugView(new LocalPlayerView(m_localPlayer));
-
-            GetMultiplayerManager().StartListeningServerMessages(NetworkMessageId.ServerPacket, OnServerPacketReceived);
-        }
-
         private void OnServerPacketReceived(Peer client, NetworkMessageId messageId, NetIncomingMessage message)
         {   
             ServerPacket packet = ReadServerPacket(message);
@@ -174,12 +140,41 @@ namespace Bomberman.Game.Multiplayer
 
         private void RequestFieldState()
         {
-            Client client = GetMultiplayerManager().GetClient();
-            NetworkRequest fieldRequest = new NetworkRequest(client, NetworkRequestId.RoundStart);
-            fieldRequest.requestDelegate = OnFieldStateReceived;
-            fieldRequest.Start();
+            SendRequest(NetworkRequestId.RoundStart, OnFieldStateReceived, "Waiting for server...");
+        }
 
-            StartScreen(new BlockingOperationScreen("Waiting for the server...", fieldRequest));
+        private void OnFieldStateReceived(NetworkRequest request, NetIncomingMessage message)
+        {
+            game = new Game(MultiplayerMode.Client);
+
+            SetupField(settings.scheme);
+            ReadFieldState(message);
+
+            gameScreen = new GameScreen();
+
+            m_localPlayer = null;
+            List<Player> players = game.GetPlayers().list;
+            for (int i = 0; i < players.Count; ++i)
+            {
+                if (players[i].input == null)
+                {
+                    m_localPlayer = players[i];
+                    m_localPlayer.SetPlayerInput(InputMapping.CreatePlayerInput(InputType.Keyboard1));
+                    m_localPlayer.input.IsActive = true; // TODO: handle console
+                    break;
+                }
+            }
+
+            Client client = request.peer as Client;
+
+            Debug.Assert(m_localPlayer != null);
+            m_localPlayer.connection = client.RemoteConnection;
+
+            StartScreen(gameScreen);
+            gameScreen.AddDebugView(new NetworkTraceView(client.RemoteConnection));
+            gameScreen.AddDebugView(new LocalPlayerView(m_localPlayer));
+
+            GetMultiplayerManager().StartListeningServerMessages(NetworkMessageId.ServerPacket, OnServerPacketReceived);
         }
 
         #endregion

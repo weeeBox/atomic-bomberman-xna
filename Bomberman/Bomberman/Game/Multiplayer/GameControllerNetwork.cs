@@ -9,6 +9,7 @@ using Bomberman.Multiplayer;
 using Bomberman.Networking;
 using Lidgren.Network;
 using Bomberman.Game.Elements;
+using Bomberman.Game.Screens;
 
 namespace Bomberman.Game.Multiplayer
 {
@@ -465,23 +466,20 @@ namespace Bomberman.Game.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Connection screen
+        #region Network request
 
-        protected void StartConnectionScreen(ConnectionCancelCallback cancelCallback, String message)
+        protected NetworkRequest SendRequest(NetworkRequestId requestId, NetworkRequestDelegate reqDelegate, String message)
         {
-            NetworkConnectionScreen screen = new NetworkConnectionScreen(message);
-            screen.cancelCallback = cancelCallback;
-            StartNextScreen(screen);
-        }
+            Peer peer = GetMultiplayerManager().GetPeer();
+            Debug.AssertNotNull(peer);
 
-        protected void HideConnectionScreen()
-        {
-            NetworkConnectionScreen screen = CurrentScreen() as NetworkConnectionScreen;
-            if (screen != null)
-            {
-                screen.cancelCallback = null;
-                screen.Finish();
-            }
+            NetworkRequest request = new NetworkRequest(peer, requestId);
+            request.requestDelegate = reqDelegate;
+            request.Start();
+
+            StartScreen(new BlockingOperationScreen(message, request));
+
+            return request;
         }
 
         #endregion

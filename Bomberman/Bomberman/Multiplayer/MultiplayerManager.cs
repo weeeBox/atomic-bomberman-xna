@@ -220,6 +220,11 @@ namespace Bomberman.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
+        internal Peer GetPeer()
+        {
+            return networkPeer;
+        }
+
         internal Server GetServer()
         {
             Server server = networkPeer as Server;
