@@ -186,34 +186,19 @@ namespace Bomberman.Multiplayer
 
         #region Network messages delegates
 
-        public void StartListeningServerMessages(NetworkMessageId messageId, ReceivedMessageDelegate del)
+        public void StartListeningMessages(NetworkMessageId messageId, ReceivedMessageDelegate del)
         {
             GetClient().AddMessageDelegate(messageId, del);
         }
 
-        public void StopListeningServerMessages(ReceivedMessageDelegate del)
+        public void StopListeningMessages(ReceivedMessageDelegate del)
         {
             GetClient().RemoveMessageDelegate(del);
         }
 
-        public void StopListeningAllServerMessages(Object target)
+        public void StopListeningAllMessages(Object target)
         {
             GetClient().RemoveMessageDelegates(target);
-        }
-
-        public void StartListeningClientMessages(NetworkMessageId messageId, ReceivedMessageDelegate del)
-        {
-            GetServer().AddMessageDelegate(messageId, del);
-        }
-
-        public void StopListeningClientMessages(ReceivedMessageDelegate del)
-        {
-            GetServer().RemoveMessageDelegate(del);
-        }
-
-        public void StopListeningAllClientMessages(Object target)
-        {
-            GetServer().RemoveMessageDelegates(target);
         }
 
         #endregion

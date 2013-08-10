@@ -44,7 +44,7 @@ namespace Bomberman.Game.Multiplayer
         protected override void OnStop()
         {
             base.OnStop();
-            GetMultiplayerManager().StopListeningAllServerMessages(this);
+            GetMultiplayerManager().StopListeningAllMessages(this);
         }
 
         public override void Update(float delta)
@@ -59,7 +59,7 @@ namespace Bomberman.Game.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Server messages delegates
+        #region Server packet
 
         private void OnServerPacketReceived(Peer client, NetworkMessageId messageId, NetIncomingMessage message)
         {   
@@ -92,6 +92,24 @@ namespace Bomberman.Game.Multiplayer
         }
 
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        private void OnServerRequest(Peer client, NetworkMessageId messageId, NetIncomingMessage message)
+        {
+            NetworkRequestId requestId = (NetworkRequestId) message.ReadByte();
+            switch (requestId)
+            {
+                case NetworkRequestId.RoundEnd:
+                {
+                    NetOutgoingMessage response = CreateMessage(NetworkMessageId.Response);
+                    response.Write((byte)requestId);
+
+                    SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableSequenced);
+                    break;
+                }
+            }
+        }
 
         //////////////////////////////////////////////////////////////////////////////
 
@@ -174,7 +192,7 @@ namespace Bomberman.Game.Multiplayer
             gameScreen.AddDebugView(new NetworkTraceView(client.RemoteConnection));
             gameScreen.AddDebugView(new LocalPlayerView(m_localPlayer));
 
-            GetMultiplayerManager().StartListeningServerMessages(NetworkMessageId.ServerPacket, OnServerPacketReceived);
+            GetMultiplayerManager().StartListeningMessages(NetworkMessageId.ServerPacket, OnServerPacketReceived);
         }
 
         #endregion
