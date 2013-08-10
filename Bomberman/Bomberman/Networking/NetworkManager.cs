@@ -8,7 +8,7 @@ using System.Net;
 using BomberEngine.Core;
 using Lidgren.Network;
 
-namespace Bomberman.Multiplayer
+namespace Bomberman.Networking
 {
     public class NetworkNotifications
     {
@@ -22,7 +22,7 @@ namespace Bomberman.Multiplayer
         public static readonly String LocalServerDiscovered     = "LocalServerDiscovered";  // peer:Client, msg:NetIncomingMessage
     }
 
-    public class MultiplayerManager : IUpdatable
+    public class NetworkManager : IUpdatable
     {
         private Peer networkPeer;
         private LocalServersDiscovery serverDiscovery;

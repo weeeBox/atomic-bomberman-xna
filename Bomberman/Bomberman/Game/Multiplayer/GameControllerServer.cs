@@ -70,7 +70,7 @@ namespace Bomberman.Game.Multiplayer
             RegisterNotification(NetworkNotifications.ClientConnected, ClientConnectedNotification);
             RegisterNotification(NetworkNotifications.ClientDisconnected, ClientDisconnectedNotification);
 
-            GetMultiplayerManager().StartListeningMessages(NetworkMessageId.Request, OnClientRequest);
+            GetNetwork().StartListeningMessages(NetworkMessageId.Request, OnClientRequest);
         }
 
         protected override void OnStop()
@@ -140,7 +140,7 @@ namespace Bomberman.Game.Multiplayer
                     WriteFieldState(response, player);
                     SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableSequenced);
 
-                    GetMultiplayerManager().StartListeningMessages(NetworkMessageId.ClientPacket, OnClientPacketReceived);
+                    GetNetwork().StartListeningMessages(NetworkMessageId.ClientPacket, OnClientPacketReceived);
                     break;
                 }
 
@@ -265,7 +265,7 @@ namespace Bomberman.Game.Multiplayer
 
         private Server GetServer()
         {
-            return GetMultiplayerManager().GetServer();
+            return GetNetwork().GetServer();
         }
 
         #endregion

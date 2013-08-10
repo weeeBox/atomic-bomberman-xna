@@ -6,6 +6,7 @@ using BomberEngine.Game;
 using Bomberman.Multiplayer;
 using BomberEngine.Core.Input;
 using BomberEngine.Core.Events;
+using Bomberman.Networking;
 
 namespace Bomberman
 {
@@ -25,9 +26,9 @@ namespace Bomberman
             return base.GetRootController() as BmRootController;
         }
 
-        protected MultiplayerManager GetMultiplayerManager()
+        protected NetworkManager GetNetwork()
         {
-            return GetRootController().GetMultiplayerManager();
+            return GetRootController().GetNetwork();
         }
 
         protected BmAssetManager Assets()

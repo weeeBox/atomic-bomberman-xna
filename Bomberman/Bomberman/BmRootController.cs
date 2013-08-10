@@ -19,12 +19,12 @@ namespace Bomberman
     public class BmRootController : RootController
     {
         private MenuController menuController;
-        private MultiplayerManager multiplayerManager;
+        private NetworkManager networkManager;
 
         public BmRootController(ContentManager contentManager)
             : base(contentManager)
         {
-            multiplayerManager = new MultiplayerManager();
+            networkManager = new NetworkManager();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ namespace Bomberman
         public override void Update(float delta)
         {
             base.Update(delta);
-            multiplayerManager.Update(delta);
+            networkManager.Update(delta);
         }
 
         #endregion
@@ -238,9 +238,9 @@ namespace Bomberman
             StartController(menuController);
         }
 
-        public MultiplayerManager GetMultiplayerManager()
+        public NetworkManager GetNetwork()
         {
-            return multiplayerManager;
+            return networkManager;
         }
 
         #endregion

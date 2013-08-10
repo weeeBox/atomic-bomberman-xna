@@ -419,47 +419,47 @@ namespace Bomberman.Game.Multiplayer
 
         protected NetOutgoingMessage CreateMessage()
         {
-            return GetMultiplayerManager().CreateMessage();
+            return GetNetwork().CreateMessage();
         }
 
         protected NetOutgoingMessage CreateMessage(NetworkMessageId messageId)
         {
-            return GetMultiplayerManager().CreateMessage(messageId);
+            return GetNetwork().CreateMessage(messageId);
         }
 
         protected void SendMessage(NetOutgoingMessage message, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
         {
-            GetMultiplayerManager().SendMessage(message, recipient, method);
+            GetNetwork().SendMessage(message, recipient, method);
         }
 
         protected void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
         {
-            GetMultiplayerManager().SendMessage(messageId, method);
+            GetNetwork().SendMessage(messageId, method);
         }
 
         protected void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
         {
-            GetMultiplayerManager().SendMessage(message, method);
+            GetNetwork().SendMessage(message, method);
         }
 
         protected void SendMessage(NetworkMessageId messageId, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
         {
-            GetMultiplayerManager().SendMessage(messageId, recipient, method);
+            GetNetwork().SendMessage(messageId, recipient, method);
         }
 
         protected void RecycleMessage(NetOutgoingMessage msg)
         {
-            GetMultiplayerManager().RecycleMessage(msg);
+            GetNetwork().RecycleMessage(msg);
         }
 
         protected void RecycleMessage(NetIncomingMessage msg)
         {
-            GetMultiplayerManager().RecycleMessage(msg);
+            GetNetwork().RecycleMessage(msg);
         }
 
         protected void StopNetworkPeer()
         {
-            GetMultiplayerManager().Stop();
+            GetNetwork().Stop();
         }
 
         #endregion
@@ -470,7 +470,7 @@ namespace Bomberman.Game.Multiplayer
 
         protected NetworkRequest SendRequest(NetworkRequestId requestId, NetworkRequestDelegate reqDelegate, String message)
         {
-            Peer peer = GetMultiplayerManager().GetPeer();
+            Peer peer = GetNetwork().GetPeer();
             Debug.AssertNotNull(peer);
 
             NetworkRequest request = new NetworkRequest(peer, requestId);

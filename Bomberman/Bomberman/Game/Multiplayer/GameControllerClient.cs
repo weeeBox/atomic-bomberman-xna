@@ -44,7 +44,7 @@ namespace Bomberman.Game.Multiplayer
         protected override void OnStop()
         {
             base.OnStop();
-            GetMultiplayerManager().StopListeningAllMessages(this);
+            GetNetwork().StopListeningAllMessages(this);
         }
 
         public override void Update(float delta)
@@ -192,7 +192,7 @@ namespace Bomberman.Game.Multiplayer
             gameScreen.AddDebugView(new NetworkTraceView(client.RemoteConnection));
             gameScreen.AddDebugView(new LocalPlayerView(m_localPlayer));
 
-            GetMultiplayerManager().StartListeningMessages(NetworkMessageId.ServerPacket, OnServerPacketReceived);
+            GetNetwork().StartListeningMessages(NetworkMessageId.ServerPacket, OnServerPacketReceived);
         }
 
         #endregion

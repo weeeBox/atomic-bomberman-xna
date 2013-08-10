@@ -9,7 +9,7 @@ using Lidgren.Network;
 using BomberEngine.Debugging;
 using BomberEngine.Game;
 
-namespace Bomberman.Multiplayer
+namespace Bomberman.Networking
 {
     public enum NetworkRequestId
     {

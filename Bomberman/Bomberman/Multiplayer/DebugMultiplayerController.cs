@@ -99,7 +99,7 @@ namespace Bomberman.Multiplayer
         {
             RegisterNotification(NetworkNotifications.LocalServerDiscovered, LocalServerDiscoveredNotification);
 
-            GetMultiplayerManager().StartLocalServerDiscovery();
+            GetNetwork().StartLocalServerDiscovery();
             Application.ScheduleTimer(OnDiscoveryTimeout, 1.0f);
         }
 
@@ -107,7 +107,7 @@ namespace Bomberman.Multiplayer
         {
             UnregisterNotification(NetworkNotifications.LocalServerDiscovered, LocalServerDiscoveredNotification);
 
-            GetMultiplayerManager().StopLocalServerDiscovery();
+            GetNetwork().StopLocalServerDiscovery();
             Application.CancelTimer(OnDiscoveryTimeout);
         }
 
@@ -142,19 +142,19 @@ namespace Bomberman.Multiplayer
             serverInfo = new ServerInfo(hostName);
             serverInfo.scheme = scheme;
 
-            GetMultiplayerManager().StartServer();
-            GetMultiplayerManager().StartListeningForServerDiscovery();
+            GetNetwork().StartServer();
+            GetNetwork().StartListeningForServerDiscovery();
         }
 
         private void StartClient(IPEndPoint remoteEndPoint)
         {
-            GetMultiplayerManager().StartClient(remoteEndPoint);
+            GetNetwork().StartClient(remoteEndPoint);
         }
 
         private void StopPeer()
         {
             serverInfo = null;
-            GetMultiplayerManager().Stop();
+            GetNetwork().Stop();
         }
 
         #endregion
