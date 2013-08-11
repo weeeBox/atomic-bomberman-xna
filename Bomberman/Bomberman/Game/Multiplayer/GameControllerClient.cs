@@ -42,26 +42,22 @@ namespace Bomberman.Game.Multiplayer
         public override void Update(float delta)
         {
             base.Update(delta);
-
-            if (game != null)
-            {
-                SendClientPacket(m_localPlayer);
-            }
+            SendClientPacket();
         }
 
         //////////////////////////////////////////////////////////////////////////////
 
         #region Peer messages
 
-        public override void OnPeerMessageReceived(Peer peer, NetIncomingMessage message)
+        private void SendClientPacket()
         {
-            ServerPacket packet = ReadServerPacket(message);
-            m_localPlayer.lastAckPacketId = packet.lastAckClientPacketId;
-
-            if (!CVars.sv_dumbClient.boolValue)
+            NetOutgoingMessage msg = CreateMessage();
+            if (game != null)
             {
-                ReplayPlayerActions(m_localPlayer);
+                WriteIngameChunk(msg);
             }
+
+            SendMessage(msg);
         }
 
         private void ReplayPlayerActions(Player player)
@@ -85,6 +81,33 @@ namespace Bomberman.Game.Multiplayer
 
         #endregion
 
+        public override void OnPeerMessageReceived(Peer peer, NetIncomingMessage msg)
+        {
+            ServerPacket packet;
+            packet.id = msg.ReadInt32();
+            packet.lastAckClientPacketId = msg.ReadInt32();
+
+            if (m_localPlayer != null)
+            {
+                m_localPlayer.lastAckPacketId = packet.lastAckClientPacketId;
+            }
+
+            base.OnPeerMessageReceived(peer, msg);
+        }
+
+        protected override void ReadPacketChunk(Peer peer, PacketChunkType chunkType, NetIncomingMessage msg)
+        {
+            switch (chunkType)
+            {
+                case PacketChunkType.Ingame:
+                    ReadIngameChunk(peer, msg);
+                    break;
+                case PacketChunkType.RoundStart:
+                    ReadRoundStartChunk(peer, msg);
+                    break;
+            }
+        }
+
         //////////////////////////////////////////////////////////////////////////////
 
         private void ConnectedToServerNotification(Notification notification)
@@ -99,7 +122,29 @@ namespace Bomberman.Game.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        private void SendClientPacket(Player player)
+        private void WriteRoundStartChunk(NetOutgoingMessage msg)
+        {
+            WritePacketChunkType(msg, PacketChunkType.RoundStart);
+            WriteRoundStartChunk(msg, m_localPlayer);
+        }
+
+        private void WriteRoundStartChunk(NetOutgoingMessage msg, Player player)
+        {
+            // TODO: add data here
+        }
+
+        private void ReadRoundStartChunk(Peer peer, NetIncomingMessage msg)
+        {
+            OnFieldStateReceived(peer, msg);
+        }
+
+        private void WriteIngameChunk(NetOutgoingMessage msg)
+        {
+            WritePacketChunkType(msg, PacketChunkType.Ingame);
+            WriteIngameChunk(msg, m_localPlayer);
+        }
+
+        private void WriteIngameChunk(NetOutgoingMessage msg, Player player)
         {
             int actions = 0;
             int actionsCount = (int)PlayerAction.Count;
@@ -119,11 +164,19 @@ namespace Bomberman.Game.Multiplayer
             packet.timeStamp = (float)NetTime.Now;
             packet.actions = actions;
 
-            NetOutgoingMessage msg = CreateMessage();
             WriteClientPacket(msg, ref packet);
-            SendMessage(msg);
-
+            
             PushPacket(ref packet);
+        }
+
+        private void ReadIngameChunk(Peer peer, NetIncomingMessage msg)
+        {
+            ReadServerPacket(msg);
+
+            if (!CVars.sv_dumbClient.boolValue)
+            {
+                ReplayPlayerActions(m_localPlayer);
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////

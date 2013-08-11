@@ -32,7 +32,7 @@ namespace Bomberman.Networking
         {
             m_name = name;
             m_port = port;
-            m_listener = s_nullPeerListener;
+            SetPeerListener(null);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -144,7 +144,7 @@ namespace Bomberman.Networking
 
         public void SetPeerListener(IPeerListener listener)
         {
-            m_listener = listener != null ? m_listener : s_nullPeerListener;
+            m_listener = listener != null ? listener : s_nullPeerListener;
         }
 
         #endregion

@@ -25,11 +25,19 @@ namespace Bomberman.Game.Multiplayer
     {
         public int id;
         public int lastAckClientPacketId;
-        public float timeStamp;
     }
 
     public abstract class GameControllerNetwork : GameController, IPeerListener
     {
+        public enum PacketChunkType
+        {
+            Ingame     = 0,    // 0
+            RoundEnd   = 0x2,  // 10
+            RoundStart = 0x6,  // 110
+            GameEnd    = 0xE,  // 1110
+            Command    = 0x1E, // 11110
+        }
+
         public GameControllerNetwork(GameSettings settings)
             : base(settings)
         {
@@ -150,8 +158,6 @@ namespace Bomberman.Game.Multiplayer
         /* the server sends data to a client */
         protected void WriteServerPacket(NetBuffer buffer)
         {
-            buffer.WriteTime(false);
-
             WriteServerPacket(buffer, game.Field);
 
             List<Player> players = game.GetPlayers().list;
@@ -267,13 +273,8 @@ namespace Bomberman.Game.Multiplayer
         }
 
         /* a client reads data from the server */
-        protected ServerPacket ReadServerPacket(NetIncomingMessage msg)
+        protected void ReadServerPacket(NetIncomingMessage msg)
         {
-            ServerPacket packet;
-            packet.id = msg.ReadInt32();
-            packet.lastAckClientPacketId = msg.ReadInt32();
-            packet.timeStamp = (float)msg.ReadTime(false);
-
             ReadServerPacket(msg, game.Field);
 
             List<Player> players = game.GetPlayers().list;
@@ -281,8 +282,6 @@ namespace Bomberman.Game.Multiplayer
             {
                 ReadServerPacket(msg, players[i]);
             }
-
-            return packet;
         }
 
         private void ReadServerPacket(NetIncomingMessage msg, Field field)
@@ -458,9 +457,38 @@ namespace Bomberman.Game.Multiplayer
 
         public virtual void OnPeerMessageReceived(Peer peer, NetIncomingMessage msg)
         {
+            while (HasNextChunk(msg))
+            {
+                ReadPacketChunk(peer, msg);
+            }
         }
 
         #endregion
+
+        private bool HasNextChunk(NetIncomingMessage msg)
+        {
+            return msg.Position < msg.LengthBits;
+        }
+
+        private void ReadPacketChunk(Peer peer, NetIncomingMessage msg)
+        {
+            PacketChunkType chunkType = ReadPacketChunkType(msg);
+            ReadPacketChunk(peer, chunkType, msg);
+        }
+
+        protected virtual void ReadPacketChunk(Peer peer, PacketChunkType chunkType, NetIncomingMessage msg)
+        {
+        }
+
+        protected PacketChunkType ReadPacketChunkType(NetIncomingMessage msg)
+        {
+            return (PacketChunkType)msg.ReadByte(); // TODO: use compressed format
+        }
+
+        protected void WritePacketChunkType(NetOutgoingMessage msg, PacketChunkType chunkType)
+        {
+            msg.Write((byte)chunkType);
+        }
 
         //////////////////////////////////////////////////////////////////////////////
 

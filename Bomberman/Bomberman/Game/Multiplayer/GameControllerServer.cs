@@ -41,6 +41,7 @@ namespace Bomberman.Game.Multiplayer
             {
                 Player player = new Player(entries[playerIndex].playerIndex);
                 player.SetPlayerInput(entries[playerIndex].input);
+                player.IsReady = true;
                 game.AddPlayer(player);
             }
 
@@ -52,6 +53,7 @@ namespace Bomberman.Game.Multiplayer
             {
                 Player player = new Player(playerIndex + i);
                 player.SetPlayerInput(new PlayerNetworkInput());
+                player.IsReady = false;
                 game.AddPlayer(player);
 
                 AddPlayerConnection(connections[i], player);
@@ -95,6 +97,15 @@ namespace Bomberman.Game.Multiplayer
 
         private void SendServerPacketCallback(Timer timer)
         {
+            WriteServerPacket();
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Peer packet chunks
+
+        private void WriteServerPacket()
+        {
             NetOutgoingMessage payloadMessage = CreateMessage();
             WriteServerPacket(payloadMessage);
 
@@ -105,6 +116,14 @@ namespace Bomberman.Game.Multiplayer
                 NetOutgoingMessage message = CreateMessage();
                 message.Write(nextPacketId);
                 message.Write(player.lastAckPacketId);
+
+                if (!player.IsReady)
+                {
+                    WritePacketChunkType(message, PacketChunkType.RoundStart);
+                    WriteFieldState(message, player);
+                }
+
+                WritePacketChunkType(message, PacketChunkType.Ingame);
                 message.Write(payloadMessage);
 
                 NetConnection connection = player.connection;
@@ -118,14 +137,26 @@ namespace Bomberman.Game.Multiplayer
             ++nextPacketId;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
+        protected override void ReadPacketChunk(Peer peer, PacketChunkType chunkType, NetIncomingMessage msg)
+        {
+            switch (chunkType)
+            {
+                case PacketChunkType.Ingame:
+                    ReadIngameChunk(peer, msg);
+                    break;
 
-        #region Peer listener
+                default:
+                    Debug.Fail("Unexpected chunk: " + chunkType);
+                    break;
+            }
+        }
 
-        public override void OnPeerMessageReceived(Peer peer, NetIncomingMessage msg)
+        private void ReadIngameChunk(Peer peer, NetIncomingMessage msg)
         {
             Player player = FindPlayer(msg.SenderConnection);
             Debug.Assert(player != null);
+
+            player.IsReady = true;
 
             ClientPacket packet = ReadClientPacket(msg);
             player.lastAckPacketId = packet.id;
@@ -136,10 +167,16 @@ namespace Bomberman.Game.Multiplayer
             input.SetNetActionBits(packet.actions);
         }
 
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Notifications
+
         private void ClientConnectedNotification(Notification notification)
         {
-            NetConnection connection = notification.GetData2<NetConnection>();
-            String name = notification.GetData3<String>();
+            NetConnection connection = notification.GetData<NetConnection>();
+            String name = notification.GetData2<String>();
 
             throw new NotImplementedException(); // clients can't join in progress game yet
         }
@@ -221,16 +258,6 @@ namespace Bomberman.Game.Multiplayer
         }
 
         #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Helpers
-
-        private Server GetServer()
-        {
-            return GetNetwork().GetServer();
-        }
-
-        #endregion
+        
     }
 }
