@@ -32,6 +32,7 @@ namespace Bomberman.Game.Elements.Players
         private int m_triggerBombsCount;
 
         private bool m_alive;
+        private bool m_ready;
 
         private PlayerInput m_input;
         private BombList m_bombs;
@@ -83,6 +84,7 @@ namespace Bomberman.Game.Elements.Players
             SetCell(0, 0);
 
             m_alive = true;
+            m_ready = false;
 
             ResetPowerups();
             ResetBombs();
@@ -1422,6 +1424,12 @@ namespace Bomberman.Game.Elements.Players
         public int GetIndex()
         {
             return m_index;
+        }
+
+        public bool IsReady
+        {
+            get { return m_ready; }
+            set { m_ready = value; }
         }
 
         public float errDx

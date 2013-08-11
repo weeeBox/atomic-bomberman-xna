@@ -155,7 +155,7 @@ namespace Bomberman.Game.Multiplayer
             SendPeerRequest(NetworkRequestId.RoundStart, OnFieldStateReceived, "Waiting for server...");
         }
 
-        private void OnFieldStateReceived(NetworkRequest request, NetIncomingMessage message)
+        private void OnFieldStateReceived(ClientRequestOperation request, NetIncomingMessage message)
         {
             game = new Game(MultiplayerMode.Client);
 

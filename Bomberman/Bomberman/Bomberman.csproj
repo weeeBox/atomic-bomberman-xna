@@ -192,8 +192,9 @@
     <Compile Include="Menu\MenuController.cs" />
     <Compile Include="Menu\Screens\MainMenuScreen.cs" />
     <Compile Include="Menu\Screens\SettingsScreen.cs" />
-    <Compile Include="Networking\NetworkRequest.cs" />
+    <Compile Include="Networking\ClientRequestOperation.cs" />
     <Compile Include="Networking\Client.cs" />
+    <Compile Include="Networking\ServerRequestOperation.cs" />
     <Compile Include="Networking\ReceivedMessageDelegate.cs" />
     <Compile Include="Networking\ReceivedMessageDelegateRegistry.cs" />
     <Compile Include="Networking\Server.cs" />

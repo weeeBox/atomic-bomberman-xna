@@ -18,16 +18,16 @@ namespace Bomberman.Networking
         GameEnd,
     }
 
-    public delegate void NetworkRequestDelegate(NetworkRequest request, NetIncomingMessage message);
+    public delegate void ClientRequestOperationDelegate(ClientRequestOperation op, NetIncomingMessage message);
 
-    public class NetworkRequest : BaseOperation
+    public class ClientRequestOperation : BaseOperation
     {
         private Peer m_peer;
         private NetworkRequestId m_requestId;
         private NetOutgoingMessage m_payloadMessage;
-        private NetworkRequestDelegate m_delegate;
+        private ClientRequestOperationDelegate m_delegate;
 
-        public NetworkRequest(Peer peer, NetworkRequestId requestId, NetOutgoingMessage payloadMessage = null)
+        public ClientRequestOperation(Peer peer, NetworkRequestId requestId, NetOutgoingMessage payloadMessage = null)
         {
             m_peer = peer;
             m_requestId = requestId;
@@ -89,7 +89,7 @@ namespace Bomberman.Networking
             get { return m_requestId; }
         }
 
-        public NetworkRequestDelegate requestDelegate
+        public ClientRequestOperationDelegate requestDelegate
         {
             get { return m_delegate; }
             set { m_delegate = value; }

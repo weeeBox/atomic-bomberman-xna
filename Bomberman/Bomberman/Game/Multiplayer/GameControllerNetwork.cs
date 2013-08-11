@@ -514,17 +514,17 @@ namespace Bomberman.Game.Multiplayer
             StopListeningPeerMessages(NetworkMessageId.Request, PeerRequestReceived);
         }
 
-        protected NetworkRequest SendPeerRequest(NetworkRequestId requestId, NetworkRequestDelegate reqDelegate, String message)
+        protected ClientRequestOperation SendPeerRequest(NetworkRequestId requestId, ClientRequestOperationDelegate reqDelegate, String message)
         {
             return SendPeerRequest(requestId, null, reqDelegate, message);
         }
 
-        protected NetworkRequest SendPeerRequest(NetworkRequestId requestId, NetOutgoingMessage payloadMessage, NetworkRequestDelegate reqDelegate, String message)
+        protected ClientRequestOperation SendPeerRequest(NetworkRequestId requestId, NetOutgoingMessage payloadMessage, ClientRequestOperationDelegate reqDelegate, String message)
         {
             Peer peer = GetNetwork().GetPeer();
             Debug.AssertNotNull(peer);
 
-            NetworkRequest request = new NetworkRequest(peer, requestId, payloadMessage);
+            ClientRequestOperation request = new ClientRequestOperation(peer, requestId, payloadMessage);
             request.requestDelegate = reqDelegate;
             request.Start();
 
@@ -543,5 +543,20 @@ namespace Bomberman.Game.Multiplayer
         }
 
         #endregion
+
+        protected Server GetServer()
+        {
+            return GetNetwork().GetServer();
+        }
+
+        protected Client GetClient()
+        {
+            return GetNetwork().GetClient();
+        }
+
+        protected Peer GetPeer()
+        {
+            return GetNetwork().GetPeer();
+        }
     }
 }

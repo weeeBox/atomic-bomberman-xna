@@ -156,6 +156,11 @@ namespace Bomberman.Networking
             return connections;
         }
 
+        public int GetConnectionsCount()
+        {
+            return connections.Count;
+        }
+
         private void AddConnection(NetConnection connection)
         {
             Debug.Assert(!connections.Contains(connection));
