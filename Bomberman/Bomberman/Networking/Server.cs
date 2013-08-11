@@ -129,19 +129,11 @@ namespace Bomberman.Networking
 
         #region Messages
 
-        public override void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        public override void SendMessage(NetOutgoingMessage message)
         {
             for (int i = 0; i < connections.Count; ++i)
             {
-                SendMessage(message, connections[i], method);
-            }
-        }
-
-        public override void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
-        {
-            for (int i = 0; i < connections.Count; ++i)
-            {
-                SendMessage(messageId, connections[i], method);
+                SendMessage(message, connections[i]);
             }
         }
 

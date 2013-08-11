@@ -35,8 +35,6 @@ namespace Bomberman.Game.Multiplayer
 
             Application.SetWindowTitle("Client");
 
-            RequestFieldState();
-
             RegisterNotification(NetworkNotifications.ConnectedToServer,      ConnectedToServerNotification);
             RegisterNotification(NetworkNotifications.DisconnectedFromServer, DisconnectedFromServerNotification);
         }
@@ -53,10 +51,10 @@ namespace Bomberman.Game.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Server packet
+        #region Peer messages
 
-        private void OnServerPacketReceived(Peer client, NetworkMessageId messageId, NetIncomingMessage message)
-        {   
+        public override void OnPeerMessageReceived(Peer peer, NetIncomingMessage message)
+        {
             ServerPacket packet = ReadServerPacket(message);
             m_localPlayer.lastAckPacketId = packet.lastAckClientPacketId;
 
@@ -86,24 +84,6 @@ namespace Bomberman.Game.Multiplayer
         }
 
         #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        private void OnServerRequest(Peer client, NetworkMessageId messageId, NetIncomingMessage message)
-        {
-            NetworkRequestId requestId = (NetworkRequestId) message.ReadByte();
-            switch (requestId)
-            {
-                case NetworkRequestId.RoundEnd:
-                {
-                    NetOutgoingMessage response = CreateMessage(NetworkMessageId.Response);
-                    response.Write((byte)requestId);
-
-                    SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableSequenced);
-                    break;
-                }
-            }
-        }
 
         //////////////////////////////////////////////////////////////////////////////
 
@@ -139,7 +119,7 @@ namespace Bomberman.Game.Multiplayer
             packet.timeStamp = (float)NetTime.Now;
             packet.actions = actions;
 
-            NetOutgoingMessage msg = CreateMessage(NetworkMessageId.ClientPacket);
+            NetOutgoingMessage msg = CreateMessage();
             WriteClientPacket(msg, ref packet);
             SendMessage(msg);
 
@@ -150,12 +130,7 @@ namespace Bomberman.Game.Multiplayer
 
         #region Field state
 
-        private void RequestFieldState()
-        {
-            SendPeerRequest(NetworkRequestId.RoundStart, OnFieldStateReceived, "Waiting for server...");
-        }
-
-        private void OnFieldStateReceived(ClientRequestOperation request, NetIncomingMessage message)
+        private void OnFieldStateReceived(Peer peer, NetIncomingMessage message)
         {
             game = new Game(MultiplayerMode.Client);
 
@@ -177,7 +152,7 @@ namespace Bomberman.Game.Multiplayer
                 }
             }
 
-            Client client = request.peer as Client;
+            Client client = peer as Client;
 
             Debug.Assert(m_localPlayer != null);
             m_localPlayer.connection = client.RemoteConnection;
@@ -186,8 +161,6 @@ namespace Bomberman.Game.Multiplayer
 
             gameScreen.AddDebugView(new NetworkTraceView(client.RemoteConnection));
             gameScreen.AddDebugView(new LocalPlayerView(m_localPlayer));
-
-            StartListeningPeerMessages(NetworkMessageId.ServerPacket, OnServerPacketReceived);
         }
 
         #endregion

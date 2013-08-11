@@ -192,15 +192,10 @@
     <Compile Include="Menu\MenuController.cs" />
     <Compile Include="Menu\Screens\MainMenuScreen.cs" />
     <Compile Include="Menu\Screens\SettingsScreen.cs" />
-    <Compile Include="Networking\ClientRequestOperation.cs" />
     <Compile Include="Networking\Client.cs" />
-    <Compile Include="Networking\ServerRequestOperation.cs" />
-    <Compile Include="Networking\ReceivedMessageDelegate.cs" />
-    <Compile Include="Networking\ReceivedMessageDelegateRegistry.cs" />
     <Compile Include="Networking\Server.cs" />
     <Compile Include="Networking\Peer.cs" />
     <Compile Include="Networking\LocalServersDiscovery.cs" />
-    <Compile Include="Networking\ReceivedMessageDelegateList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="BmGame.cs" />

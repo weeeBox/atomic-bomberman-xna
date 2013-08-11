@@ -82,14 +82,9 @@ namespace Bomberman.Networking
 
         #region Messages
 
-        public override void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        public override void SendMessage(NetOutgoingMessage message)
         {
-            SendMessage(message, m_remoteConnection, method);
-        }
-
-        public override void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
-        {   
-            SendMessage(messageId, m_remoteConnection, method);
+            SendMessage(message, m_remoteConnection);
         }
 
         #endregion

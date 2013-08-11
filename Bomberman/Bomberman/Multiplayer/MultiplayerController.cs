@@ -201,10 +201,6 @@ namespace Bomberman.Multiplayer
 
         #region ServerListener
 
-        public void OnClientPacketReceived(Server server, NetworkMessageId messageId, NetIncomingMessage message)
-        {   
-        }
-
         public void OnClientConnected(Server server, String name, NetConnection connection)
         {
             MultiplayerLobbyScreen lobbyScreen = FindLobbyScreen();

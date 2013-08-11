@@ -147,29 +147,14 @@ namespace Bomberman.Networking
             return networkPeer.CreateMessage();
         }
 
-        public NetOutgoingMessage CreateMessage(NetworkMessageId messageId)
+        public void SendMessage(NetOutgoingMessage message, NetConnection recipient)
         {
-            return networkPeer.CreateMessage(messageId);
+            networkPeer.SendMessage(message, recipient);
         }
 
-        public void SendMessage(NetOutgoingMessage message, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        public void SendMessage(NetOutgoingMessage message)
         {
-            networkPeer.SendMessage(message, recipient, method);
-        }
-
-        public void SendMessage(NetworkMessageId messageId, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
-        {
-            networkPeer.SendMessage(messageId, recipient, method);
-        }
-
-        public void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
-        {
-            networkPeer.SendMessage(message, method);
-        }
-
-        public void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
-        {
-            networkPeer.SendMessage(messageId, method);
+            networkPeer.SendMessage(message);
         }
 
         public void RecycleMessage(NetOutgoingMessage msg)
@@ -181,32 +166,6 @@ namespace Bomberman.Networking
         {
             networkPeer.RecycleMessage(msg);
         }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Network messages delegates
-
-        public void StartListeningMessages(NetworkMessageId messageId, ReceivedMessageDelegate del)
-        {
-            GetPeer().AddMessageDelegate(messageId, del);
-        }
-
-        public void StopListeningMessages(NetworkMessageId messageId, ReceivedMessageDelegate del)
-        {
-            GetPeer().RemoveMessageDelegate(messageId, del);
-        }
-
-        public void StopListeningMessages(ReceivedMessageDelegate del)
-        {
-            GetPeer().RemoveMessageDelegate(del);
-        }
-
-        public void StopListeningAllMessages(Object target)
-        {
-            GetPeer().RemoveMessageDelegates(target);
-        }
-
-        #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 

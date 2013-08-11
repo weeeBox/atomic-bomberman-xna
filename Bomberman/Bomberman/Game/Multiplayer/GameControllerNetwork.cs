@@ -28,7 +28,7 @@ namespace Bomberman.Game.Multiplayer
         public float timeStamp;
     }
 
-    public abstract class GameControllerNetwork : GameController
+    public abstract class GameControllerNetwork : GameController, IPeerListener
     {
         public GameControllerNetwork(GameSettings settings)
             : base(settings)
@@ -38,14 +38,12 @@ namespace Bomberman.Game.Multiplayer
         protected override void OnStart()
         {
             base.OnStart();
-            StartListeningPeerRequests();
+            GetPeer().SetPeerListener(this);
         }
 
         protected override void OnStop()
         {
-            StopListeningPeerRequests();
-            StopListeningPeerMessages();
-
+            GetPeer().SetPeerListener(null);
             StopNetworkPeer();
 
             base.OnStop();
@@ -432,39 +430,19 @@ namespace Bomberman.Game.Multiplayer
             return GetNetwork().CreateMessage();
         }
 
-        protected NetOutgoingMessage CreateMessage(NetworkMessageId messageId)
+        protected void SendMessage(NetOutgoingMessage message, NetConnection recipient)
         {
-            return GetNetwork().CreateMessage(messageId);
+            GetNetwork().SendMessage(message, recipient);
         }
 
-        protected void SendMessage(NetOutgoingMessage message, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        protected void SendMessage(NetOutgoingMessage message)
         {
-            GetNetwork().SendMessage(message, recipient, method);
+            GetNetwork().SendMessage(message);
         }
 
-        protected void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        protected void RecycleMessage(NetOutgoingMessage message)
         {
-            GetNetwork().SendMessage(messageId, method);
-        }
-
-        protected void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
-        {
-            GetNetwork().SendMessage(message, method);
-        }
-
-        protected void SendMessage(NetworkMessageId messageId, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
-        {
-            GetNetwork().SendMessage(messageId, recipient, method);
-        }
-
-        protected void RecycleMessage(NetOutgoingMessage msg)
-        {
-            GetNetwork().RecycleMessage(msg);
-        }
-
-        protected void RecycleMessage(NetIncomingMessage msg)
-        {
-            GetNetwork().RecycleMessage(msg);
+            GetNetwork().RecycleMessage(message);
         }
 
         protected void StopNetworkPeer()
@@ -476,26 +454,10 @@ namespace Bomberman.Game.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Peer messages
+        #region IPeerListener
 
-        protected void StartListeningPeerMessages(NetworkMessageId messageId, ReceivedMessageDelegate del)
+        public virtual void OnPeerMessageReceived(Peer peer, NetIncomingMessage msg)
         {
-            GetNetwork().StartListeningMessages(messageId, del);
-        }
-
-        protected void StopListeningPeerMessages(NetworkMessageId messageId, ReceivedMessageDelegate del)
-        {
-            GetNetwork().StopListeningMessages(messageId, del);
-        }
-
-        protected void StopListeningPeerMessages(ReceivedMessageDelegate del)
-        {
-            GetNetwork().StopListeningMessages(del);
-        }
-
-        private void StopListeningPeerMessages()
-        {
-            GetNetwork().StopListeningAllMessages(this);
         }
 
         #endregion
@@ -503,46 +465,6 @@ namespace Bomberman.Game.Multiplayer
         //////////////////////////////////////////////////////////////////////////////
 
         #region Peer request/response
-
-        private void StartListeningPeerRequests()
-        {
-            StartListeningPeerMessages(NetworkMessageId.Request, PeerRequestReceived);
-        }
-
-        private void StopListeningPeerRequests()
-        {
-            StopListeningPeerMessages(NetworkMessageId.Request, PeerRequestReceived);
-        }
-
-        protected ClientRequestOperation SendPeerRequest(NetworkRequestId requestId, ClientRequestOperationDelegate reqDelegate, String message)
-        {
-            return SendPeerRequest(requestId, null, reqDelegate, message);
-        }
-
-        protected ClientRequestOperation SendPeerRequest(NetworkRequestId requestId, NetOutgoingMessage payloadMessage, ClientRequestOperationDelegate reqDelegate, String message)
-        {
-            Peer peer = GetNetwork().GetPeer();
-            Debug.AssertNotNull(peer);
-
-            ClientRequestOperation request = new ClientRequestOperation(peer, requestId, payloadMessage);
-            request.requestDelegate = reqDelegate;
-            request.Start();
-
-            StartScreen(new BlockingOperationScreen(message, request));
-            return request;
-        }
-
-        private void PeerRequestReceived(Peer peer, NetworkMessageId messageId, NetIncomingMessage message)
-        {
-            NetworkRequestId requestId = (NetworkRequestId) message.ReadByte();
-            PeerRequestReceived(peer, requestId, message);
-        }
-
-        protected virtual void PeerRequestReceived(Peer peer, NetworkRequestId requestId, NetIncomingMessage message)
-        {
-        }
-
-        #endregion
 
         protected Server GetServer()
         {
@@ -558,5 +480,7 @@ namespace Bomberman.Game.Multiplayer
         {
             return GetNetwork().GetPeer();
         }
+
+        #endregion
     }
 }

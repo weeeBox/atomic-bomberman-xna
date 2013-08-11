@@ -68,12 +68,7 @@ namespace Bomberman.Networking
             return false;
         }
 
-        public override void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
-        {
-            throw new InvalidOperationException();
-        }
-
-        public override void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        public override void SendMessage(NetOutgoingMessage message)
         {
             throw new InvalidOperationException();
         }

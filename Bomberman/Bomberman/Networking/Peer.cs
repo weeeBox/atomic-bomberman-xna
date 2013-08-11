@@ -11,33 +11,28 @@ using BomberEngine.Game;
 
 namespace Bomberman.Networking
 {
-    public enum NetworkMessageId
-    {   
-        Request,
-        Response,
-
-        FieldState,
-        RoundEnded,
-        GameEnded,
-        ClientPacket,
-        ServerPacket,
-        Count,
+    public interface IPeerListener
+    {
+        void OnPeerMessageReceived(Peer peer, NetIncomingMessage msg);
     }
 
     public abstract class Peer : BaseObject, IUpdatable
     {
+        protected static readonly NetDeliveryMethod DefaultNetDeliveryMethod = NetDeliveryMethod.Unreliable;
+
         protected String m_name;
         protected int m_port;
 
         protected NetPeer m_peer;
-        private ReceivedMessageDelegateRegistry m_delegateRegistry;
 
+        private static readonly IPeerListener s_nullPeerListener = new NullPeerListener();
+        private IPeerListener m_listener;
+        
         protected Peer(String name, int port)
         {
             m_name = name;
             m_port = port;
-
-            m_delegateRegistry = new ReceivedMessageDelegateRegistry();
+            m_listener = s_nullPeerListener;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -104,9 +99,9 @@ namespace Bomberman.Networking
         {
         }
 
-        protected virtual void OnMessageReceive(NetworkMessageId messageId, NetIncomingMessage message)
+        protected virtual void OnMessageReceive(NetIncomingMessage message)
         {
-            m_delegateRegistry.NotifyMessageReceived(this, messageId, message);
+            m_listener.OnPeerMessageReceived(this, message);
         }
 
         #endregion
@@ -117,46 +112,24 @@ namespace Bomberman.Networking
 
         private void ReadMessage(NetIncomingMessage msg)
         {
-            NetworkMessageId message = ReadMessageId(msg);
-            OnMessageReceive(message, msg);
+            OnMessageReceive(msg);
         }
 
-        public void SendMessage(NetOutgoingMessage message, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
+        public void SendMessage(NetOutgoingMessage message, NetConnection recipient)
         {
-            m_peer.SendMessage(message, recipient, method);
+            m_peer.SendMessage(message, recipient, DefaultNetDeliveryMethod);
         }
 
-        public void SendMessage(NetworkMessageId messageId, NetConnection recipient, NetDeliveryMethod method = NetDeliveryMethod.Unreliable)
-        {
-            NetOutgoingMessage message = CreateMessage(messageId);
-            m_peer.SendMessage(message, recipient, method);
-        }
-
-        public abstract void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method = NetDeliveryMethod.Unreliable);
-        public abstract void SendMessage(NetworkMessageId messageId, NetDeliveryMethod method = NetDeliveryMethod.Unreliable);
+        public abstract void SendMessage(NetOutgoingMessage message);
         
         public NetOutgoingMessage CreateMessage()
         {
             return m_peer.CreateMessage();
         }
 
-        public NetOutgoingMessage CreateMessage(NetworkMessageId messageId)
-        {
-            NetOutgoingMessage message = CreateMessage();
-            WriteMessageId(messageId, message);
-            return message;
-        }
-
         public NetOutgoingMessage CreateMessage(int initialCapacity)
         {
             return m_peer.CreateMessage(initialCapacity);
-        }
-
-        public NetOutgoingMessage CreateMessage(NetworkMessageId messageId, int initialCapacity)
-        {
-            NetOutgoingMessage message = CreateMessage(initialCapacity);
-            WriteMessageId(messageId, message);
-            return message;
         }
 
         public void RecycleMessage(NetOutgoingMessage msg)
@@ -169,42 +142,9 @@ namespace Bomberman.Networking
             m_peer.Recycle(msg);
         }
 
-        private void WriteMessageId(NetworkMessageId messageId, NetOutgoingMessage message)
+        public void SetPeerListener(IPeerListener listener)
         {
-            byte id = (byte)messageId;
-            message.Write(id, 4);
-        }
-
-        private NetworkMessageId ReadMessageId(NetIncomingMessage message)
-        {
-            byte id = message.ReadByte(4);
-            return (NetworkMessageId)id;
-        }
-            
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Message delegates
-
-        public void AddMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate del)
-        {
-            m_delegateRegistry.Add(messageId, del);
-        }
-
-        public void RemoveMessageDelegate(NetworkMessageId messageId, ReceivedMessageDelegate del)
-        {
-            m_delegateRegistry.Remove(messageId, del);
-        }
-
-        public void RemoveMessageDelegate(ReceivedMessageDelegate del)
-        {
-            m_delegateRegistry.Remove(del);
-        }
-
-        public void RemoveMessageDelegates(Object target)
-        {
-            m_delegateRegistry.RemoveAll(target);
+            m_listener = listener != null ? m_listener : s_nullPeerListener;
         }
 
         #endregion
@@ -219,5 +159,12 @@ namespace Bomberman.Networking
         }
 
         #endregion
+
+        private class NullPeerListener : IPeerListener
+        {
+            public void OnPeerMessageReceived(Peer peer, NetIncomingMessage msg)
+            {
+            }
+        }
     }
 }
