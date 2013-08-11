@@ -188,17 +188,22 @@ namespace Bomberman.Networking
 
         public void StartListeningMessages(NetworkMessageId messageId, ReceivedMessageDelegate del)
         {
-            GetClient().AddMessageDelegate(messageId, del);
+            GetPeer().AddMessageDelegate(messageId, del);
+        }
+
+        public void StopListeningMessages(NetworkMessageId messageId, ReceivedMessageDelegate del)
+        {
+            GetPeer().RemoveMessageDelegate(messageId, del);
         }
 
         public void StopListeningMessages(ReceivedMessageDelegate del)
         {
-            GetClient().RemoveMessageDelegate(del);
+            GetPeer().RemoveMessageDelegate(del);
         }
 
         public void StopListeningAllMessages(Object target)
         {
-            GetClient().RemoveMessageDelegates(target);
+            GetPeer().RemoveMessageDelegates(target);
         }
 
         #endregion

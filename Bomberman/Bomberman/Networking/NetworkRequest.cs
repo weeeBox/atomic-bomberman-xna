@@ -47,7 +47,8 @@ namespace Bomberman.Networking
             msg.Write((byte)m_requestId);
             if (m_payloadMessage != null)
             {
-                msg.Write(m_payloadMessage); 
+                msg.Write(m_payloadMessage);
+                m_peer.RecycleMessage(m_payloadMessage);
             }
 
             m_peer.SendMessage(msg, NetDeliveryMethod.ReliableUnordered);

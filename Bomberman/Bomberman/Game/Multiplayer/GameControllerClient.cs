@@ -37,14 +37,8 @@ namespace Bomberman.Game.Multiplayer
 
             RequestFieldState();
 
-            RegisterNotification(NetworkNotifications.ConnectedToServer, ConnectedToServerNotification);
+            RegisterNotification(NetworkNotifications.ConnectedToServer,      ConnectedToServerNotification);
             RegisterNotification(NetworkNotifications.DisconnectedFromServer, DisconnectedFromServerNotification);
-        }
-
-        protected override void OnStop()
-        {
-            base.OnStop();
-            GetNetwork().StopListeningAllMessages(this);
         }
 
         public override void Update(float delta)
@@ -158,7 +152,7 @@ namespace Bomberman.Game.Multiplayer
 
         private void RequestFieldState()
         {
-            SendRequest(NetworkRequestId.RoundStart, OnFieldStateReceived, "Waiting for server...");
+            SendPeerRequest(NetworkRequestId.RoundStart, OnFieldStateReceived, "Waiting for server...");
         }
 
         private void OnFieldStateReceived(NetworkRequest request, NetIncomingMessage message)
@@ -189,10 +183,11 @@ namespace Bomberman.Game.Multiplayer
             m_localPlayer.connection = client.RemoteConnection;
 
             StartScreen(gameScreen);
+
             gameScreen.AddDebugView(new NetworkTraceView(client.RemoteConnection));
             gameScreen.AddDebugView(new LocalPlayerView(m_localPlayer));
 
-            GetNetwork().StartListeningMessages(NetworkMessageId.ServerPacket, OnServerPacketReceived);
+            StartListeningPeerMessages(NetworkMessageId.ServerPacket, OnServerPacketReceived);
         }
 
         #endregion

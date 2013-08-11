@@ -35,9 +35,19 @@ namespace Bomberman.Game.Multiplayer
         {
         }
 
+        protected override void OnStart()
+        {
+            base.OnStart();
+            StartListeningPeerRequests();
+        }
+
         protected override void OnStop()
         {
+            StopListeningPeerRequests();
+            StopListeningPeerMessages();
+
             StopNetworkPeer();
+
             base.OnStop();
         }
 
@@ -466,20 +476,70 @@ namespace Bomberman.Game.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Network request
+        #region Peer messages
 
-        protected NetworkRequest SendRequest(NetworkRequestId requestId, NetworkRequestDelegate reqDelegate, String message)
+        protected void StartListeningPeerMessages(NetworkMessageId messageId, ReceivedMessageDelegate del)
+        {
+            GetNetwork().StartListeningMessages(messageId, del);
+        }
+
+        protected void StopListeningPeerMessages(NetworkMessageId messageId, ReceivedMessageDelegate del)
+        {
+            GetNetwork().StopListeningMessages(messageId, del);
+        }
+
+        protected void StopListeningPeerMessages(ReceivedMessageDelegate del)
+        {
+            GetNetwork().StopListeningMessages(del);
+        }
+
+        private void StopListeningPeerMessages()
+        {
+            GetNetwork().StopListeningAllMessages(this);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Peer request/response
+
+        private void StartListeningPeerRequests()
+        {
+            StartListeningPeerMessages(NetworkMessageId.Request, PeerRequestReceived);
+        }
+
+        private void StopListeningPeerRequests()
+        {
+            StopListeningPeerMessages(NetworkMessageId.Request, PeerRequestReceived);
+        }
+
+        protected NetworkRequest SendPeerRequest(NetworkRequestId requestId, NetworkRequestDelegate reqDelegate, String message)
+        {
+            return SendPeerRequest(requestId, null, reqDelegate, message);
+        }
+
+        protected NetworkRequest SendPeerRequest(NetworkRequestId requestId, NetOutgoingMessage payloadMessage, NetworkRequestDelegate reqDelegate, String message)
         {
             Peer peer = GetNetwork().GetPeer();
             Debug.AssertNotNull(peer);
 
-            NetworkRequest request = new NetworkRequest(peer, requestId);
+            NetworkRequest request = new NetworkRequest(peer, requestId, payloadMessage);
             request.requestDelegate = reqDelegate;
             request.Start();
 
             StartScreen(new BlockingOperationScreen(message, request));
-
             return request;
+        }
+
+        private void PeerRequestReceived(Peer peer, NetworkMessageId messageId, NetIncomingMessage message)
+        {
+            NetworkRequestId requestId = (NetworkRequestId) message.ReadByte();
+            PeerRequestReceived(peer, requestId, message);
+        }
+
+        protected virtual void PeerRequestReceived(Peer peer, NetworkRequestId requestId, NetIncomingMessage message)
+        {
         }
 
         #endregion

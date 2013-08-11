@@ -69,8 +69,6 @@ namespace Bomberman.Game.Multiplayer
             RegisterNotification(Notifications.ConsoleVariableChanged, ServerRateVarChangedCallback);
             RegisterNotification(NetworkNotifications.ClientConnected, ClientConnectedNotification);
             RegisterNotification(NetworkNotifications.ClientDisconnected, ClientDisconnectedNotification);
-
-            GetNetwork().StartListeningMessages(NetworkMessageId.Request, OnClientRequest);
         }
 
         protected override void OnStop()
@@ -124,41 +122,6 @@ namespace Bomberman.Game.Multiplayer
 
         #region Server listener
 
-        private void OnClientRequest(Peer server, NetworkMessageId messageId, NetIncomingMessage message)
-        {
-            NetworkRequestId requestId = (NetworkRequestId) message.ReadByte();
-            switch (requestId)
-            {
-                case NetworkRequestId.RoundStart:
-                {
-                    Player player = FindPlayer(message.SenderConnection);
-                    Debug.Assert(player != null);
-
-                    NetOutgoingMessage response = CreateMessage(NetworkMessageId.Response);
-                    response.Write((byte)requestId);
-
-                    WriteFieldState(response, player);
-                    SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableSequenced);
-
-                    GetNetwork().StartListeningMessages(NetworkMessageId.ClientPacket, OnClientPacketReceived);
-                    break;
-                }
-
-                case NetworkRequestId.RoundEnd:
-                {
-                    NetOutgoingMessage response = CreateMessage(NetworkMessageId.Response);
-                    response.Write((byte)requestId);
-
-                    SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableSequenced);
-                    break;
-                }
-
-                default:
-                    Debug.Fail("Unexpected request id: " + requestId);
-                    break;
-            }
-        }
-
         private void OnClientPacketReceived(Peer server, NetworkMessageId messageId, NetIncomingMessage message)
         {
             Player player = FindPlayer(message.SenderConnection);
@@ -194,6 +157,48 @@ namespace Bomberman.Game.Multiplayer
             if (CVars.g_startupMultiplayerMode.value != "server")
             {
                 Application.sharedApplication.Stop();
+            }
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Peer request/response
+
+        protected override void PeerRequestReceived(Peer peer, NetworkRequestId requestId, NetIncomingMessage message)
+        {
+            switch (requestId)
+            {
+                case NetworkRequestId.RoundStart:
+                {
+                    Player player = FindPlayer(message.SenderConnection);
+                    Debug.Assert(player != null);
+
+                    NetOutgoingMessage response = CreateMessage(NetworkMessageId.Response);
+                    response.Write((byte)requestId);
+
+                    WriteFieldState(response, player);
+                    SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableSequenced);
+
+                    StartListeningPeerMessages(NetworkMessageId.ClientPacket, OnClientPacketReceived);
+                    break;
+                }
+
+                case NetworkRequestId.RoundEnd:
+                {
+                    NetOutgoingMessage response = CreateMessage(NetworkMessageId.Response);
+                    response.Write((byte)requestId);
+
+                    SendMessage(response, message.SenderConnection, NetDeliveryMethod.ReliableSequenced);
+                    break;
+                }
+
+                default:
+                {
+                    Debug.Fail("Unexpected request id: " + requestId);
+                    break;
+                }   
             }
         }
 
@@ -245,7 +250,7 @@ namespace Bomberman.Game.Multiplayer
         protected override void OnRoundEnded()
         {
             base.OnRoundEnded();
-            SendRequest(NetworkRequestId.RoundEnd, null, "Waiting for clients");
+            SendPeerRequest(NetworkRequestId.RoundEnd, null, "Waiting for clients");
         }
 
         //////////////////////////////////////////////////////////////////////////////
