@@ -42,6 +42,7 @@ namespace Bomberman.Game.Multiplayer
         public override void Update(float delta)
         {
             base.Update(delta);
+
             SendClientPacket();
         }
 
@@ -50,14 +51,13 @@ namespace Bomberman.Game.Multiplayer
         #region Peer messages
 
         private void SendClientPacket()
-        {
-            NetOutgoingMessage msg = CreateMessage();
+        {   
             if (game != null)
             {
+                NetOutgoingMessage msg = CreateMessage();
                 WriteIngameChunk(msg);
+                SendMessage(msg);
             }
-
-            SendMessage(msg);
         }
 
         private void ReplayPlayerActions(Player player)
@@ -102,8 +102,11 @@ namespace Bomberman.Game.Multiplayer
                 case PacketChunkType.Ingame:
                     ReadIngameChunk(peer, msg);
                     break;
-                case PacketChunkType.RoundStart:
-                    ReadRoundStartChunk(peer, msg);
+                case PacketChunkType.RoundEvent:
+                    ReadRoundEventChunk(peer, msg);
+                    break;
+                default:
+                    Debug.Fail("Unexpected chunk type: " + chunkType);
                     break;
             }
         }
@@ -122,20 +125,28 @@ namespace Bomberman.Game.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        private void WriteRoundStartChunk(NetOutgoingMessage msg)
+        private void ReadRoundEventChunk(Peer peer, NetIncomingMessage msg)
         {
-            WritePacketChunkType(msg, PacketChunkType.RoundStart);
-            WriteRoundStartChunk(msg, m_localPlayer);
-        }
+            RoundEvent evt = (RoundEvent)ReadPackedInt(msg);
+            switch (evt)
+            {
+                case RoundEvent.Start:
+                {
+                    OnFieldStateReceived(peer, msg);
+                    break;
+                }
 
-        private void WriteRoundStartChunk(NetOutgoingMessage msg, Player player)
-        {
-            // TODO: add data here
-        }
+                case RoundEvent.End:
+                {
+                    throw new NotImplementedException();
+                }
 
-        private void ReadRoundStartChunk(Peer peer, NetIncomingMessage msg)
-        {
-            OnFieldStateReceived(peer, msg);
+                default:
+                {
+                    Debug.Fail("Unexpected round event: " + evt);
+                    break;
+                }
+            }
         }
 
         private void WriteIngameChunk(NetOutgoingMessage msg)

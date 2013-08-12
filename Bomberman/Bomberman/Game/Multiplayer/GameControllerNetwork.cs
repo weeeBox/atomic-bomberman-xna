@@ -32,10 +32,21 @@ namespace Bomberman.Game.Multiplayer
         public enum PacketChunkType
         {
             Ingame     = 0,    // 0
-            RoundEnd   = 0x2,  // 10
-            RoundStart = 0x6,  // 110
-            GameEnd    = 0xE,  // 1110
-            Command    = 0x1E, // 11110
+            RoundEvent = 0x2,  // 10
+            GameEvent  = 0x6,  // 110
+            Command    = 0xE,  // 1110
+        }
+
+        public enum RoundEvent
+        {
+            Start = 0,    // 0
+            End   = 0x2,  // 10
+        }
+
+        public enum GameEvent
+        {
+            Start = 0,    // 0
+            End   = 0x2,  // 10
         }
 
         public GameControllerNetwork(GameSettings settings)
@@ -159,7 +170,7 @@ namespace Bomberman.Game.Multiplayer
         protected void WriteServerPacket(NetBuffer buffer)
         {
             WriteServerPacket(buffer, game.Field);
-
+             
             List<Player> players = game.GetPlayers().list;
             for (int i = 0; i < players.Count; ++i)
             {
@@ -482,12 +493,32 @@ namespace Bomberman.Game.Multiplayer
 
         protected PacketChunkType ReadPacketChunkType(NetIncomingMessage msg)
         {
-            return (PacketChunkType)msg.ReadByte(); // TODO: use compressed format
+            return (PacketChunkType)ReadPackedInt(msg);
         }
 
         protected void WritePacketChunkType(NetOutgoingMessage msg, PacketChunkType chunkType)
         {
-            msg.Write((byte)chunkType);
+            WritePackedInt(msg, (byte)chunkType);
+        }
+
+        protected int ReadPackedInt(NetIncomingMessage msg)
+        {   
+            //int value = 0;
+
+            //int bit;
+            //while ((bit = msg.PeekByte(1)) != 0)
+            //{
+            //    bit = (bit << 1) | (msg.ReadByte(1) & 0x1);
+            //}
+
+            //return value;
+
+            return msg.ReadByte();
+        }
+
+        protected void WritePackedInt(NetOutgoingMessage msg, int value)
+        {
+            msg.Write((byte)value);
         }
 
         //////////////////////////////////////////////////////////////////////////////

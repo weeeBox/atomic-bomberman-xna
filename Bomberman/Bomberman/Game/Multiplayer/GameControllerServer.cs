@@ -119,7 +119,8 @@ namespace Bomberman.Game.Multiplayer
 
                 if (!player.IsReady)
                 {
-                    WritePacketChunkType(message, PacketChunkType.RoundStart);
+                    WritePacketChunkType(message, PacketChunkType.RoundEvent);
+                    WritePackedInt(message, (byte)RoundEvent.Start);
                     WriteFieldState(message, player);
                 }
 
