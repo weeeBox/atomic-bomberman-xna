@@ -37,24 +37,12 @@ namespace Bomberman.Game.Multiplayer
             EndingGame
         }
 
-        public enum PacketChunkType
+        public enum PeerMessageId
         {
-            Ingame     = 0,    // 0
-            RoundEvent = 0x2,  // 10
-            GameEvent  = 0x6,  // 110
-            Command    = 0xE,  // 1110
-        }
-
-        public enum RoundEvent
-        {
-            Start = 0,    // 0
-            End   = 0x2,  // 10
-        }
-
-        public enum GameEvent
-        {
-            Start = 0,    // 0
-            End   = 0x2,  // 10
+            RoundStart,
+            Playing,
+            RoundEnd,
+            GameEnd,
         }
 
         private State m_state;
@@ -491,6 +479,13 @@ namespace Bomberman.Game.Multiplayer
             return GetNetwork().CreateMessage();
         }
 
+        protected NetOutgoingMessage CreateMessage(PeerMessageId messageId)
+        {
+            NetOutgoingMessage msg = CreateMessage();
+            msg.Write((byte)messageId);
+            return msg;
+        }
+
         protected void SendMessage(NetOutgoingMessage message, NetConnection recipient)
         {
             GetNetwork().SendMessage(message, recipient);
@@ -519,62 +514,19 @@ namespace Bomberman.Game.Multiplayer
 
         public virtual void OnPeerMessageReceived(Peer peer, NetIncomingMessage msg)
         {
-            while (HasNextChunk(msg))
-            {
-                ReadPacketChunk(peer, msg);
-            }
+            PeerMessageId id = (PeerMessageId) msg.ReadByte();
+            ReadPeerMessage(peer, id, msg);
+        }
+
+        protected virtual void ReadPeerMessage(Peer peer, PeerMessageId id, NetIncomingMessage msg)
+        {   
         }
 
         #endregion
 
-        private bool HasNextChunk(NetIncomingMessage msg)
-        {
-            return msg.Position < msg.LengthBits;
-        }
-
-        private void ReadPacketChunk(Peer peer, NetIncomingMessage msg)
-        {
-            PacketChunkType chunkType = ReadPacketChunkType(msg);
-            ReadPacketChunk(peer, chunkType, msg);
-        }
-
-        protected virtual void ReadPacketChunk(Peer peer, PacketChunkType chunkType, NetIncomingMessage msg)
-        {
-        }
-
-        protected PacketChunkType ReadPacketChunkType(NetIncomingMessage msg)
-        {
-            return (PacketChunkType)ReadPackedInt(msg);
-        }
-
-        protected void WritePacketChunkType(NetBuffer buffer, PacketChunkType chunkType)
-        {
-            WritePackedInt(buffer, (byte)chunkType);
-        }
-
-        protected int ReadPackedInt(NetIncomingMessage msg)
-        {   
-            //int value = 0;
-
-            //int bit;
-            //while ((bit = msg.PeekByte(1)) != 0)
-            //{
-            //    bit = (bit << 1) | (msg.ReadByte(1) & 0x1);
-            //}
-
-            //return value;
-
-            return msg.ReadByte();
-        }
-
-        protected void WritePackedInt(NetBuffer buffer, int value)
-        {
-            buffer.Write((byte)value);
-        }
-
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Peer request/response
+        #region Helpers
 
         protected Server GetServer()
         {

@@ -53,14 +53,14 @@ namespace Bomberman.Game.Multiplayer
         {   
             if (IsPlaying())
             {
-                NetOutgoingMessage msg = CreateMessage();
-                WriteIngameChunk(msg);
+                NetOutgoingMessage msg = CreateMessage(PeerMessageId.Playing);
+                WritePlayingMessage(msg);
                 SendMessage(msg);
             }
             else if (IsStartingRound())
             {
-                NetOutgoingMessage msg = CreateMessage();
-                WriteStartingRound(msg);
+                NetOutgoingMessage msg = CreateMessage(PeerMessageId.RoundStart);
+                WriteRoundStartMessage(msg);
                 SendMessage(msg);
             }
         }
@@ -88,18 +88,18 @@ namespace Bomberman.Game.Multiplayer
 
         #endregion
 
-        protected override void ReadPacketChunk(Peer peer, PacketChunkType chunkType, NetIncomingMessage msg)
+        protected override void ReadPeerMessage(Peer peer, PeerMessageId id, NetIncomingMessage msg)
         {
-            switch (chunkType)
+            switch (id)
             {
-                case PacketChunkType.Ingame:
-                    ReadIngameChunk(peer, msg);
+                case PeerMessageId.RoundStart:
+                    ReadRoundStartMessage(peer, msg);
                     break;
-                case PacketChunkType.RoundEvent:
-                    ReadRoundEventChunk(peer, msg);
+                case PeerMessageId.Playing:
+                    ReadPlayingMessage(peer, msg);
                     break;
                 default:
-                    Debug.Fail("Unexpected chunk type: " + chunkType);
+                    Debug.Fail("Unexpected message id: " + id);
                     break;
             }
         }
@@ -118,39 +118,49 @@ namespace Bomberman.Game.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        private void ReadRoundEventChunk(Peer peer, NetIncomingMessage msg)
+        private void ReadRoundStartMessage(Peer peer, NetIncomingMessage msg)
         {
-            RoundEvent evt = (RoundEvent)ReadPackedInt(msg);
-            switch (evt)
+            if (IsStartingRound())
             {
-                case RoundEvent.Start:
-                {
-                    OnFieldStateReceived(peer, msg);
-                    SetState(State.Playing);
-                    break;
-                }
+                OnFieldStateReceived(peer, msg);
+                SetState(State.Playing);
+            }
+            else
+            {
+                Log.d("Ignoring round start message");
+            }
+        }
 
-                case RoundEvent.End:
-                {
-                    throw new NotImplementedException();
-                }
+        private void WriteRoundStartMessage(NetBuffer buffer)
+        {
+            if (m_localPlayer != null)
+            {
+                buffer.Write(m_localPlayer.IsReady);
+            }
+            else
+            {
+                buffer.Write(true);
+            }
+        }
 
-                default:
+        private void ReadPlayingMessage(Peer peer, NetIncomingMessage msg)
+        {
+            if (IsPlaying())
+            {
+                ReadServerIngameChunk(msg);
+
+                if (!CVars.sv_dumbClient.boolValue)
                 {
-                    Debug.Fail("Unexpected round event: " + evt);
-                    break;
+                    ReplayPlayerActions(m_localPlayer);
                 }
             }
         }
 
-        private void WriteIngameChunk(NetOutgoingMessage msg)
+        private void WritePlayingMessage(NetOutgoingMessage msg)
         {
-            WritePacketChunkType(msg, PacketChunkType.Ingame);
-            WriteIngameChunk(msg, m_localPlayer);
-        }
+            Player player = m_localPlayer;
+            Debug.Assert(player != null);
 
-        private void WriteIngameChunk(NetOutgoingMessage msg, Player player)
-        {
             int actions = 0;
             int actionsCount = (int)PlayerAction.Count;
             for (int i = 0; i < actionsCount; ++i)
@@ -167,46 +177,8 @@ namespace Bomberman.Game.Multiplayer
             packet.actions = actions;
 
             WriteClientPacket(msg, ref packet);
-            
+
             PushPacket(ref packet);
-        }
-
-        private void ReadIngameChunk(Peer peer, NetIncomingMessage msg)
-        {
-            ReadServerIngameChunk(msg);
-
-            if (!CVars.sv_dumbClient.boolValue)
-            {
-                ReplayPlayerActions(m_localPlayer);
-            }
-        }
-
-        private void ReadServerStartingRound(NetBuffer buffer)
-        {
-            List<Player> players = game.GetPlayersList();
-            for (int i = 0; i < players.Count; ++i)
-            {   
-                players[i].IsReady = buffer.ReadBoolean();
-            }
-        }
-
-        private void WriteStartingRound(NetBuffer buffer)
-        {
-            WritePacketChunkType(buffer, PacketChunkType.RoundEvent);
-            WritePackedInt(buffer, (byte)RoundEvent.Start);
-            WriteStartingRound(buffer, m_localPlayer);
-        }
-
-        private void WriteStartingRound(NetBuffer buffer, Player localPlayer)
-        {
-            if (localPlayer != null)
-            {
-                buffer.Write(localPlayer.IsReady);
-            }
-            else
-            {
-                buffer.Write(true);
-            }
         }
 
         //////////////////////////////////////////////////////////////////////////////

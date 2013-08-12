@@ -75,7 +75,7 @@ namespace Bomberman.Game.Multiplayer
         {
             networkPlayersLookup = null;
             networkPlayers = null;
-            game.Field.CancelAllTimers(this);
+            Application.CancelAllTimers(this);
 
             base.OnStop();
         }
@@ -83,8 +83,8 @@ namespace Bomberman.Game.Multiplayer
         private void SetPacketRate(int packetRate)
         {
             float packetDelay = 1.0f / packetRate;
-            game.Field.CancelTimer(SendServerPacketCallback);
-            game.Field.ScheduleTimer(SendServerPacketCallback, packetDelay, true);
+            Application.CancelTimer(SendServerPacketCallback);
+            Application.ScheduleTimer(SendServerPacketCallback, packetDelay, true);
         }
 
         private void ServerRateVarChangedCallback(Notification notification)
@@ -113,15 +113,7 @@ namespace Bomberman.Game.Multiplayer
                 {
                     Player player = networkPlayers[i];
 
-                    NetOutgoingMessage message = CreateMessage();
-                    if (!player.IsReady)
-                    {
-                        WritePacketChunkType(message, PacketChunkType.RoundEvent);
-                        WritePackedInt(message, (byte)RoundEvent.Start);
-                        WriteFieldState(message, player);
-                    }
-
-                    WritePacketChunkType(message, PacketChunkType.Ingame);
+                    NetOutgoingMessage message = CreateMessage(PeerMessageId.Playing);
                     message.Write(payloadMessage);
 
                     NetConnection connection = player.connection;
@@ -140,10 +132,7 @@ namespace Bomberman.Game.Multiplayer
                     Player player = players[i];
                     if (!player.IsReady)
                     {
-                        NetOutgoingMessage message = CreateMessage();
-
-                        WritePacketChunkType(message, PacketChunkType.RoundEvent);
-                        WritePackedInt(message, (byte)RoundEvent.Start);
+                        NetOutgoingMessage message = CreateMessage(PeerMessageId.RoundStart);
                         WriteFieldState(message, player);
 
                         NetConnection connection = player.connection;
@@ -163,20 +152,16 @@ namespace Bomberman.Game.Multiplayer
             }
         }
 
-        protected override void ReadPacketChunk(Peer peer, PacketChunkType chunkType, NetIncomingMessage msg)
+        protected override void ReadPeerMessage(Peer peer, PeerMessageId id, NetIncomingMessage msg)
         {
-            switch (chunkType)
+            switch (id)
             {
-                case PacketChunkType.Ingame:
-                    ReadIngameChunk(peer, msg);
-                    break;
-
-                case PacketChunkType.RoundEvent:
+                case PeerMessageId.RoundStart:
                     ReadRoundEventChunk(peer, msg);
                     break;
 
-                default:
-                    Debug.Fail("Unexpected chunk: " + chunkType);
+                case PeerMessageId.Playing:
+                    ReadIngameChunk(peer, msg);
                     break;
             }
         }
@@ -197,42 +182,23 @@ namespace Bomberman.Game.Multiplayer
 
         private void ReadRoundEventChunk(Peer peer, NetIncomingMessage msg)
         {
-            RoundEvent evt = (RoundEvent)ReadPackedInt(msg);
-            switch (evt)
+            Player player = FindPlayer(msg.SenderConnection);
+            player.IsReady = msg.ReadBoolean();
+
+            bool allPlayersAreReady = true;
+            for (int i = 0; i < networkPlayers.Count; ++i)
             {
-                case RoundEvent.Start:
+                if (!networkPlayers[i].IsReady)
                 {
-                    Player player = FindPlayer(msg.SenderConnection);
-                    player.IsReady = msg.ReadBoolean();
-
-                    bool allPlayersAreReady = true;
-                    for (int i = 0; i < networkPlayers.Count; ++i)
-                    {
-                        if (!networkPlayers[i].IsReady)
-                        {
-                            allPlayersAreReady = false;
-                            break;
-                        }
-                    }
-
-                    if (allPlayersAreReady)
-                    {
-                        Log.d("All players are ready");
-                        SetState(State.Playing);
-                    }
+                    allPlayersAreReady = false;
                     break;
                 }
+            }
 
-                case RoundEvent.End:
-                {
-                    throw new NotImplementedException();
-                }
-
-                default:
-                {
-                    Debug.Fail("Unexpected round event: " + evt);
-                    break;
-                }
+            if (allPlayersAreReady)
+            {
+                Log.d("All players are ready");
+                SetState(State.Playing);
             }
         }
 
