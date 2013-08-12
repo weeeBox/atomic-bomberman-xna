@@ -53,6 +53,11 @@ namespace Bomberman.Game
             return m_field.GetPlayers();
         }
 
+        public List<Player> GetPlayersList()
+        {
+            return m_field.GetPlayers().list;
+        }
+
         public int GetPlayersCount()
         {
             return m_field.GetPlayers().GetCount();

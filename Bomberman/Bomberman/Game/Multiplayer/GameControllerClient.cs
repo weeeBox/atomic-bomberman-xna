@@ -52,7 +52,7 @@ namespace Bomberman.Game.Multiplayer
 
         private void SendClientPacket()
         {   
-            if (game != null)
+            if (IsPlaying())
             {
                 NetOutgoingMessage msg = CreateMessage();
                 WriteIngameChunk(msg);
@@ -133,6 +133,7 @@ namespace Bomberman.Game.Multiplayer
                 case RoundEvent.Start:
                 {
                     OnFieldStateReceived(peer, msg);
+                    SetState(State.Playing);
                     break;
                 }
 
@@ -172,7 +173,6 @@ namespace Bomberman.Game.Multiplayer
             ClientPacket packet;
             packet.id = player.lastSentPacketId;
             packet.lastAckServerPacketId = player.lastAckPacketId;
-            packet.timeStamp = (float)NetTime.Now;
             packet.actions = actions;
 
             WriteClientPacket(msg, ref packet);
@@ -182,7 +182,7 @@ namespace Bomberman.Game.Multiplayer
 
         private void ReadIngameChunk(Peer peer, NetIncomingMessage msg)
         {
-            ReadServerPacket(msg);
+            ReadServerIngameChunk(msg);
 
             if (!CVars.sv_dumbClient.boolValue)
             {

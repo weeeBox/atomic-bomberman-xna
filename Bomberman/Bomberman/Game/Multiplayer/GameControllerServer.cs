@@ -97,45 +97,97 @@ namespace Bomberman.Game.Multiplayer
 
         private void SendServerPacketCallback(Timer timer)
         {
-            WriteServerPacket();
+            SendServerPacket();
         }
 
         //////////////////////////////////////////////////////////////////////////////
 
         #region Peer packet chunks
 
-        private void WriteServerPacket()
+        private void SendServerPacket()
         {
-            NetOutgoingMessage payloadMessage = CreateMessage();
-            WriteServerPacket(payloadMessage);
-
-            for (int i = 0; i < networkPlayers.Count; ++i)
+            if (IsPlaying())
             {
-                Player player = networkPlayers[i];
+                NetOutgoingMessage payloadMessage = CreateMessage();
+                WriteServerIngameChunk(payloadMessage);
 
-                NetOutgoingMessage message = CreateMessage();
-                message.Write(nextPacketId);
-                message.Write(player.lastAckPacketId);
-
-                if (!player.IsReady)
+                for (int i = 0; i < networkPlayers.Count; ++i)
                 {
-                    WritePacketChunkType(message, PacketChunkType.RoundEvent);
-                    WritePackedInt(message, (byte)RoundEvent.Start);
-                    WriteFieldState(message, player);
+                    Player player = networkPlayers[i];
+
+                    NetOutgoingMessage message = CreateMessage();
+                    message.Write(nextPacketId);
+                    message.Write(player.lastAckPacketId);
+
+                    if (!player.IsReady)
+                    {
+                        WritePacketChunkType(message, PacketChunkType.RoundEvent);
+                        WritePackedInt(message, (byte)RoundEvent.Start);
+                        WriteFieldState(message, player);
+                    }
+
+                    WritePacketChunkType(message, PacketChunkType.Ingame);
+                    message.Write(payloadMessage);
+
+                    NetConnection connection = player.connection;
+                    Debug.Assert(connection != null);
+
+                    SendMessage(message, connection);
                 }
 
-                WritePacketChunkType(message, PacketChunkType.Ingame);
-                message.Write(payloadMessage);
+                RecycleMessage(payloadMessage);
 
-                NetConnection connection = player.connection;
-                Debug.Assert(connection != null);
-
-                SendMessage(message, connection);
+                ++nextPacketId;
             }
+            else if (IsEndingRound())
+            {
+                NetOutgoingMessage payloadMessage = CreateMessage();
+                WriteServerIngameChunk(payloadMessage);
 
-            RecycleMessage(payloadMessage);
+                for (int i = 0; i < networkPlayers.Count; ++i)
+                {
+                    Player player = networkPlayers[i];
 
-            ++nextPacketId;
+                    NetOutgoingMessage message = CreateMessage();
+                    message.Write(nextPacketId);
+                    message.Write(player.lastAckPacketId);
+
+                    WritePacketChunkType(message, PacketChunkType.RoundEvent);
+                    WritePackedInt(message, (int)RoundEvent.End);
+
+                    message.Write(payloadMessage);
+
+                    NetConnection connection = player.connection;
+                    Debug.Assert(connection != null);
+
+                    SendMessage(message, connection);
+                }
+
+                RecycleMessage(payloadMessage);
+
+                ++nextPacketId;
+            }
+            else if (IsEndingGame())
+            {
+                for (int i = 0; i < networkPlayers.Count; ++i)
+                {
+                    Player player = networkPlayers[i];
+
+                    NetOutgoingMessage message = CreateMessage();
+                    message.Write(nextPacketId);
+                    message.Write(player.lastAckPacketId);
+
+                    WritePacketChunkType(message, PacketChunkType.GameEvent);
+                    WritePackedInt(message, (int)GameEvent.End);
+
+                    NetConnection connection = player.connection;
+                    Debug.Assert(connection != null);
+
+                    SendMessage(message, connection);
+                }
+
+                ++nextPacketId;
+            }
         }
 
         protected override void ReadPacketChunk(Peer peer, PacketChunkType chunkType, NetIncomingMessage msg)
@@ -245,8 +297,13 @@ namespace Bomberman.Game.Multiplayer
 
         protected override void OnRoundEnded()
         {
+            SetState(State.EndingRound);
+            for (int i = 0; i < networkPlayers.Count; ++i)
+            {
+                networkPlayers[i].IsReady = false;
+            }
+
             base.OnRoundEnded();
-            //SendPeerRequest(NetworkRequestId.RoundEnd, null, "Waiting for clients");
         }
 
         //////////////////////////////////////////////////////////////////////////////
