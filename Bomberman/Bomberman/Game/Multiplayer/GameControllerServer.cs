@@ -20,8 +20,6 @@ namespace Bomberman.Game.Multiplayer
         private IDictionary<NetConnection, Player> networkPlayersLookup;
         private List<Player> networkPlayers;
 
-        private int nextPacketId;
-
         public GameControllerServer(GameSettings settings) :
             base(settings)
         {
@@ -116,9 +114,6 @@ namespace Bomberman.Game.Multiplayer
                     Player player = networkPlayers[i];
 
                     NetOutgoingMessage message = CreateMessage();
-                    message.Write(nextPacketId);
-                    message.Write(player.lastAckPacketId);
-
                     if (!player.IsReady)
                     {
                         WritePacketChunkType(message, PacketChunkType.RoundEvent);
@@ -136,57 +131,35 @@ namespace Bomberman.Game.Multiplayer
                 }
 
                 RecycleMessage(payloadMessage);
+            }
+            else if (IsStartingRound())
+            {
+                List<Player> players = game.GetPlayersList();
+                for (int i = 0; i < players.Count; ++i)
+                {
+                    Player player = players[i];
+                    if (!player.IsReady)
+                    {
+                        NetOutgoingMessage message = CreateMessage();
 
-                ++nextPacketId;
+                        WritePacketChunkType(message, PacketChunkType.RoundEvent);
+                        WritePackedInt(message, (byte)RoundEvent.Start);
+                        WriteFieldState(message, player);
+
+                        NetConnection connection = player.connection;
+                        Debug.Assert(connection != null);
+
+                        SendMessage(message, connection);
+                    }
+                }
             }
             else if (IsEndingRound())
             {
-                NetOutgoingMessage payloadMessage = CreateMessage();
-                WriteServerIngameChunk(payloadMessage);
-
-                for (int i = 0; i < networkPlayers.Count; ++i)
-                {
-                    Player player = networkPlayers[i];
-
-                    NetOutgoingMessage message = CreateMessage();
-                    message.Write(nextPacketId);
-                    message.Write(player.lastAckPacketId);
-
-                    WritePacketChunkType(message, PacketChunkType.RoundEvent);
-                    WritePackedInt(message, (int)RoundEvent.End);
-
-                    message.Write(payloadMessage);
-
-                    NetConnection connection = player.connection;
-                    Debug.Assert(connection != null);
-
-                    SendMessage(message, connection);
-                }
-
-                RecycleMessage(payloadMessage);
-
-                ++nextPacketId;
+                throw new NotImplementedException();
             }
             else if (IsEndingGame())
             {
-                for (int i = 0; i < networkPlayers.Count; ++i)
-                {
-                    Player player = networkPlayers[i];
-
-                    NetOutgoingMessage message = CreateMessage();
-                    message.Write(nextPacketId);
-                    message.Write(player.lastAckPacketId);
-
-                    WritePacketChunkType(message, PacketChunkType.GameEvent);
-                    WritePackedInt(message, (int)GameEvent.End);
-
-                    NetConnection connection = player.connection;
-                    Debug.Assert(connection != null);
-
-                    SendMessage(message, connection);
-                }
-
-                ++nextPacketId;
+                throw new NotImplementedException();
             }
         }
 
@@ -198,6 +171,10 @@ namespace Bomberman.Game.Multiplayer
                     ReadIngameChunk(peer, msg);
                     break;
 
+                case PacketChunkType.RoundEvent:
+                    ReadRoundEventChunk(peer, msg);
+                    break;
+
                 default:
                     Debug.Fail("Unexpected chunk: " + chunkType);
                     break;
@@ -207,8 +184,6 @@ namespace Bomberman.Game.Multiplayer
         private void ReadIngameChunk(Peer peer, NetIncomingMessage msg)
         {
             Player player = FindPlayer(msg.SenderConnection);
-            Debug.Assert(player != null);
-
             player.IsReady = true;
 
             ClientPacket packet = ReadClientPacket(msg);
@@ -218,6 +193,47 @@ namespace Bomberman.Game.Multiplayer
             Debug.Assert(input != null);
 
             input.SetNetActionBits(packet.actions);
+        }
+
+        private void ReadRoundEventChunk(Peer peer, NetIncomingMessage msg)
+        {
+            RoundEvent evt = (RoundEvent)ReadPackedInt(msg);
+            switch (evt)
+            {
+                case RoundEvent.Start:
+                {
+                    Player player = FindPlayer(msg.SenderConnection);
+                    player.IsReady = msg.ReadBoolean();
+
+                    bool allPlayersAreReady = true;
+                    for (int i = 0; i < networkPlayers.Count; ++i)
+                    {
+                        if (!networkPlayers[i].IsReady)
+                        {
+                            allPlayersAreReady = false;
+                            break;
+                        }
+                    }
+
+                    if (allPlayersAreReady)
+                    {
+                        Log.d("All players are ready");
+                        SetState(State.Playing);
+                    }
+                    break;
+                }
+
+                case RoundEvent.End:
+                {
+                    throw new NotImplementedException();
+                }
+
+                default:
+                {
+                    Debug.Fail("Unexpected round event: " + evt);
+                    break;
+                }
+            }
         }
 
         #endregion
@@ -280,7 +296,7 @@ namespace Bomberman.Game.Multiplayer
             networkPlayers.Remove(player);
         }
 
-        private Player FindPlayer(NetConnection connection)
+        private Player TryFindPlayer(NetConnection connection)
         {
             Player player;
             if (networkPlayersLookup.TryGetValue(connection, out player))
@@ -289,6 +305,14 @@ namespace Bomberman.Game.Multiplayer
             }
 
             return null;
+        }
+
+        private Player FindPlayer(NetConnection connection)
+        {
+            Player player = TryFindPlayer(connection);
+            Debug.Assert(player != null);
+
+            return player;
         }
 
         #endregion

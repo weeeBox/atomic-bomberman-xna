@@ -21,8 +21,7 @@ namespace Bomberman.Game.Multiplayer
         
         private Player m_localPlayer; // TODO: don't store the reference (multiplayer local players may exist)
         private ClientPacket[] m_sentPackets;
-        private int m_lastSentPacketId;
-
+        
         public GameControllerClient(GameSettings settings)
             : base(settings)
         {
@@ -58,42 +57,36 @@ namespace Bomberman.Game.Multiplayer
                 WriteIngameChunk(msg);
                 SendMessage(msg);
             }
+            else if (IsStartingRound())
+            {
+                NetOutgoingMessage msg = CreateMessage();
+                WriteStartingRound(msg);
+                SendMessage(msg);
+            }
         }
 
         private void ReplayPlayerActions(Player player)
         {
-            float delta = Application.frameTime;
-            player.input.Reset();
+            //float delta = Application.frameTime;
+            //player.input.Reset();
 
-            for (int id = player.lastAckPacketId; id <= m_lastSentPacketId; ++id)
-            {
-                ClientPacket packet = GetPacket(id);
-                int actions = packet.actions;
-                int actionsCount = (int)PlayerAction.Count;
-                for (int i = 0; i < actionsCount; ++i)
-                {
-                    player.input.SetActionPressed(i, (actions & (1 << i)) != 0);
-                }
+            //for (int id = player.lastAckPacketId; id <= m_lastSentPacketId; ++id)
+            //{
+            //    ClientPacket packet = GetPacket(id);
+            //    int actions = packet.actions;
+            //    int actionsCount = (int)PlayerAction.Count;
+            //    for (int i = 0; i < actionsCount; ++i)
+            //    {
+            //        player.input.SetActionPressed(i, (actions & (1 << i)) != 0);
+            //    }
 
-                player.UpdateMoving(delta);
-            }
+            //    player.UpdateMoving(delta);
+            //}
+
+            throw new NotImplementedException();
         }
 
         #endregion
-
-        public override void OnPeerMessageReceived(Peer peer, NetIncomingMessage msg)
-        {
-            ServerPacket packet;
-            packet.id = msg.ReadInt32();
-            packet.lastAckClientPacketId = msg.ReadInt32();
-
-            if (m_localPlayer != null)
-            {
-                m_localPlayer.lastAckPacketId = packet.lastAckClientPacketId;
-            }
-
-            base.OnPeerMessageReceived(peer, msg);
-        }
 
         protected override void ReadPacketChunk(Peer peer, PacketChunkType chunkType, NetIncomingMessage msg)
         {
@@ -168,8 +161,6 @@ namespace Bomberman.Game.Multiplayer
                 }
             }
 
-            player.lastSentPacketId = ++m_lastSentPacketId;
-
             ClientPacket packet;
             packet.id = player.lastSentPacketId;
             packet.lastAckServerPacketId = player.lastAckPacketId;
@@ -187,6 +178,34 @@ namespace Bomberman.Game.Multiplayer
             if (!CVars.sv_dumbClient.boolValue)
             {
                 ReplayPlayerActions(m_localPlayer);
+            }
+        }
+
+        private void ReadServerStartingRound(NetBuffer buffer)
+        {
+            List<Player> players = game.GetPlayersList();
+            for (int i = 0; i < players.Count; ++i)
+            {   
+                players[i].IsReady = buffer.ReadBoolean();
+            }
+        }
+
+        private void WriteStartingRound(NetBuffer buffer)
+        {
+            WritePacketChunkType(buffer, PacketChunkType.RoundEvent);
+            WritePackedInt(buffer, (byte)RoundEvent.Start);
+            WriteStartingRound(buffer, m_localPlayer);
+        }
+
+        private void WriteStartingRound(NetBuffer buffer, Player localPlayer)
+        {
+            if (localPlayer != null)
+            {
+                buffer.Write(localPlayer.IsReady);
+            }
+            else
+            {
+                buffer.Write(true);
             }
         }
 

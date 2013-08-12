@@ -92,32 +92,6 @@ namespace Bomberman.Game.Multiplayer
         private static readonly int BITS_FOR_STATIC_CELL = NetUtility.BitsToHoldUInt(2);
         private static readonly int BITS_FOR_POWERUP = NetUtility.BitsToHoldUInt(Powerups.Count - 1);
 
-        protected void WriteServerStartingRound(NetBuffer buffer)
-        {
-            List<Player> players = game.GetPlayersList();
-            for (int i = 0; i < players.Count; ++i)
-            {
-                buffer.Write(players[i].IsReady);
-            }
-        }
-
-        protected void ReadServerStartingRound(NetBuffer buffer)
-        {
-            List<Player> players = game.GetPlayersList();
-            for (int i = 0; i < players.Count; ++i)
-            {
-                players[i].IsReady = buffer.ReadBoolean();
-            }
-        }
-
-        protected void WriteClientStartingRound(NetBuffer buffer)
-        {   
-        }
-
-        protected void ReadClientStartingRound(NetBuffer buffer)
-        {   
-        }
-
         protected void WriteFieldState(NetOutgoingMessage response, Player senderPlayer)
         {
             Field field = game.Field;
@@ -487,6 +461,11 @@ namespace Bomberman.Game.Multiplayer
             return m_state == State.Playing;
         }
 
+        protected bool IsStartingRound()
+        {
+            return m_state == State.StartingRound;
+        }
+
         protected bool IsEndingRound()
         {
             return m_state == State.EndingRound;
@@ -568,9 +547,9 @@ namespace Bomberman.Game.Multiplayer
             return (PacketChunkType)ReadPackedInt(msg);
         }
 
-        protected void WritePacketChunkType(NetOutgoingMessage msg, PacketChunkType chunkType)
+        protected void WritePacketChunkType(NetBuffer buffer, PacketChunkType chunkType)
         {
-            WritePackedInt(msg, (byte)chunkType);
+            WritePackedInt(buffer, (byte)chunkType);
         }
 
         protected int ReadPackedInt(NetIncomingMessage msg)
@@ -588,9 +567,9 @@ namespace Bomberman.Game.Multiplayer
             return msg.ReadByte();
         }
 
-        protected void WritePackedInt(NetOutgoingMessage msg, int value)
+        protected void WritePackedInt(NetBuffer buffer, int value)
         {
-            msg.Write((byte)value);
+            buffer.Write((byte)value);
         }
 
         //////////////////////////////////////////////////////////////////////////////
