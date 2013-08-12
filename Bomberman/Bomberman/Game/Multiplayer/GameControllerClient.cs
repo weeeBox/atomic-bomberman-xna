@@ -122,8 +122,10 @@ namespace Bomberman.Game.Multiplayer
         {
             if (IsStartingRound())
             {
-                OnFieldStateReceived(peer, msg);
-                SetState(State.Playing);
+                if (game == null)
+                {
+                    OnFieldStateReceived(peer, msg);
+                }
             }
             else
             {
@@ -133,26 +135,25 @@ namespace Bomberman.Game.Multiplayer
 
         private void WriteRoundStartMessage(NetBuffer buffer)
         {
-            if (m_localPlayer != null)
-            {
-                buffer.Write(m_localPlayer.IsReady);
-            }
-            else
-            {
-                buffer.Write(true);
-            }
+            bool isReady = m_localPlayer != null && m_localPlayer.IsReady;
+            buffer.Write(isReady);
         }
 
         private void ReadPlayingMessage(Peer peer, NetIncomingMessage msg)
         {
-            if (IsPlaying())
-            {
-                ReadServerIngameChunk(msg);
+            Debug.Assert(game != null);
+            Debug.Assert(m_localPlayer != null && m_localPlayer.IsReady);
 
-                if (!CVars.sv_dumbClient.boolValue)
-                {
-                    ReplayPlayerActions(m_localPlayer);
-                }
+            if (!IsPlaying())
+            {
+                SetState(State.Playing);
+            }
+
+            ReadServerIngameChunk(msg);
+
+            if (!CVars.sv_dumbClient.boolValue)
+            {
+                ReplayPlayerActions(m_localPlayer);
             }
         }
 
@@ -211,6 +212,7 @@ namespace Bomberman.Game.Multiplayer
 
             Debug.Assert(m_localPlayer != null);
             m_localPlayer.connection = client.RemoteConnection;
+            m_localPlayer.IsReady = true;
 
             StartScreen(gameScreen);
 

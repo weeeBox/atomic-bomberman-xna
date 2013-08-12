@@ -157,16 +157,16 @@ namespace Bomberman.Game.Multiplayer
             switch (id)
             {
                 case PeerMessageId.RoundStart:
-                    ReadRoundEventChunk(peer, msg);
+                    ReadRoundStartMessage(peer, msg);
                     break;
 
                 case PeerMessageId.Playing:
-                    ReadIngameChunk(peer, msg);
+                    ReadPlayingMessage(peer, msg);
                     break;
             }
         }
 
-        private void ReadIngameChunk(Peer peer, NetIncomingMessage msg)
+        private void ReadPlayingMessage(Peer peer, NetIncomingMessage msg)
         {
             Player player = FindPlayer(msg.SenderConnection);
             player.IsReady = true;
@@ -180,7 +180,7 @@ namespace Bomberman.Game.Multiplayer
             input.SetNetActionBits(packet.actions);
         }
 
-        private void ReadRoundEventChunk(Peer peer, NetIncomingMessage msg)
+        private void ReadRoundStartMessage(Peer peer, NetIncomingMessage msg)
         {
             Player player = FindPlayer(msg.SenderConnection);
             player.IsReady = msg.ReadBoolean();
