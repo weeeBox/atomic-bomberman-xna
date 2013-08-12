@@ -178,17 +178,17 @@ namespace Bomberman.Game
         private void RoundResultScreenButtonDelegate(Button button)
         {
             RoundResultScreen.ButtonId buttonId = (RoundResultScreen.ButtonId)button.id;
+
+            RoundResultScreen resultScreen = CurrentScreen() as RoundResultScreen;
+            Debug.Assert(resultScreen != null);
+
             switch (buttonId)
             {
                 case RoundResultScreen.ButtonId.Continue:
-                    Screen currentScreen = CurrentScreen();
-                    Debug.Assert(currentScreen is RoundResultScreen);
-                    currentScreen.Finish();
-                    
-                    StartNextRound();
+                    RoundResultScreenAccepted(resultScreen);
                     break;
                 case RoundResultScreen.ButtonId.Exit:
-                    Stop(ExitCode.Exit);
+                    RoundResultScreenDismissed(resultScreen);
                     break;
             }
         }
@@ -216,6 +216,17 @@ namespace Bomberman.Game
         protected virtual void OnGameEnded()
         {
             StartNextScreen(new GameResultScreen(GameResultScreenButtonDelegate));
+        }
+
+        protected virtual void RoundResultScreenAccepted(RoundResultScreen screen)
+        {
+            screen.Finish();
+            StartNextRound();
+        }
+
+        protected virtual void RoundResultScreenDismissed(RoundResultScreen screen)
+        {
+            Stop(ExitCode.Exit);
         }
 
         //////////////////////////////////////////////////////////////////////////////

@@ -63,6 +63,12 @@ namespace Bomberman.Game.Multiplayer
                 WriteRoundStartMessage(msg);
                 SendMessage(msg);
             }
+            else if (IsEndingRound())
+            {
+                NetOutgoingMessage msg = CreateMessage(PeerMessageId.RoundEnd);
+                WriteRoundEndMessage(msg);
+                SendMessage(msg);
+            }
         }
 
         private void ReplayPlayerActions(Player player)
@@ -97,6 +103,9 @@ namespace Bomberman.Game.Multiplayer
                     break;
                 case PeerMessageId.Playing:
                     ReadPlayingMessage(peer, msg);
+                    break;
+                case PeerMessageId.RoundEnd:
+                    ReadRoundEndMessage(peer, msg);
                     break;
                 default:
                     Debug.Fail("Unexpected message id: " + id);
@@ -144,11 +153,8 @@ namespace Bomberman.Game.Multiplayer
             Debug.Assert(game != null);
             Debug.Assert(m_localPlayer != null && m_localPlayer.IsReady);
 
-            if (!IsPlaying())
-            {
-                SetState(State.Playing);
-            }
-
+            SetState(State.Playing);
+            
             ReadServerIngameChunk(msg);
 
             if (!CVars.sv_dumbClient.boolValue)
@@ -180,6 +186,17 @@ namespace Bomberman.Game.Multiplayer
             WriteClientPacket(msg, ref packet);
 
             PushPacket(ref packet);
+        }
+
+        private void ReadRoundEndMessage(Peer peer, NetIncomingMessage msg)
+        {
+            SetState(State.EndingRound);
+        }
+
+        private void WriteRoundEndMessage(NetBuffer buffer)
+        {
+            bool isReady = m_localPlayer.IsReady;
+            buffer.Write(isReady);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -221,6 +238,42 @@ namespace Bomberman.Game.Multiplayer
         }
 
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        protected override void OnStateChanged(State oldState, State newState)
+        {
+            switch (newState)
+            {
+                case State.EndingRound:
+                    m_localPlayer.IsReady = false;
+                    OnRoundEnded();
+                    break;
+            }
+        }
+
+        protected override void OnRoundEnded()
+        {
+            if (IsEndingRound())
+            {
+                base.OnRoundEnded();
+            }
+            else
+            {
+                StartScreen(new BlockingScreen("Waiting for server..."));
+            }
+        }
+
+        protected override void RoundResultScreenAccepted(RoundResultScreen screen)
+        {
+            m_localPlayer.IsReady = true;
+            StartScreen(new BlockingScreen("Waiting for server..."));
+        }
+
+        protected override void RoundResultScreenDismissed(RoundResultScreen screen)
+        {
+            Stop(ExitCode.StopClient);
+        }
 
         //////////////////////////////////////////////////////////////////////////////
 

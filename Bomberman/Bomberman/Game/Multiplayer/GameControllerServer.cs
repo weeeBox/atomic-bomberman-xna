@@ -104,6 +104,7 @@ namespace Bomberman.Game.Multiplayer
 
         private void SendServerPacket()
         {
+            // TODO: refactor this code
             if (IsPlaying())
             {
                 NetOutgoingMessage payloadMessage = CreateMessage();
@@ -144,11 +145,43 @@ namespace Bomberman.Game.Multiplayer
             }
             else if (IsEndingRound())
             {
-                throw new NotImplementedException();
+                NetOutgoingMessage payloadMessage = CreateMessage();
+                WriteServerIngameChunk(payloadMessage);
+
+                for (int i = 0; i < networkPlayers.Count; ++i)
+                {
+                    Player player = networkPlayers[i];
+
+                    NetOutgoingMessage message = CreateMessage(PeerMessageId.RoundEnd);
+                    message.Write(payloadMessage);
+
+                    NetConnection connection = player.connection;
+                    Debug.Assert(connection != null);
+
+                    SendMessage(message, connection);
+                }
+
+                RecycleMessage(payloadMessage);
             }
             else if (IsEndingGame())
             {
-                throw new NotImplementedException();
+                NetOutgoingMessage payloadMessage = CreateMessage();
+                WriteServerIngameChunk(payloadMessage);
+
+                for (int i = 0; i < networkPlayers.Count; ++i)
+                {
+                    Player player = networkPlayers[i];
+
+                    NetOutgoingMessage message = CreateMessage(PeerMessageId.GameEnd);
+                    message.Write(payloadMessage);
+
+                    NetConnection connection = player.connection;
+                    Debug.Assert(connection != null);
+
+                    SendMessage(message, connection);
+                }
+
+                RecycleMessage(payloadMessage);
             }
         }
 
@@ -163,6 +196,13 @@ namespace Bomberman.Game.Multiplayer
                 case PeerMessageId.Playing:
                     ReadPlayingMessage(peer, msg);
                     break;
+
+                case PeerMessageId.RoundEnd:
+                    ReadRoundEndMessage(peer, msg);
+                    break;
+
+                case PeerMessageId.GameEnd:
+                    throw new NotImplementedException();
             }
         }
 
@@ -199,6 +239,28 @@ namespace Bomberman.Game.Multiplayer
             {
                 Log.d("All players are ready");
                 SetState(State.Playing);
+            }
+        }
+
+        private void ReadRoundEndMessage(Peer peer, NetIncomingMessage msg)
+        {
+            Player player = FindPlayer(msg.SenderConnection);
+            player.IsReady = msg.ReadBoolean();
+
+            bool allPlayersAreReady = true;
+            for (int i = 0; i < networkPlayers.Count; ++i)
+            {
+                if (!networkPlayers[i].IsReady)
+                {
+                    allPlayersAreReady = false;
+                    break;
+                }
+            }
+
+            if (allPlayersAreReady)
+            {
+                Log.d("All players are ready");
+                throw new NotImplementedException();
             }
         }
 
