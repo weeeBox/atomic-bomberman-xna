@@ -190,7 +190,7 @@ namespace Bomberman.Game.Multiplayer
 
         private void ReadRoundEndMessage(Peer peer, NetIncomingMessage msg)
         {
-            SetState(State.EndingRound);
+            SetState(State.RoundEnd);
         }
 
         private void WriteRoundEndMessage(NetBuffer buffer)
@@ -245,7 +245,7 @@ namespace Bomberman.Game.Multiplayer
         {
             switch (newState)
             {
-                case State.EndingRound:
+                case State.RoundEnd:
                     m_localPlayer.IsReady = false;
                     OnRoundEnded();
                     break;

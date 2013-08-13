@@ -31,10 +31,10 @@ namespace Bomberman.Game.Multiplayer
         protected enum State
         {
             Undefined,
-            StartingRound,
+            RoundStart,
             Playing,
-            EndingRound,
-            EndingGame
+            RoundEnd,
+            GameEnd
         }
 
         public enum PeerMessageId
@@ -58,7 +58,7 @@ namespace Bomberman.Game.Multiplayer
             base.OnStart();
             GetPeer().SetPeerListener(this);
 
-            SetState(State.StartingRound);
+            SetState(State.RoundStart);
         }
 
         protected override void OnStop()
@@ -451,17 +451,17 @@ namespace Bomberman.Game.Multiplayer
 
         protected bool IsStartingRound()
         {
-            return m_state == State.StartingRound;
+            return m_state == State.RoundStart;
         }
 
         protected bool IsEndingRound()
         {
-            return m_state == State.EndingRound;
+            return m_state == State.RoundEnd;
         }
 
         protected bool IsEndingGame()
         {
-            return m_state == State.EndingGame;
+            return m_state == State.GameEnd;
         }
 
         protected virtual void OnStateChanged(State oldState, State newState)

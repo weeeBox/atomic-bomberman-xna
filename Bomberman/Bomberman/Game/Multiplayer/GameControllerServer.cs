@@ -349,7 +349,7 @@ namespace Bomberman.Game.Multiplayer
 
         protected override void OnRoundEnded()
         {
-            SetState(State.EndingRound);
+            SetState(State.RoundEnd);
             for (int i = 0; i < networkPlayers.Count; ++i)
             {
                 networkPlayers[i].IsReady = false;
