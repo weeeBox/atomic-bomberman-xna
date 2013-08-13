@@ -305,6 +305,10 @@ namespace Bomberman.Game.Multiplayer
                         case CELL_FLAME:
                         {
                             int playerIndex = msg.ReadInt32(bitsForPlayerIndex);
+                            if (!slot.ContainsFlame())
+                            {
+                                throw new NotImplementedException();
+                            }
                             break;
                         }
                     }

@@ -79,10 +79,10 @@ namespace Bomberman.Game.Elements.Fields
             return movableCells.Size();
         }
 
-        //public bool ContainsSolid()
-        //{
-        //    return Contains(FieldCellType.Solid);
-        //}
+        public bool ContainsSolid()
+        {
+            return GetSolid() != null;
+        }
 
         public bool IsEmpty()
         {
@@ -94,10 +94,10 @@ namespace Bomberman.Game.Elements.Fields
             return staticCell != null ? staticCell.AsSolid() : null;
         }
 
-        //public bool ContainsBrick()
-        //{
-        //    return Contains(FieldCellType.Brick);
-        //}
+        public bool ContainsBrick()
+        {
+            return GetBrick() != null;
+        }
 
         public BrickCell GetBrick()
         {
@@ -114,20 +114,20 @@ namespace Bomberman.Game.Elements.Fields
             return staticCell != null ? staticCell.AsPowerup() : null;
         }
 
-        //public bool ContainsFlame()
-        //{
-        //    return Contains(FieldCellType.Flame);
-        //}
+        public bool ContainsFlame()
+        {
+            return GetFlame() != null;
+        }
 
         public FlameCell GetFlame()
         {
             return staticCell != null ? staticCell.AsFlame() : null;
         }
 
-        //public bool ContainsBomb()
-        //{
-        //    return Contains(FieldCellType.Bomb);
-        //}
+        public bool ContainsBomb()
+        {
+            return GetBomb() != null;
+        }
 
         public Bomb GetBomb()
         {
