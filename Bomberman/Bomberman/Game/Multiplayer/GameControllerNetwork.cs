@@ -82,20 +82,6 @@ namespace Bomberman.Game.Multiplayer
 
         protected void WriteFieldState(NetOutgoingMessage response, Player senderPlayer)
         {
-            Field field = game.Field;
-            Debug.Assert(field != null);
-
-            // powerups
-            FieldCellSlot[] slots = field.GetCells().slots;
-            for (int i = 0; i < slots.Length; ++i)
-            {
-                BrickCell brick = slots[i].GetBrick();
-                if (brick != null)
-                {
-                    response.Write((byte)brick.powerup);
-                }
-            }
-
             // players
             List<Player> players = game.GetPlayers().list;
 
@@ -114,20 +100,6 @@ namespace Bomberman.Game.Multiplayer
 
         protected void ReadFieldState(NetIncomingMessage response)
         {
-            Field field = game.Field;
-            Debug.Assert(field != null);
-
-            // powerups
-            FieldCellSlot[] slots = field.GetCells().slots;
-            for (int i = 0; i < slots.Length; ++i)
-            {
-                BrickCell brick = slots[i].GetBrick();
-                if (brick != null)
-                {
-                    brick.powerup = response.ReadByte();
-                }
-            }
-
             // players
             int senderIndex = response.ReadByte();
             int playersCount = response.ReadByte();

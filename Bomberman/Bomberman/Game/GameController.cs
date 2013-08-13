@@ -99,6 +99,7 @@ namespace Bomberman.Game
 
             RegisterNotification(GameNotifications.RoundEnded, RoundEndedNotification);
             RegisterNotification(GameNotifications.GameEnded, GameEndedNotification);
+            RegisterNotification(GameNotifications.RoundRestarted, RoundRestartedNotification);
         }
 
         protected override void OnStop()
@@ -169,6 +170,12 @@ namespace Bomberman.Game
             OnRoundEnded();
         }
 
+        private void RoundRestartedNotification(Notification notification)
+        {
+            Log.d("Round restarted");
+            OnRoundRestarted();
+        }
+
         private void GameEndedNotification(Notification notification)
         {
             Log.d("Game ended");
@@ -211,6 +218,10 @@ namespace Bomberman.Game
         protected virtual void OnRoundEnded()
         {
             StartNextScreen(new RoundResultScreen(RoundResultScreenButtonDelegate));
+        }
+
+        protected virtual void OnRoundRestarted()
+        {
         }
 
         protected virtual void OnGameEnded()

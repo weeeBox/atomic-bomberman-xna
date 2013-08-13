@@ -14,8 +14,9 @@ namespace Bomberman.Game
 {
     public class GameNotifications
     {
-        public static readonly String RoundEnded = "Game Ended";
-        public static readonly String GameEnded  = "Round Ended";
+        public static readonly String RoundEnded     = "RoundEnded";
+        public static readonly String RoundRestarted = "RoundRestarted";
+        public static readonly String GameEnded      = "GameEnded";
     }
 
     public enum MultiplayerMode
@@ -80,6 +81,7 @@ namespace Bomberman.Game
         public void Restart()
         {
             m_field.Restart(m_currentScheme);
+            PostNotificationImmediately(GameNotifications.RoundEnded);
         }
 
         public void StartNextRound()

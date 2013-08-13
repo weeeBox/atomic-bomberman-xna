@@ -358,6 +358,17 @@ namespace Bomberman.Game.Multiplayer
             base.OnRoundEnded();
         }
 
+        protected override void OnRoundRestarted()
+        {
+            SetState(State.RoundEnd);
+            for (int i = 0; i < networkPlayers.Count; ++i)
+            {
+                networkPlayers[i].IsReady = false;
+            }
+
+            base.OnRoundRestarted();
+        }
+
         //////////////////////////////////////////////////////////////////////////////
 
         #region Game state
