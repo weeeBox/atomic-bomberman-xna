@@ -280,7 +280,7 @@ namespace Bomberman.Game.Multiplayer
 
         private void ClientDisconnectedNotification(Notification notification)
         {
-            NetConnection connection = notification.GetData2<NetConnection>();
+            NetConnection connection = notification.GetData<NetConnection>();
 
             Player player = FindPlayer(connection);
             Debug.Assert(player != null);
