@@ -95,8 +95,12 @@ namespace Bomberman.Game.Elements.Players
             m_thrownBombs.Clear();
             m_winsCount = 0;
             m_suicidesCount = 0;
+        }
+
+        public override void Destroy()
+        {
+            base.Destroy();
             m_connection = null;
-            m_lastAckPacketId = 0;
         }
 
         //////////////////////////////////////////////////////////////////////////////

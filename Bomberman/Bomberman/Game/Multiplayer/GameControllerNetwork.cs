@@ -307,7 +307,7 @@ namespace Bomberman.Game.Multiplayer
                             int playerIndex = msg.ReadInt32(bitsForPlayerIndex);
                             if (!slot.ContainsFlame())
                             {
-                                throw new NotImplementedException();
+                                
                             }
                             break;
                         }

@@ -81,7 +81,7 @@ namespace Bomberman.Game
         public void Restart()
         {
             m_field.Restart(m_currentScheme);
-            PostNotificationImmediately(GameNotifications.RoundEnded);
+            PostNotificationImmediately(GameNotifications.RoundRestarted);
         }
 
         public void StartNextRound()

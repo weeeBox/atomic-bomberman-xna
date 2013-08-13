@@ -131,10 +131,14 @@ namespace Bomberman.Game.Multiplayer
         {
             if (IsStartingRound())
             {
-                if (game == null)
+                if (m_localPlayer == null || !m_localPlayer.IsReady)
                 {
-                    OnFieldStateReceived(peer, msg);
+                    OnFieldStateReceived(peer, msg);                
                 }
+            }
+            else if (IsEndingRound())
+            {
+                OnFieldStateReceived(peer, msg);
             }
             else
             {

@@ -127,10 +127,9 @@ namespace Bomberman.Game.Multiplayer
             }
             else if (IsStartingRound())
             {
-                List<Player> players = game.GetPlayersList();
-                for (int i = 0; i < players.Count; ++i)
+                for (int i = 0; i < networkPlayers.Count; ++i)
                 {
-                    Player player = players[i];
+                    Player player = networkPlayers[i];
                     if (!player.IsReady)
                     {
                         NetOutgoingMessage message = CreateMessage(PeerMessageId.RoundStart);
@@ -222,45 +221,51 @@ namespace Bomberman.Game.Multiplayer
 
         private void ReadRoundStartMessage(Peer peer, NetIncomingMessage msg)
         {
-            Player player = FindPlayer(msg.SenderConnection);
-            player.IsReady = msg.ReadBoolean();
-
-            bool allPlayersAreReady = true;
-            for (int i = 0; i < networkPlayers.Count; ++i)
+            if (IsStartingRound())
             {
-                if (!networkPlayers[i].IsReady)
+                Player player = FindPlayer(msg.SenderConnection);
+                player.IsReady = msg.ReadBoolean();
+
+                bool allPlayersAreReady = true;
+                for (int i = 0; i < networkPlayers.Count; ++i)
                 {
-                    allPlayersAreReady = false;
-                    break;
+                    if (!networkPlayers[i].IsReady)
+                    {
+                        allPlayersAreReady = false;
+                        break;
+                    }
                 }
-            }
 
-            if (allPlayersAreReady)
-            {
-                Log.d("All players are ready");
-                SetState(State.Playing);
+                if (allPlayersAreReady)
+                {
+                    Log.d("All players are ready");
+                    SetState(State.Playing);
+                }
             }
         }
 
         private void ReadRoundEndMessage(Peer peer, NetIncomingMessage msg)
         {
-            Player player = FindPlayer(msg.SenderConnection);
-            player.IsReady = msg.ReadBoolean();
-
-            bool allPlayersAreReady = true;
-            for (int i = 0; i < networkPlayers.Count; ++i)
+            if (IsEndingRound())
             {
-                if (!networkPlayers[i].IsReady)
+                Player player = FindPlayer(msg.SenderConnection);
+                player.IsReady = msg.ReadBoolean();
+
+                bool allPlayersAreReady = true;
+                for (int i = 0; i < networkPlayers.Count; ++i)
                 {
-                    allPlayersAreReady = false;
-                    break;
+                    if (!networkPlayers[i].IsReady)
+                    {
+                        allPlayersAreReady = false;
+                        break;
+                    }
                 }
-            }
 
-            if (allPlayersAreReady)
-            {
-                Log.d("All players are ready");
-                throw new NotImplementedException();
+                if (allPlayersAreReady)
+                {
+                    Log.d("All players are ready");
+                    game.StartNextRound();
+                }
             }
         }
 
@@ -360,7 +365,7 @@ namespace Bomberman.Game.Multiplayer
 
         protected override void OnRoundRestarted()
         {
-            SetState(State.RoundEnd);
+            SetState(State.RoundStart);
             for (int i = 0; i < networkPlayers.Count; ++i)
             {
                 networkPlayers[i].IsReady = false;
@@ -368,7 +373,7 @@ namespace Bomberman.Game.Multiplayer
 
             base.OnRoundRestarted();
         }
-
+        
         //////////////////////////////////////////////////////////////////////////////
 
         #region Game state
