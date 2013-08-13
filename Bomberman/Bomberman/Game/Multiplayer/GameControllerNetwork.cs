@@ -285,12 +285,20 @@ namespace Bomberman.Game.Multiplayer
                         {
                             bool hasPowerup = msg.ReadBoolean();
                             int powerup = hasPowerup ? msg.ReadInt32(BITS_FOR_POWERUP) : Powerups.None;
+                            if (powerup != Powerups.None)
+                            {
+                                slot.GetBrick().powerup = powerup;
+                            }
                             break;
                         }
 
                         case CELL_POWERUP:
                         {
                             int powerup = msg.ReadInt32(BITS_FOR_POWERUP);
+                            if (!slot.ContainsPowerup())
+                            {
+                                field.AddCell(new PowerupCell(powerup, slot.cx, slot.cy));
+                            }
                             break;
                         }
 

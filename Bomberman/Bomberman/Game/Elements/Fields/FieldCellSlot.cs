@@ -104,10 +104,10 @@ namespace Bomberman.Game.Elements.Fields
             return staticCell != null ? staticCell.AsBrick() : null;
         }
 
-        //public bool ContainsPowerup()
-        //{
-        //    return Contains(FieldCellType.Powerup);
-        //}
+        public bool ContainsPowerup()
+        {
+            return GetPowerup() != null;
+        }
 
         public PowerupCell GetPowerup()
         {
