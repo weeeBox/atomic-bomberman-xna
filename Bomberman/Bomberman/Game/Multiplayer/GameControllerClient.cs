@@ -129,20 +129,10 @@ namespace Bomberman.Game.Multiplayer
 
         private void ReadRoundStartMessage(Peer peer, NetIncomingMessage msg)
         {
-            if (IsStartingRound())
-            {
-                if (m_localPlayer == null || !m_localPlayer.IsReady)
-                {
-                    OnFieldStateReceived(peer, msg);                
-                }
-            }
-            else if (IsEndingRound())
+            if (m_localPlayer == null || m_localPlayer.IsAcceptsRoundStart)
             {
                 OnFieldStateReceived(peer, msg);
-            }
-            else
-            {
-                Log.d("Ignoring round start message");
+                m_localPlayer.IsAcceptsRoundStart = false;
             }
         }
 
@@ -154,16 +144,19 @@ namespace Bomberman.Game.Multiplayer
 
         private void ReadPlayingMessage(Peer peer, NetIncomingMessage msg)
         {
-            Debug.Assert(game != null);
-            Debug.Assert(m_localPlayer != null && m_localPlayer.IsReady);
-
-            SetState(State.Playing);
-            
-            ReadServerIngameChunk(msg);
-
-            if (!CVars.sv_dumbClient.boolValue)
+            if (!IsEndingRound() && !IsEndingGame())
             {
-                ReplayPlayerActions(m_localPlayer);
+                Debug.Assert(game != null);
+                Debug.Assert(m_localPlayer != null && m_localPlayer.IsReady);
+
+                SetState(State.Playing);
+
+                ReadServerIngameChunk(msg);
+
+                if (!CVars.sv_dumbClient.boolValue)
+                {
+                    ReplayPlayerActions(m_localPlayer);
+                }
             }
         }
 
@@ -194,7 +187,12 @@ namespace Bomberman.Game.Multiplayer
 
         private void ReadRoundEndMessage(Peer peer, NetIncomingMessage msg)
         {
-            SetState(State.RoundEnd);
+            Debug.Assert(m_localPlayer != null);
+            if (m_localPlayer.IsAcceptsRoundEnd)
+            {
+                m_localPlayer.IsAcceptsRoundEnd = false;
+                SetState(State.RoundEnd);
+            }
         }
 
         private void WriteRoundEndMessage(NetBuffer buffer)
@@ -214,9 +212,9 @@ namespace Bomberman.Game.Multiplayer
             SetupField(settings.scheme);
             ReadFieldState(message);
 
-            gameScreen = new GameScreen();
-
+            bool shouldBeReady = m_localPlayer == null;
             m_localPlayer = null;
+
             List<Player> players = game.GetPlayers().list;
             for (int i = 0; i < players.Count; ++i)
             {
@@ -229,16 +227,9 @@ namespace Bomberman.Game.Multiplayer
                 }
             }
 
-            Client client = peer as Client;
-
             Debug.Assert(m_localPlayer != null);
-            m_localPlayer.connection = client.RemoteConnection;
-            m_localPlayer.IsReady = true;
-
-            StartScreen(gameScreen);
-
-            gameScreen.AddDebugView(new NetworkTraceView(client.RemoteConnection));
-            gameScreen.AddDebugView(new LocalPlayerView(m_localPlayer));
+            m_localPlayer.IsReady = shouldBeReady;
+            m_localPlayer.connection = peer.RemoteConnection;
         }
 
         #endregion
@@ -250,9 +241,30 @@ namespace Bomberman.Game.Multiplayer
             switch (newState)
             {
                 case State.RoundEnd:
+                {
+                    Debug.Assert(oldState == State.Playing, "Unexpected old state: " + oldState);
+
                     m_localPlayer.IsReady = false;
                     OnRoundEnded();
                     break;
+                }
+
+                case State.Playing:
+                {
+                    Debug.Assert(oldState == State.RoundStart, "Unexpected old state: " + oldState);
+
+                    gameScreen = new GameScreen();
+                    StartScreen(gameScreen);
+
+                    Debug.Assert(m_localPlayer != null);
+                    Debug.Assert(m_localPlayer.connection != null);
+
+                    m_localPlayer.IsAcceptsRoundStart = true; // for round restart support
+
+                    gameScreen.AddDebugView(new NetworkTraceView(m_localPlayer.connection));
+                    gameScreen.AddDebugView(new LocalPlayerView(m_localPlayer));
+                    break;
+                }
             }
         }
 

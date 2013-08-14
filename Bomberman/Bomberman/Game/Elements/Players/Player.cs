@@ -32,7 +32,10 @@ namespace Bomberman.Game.Elements.Players
         private int m_triggerBombsCount;
 
         private bool m_alive;
+
         private bool m_ready;
+        private bool m_acceptsRoundStart;
+        private bool m_acceptsRoundEnd;
 
         private PlayerInput m_input;
         private BombList m_bombs;
@@ -73,6 +76,8 @@ namespace Bomberman.Game.Elements.Players
             InitPlayer();
 
             m_thrownBombs = new List<Bomb>();
+
+            ResetNetworkState();
         }
 
         public override void Reset()
@@ -84,7 +89,6 @@ namespace Bomberman.Game.Elements.Players
             SetCell(0, 0);
 
             m_alive = true;
-            m_ready = false;
 
             ResetPowerups();
             ResetBombs();
@@ -95,6 +99,15 @@ namespace Bomberman.Game.Elements.Players
             m_thrownBombs.Clear();
             m_winsCount = 0;
             m_suicidesCount = 0;
+
+            ResetNetworkState();
+        }
+
+        public void ResetNetworkState()
+        {
+            m_ready = false;
+            m_acceptsRoundStart = true;
+            m_acceptsRoundEnd = true;
         }
 
         public override void Destroy()
@@ -1434,6 +1447,18 @@ namespace Bomberman.Game.Elements.Players
         {
             get { return m_ready; }
             set { m_ready = value; }
+        }
+
+        public bool IsAcceptsRoundStart
+        {
+            get { return m_acceptsRoundStart; }
+            set { m_acceptsRoundStart = value; }
+        }
+
+        public bool IsAcceptsRoundEnd
+        {
+            get { return m_acceptsRoundEnd; }
+            set { m_acceptsRoundEnd = value; }
         }
 
         public float errDx

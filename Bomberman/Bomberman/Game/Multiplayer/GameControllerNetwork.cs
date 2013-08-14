@@ -428,6 +428,11 @@ namespace Bomberman.Game.Multiplayer
             }
         }
 
+        protected State GetState()
+        {
+            return m_state;
+        }
+
         protected bool IsPlaying()
         {
             return m_state == State.Playing;
