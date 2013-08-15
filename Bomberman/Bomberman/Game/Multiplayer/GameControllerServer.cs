@@ -340,28 +340,6 @@ namespace Bomberman.Game.Multiplayer
             }
 
             StartScreen(new BlockingScreen("Waiting for clients..."));
-            Application.ScheduleTimerOnce(CheckPlayersReadyCallback, 0.5f, true);
-        }
-
-        private void CheckPlayersReadyCallback(Timer timer)
-        {
-            bool playersReady = true;
-
-            List<Player> players = game.GetPlayersList();
-            for (int i = 0; i < players.Count; ++i)
-            {
-                if (!players[i].IsReady)
-                {
-                    playersReady = false;
-                    break;
-                }
-            }
-
-            if (playersReady)
-            {
-                timer.Cancel();
-                StartNextRound();
-            }
         }
 
         protected override void OnStateChanged(GameControllerNetwork.State oldState, GameControllerNetwork.State newState)

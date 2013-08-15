@@ -614,8 +614,8 @@ namespace BomberEngine.Game
             if (m_debugViews == null)
             {
                 m_debugViews = new List<View>();
-                m_debugViews.Add(view);
             }
+            m_debugViews.Add(view);
         }
 
         [System.Diagnostics.Conditional("DEBUG_VIEW")]
