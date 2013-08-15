@@ -21,11 +21,13 @@ namespace Bomberman.Game.Screens
 {
     public class GameScreen : Screen
     {
-        private ImageView fieldBackground;        
+        private ImageView fieldBackground;
+        private Field m_field;
 
         public GameScreen()
         {
             Field field = Game.Current.Field;
+            m_field = field;
             
             AddUpdatable(field);
 
@@ -46,6 +48,12 @@ namespace Bomberman.Game.Screens
         protected override void OnStart()
         {
             RegisterNotification(Notifications.ConsoleVisiblityChanged, ConsoleVisiblityChangedNotification);
+        }
+
+        protected override void OnStop()
+        {
+            m_field.CancelAllTimers();
+            base.OnStop();
         }
 
         protected override bool OnCancelPressed(KeyEventArg arg)

@@ -1040,6 +1040,11 @@ namespace Bomberman.Game.Elements.Fields
             timerManager.CancelAll(target);
         }
 
+        public void CancelAllTimers()
+        {
+            timerManager.CancelAll();
+        }
+
         #endregion
     }
 }

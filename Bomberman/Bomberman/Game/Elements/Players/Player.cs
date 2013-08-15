@@ -97,8 +97,6 @@ namespace Bomberman.Game.Elements.Players
             ResetAnimation();
             
             m_thrownBombs.Clear();
-            m_winsCount = 0;
-            m_suicidesCount = 0;
 
             ResetNetworkState();
         }
