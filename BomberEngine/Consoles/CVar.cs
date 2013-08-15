@@ -9,8 +9,9 @@ namespace BomberEngine.Consoles
     public enum CFlags
     {   
         Readonly = 1,
-        Debug = 2,
-        Hidden = 4
+        Debug    = 2,
+        Hidden   = 4,
+        DontSave = 8,
     }
 
     public class CVar
@@ -31,6 +32,7 @@ namespace BomberEngine.Consoles
         private float m_floatValue;
 
         private VarType m_type;
+        private CFlags m_flags;
 
         public CVar(String name, int defaultValue, CFlags flags = 0)
             : this(name, StringUtils.ToString(defaultValue), VarType.Integer, flags)
@@ -57,6 +59,7 @@ namespace BomberEngine.Consoles
             m_name = name;
             m_defaultValue = defaultValue;
             m_type = type;
+            m_flags = flags;
 
             SetValue(defaultValue);
         }
@@ -167,6 +170,11 @@ namespace BomberEngine.Consoles
         public bool IsDefault()
         {
             return m_value == m_defaultValue;
+        }
+
+        public bool HasFlag(CFlags flag)
+        {
+            return (m_flags & flag) != 0;
         }
     }
 }

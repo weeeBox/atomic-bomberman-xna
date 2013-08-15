@@ -98,7 +98,11 @@ namespace BomberEngine.Consoles
         {
             if (manual)
             {
-                console.ScheduleConfigUpdate();
+                if (!cvar.HasFlag(CFlags.DontSave))
+                {
+                    console.ScheduleConfigUpdate();
+                }
+                
                 PostNotification(Notifications.ConsoleVariableChanged, cvar);
                 return true;
             }

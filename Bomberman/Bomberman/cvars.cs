@@ -92,6 +92,12 @@ namespace Bomberman
         public static readonly CVar g_drawHiddenPowerups = new CVar("g_drawHiddenPowerups", 0, CFlags.Debug);
         public static readonly CVar g_startupMultiplayerMode = new CVar("g_startupMultiplayerMode", null, CFlags.Debug);
 
+        public static readonly CVar d_breakPoint1 = new CVar("d_breakPoint1", 0, CFlags.Debug|CFlags.DontSave);
+        public static readonly CVar d_breakPoint2 = new CVar("d_breakPoint2", 0, CFlags.Debug|CFlags.DontSave);
+        public static readonly CVar d_breakPoint3 = new CVar("d_breakPoint3", 0, CFlags.Debug|CFlags.DontSave);
+        public static readonly CVar d_breakPoint4 = new CVar("d_breakPoint4", 0, CFlags.Debug|CFlags.DontSave);
+        public static readonly CVar d_breakPoint5 = new CVar("d_breakPoint5", 0, CFlags.Debug|CFlags.DontSave);
+
         /* Network */
         public static readonly CVar sv_port = new CVar("sv_port", 1334);
         public static readonly CVar sv_appId = new CVar("sv_appId", "bomberman");
@@ -161,6 +167,12 @@ namespace Bomberman
             g_drawPlayerMovable,
             g_drawHiddenPowerups,
             g_startupMultiplayerMode,
+
+            d_breakPoint1,
+            d_breakPoint2,
+            d_breakPoint3,
+            d_breakPoint4,
+            d_breakPoint5,
         };
 
         private static readonly CVar[] cheatVars =
@@ -191,7 +203,11 @@ namespace Bomberman
             console.RegisterCvars(powerupsInitials);
             console.RegisterCvars(powerupsMax);
             console.RegisterCvars(powerupsCount);
+
+            #if DEBUG
             console.RegisterCvars(debugVars);
+            #endif
+
             console.RegisterCvars(serverVars);
             console.RegisterCvars(cheatVars);
 
