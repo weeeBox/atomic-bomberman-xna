@@ -249,6 +249,16 @@ namespace Bomberman.Game
             get { return Game.Current.Field; }
         }
 
+        protected List<Player> GetPlayerList()
+        {
+            return game.GetPlayersList();
+        }
+
+        protected PlayerList GetPlayers()
+        {
+            return game.GetPlayers();
+        }
+
         #endregion
     }
 

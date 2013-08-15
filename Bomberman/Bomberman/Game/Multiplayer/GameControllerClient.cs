@@ -144,19 +144,28 @@ namespace Bomberman.Game.Multiplayer
 
         private void ReadPlayingMessage(Peer peer, NetIncomingMessage msg)
         {
-            if (!IsEndingRound() && !IsEndingGame())
+            Debug.Assert(game != null);
+            Debug.Assert(m_localPlayer != null && m_localPlayer.IsReady);
+
+            if (IsEndingRound())
             {
-                Debug.Assert(game != null);
-                Debug.Assert(m_localPlayer != null && m_localPlayer.IsReady);
-
-                SetState(State.Playing);
-
-                ReadServerIngameChunk(msg);
-
-                if (!CVars.sv_dumbClient.boolValue)
+                game.SetupField(settings.scheme);
+                List<Player> players = GetPlayerList();
+                for (int i = 0; i < players.Count; ++i)
                 {
-                    ReplayPlayerActions(m_localPlayer);
+                    players[i].Reset();
+                    players[i].IsReady = true;
+                    game.Field.AddCell(players[i]);
                 }
+            }
+
+            SetState(State.Playing);
+
+            ReadPlayingMessage(msg);
+
+            if (!CVars.sv_dumbClient.boolValue)
+            {
+                ReplayPlayerActions(m_localPlayer);
             }
         }
 
@@ -190,6 +199,8 @@ namespace Bomberman.Game.Multiplayer
             Debug.Assert(m_localPlayer != null);
             if (m_localPlayer.IsAcceptsRoundEnd)
             {
+                ReadRoundEndMessage(msg);
+
                 m_localPlayer.IsAcceptsRoundEnd = false;
                 SetState(State.RoundEnd);
             }
@@ -251,8 +262,6 @@ namespace Bomberman.Game.Multiplayer
 
                 case State.Playing:
                 {
-                    Debug.Assert(oldState == State.RoundStart, "Unexpected old state: " + oldState);
-
                     gameScreen = new GameScreen();
                     StartScreen(gameScreen);
 

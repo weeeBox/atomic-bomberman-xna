@@ -84,13 +84,34 @@ namespace Bomberman.Game.Elements.Players
             int count = 0;
             for (int i = 0; i < list.Count; ++i)
             {
-                if (list[i].IsAlive())
+                if (list[i].IsAlive)
                 {
                     ++count;
                 }
             }
 
             return count;
+        }
+
+        public bool AllPlayersAreReady()
+        {
+            for (int i = 0; i < list.Count; ++i)
+            {
+                if (!list[i].IsReady)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public void SetPlayersReady(bool ready)
+        {
+            for (int i = 0; i < list.Count; ++i)
+            {
+                list[i].IsReady = ready;
+            }
         }
 
         #endregion

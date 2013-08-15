@@ -42,7 +42,6 @@ namespace Bomberman.Game.Multiplayer
             RoundStart,
             Playing,
             RoundEnd,
-            GameEnd,
         }
 
         private State m_state;
@@ -71,8 +70,6 @@ namespace Bomberman.Game.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Protocol
-
         private const byte CELL_FLAME   = 0;
         private const byte CELL_BRICK   = 1;
         private const byte CELL_POWERUP = 2;
@@ -80,34 +77,55 @@ namespace Bomberman.Game.Multiplayer
         private static readonly int BITS_FOR_STATIC_CELL = NetUtility.BitsToHoldUInt(2);
         private static readonly int BITS_FOR_POWERUP = NetUtility.BitsToHoldUInt(Powerups.Count - 1);
 
-        protected void WriteFieldState(NetOutgoingMessage response, Player senderPlayer)
+        /* a client sends data to the server */
+        protected void WriteClientPacket(NetBuffer buffer, ref ClientPacket packet)
+        {
+            buffer.Write(packet.id);
+            buffer.Write(packet.lastAckServerPacketId);
+            buffer.Write(packet.actions, (int)PlayerAction.Count);
+        }
+
+        /* the server reads data from a client */
+        protected ClientPacket ReadClientPacket(NetBuffer msg)
+        {
+            ClientPacket packet;
+            packet.id = msg.ReadInt32();
+            packet.lastAckServerPacketId = msg.ReadInt32();
+            packet.actions = msg.ReadInt32((int)PlayerAction.Count);
+
+            return packet;
+        }
+
+        #region "RoundStart" message
+
+        protected void WriteFieldState(NetBuffer buffer, Player senderPlayer)
         {
             // players
             List<Player> players = game.GetPlayers().list;
 
             int senderIndex = players.IndexOf(senderPlayer);
             Debug.Assert(senderIndex != -1);
-            response.Write((byte)senderIndex);
+            buffer.Write((byte)senderIndex);
 
-            response.Write((byte)players.Count);
+            buffer.Write((byte)players.Count);
             for (int i = 0; i < players.Count; ++i)
             {
                 Player player = players[i];
-                response.Write((byte)player.cx);
-                response.Write((byte)player.cy);
+                buffer.Write((byte)player.cx);
+                buffer.Write((byte)player.cy);
             }
         }
 
-        protected void ReadFieldState(NetIncomingMessage response)
+        protected void ReadFieldState(NetBuffer buffer)
         {
             // players
-            int senderIndex = response.ReadByte();
-            int playersCount = response.ReadByte();
+            int senderIndex = buffer.ReadByte();
+            int playersCount = buffer.ReadByte();
             for (int i = 0; i < playersCount; ++i)
             {
                 Player player = new Player(i);
-                int cx = response.ReadByte();
-                int cy = response.ReadByte();
+                int cx = buffer.ReadByte();
+                int cy = buffer.ReadByte();
                 player.SetCell(cx, cy);
                 if (senderIndex != i)
                 {
@@ -118,38 +136,23 @@ namespace Bomberman.Game.Multiplayer
             }
         }
 
-        /* a client sends data to the server */
-        protected void WriteClientPacket(NetOutgoingMessage msg, ref ClientPacket packet)
-        {
-            msg.Write(packet.id);
-            msg.Write(packet.lastAckServerPacketId);
-            msg.Write(packet.actions, (int)PlayerAction.Count);
-        }
+        #endregion
 
-        /* the server reads data from a client */
-        protected ClientPacket ReadClientPacket(NetIncomingMessage msg)
-        {
-            ClientPacket packet;
-            packet.id = msg.ReadInt32();
-            packet.lastAckServerPacketId = msg.ReadInt32();
-            packet.actions = msg.ReadInt32((int)PlayerAction.Count);
-
-            return packet;
-        }
+        #region "Playing" message
 
         /* the server sends data to a client */
-        protected void WriteServerIngameChunk(NetBuffer buffer)
+        protected void WritePlayingMessage(NetBuffer buffer)
         {
-            WriteServerIngameChunk(buffer, game.Field);
+            WriteFieldState(buffer, game.Field);
              
             List<Player> players = game.GetPlayers().list;
             for (int i = 0; i < players.Count; ++i)
             {
-                WriteServerIngameChunk(buffer, players[i]);
+                WritePlayerState(buffer, players[i]);
             }
         }
 
-        private void WriteServerIngameChunk(NetBuffer buffer, Field field)
+        private void WriteFieldState(NetBuffer buffer, Field field)
         {
             int bitsForPlayerIndex = NetUtility.BitsToHoldUInt((uint)(field.GetPlayers().GetCount()-1));
 
@@ -195,9 +198,9 @@ namespace Bomberman.Game.Multiplayer
             }
         }
 
-        private void WriteServerIngameChunk(NetBuffer buffer, Player p)
+        private void WritePlayerState(NetBuffer buffer, Player p)
         {
-            bool alive = p.IsAlive();
+            bool alive = p.IsAlive;
             buffer.Write(alive);
             if (alive)
             {
@@ -235,11 +238,11 @@ namespace Bomberman.Game.Multiplayer
             Bomb[] bombs = p.bombs.array;
             for (int i = 0; i < bombs.Length; ++i)
             {
-                WriteServerIngameChunk(buffer, bombs[i]);
+                WriteBombState(buffer, bombs[i]);
             }
         }
 
-        private void WriteServerIngameChunk(NetBuffer msg, Bomb b)
+        private void WriteBombState(NetBuffer msg, Bomb b)
         {
             msg.Write(b.isActive);
             if (b.isActive)
@@ -255,18 +258,18 @@ namespace Bomberman.Game.Multiplayer
         }
 
         /* a client reads data from the server */
-        protected void ReadServerIngameChunk(NetIncomingMessage msg)
+        protected void ReadPlayingMessage(NetIncomingMessage msg)
         {
-            ReadServerIngameChunk(msg, game.Field);
+            ReadFieldState(msg, game.Field);
 
             List<Player> players = game.GetPlayers().list;
             for (int i = 0; i < players.Count; ++i)
             {
-                ReadServerIngameChunk(msg, players[i]);
+                ReadPlayerState(msg, players[i]);
             }
         }
 
-        private void ReadServerIngameChunk(NetIncomingMessage msg, Field field)
+        private void ReadFieldState(NetBuffer msg, Field field)
         {
             int bitsForPlayerIndex = NetUtility.BitsToHoldUInt((uint)(field.GetPlayers().GetCount() - 1));
 
@@ -320,7 +323,7 @@ namespace Bomberman.Game.Multiplayer
             }
         }
 
-        private void ReadServerIngameChunk(NetIncomingMessage msg, Player p)
+        private void ReadPlayerState(NetIncomingMessage msg, Player p)
         {
             bool alive = msg.ReadBoolean();
             if (alive)
@@ -367,7 +370,7 @@ namespace Bomberman.Game.Multiplayer
                     }
                 }
             }
-            else if (p.IsAlive())
+            else if (p.IsAlive)
             {
                 Field.KillPlayer(p);
             }
@@ -375,11 +378,11 @@ namespace Bomberman.Game.Multiplayer
             Bomb[] bombs = p.bombs.array;
             for (int i = 0; i < bombs.Length; ++i)
             {
-                ReadServerIngameChunk(msg, p, bombs[i]);
+                ReadBombState(msg, p, bombs[i]);
             }
         }
 
-        private void ReadServerIngameChunk(NetIncomingMessage msg, Player p, Bomb b)
+        private void ReadBombState(NetIncomingMessage msg, Player p, Bomb b)
         {
             bool active = msg.ReadBoolean();
             if (active)
@@ -414,6 +417,33 @@ namespace Bomberman.Game.Multiplayer
 
         #endregion
 
+        #region "RoundEnd" message
+
+        protected void WriteRoundEndMessage(NetBuffer buffer)
+        {
+            List<Player> players = GetPlayerList();
+            for (int i = 0; i < players.Count; ++i)
+            {
+                buffer.Write(players[i].IsReady);
+            }
+        }
+
+        protected void ReadRoundEndMessage(NetBuffer buffer)
+        {
+            List<Player> players = GetPlayerList();
+            for (int i = 0; i < players.Count; ++i)
+            {
+                bool ready = buffer.ReadBoolean();
+                Player player = players[i];
+                if (player.IsNetworkPlayer)
+                {
+                    player.IsReady = ready;
+                }
+            }
+        }
+
+        #endregion
+        
         //////////////////////////////////////////////////////////////////////////////
 
         #region State management

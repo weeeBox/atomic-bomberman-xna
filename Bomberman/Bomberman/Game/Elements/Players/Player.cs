@@ -124,7 +124,7 @@ namespace Bomberman.Game.Elements.Players
         {
             base.Update(delta);
 
-            if (IsAlive())
+            if (IsAlive)
             {
                 UpdateInput(delta);
 
@@ -440,7 +440,7 @@ namespace Bomberman.Game.Elements.Players
 
         private bool HandleCollision(FlameCell flame)
         {
-            if (IsAlive())
+            if (IsAlive)
             {
                 GetField().KillPlayer(this);
                 return true;
@@ -1170,7 +1170,7 @@ namespace Bomberman.Game.Elements.Players
             PlayerAnimations.Id currentId = (PlayerAnimations.Id)m_currentAnimation.id;
             AnimationInstance.Mode mode = AnimationInstance.Mode.Looped;
 
-            if (IsAlive())
+            if (IsAlive)
             {
                 if (IsPunchingBomb)
                 {
@@ -1243,7 +1243,7 @@ namespace Bomberman.Game.Elements.Players
             {
                 case PlayerAnimations.Id.Die:
                 {
-                    Debug.Assert(!IsAlive());
+                    Debug.Assert(!IsAlive);
                     RemoveFromField();
                     break;
                 }
@@ -1428,9 +1428,10 @@ namespace Bomberman.Game.Elements.Players
 
         #region Getters/Setters
 
-        public bool IsAlive()
+        public bool IsAlive
         {
-            return m_alive;
+            get { return m_alive; }
+            set { m_alive = value; }
         }
 
         public bool IsNetworkPlayer
