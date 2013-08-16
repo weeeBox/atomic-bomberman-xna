@@ -98,6 +98,41 @@ namespace Bomberman.Game.Multiplayer
 
         #region "RoundStart" message
 
+        protected void WriteBricksState(NetBuffer buffer)
+        {   
+            FieldCellSlot[] slots = game.Field.GetCells().slots;
+            for (int i = 0; i < slots.Length; ++i)
+            {
+                BrickCell brick = slots[i].GetBrick();
+                if (brick != null)
+                {
+                    bool hasPowerup = brick.HasPowerup();
+                    buffer.Write(hasPowerup);
+                    if (hasPowerup)
+                    {
+                        buffer.Write((byte)brick.powerup);
+                    }
+                }
+            }
+        }
+
+        protected void ReadBricksState(NetBuffer buffer)
+        {
+            FieldCellSlot[] slots = game.Field.GetCells().slots;
+            for (int i = 0; i < slots.Length; ++i)
+            {
+                BrickCell brick = slots[i].GetBrick();
+                if (brick != null)
+                {
+                    bool hasPowerup = buffer.ReadBoolean();
+                    if (hasPowerup)
+                    {
+                        brick.powerup = buffer.ReadByte();
+                    }
+                }
+            }
+        }
+
         protected void WriteFieldState(NetBuffer buffer, Player senderPlayer)
         {
             // players
@@ -134,6 +169,8 @@ namespace Bomberman.Game.Multiplayer
 
                 game.AddPlayer(player);
             }
+
+            ReadBricksState(buffer);
         }
 
         #endregion
@@ -160,8 +197,10 @@ namespace Bomberman.Game.Multiplayer
             for (int i = 0; i < slots.Length; ++i)
             {
                 FieldCell staticCell = slots[i].staticCell;
+
                 bool shouldWrite = staticCell != null && !staticCell.IsSolid();
                 buffer.Write(shouldWrite);
+
                 if (shouldWrite)
                 {   
                     switch (staticCell.type)
@@ -169,14 +208,7 @@ namespace Bomberman.Game.Multiplayer
                         case FieldCellType.Brick:
                         {
                             BrickCell brick = staticCell.AsBrick();
-                            bool hasPowerup = brick.powerup != Powerups.None;
-
                             buffer.Write(CELL_BRICK, BITS_FOR_STATIC_CELL);
-                            buffer.Write(hasPowerup);
-                            if (hasPowerup)
-                            {
-                                buffer.Write(brick.powerup, BITS_FOR_POWERUP);
-                            }
                             break;
                         }
                         case FieldCellType.Powerup:
@@ -192,7 +224,7 @@ namespace Bomberman.Game.Multiplayer
                             buffer.Write(CELL_FLAME, BITS_FOR_STATIC_CELL);
                             buffer.Write(flame.player.GetIndex(), bitsForPlayerIndex);
                             break;
-                        }
+                        }  
                     }
                 }
             }
@@ -286,20 +318,20 @@ namespace Bomberman.Game.Multiplayer
                     {
                         case CELL_BRICK:
                         {
-                            bool hasPowerup = msg.ReadBoolean();
-                            int powerup = hasPowerup ? msg.ReadInt32(BITS_FOR_POWERUP) : Powerups.None;
-                            if (powerup != Powerups.None)
-                            {
-                                slot.GetBrick().powerup = powerup;
-                            }
+                            Debug.Assert(slot.ContainsBrick());
                             break;
                         }
 
                         case CELL_POWERUP:
                         {
                             int powerup = msg.ReadInt32(BITS_FOR_POWERUP);
-                            if (!slot.ContainsPowerup())
+                            if (slot.staticCell == null)
                             {
+                                field.AddCell(new PowerupCell(powerup, slot.cx, slot.cy));
+                            }
+                            else if (!slot.staticCell.IsPowerup())
+                            {
+                                field.RemoveCell(slot.staticCell);
                                 field.AddCell(new PowerupCell(powerup, slot.cx, slot.cy));
                             }
                             break;
@@ -308,9 +340,16 @@ namespace Bomberman.Game.Multiplayer
                         case CELL_FLAME:
                         {
                             int playerIndex = msg.ReadInt32(bitsForPlayerIndex);
-                            if (!slot.ContainsFlame())
+                            if (slot.staticCell == null)
                             {
-                                
+                                Player player = field.GetPlayers().Get(playerIndex);
+                                field.AddCell(new FlameCell(player, slot.cx, slot.cy));
+                            }
+                            else if (!slot.staticCell.IsFlame())
+                            {
+                                Player player = field.GetPlayers().Get(playerIndex);
+                                field.RemoveCell(slot.staticCell);
+                                field.AddCell(new FlameCell(player, slot.cx, slot.cy));
                             }
                             break;
                         }
@@ -318,7 +357,7 @@ namespace Bomberman.Game.Multiplayer
                 }
                 else if (slot.staticCell != null && !slot.staticCell.IsSolid())
                 {
-                    slot.RemoveCell(slot.staticCell);
+                    field.RemoveCell(slot.staticCell);
                 }
             }
         }
@@ -411,7 +450,8 @@ namespace Bomberman.Game.Multiplayer
             }
             else if (b.isActive)
             {
-                b.Blow();
+                b.Deactivate();
+                b.RemoveFromField();
             }
         }
 

@@ -39,6 +39,11 @@ namespace Bomberman.Game.Elements.Cells
             }
         }
 
+        public bool HasPowerup()
+        {
+            return powerup != Powerups.None;
+        }
+
         public override BrickCell AsBrick()
         {
             return this;

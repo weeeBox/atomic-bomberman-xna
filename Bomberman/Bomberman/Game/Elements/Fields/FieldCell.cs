@@ -52,6 +52,11 @@ namespace Bomberman.Game.Elements.Fields
         {
         }
 
+        public virtual void UpdateDumb(float delta)
+        {
+            UpdateAnimation(delta);
+        }
+
         public void SetCell()
         {
             SetCell(cx, cy);

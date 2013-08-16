@@ -309,11 +309,16 @@ namespace Bomberman.Game.Elements.Cells
             UpdateAnimation();
         }
 
+        public void Deactivate()
+        {
+            m_active = false;
+        }
+
         public void Blow()
         {
             SetCell();
             StopMoving();
-            m_active = false;
+            Deactivate();
 
             GetField().BlowBomb(this);
         }

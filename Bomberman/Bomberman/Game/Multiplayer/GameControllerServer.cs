@@ -128,6 +128,9 @@ namespace Bomberman.Game.Multiplayer
             }
             else if (IsStartingRound())
             {
+                NetOutgoingMessage payload = CreateMessage();
+                WriteBricksState(payload);
+
                 for (int i = 0; i < networkPlayers.Count; ++i)
                 {
                     Player player = networkPlayers[i];
@@ -135,6 +138,7 @@ namespace Bomberman.Game.Multiplayer
                     {
                         NetOutgoingMessage message = CreateMessage(PeerMessageId.RoundStart);
                         WriteFieldState(message, player);
+                        message.Write(payload);
 
                         NetConnection connection = player.connection;
                         Debug.Assert(connection != null);
@@ -142,6 +146,8 @@ namespace Bomberman.Game.Multiplayer
                         SendMessage(message, connection);
                     }
                 }
+
+                RecycleMessage(payload);
             }
             else if (IsEndingRound())
             {

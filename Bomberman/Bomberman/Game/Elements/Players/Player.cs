@@ -142,6 +142,15 @@ namespace Bomberman.Game.Elements.Players
             }
         }
 
+        public override void UpdateDumb(float delta)
+        {
+            base.UpdateDumb(delta);
+            if (IsAlive)
+            {
+                UpdateInput(delta);
+            }
+        }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////

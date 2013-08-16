@@ -291,7 +291,7 @@ namespace Bomberman.Game.Elements.Fields
 
             if (IsGameDumbMuliplayerClient)
             {
-                UpdateAnimations(delta);
+                UpdateDumb(delta);
                 // the server sends game state: no need to calculate it
             }
             else
@@ -301,7 +301,7 @@ namespace Bomberman.Game.Elements.Fields
             }
         }
 
-        private void UpdateAnimations(float delta)
+        private void UpdateDumb(float delta)
         {
             FieldCellSlot[] slots = cells.slots;
             foreach (FieldCellSlot slot in slots)
@@ -313,7 +313,7 @@ namespace Bomberman.Game.Elements.Fields
             {
                 foreach (FieldCell cell in m_tempCellsList)
                 {
-                    cell.Update(delta);
+                    cell.UpdateDumb(delta);
                 }
                 m_tempCellsList.Clear();
             }
