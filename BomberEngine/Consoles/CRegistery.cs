@@ -107,6 +107,30 @@ namespace BomberEngine.Consoles
             return list;
         }
 
+        public CVarCommand FindCvarCommand(String name)
+        {
+            foreach (KeyValuePair<char, LinkedList<CCommand>> e in commandsLookup)
+            {
+                LinkedList<CCommand> commands = e.Value;
+                foreach (CCommand command in commands)
+                {
+                    CVarCommand varCommand = command as CVarCommand;
+                    if (varCommand != null && varCommand.cvar.name == name)
+                    {
+                        return varCommand;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public CVar FindCvar(String name)
+        {
+            CVarCommand cmd = FindCvarCommand(name);
+            return cmd != null ? cmd.cvar : null;
+        }
+
         public CCommand FindCommand(String name)
         {
             LinkedList<CCommand> list = FindList(name);

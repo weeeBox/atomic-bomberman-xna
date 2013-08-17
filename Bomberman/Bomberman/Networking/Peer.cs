@@ -59,8 +59,6 @@ namespace Bomberman.Networking
 
         protected virtual bool HandleMessage(NetPeer peer, NetIncomingMessage msg)
         {
-            Log.d(msg.MessageType != NetIncomingMessageType.Data, "Message received: " + msg.MessageType);
-
             switch (msg.MessageType)
             {
                 case NetIncomingMessageType.StatusChanged:

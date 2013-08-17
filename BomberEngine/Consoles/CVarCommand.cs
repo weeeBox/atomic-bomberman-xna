@@ -67,7 +67,7 @@ namespace BomberEngine.Consoles
             }
         }
 
-        private void SetValue(float value)
+        public void SetValue(float value)
         {
             if (cvar.floatValue != value)
             {
@@ -76,7 +76,7 @@ namespace BomberEngine.Consoles
             }
         }
 
-        private void SetValue(int value)
+        public void SetValue(int value)
         {
             if (cvar.intValue != value)
             {
@@ -85,7 +85,7 @@ namespace BomberEngine.Consoles
             }
         }
 
-        private void SetValue(String value)
+        public void SetValue(String value)
         {
             if (cvar.value != value)
             {
@@ -108,6 +108,56 @@ namespace BomberEngine.Consoles
             }
 
             return false;
+        }
+
+        public String value
+        {
+            get { return cvar.value; }
+        }
+
+        public String defaultValue
+        {
+            get { return cvar.defaultValue; }
+        }
+
+        public int intValue
+        {
+            get { return cvar.intValue; }
+        }
+
+        public float floatValue
+        {
+            get { return cvar.floatValue; }
+        }
+
+        public bool boolValue
+        {
+            get { return cvar.boolValue; }
+        }
+
+        public bool IsString()
+        {
+            return cvar.IsString();
+        }
+
+        public bool IsInt()
+        {
+            return cvar.IsInt();
+        }
+
+        public bool IsFloat()
+        {
+            return cvar.IsFloat();
+        }
+
+        public bool IsDefault()
+        {
+            return cvar.IsDefault();
+        }
+
+        public bool HasFlag(CFlags flag)
+        {
+            return cvar.HasFlag(flag);
         }
     }
 }

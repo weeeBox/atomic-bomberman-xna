@@ -458,6 +458,22 @@ namespace BomberEngine.Consoles
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Cvar lookup
+
+        public CVarCommand FindCvarCommand(String name)
+        {
+            return commands.FindCvarCommand(name);
+        }
+
+        public CVar FindCvar(String name)
+        {
+            return commands.FindCvar(name);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
         #region History
 
         private void PushHistory(String line)

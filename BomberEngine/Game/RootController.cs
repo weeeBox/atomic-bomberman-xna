@@ -148,6 +148,7 @@ namespace BomberEngine.Game
             console.RegisterCommand(new Cmd_unbind());
             console.RegisterCommand(new Cmd_unbind_all());
             console.RegisterCommand(new Cmd_bindlist());
+            console.RegisterCommand(new Cmd_ctoggle());
 
             console.RegisterCvar(CVars.g_drawViewBorders);
 

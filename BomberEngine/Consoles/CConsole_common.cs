@@ -279,6 +279,39 @@ namespace BomberEngine.Consoles
         }
     }
 
+    public class Cmd_ctoggle : CCommand
+    {
+        public Cmd_ctoggle()
+            : base("ctoggle")
+        {
+        }
+
+        public override void Execute()
+        {
+            if (ArgsCount() != 1)
+            {
+                Print("usage: " + name + " <cvar>");
+                return;
+            }
+
+            String cvarName = StrArg(0);
+            CVarCommand cmd = console.FindCvarCommand(cvarName);
+            if (cmd == null)
+            {
+                Print("Can't find cvar '" + cvarName + "'");
+                return;
+            }
+
+            if (!cmd.IsInt())
+            {
+                Print("Can't toggle non-int value");
+                return;
+            }
+
+            cmd.SetValue(cmd.boolValue ? 0 : 1);
+        }
+    }
+
     //////////////////////////////////////////////////////////////////////////////
 
     public class CVars
