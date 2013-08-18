@@ -106,7 +106,7 @@ namespace Bomberman.Game.Multiplayer
         private void SendServerPacket()
         {
             // TODO: refactor this code
-            if (IsPlaying())
+            if (IsIngame())
             {
                 NetOutgoingMessage payloadMessage = CreateMessage();
                 WritePlayingMessage(payloadMessage);
@@ -126,7 +126,7 @@ namespace Bomberman.Game.Multiplayer
 
                 RecycleMessage(payloadMessage);
             }
-            else if (IsStartingRound())
+            else if (IsWaitingIngame() || IsWaitingRoundStart())
             {
                 NetOutgoingMessage payload = CreateMessage();
                 WriteBricksState(payload);
@@ -149,7 +149,7 @@ namespace Bomberman.Game.Multiplayer
 
                 RecycleMessage(payload);
             }
-            else if (IsEndingRound())
+            else if (IsWaitingRoundRestart())
             {
                 NetOutgoingMessage payloadMessage = CreateMessage();
                 WriteRoundEndMessage(payloadMessage);
@@ -205,7 +205,7 @@ namespace Bomberman.Game.Multiplayer
 
         private void ReadRoundStartMessage(Peer peer, NetIncomingMessage msg)
         {
-            if (IsStartingRound())
+            if (IsWaitingRoundStart())
             {
                 Player player = FindPlayer(msg.SenderConnection);
                 player.IsReady = msg.ReadBoolean();
@@ -213,14 +213,14 @@ namespace Bomberman.Game.Multiplayer
                 if (player.IsReady && AllPlayersAreReady())
                 {
                     Log.d("Clients are ready to play");
-                    SetState(State.Playing);
+                    SetState(State.Ingame);
                 }
             }
         }
 
         private void ReadRoundEndMessage(Peer peer, NetIncomingMessage msg)
         {
-            if (IsEndingRound())
+            if (IsWaitingRoundRestart())
             {
                 Player player = FindPlayer(msg.SenderConnection);
                 player.IsReady = msg.ReadBoolean();
@@ -229,7 +229,7 @@ namespace Bomberman.Game.Multiplayer
                 {
                     Log.d("Clients are ready for the next round");
                     game.StartNextRound();
-                    SetState(State.Playing);
+                    SetState(State.Ingame);
                 }
             }
         }
@@ -319,18 +319,15 @@ namespace Bomberman.Game.Multiplayer
 
         protected override void OnRoundEnded()
         {
-            SetState(State.RoundEnd);
-            SetPlayersReady(false);
+            Debug.Assert(GetState() == State.Ingame);
 
-            base.OnRoundEnded();
+            SetPlayersReady(false);
+            SetState(State.WaitRoundRestart);
         }
 
         protected override void OnRoundRestarted()
         {
-            SetState(State.RoundStart);
-            SetPlayersReady(false);
-
-            base.OnRoundRestarted();
+            throw new NotImplementedException();
         }
 
         protected override void RoundResultScreenAccepted(RoundResultScreen screen)
@@ -348,27 +345,39 @@ namespace Bomberman.Game.Multiplayer
             StartScreen(new BlockingScreen("Waiting for clients..."));
         }
 
-        protected override void OnStateChanged(GameControllerNetwork.State oldState, GameControllerNetwork.State newState)
+        protected override void OnStateChanged(State oldState, State newState)
         {
             switch (newState)
             {
-                case State.RoundStart:
-                case State.RoundEnd:
-                case State.GameEnd:
+                case State.WaitRoundStart:
                 {
                     StartScreen(new BlockingScreen("Waiting for clients..."));
                     break;
                 }
 
-                case State.Playing:
+                case State.Ingame:
                 {
-                    Debug.Assert(oldState == State.RoundStart, "Unexpected old state: " + oldState);
+                    Debug.Assert(oldState == State.WaitRoundRestart || oldState == State.WaitRoundStart, "Unexpected old state: " + oldState);
                     Debug.Assert(!(CurrentScreen() is GameScreen));
 
                     gameScreen = new GameScreen();
                     StartScreen(gameScreen);
                     break;
-                }   
+                }
+
+                case State.WaitRoundRestart:
+                {
+                    Debug.Assert(oldState == State.Ingame, "Unexpected old state: " + oldState);
+
+                    StartRoundResultScreen();
+                    break;
+                }
+                  
+                default:
+                {
+                    Debug.Fail("Unexpected old state: " + newState);
+                    break;
+                }
             }
         }
         

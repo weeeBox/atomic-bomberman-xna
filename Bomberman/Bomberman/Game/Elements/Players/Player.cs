@@ -1457,18 +1457,6 @@ namespace Bomberman.Game.Elements.Players
             set { m_ready = value; }
         }
 
-        public bool IsAcceptsRoundStart
-        {
-            get { return m_acceptsRoundStart; }
-            set { m_acceptsRoundStart = value; }
-        }
-
-        public bool IsAcceptsRoundEnd
-        {
-            get { return m_acceptsRoundEnd; }
-            set { m_acceptsRoundEnd = value; }
-        }
-
         public float errDx
         {
             get { return m_errDx; }

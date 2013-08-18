@@ -31,10 +31,11 @@ namespace Bomberman.Game.Multiplayer
         protected enum State
         {
             Undefined,
-            RoundStart,
-            Playing,
-            RoundEnd,
-            GameEnd
+            WaitRoundStart,
+            WaitIngame,
+            Ingame,
+            WaitRoundResult,
+            WaitRoundRestart
         }
 
         public enum PeerMessageId
@@ -55,9 +56,9 @@ namespace Bomberman.Game.Multiplayer
         protected override void OnStart()
         {
             base.OnStart();
-            GetPeer().SetPeerListener(this);
 
-            SetState(State.RoundStart);
+            GetPeer().SetPeerListener(this);
+            SetState(State.WaitRoundStart);
         }
 
         protected override void OnStop()
@@ -494,6 +495,7 @@ namespace Bomberman.Game.Multiplayer
             {
                 State oldState = m_state;
                 m_state = state;
+                Log.d("Set state: " + state + " was " + oldState);
                 OnStateChanged(oldState, state);
             }
         }
@@ -503,24 +505,29 @@ namespace Bomberman.Game.Multiplayer
             return m_state;
         }
 
-        protected bool IsPlaying()
+        protected bool IsWaitingRoundStart()
         {
-            return m_state == State.Playing;
+            return m_state == State.WaitRoundStart;
         }
 
-        protected bool IsStartingRound()
+        protected bool IsWaitingIngame()
         {
-            return m_state == State.RoundStart;
+            return m_state == State.WaitIngame;
         }
 
-        protected bool IsEndingRound()
+        protected bool IsIngame()
         {
-            return m_state == State.RoundEnd;
+            return m_state == State.Ingame;
         }
 
-        protected bool IsEndingGame()
+        protected bool isWaitingRoundResult()
         {
-            return m_state == State.GameEnd;
+            return m_state == State.WaitRoundResult;
+        }
+
+        protected bool IsWaitingRoundRestart()
+        {
+            return m_state == State.WaitRoundRestart;
         }
 
         protected virtual void OnStateChanged(State oldState, State newState)
