@@ -126,7 +126,7 @@ namespace Bomberman.Game.Multiplayer
 
                 RecycleMessage(payloadMessage);
             }
-            else if (IsWaitingIngame() || IsWaitingRoundStart())
+            else if (IsWaitingIngame() || IsWaitingGameStart())
             {
                 NetOutgoingMessage payload = CreateMessage();
                 WriteBricksState(payload);
@@ -205,7 +205,7 @@ namespace Bomberman.Game.Multiplayer
 
         private void ReadRoundStartMessage(Peer peer, NetIncomingMessage msg)
         {
-            if (IsWaitingRoundStart())
+            if (IsWaitingGameStart())
             {
                 Player player = FindPlayer(msg.SenderConnection);
                 player.IsReady = msg.ReadBoolean();
@@ -349,7 +349,7 @@ namespace Bomberman.Game.Multiplayer
         {
             switch (newState)
             {
-                case State.WaitRoundStart:
+                case State.WaitGameStart:
                 {
                     StartScreen(new BlockingScreen("Waiting for clients..."));
                     break;
@@ -357,7 +357,7 @@ namespace Bomberman.Game.Multiplayer
 
                 case State.Ingame:
                 {
-                    Debug.Assert(oldState == State.WaitRoundRestart || oldState == State.WaitRoundStart, "Unexpected old state: " + oldState);
+                    Debug.Assert(oldState == State.WaitRoundRestart || oldState == State.WaitGameStart, "Unexpected old state: " + oldState);
                     Debug.Assert(!(CurrentScreen() is GameScreen));
 
                     gameScreen = new GameScreen();

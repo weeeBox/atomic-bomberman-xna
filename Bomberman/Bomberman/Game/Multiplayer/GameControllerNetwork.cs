@@ -31,11 +31,12 @@ namespace Bomberman.Game.Multiplayer
         protected enum State
         {
             Undefined,
-            WaitRoundStart,
+            WaitGameStart,
             WaitIngame,
             Ingame,
             WaitRoundResult,
-            WaitRoundRestart
+            WaitRoundRestart,
+            WaitGameEnd,
         }
 
         public enum PeerMessageId
@@ -58,7 +59,7 @@ namespace Bomberman.Game.Multiplayer
             base.OnStart();
 
             GetPeer().SetPeerListener(this);
-            SetState(State.WaitRoundStart);
+            SetState(State.WaitGameStart);
         }
 
         protected override void OnStop()
@@ -505,9 +506,9 @@ namespace Bomberman.Game.Multiplayer
             return m_state;
         }
 
-        protected bool IsWaitingRoundStart()
+        protected bool IsWaitingGameStart()
         {
-            return m_state == State.WaitRoundStart;
+            return m_state == State.WaitGameStart;
         }
 
         protected bool IsWaitingIngame()
