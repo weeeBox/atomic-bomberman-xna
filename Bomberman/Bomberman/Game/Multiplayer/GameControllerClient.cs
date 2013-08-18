@@ -63,7 +63,7 @@ namespace Bomberman.Game.Multiplayer
                 WriteRoundEndMessage(msg);
                 SendMessage(msg);
             }
-            else if (IsWaitingGameStart() || IsWaitingIngame())
+            else if (IsWaitingIngame() || IsWaitingGameStart())
             {
                 NetOutgoingMessage msg = CreateMessage(PeerMessageId.RoundStart);
                 WriteRoundStartMessage(msg);
@@ -205,7 +205,6 @@ namespace Bomberman.Game.Multiplayer
             SetupField(settings.scheme);
             ReadFieldState(message);
 
-            bool shouldBeReady = m_localPlayer == null;
             m_localPlayer = null;
 
             List<Player> players = game.GetPlayers().list;
@@ -221,7 +220,6 @@ namespace Bomberman.Game.Multiplayer
             }
 
             Debug.Assert(m_localPlayer != null);
-            m_localPlayer.IsReady = shouldBeReady;
             m_localPlayer.connection = peer.RemoteConnection;
         }
 
@@ -235,13 +233,17 @@ namespace Bomberman.Game.Multiplayer
             {
                 case State.WaitGameStart:
                 {
+                    Debug.Assert(m_localPlayer == null);
+
                     Debug.Assert(oldState == State.Undefined, "Unexpected old state: " + oldState);
                     StartScreen(new BlockingScreen("Waiting round start..."));
                     break;
                 }
 
                 case State.WaitIngame:
-                {   
+                {
+                    Debug.Assert(m_localPlayer != null && !m_localPlayer.IsReady);
+                    m_localPlayer.IsReady = true;
                     break;
                 }
 

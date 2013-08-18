@@ -231,7 +231,7 @@ namespace Bomberman.Game
 
         protected void StartRoundResultScreen()
         {
-            StartScreen(new RoundResultScreen(RoundResultScreenButtonDelegate));
+            StartScreen(new RoundResultScreen(game, RoundResultScreenButtonDelegate));
         }
 
         protected virtual void RoundResultScreenAccepted(RoundResultScreen screen)
