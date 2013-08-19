@@ -79,6 +79,19 @@ namespace Bomberman
             Runtime.contentManager = Content;
 
             application.Start();
+
+            #if DEBUG && WINDOWS
+
+            int windowX = Application.Storage().GetInt("lastWinX", Int32.MaxValue);
+            int windowY = Application.Storage().GetInt("lastWinY", Int32.MaxValue);
+
+            if (windowX != Int32.MaxValue && windowY != Int32.MaxValue)
+            {
+                var form = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle(this.Window.Handle);
+                form.Location = new System.Drawing.Point(windowX, windowY);
+            }
+
+            #endif
         }
 
         /// <summary>
@@ -104,6 +117,13 @@ namespace Bomberman
             }
             else
             {
+                #if DEBUG && WINDOWS
+                var form = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle(this.Window.Handle);
+                Application.Storage().Set("lastWinX", form.Location.X);
+                Application.Storage().Set("lastWinY", form.Location.Y);
+                Application.Storage().SaveImmediately();
+                #endif
+
                 application.RunStop();
                 Exit();
             }
