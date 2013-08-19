@@ -220,12 +220,12 @@ namespace Bomberman.Game.Multiplayer
         {
             Debug.Assert(m_localPlayer != null);
 
+            SetState(State.RoundEnd);
+
             ReadReadyFlags(msg);
 
             if (m_localPlayer.needsRoundResults)
             {
-                SetState(State.RoundEnd);
-
                 ReadRoundResults(msg);
                 m_localPlayer.needsRoundResults = false;
                 StartRoundResultScreen();
