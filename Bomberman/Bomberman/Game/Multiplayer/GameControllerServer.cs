@@ -55,7 +55,7 @@ namespace Bomberman.Game.Multiplayer
             {
                 Player player = new Player(playerIndex + i);
                 player.SetPlayerInput(new PlayerNetworkInput());
-                player.IsReady = false;
+                player.ResetNetworkState();
                 game.AddPlayer(player);
 
                 AddPlayerConnection(connections[i], player);
@@ -105,69 +105,86 @@ namespace Bomberman.Game.Multiplayer
 
         private void SendServerPacket()
         {
-            // TODO: refactor this code
-            if (IsIngame())
+            State state = GetState();
+            switch (state)
             {
-                NetOutgoingMessage payloadMessage = CreateMessage();
-                WritePlayingMessage(payloadMessage);
-
-                for (int i = 0; i < networkPlayers.Count; ++i)
+                case State.RoundStart:
                 {
-                    Player player = networkPlayers[i];
-
-                    NetOutgoingMessage message = CreateMessage(PeerMessageId.Playing);
-                    message.Write(payloadMessage);
-
-                    NetConnection connection = player.connection;
-                    Debug.Assert(connection != null);
-
-                    SendMessage(message, connection);
-                }
-
-                RecycleMessage(payloadMessage);
-            }
-            else if (IsWaitingIngame() || IsWaitingGameStart())
-            {
-                NetOutgoingMessage payload = CreateMessage();
-                WriteBricksState(payload);
-
-                for (int i = 0; i < networkPlayers.Count; ++i)
-                {
-                    Player player = networkPlayers[i];
-                    if (!player.IsReady)
+                    for (int i = 0; i < networkPlayers.Count; ++i)
                     {
+                        Player player = networkPlayers[i];
                         NetOutgoingMessage message = CreateMessage(PeerMessageId.RoundStart);
-                        WriteFieldState(message, player);
-                        message.Write(payload);
+
+                        WriteReadyFlags(message);
+
+                        if (player.needsFieldState)
+                        {   
+                            WriteFieldState(message, player);
+                        }
 
                         NetConnection connection = player.connection;
                         Debug.Assert(connection != null);
 
                         SendMessage(message, connection);
                     }
+                    break;
                 }
-
-                RecycleMessage(payload);
-            }
-            else if (IsWaitingRoundRestart())
-            {
-                NetOutgoingMessage payloadMessage = CreateMessage();
-                WriteRoundEndMessage(payloadMessage);
-
-                for (int i = 0; i < networkPlayers.Count; ++i)
+                
+                case State.Playing:
                 {
-                    Player player = networkPlayers[i];
+                    NetOutgoingMessage payloadMessage = CreateMessage();
+                    WritePlayingMessage(payloadMessage);
 
-                    NetOutgoingMessage message = CreateMessage(PeerMessageId.RoundEnd);
-                    message.Write(payloadMessage);
+                    for (int i = 0; i < networkPlayers.Count; ++i)
+                    {
+                        Player player = networkPlayers[i];
 
-                    NetConnection connection = player.connection;
-                    Debug.Assert(connection != null);
+                        NetOutgoingMessage message = CreateMessage(PeerMessageId.Playing);
+                        message.Write(payloadMessage);
 
-                    SendMessage(message, connection);
+                        NetConnection connection = player.connection;
+                        Debug.Assert(connection != null);
+
+                        SendMessage(message, connection);
+                    }
+
+                    RecycleMessage(payloadMessage);
+                    break;
                 }
 
-                RecycleMessage(payloadMessage);
+                case State.RoundEnd:
+                {
+                    NetOutgoingMessage payload = CreateMessage();
+                    WriteRoundResults(payload);
+
+                    for (int i = 0; i < networkPlayers.Count; ++i)
+                    {
+                        Player player = networkPlayers[i];
+
+                        NetOutgoingMessage message = CreateMessage(PeerMessageId.RoundEnd);
+
+                        WriteReadyFlags(message);
+
+                        if (player.needsRoundResults)
+                        {
+                            message.Write(payload);
+                        }
+
+                        NetConnection connection = player.connection;
+                        Debug.Assert(connection != null);
+
+                        SendMessage(message, connection);
+                    }
+
+                    RecycleMessage(payload);
+                    break;
+                }
+
+                default:
+                {
+                    Debug.Fail("Unexpected state: " + state);
+                    break;
+                }
             }
         }
 
@@ -205,31 +222,41 @@ namespace Bomberman.Game.Multiplayer
 
         private void ReadRoundStartMessage(Peer peer, NetIncomingMessage msg)
         {
-            if (IsWaitingGameStart())
+            State state = GetState();
+            if (state == State.RoundStart)
             {
                 Player player = FindPlayer(msg.SenderConnection);
                 player.IsReady = msg.ReadBoolean();
+                player.needsFieldState = msg.ReadBoolean();
 
                 if (player.IsReady && AllPlayersAreReady())
                 {
                     Log.d("Clients are ready to play");
-                    SetState(State.Ingame);
+                    SetState(State.Playing);
                 }
+            }
+            else
+            {
+                Log.d("Ignore 'RoundStart' message");
             }
         }
 
         private void ReadRoundEndMessage(Peer peer, NetIncomingMessage msg)
         {
-            if (IsWaitingRoundRestart())
+            State state = GetState();
+            if (state == State.RoundEnd)
             {
                 Player player = FindPlayer(msg.SenderConnection);
+
                 player.IsReady = msg.ReadBoolean();
+                player.needsRoundResults = msg.ReadBoolean();
 
                 if (player.IsReady && AllPlayersAreReady())
                 {
                     Log.d("Clients are ready for the next round");
                     game.StartNextRound();
-                    SetState(State.Ingame);
+
+                    SetState(State.RoundStart);
                 }
             }
         }
@@ -319,15 +346,14 @@ namespace Bomberman.Game.Multiplayer
 
         protected override void OnRoundEnded()
         {
-            Debug.Assert(GetState() == State.Ingame);
+            Debug.Assert(GetState() == State.Playing);
 
             SetPlayersReady(false);
-            SetState(State.WaitRoundRestart);
+            SetState(State.RoundEnd);
         }
 
         protected override void OnRoundRestarted()
-        {
-            throw new NotImplementedException();
+        {   
         }
 
         protected override void RoundResultScreenAccepted(RoundResultScreen screen)
@@ -349,15 +375,29 @@ namespace Bomberman.Game.Multiplayer
         {
             switch (newState)
             {
-                case State.WaitGameStart:
+                case State.RoundStart:
                 {
+                    Debug.Assert(oldState == State.RoundEnd || oldState == State.Undefined,
+                        "Unexpected old state: " + oldState);
+
                     StartScreen(new BlockingScreen("Waiting for clients..."));
+
+                    if (game != null)
+                    {
+                        List<Player> players = game.GetPlayersList();
+                        for (int i = 0; i < players.Count; ++i)
+                        {
+                            Player p = players[i];
+                            p.IsReady = !p.IsNetworkPlayer;
+                        }
+                    }
+
                     break;
                 }
 
-                case State.Ingame:
+                case State.Playing:
                 {
-                    Debug.Assert(oldState == State.WaitRoundRestart || oldState == State.WaitGameStart, "Unexpected old state: " + oldState);
+                    Debug.Assert(oldState == State.RoundStart, "Unexpected old state: " + oldState);
                     Debug.Assert(!(CurrentScreen() is GameScreen));
 
                     gameScreen = new GameScreen();
@@ -365,10 +405,11 @@ namespace Bomberman.Game.Multiplayer
                     break;
                 }
 
-                case State.WaitRoundRestart:
+                case State.RoundEnd:
                 {
-                    Debug.Assert(oldState == State.Ingame, "Unexpected old state: " + oldState);
+                    Debug.Assert(oldState == State.Playing, "Unexpected old state: " + oldState);
 
+                    Restart();
                     StartRoundResultScreen();
                     break;
                 }
@@ -399,11 +440,6 @@ namespace Bomberman.Game.Multiplayer
         private bool AllPlayersAreReady()
         {
             return game.GetPlayers().AllPlayersAreReady();
-        }
-
-        private void SetPlayersReady(bool ready)
-        {
-            game.GetPlayers().SetPlayersReady(ready);
         }
 
         private bool NetworkPlayersAreReady()

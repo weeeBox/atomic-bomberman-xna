@@ -30,6 +30,8 @@ namespace BomberEngine.Game
 
         public void Destroy()
         {
+            RemoveDebugViews();
+
             screenManager.Destroy();
             exitData = null;
             exitCode = 0;
@@ -256,5 +258,40 @@ namespace BomberEngine.Game
         }
 
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        private List<View> m_debugViews;
+
+        [System.Diagnostics.Conditional("DEBUG_VIEW")]
+        public void AddDebugView(View view)
+        {
+            Application.RootController().AddDebugView(view);
+            if (m_debugViews == null)
+            {
+                m_debugViews = new List<View>();
+            }
+            m_debugViews.Add(view);
+        }
+
+        [System.Diagnostics.Conditional("DEBUG_VIEW")]
+        public void RemoveDebugView(View view)
+        {
+            Application.RootController().RemoveDebugView(view);
+            m_debugViews.Remove(view);
+        }
+
+        [System.Diagnostics.Conditional("DEBUG_VIEW")]
+        protected void RemoveDebugViews()
+        {
+            if (m_debugViews != null)
+            {
+                foreach (View view in m_debugViews)
+                {
+                    Application.RootController().RemoveDebugView(view);
+                }
+                m_debugViews.Clear();
+            }
+        }
     }
 }

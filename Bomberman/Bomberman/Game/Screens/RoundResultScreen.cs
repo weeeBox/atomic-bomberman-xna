@@ -18,12 +18,8 @@ namespace Bomberman.Game.Screens
             Continue
         }
 
-        private Game m_game;
-
         public RoundResultScreen(Game game, ButtonDelegate buttonDelegate)
         {
-            m_game = game;
-
             View contentView = new View(64, 48, 512, 384);
 
             // table

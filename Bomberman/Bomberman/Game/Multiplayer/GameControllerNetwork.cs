@@ -10,6 +10,8 @@ using Bomberman.Networking;
 using Lidgren.Network;
 using Bomberman.Game.Elements;
 using Bomberman.Game.Screens;
+using BomberEngine.Core.Visual;
+using System.Text;
 
 namespace Bomberman.Game.Multiplayer
 {
@@ -31,12 +33,9 @@ namespace Bomberman.Game.Multiplayer
         protected enum State
         {
             Undefined,
-            WaitGameStart,
-            WaitIngame,
-            Ingame,
-            WaitRoundResult,
-            WaitRoundRestart,
-            WaitGameEnd,
+            RoundStart,
+            Playing,
+            RoundEnd,
         }
 
         public enum PeerMessageId
@@ -59,7 +58,9 @@ namespace Bomberman.Game.Multiplayer
             base.OnStart();
 
             GetPeer().SetPeerListener(this);
-            SetState(State.WaitGameStart);
+            SetState(State.RoundStart);
+
+            AddDebugView(new NetworkControllerDebugView(this));
         }
 
         protected override void OnStop()
@@ -100,8 +101,9 @@ namespace Bomberman.Game.Multiplayer
 
         #region "RoundStart" message
 
-        protected void WriteBricksState(NetBuffer buffer)
+        protected void WriteFieldState(NetBuffer buffer, Player player)
         {   
+            // bricks & powerups
             FieldCellSlot[] slots = game.Field.GetCells().slots;
             for (int i = 0; i < slots.Length; ++i)
             {
@@ -116,10 +118,26 @@ namespace Bomberman.Game.Multiplayer
                     }
                 }
             }
+
+            // players
+            List<Player> players = game.GetPlayers().list;
+
+            int senderIndex = players.IndexOf(player);
+            Debug.Assert(senderIndex != -1);
+
+            buffer.Write((byte)senderIndex);
+            buffer.Write((byte)players.Count);
+            for (int i = 0; i < players.Count; ++i)
+            {
+                Player p = players[i];
+                buffer.Write((byte)p.cx);
+                buffer.Write((byte)p.cy);
+            }
         }
 
-        protected void ReadBricksState(NetBuffer buffer)
+        protected void ReadFieldState(NetBuffer buffer)
         {
+            // bricks & powerups
             FieldCellSlot[] slots = game.Field.GetCells().slots;
             for (int i = 0; i < slots.Length; ++i)
             {
@@ -133,28 +151,7 @@ namespace Bomberman.Game.Multiplayer
                     }
                 }
             }
-        }
 
-        protected void WriteFieldState(NetBuffer buffer, Player senderPlayer)
-        {
-            // players
-            List<Player> players = game.GetPlayers().list;
-
-            int senderIndex = players.IndexOf(senderPlayer);
-            Debug.Assert(senderIndex != -1);
-            buffer.Write((byte)senderIndex);
-
-            buffer.Write((byte)players.Count);
-            for (int i = 0; i < players.Count; ++i)
-            {
-                Player player = players[i];
-                buffer.Write((byte)player.cx);
-                buffer.Write((byte)player.cy);
-            }
-        }
-
-        protected void ReadFieldState(NetBuffer buffer)
-        {
             // players
             int senderIndex = buffer.ReadByte();
             int playersCount = buffer.ReadByte();
@@ -164,15 +161,51 @@ namespace Bomberman.Game.Multiplayer
                 int cx = buffer.ReadByte();
                 int cy = buffer.ReadByte();
                 player.SetCell(cx, cy);
-                if (senderIndex != i)
+                if (i != senderIndex)
                 {
                     player.SetPlayerInput(new PlayerNetworkInput());
                 }
 
                 game.AddPlayer(player);
             }
+        }
 
-            ReadBricksState(buffer);
+        #endregion
+
+        #region "Ready"
+
+        protected void WriteReadyFlags(NetBuffer buffer)
+        {
+            List<Player> players = game.GetPlayers().list;
+            buffer.Write((byte)players.Count);
+            for (int i = 0; i < players.Count; ++i)
+            {
+                buffer.Write(players[i].IsReady);
+            }
+        }
+
+        protected void ReadReadyFlags(NetBuffer buffer)
+        {
+            List<Player> players = game.GetPlayers().list;
+            int playersCount = buffer.ReadByte();
+            Debug.Assert(players.Count == playersCount);
+
+            for (int i = 0; i < playersCount; ++i)
+            {   
+                Player player = players[i];
+
+                bool isReady = buffer.ReadBoolean();
+                if (player.IsNetworkPlayer)
+                {
+                    player.IsReady = isReady;
+                }
+            }
+        }
+
+        protected void SkipReadyFlags(NetBuffer buffer)
+        {
+            int playersCount = buffer.ReadByte();
+            buffer.ReadInt64(playersCount);
         }
 
         #endregion
@@ -461,27 +494,14 @@ namespace Bomberman.Game.Multiplayer
 
         #region "RoundEnd" message
 
-        protected void WriteRoundEndMessage(NetBuffer buffer)
+        protected void WriteRoundResults(NetBuffer buffer)
         {
-            List<Player> players = GetPlayerList();
-            for (int i = 0; i < players.Count; ++i)
-            {
-                buffer.Write(players[i].IsReady);
-            }
+            // TODO
         }
 
-        protected void ReadRoundEndMessage(NetBuffer buffer)
+        protected void ReadRoundResults(NetBuffer buffer)
         {
-            List<Player> players = GetPlayerList();
-            for (int i = 0; i < players.Count; ++i)
-            {
-                bool ready = buffer.ReadBoolean();
-                Player player = players[i];
-                if (player.IsNetworkPlayer)
-                {
-                    player.IsReady = ready;
-                }
-            }
+            // TODO
         }
 
         #endregion
@@ -504,31 +524,6 @@ namespace Bomberman.Game.Multiplayer
         protected State GetState()
         {
             return m_state;
-        }
-
-        protected bool IsWaitingGameStart()
-        {
-            return m_state == State.WaitGameStart;
-        }
-
-        protected bool IsWaitingIngame()
-        {
-            return m_state == State.WaitIngame;
-        }
-
-        protected bool IsIngame()
-        {
-            return m_state == State.Ingame;
-        }
-
-        protected bool isWaitingRoundResult()
-        {
-            return m_state == State.WaitRoundResult;
-        }
-
-        protected bool IsWaitingRoundRestart()
-        {
-            return m_state == State.WaitRoundRestart;
         }
 
         protected virtual void OnStateChanged(State oldState, State newState)
@@ -610,6 +605,58 @@ namespace Bomberman.Game.Multiplayer
             return GetNetwork().GetPeer();
         }
 
+        protected void SetPlayersReady(bool ready)
+        {
+            game.GetPlayers().SetPlayersReady(ready);
+        }
+
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        private class NetworkControllerDebugView : View
+        {
+            private GameControllerNetwork m_controller;
+            private TextView m_textView;
+
+            public NetworkControllerDebugView(GameControllerNetwork controller)
+            {
+                m_controller = controller;
+
+                m_textView = new TextView(Helper.fontSystem, null);
+                UpdateState();
+
+                AddView(m_textView);
+                ResizeToFitViews();
+
+                height = 100;
+            }
+
+            public override void Update(float delta)
+            {
+                UpdateState();
+            }
+
+            private void UpdateState()
+            {
+                StringBuilder buf = new StringBuilder();
+                buf.Append("State: " + m_controller.GetState());
+
+                if (m_controller.game != null)
+                {
+                    List<Player> players = m_controller.game.GetPlayersList();
+                    for (int i = 0; i < players.Count; ++i)
+                    {
+                        Player p = players[i];
+                        buf.Append("\n" + i + ": isReady=" + p.IsReady +
+                            " net=" + p.IsNetworkPlayer +
+                            " needsFieldState=" + p.needsFieldState + 
+                            " needsRoundResults=" + p.needsRoundResults);
+                    }
+                }
+
+                m_textView.SetText(buf.ToString());
+            }
+        }
     }
 }

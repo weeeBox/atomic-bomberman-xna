@@ -34,9 +34,10 @@ namespace Bomberman.Game.Elements.Players
         private bool m_alive;
 
         private bool m_ready;
-        private bool m_acceptsRoundStart;
-        private bool m_acceptsRoundEnd;
 
+        public bool needsFieldState;
+        public bool needsRoundResults;
+        
         private PlayerInput m_input;
         private BombList m_bombs;
         private PowerupList m_powerups;
@@ -49,8 +50,8 @@ namespace Bomberman.Game.Elements.Players
 
         private NetConnection m_connection;
 
-        private int m_lastAckPacketId; // last acknowledged packet id
-        private int m_lastSentPacketId; // last acknowledged packet id
+        private int m_lastAckPacketId;  // last acknowledged packet id
+        private int m_lastSentPacketId; // last sent packet id
 
         private float m_errDx;
         private float m_errDy;
@@ -104,8 +105,8 @@ namespace Bomberman.Game.Elements.Players
         public void ResetNetworkState()
         {
             m_ready = false;
-            m_acceptsRoundStart = true;
-            m_acceptsRoundEnd = true;
+            needsFieldState = true;
+            needsRoundResults = true;
         }
 
         public override void Destroy()
