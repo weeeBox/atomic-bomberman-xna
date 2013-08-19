@@ -16,7 +16,7 @@ namespace Bomberman.Game.Screens
             Exit
         }
 
-        public GameResultScreen(ButtonDelegate buttonDelegate)
+        public GameResultScreen(Game game, ButtonDelegate buttonDelegate)
         {
             Font font = Helper.fontButton;
             TextView text = new TextView(font, "GAME ENDED");

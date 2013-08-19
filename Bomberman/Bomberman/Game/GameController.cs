@@ -232,7 +232,7 @@ namespace Bomberman.Game
 
         protected virtual void OnGameEnded()
         {
-            StartRoundResultScreen();
+            StartGameResultScreen();
         }
 
         protected void StartRoundResultScreen()
@@ -240,9 +240,17 @@ namespace Bomberman.Game
             StartScreen(new RoundResultScreen(game, RoundResultScreenButtonDelegate));
         }
 
+        protected void StartGameResultScreen()
+        {
+            StartScreen(new GameResultScreen(game, GameResultScreenButtonDelegate));
+        }
+
         protected virtual void RoundResultScreenAccepted(RoundResultScreen screen)
         {
             StartNextRound();
+
+            gameScreen = new GameScreen();
+            StartScreen(gameScreen);
         }
 
         protected virtual void RoundResultScreenDismissed(RoundResultScreen screen)
