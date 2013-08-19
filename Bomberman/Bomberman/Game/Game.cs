@@ -9,6 +9,8 @@ using Bomberman.Game.Elements.Fields;
 using Bomberman.Content;
 using BomberEngine.Debugging;
 using BomberEngine.Game;
+using BomberEngine.Core.Events;
+using BomberEngine.Consoles;
 
 namespace Bomberman.Game
 {
@@ -26,7 +28,7 @@ namespace Bomberman.Game
         Server,
     }
 
-    public class Game : BaseObject
+    public class Game : BaseObject, IDestroyable
     {
         private static Game s_current;
 
@@ -34,7 +36,9 @@ namespace Bomberman.Game
         private MultiplayerMode m_multiplayerMode;
 
         private Scheme m_currentScheme;
+
         private int m_roundIndex;
+        private int m_totalRounds;
 
         public Game(MultiplayerMode mode)
         {
@@ -42,6 +46,16 @@ namespace Bomberman.Game
 
             m_multiplayerMode = mode;
             m_field = new Field(this);
+
+            m_roundIndex = 0;
+            m_totalRounds = CVars.roundsToWin.intValue;
+
+            RegisterNotification(Notifications.ConsoleVariableChanged, ConsoleVariableChanged);
+        }
+
+        public void Destroy()
+        {
+            UnregisterNotifications();
         }
 
         public void AddPlayer(Player player)
@@ -86,7 +100,7 @@ namespace Bomberman.Game
 
         public void StartNextRound()
         {
-            Debug.Assert(m_roundIndex < CVars.roundsToWin.intValue - 1);
+            Debug.Assert(m_roundIndex < m_totalRounds - 1);
             ++m_roundIndex;
 
             Restart();
@@ -98,7 +112,7 @@ namespace Bomberman.Game
 
         public void EndRound()
         {
-            if (m_roundIndex < CVars.roundsToWin.intValue - 1)
+            if (m_roundIndex < roundsCount - 1)
             {
                 NotifyRoundEnded();
             }
@@ -128,7 +142,19 @@ namespace Bomberman.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Getters/Setters
+        private void ConsoleVariableChanged(Notification notification)
+        {
+            CVar cvar = notification.GetData<CVar>();
+            if (cvar == CVars.roundsToWin)
+            {
+                int totalRounds = cvar.intValue;
+                m_totalRounds = Math.Max(totalRounds, roundIndex + 1);
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
 
         public static Game Current
         {
@@ -163,6 +189,23 @@ namespace Bomberman.Game
         public bool IsLocal
         {
             get { return m_multiplayerMode == MultiplayerMode.None; }
+        }
+
+        public bool IsGameEnded
+        {
+            get { return m_roundIndex == m_totalRounds - 1; }
+        }
+
+        public int roundIndex
+        {
+            get { return m_roundIndex; }
+            set { m_roundIndex = value; }
+        }
+
+        public int roundsCount
+        {
+            get { return m_totalRounds; }
+            set { m_totalRounds = value; }
         }
 
         #endregion

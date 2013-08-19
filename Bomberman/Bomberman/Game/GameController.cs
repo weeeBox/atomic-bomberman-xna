@@ -61,7 +61,7 @@ namespace Bomberman.Game
         protected GameScreen gameScreen;
         protected PauseScreen pauseScreen;
         
-        protected Game game;
+        private Game m_game;
 
         protected GameSettings settings;
 
@@ -91,6 +91,12 @@ namespace Bomberman.Game
         protected GameController(GameSettings settings)
         {
             this.settings = settings;
+        }
+
+        public override void Destroy()
+        {
+            game = null;
+            base.Destroy();
         }
 
         protected override void OnStart()
@@ -226,7 +232,7 @@ namespace Bomberman.Game
 
         protected virtual void OnGameEnded()
         {
-            StartScreen(new GameResultScreen(GameResultScreenButtonDelegate));
+            StartRoundResultScreen();
         }
 
         protected void StartRoundResultScreen()
@@ -236,7 +242,6 @@ namespace Bomberman.Game
 
         protected virtual void RoundResultScreenAccepted(RoundResultScreen screen)
         {
-            screen.Finish();
             StartNextRound();
         }
 
@@ -262,6 +267,19 @@ namespace Bomberman.Game
         protected PlayerList GetPlayers()
         {
             return game.GetPlayers();
+        }
+
+        public Game game
+        {
+            get { return m_game; }
+            protected set
+            {
+                if (m_game != value && m_game != null)
+                {
+                    m_game.Destroy();
+                }
+                m_game = value;
+            }
         }
 
         #endregion

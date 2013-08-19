@@ -28,7 +28,7 @@ namespace BomberEngine.Game
             screenManager.listener = this;
         }
 
-        public void Destroy()
+        public virtual void Destroy()
         {
             RemoveDebugViews();
 

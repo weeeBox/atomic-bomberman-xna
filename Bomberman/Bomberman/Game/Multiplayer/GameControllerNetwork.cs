@@ -496,12 +496,36 @@ namespace Bomberman.Game.Multiplayer
 
         protected void WriteRoundResults(NetBuffer buffer)
         {
-            // TODO
+            Debug.Assert(game != null);
+
+            buffer.Write((byte)game.roundIndex);
+            buffer.Write((byte)game.roundsCount);
+
+            List<Player> players = game.GetPlayersList();
+
+            for (int i = 0; i < players.Count; ++i)
+            {
+                Player p = players[i];
+                buffer.Write((byte)p.winsCount);
+                buffer.Write((byte)p.suicidesCount);
+            }
         }
 
         protected void ReadRoundResults(NetBuffer buffer)
         {
-            // TODO
+            Debug.Assert(game != null);
+
+            game.roundIndex = buffer.ReadByte();
+            game.roundsCount = buffer.ReadByte();
+
+            List<Player> players = game.GetPlayersList();
+
+            for (int i = 0; i < players.Count; ++i)
+            {
+                Player p = players[i];
+                p.winsCount = buffer.ReadByte();
+                p.suicidesCount = buffer.ReadByte();
+            }
         }
 
         #endregion

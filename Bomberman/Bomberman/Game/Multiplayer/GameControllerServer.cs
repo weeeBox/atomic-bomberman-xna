@@ -251,12 +251,19 @@ namespace Bomberman.Game.Multiplayer
                 player.IsReady = msg.ReadBoolean();
                 player.needsRoundResults = msg.ReadBoolean();
 
-                if (player.IsReady && AllPlayersAreReady())
+                if (game.IsGameEnded)
                 {
-                    Log.d("Clients are ready for the next round");
-                    game.StartNextRound();
+                    // TODO
+                }
+                else
+                {
+                    if (player.IsReady && AllPlayersAreReady())
+                    {
+                        Log.d("Clients are ready for the next round");
+                        game.StartNextRound();
 
-                    SetState(State.RoundStart);
+                        SetState(State.RoundStart);
+                    }
                 }
             }
         }
@@ -345,6 +352,14 @@ namespace Bomberman.Game.Multiplayer
         //////////////////////////////////////////////////////////////////////////////
 
         protected override void OnRoundEnded()
+        {
+            Debug.Assert(GetState() == State.Playing);
+
+            SetPlayersReady(false);
+            SetState(State.RoundEnd);
+        }
+
+        protected override void OnGameEnded()
         {
             Debug.Assert(GetState() == State.Playing);
 

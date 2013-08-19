@@ -1132,24 +1132,16 @@ namespace Bomberman.Game.Elements.Players
 
         #region Round
 
-        public void IncWinsCount()
+        public int winsCount
         {
-            m_winsCount++;
+            get { return m_winsCount; }
+            set { m_winsCount = value; }
         }
 
-        public void IncSuicidesCount()
+        public int suicidesCount
         {
-            m_suicidesCount++;
-        }
-
-        public int GetWinsCount()
-        {
-            return m_winsCount;
-        }
-
-        public int GetSuicidesCount()
-        {
-            return m_suicidesCount;
+            get { return m_suicidesCount; }
+            set { m_suicidesCount = value; }
         }
 
         #endregion

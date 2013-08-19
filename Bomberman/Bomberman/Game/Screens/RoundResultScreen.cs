@@ -94,6 +94,8 @@ namespace Bomberman.Game.Screens
     {
         private Player m_player;
         private TextView m_readyTextView;
+        private TextView m_winsView;
+        private TextView m_suicidesView;
 
         public PlayerResultView(Player player)
         {
@@ -102,9 +104,15 @@ namespace Bomberman.Game.Screens
             Font font = Helper.fontButton;
 
             m_readyTextView = new TextView(font, "Not Ready");
+            m_winsView = new TextView(font, "99");
+            m_suicidesView = new TextView(font, "99");
+
             UpdateState();
             AddView(m_readyTextView);
+            AddView(m_winsView);
+            AddView(m_suicidesView);
 
+            LayoutHor(10);
             ResizeToFitViews();
         }
 
@@ -116,6 +124,8 @@ namespace Bomberman.Game.Screens
         private void UpdateState()
         {
             m_readyTextView.SetText(m_player.IsReady ? "Ready" : "Not Ready");
+            m_winsView.SetText(m_player.winsCount);
+            m_suicidesView.SetText(m_player.suicidesCount);
         }
     }
 }
