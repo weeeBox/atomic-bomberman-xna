@@ -36,7 +36,7 @@
         </path>
         
         <taskdef name="content" classname="bc.tasks.ContentTask">
-            <classpath path="${dir.builder}/bin"/>
+            <classpath path="${dir.builder}/classes"/>
             <classpath refid="libs"/>
         </taskdef>
         
