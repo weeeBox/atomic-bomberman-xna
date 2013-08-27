@@ -222,28 +222,31 @@ namespace Bomberman.Game.Elements.Fields
                 anim.Draw(context, drawX + 0.5f * cellWidth, drawY + cellHeight);
             }
 
-            int stepX = Math.Sign(player.px - player.CellCenterPx());
-            int stepY = Math.Sign(player.py - player.CellCenterPy());
-
-            bool hasStepX = stepX != 0;
-            bool hasStepY = stepY != 0;
-
-            int cx = player.GetCx();
-            int cy = player.GetCy();
-
-            if (hasStepX && hasStepY)
+            if (CVars.g_drawPlayerStepRect.boolValue)
             {
-                DrawCellRect(context, cx + stepX, cy, Color.Yellow);
-                DrawCellRect(context, cx, cy + stepY, Color.Yellow);
-                DrawCellRect(context, cx + stepX, cy + stepY, Color.Yellow);
-            }
-            else if (hasStepX)
-            {
-                DrawCellRect(context, cx + stepX, cy, Color.Yellow);
-            }
-            else if (hasStepY)
-            {
-                DrawCellRect(context, cx, cy + stepY, Color.Yellow);
+                int stepX = Math.Sign(player.px - player.CellCenterPx());
+                int stepY = Math.Sign(player.py - player.CellCenterPy());
+
+                bool hasStepX = stepX != 0;
+                bool hasStepY = stepY != 0;
+
+                int cx = player.GetCx();
+                int cy = player.GetCy();
+
+                if (hasStepX && hasStepY)
+                {
+                    DrawCellRect(context, cx + stepX, cy, Color.Yellow);
+                    DrawCellRect(context, cx, cy + stepY, Color.Yellow);
+                    DrawCellRect(context, cx + stepX, cy + stepY, Color.Yellow);
+                }
+                else if (hasStepX)
+                {
+                    DrawCellRect(context, cx + stepX, cy, Color.Yellow);
+                }
+                else if (hasStepY)
+                {
+                    DrawCellRect(context, cx, cy + stepY, Color.Yellow);
+                }
             }
         }
 

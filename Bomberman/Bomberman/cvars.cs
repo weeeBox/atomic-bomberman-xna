@@ -89,6 +89,7 @@ namespace Bomberman
         public static readonly CVar g_drawSlotSize = new CVar("g_drawSlotSize", 0, CFlags.Debug);
         public static readonly CVar g_drawPlayerCell = new CVar("g_drawPlayerCell", 0, CFlags.Debug);
         public static readonly CVar g_drawPlayerMovable = new CVar("g_drawPlayerMovable", 0, CFlags.Debug);
+        public static readonly CVar g_drawPlayerStepRect = new CVar("g_drawPlayerStepRect", 0, CFlags.Debug);
         public static readonly CVar g_drawHiddenPowerups = new CVar("g_drawHiddenPowerups", 0, CFlags.Debug);
         public static readonly CVar g_startupMultiplayerMode = new CVar("g_startupMultiplayerMode", null, CFlags.Debug);
 
@@ -165,6 +166,7 @@ namespace Bomberman
             g_drawSlotSize,
             g_drawPlayerCell,
             g_drawPlayerMovable,
+            g_drawPlayerStepRect,
             g_drawHiddenPowerups,
             g_startupMultiplayerMode,
 
