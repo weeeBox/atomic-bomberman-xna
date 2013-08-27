@@ -33,7 +33,9 @@ namespace Bomberman.Game.Elements.Players.Input
         {
             base.Update(delta);
 
-            Vector2 stick = Application.Input().ThumbSticks(playerIndex).Left;
+            InputManager im = Application.Input();
+
+            Vector2 stick = im.ThumbSticks(playerIndex).Left;
             float dx = stick.X;
             float dy = stick.Y;
 
@@ -71,6 +73,9 @@ namespace Bomberman.Game.Elements.Players.Input
                 m_dx = dx;
                 m_dy = dy;
             }
+
+            SetActionPressed(PlayerAction.Bomb, im.IsButtonPressed(playerIndex, KeyCode.GP_A) || im.IsButtonPressed(playerIndex, KeyCode.GP_Y));
+            SetActionPressed(PlayerAction.Special, im.IsButtonPressed(playerIndex, KeyCode.GP_X) || im.IsButtonPressed(playerIndex, KeyCode.GP_B));
         }
     }
 }
