@@ -73,16 +73,16 @@ namespace Bomberman.Game
             return py - CellCenterPy(py);
         }
 
-        public static float TargetPxOffset(float px)
+        public static float TargetPxOffset(float px, float k = 1.0f)
         {
             float offset = CellCenterOffX(px);
-            return offset < 0.5f * cw ? -offset : (cw - offset);
+            return Math.Abs(offset) < k * 0.5f * cw ? -offset : Math.Sign(offset) * (cw - offset);
         }
 
-        public static float TargetPyOffset(float py)
+        public static float TargetPyOffset(float py, float k = 1.0f)
         {
             float offset = CellCenterOffY(py);
-            return offset < 0.5f * ch ? -offset : (ch - offset);
+            return Math.Abs(offset) < k * 0.5f * ch ? -offset : Math.Sign(offset) * (ch - offset);
         }
 
         public static float TravelDistanceX(float fromPx, int toCx)

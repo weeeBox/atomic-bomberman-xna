@@ -292,40 +292,40 @@ namespace Bomberman.Game.Elements.Players
             switch (action)
             {
                 case PlayerAction.Up:
-                    {
-                        StartMovingToDirection(Direction.UP);
-                        break;
-                    }
+                {
+                    StartMovingToDirection(Direction.UP);
+                    break;
+                }
 
                 case PlayerAction.Down:
-                    {
-                        StartMovingToDirection(Direction.DOWN);
-                        break;
-                    }
+                {
+                    StartMovingToDirection(Direction.DOWN);
+                    break;
+                }
 
                 case PlayerAction.Left:
-                    {
-                        StartMovingToDirection(Direction.LEFT);
-                        break;
-                    }
+                {
+                    StartMovingToDirection(Direction.LEFT);
+                    break;
+                }
 
                 case PlayerAction.Right:
-                    {
-                        StartMovingToDirection(Direction.RIGHT);
-                        break;
-                    }
+                {
+                    StartMovingToDirection(Direction.RIGHT);
+                    break;
+                }
 
                 case PlayerAction.Bomb:
-                    {
-                        TryAction();
-                        break;
-                    }
+                {
+                    TryAction();
+                    break;
+                }
 
                 case PlayerAction.Special:
-                    {
-                        TrySpecialAction();
-                        break;
-                    }
+                {
+                    TrySpecialAction();
+                    break;
+                }
             }
         }
 
@@ -603,73 +603,73 @@ namespace Bomberman.Game.Elements.Players
             switch (powerupIndex)
             {
                 case Powerups.Bomb:
+                {
+                    m_bombs.IncMaxActiveCount();
+
+                    if (HasTrigger())
                     {
-                        m_bombs.IncMaxActiveCount();
-
-                        if (HasTrigger())
-                        {
-                            ++m_triggerBombsCount;
-                        }
-
-                        break;
+                        ++m_triggerBombsCount;
                     }
+
+                    break;
+                }
 
                 case Powerups.Speed:
-                    {
-                        SetSpeed(CalcPlayerSpeed());
-                        break;
-                    }
+                {
+                    SetSpeed(CalcPlayerSpeed());
+                    break;
+                }
 
                 case Powerups.Flame:
                 case Powerups.GoldFlame:
-                    {   
-                        break;
-                    }
+                {   
+                    break;
+                }
 
                 // Trigger will drop Jelly and Boxing Glove
                 case Powerups.Trigger:
-                    {
-                        m_triggerBombsCount = m_bombs.GetMaxActiveCount();
+                {
+                    m_triggerBombsCount = m_bombs.GetMaxActiveCount();
 
-                        TryGivePowerupBack(Powerups.Jelly);
-                        TryGivePowerupBack(Powerups.Punch);
-                        break;
-                    }
+                    TryGivePowerupBack(Powerups.Jelly);
+                    TryGivePowerupBack(Powerups.Punch);
+                    break;
+                }
 
                 // Jelly will drop Trigger
                 // Boxing Glove will drop Trigger
                 case Powerups.Jelly:
                 case Powerups.Punch:
-                    {
-                        TryGivePowerupBack(Powerups.Trigger);
-                        break;
-                    }
+                {
+                    TryGivePowerupBack(Powerups.Trigger);
+                    break;
+                }
 
                 // Blue Hand will drop Spooge
                 case Powerups.Grab:
-                    {
-                        TryGivePowerupBack(Powerups.Spooger);
-                        break;
-                    }
+                {
+                    TryGivePowerupBack(Powerups.Spooger);
+                    break;
+                }
 
                 // Spooge will drop Blue Hand
                 case Powerups.Spooger:
-                    {
-                        TryGivePowerupBack(Powerups.Grab);
-                        break;
-                    }
+                {
+                    TryGivePowerupBack(Powerups.Grab);
+                    break;
+                }
 
                 case Powerups.Disease:
-                    {
-                        InfectRandom(1);
-                        break;
-                    }
+                {
+                    InfectRandom(1);
+                    break;
+                }
 
                 case Powerups.Ebola:
-                    {
-                        InfectRandom(3);
-                        break;
-                    }
+                {
+                    InfectRandom(3);
+                    break;
+                }
             }
 
             return true;
