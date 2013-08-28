@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Bomberman.Game.Elements.Fields;
 using BomberEngine.Util;
+using BomberEngine.Debugging;
 
 namespace Bomberman.Game.Elements.Cells
 {
@@ -165,37 +166,38 @@ namespace Bomberman.Game.Elements.Cells
 
         private float GetTargetDy(float delta, bool blocked)
         {
-            float yOffset = Util.TargetPyOffset(py);
+            float yOffset;
 
             if (blocked)
             {
-                // if target offset is really small (more like calculation error) - don't try to come
-                // around obstacle
-                if (Math.Abs(yOffset) < 0.01f)
+                float cOffset = CenterOffY;
+                if (Math.Abs(cOffset) < 0.01f) // if target offset is really small (more like calculation error) - don't try to come around obstacle
                 {
-                    return yOffset;
+                    return -cOffset;
                 }
 
-                bool obstacleUp   = HasNearObstacle(0, -1);
-                bool obstacleDown = HasNearObstacle(0, 1);
+                int dcx = Math.Sign(m_moveKx);
+                int dcy = Math.Sign(cOffset);
 
-                if (obstacleUp && obstacleDown)
-                {
-                    return 0; // don't adjust pos
-                }
+                Debug.Assert(dcx != 0);
+                Debug.Assert(dcy != 0);
 
-                if (obstacleUp)
+                if (!HasNearObstacle(dcx, dcy)) // it's ok to take the shorter path
                 {
-                    yOffset = Util.Cy2Py(cy + 1) - py;
+                    yOffset = Util.Cx2Px(cy + dcy) - py;
                 }
-                else if (obstacleDown)
+                else if (!HasNearObstacle(dcx, -dcy)) // it's ok to take the longer path
                 {
-                    yOffset = Util.Cy2Py(cy - 1) - py;
+                    yOffset = Util.Cx2Px(cy - dcy) - py;
                 }
-                else
+                else // no way to go
                 {
-                    yOffset = Util.TargetPyOffset(py);
+                    return 0.0f;
                 }
+            }
+            else
+            {
+                yOffset = Util.TargetPyOffset(py);
             }
 
             return yOffset < 0 ? Math.Max(yOffset, -delta * m_speed) : Math.Min(yOffset, delta * m_speed);
