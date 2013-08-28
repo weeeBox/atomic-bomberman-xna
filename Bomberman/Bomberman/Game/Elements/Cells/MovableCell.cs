@@ -69,184 +69,58 @@ namespace Bomberman.Game.Elements.Cells
             {
                 case Direction.LEFT:
                 case Direction.RIGHT:
-                    {   
-                        dx = m_moveKx * offset;
-                        break;
-                    }
+                {   
+                    dx = m_moveKx * offset;
+                    break;
+                }
 
                 case Direction.UP:
                 case Direction.DOWN:
-                    {   
-                        dy = m_moveKy * offset;
-                        break;
-                    }
+                {   
+                    dy = m_moveKy * offset;
+                    break;
+                }
             }
 
             Move(dx, dy);
 
-            // if the cell doesn't have any collision - adjust the movement: snap to grid
+            // we need to calculate static collisions right away to check if player's
+            // movement is blocked by a static or a still object
             GetField().CheckStaticCollisions(this);
-
+            
             switch (direction)
             {
                 case Direction.LEFT:
                 case Direction.RIGHT:
-                    {
-                        bool blocked = Math.Abs(px - oldPx) < 0.01f;
-                        dx = 0.0f;
-                        dy = GetTargetDy(delta, blocked);
-                        break;
-                    }
+                {
+                    bool blocked = Math.Abs(px - oldPx) < 0.01f;
+                    dx = 0.0f;
+                    dy = GetMoveTargetDy(delta, blocked);
+                    break;
+                }
 
                 case Direction.UP:
                 case Direction.DOWN:
-                    {
-                        bool blocked = Math.Abs(px - oldPx) < 0.01f;
-                        dx = GetTargetDx(delta, blocked);
-                        dy = 0.0f;
-                        break;
-                    }
+                {
+                    bool blocked = Math.Abs(px - oldPx) < 0.01f;
+                    dx = GetMoveTargetDx(delta, blocked);
+                    dy = 0.0f;
+                    break;
+                }
             }
 
             Move(dx, dy);
-            GetField().CheckStaticCollisions(this);
         }
 
-        //private bool TryComeRoundObstacleX(float delta, int step)
-        //{
-        //    FieldCell blockingCell = NearCell(step, 0);
-        //    if (blockingCell != null)
-        //    {
-        //        if (blockingCell.IsObstacle())
-        //        {
-        //            float blockingPy = blockingCell.GetPy();
-        //            if (py < blockingPy && !GetField().IsObstacleCell(cx + step, cy - 1))
-        //            {
-        //                MoveY(Math.Max(Util.Cy2Py(cy - 1) - py, -m_speed * delta));
-        //                return true;
-        //            }
-        //            if (py > blockingPy && !GetField().IsObstacleCell(cx + step, cy + 1))
-        //            {
-        //                MoveY(Math.Min(Util.Cy2Py(cy + 1) - py, m_speed * delta));
-        //                return true;
-        //            }
-        //        }
-        //    }
-
-        //    return false;
-        //}
-
-        //private bool TryComeRoundObstacleY(float delta, int step)
-        //{
-        //    FieldCell blockingCell = NearCell(0, step);
-        //    if (blockingCell != null)
-        //    {
-        //        if (blockingCell.IsObstacle())
-        //        {
-        //            float blockingPx = blockingCell.GetPx();
-        //            if (px < blockingPx && !GetField().IsObstacleCell(cx - 1, cy + step))
-        //            {
-        //                MoveX(Math.Max(Util.Cx2Px(cx - 1) - px, -m_speed * delta));
-        //                return true;
-        //            }
-        //            if (px > blockingPx && !GetField().IsObstacleCell(cx + 1, cy + step))
-        //            {
-        //                MoveX(Math.Min(Util.Cx2Px(cx + 1) - px, m_speed * delta));
-        //                return true;
-        //            }
-        //        }
-        //    }
-        //    return false;
-        //}
-
-        private float GetTargetDx(float delta, bool blocked)
-        {
-            float xOffset;
-
-            if (blocked)
-            {
-                float cOffset = CenterOffX;
-                if (Math.Abs(cOffset) < 0.01f) // if target offset is really small (more like calculation error) - don't try to come around obstacle
-                {
-                    return -cOffset;
-                }
-
-                int dcx = Math.Sign(cOffset);
-                int dcy = Math.Sign(m_moveKy);
-
-                Debug.Assert(dcx != 0);
-                Debug.Assert(dcy != 0);
-
-                if (HasNearObstacle(0, dcy)) // can't go ahead?
-                {
-                    if (!HasNearObstacle(dcx, dcy)) // it's ok to take the shorter path
-                    {
-                        xOffset = Util.Cx2Px(cx + dcx) - px;
-                    }
-                    else if (!HasNearObstacle(-dcx, dcy)) // it's ok to take the longer path
-                    {
-                        xOffset = Util.Cx2Px(cx - dcx) - px;
-                    }
-                    else // no way to go
-                    {
-                        return 0.0f;
-                    }
-                }
-                else
-                {
-                    xOffset = Util.TargetPxOffset(px);
-                }
-            }
-            else
-            {
-                xOffset = Util.TargetPxOffset(px);
-            }
+        protected virtual float GetMoveTargetDx(float delta, bool blocked)
+        {   
+            float xOffset = Util.TargetPxOffset(px);
             return xOffset < 0 ? Math.Max(xOffset, -delta * m_speed) : Math.Min(xOffset, delta * m_speed);
         }
 
-        private float GetTargetDy(float delta, bool blocked)
+        protected virtual float GetMoveTargetDy(float delta, bool blocked)
         {
-            float yOffset;
-
-            if (blocked)
-            {
-                float cOffset = CenterOffY;
-                if (Math.Abs(cOffset) < 0.01f) // if target offset is really small (more like calculation error) - don't try to come around obstacle
-                {
-                    return -cOffset;
-                }
-
-                int dcx = Math.Sign(m_moveKx);
-                int dcy = Math.Sign(cOffset);
-
-                Debug.Assert(dcx != 0);
-                Debug.Assert(dcy != 0);
-
-                if (HasNearObstacle(dcx, 0)) // can't go ahead?
-                {
-                    if (!HasNearObstacle(dcx, dcy)) // it's ok to take the shorter path
-                    {
-                        yOffset = Util.Cy2Py(cy + dcy) - py;
-                    }
-                    else if (!HasNearObstacle(dcx, -dcy)) // it's ok to take the longer path
-                    {
-                        yOffset = Util.Cy2Py(cy - dcy) - py;
-                    }
-                    else // no way to go
-                    {
-                        return 0.0f;
-                    }
-                }
-                else
-                {
-                    yOffset = Util.TargetPyOffset(py);
-                }
-            }
-            else
-            {
-                yOffset = Util.TargetPyOffset(py);
-            }
-
+            float yOffset = Util.TargetPyOffset(py);
             return yOffset < 0 ? Math.Max(yOffset, -delta * m_speed) : Math.Min(yOffset, delta * m_speed);
         }
 
@@ -552,6 +426,16 @@ namespace Bomberman.Game.Elements.Cells
         public Direction oldDirection
         {
             get { return m_oldDirection; }
+        }
+
+        protected float moveKx
+        {
+            get { return m_moveKx; }
+        }
+
+        protected float moveKy
+        {
+            get { return m_moveKy; }
         }
     }
 }

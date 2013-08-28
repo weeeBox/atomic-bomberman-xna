@@ -377,6 +377,7 @@ namespace Bomberman.Game.Elements.Fields
         private void UpdateMoving(float delta, MovableCell cell)
         {
             cell.UpdateMoving(delta);
+            CheckStaticCollisions(cell);
         }
 
         #endregion

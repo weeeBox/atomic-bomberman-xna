@@ -152,6 +152,106 @@ namespace Bomberman.Game.Elements.Players
             }
         }
 
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Movable
+
+        /* Player needs to overcome obstacles */
+        protected override float GetMoveTargetDx(float delta, bool blocked)
+        {
+            float xOffset;
+
+            if (blocked)
+            {
+                float cOffset = CenterOffX;
+                if (Math.Abs(cOffset) < 0.01f) // if target offset is really small (more like calculation error) - don't try to come around obstacle
+                {
+                    return -cOffset;
+                }
+
+                int dcx = Math.Sign(cOffset);
+                int dcy = Math.Sign(moveKy);
+
+                Debug.Assert(dcx != 0);
+                Debug.Assert(dcy != 0);
+
+                if (HasNearObstacle(0, dcy)) // can't go ahead?
+                {
+                    if (!HasNearObstacle(dcx, dcy)) // it's ok to take the shorter path
+                    {
+                        xOffset = Util.Cx2Px(cx + dcx) - px;
+                    }
+                    else if (!HasNearObstacle(-dcx, dcy)) // it's ok to take the longer path
+                    {
+                        xOffset = Util.Cx2Px(cx - dcx) - px;
+                    }
+                    else // no way to go
+                    {
+                        return 0.0f;
+                    }
+                }
+                else
+                {
+                    xOffset = Util.TargetPxOffset(px);
+                }
+            }
+            else
+            {
+                xOffset = Util.TargetPxOffset(px);
+            }
+            return xOffset < 0 ? Math.Max(xOffset, -delta * GetSpeed()) : Math.Min(xOffset, delta * GetSpeed());
+        }
+
+        /* Player needs to overcome obstacles */
+        protected override float GetMoveTargetDy(float delta, bool blocked)
+        {
+            float yOffset;
+
+            if (blocked)
+            {
+                float cOffset = CenterOffY;
+                if (Math.Abs(cOffset) < 0.01f) // if target offset is really small (more like calculation error) - don't try to come around obstacle
+                {
+                    return -cOffset;
+                }
+
+                int dcx = Math.Sign(moveKx);
+                int dcy = Math.Sign(cOffset);
+
+                Debug.Assert(dcx != 0);
+                Debug.Assert(dcy != 0);
+
+                if (HasNearObstacle(dcx, 0)) // can't go ahead?
+                {
+                    if (!HasNearObstacle(dcx, dcy)) // it's ok to take the shorter path
+                    {
+                        yOffset = Util.Cy2Py(cy + dcy) - py;
+                    }
+                    else if (!HasNearObstacle(dcx, -dcy)) // it's ok to take the longer path
+                    {
+                        yOffset = Util.Cy2Py(cy - dcy) - py;
+                    }
+                    else // no way to go
+                    {
+                        return 0.0f;
+                    }
+                }
+                else
+                {
+                    yOffset = Util.TargetPyOffset(py);
+                }
+            }
+            else
+            {
+                yOffset = Util.TargetPyOffset(py);
+            }
+
+            return yOffset < 0 ? Math.Max(yOffset, -delta * GetSpeed()) : Math.Min(yOffset, delta * GetSpeed());
+        }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
