@@ -377,9 +377,6 @@ namespace Bomberman.Game.Elements.Fields
         private void UpdateMoving(float delta, MovableCell cell)
         {
             cell.UpdateMoving(delta);
-
-            CheckWallCollisions(cell);
-            CheckStaticCollisions(cell);
         }
 
         #endregion
@@ -825,7 +822,18 @@ namespace Bomberman.Game.Elements.Fields
             }
         }
 
-        private void CheckStaticCollisions(MovableCell movable)
+        public bool CheckStaticCollisions(MovableCell movable)
+        {
+            bool hasCollision = false;
+
+            hasCollision |= CheckWallCollisions(movable);
+            hasCollision |= CheckStillCellsCollisions(movable);
+
+            return hasCollision;
+        }
+
+        /* Checks collision with static cells (bricks and solids) + still movable obstacles (not moving bombs) */
+        private bool CheckStillCellsCollisions(MovableCell movable)
         {
             int cx = movable.cx;
             int cy = movable.cy;
@@ -836,51 +844,56 @@ namespace Bomberman.Game.Elements.Fields
             bool hasStepX = stepX != 0;
             bool hasStepY = stepY != 0;
 
-            CheckStaticCollisions(movable, GetSlot(cx, cy));
+            bool hasCollision = false;
+
+            hasCollision |= CheckStillCollisions(movable, GetSlot(cx, cy));
 
             if (hasStepX && hasStepY)
             {
-                CheckStaticCollisions(movable, GetSlot(cx + stepX, cy));
-                CheckStaticCollisions(movable, GetSlot(cx, cy + stepY));
-                CheckStaticCollisions(movable, GetSlot(cx + stepX, cy + stepY));
+                hasCollision |= CheckStillCollisions(movable, GetSlot(cx + stepX, cy));
+                hasCollision |= CheckStillCollisions(movable, GetSlot(cx, cy + stepY));
+                hasCollision |= CheckStillCollisions(movable, GetSlot(cx + stepX, cy + stepY));
             }
             else if (hasStepX)
             {
-                CheckStaticCollisions(movable, GetSlot(cx + stepX, cy));
+                hasCollision |= CheckStillCollisions(movable, GetSlot(cx + stepX, cy));
             }
             else if (hasStepY)
             {
-                CheckStaticCollisions(movable, GetSlot(cx, cy + stepY));
+                hasCollision |= CheckStillCollisions(movable, GetSlot(cx, cy + stepY));
             }
+
+            return hasCollision;
         }
 
-        private void CheckStaticCollisions(MovableCell movable, FieldCellSlot slot)
+        private bool CheckStillCollisions(MovableCell movable, FieldCellSlot slot)
         {
             if (slot != null)
             {
                 FieldCell staticCell = slot.staticCell;
                 if (staticCell != null)
                 {
-                    CheckCollision(movable, staticCell);
+                    return CheckCollision(movable, staticCell);
                 }
-                else
+                
+                FlameCell flame = slot.GetFlame();
+                if (flame != null && CheckCollision(movable, flame))
                 {
-                    FlameCell flame = slot.GetFlame();
-                    if (flame != null && flame.GetCx() == slot.cx && flame.GetCy() == slot.cy)
-                    {
-                        movable.HandleCollision(flame);
-                    }
+                    return true;
+                }
+
+                Bomb bomb = slot.GetBomb();
+                if (bomb != null && !bomb.IsMoving() && CheckCollision(movable, bomb))
+                {
+                    return true;
                 }
             }
+
+            return false;
         }
 
-        private bool CheckCollision(MovableCell c1, FieldCell c2)
+        private bool CheckWallCollisions(MovableCell movable)
         {
-            return Collides(c1, c2) && c1.HandleCollision(c2);
-        }
-
-        private void CheckWallCollisions(MovableCell movable)
-        {   
             float dx = movable.moveDx;
             float dy = movable.moveDy;
 
@@ -891,6 +904,8 @@ namespace Bomberman.Game.Elements.Fields
                 {
                     movable.SetPosX(maxX);
                     movable.HandleWallCollision();
+
+                    return true;
                 }
             }
             else if (dx < 0)
@@ -900,6 +915,8 @@ namespace Bomberman.Game.Elements.Fields
                 {
                     movable.SetPosX(minX);
                     movable.HandleWallCollision();
+
+                    return true;
                 }
             }
 
@@ -910,6 +927,8 @@ namespace Bomberman.Game.Elements.Fields
                 {
                     movable.SetPosY(maxY);
                     movable.HandleWallCollision();
+
+                    return true;
                 }
             }
             else if (dy < 0)
@@ -919,8 +938,17 @@ namespace Bomberman.Game.Elements.Fields
                 {
                     movable.SetPosY(minY);
                     movable.HandleWallCollision();
+
+                    return true;
                 }
             }
+
+            return false;
+        }
+
+        private bool CheckCollision(MovableCell c1, FieldCell c2)
+        {
+            return Collides(c1, c2) && c1.HandleCollision(c2);
         }
 
         private bool Collides(FieldCell a, FieldCell b)

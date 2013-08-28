@@ -708,7 +708,7 @@ namespace Bomberman.Game.Elements.Players
 
         private bool TryKick(Bomb bomb)
         {
-            FieldCellSlot blockingSlot = bomb.NearSlotDir(direction);
+            FieldCellSlot blockingSlot = bomb.GetNearSlot(direction);
             if (blockingSlot != null && !blockingSlot.ContainsObstacle())
             {
                 KickBomb(bomb);
@@ -1073,7 +1073,7 @@ namespace Bomberman.Game.Elements.Players
         {
             IsPunchingBomb = true;
 
-            FieldCellSlot slot = NearSlotDir(direction);
+            FieldCellSlot slot = GetNearSlot(direction);
             Bomb bomb = slot != null ? slot.GetBomb() : null;
             if (bomb != null)
             {   

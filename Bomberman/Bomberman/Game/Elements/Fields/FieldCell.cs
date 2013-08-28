@@ -190,29 +190,35 @@ namespace Bomberman.Game.Elements.Fields
             return py - CellCenterPy();
         }
 
-        public FieldCellSlot NearSlot(int dcx, int dcy)
+        public FieldCellSlot GetNearSlot(int dcx, int dcy)
         {
             return GetField().GetSlot(cx + dcx, cy + dcy);
         }
 
-        public FieldCellSlot NearSlotDir(Direction dir)
+        public FieldCellSlot GetNearSlot(Direction dir)
         {
             switch (dir)
             {
                 case Direction.DOWN:
-                    return NearSlot(0, 1);
+                    return GetNearSlot(0, 1);
                 case Direction.UP:
-                    return NearSlot(0, -1);
+                    return GetNearSlot(0, -1);
                 case Direction.LEFT:
-                    return NearSlot(-1, 0);
+                    return GetNearSlot(-1, 0);
                 case Direction.RIGHT:
-                    return NearSlot(1, 0);
+                    return GetNearSlot(1, 0);
                 default:
                     Debug.Assert(false, "Unknown dir: " + dir);
                     break;
             }
 
             return null;
+        }
+
+        public bool HasNearObstacle(int dcx, int dcy)
+        {
+            FieldCellSlot slot = GetNearSlot(dcx, dcy);
+            return slot == null || slot.ContainsObstacle();
         }
 
         public void RemoveFromField()

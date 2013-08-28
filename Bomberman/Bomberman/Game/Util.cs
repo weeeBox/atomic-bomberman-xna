@@ -33,6 +33,26 @@ namespace Bomberman.Game
             return (cy + 0.5f) * ch;
         }
 
+        public static float CellLeftX(float px)
+        {
+            return CellCenterPx(px) - 0.5f * ch;
+        }
+
+        public static float CellRightX(float px)
+        {
+            return CellCenterPx(px) + 0.5f * ch;
+        }
+
+        public static float CellTopY(float py)
+        {
+            return CellCenterPy(py) - 0.5f * ch;
+        }
+
+        public static float CellBottomY(float py)
+        {
+            return CellCenterPy(py) + 0.5f * ch;
+        }
+
         public static float CellCenterPx(float px)
         {
             return Cx2Px(Px2Cx(px));
@@ -43,20 +63,26 @@ namespace Bomberman.Game
             return Cy2Py(Py2Cy(py));
         }
 
-        public static float TargetPxOffset(float px, Direction oldDir)
+        public static float CellCenterOffX(float px)
         {
-            float prevPx = Cx2Px(Px2Cx(px));
-            float dx = px - prevPx;
-            // float k = oldDir == Direction.RIGHT ? 0.15f : oldDir == Direction.LEFT ? 0.85f : 0.5f;
-            return dx < 0.5f * cw ? -dx : (cw - dx);
+            return px - CellCenterPx(px);
         }
 
-        public static float TargetPyOffset(float py, Direction oldDir)
+        public static float CellCenterOffY(float py)
         {
-            float prevPy = Cy2Py(Py2Cy(py));
-            float dy = py - prevPy;
-            //float k = oldDir == Direction.DOWN ? 0.15f : oldDir == Direction.UP ? 0.85f : 0.5f;
-            return dy < 0.5f * ch ? -dy : (ch - dy);
+            return py - CellCenterPy(py);
+        }
+
+        public static float TargetPxOffset(float px)
+        {
+            float offset = CellCenterOffX(px);
+            return offset < 0.5f * cw ? -offset : (cw - offset);
+        }
+
+        public static float TargetPyOffset(float py)
+        {
+            float offset = CellCenterOffY(py);
+            return offset < 0.5f * ch ? -offset : (ch - offset);
         }
 
         public static float TravelDistanceX(float fromPx, int toCx)

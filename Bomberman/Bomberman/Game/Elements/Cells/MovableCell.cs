@@ -61,26 +61,53 @@ namespace Bomberman.Game.Elements.Cells
             float dx = 0;
             float dy = 0;
 
+            float oldPx = px;
+            float oldPy = py;
+
             switch (direction)
             {
                 case Direction.LEFT:
                 case Direction.RIGHT:
                     {   
                         dx = m_moveKx * offset;
-                        dy = GetTargetDy(delta);
                         break;
                     }
 
                 case Direction.UP:
                 case Direction.DOWN:
-                    {
-                        dx = GetTargetDx(delta);
+                    {   
                         dy = m_moveKy * offset;
                         break;
                     }
             }
 
             Move(dx, dy);
+
+            // if the cell doesn't have any collision - adjust the movement: snap to grid
+            GetField().CheckStaticCollisions(this);
+
+            switch (direction)
+            {
+                case Direction.LEFT:
+                case Direction.RIGHT:
+                    {
+                        bool blocked = Math.Abs(px - oldPx) < 0.01f;
+                        dx = 0.0f;
+                        dy = GetTargetDy(delta, blocked);
+                        break;
+                    }
+
+                case Direction.UP:
+                case Direction.DOWN:
+                    {   
+                        dx = GetTargetDx(delta);
+                        dy = 0.0f;
+                        break;
+                    }
+            }
+
+            Move(dx, dy);
+            GetField().CheckStaticCollisions(this);
         }
 
         //private bool TryComeRoundObstacleX(float delta, int step)
@@ -132,13 +159,45 @@ namespace Bomberman.Game.Elements.Cells
 
         private float GetTargetDx(float delta)
         {
-            float xOffset = Util.TargetPxOffset(px, m_oldDirection);
+            float xOffset = Util.TargetPxOffset(px);
             return xOffset < 0 ? Math.Max(xOffset, -delta * m_speed) : Math.Min(xOffset, delta * m_speed);
         }
 
-        private float GetTargetDy(float delta)
+        private float GetTargetDy(float delta, bool blocked)
         {
-            float yOffset = Util.TargetPyOffset(py, m_oldDirection);
+            float yOffset = Util.TargetPyOffset(py);
+
+            if (blocked)
+            {
+                // if target offset is really small (more like calculation error) - don't try to come
+                // around obstacle
+                if (Math.Abs(yOffset) < 0.01f)
+                {
+                    return yOffset;
+                }
+
+                bool obstacleUp   = HasNearObstacle(0, -1);
+                bool obstacleDown = HasNearObstacle(0, 1);
+
+                if (obstacleUp && obstacleDown)
+                {
+                    return 0; // don't adjust pos
+                }
+
+                if (obstacleUp)
+                {
+                    yOffset = Util.Cy2Py(cy + 1) - py;
+                }
+                else if (obstacleDown)
+                {
+                    yOffset = Util.Cy2Py(cy - 1) - py;
+                }
+                else
+                {
+                    yOffset = Util.TargetPyOffset(py);
+                }
+            }
+
             return yOffset < 0 ? Math.Max(yOffset, -delta * m_speed) : Math.Min(yOffset, delta * m_speed);
         }
 
@@ -411,6 +470,16 @@ namespace Bomberman.Game.Elements.Cells
             return m_speed * m_moveKy;
         }
 
+        public float CenterOffX
+        {
+            get { return Util.CellCenterOffX(px); }
+        }
+
+        public float CenterOffY
+        {
+            get { return Util.CellCenterOffY(py); }
+        }
+
         public override bool IsMovable()
         {
             return true;
@@ -421,7 +490,7 @@ namespace Bomberman.Game.Elements.Cells
             return this;
         }
 
-        public virtual bool IsMoving()
+        public bool IsMoving()
         {
             return m_moving;
         }
