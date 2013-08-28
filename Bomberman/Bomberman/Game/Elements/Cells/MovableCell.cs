@@ -100,8 +100,9 @@ namespace Bomberman.Game.Elements.Cells
 
                 case Direction.UP:
                 case Direction.DOWN:
-                    {   
-                        dx = GetTargetDx(delta);
+                    {
+                        bool blocked = Math.Abs(px - oldPx) < 0.01f;
+                        dx = GetTargetDx(delta, blocked);
                         dy = 0.0f;
                         break;
                     }
@@ -158,9 +159,48 @@ namespace Bomberman.Game.Elements.Cells
         //    return false;
         //}
 
-        private float GetTargetDx(float delta)
+        private float GetTargetDx(float delta, bool blocked)
         {
-            float xOffset = Util.TargetPxOffset(px);
+            float xOffset;
+
+            if (blocked)
+            {
+                float cOffset = CenterOffX;
+                if (Math.Abs(cOffset) < 0.01f) // if target offset is really small (more like calculation error) - don't try to come around obstacle
+                {
+                    return -cOffset;
+                }
+
+                int dcx = Math.Sign(cOffset);
+                int dcy = Math.Sign(m_moveKy);
+
+                Debug.Assert(dcx != 0);
+                Debug.Assert(dcy != 0);
+
+                if (HasNearObstacle(0, dcy)) // can't go ahead?
+                {
+                    if (!HasNearObstacle(dcx, dcy)) // it's ok to take the shorter path
+                    {
+                        xOffset = Util.Cx2Px(cx + dcx) - px;
+                    }
+                    else if (!HasNearObstacle(-dcx, dcy)) // it's ok to take the longer path
+                    {
+                        xOffset = Util.Cx2Px(cx - dcx) - px;
+                    }
+                    else // no way to go
+                    {
+                        return 0.0f;
+                    }
+                }
+                else
+                {
+                    xOffset = Util.TargetPxOffset(px);
+                }
+            }
+            else
+            {
+                xOffset = Util.TargetPxOffset(px);
+            }
             return xOffset < 0 ? Math.Max(xOffset, -delta * m_speed) : Math.Min(xOffset, delta * m_speed);
         }
 
@@ -182,17 +222,24 @@ namespace Bomberman.Game.Elements.Cells
                 Debug.Assert(dcx != 0);
                 Debug.Assert(dcy != 0);
 
-                if (!HasNearObstacle(dcx, dcy)) // it's ok to take the shorter path
+                if (HasNearObstacle(dcx, 0)) // can't go ahead?
                 {
-                    yOffset = Util.Cx2Px(cy + dcy) - py;
+                    if (!HasNearObstacle(dcx, dcy)) // it's ok to take the shorter path
+                    {
+                        yOffset = Util.Cy2Py(cy + dcy) - py;
+                    }
+                    else if (!HasNearObstacle(dcx, -dcy)) // it's ok to take the longer path
+                    {
+                        yOffset = Util.Cy2Py(cy - dcy) - py;
+                    }
+                    else // no way to go
+                    {
+                        return 0.0f;
+                    }
                 }
-                else if (!HasNearObstacle(dcx, -dcy)) // it's ok to take the longer path
+                else
                 {
-                    yOffset = Util.Cx2Px(cy - dcy) - py;
-                }
-                else // no way to go
-                {
-                    return 0.0f;
+                    yOffset = Util.TargetPyOffset(py);
                 }
             }
             else
