@@ -48,7 +48,8 @@ namespace Bomberman.Content
             m_frameTime += delta * m_speedMultiplier;
             if (m_frameTime >= m_animation.frames[m_frameIndex].duration) // TODO: handle skipped frames
             {
-                m_frameTime = 0.0f;
+                m_frameTime -= m_animation.frames[m_frameIndex].duration;
+
                 if (m_frameIndex == m_animation.frames.Length - 1)
                 {
                     if (m_mode == Mode.Normal)

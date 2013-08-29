@@ -46,5 +46,6 @@ public class Animation extends Asset
 		public int oy;
 		public int w;
 		public int h;
+		public int duration;
 	}
 }

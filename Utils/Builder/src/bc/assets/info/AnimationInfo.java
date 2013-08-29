@@ -96,6 +96,7 @@ class AnimationImporter extends ContentImporter<AnimationInfo, Animation>
 		frame.oy = attributeInt(element, "oy");
 		frame.w = attributeInt(element, "w");
 		frame.h = attributeInt(element, "h");
+		frame.duration = attributeInt(element, "duration", 50);
 		
 		return frame;
 	}
@@ -115,23 +116,30 @@ class AnimationImporter extends ContentImporter<AnimationInfo, Animation>
 	private String attributeString(Element element, String name)
 	{
 		String value = element.attributeValue(name);
-		if (value == null)
-			throw new BuildException("Missing '" + name + "' attribute");
-		
 		return value;
 	}
 	
 	private int attributeInt(Element element, String name)
 	{
+		return attributeInt(element, name, 0);
+	}
+	
+	private int attributeInt(Element element, String name, int defaultValue)
+	{
 		String value = attributeString(element, name);
-		try
+		if (value != null)
 		{
-			return Integer.parseInt(value);
+			try
+			{
+				return Integer.parseInt(value);
+			}
+			catch (NumberFormatException e)
+			{
+				throw new BuildException(e);
+			}
 		}
-		catch (NumberFormatException e)
-		{
-			throw new BuildException(e);
-		}
+		
+		return defaultValue;
 	}
 }
 
@@ -161,6 +169,7 @@ class AnimationWriter extends ContentWriter<Animation>
 		output.write(frame.oy);
 		output.write(frame.w);
 		output.write(frame.h);
+		output.write(frame.duration);
 	}
 
 	private void write(BinaryWriter output, Texture texture) throws IOException

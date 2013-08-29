@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <animation name="walk_east" file="walk_east.png">
-  <frame x="0" y="893" ox="22" oy="69" w="34" h="67"/>
-  <frame x="0" y="631" ox="24" oy="68" w="35" h="67"/>
-  <frame x="0" y="698" ox="22" oy="67" w="35" h="66"/>
-  <frame x="0" y="440" ox="23" oy="66" w="38" h="64"/>
-  <frame x="0" y="248" ox="24" oy="64" w="41" h="62"/>
-  <frame x="0" y="310" ox="25" oy="66" w="40" h="64"/>
-  <frame x="0" y="567" ox="25" oy="66" w="36" h="64"/>
-  <frame x="0" y="764" ox="24" oy="66" w="35" h="64"/>
-  <frame x="0" y="828" ox="22" oy="66" w="35" h="65"/>
-  <frame x="0" y="504" ox="22" oy="65" w="37" h="63"/>
-  <frame x="0" y="122" ox="23" oy="64" w="43" h="63"/>
-  <frame x="0" y="61" ox="22" oy="62" w="45" h="61"/>
-  <frame x="0" y="0" ox="26" oy="63" w="47" h="61"/>
-  <frame x="0" y="185" ox="24" oy="64" w="43" h="63"/>
-  <frame x="0" y="374" ox="24" oy="67" w="39" h="66"/>
+  <frame x="0" y="893" ox="22" oy="69" w="34" h="67" duration="5"/>
+  <frame x="0" y="631" ox="24" oy="68" w="35" h="67" duration="5"/>
+  <frame x="0" y="698" ox="22" oy="67" w="35" h="66" duration="5"/>
+  <frame x="0" y="440" ox="23" oy="66" w="38" h="64" duration="5"/>
+  <frame x="0" y="248" ox="24" oy="64" w="41" h="62" duration="5"/>
+  <frame x="0" y="310" ox="25" oy="66" w="40" h="64" duration="5"/>
+  <frame x="0" y="567" ox="25" oy="66" w="36" h="64" duration="5"/>
+  <frame x="0" y="764" ox="24" oy="66" w="35" h="64" duration="5"/>
+  <frame x="0" y="828" ox="22" oy="66" w="35" h="65" duration="5"/>
+  <frame x="0" y="504" ox="22" oy="65" w="37" h="63" duration="5"/>
+  <frame x="0" y="122" ox="23" oy="64" w="43" h="63" duration="5"/>
+  <frame x="0" y="61" ox="22" oy="62" w="45" h="61" duration="5"/>
+  <frame x="0" y="0" ox="26" oy="63" w="47" h="61" duration="5"/>
+  <frame x="0" y="185" ox="24" oy="64" w="43" h="63" duration="5"/>
+  <frame x="0" y="374" ox="24" oy="67" w="39" h="66" duration="5"/>
 </animation>
