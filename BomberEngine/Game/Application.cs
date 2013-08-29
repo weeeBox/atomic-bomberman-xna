@@ -11,6 +11,7 @@ using BomberEngine.Core.Events;
 using BomberEngine.Core.Storage;
 using BomberEngine.Util;
 using BomberEngine.Consoles;
+using BomberEngine.Demo;
 
 namespace BomberEngine.Game
 {
@@ -128,10 +129,16 @@ namespace BomberEngine.Game
             rootController = CreateRootController();
             AddGameObject(rootController);
             
+            #if DEBUG_DEMO
+            DemoRecorder recorder = new DemoRecorder();
+            AddUpdatable(recorder);
+            inputManager.AddInputListener(recorder);
+            #endif
+
             started = true;
             OnStart();
 
-            inputManager.SetInputListener(rootController);
+            inputManager.AddInputListener(rootController);
             rootController.Start();
         }
 

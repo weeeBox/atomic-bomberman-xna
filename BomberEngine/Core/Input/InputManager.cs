@@ -123,8 +123,8 @@ namespace BomberEngine.Core.Input
 
         private KeyRepeatInfo[] keyRepeats;
 
-        private IKeyInputListener keyListener;
-        private ITouchInputListener touchListener;
+        private List<IKeyInputListener> keyListeners;
+        private List<ITouchInputListener> touchListeners;
 
         private GamePadDeadZone deadZone;
 
@@ -135,6 +135,8 @@ namespace BomberEngine.Core.Input
         public InputManager()
         {
             deadZone = GamePadDeadZone.Circular;
+            keyListeners = new List<IKeyInputListener>();
+            touchListeners = new List<ITouchInputListener>();
 
             currentGamepadStates = new GamePadState[MAX_GAMEPADS_COUNT];
             for (int i = 0; i < currentGamepadStates.Length; ++i)
@@ -172,7 +174,10 @@ namespace BomberEngine.Core.Input
             {
                 if (keyRepeats[i].timestamp < currentTime)
                 {
-                    keyListener.OnKeyRepeated(keyRepeats[i].eventArg);
+                    for (int j = 0; j < keyListeners.Count; ++j)
+                    {
+                        keyListeners[j].OnKeyRepeated(keyRepeats[i].eventArg);
+                    }
                     keyRepeats[i].timestamp = currentTime + 0.03f;
                 }
             }
@@ -318,27 +323,24 @@ namespace BomberEngine.Core.Input
             KeyboardState oldState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
 
-            if (keyListener != null)
+            Keys[] oldKeys = oldState.GetPressedKeys();
+            Keys[] newKeys = currentKeyboardState.GetPressedKeys();
+
+            for (int i = 0; i < newKeys.Length; ++i)
             {
-                Keys[] oldKeys = oldState.GetPressedKeys();
-                Keys[] newKeys = currentKeyboardState.GetPressedKeys();
-
-                for (int i = 0; i < newKeys.Length; ++i)
+                if (!oldKeys.Contains(newKeys[i]))
                 {
-                    if (!oldKeys.Contains(newKeys[i]))
-                    {
-                        UpdateModifierKeysPressed(ref newKeys[i]);
-                        FireKeyPressed(-1, KeyCodeHelper.FromKey(newKeys[i]), REPEAT_KEYBOARD_INDEX);
-                    }
+                    UpdateModifierKeysPressed(ref newKeys[i]);
+                    FireKeyPressed(-1, KeyCodeHelper.FromKey(newKeys[i]), REPEAT_KEYBOARD_INDEX);
                 }
-                for (int i = 0; i < oldKeys.Length; ++i)
+            }
+            for (int i = 0; i < oldKeys.Length; ++i)
+            {
+                if (!newKeys.Contains(oldKeys[i]))
                 {
-                    if (!newKeys.Contains(oldKeys[i]))
-                    {
-                        UpdateModifierKeysReleased(ref oldKeys[i]);
+                    UpdateModifierKeysReleased(ref oldKeys[i]);
 
-                        FireKeyReleased(-1, KeyCodeHelper.FromKey(oldKeys[i]), REPEAT_KEYBOARD_INDEX);
-                    }
+                    FireKeyReleased(-1, KeyCodeHelper.FromKey(oldKeys[i]), REPEAT_KEYBOARD_INDEX);
                 }
             }
         }
@@ -357,14 +359,20 @@ namespace BomberEngine.Core.Input
         private void FireKeyPressed(int playerIndex, KeyCode key, int index)
         {
             KeyEventArg eventArg = new KeyEventArg(key, playerIndex);
-            keyListener.OnKeyPressed(eventArg);
+            for (int i = 0; i < keyListeners.Count; ++i)
+            {
+                keyListeners[i].OnKeyPressed(eventArg);
+            }
             SetKeyRepeat(ref eventArg, index);
         }
 
         private void FireKeyReleased(int playerIndex, KeyCode key, int index)
         {
             KeyEventArg eventArg = new KeyEventArg(key, playerIndex);
-            keyListener.OnKeyReleased(eventArg);
+            for (int i = 0; i < keyListeners.Count; ++i)
+            {
+                keyListeners[i].OnKeyReleased(eventArg);
+            }
             ClearKeyRepeat(ref eventArg, index);
         }
 
@@ -394,30 +402,22 @@ namespace BomberEngine.Core.Input
 
         #region Properties
 
-        public void SetInputListener(IInputListener listener)
+        public void AddInputListener(IInputListener listener)
         {
-            SetKeyboardListener(listener);
-            SetTouchListener(listener);
+            AddKeyboardListener(listener);
+            AddTouchListener(listener);
         }
 
-        public IKeyInputListener GetKeyboardListener()
+        public void AddKeyboardListener(IKeyInputListener listener)
         {
-            return keyListener;
+            Debug.Assert(!keyListeners.Contains(listener));
+            keyListeners.Add(listener);
         }
 
-        public void SetKeyboardListener(IKeyInputListener listener)
+        public void AddTouchListener(ITouchInputListener listener)
         {
-            keyListener = listener;
-        }
-
-        public ITouchInputListener GetTouchListener()
-        {
-            return touchListener;
-        }
-
-        public void SetTouchListener(ITouchInputListener listener)
-        {
-            this.touchListener = listener;
+            Debug.Assert(!touchListeners.Contains(listener));
+            touchListeners.Add(listener);
         }
 
         public bool IsShiftPressed()
