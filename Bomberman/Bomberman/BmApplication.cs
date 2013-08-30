@@ -11,6 +11,7 @@ using BomberEngine.Core.Assets.Types;
 using BomberEngine.Core.Events;
 using BomberEngine.Consoles;
 using BomberEngine.Core.Visual;
+using System;
 
 namespace Bomberman
 {
@@ -59,9 +60,14 @@ namespace Bomberman
 
     public class BmDemoPlayerApplication : BmApplication
     {
+        public BmDemoPlayerApplication(ContentManager contentManager, ApplicationInfo info)
+            : base(contentManager, info)
+        {
+        }
+
         protected override InputManager CreateInputManager()
         {
-
+            throw new NotImplementedException();
         }
     }
 }

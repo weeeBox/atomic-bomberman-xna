@@ -86,14 +86,14 @@ namespace BomberEngine.Game
             return new TimerManager();
         }
 
-        private virtual NotificationCenter CreateNotifications(TimerManager timerManager)
+        protected virtual NotificationCenter CreateNotifications(TimerManager timerManager)
         {
             return new NotificationCenter(timerManager);
         }
 
         protected virtual InputManager CreateInputManager()
         {
-            return new InputManager();
+            return new InputManagerImpl();
         }
 
         protected virtual SharedStorage CreateSharedStorage(String filename, TimerManager timerManager)
@@ -122,7 +122,10 @@ namespace BomberEngine.Game
             sharedStorage = CreateSharedStorage("storage",  timerManager);
 
             inputManager = CreateInputManager();
-            AddUpdatable(inputManager);
+            if (inputManager is IUpdatable)
+            {
+                AddUpdatable(inputManager as IUpdatable);
+            }
 
             assetManager = CreateAssetManager();
 

@@ -117,7 +117,6 @@ namespace Bomberman
             }
             catch (Exception ex)
             {
-                application.RunCrashStop();
                 throw ex;
             }
             

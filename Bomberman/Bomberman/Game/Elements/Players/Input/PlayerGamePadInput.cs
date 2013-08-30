@@ -35,7 +35,7 @@ namespace Bomberman.Game.Elements.Players.Input
 
             InputManager im = Application.Input();
 
-            Vector2 stick = im.ThumbSticks(playerIndex).Left;
+            Vector2 stick = im.LeftThumbStick(playerIndex);
             float dx = stick.X;
             float dy = stick.Y;
 

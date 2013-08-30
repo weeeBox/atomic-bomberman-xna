@@ -51,7 +51,26 @@ namespace BomberEngine.Core.Input
         }
     }
 
-    public class InputManager : BaseObject, IUpdatable
+    public interface InputManager
+    {
+        void AddInputListener(IInputListener listener);
+
+        bool IsKeyPressed(KeyCode key);
+        bool IsShiftPressed();
+        bool IsAltPressed();
+        bool IsControlPressed();
+        
+        bool IsButtonPressed(int playerIndex, KeyCode keyCode);
+        bool IsGamePadConnected(int playerIndex);
+
+        Vector2 LeftThumbStick(int playerIndex = 0);
+        Vector2 RightThumbStick(int playerIndex = 0);
+        
+        float LeftTrigger(int playerIndex = 0);
+        float RightTrigger(int playerIndex = 0);
+    }
+
+    public class InputManagerImpl : BaseObject, InputManager, IUpdatable
     {
         private static PlayerIndex[] PLAYERS_INDICES = 
         { 
@@ -132,7 +151,7 @@ namespace BomberEngine.Core.Input
         private bool ctrlPressed;
         private bool altPressed;
 
-        public InputManager()
+        public InputManagerImpl()
         {
             deadZone = GamePadDeadZone.Circular;
             keyListeners = new List<IKeyInputListener>();
@@ -276,24 +295,24 @@ namespace BomberEngine.Core.Input
 
         #region Gamepad analogs
 
-        public GamePadThumbSticks ThumbSticks()
+        public Vector2 LeftThumbStick(int playerIndex = 0)
         {
-            return ThumbSticks(0);
+            return currentGamepadStates[playerIndex].ThumbSticks.Left;
         }
 
-        public GamePadThumbSticks ThumbSticks(int playerIndex)
+        public Vector2 RightThumbStick(int playerIndex = 0)
         {
-            return currentGamepadStates[playerIndex].ThumbSticks;
+            return currentGamepadStates[playerIndex].ThumbSticks.Right;
         }
 
-        public GamePadTriggers Triggers()
+        public float LeftTrigger(int playerIndex = 0)
         {
-            return Triggers(0);
+            return currentGamepadStates[playerIndex].Triggers.Left;
         }
 
-        public GamePadTriggers Triggers(int playerIndex)
+        public float RightTrigger(int playerIndex = 0)
         {
-            return currentGamepadStates[playerIndex].Triggers;
+            return currentGamepadStates[playerIndex].Triggers.Right;
         }
 
         #endregion
