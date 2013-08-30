@@ -30,13 +30,13 @@ namespace BomberEngine.Demo
 
         public void Update(float delta)
         {
-            m_tickCmd.frameTime = delta;
-            Write(m_tickCmd);
-
             if (m_inputCmd.IsChanged)
             {
                 Write(m_inputCmd);
             }
+
+            m_tickCmd.frameTime = delta;
+            Write(m_tickCmd);
         }
 
         #endregion
@@ -63,8 +63,14 @@ namespace BomberEngine.Demo
             {
                 byte[] data = m_buffer.Data;
                 int length = m_buffer.LengthBytes;
+                int bitLegth = m_buffer.LengthBits;
 
-                stream.Write(data, 0, length);
+                using (System.IO.BinaryWriter writer = new System.IO.BinaryWriter(stream))
+                {
+                    writer.Write(bitLegth);
+                    writer.Write(length);
+                    stream.Write(data, 0, length);
+                }
             }
         }
 

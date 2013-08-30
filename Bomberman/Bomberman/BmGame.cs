@@ -110,9 +110,24 @@ namespace Bomberman
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            try
+            {
+                float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                RunUpdate(delta);
+            }
+            catch (Exception ex)
+            {
+                application.RunCrashStop();
+                throw ex;
+            }
+            
+            base.Update(gameTime);
+        }
+
+        private void RunUpdate(float delta)
+        {
             if (application.IsRunning())
             {
-                float delta = (float) gameTime.ElapsedGameTime.TotalSeconds;
                 application.Update(delta);
             }
             else
@@ -127,8 +142,6 @@ namespace Bomberman
                 application.RunStop();
                 Exit();
             }
-            
-            base.Update(gameTime);
         }
 
         /// <summary>

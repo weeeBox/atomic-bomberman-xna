@@ -81,22 +81,22 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
-        protected TimerManager CreateTimerManager()
+        protected virtual TimerManager CreateTimerManager()
         {
             return new TimerManager();
         }
 
-        private NotificationCenter CreateNotifications(TimerManager timerManager)
+        private virtual NotificationCenter CreateNotifications(TimerManager timerManager)
         {
             return new NotificationCenter(timerManager);
         }
 
-        protected InputManager CreateInputManager()
+        protected virtual InputManager CreateInputManager()
         {
             return new InputManager();
         }
 
-        protected SharedStorage CreateSharedStorage(String filename, TimerManager timerManager)
+        protected virtual SharedStorage CreateSharedStorage(String filename, TimerManager timerManager)
         {
             return new SharedStorage(filename, timerManager);
         }

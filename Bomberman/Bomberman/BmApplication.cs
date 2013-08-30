@@ -54,4 +54,14 @@ namespace Bomberman
             return Application.RootController() as BmRootController;
         }
     }
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    public class BmDemoPlayerApplication : BmApplication
+    {
+        protected override InputManager CreateInputManager()
+        {
+
+        }
+    }
 }

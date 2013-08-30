@@ -5,6 +5,7 @@ using System.Text;
 using BomberEngine.Core.IO;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core.Input;
+using BomberEngine.Game;
 
 namespace BomberEngine.Demo
 {
@@ -25,12 +26,19 @@ namespace BomberEngine.Demo
             m_type = type;
         }
 
+        // returns "true" if no more commands should be executed
+        public abstract bool Execute();
         public abstract void Write(BitWriteBuffer buffer);
         public abstract void Read(BitReadBuffer buffer);
 
         public DemoCmdType cmdType
         {
             get { return m_type; }
+        }
+
+        protected Application GetApplication()
+        {
+            return Application.sharedApplication;
         }
     }
 
@@ -43,6 +51,12 @@ namespace BomberEngine.Demo
         public DemoTickCmd()
             : base(DemoCmdType.Tick)
         {
+        }
+
+        public override bool Execute()
+        {
+            GetApplication().Update(m_frameTime);
+            return true;
         }
 
         public override void Write(BitWriteBuffer buffer)
@@ -81,6 +95,11 @@ namespace BomberEngine.Demo
             m_pressedKeys = new List<KeyEventArg>(64);
             m_repeatedKeys = new List<KeyEventArg>(64);
             m_releasedKeys = new List<KeyEventArg>(64);
+        }
+
+        public override bool Execute()
+        {
+            throw new NotImplementedException();
         }
 
         public override void Write(BitWriteBuffer buffer)
