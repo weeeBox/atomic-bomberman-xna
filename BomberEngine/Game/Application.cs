@@ -93,7 +93,7 @@ namespace BomberEngine.Game
 
         protected virtual InputManager CreateInputManager()
         {
-            return new InputManagerImpl();
+            return new DefaultInputManager();
         }
 
         protected virtual SharedStorage CreateSharedStorage(String filename, TimerManager timerManager)

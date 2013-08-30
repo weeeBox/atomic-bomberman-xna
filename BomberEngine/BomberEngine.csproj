@@ -159,6 +159,7 @@
     <Compile Include="Demo\DemoCmd.cs" />
     <Compile Include="Demo\DemoManager.cs" />
     <Compile Include="Demo\DemoPlayer.cs" />
+    <Compile Include="Demo\DemoPlayerInputManager.cs" />
     <Compile Include="Demo\DemoRecorder.cs" />
     <Compile Include="Game\Application.cs" />
     <Compile Include="Game\Controller.cs" />

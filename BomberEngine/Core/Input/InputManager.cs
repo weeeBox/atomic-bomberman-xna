@@ -51,26 +51,110 @@ namespace BomberEngine.Core.Input
         }
     }
 
-    public interface InputManager
+    public abstract class InputManager : BaseObject
     {
-        void AddInputListener(IInputListener listener);
+        protected const int MAX_GAMEPADS_COUNT = 4;
 
-        bool IsKeyPressed(KeyCode key);
-        bool IsShiftPressed();
-        bool IsAltPressed();
-        bool IsControlPressed();
-        
-        bool IsButtonPressed(int playerIndex, KeyCode keyCode);
-        bool IsGamePadConnected(int playerIndex);
+        private List<IKeyInputListener> keyListeners;
+        private List<ITouchInputListener> touchListeners;
 
-        Vector2 LeftThumbStick(int playerIndex = 0);
-        Vector2 RightThumbStick(int playerIndex = 0);
-        
-        float LeftTrigger(int playerIndex = 0);
-        float RightTrigger(int playerIndex = 0);
+        public InputManager()
+        {
+            keyListeners = new List<IKeyInputListener>();
+            touchListeners = new List<ITouchInputListener>();
+        }
+
+        public abstract bool IsKeyPressed(KeyCode code);
+        public abstract bool IsButtonPressed(int playerIndex, KeyCode code);
+        public abstract bool IsGamePadConnected(int playerIndex);
+
+        public abstract Vector2 LeftThumbStick(int playerIndex = 0);
+        public abstract Vector2 RightThumbStick(int playerIndex = 0);
+
+        public abstract float LeftTrigger(int playerIndex = 0);
+        public abstract float RightTrigger(int playerIndex = 0);
+
+        #region Listeners
+
+        public void AddInputListener(IInputListener listener)
+        {
+            AddKeyboardListener(listener);
+            AddTouchListener(listener);
+        }
+
+        public void AddKeyboardListener(IKeyInputListener listener)
+        {
+            Debug.Assert(!keyListeners.Contains(listener));
+            keyListeners.Add(listener);
+        }
+
+        public void AddTouchListener(ITouchInputListener listener)
+        {
+            Debug.Assert(!touchListeners.Contains(listener));
+            touchListeners.Add(listener);
+        }
+
+        protected void NotifyKeyPressed(ref KeyEventArg eventArg)
+        {
+            for (int i = 0; i < keyListeners.Count; ++i)
+            {
+                keyListeners[i].OnKeyPressed(eventArg);
+            }
+        }
+
+        protected void NotifyKeyRepeated(ref KeyEventArg eventArg)
+        {
+            for (int i = 0; i < keyListeners.Count; ++i)
+            {
+                keyListeners[i].OnKeyRepeated(eventArg);
+            }
+        }
+
+        protected void NotifyKeyReleased(ref KeyEventArg eventArg)
+        {
+            for (int i = 0; i < keyListeners.Count; ++i)
+            {
+                keyListeners[i].OnKeyReleased(eventArg);
+            }
+        }
+
+        #endregion
+
+        #region Keys
+
+        public bool IsShiftPressed()
+        {
+            return IsKeyPressed(KeyCode.LeftShift) || IsKeyPressed(KeyCode.RightShift);
+        }
+
+        public bool IsAltPressed()
+        {
+            return IsKeyPressed(KeyCode.LeftAlt) || IsKeyPressed(KeyCode.RightAlt);
+        }
+
+        public bool IsControlPressed()
+        {
+            return IsKeyPressed(KeyCode.LeftControl) || IsKeyPressed(KeyCode.RightControl);
+        }
+
+        #endregion
+
+        #region Gamepad
+
+        protected void NotifyGamePadConnected(int playerIndex)
+        {
+            PostNotification(Notifications.GamePadConnected, playerIndex);
+        }
+
+        protected void NotifyGamePadDisconnected(int playerIndex)
+        {
+            PostNotification(Notifications.GamePadDisconnected, playerIndex);
+        }
+
+        #endregion
     }
 
-    public class InputManagerImpl : BaseObject, InputManager, IUpdatable
+    public class DefaultInputManager : InputManager, IUpdatable
     {
         private static PlayerIndex[] PLAYERS_INDICES = 
         { 
@@ -128,8 +212,6 @@ namespace BomberEngine.Core.Input
             }
         }
 
-        private const int MAX_GAMEPADS_COUNT = 4;
-
 #if WINDOWS
         private const int REPEAT_KEYBOARD_INDEX = MAX_GAMEPADS_COUNT;
         private const int REPEAT_KEYS_COUNT = REPEAT_KEYBOARD_INDEX + 1;
@@ -142,20 +224,11 @@ namespace BomberEngine.Core.Input
 
         private KeyRepeatInfo[] keyRepeats;
 
-        private List<IKeyInputListener> keyListeners;
-        private List<ITouchInputListener> touchListeners;
-
         private GamePadDeadZone deadZone;
 
-        private bool shiftPressed;
-        private bool ctrlPressed;
-        private bool altPressed;
-
-        public InputManagerImpl()
+        public DefaultInputManager()
         {
             deadZone = GamePadDeadZone.Circular;
-            keyListeners = new List<IKeyInputListener>();
-            touchListeners = new List<ITouchInputListener>();
 
             currentGamepadStates = new GamePadState[MAX_GAMEPADS_COUNT];
             for (int i = 0; i < currentGamepadStates.Length; ++i)
@@ -193,10 +266,7 @@ namespace BomberEngine.Core.Input
             {
                 if (keyRepeats[i].timestamp < currentTime)
                 {
-                    for (int j = 0; j < keyListeners.Count; ++j)
-                    {
-                        keyListeners[j].OnKeyRepeated(keyRepeats[i].eventArg);
-                    }
+                    NotifyKeyRepeated(ref keyRepeats[i].eventArg);
                     keyRepeats[i].timestamp = currentTime + 0.03f;
                 }
             }
@@ -279,56 +349,40 @@ namespace BomberEngine.Core.Input
             return newState.IsButtonUp(button) && oldState.IsButtonDown(button);
         }
 
-        public bool IsButtonPressed(int playerIndex, KeyCode code)
+        public override bool IsButtonPressed(int playerIndex, KeyCode code)
         {
             return currentGamepadStates[playerIndex].IsButtonDown(KeyCodeHelper.ToButton(code));
         }
 
-        public bool IsGamePadConnected(int playerIndex)
+        public override bool IsGamePadConnected(int playerIndex)
         {
             return currentGamepadStates[playerIndex].IsConnected;
         }
 
         #endregion
-
+        
         //////////////////////////////////////////////////////////////////////////////
 
         #region Gamepad analogs
 
-        public Vector2 LeftThumbStick(int playerIndex = 0)
+        public override Vector2 LeftThumbStick(int playerIndex = 0)
         {
             return currentGamepadStates[playerIndex].ThumbSticks.Left;
         }
 
-        public Vector2 RightThumbStick(int playerIndex = 0)
+        public override Vector2 RightThumbStick(int playerIndex = 0)
         {
             return currentGamepadStates[playerIndex].ThumbSticks.Right;
         }
 
-        public float LeftTrigger(int playerIndex = 0)
+        public override float LeftTrigger(int playerIndex = 0)
         {
             return currentGamepadStates[playerIndex].Triggers.Left;
         }
 
-        public float RightTrigger(int playerIndex = 0)
+        public override float RightTrigger(int playerIndex = 0)
         {
             return currentGamepadStates[playerIndex].Triggers.Right;
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region GamePad state
-
-        private void NotifyGamePadConnected(int playerIndex)
-        {
-            PostNotification(Notifications.GamePadConnected, playerIndex);
-        }
-
-        private void NotifyGamePadDisconnected(int playerIndex)
-        {
-            PostNotification(Notifications.GamePadDisconnected, playerIndex);
         }
 
         #endregion
@@ -348,8 +402,7 @@ namespace BomberEngine.Core.Input
             for (int i = 0; i < newKeys.Length; ++i)
             {
                 if (!oldKeys.Contains(newKeys[i]))
-                {
-                    UpdateModifierKeysPressed(ref newKeys[i]);
+                {   
                     FireKeyPressed(-1, KeyCodeHelper.FromKey(newKeys[i]), REPEAT_KEYBOARD_INDEX);
                 }
             }
@@ -357,101 +410,28 @@ namespace BomberEngine.Core.Input
             {
                 if (!newKeys.Contains(oldKeys[i]))
                 {
-                    UpdateModifierKeysReleased(ref oldKeys[i]);
-
                     FireKeyReleased(-1, KeyCodeHelper.FromKey(oldKeys[i]), REPEAT_KEYBOARD_INDEX);
                 }
             }
         }
 
-        public bool IsKeyPressed(KeyCode code)
+        public override bool IsKeyPressed(KeyCode code)
         {
             return currentKeyboardState.IsKeyDown(KeyCodeHelper.ToKey(code));
         }
 
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Key listener notifications
-
-        private void FireKeyPressed(int playerIndex, KeyCode key, int index)
+        protected virtual void FireKeyPressed(int playerIndex, KeyCode key, int index)
         {
             KeyEventArg eventArg = new KeyEventArg(key, playerIndex);
-            for (int i = 0; i < keyListeners.Count; ++i)
-            {
-                keyListeners[i].OnKeyPressed(eventArg);
-            }
+            NotifyKeyPressed(ref eventArg);
             SetKeyRepeat(ref eventArg, index);
         }
 
-        private void FireKeyReleased(int playerIndex, KeyCode key, int index)
+        protected virtual void FireKeyReleased(int playerIndex, KeyCode key, int index)
         {
             KeyEventArg eventArg = new KeyEventArg(key, playerIndex);
-            for (int i = 0; i < keyListeners.Count; ++i)
-            {
-                keyListeners[i].OnKeyReleased(eventArg);
-            }
+            NotifyKeyReleased(ref eventArg);
             ClearKeyRepeat(ref eventArg, index);
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Modifier keys
-
-        private void UpdateModifierKeysPressed(ref Keys key)
-        {
-            shiftPressed |= key == Keys.LeftShift || key == Keys.RightShift;
-            altPressed |= key == Keys.LeftAlt || key == Keys.RightAlt;
-            ctrlPressed |= key == Keys.LeftControl || key == Keys.RightControl;
-        }
-
-        private void UpdateModifierKeysReleased(ref Keys key)
-        {
-            shiftPressed &= key != Keys.LeftShift && key != Keys.RightShift;
-            altPressed &= key != Keys.LeftAlt && key != Keys.RightAlt;
-            ctrlPressed &= key != Keys.LeftControl && key != Keys.RightControl;
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Properties
-
-        public void AddInputListener(IInputListener listener)
-        {
-            AddKeyboardListener(listener);
-            AddTouchListener(listener);
-        }
-
-        public void AddKeyboardListener(IKeyInputListener listener)
-        {
-            Debug.Assert(!keyListeners.Contains(listener));
-            keyListeners.Add(listener);
-        }
-
-        public void AddTouchListener(ITouchInputListener listener)
-        {
-            Debug.Assert(!touchListeners.Contains(listener));
-            touchListeners.Add(listener);
-        }
-
-        public bool IsShiftPressed()
-        {
-            return shiftPressed;
-        }
-
-        public bool IsAltPressed()
-        {
-            return altPressed;
-        }
-
-        public bool IsControlPressed()
-        {
-            return ctrlPressed;
         }
 
         #endregion
