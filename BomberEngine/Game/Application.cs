@@ -47,7 +47,7 @@ namespace BomberEngine.Game
         private bool stoped;
 
         private TimerManager timerManager;
-        private InputManager inputManager;
+        private IInputManager inputManager;
         private AssetManager assetManager;
         private NotificationCenter notifications;
         private SharedStorage sharedStorage;
@@ -91,9 +91,9 @@ namespace BomberEngine.Game
             return new NotificationCenter(timerManager);
         }
 
-        protected virtual InputManager CreateInputManager()
+        protected virtual IInputManager CreateInputManager()
         {
-            return new InputManagerImpl();
+            return new InputManager();
         }
 
         protected virtual SharedStorage CreateSharedStorage(String filename, TimerManager timerManager)
@@ -296,7 +296,7 @@ namespace BomberEngine.Game
             return sharedApplication.assetManager;
         }
 
-        public static InputManager Input()
+        public static IInputManager Input()
         {
             return sharedApplication.inputManager;
         }

@@ -40,7 +40,7 @@ namespace BomberEngine.Core.Input
             return GetInputManager().IsControlPressed();
         }
 
-        public InputManager GetInputManager()
+        public IInputManager GetInputManager()
         {
             return Application.Input();
         }
@@ -51,7 +51,7 @@ namespace BomberEngine.Core.Input
         }
     }
 
-    public interface InputManager
+    public interface IInputManager
     {
         void AddInputListener(IInputListener listener);
 
@@ -70,7 +70,7 @@ namespace BomberEngine.Core.Input
         float RightTrigger(int playerIndex = 0);
     }
 
-    public class InputManagerImpl : BaseObject, InputManager, IUpdatable
+    public class InputManager : BaseObject, IInputManager, IUpdatable
     {
         private static PlayerIndex[] PLAYERS_INDICES = 
         { 
@@ -151,7 +151,7 @@ namespace BomberEngine.Core.Input
         private bool ctrlPressed;
         private bool altPressed;
 
-        public InputManagerImpl()
+        public InputManager()
         {
             deadZone = GamePadDeadZone.Circular;
             keyListeners = new List<IKeyInputListener>();

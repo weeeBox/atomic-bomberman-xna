@@ -71,7 +71,7 @@ namespace Bomberman.Game
             SetInputState(InputType.Keyboard5, InputState.Available);
             SetInputState(InputType.Keyboard6, InputState.Available);
 
-            InputManager im = Input();
+            IInputManager im = Input();
             SetInputState(InputType.GamePad1, im.IsGamePadConnected(0) ? InputState.Available : InputState.Disabled);
             SetInputState(InputType.GamePad2, im.IsGamePadConnected(1) ? InputState.Available : InputState.Disabled);
             SetInputState(InputType.GamePad3, im.IsGamePadConnected(2) ? InputState.Available : InputState.Disabled);
