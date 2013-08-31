@@ -80,7 +80,7 @@ namespace BomberEngine.Demo
 
     public class DemoInputCmd : DemoCmd, IInputListener
     {
-        private static readonly int BitsPerKey = BitUtils.BitsToHoldUInt((int)KeyCode.TotalCount);
+        private static readonly int BitsPerKey = BitUtils.BitsToHoldUInt((int)KeyCode.Count);
         private static readonly int BitsPerPlayerIndex = 4;
 
         private List<KeyEventArg> m_pressedKeys;

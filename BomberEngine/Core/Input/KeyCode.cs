@@ -198,7 +198,7 @@ namespace BomberEngine.Core.Input
         GP_LeftThumbstickDown = 278,
         GP_LeftThumbstickRight = 279,
 
-        TotalCount = 280
+        Count = 280
     }
 
     public class KeyCodeHelper

@@ -28,7 +28,7 @@ namespace BomberEngine.Consoles
         
         public CKeyBindings()
         {
-            bindings = new String[(int)KeyCode.TotalCount];
+            bindings = new String[(int)KeyCode.Count];
         }
 
         public void Bind(KeyCode code, String cmd)
