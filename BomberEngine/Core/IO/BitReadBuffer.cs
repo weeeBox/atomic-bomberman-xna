@@ -14,6 +14,11 @@ namespace BomberEngine.Core.IO
 
         private int m_readPosition;
 
+        public BitReadBuffer(byte[] data, int bitLength)
+        {
+            Init(data, bitLength);
+        }
+
         public void Init(byte[] data, int bitLength)
         {
             m_data = data;
@@ -657,6 +662,11 @@ namespace BomberEngine.Core.IO
         public int PositionInBytes
         {
             get { return (int)(m_readPosition / 8); }
+        }
+
+        public long BitsAvailable
+        {
+            get { return m_bitLength - m_readPosition; }
         }
     }
 }

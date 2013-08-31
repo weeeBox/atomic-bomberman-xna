@@ -141,13 +141,44 @@ namespace BomberEngine.Demo
                     {
                         throw new IOException("Wrong data size: " + bytesRead + " expected: " + length);
                     }
+
+                    m_buffer = new BitReadBuffer(data, bitLength);
                 }
             }
         }
 
-        public void ReadNextCmd()
+        public void Execute()
         {
-
+            DemoCmd cmd = Read(m_buffer);
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Commands
+
+        private DemoCmd Read(BitReadBuffer buffer)
+        {
+            DemoCmdType cmdType = (DemoCmdType)buffer.ReadInt32(BitsPerCmdType);
+            DemoCmd cmd = FindCmd(cmdType);
+            if (cmd == null)
+            {
+                throw new Exception("Unexpected command: " + cmdType);
+            }
+
+            return cmd;
+        }
+
+        private DemoCmd FindCmd(DemoCmdType type)
+        {
+            DemoCmd cmd;
+            if (m_cmdLookup.TryGetValue(type, out cmd))
+            {
+                return cmd;
+            }
+
+            return null;
+        }
+
+        #endregion
     }
 }
