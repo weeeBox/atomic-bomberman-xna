@@ -40,6 +40,12 @@ namespace BomberEngine.Game
 
     public abstract class Application
     {
+        private enum Mode
+        {
+            Normal,
+            Demo,
+        }
+
         public static Application sharedApplication;
 
         private RootController rootController;
@@ -69,6 +75,9 @@ namespace BomberEngine.Game
         private float m_currentTime;
         private float m_frameTime;
 
+        private Mode m_mode;
+        private DemoCmdEntry m_demoCmdEntry;
+
         public Application(ApplicationInfo info)
         {
             nativeInterface = info.nativeInterface;
@@ -91,7 +100,11 @@ namespace BomberEngine.Game
 
         protected virtual CommandLine CreateCommandLine()
         {
-            return new CommandLine();
+            m_demoCmdEntry = new DemoCmdEntry();
+
+            CommandLine cmd = new CommandLine();
+            cmd.Register(m_demoCmdEntry);
+            return cmd;
         }
 
         protected virtual TimerManager CreateTimerManager()
@@ -128,34 +141,14 @@ namespace BomberEngine.Game
                 throw new InvalidOperationException("Application already started");
             }
 
-            MathHelp.InitRandom();
-
-            timerManager = CreateTimerManager();
-            notifications = CreateNotifications(timerManager);
-            sharedStorage = CreateSharedStorage("storage",  timerManager);
-
-            inputManager = CreateInputManager();
-            if (inputManager is IUpdatable)
+            if (m_demoCmdEntry.FileName != null)
             {
-                AddUpdatable(inputManager as IUpdatable);
+                StartDemo(m_demoCmdEntry.FileName);
             }
-
-            assetManager = CreateAssetManager();
-
-            rootController = CreateRootController();
-            AddGameObject(rootController);
-            
-            #if DEBUG_DEMO
-            DemoRecorder recorder = new DemoRecorder();
-            AddUpdatable(recorder);
-            inputManager.AddInputListener(recorder);
-            #endif
-
-            started = true;
-            OnStart();
-
-            inputManager.AddInputListener(rootController);
-            rootController.Start();
+            else
+            {
+                StartNormal();
+            }
         }
 
         public void Stop()
@@ -185,6 +178,61 @@ namespace BomberEngine.Game
         protected virtual void OnStop()
         {
 
+        }
+
+        private void StartNormal()
+        {
+            m_mode = Mode.Normal;
+
+            MathHelp.InitRandom();
+
+            timerManager = CreateTimerManager();
+            notifications = CreateNotifications(timerManager);
+            sharedStorage = CreateSharedStorage("storage", timerManager);
+
+            inputManager = CreateInputManager();
+            if (inputManager is IUpdatable)
+            {
+                AddUpdatable(inputManager as IUpdatable);
+            }
+
+            assetManager = CreateAssetManager();
+
+            rootController = CreateRootController();
+            AddGameObject(rootController);
+
+#if DEBUG_DEMO
+            DemoRecorder recorder = new DemoRecorder();
+            AddUpdatable(recorder);
+            inputManager.AddInputListener(recorder);
+#endif
+
+            started = true;
+            OnStart();
+
+            inputManager.AddInputListener(rootController);
+            rootController.Start();
+        }
+
+        private void StartDemo(String filename)
+        {
+            m_mode = Mode.Demo;
+
+            timerManager = CreateTimerManager();
+            notifications = CreateNotifications(timerManager);
+            sharedStorage = CreateSharedStorage("storage", timerManager);
+
+            inputManager = new DemoPlayerInputManager();
+            assetManager = CreateAssetManager();
+
+            rootController = CreateRootController();
+            AddGameObject(rootController);
+
+            started = true;
+            OnStart();
+
+            inputManager.AddInputListener(rootController);
+            rootController.Start();
         }
 
         #endregion
