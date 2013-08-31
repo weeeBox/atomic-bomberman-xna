@@ -33,7 +33,7 @@ namespace Bomberman.Game.Elements.Players.Input
         {
             base.Update(delta);
 
-            IInputManager im = Application.Input();
+            InputManager im = Application.Input();
 
             Vector2 stick = im.LeftThumbStick(playerIndex);
             float dx = stick.X;

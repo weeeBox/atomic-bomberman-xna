@@ -29,7 +29,7 @@ namespace Bomberman
         private GraphicsDeviceManager graphics;
         private Application application;
 
-        public BmGame()
+        public BmGame(String[] args)
         {
             int width = WIDTH;
             int height = HEIGHT;

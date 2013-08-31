@@ -27,7 +27,7 @@ namespace BomberEngine.Demo
             private float m_leftTrigger;
             private float m_rightTrigger;
 
-            public GamePadState()
+            public GamePadState(Object dummy = null)
             {   
                 m_connected = false;
                 m_keyPressedFlags = new bool[KeyMax - KeyMin];
@@ -97,7 +97,7 @@ namespace BomberEngine.Demo
 
             private bool[] m_keyPressedFlags;
 
-            public KeyBoardState()
+            public KeyBoardState(Object dummy = null)
             {
                 m_keyPressedFlags = new bool[KeyMax - KeyMin];
             }

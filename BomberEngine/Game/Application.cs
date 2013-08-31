@@ -12,6 +12,7 @@ using BomberEngine.Core.Storage;
 using BomberEngine.Util;
 using BomberEngine.Consoles;
 using BomberEngine.Demo;
+using BomberEngine.Core.IO;
 
 namespace BomberEngine.Game
 {
@@ -23,6 +24,7 @@ namespace BomberEngine.Game
         public int height;
         public int realWidth;
         public int realHeight;
+        public String[] args;
 
         public ApplicationInfo(int width, int height)
         {
@@ -32,6 +34,7 @@ namespace BomberEngine.Game
             realHeight = height;
 
             nativeInterface = null;
+            args = new String[0];
         }
     }
 
@@ -45,6 +48,8 @@ namespace BomberEngine.Game
 
         private bool started;
         private bool stoped;
+
+        private CommandLine cmdLine;
 
         private TimerManager timerManager;
         private InputManager inputManager;
@@ -77,9 +82,17 @@ namespace BomberEngine.Game
             context = new Context();
             updatables = new UpdatableList(1);
             drawables = new DrawableList(1);
+
+            cmdLine = CreateCommandLine();
+            cmdLine.Parse(info.args);
         }
 
         //////////////////////////////////////////////////////////////////////////////
+
+        protected virtual CommandLine CreateCommandLine()
+        {
+            return new CommandLine();
+        }
 
         protected virtual TimerManager CreateTimerManager()
         {

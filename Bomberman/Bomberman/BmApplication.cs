@@ -65,7 +65,7 @@ namespace Bomberman
         {
         }
 
-        protected override IInputManager CreateInputManager()
+        protected override InputManager CreateInputManager()
         {
             throw new NotImplementedException();
         }

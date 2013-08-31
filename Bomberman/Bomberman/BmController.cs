@@ -36,7 +36,7 @@ namespace Bomberman
             return BmApplication.Assets();
         }
 
-        protected IInputManager Input()
+        protected InputManager Input()
         {
             return BmApplication.Input();
         }

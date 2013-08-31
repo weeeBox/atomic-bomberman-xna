@@ -14,7 +14,7 @@ namespace Bomberman
         {
             ProcessArgs(args);
 
-            using (BmGame game = new BmGame())
+            using (BmGame game = new BmGame(args))
             {
                 game.Run();
             }
