@@ -78,6 +78,9 @@ namespace BomberEngine.Game
         private Mode m_mode;
         private DemoCmdEntry m_demoCmdEntry;
 
+        private DemoPlayer m_demoPlayer;
+        private DemoRecorder m_demoRecorder;
+
         public Application(ApplicationInfo info)
         {
             nativeInterface = info.nativeInterface;
@@ -168,6 +171,15 @@ namespace BomberEngine.Game
 
             sharedStorage.Destroy();
             timerManager.Destroy();
+
+            #if DEBUG_DEMO
+            if (m_demoRecorder != null)
+            {
+                String path = "demo.dm";
+                m_demoRecorder.Save(path);
+                Log.d("Demo saved: " + path);
+            }
+            #endif
         }
 
         protected virtual void OnStart()
@@ -186,6 +198,11 @@ namespace BomberEngine.Game
 
             MathHelp.InitRandom();
 
+            #if DEBUG_DEMO
+            m_demoRecorder = new DemoRecorder();
+            AddUpdatable(m_demoRecorder);
+            #endif
+
             timerManager = CreateTimerManager();
             notifications = CreateNotifications(timerManager);
             sharedStorage = CreateSharedStorage("storage", timerManager);
@@ -196,16 +213,14 @@ namespace BomberEngine.Game
                 AddUpdatable(inputManager as IUpdatable);
             }
 
+            #if DEBUG_DEMO
+            inputManager.AddInputListener(m_demoRecorder);
+            #endif
+
             assetManager = CreateAssetManager();
 
             rootController = CreateRootController();
             AddGameObject(rootController);
-
-#if DEBUG_DEMO
-            DemoRecorder recorder = new DemoRecorder();
-            AddUpdatable(recorder);
-            inputManager.AddInputListener(recorder);
-#endif
 
             started = true;
             OnStart();
@@ -214,9 +229,11 @@ namespace BomberEngine.Game
             rootController.Start();
         }
 
-        private void StartDemo(String filename)
+        private void StartDemo(String path)
         {
             m_mode = Mode.Demo;
+
+            m_demoPlayer = new DemoPlayer(path);
 
             timerManager = CreateTimerManager();
             notifications = CreateNotifications(timerManager);
@@ -241,12 +258,14 @@ namespace BomberEngine.Game
 
         public void Update(float delta)
         {
-            m_currentTime += delta;
-            m_frameTime = delta;
-
-            updatables.Update(delta);
-            timerManager.Update(delta);
-            OnUpdateDebug(delta);
+            if (m_mode == Mode.Demo)
+            {
+                m_demoPlayer.ReadTick();
+            }
+            else
+            {
+                RunUpdate(delta);
+            }
         }
 
         public void Draw(GraphicsDevice graphicsDevice)
@@ -255,6 +274,16 @@ namespace BomberEngine.Game
             drawables.Draw(context);
             OnDrawDebug(context);
             context.End();
+        }
+
+        public void RunUpdate(float delta)
+        {
+            m_currentTime += delta;
+            m_frameTime = delta;
+
+            updatables.Update(delta);
+            timerManager.Update(delta);
+            OnUpdateDebug(delta);
         }
 
         [System.Diagnostics.Conditional("DEBUG")]

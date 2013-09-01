@@ -52,6 +52,7 @@ namespace Bomberman
             info.realHeight = realHeight;
             IsMouseVisible = true;
             #endif
+            info.args = args;
 
             application = new BmApplication(Content, info);
         }

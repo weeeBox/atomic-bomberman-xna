@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Core.IO;
 using System.IO;
+using BomberEngine.Debugging;
 
 namespace BomberEngine.Demo
 {
@@ -14,14 +15,16 @@ namespace BomberEngine.Demo
         private BitReadBuffer m_buffer;
         private IDictionary<DemoCmdType, DemoCmd> m_cmdLookup;
 
-        public DemoPlayer()
+        public DemoPlayer(String path)
         {   
             m_cmdLookup = new Dictionary<DemoCmdType, DemoCmd>();
             m_cmdLookup[DemoCmdType.Input] = new DemoInputCmd();
             m_cmdLookup[DemoCmdType.Tick]  = new DemoTickCmd();
+
+            Read(path);
         }
 
-        public void Read(String path)
+        private void Read(String path)
         {
             using (Stream stream = FileUtils.OpenRead(path))
             {
@@ -41,7 +44,7 @@ namespace BomberEngine.Demo
             }
         }
 
-        public void Execute()
+        public void ReadTick()
         {
             while (m_buffer.BitsAvailable > 0)
             {
@@ -66,7 +69,7 @@ namespace BomberEngine.Demo
             {
                 throw new Exception("Unexpected command: " + cmdType);
             }
-
+            cmd.Read(buffer);
             return cmd;
         }
 

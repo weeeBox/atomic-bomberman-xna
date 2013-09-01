@@ -45,6 +45,14 @@ namespace BomberEngine.Core.IO
                     {
                         throw new CommandLineException("Short param expected");
                     }
+
+                    CommandLineEntry entry = FindEntry(shortParam, true);
+                    if (entry == null)
+                    {
+                        throw new CommandLineException("Unknown param: " + arg);
+                    }
+
+                    entry.Parse(iter);
                 }
                 else if (arg.StartsWith("--"))
                 {
@@ -53,6 +61,14 @@ namespace BomberEngine.Core.IO
                     {
                         throw new CommandLineException("Long param expected");
                     }
+
+                    CommandLineEntry entry = FindEntry(longParam, false);
+                    if (entry == null)
+                    {
+                        throw new CommandLineException("Unknown param: " + arg);
+                    }
+
+                    entry.Parse(iter);
                 }
                 else
                 {

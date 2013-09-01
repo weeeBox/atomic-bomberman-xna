@@ -10,7 +10,7 @@ using BomberEngine.Debugging;
 
 namespace BomberEngine.Demo
 {
-    public class DemoPlayerInputManager : InputManager, IResettable
+    public class  DemoPlayerInputManager : InputManager, IResettable
     {
         private struct GamePadState
         {

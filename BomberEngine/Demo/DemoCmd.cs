@@ -6,6 +6,7 @@ using BomberEngine.Core.IO;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core.Input;
 using BomberEngine.Game;
+using BomberEngine.Debugging;
 
 namespace BomberEngine.Demo
 {
@@ -55,7 +56,7 @@ namespace BomberEngine.Demo
 
         public override bool Execute()
         {
-            GetApplication().Update(m_frameTime);
+            GetApplication().RunUpdate(m_frameTime);
             return true;
         }
 
@@ -116,6 +117,11 @@ namespace BomberEngine.Demo
             ReadKeys(buffer, m_pressedKeys);
             ReadKeys(buffer, m_repeatedKeys);
             ReadKeys(buffer, m_releasedKeys);
+
+            DemoPlayerInputManager im = Application.Input() as DemoPlayerInputManager;
+            Debug.Assert(im != null);
+
+            
         }
 
         private void WriteKeys(BitWriteBuffer buffer, List<KeyEventArg> keys)
