@@ -181,15 +181,15 @@ namespace BomberEngine.Demo
             return m_gamePads[playerIndex].RightTrigger;
         }
 
-        public void SetKeyPressed(KeyEventArg arg)
+        public void SetKeyPressed(KeyEventArg arg, bool flag)
         {
             if (arg.playerIndex != -1)
             {
-                m_gamePads[arg.playerIndex].SetButtonPressed(arg.key, true);
+                m_gamePads[arg.playerIndex].SetButtonPressed(arg.key, flag);
             }
             else
             {
-                m_keyboard.SetKeyPressed(arg.key, true);
+                m_keyboard.SetKeyPressed(arg.key, flag);
             }
         }
 

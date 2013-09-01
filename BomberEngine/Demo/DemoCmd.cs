@@ -150,15 +150,16 @@ namespace BomberEngine.Demo
             DemoPlayerInputManager im = Application.Input() as DemoPlayerInputManager;
             Debug.Assert(im != null);
 
-            // clear old states
-            im.Reset();
-
             // set pressed states
             for (int i = 0; i < m_keyEntries.Count; ++i)
             {
                 if (m_keyEntries[i].state == KeyState.Pressed)
                 {
-                    im.SetKeyPressed(m_keyEntries[i].arg);
+                    im.SetKeyPressed(m_keyEntries[i].arg, true);
+                }
+                else if (m_keyEntries[i].state == KeyState.Released)
+                {
+                    im.SetKeyPressed(m_keyEntries[i].arg, false);
                 }
             }
 
