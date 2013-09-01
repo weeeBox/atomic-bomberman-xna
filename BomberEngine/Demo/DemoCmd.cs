@@ -158,15 +158,7 @@ namespace BomberEngine.Demo
             {
                 if (m_keyEntries[i].state == KeyState.Pressed)
                 {
-                    int playerIndex = m_keyEntries[i].arg.playerIndex;
-                    if (playerIndex != -1)
-                    {
-                        im.SetButtonPressed(playerIndex, m_keyEntries[i].arg.key);
-                    }
-                    else
-                    {
-                        im.SetKeyPressed(m_keyEntries[i].arg.key);
-                    }
+                    im.SetKeyPressed(m_keyEntries[i].arg);
                 }
             }
 
@@ -176,7 +168,7 @@ namespace BomberEngine.Demo
                 switch (m_keyEntries[i].state)
                 {
                     case KeyState.Pressed:
-                    {
+                    {   
                         im.FireKeyPressed(m_keyEntries[i].arg);
                         break;
                     }

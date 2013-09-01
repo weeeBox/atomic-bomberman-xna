@@ -181,14 +181,16 @@ namespace BomberEngine.Demo
             return m_gamePads[playerIndex].RightTrigger;
         }
 
-        public void SetKeyPressed(KeyCode code)
+        public void SetKeyPressed(KeyEventArg arg)
         {
-            m_keyboard.SetKeyPressed(code, true);
-        }
-
-        public void SetButtonPressed(int playerIndex, KeyCode code)
-        {
-            m_gamePads[playerIndex].SetButtonPressed(code, true);
+            if (arg.playerIndex != -1)
+            {
+                m_gamePads[arg.playerIndex].SetButtonPressed(arg.key, true);
+            }
+            else
+            {
+                m_keyboard.SetKeyPressed(arg.key, true);
+            }
         }
 
         public void FireKeyPressed(KeyEventArg arg)
