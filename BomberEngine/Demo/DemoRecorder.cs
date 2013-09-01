@@ -5,6 +5,7 @@ using System.Text;
 using BomberEngine.Core;
 using BomberEngine.Core.Input;
 using BomberEngine.Core.IO;
+using BomberEngine.Util;
 
 namespace BomberEngine.Demo
 {
@@ -22,6 +23,8 @@ namespace BomberEngine.Demo
             m_buffer = new BitWriteBuffer();
             m_tickCmd = new DemoTickCmd();
             m_inputCmd = new DemoInputCmd();
+
+            Write(new DemoInitCmd(MathHelp.GetRandomSeed()));
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -47,7 +50,7 @@ namespace BomberEngine.Demo
 
         private void Write(DemoCmd cmd)
         {
-            m_buffer.Write((int)cmd.cmdType, BitsPerCmdType);
+            m_buffer.Write((uint)cmd.cmdType, BitsPerCmdType);
             cmd.Write(m_buffer);
         }
 

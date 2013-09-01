@@ -18,6 +18,7 @@ namespace BomberEngine.Demo
         public DemoPlayer(String path)
         {   
             m_cmdLookup = new Dictionary<DemoCmdType, DemoCmd>();
+            m_cmdLookup[DemoCmdType.Init] = new DemoInitCmd();
             m_cmdLookup[DemoCmdType.Input] = new DemoInputCmd();
             m_cmdLookup[DemoCmdType.Tick]  = new DemoTickCmd();
 
@@ -63,7 +64,7 @@ namespace BomberEngine.Demo
 
         private DemoCmd Read(BitReadBuffer buffer)
         {
-            DemoCmdType cmdType = (DemoCmdType)buffer.ReadInt32(BitsPerCmdType);
+            DemoCmdType cmdType = (DemoCmdType)buffer.ReadUInt32(BitsPerCmdType);
             DemoCmd cmd = FindCmd(cmdType);
             if (cmd == null)
             {

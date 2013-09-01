@@ -27,9 +27,9 @@ namespace BomberEngine.Demo
             private float m_leftTrigger;
             private float m_rightTrigger;
 
-            public GamePadState(Object dummy = null)
+            public GamePadState(bool connected)
             {   
-                m_connected = false;
+                m_connected = connected;
                 m_keyPressedFlags = new bool[KeyMax - KeyMin];
                 m_leftThumbStick = m_rightThumbStick = Vector2.Zero;
                 m_leftTrigger = m_rightTrigger = 0.0f;
@@ -132,9 +132,9 @@ namespace BomberEngine.Demo
             m_gamePads = new GamePadState[MAX_GAMEPADS_COUNT];
             for (int i = 0; i < m_gamePads.Length; ++i)
             {
-                m_gamePads[i] = new GamePadState();
+                m_gamePads[i] = new GamePadState(false);
             }
-            m_keyboard = new KeyBoardState();
+            m_keyboard = new KeyBoardState(null); // dummy param
         }
 
         public void Reset()
@@ -179,6 +179,31 @@ namespace BomberEngine.Demo
         public override float RightTrigger(int playerIndex = 0)
         {
             return m_gamePads[playerIndex].RightTrigger;
+        }
+
+        public void SetKeyPressed(KeyCode code)
+        {
+            m_keyboard.SetKeyPressed(code, true);
+        }
+
+        public void SetButtonPressed(int playerIndex, KeyCode code)
+        {
+            m_gamePads[playerIndex].SetButtonPressed(code, true);
+        }
+
+        public void FireKeyPressed(KeyEventArg arg)
+        {
+            NotifyKeyPressed(ref arg);
+        }
+
+        public void FireKeyRepeated(KeyEventArg arg)
+        {
+            NotifyKeyRepeated(ref arg);
+        }
+
+        public void FireKeyReleased(KeyEventArg arg)
+        {
+            NotifyKeyReleased(ref arg);
         }
     }
 }

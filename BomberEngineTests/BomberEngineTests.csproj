@@ -56,8 +56,8 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitBufferTests.cs" />
     <Compile Include="CConsoleTests.cs" />
-    <Compile Include="CommandLineTest.cs" />
     <Compile Include="FastLinkedListTests.cs" />
     <Compile Include="NotificationsTest.cs" />
     <Compile Include="ObjectsPoolTest.cs" />

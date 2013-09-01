@@ -7,14 +7,15 @@ using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core.Input;
 using BomberEngine.Game;
 using BomberEngine.Debugging;
+using BomberEngine.Util;
 
 namespace BomberEngine.Demo
 {
     public enum DemoCmdType
     {
+        Init = 0,
         Tick,
         Input,
-        Random,
         Count
     }
 
@@ -79,77 +80,168 @@ namespace BomberEngine.Demo
 
     //////////////////////////////////////////////////////////////////////////////
 
+    public class DemoInitCmd : DemoCmd
+    {
+        private int m_randSeed;
+
+        public DemoInitCmd(int randSeed = 0)
+            : base(DemoCmdType.Init)
+        {
+            m_randSeed = randSeed;
+        }
+
+        public override bool Execute()
+        {
+            MathHelp.InitRandom(m_randSeed);
+            return false;
+        }
+
+        public override void Write(BitWriteBuffer buffer)
+        {
+            buffer.Write(m_randSeed);
+        }
+
+        public override void Read(BitReadBuffer buffer)
+        {
+            m_randSeed = buffer.ReadInt32();
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+
     public class DemoInputCmd : DemoCmd, IInputListener
     {
+        private enum KeyState
+        {
+            Pressed,
+            Released,
+            Repeated,
+            Count
+        }
+
+        private struct KeyEntry
+        {
+            public KeyEventArg arg;
+            public KeyState state;
+
+            public KeyEntry(KeyEventArg arg, KeyState state)
+            {
+                this.arg = arg;
+                this.state = state;
+            }
+        }
+
         private static readonly int BitsPerKey = BitUtils.BitsToHoldUInt((int)KeyCode.Count);
-        private static readonly int BitsPerPlayerIndex = 4;
+        private static readonly int BitsPerKeyState = BitUtils.BitsToHoldUInt((int)KeyState.Count);
+        private static readonly int BitsPerPlayerIndex = BitUtils.BitsToHoldUInt(4);
 
-        private List<KeyEventArg> m_pressedKeys;
-        private List<KeyEventArg> m_repeatedKeys;
-        private List<KeyEventArg> m_releasedKeys;
-
+        private List<KeyEntry> m_keyEntries;
+        
         private bool m_changed;
 
         public DemoInputCmd()
             : base(DemoCmdType.Input)
         {
-            m_pressedKeys = new List<KeyEventArg>(64);
-            m_repeatedKeys = new List<KeyEventArg>(64);
-            m_releasedKeys = new List<KeyEventArg>(64);
+            m_keyEntries = new List<KeyEntry>(128);
         }
 
         public override bool Execute()
         {
-            throw new NotImplementedException();
+            DemoPlayerInputManager im = Application.Input() as DemoPlayerInputManager;
+            Debug.Assert(im != null);
+
+            // clear old states
+            im.Reset();
+
+            // set pressed states
+            for (int i = 0; i < m_keyEntries.Count; ++i)
+            {
+                if (m_keyEntries[i].state == KeyState.Pressed)
+                {
+                    int playerIndex = m_keyEntries[i].arg.playerIndex;
+                    if (playerIndex != -1)
+                    {
+                        im.SetButtonPressed(playerIndex, m_keyEntries[i].arg.key);
+                    }
+                    else
+                    {
+                        im.SetKeyPressed(m_keyEntries[i].arg.key);
+                    }
+                }
+            }
+
+            // fire events
+            for (int i = 0; i < m_keyEntries.Count; ++i)
+            {
+                switch (m_keyEntries[i].state)
+                {
+                    case KeyState.Pressed:
+                    {
+                        im.FireKeyPressed(m_keyEntries[i].arg);
+                        break;
+                    }
+
+                    case KeyState.Repeated:
+                    {
+                        im.FireKeyRepeated(m_keyEntries[i].arg);
+                        break;
+                    }
+
+                    case KeyState.Released:
+                    {
+                        im.FireKeyReleased(m_keyEntries[i].arg);
+                        break;
+                    }
+
+                    default:
+                    {
+                        Debug.Fail("Unexpected key state: " + m_keyEntries[i].state);
+                        break;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public override void Write(BitWriteBuffer buffer)
         {
-            WriteKeys(buffer, m_pressedKeys);
-            WriteKeys(buffer, m_repeatedKeys);
-            WriteKeys(buffer, m_releasedKeys);
-
+            WriteKeyEntries(buffer, m_keyEntries);
             m_changed = false;
         }
 
         public override void Read(BitReadBuffer buffer)
         {
-            ReadKeys(buffer, m_pressedKeys);
-            ReadKeys(buffer, m_repeatedKeys);
-            ReadKeys(buffer, m_releasedKeys);
-
-            DemoPlayerInputManager im = Application.Input() as DemoPlayerInputManager;
-            Debug.Assert(im != null);
-
-            
+            ReadKeyEntries(buffer, m_keyEntries);
         }
 
-        private void WriteKeys(BitWriteBuffer buffer, List<KeyEventArg> keys)
+        private void WriteKeyEntries(BitWriteBuffer buffer, List<KeyEntry> entries)
         {
-            bool hasKeys = keys.Count > 0;
+            bool hasKeys = entries.Count > 0;
             buffer.Write(hasKeys);
             if (hasKeys)
             {
-                buffer.Write((byte)keys.Count);
-                for (int i = 0; i < keys.Count; ++i)
+                buffer.Write((byte)entries.Count);
+                for (int i = 0; i < entries.Count; ++i)
                 {
-                    buffer.Write((int)keys[i].key, BitsPerKey);
+                    buffer.Write((uint)entries[i].state, BitsPerKeyState);
+                    buffer.Write((uint)entries[i].arg.key, BitsPerKey);
 
-                    bool hasPlayerIndex = keys[i].playerIndex != -1;
+                    bool hasPlayerIndex = entries[i].arg.playerIndex != -1;
                     buffer.Write(hasPlayerIndex);
                     if (hasPlayerIndex)
                     {
-                        buffer.Write(keys[i].playerIndex, BitsPerPlayerIndex);
+                        buffer.Write((uint)entries[i].arg.playerIndex, BitsPerPlayerIndex);
                     }
                 }
 
-                keys.Clear();
+                entries.Clear();
             }
         }
 
-        private void ReadKeys(BitReadBuffer buffer, List<KeyEventArg> keys)
+        private void ReadKeyEntries(BitReadBuffer buffer, List<KeyEntry> entries)
         {
-            keys.Clear();
+            entries.Clear();
 
             bool hasKeys = buffer.ReadBoolean();
             if (hasKeys)
@@ -157,34 +249,38 @@ namespace BomberEngine.Demo
                 int count = buffer.ReadByte();;
                 for (int i = 0; i < count; ++i)
                 {
-                    KeyCode key = (KeyCode)buffer.ReadInt32(BitsPerKey);
+                    KeyState state = (KeyState)buffer.ReadUInt32(BitsPerKeyState);
+                    KeyCode key = (KeyCode)buffer.ReadUInt32(BitsPerKey);
                     int playerIndex = -1;
                     bool hasPlayerIndex = buffer.ReadBoolean();
                     if (hasPlayerIndex)
                     {
-                        playerIndex = buffer.ReadInt32(BitsPerPlayerIndex);
+                        playerIndex = (int)buffer.ReadUInt32(BitsPerPlayerIndex);
                     }
 
-                    keys.Add(new KeyEventArg(key, playerIndex));
+                    entries.Add(new KeyEntry(new KeyEventArg(key, playerIndex), state));
                 }
             }
         }
 
         public bool OnKeyPressed(KeyEventArg arg)
         {
-            AddKeyArg(arg, m_pressedKeys);
+            KeyEntry entry = new KeyEntry(arg, KeyState.Pressed);
+            AddKeyEntry(ref entry);
             return false;
         }
 
         public bool OnKeyRepeated(KeyEventArg arg)
         {
-            AddKeyArg(arg, m_repeatedKeys);
+            KeyEntry entry = new KeyEntry(arg, KeyState.Repeated);
+            AddKeyEntry(ref entry);
             return false;
         }
 
         public bool OnKeyReleased(KeyEventArg arg)
         {
-            AddKeyArg(arg, m_releasedKeys);
+            KeyEntry entry = new KeyEntry(arg, KeyState.Released);
+            AddKeyEntry(ref entry);
             return false;
         }
 
@@ -208,9 +304,9 @@ namespace BomberEngine.Demo
             throw new NotImplementedException();
         }
 
-        private void AddKeyArg(KeyEventArg arg, List<KeyEventArg> keys)
+        private void AddKeyEntry(ref KeyEntry arg)
         {
-            keys.Add(arg);
+            m_keyEntries.Add(arg);
             m_changed = true;
         }
 
