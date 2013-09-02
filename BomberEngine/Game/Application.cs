@@ -200,15 +200,13 @@ namespace BomberEngine.Game
             notifications = CreateNotifications(timerManager);
             sharedStorage = CreateSharedStorage("storage", timerManager);
 
-            CreateDemoRecorder();
-
             inputManager = CreateInputManager();
             if (inputManager is IUpdatable)
             {
                 AddUpdatable(inputManager as IUpdatable);
             }
 
-            InitDemoRecorder();
+            CreateDemoRecorder();
             
             assetManager = CreateAssetManager();
 
@@ -257,7 +255,15 @@ namespace BomberEngine.Game
             }
             else
             {
-                RunUpdate(delta);
+                try
+                {
+                    RunUpdate(delta);
+                }
+                catch (Exception e)
+                {
+                    RunCrash(e);
+                    nativeInterface.Exit();
+                }
             }
         }
 
@@ -368,11 +374,7 @@ namespace BomberEngine.Game
         {
             m_demoRecorder = new DemoRecorder();
             AddUpdatable(m_demoRecorder);
-        }
 
-        [System.Diagnostics.Conditional("DEBUG_DEMO")]
-        protected void InitDemoRecorder()
-        {
             inputManager.AddInputListener(m_demoRecorder);
         }
 
