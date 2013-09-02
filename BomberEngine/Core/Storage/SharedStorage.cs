@@ -158,12 +158,12 @@ namespace BomberEngine.Core.Storage
             return false;
         }
 
-        private void Save(Stream stream)
+        public void Save(Stream stream)
         {
             Formatter.Serialize(stream, m_data);
         }
 
-        private bool Load(Stream stream)
+        public bool Load(Stream stream)
         {
             m_data = Formatter.Deserialize(stream) as IDictionary<String, Object>;
             return m_data != null;

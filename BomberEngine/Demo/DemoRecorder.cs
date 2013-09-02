@@ -6,6 +6,8 @@ using BomberEngine.Core;
 using BomberEngine.Core.Input;
 using BomberEngine.Core.IO;
 using BomberEngine.Util;
+using System.IO;
+using BomberEngine.Game;
 
 namespace BomberEngine.Demo
 {
@@ -62,19 +64,48 @@ namespace BomberEngine.Demo
 
         public void Save(String path)
         {
-            using (System.IO.Stream stream = FileUtils.OpenWrite(path))
+            using (Stream stream = FileUtils.OpenWrite(path))
             {
-                byte[] data = m_buffer.Data;
-                int length = m_buffer.LengthBytes;
-                int bitLegth = m_buffer.LengthBits;
-
-                using (System.IO.BinaryWriter writer = new System.IO.BinaryWriter(stream))
+                using (BinaryWriter writer = new BinaryWriter(stream))
                 {
-                    writer.Write(bitLegth);
-                    writer.Write(length);
-                    stream.Write(data, 0, length);
+                    // version
+                    WriteVersion(writer);
+
+                    // storage
+                    WriteStorage(writer);
+
+                    // demo data
+                    WriteDemo(writer);
                 }
             }
+        }
+
+        private void WriteVersion(BinaryWriter writer)
+        {   
+            writer.Write(DemoConstants.Version);
+        }
+
+        private void WriteStorage(BinaryWriter writer)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                Application.Storage().Save(stream);
+
+                byte[] data = stream.ToArray();
+                writer.Write(data.Length);
+                writer.Write(data);
+            }
+        }
+
+        private void WriteDemo(BinaryWriter writer)
+        {
+            byte[] data = m_buffer.Data;
+            int length = m_buffer.LengthBytes;
+            int bitLegth = m_buffer.LengthBits;
+
+            writer.Write(bitLegth);
+            writer.Write(length);
+            writer.Write(data, 0, length);
         }
 
         #endregion

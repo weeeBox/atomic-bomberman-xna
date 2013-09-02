@@ -196,11 +196,11 @@ namespace BomberEngine.Game
 
             MathHelp.InitRandom();
 
-            CreateDemoRecorder();
-            
             timerManager = CreateTimerManager();
             notifications = CreateNotifications(timerManager);
             sharedStorage = CreateSharedStorage("storage", timerManager);
+
+            CreateDemoRecorder();
 
             inputManager = CreateInputManager();
             if (inputManager is IUpdatable)
@@ -226,11 +226,11 @@ namespace BomberEngine.Game
         {
             m_mode = Mode.Demo;
 
-            m_demoPlayer = new DemoPlayer(path);
-
             timerManager = CreateTimerManager();
             notifications = CreateNotifications(timerManager);
             sharedStorage = CreateSharedStorage("storage", timerManager);
+
+            m_demoPlayer = new DemoPlayer(path);
 
             inputManager = new DemoPlayerInputManager();
             assetManager = CreateAssetManager();

@@ -172,6 +172,7 @@
     <Compile Include="Debugging\Log.cs" />
     <Compile Include="Demo\DemoCmd.cs" />
     <Compile Include="Demo\DemoCmdEntry.cs" />
+    <Compile Include="Demo\DemoConstants.cs" />
     <Compile Include="Demo\DemoPlayer.cs" />
     <Compile Include="Demo\DemoPlayerInputManager.cs" />
     <Compile Include="Demo\DemoRecorder.cs" />

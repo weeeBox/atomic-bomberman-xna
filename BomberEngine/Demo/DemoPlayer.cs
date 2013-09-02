@@ -5,6 +5,7 @@ using System.Text;
 using BomberEngine.Core.IO;
 using System.IO;
 using BomberEngine.Debugging;
+using BomberEngine.Game;
 
 namespace BomberEngine.Demo
 {
@@ -31,18 +32,51 @@ namespace BomberEngine.Demo
             {
                 using (BinaryReader reader = new BinaryReader(stream))
                 {
-                    int bitLength = reader.ReadInt32();
-                    int length = reader.ReadInt32();
-                    byte[] data = new byte[length];
-                    int bytesRead = reader.Read(data, 0, length);
-                    if (bytesRead != length)
+                    // version
+                    byte version = reader.ReadByte();
+                    if (version != DemoConstants.Version)
                     {
-                        throw new IOException("Wrong data size: " + bytesRead + " expected: " + length);
+                        throw new IOException("Version is not supported: " + version);
                     }
 
-                    m_buffer = new BitReadBuffer(data, bitLength);
+                    // storage
+                    ReadStorage(reader);
+
+                    // demo data
+                    ReadDemo(reader);
                 }
             }
+        }
+
+        private void ReadStorage(BinaryReader reader)
+        {
+            int length = reader.ReadInt32();
+            byte[] data = new byte[length];
+
+            int bytesRead = reader.Read(data, 0, length);
+            if (bytesRead != length)
+            {
+                throw new IOException("Wrong data size: " + bytesRead + " expected: " + length);
+            }
+
+            using (MemoryStream stream = new MemoryStream(data))
+            {
+                Application.Storage().Load(stream);
+            }
+        }
+
+        private void ReadDemo(BinaryReader reader)
+        {
+            int bitLength = reader.ReadInt32();
+            int length = reader.ReadInt32();
+            byte[] data = new byte[length];
+            int bytesRead = reader.Read(data, 0, length);
+            if (bytesRead != length)
+            {
+                throw new IOException("Wrong data size: " + bytesRead + " expected: " + length);
+            }
+
+            m_buffer = new BitReadBuffer(data, bitLength);
         }
 
         public void ReadTick()
