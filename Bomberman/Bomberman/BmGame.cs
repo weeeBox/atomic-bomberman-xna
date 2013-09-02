@@ -119,21 +119,28 @@ namespace Bomberman
 
         private void RunUpdate(float delta)
         {
-            if (application.IsRunning())
+            try
             {
-                application.Update(delta);
-            }
-            else
-            {
-                #if DEBUG && WINDOWS
-                var form = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle(this.Window.Handle);
-                Application.Storage().Set("lastWinX", form.Location.X);
-                Application.Storage().Set("lastWinY", form.Location.Y);
-                Application.Storage().SaveImmediately();
-                #endif
+                if (application.IsRunning())
+                {
+                    application.Update(delta);
+                }
+                else
+                {
+                    #if DEBUG && WINDOWS
+                    var form = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle(this.Window.Handle);
+                    Application.Storage().Set("lastWinX", form.Location.X);
+                    Application.Storage().Set("lastWinY", form.Location.Y);
+                    Application.Storage().SaveImmediately();
+                    #endif
 
-                application.RunStop();
-                Exit();
+                    application.RunStop();
+                    Exit();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                application.RunCrash(ex);
             }
         }
 

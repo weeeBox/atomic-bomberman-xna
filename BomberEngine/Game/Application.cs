@@ -172,14 +172,12 @@ namespace BomberEngine.Game
             sharedStorage.Destroy();
             timerManager.Destroy();
 
-            #if DEBUG_DEMO
-            if (m_demoRecorder != null)
-            {
-                String path = "demo.dm";
-                m_demoRecorder.Save(path);
-                Log.d("Demo saved: " + path);
-            }
-            #endif
+            SaveDemo();
+        }
+
+        public void RunCrash(Exception e)
+        {
+            SaveDemo();
         }
 
         protected virtual void OnStart()
@@ -198,11 +196,8 @@ namespace BomberEngine.Game
 
             MathHelp.InitRandom();
 
-            #if DEBUG_DEMO
-            m_demoRecorder = new DemoRecorder();
-            AddUpdatable(m_demoRecorder);
-            #endif
-
+            CreateDemoRecorder();
+            
             timerManager = CreateTimerManager();
             notifications = CreateNotifications(timerManager);
             sharedStorage = CreateSharedStorage("storage", timerManager);
@@ -213,10 +208,8 @@ namespace BomberEngine.Game
                 AddUpdatable(inputManager as IUpdatable);
             }
 
-            #if DEBUG_DEMO
-            inputManager.AddInputListener(m_demoRecorder);
-            #endif
-
+            InitDemoRecorder();
+            
             assetManager = CreateAssetManager();
 
             rootController = CreateRootController();
@@ -365,6 +358,36 @@ namespace BomberEngine.Game
             RemoveUpdatable(obj);
             RemoveDrawable(obj);
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Debug demo
+
+        [System.Diagnostics.Conditional("DEBUG_DEMO")]
+        protected void CreateDemoRecorder()
+        {
+            m_demoRecorder = new DemoRecorder();
+            AddUpdatable(m_demoRecorder);
+        }
+
+        [System.Diagnostics.Conditional("DEBUG_DEMO")]
+        protected void InitDemoRecorder()
+        {
+            inputManager.AddInputListener(m_demoRecorder);
+        }
+
+        [System.Diagnostics.Conditional("DEBUG_DEMO")]
+        protected void SaveDemo()
+        {
+            if (m_demoRecorder != null)
+            {
+                String path = "demo.dm";
+                m_demoRecorder.Save(path);
+                Log.d("Demo saved: " + path);
+            }
+        }
+
+        #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 

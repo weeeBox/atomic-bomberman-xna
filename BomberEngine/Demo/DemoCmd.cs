@@ -49,6 +49,7 @@ namespace BomberEngine.Demo
     public class DemoTickCmd : DemoCmd
     {
         private float m_frameTime;
+        private bool m_needsUpdate;
 
         public DemoTickCmd()
             : base(DemoCmdType.Tick)
@@ -63,18 +64,31 @@ namespace BomberEngine.Demo
 
         public override void Write(BitWriteBuffer buffer)
         {
-            buffer.Write(m_frameTime);
+            buffer.Write(m_needsUpdate);
+            if (m_needsUpdate)
+            {
+                buffer.Write(m_frameTime);
+                m_needsUpdate = false;
+            }
         }
 
         public override void Read(BitReadBuffer buffer)
         {
-            m_frameTime = buffer.ReadFloat();
+            bool needsUpdate = buffer.ReadBoolean();
+            if (needsUpdate)
+            {
+                m_frameTime = buffer.ReadFloat();
+            }
         }
 
         public float frameTime
         {
             get { return m_frameTime; }
-            set { m_frameTime = value; }
+            set 
+            {
+                m_needsUpdate = m_frameTime != value;
+                m_frameTime = value; 
+            }
         }
     }
 
