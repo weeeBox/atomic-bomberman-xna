@@ -169,6 +169,7 @@
     <Compile Include="Core\Visual\View.cs" />
     <Compile Include="Core\Visual\ImageView.cs" />
     <Compile Include="Debugging\Debug.cs" />
+    <Compile Include="Debugging\IDECmdEntry.cs" />
     <Compile Include="Debugging\Log.cs" />
     <Compile Include="Demo\DemoCmd.cs" />
     <Compile Include="Demo\DemoCmdEntry.cs" />

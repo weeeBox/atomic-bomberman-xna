@@ -38,23 +38,7 @@ namespace BomberEngine.Core.IO
             while (iter.HasNext())
             {
                 String arg = iter.Next();
-                if (arg.StartsWith("-"))
-                {
-                    String shortParam = arg.Substring(1);
-                    if (shortParam.Length == 0)
-                    {
-                        throw new CommandLineException("Short param expected");
-                    }
-
-                    CommandLineEntry entry = FindEntry(shortParam, true);
-                    if (entry == null)
-                    {
-                        throw new CommandLineException("Unknown param: " + arg);
-                    }
-
-                    entry.Parse(iter);
-                }
-                else if (arg.StartsWith("--"))
+                if (arg.StartsWith("--"))
                 {
                     String longParam = arg.Substring(2);
                     if (longParam.Length == 0)
@@ -63,6 +47,22 @@ namespace BomberEngine.Core.IO
                     }
 
                     CommandLineEntry entry = FindEntry(longParam, false);
+                    if (entry == null)
+                    {
+                        throw new CommandLineException("Unknown param: " + arg);
+                    }
+
+                    entry.Parse(iter);
+                }
+                else if (arg.StartsWith("-"))
+                {
+                    String shortParam = arg.Substring(1);
+                    if (shortParam.Length == 0)
+                    {
+                        throw new CommandLineException("Short param expected");
+                    }
+
+                    CommandLineEntry entry = FindEntry(shortParam, true);
                     if (entry == null)
                     {
                         throw new CommandLineException("Unknown param: " + arg);
