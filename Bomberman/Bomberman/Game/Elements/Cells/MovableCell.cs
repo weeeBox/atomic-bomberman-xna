@@ -35,11 +35,9 @@ namespace Bomberman.Game.Elements.Cells
             contactList = new CellContactList(this);
         }
 
-        public override void Update(float delta)
-        {
-            oldPx = px;
-            oldPy = py;
-        }
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region IResettable
 
         public override void Reset()
         {
@@ -54,6 +52,80 @@ namespace Bomberman.Game.Elements.Cells
 
             contactList.Clear();
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region IUpdatable
+
+        public override void Update(float delta)
+        {
+            oldPx = px;
+            oldPy = py;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Cell
+
+        public void SetPosX(float px)
+        {
+            SetPos(px, py);
+        }
+
+        public void SetPosY(float py)
+        {
+            SetPos(px, py);
+        }
+
+        public override void SetPos(float px, float py)
+        {
+            int oldCx = cx;
+            int oldCy = cy;
+
+            base.SetPos(px, py);
+
+            if (oldCx != cx || oldCy != cy)
+            {
+                OnCellChanged(oldCx, oldCy);
+            }
+        }
+
+        public void SetRelativeTo(FieldCell cell, int stepX, int stepY)
+        {
+            float posX = stepX != 0 ? (cell.px + stepX * Constant.CELL_WIDTH) : px;
+            float posY = stepY != 0 ? (cell.py + stepY * Constant.CELL_HEIGHT) : py;
+
+            SetPos(posX, posY);
+        }
+
+        protected virtual void OnCellMoved()
+        {
+        }
+
+        protected virtual void OnCellChanged(int oldCx, int oldCy)
+        {
+            GetField().MovableCellChanged(this, oldCx, oldCy);
+        }
+
+        public float CenterOffX
+        {
+            get { return Util.CellCenterOffX(px); }
+        }
+
+        public float CenterOffY
+        {
+            get { return Util.CellCenterOffY(py); }
+        }
+
+        #endregion
+        
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Movable
 
         public virtual void UpdateMoving(float delta)
         {   
@@ -112,6 +184,73 @@ namespace Bomberman.Game.Elements.Cells
             Move(dx, dy);
         }
 
+        protected void SetMoveDirection(Direction direction)
+        {
+            SetDirection(direction);
+            m_moving = true;
+
+            switch (direction)
+            {
+                case Direction.UP:
+                    m_moveKy = -1.0f;
+                    break;
+                case Direction.DOWN:
+                    m_moveKy = 1.0f;
+                    break;
+                case Direction.LEFT:
+                    m_moveKx = -1.0f;
+                    break;
+                case Direction.RIGHT:
+                    m_moveKx = 1.0f;
+                    break;
+            }
+        }
+
+        public virtual void StopMoving()
+        {
+            m_moving = false;
+            m_moveKx = 0;
+            m_moveKy = 0;
+        }
+
+        public void SetDirection(Direction newDirection)
+        {
+            m_oldDirection = m_direction;
+            m_direction = newDirection;
+        }
+
+        public void MoveBackX(float distance)
+        {
+            MoveX(-m_moveKx * distance);
+        }
+
+        public void MoveBackY(float distance)
+        {
+            MoveY(-m_moveKy * distance);
+        }
+
+        public void MoveX(float dx)
+        {
+            Move(dx, 0);
+        }
+
+        public void MoveY(float dy)
+        {
+            Move(0, dy);
+        }
+
+        public void Move(float dx, float dy)
+        {
+            if (dx != 0.0f || dy != 0.0f)
+            {
+                // update pixel cords without updating cell cords
+                SetPos(px + dx, py + dy);
+
+                // check collisions and all the stuff
+                OnCellMoved();
+            }
+        }
+
         protected virtual float GetMoveTargetDx(float delta, bool blocked)
         {   
             float xOffset = Util.TargetPxOffset(px);
@@ -123,6 +262,78 @@ namespace Bomberman.Game.Elements.Cells
             float yOffset = Util.TargetPyOffset(py);
             return yOffset < 0 ? Math.Max(yOffset, -delta * m_speed) : Math.Min(yOffset, delta * m_speed);
         }
+
+        public void SetSpeed(float speed)
+        {
+            m_speed = speed;
+        }
+
+        public void IncSpeed(float amount)
+        {
+            SetSpeed(m_speed + amount);
+        }
+
+        public float GetSpeed()
+        {
+            return m_speed;
+        }
+
+        public float GetSpeedX()
+        {
+            return m_speed * m_moveKx;
+        }
+
+        public float GetSpeedY()
+        {
+            return m_speed * m_moveKy;
+        }
+
+        public bool IsMoving()
+        {
+            return m_moving;
+        }
+
+        public Direction direction
+        {
+            get { return m_direction; }
+        }
+
+        public Direction oldDirection
+        {
+            get { return m_oldDirection; }
+        }
+
+        protected float moveKx
+        {
+            get { return m_moveKx; }
+        }
+
+        protected float moveKy
+        {
+            get { return m_moveKy; }
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+        
+        #region Virtual Type
+
+        public override bool IsMovable()
+        {
+            return true;
+        }
+
+        public override MovableCell AsMovable()
+        {
+            return this;
+        }
+
+        #endregion
+        
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Collider
 
         public virtual bool HandleCollision(FieldCell other)
         {
@@ -248,194 +459,6 @@ namespace Bomberman.Game.Elements.Cells
             return hadCollisiton;
         }
 
-        protected void SetMoveDirection(Direction direction)
-        {
-            SetDirection(direction);
-            m_moving = true;
-
-            switch (direction)
-            {
-                case Direction.UP:
-                    m_moveKy = -1.0f;
-                    break;
-                case Direction.DOWN:
-                    m_moveKy = 1.0f;
-                    break;
-                case Direction.LEFT:
-                    m_moveKx = -1.0f;
-                    break;
-                case Direction.RIGHT:
-                    m_moveKx = 1.0f;
-                    break;
-            }
-        }
-
-        public virtual void StopMoving()
-        {
-            m_moving = false;
-            m_moveKx = 0;
-            m_moveKy = 0;
-        }
-
-        public bool TryStopKicked()
-        {
-            if (m_moving)
-            {
-                SetCell();
-                StopMoving();
-
-                return true;
-            }
-
-            return false;
-        }
-
-        public void SetDirection(Direction newDirection)
-        {   
-            m_oldDirection = m_direction;
-            m_direction = newDirection;
-        }
-
-        public void MoveBackX(float distance)
-        {
-            MoveX(-m_moveKx * distance);
-        }
-
-        public void MoveBackY(float distance)
-        {
-            MoveY(-m_moveKy * distance);
-        }
-
-        public void MoveX(float dx)
-        {
-            Move(dx, 0);
-        }
-
-        public void MoveY(float dy)
-        {
-            Move(0, dy);
-        }
-
-        public void Move(float dx, float dy)
-        {
-            if (dx != 0.0f || dy != 0.0f)
-            {
-                // update pixel cords without updating cell cords
-                SetPos(px + dx, py + dy);
-
-                // check collisions and all the stuff
-                OnCellMoved();
-            }
-        }
-
-        public void SetPosX(float px)
-        {
-            SetPos(px, py);
-        }
-
-        public void SetPosY(float py)
-        {
-            SetPos(px, py);
-        }
-
-        public override void SetPos(float px, float py)
-        {
-            int oldCx = cx;
-            int oldCy = cy;
-
-            base.SetPos(px, py);
-
-            if (oldCx != cx || oldCy != cy)
-            {
-                OnCellChanged(oldCx, oldCy);
-            }
-        }
-
-        public void SetRelativeTo(FieldCell cell, int stepX, int stepY)
-        {
-            float posX = stepX != 0 ? (cell.px + stepX * Constant.CELL_WIDTH) : px;
-            float posY = stepY != 0 ? (cell.py + stepY * Constant.CELL_HEIGHT) : py;
-
-            SetPos(posX, posY);
-        }
-
-        protected virtual void OnCellMoved()
-        {   
-        }
-
-        protected virtual void OnCellChanged(int oldCx, int oldCy)
-        {
-            GetField().MovableCellChanged(this, oldCx, oldCy);
-        }
-
-        public void SetSpeed(float speed)
-        {
-            m_speed = speed;
-        }
-
-        public void IncSpeed(float amount)
-        {
-            SetSpeed(m_speed + amount);
-        }
-
-        public float GetSpeed()
-        {
-            return m_speed;
-        }
-
-        public float GetSpeedX()
-        {
-            return m_speed * m_moveKx;
-        }
-
-        public float GetSpeedY()
-        {
-            return m_speed * m_moveKy;
-        }
-
-        public float CenterOffX
-        {
-            get { return Util.CellCenterOffX(px); }
-        }
-
-        public float CenterOffY
-        {
-            get { return Util.CellCenterOffY(py); }
-        }
-
-        public override bool IsMovable()
-        {
-            return true;
-        }
-
-        public override MovableCell AsMovable()
-        {
-            return this;
-        }
-
-        public bool IsMoving()
-        {
-            return m_moving;
-        }
-
-        public Direction direction
-        {
-            get { return m_direction; }
-        }
-
-        public Direction oldDirection
-        {
-            get { return m_oldDirection; }
-        }
-
-        protected float moveKx
-        {
-            get { return m_moveKx; }
-        }
-
-        protected float moveKy
-        {
-            get { return m_moveKy; }
-        }
+        #endregion
     }
 }

@@ -328,6 +328,19 @@ namespace Bomberman.Game.Elements.Cells
             SetMoveDirection(direction);
         }
 
+        public bool TryStopKicked()
+        {
+            if (IsMoving())
+            {
+                SetCell();
+                StopMoving();
+
+                return true;
+            }
+
+            return false;
+        }
+
         public void Grab()
         {
             SetState(State.Grabbed);
