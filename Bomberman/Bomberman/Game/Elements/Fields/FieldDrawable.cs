@@ -92,7 +92,7 @@ namespace Bomberman.Game.Elements.Fields
 
                 if (slot.MovableCount() > 0)
                 {
-                    foreach (MovableCell movableCell in slot.movableCells.list)
+                    foreach (MovableCell movableCell in slot.movableCells)
                     {
                         DrawCell(context, movableCell);
                     }

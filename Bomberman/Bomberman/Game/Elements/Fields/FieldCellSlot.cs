@@ -17,20 +17,20 @@ namespace Bomberman.Game.Elements.Fields
         public int cy;
 
         public FieldCell staticCell;
-        public MovableCellList movableCells;
+        public List<MovableCell> movableCells;
 
         public FieldCellSlot(int cx, int cy)
         {
             this.cx = cx;
             this.cy = cy;
 
-            movableCells = new MovableCellList();
+            movableCells = new List<MovableCell>();
         }
 
         public void Reset()
         {
             staticCell = null;
-            movableCells.Reset();
+            movableCells.Clear();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -71,12 +71,12 @@ namespace Bomberman.Game.Elements.Fields
 
         public int Size()
         {
-            return movableCells.Size() + (staticCell != null ? 1 : 0);
+            return movableCells.Count + (staticCell != null ? 1 : 0);
         }
 
         public int MovableCount()
         {
-            return movableCells.Size();
+            return movableCells.Count;
         }
 
         public bool ContainsSolid()
@@ -86,7 +86,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public bool IsEmpty()
         {
-            return staticCell == null && movableCells.Size() == 0;
+            return staticCell == null && movableCells.Count == 0;
         }
 
         public SolidCell GetSolid()
@@ -131,10 +131,9 @@ namespace Bomberman.Game.Elements.Fields
 
         public Bomb GetBomb()
         {
-            LinkedList<MovableCell> list = movableCells.list;
-            for (LinkedListNode<MovableCell> node = list.First; node != null; node = node.Next)
+            for (int i = 0; i < movableCells.Count; ++i)
             {
-                MovableCell cell = node.Value;
+                MovableCell cell = movableCells[i];
                 if (cell.IsBomb())
                 {
                     return cell.AsBomb();
@@ -176,10 +175,9 @@ namespace Bomberman.Game.Elements.Fields
                 return staticCell.IsObstacle();
             }
 
-            LinkedList<MovableCell> list = movableCells.list;
-            for (LinkedListNode<MovableCell> node = list.First; node != null; node = node.Next)
+            for (int i = 0; i < movableCells.Count; ++i)
             {
-                MovableCell cell = node.Value;
+                MovableCell cell = movableCells[i];
                 if (cell.IsObstacle())
                 {
                     return true;
@@ -196,10 +194,9 @@ namespace Bomberman.Game.Elements.Fields
                 list.AddLast(staticCell);
             }
 
-            LinkedList<MovableCell> movableList = movableCells.list;
-            foreach (FieldCell cell in movableList)
+            for (int i = 0; i < movableCells.Count; ++i)
             {
-                list.AddLast(cell);
+                list.AddLast(movableCells[i]);
             }
         }
 

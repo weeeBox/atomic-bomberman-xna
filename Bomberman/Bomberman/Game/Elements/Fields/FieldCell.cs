@@ -33,6 +33,10 @@ namespace Bomberman.Game.Elements.Fields
             SetCell(cx, cy);
         }
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region IResettable
+
         public virtual void Reset()
         {   
             m_px = m_py = 0.0f;
@@ -40,9 +44,21 @@ namespace Bomberman.Game.Elements.Fields
             slotIndex = -1;
         }
 
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region IDestroyable
+
         public virtual void Destroy()
         {
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region IUpdatable
 
         public virtual void Update(float delta)
         {   
@@ -56,6 +72,12 @@ namespace Bomberman.Game.Elements.Fields
         {
             UpdateAnimation(delta);
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Cell
 
         public void SetCell()
         {
@@ -74,6 +96,83 @@ namespace Bomberman.Game.Elements.Fields
             this.m_px = px;
             this.m_py = py;
         }
+
+        public int GetCx()
+        {
+            return cx;
+        }
+
+        public int GetCy()
+        {
+            return cy;
+        }
+
+        public float GetPx()
+        {
+            return px;
+        }
+
+        public float GetPy()
+        {
+            return py;
+        }
+
+        public float CellCenterPx()
+        {
+            return Util.Cx2Px(cx);
+        }
+
+        public float CellCenterPy()
+        {
+            return Util.Cy2Py(cy);
+        }
+
+        public float CenterOffsetX()
+        {
+            return px - CellCenterPx();
+        }
+
+        public float CenterOffsetY()
+        {
+            return py - CellCenterPy();
+        }
+
+        public FieldCellSlot GetNearSlot(int dcx, int dcy)
+        {
+            return GetField().GetSlot(cx + dcx, cy + dcy);
+        }
+
+        public FieldCellSlot GetNearSlot(Direction dir)
+        {
+            switch (dir)
+            {
+                case Direction.DOWN:
+                    return GetNearSlot(0, 1);
+                case Direction.UP:
+                    return GetNearSlot(0, -1);
+                case Direction.LEFT:
+                    return GetNearSlot(-1, 0);
+                case Direction.RIGHT:
+                    return GetNearSlot(1, 0);
+                default:
+                    Debug.Assert(false, "Unknown dir: " + dir);
+                    break;
+            }
+
+            return null;
+        }
+
+        public bool HasNearObstacle(int dcx, int dcy)
+        {
+            FieldCellSlot slot = GetNearSlot(dcx, dcy);
+            return slot == null || slot.ContainsObstacle();
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Virtual Type
 
         public virtual bool IsSolid()
         {
@@ -150,91 +249,18 @@ namespace Bomberman.Game.Elements.Fields
             return null;
         }
 
-        public int GetCx()
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Collider
+
+        public virtual bool Collides(FieldCell other)
         {
-            return cx;
+            return cx == other.cx && cy == other.cy;
         }
 
-        public int GetCy()
-        {
-            return cy;
-        }
-
-        public float GetPx()
-        {
-            return px;
-        }
-
-        public float GetPy()
-        {
-            return py;
-        }
-
-        public float CellCenterPx()
-        {
-            return Util.Cx2Px(cx);
-        }
-
-        public float CellCenterPy()
-        {
-            return Util.Cy2Py(cy);
-        }
-
-        public float CenterOffsetX()
-        {
-            return px - CellCenterPx();
-        }
-
-        public float CenterOffsetY()
-        {
-            return py - CellCenterPy();
-        }
-
-        public FieldCellSlot GetNearSlot(int dcx, int dcy)
-        {
-            return GetField().GetSlot(cx + dcx, cy + dcy);
-        }
-
-        public FieldCellSlot GetNearSlot(Direction dir)
-        {
-            switch (dir)
-            {
-                case Direction.DOWN:
-                    return GetNearSlot(0, 1);
-                case Direction.UP:
-                    return GetNearSlot(0, -1);
-                case Direction.LEFT:
-                    return GetNearSlot(-1, 0);
-                case Direction.RIGHT:
-                    return GetNearSlot(1, 0);
-                default:
-                    Debug.Assert(false, "Unknown dir: " + dir);
-                    break;
-            }
-
-            return null;
-        }
-
-        public bool HasNearObstacle(int dcx, int dcy)
-        {
-            FieldCellSlot slot = GetNearSlot(dcx, dcy);
-            return slot == null || slot.ContainsObstacle();
-        }
-
-        public void RemoveFromField()
-        {
-            GetField().RemoveCell(this);
-        }
-
-        protected Field GetField()
-        {
-            return Field.Current();
-        }
-
-        protected FieldCellSlot GetSlot(int cx, int cy)
-        {
-            return GetField().GetSlot(cx, cy);
-        }
+        #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 
@@ -258,6 +284,39 @@ namespace Bomberman.Game.Elements.Fields
         protected void CancelAllTimers()
         {
             GetField().CancelAllTimers(this);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Helpers
+
+        public void RemoveFromField()
+        {
+            GetField().RemoveCell(this);
+        }
+
+        protected Field GetField()
+        {
+            return Field.Current();
+        }
+
+        protected FieldCellSlot GetSlot(int cx, int cy)
+        {
+            return GetField().GetSlot(cx, cy);
+        }
+
+        public static float OverlapX(FieldCell a, FieldCell b)
+        {
+            float overlapX = Constant.CELL_WIDTH - Math.Abs(a.px - b.px);
+            return overlapX > 0 ? overlapX : 0;
+        }
+
+        public static float OverlapY(FieldCell a, FieldCell b)
+        {
+            float overlapY = Constant.CELL_HEIGHT - Math.Abs(a.py - b.py);
+            return overlapY > 0 ? overlapY : 0;
         }
 
         #endregion
@@ -309,22 +368,5 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         #endregion
-
-        public int GetPriority()
-        {
-            return (int)type;
-        }
-
-        public static float OverlapX(FieldCell a, FieldCell b)
-        {
-            float overlapX = Constant.CELL_WIDTH - Math.Abs(a.px - b.px);
-            return overlapX > 0 ? overlapX : 0;
-        }
-
-        public static float OverlapY(FieldCell a, FieldCell b)
-        {
-            float overlapY = Constant.CELL_HEIGHT - Math.Abs(a.py - b.py);
-            return overlapY > 0 ? overlapY : 0;
-        }
     }
 }
