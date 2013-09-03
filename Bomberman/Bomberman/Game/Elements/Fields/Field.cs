@@ -1006,6 +1006,28 @@ namespace Bomberman.Game.Elements.Fields
 
         //////////////////////////////////////////////////////////////////////////////
 
+        public void RunTest1()
+        {
+        }
+
+        public void RunTest2()
+        {
+        }
+
+        public void RunTest3()
+        {
+        }
+
+        public void RunTest4()
+        {
+        }
+
+        public void RunTest5()
+        {
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
         #region TimerManager
 
         public Timer ScheduleTimer(TimerCallback callback, float delay = 0.0f, bool repeated = false)

@@ -71,6 +71,12 @@ namespace Bomberman.Game
             new Cmd_add(),
             new Cmd_map(),
             new Cmd_map_restart(),
+
+            new Cmd_test("test1", RunTest1),
+            new Cmd_test("test2", RunTest2),
+            new Cmd_test("test3", RunTest3),
+            new Cmd_test("test4", RunTest4),
+            new Cmd_test("test5", RunTest5),
         };
 
         public static GameController Client(GameSettings settings)
@@ -256,6 +262,33 @@ namespace Bomberman.Game
         protected virtual void RoundResultScreenDismissed(RoundResultScreen screen)
         {
             Stop(ExitCode.Exit);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        public static void RunTest1()
+        {
+            Field.Current().RunTest1();
+        }
+
+        public static void RunTest2()
+        {
+            Field.Current().RunTest2();
+        }
+
+        public static void RunTest3()
+        {
+            Field.Current().RunTest3();
+        }
+
+        public static void RunTest4()
+        {
+            Field.Current().RunTest4();
+        }
+
+        public static void RunTest5()
+        {
+            Field.Current().RunTest5();
         }
 
         //////////////////////////////////////////////////////////////////////////////

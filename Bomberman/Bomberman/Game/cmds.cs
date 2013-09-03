@@ -10,6 +10,8 @@ using BomberEngine.Game;
 
 namespace Bomberman.Game
 {
+    public delegate void ExecuteDelegate();
+
     public abstract class GameCCommand : CCommand
     {
         public GameCCommand(String name)
@@ -155,6 +157,27 @@ namespace Bomberman.Game
             if (gc != null)
             {
                 gc.Restart();
+            }
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    public class Cmd_test : GameCCommand
+    {
+        private ExecuteDelegate m_delegate;
+
+        public Cmd_test(String name, ExecuteDelegate del)
+            : base(name)
+        {
+            m_delegate = del;
+        }
+
+        public override void Execute()
+        {
+            if (m_delegate != null)
+            {
+                m_delegate();
             }
         }
     }
