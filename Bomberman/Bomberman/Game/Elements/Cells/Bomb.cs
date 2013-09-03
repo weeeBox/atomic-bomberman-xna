@@ -256,7 +256,7 @@ namespace Bomberman.Game.Elements.Cells
 
         public override bool Collides(FieldCell other)
         {
-            return CheckCell2BoundsCollision(other);
+            return CheckBounds2CellCollision(other);
         }
 
         public override bool HandleCollision(FieldCell cell)
