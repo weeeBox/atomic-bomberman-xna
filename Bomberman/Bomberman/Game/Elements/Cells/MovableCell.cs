@@ -359,8 +359,13 @@ namespace Bomberman.Game.Elements.Cells
         /* Not movable cell */
         protected virtual bool HandleStaticCollision(FieldCell other)
         {
-            MoveFromOverlap(other);
-            return true;
+            if (other.IsObstacle())
+            {
+                MoveFromOverlap(other);
+                return true;
+            }
+
+            return false;
         }
 
         public virtual bool HandleWallCollision()
