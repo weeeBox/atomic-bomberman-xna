@@ -275,21 +275,21 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         /* Checks cell-to-cell collision: objects collide only if cells collide */
-        protected bool CheckCell2CellCollision(FieldCell other)
+        public bool CheckCell2CellCollision(FieldCell other)
         {
             return cx == other.cx && cy == other.cy;
         }
 
         /* Checks bounds-to-cell collision: objects collide if caller's cell collides with callee's
          * bounding box */
-        protected bool CheckBounds2CellCollision(FieldCell other)
+        public bool CheckBounds2CellCollision(FieldCell other)
         {
             return Math.Abs(px - other.CellCenterPx()) < Constant.CELL_WIDTH && Math.Abs(py - other.CellCenterPy()) < Constant.CELL_HEIGHT;
         }
 
         /* Checks cell-to-bounds collision: objects collide if caller's bounding box collides with callee's
          * cell */
-        protected bool CheckCell2BoundsCollision(FieldCell other)
+        public bool CheckCell2BoundsCollision(FieldCell other)
         {
             return other.CheckBounds2CellCollision(this);
         }
