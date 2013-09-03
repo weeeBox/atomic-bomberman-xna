@@ -788,7 +788,7 @@ namespace Bomberman.Game.Elements.Fields
                 for (LinkedListNode<MovableCell> n2 = n1.Next; n2 != null; n2 = n2.Next)
                 {
                     MovableCell c2 = n2.Value;
-                    if (Collides(c1, c2))
+                    if (c1.Collides(c2))
                     {
                         cellContactList.Add(c2);
                         ++numContacts;
@@ -949,12 +949,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private bool CheckCollision(MovableCell c1, FieldCell c2)
         {
-            return Collides(c1, c2) && c1.HandleCollision(c2);
-        }
-
-        private bool Collides(FieldCell a, FieldCell b)
-        {
-            return Math.Abs(a.px - b.px) < Constant.CELL_WIDTH && Math.Abs(a.py - b.py) < Constant.CELL_HEIGHT;
+            return c1.Collides(c2) && c1.HandleCollision(c2);
         }
 
         #endregion
