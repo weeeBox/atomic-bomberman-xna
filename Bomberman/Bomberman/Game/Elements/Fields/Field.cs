@@ -29,8 +29,7 @@ namespace Bomberman.Game.Elements.Fields
         private TimerManager timerManager;
 
         private LinkedList<MovableCell> movableCells;
-        private LinkedList<CellContactList> contacts;
-
+        
         private LinkedList<FieldCell> m_tempCellsList;
         private LinkedList<MovableCell> tempMoveList;
 
@@ -49,7 +48,6 @@ namespace Bomberman.Game.Elements.Fields
             tempMoveList = new LinkedList<MovableCell>();
 
             movableCells = new LinkedList<MovableCell>();
-            contacts = new LinkedList<CellContactList>();
 
             m_playerAnimations = new PlayerAnimations();
             m_bombAnimations = new BombAnimations();
@@ -63,7 +61,6 @@ namespace Bomberman.Game.Elements.Fields
             players.Reset();
             
             movableCells.Clear();
-            contacts.Clear();
             
             m_tempCellsList.Clear();
             tempMoveList.Clear();
@@ -351,7 +348,6 @@ namespace Bomberman.Game.Elements.Fields
         private void UpdatePhysics(float delta)
         {
             UpdateMoving(delta);
-            CheckContacts();
         }
 
         private void UpdateMoving(float delta)
@@ -776,52 +772,6 @@ namespace Bomberman.Game.Elements.Fields
         //////////////////////////////////////////////////////////////////////////////
 
         #region Collisions
-
-        private void CheckContacts()
-        {
-            for (LinkedListNode<MovableCell> n1 = movableCells.First; n1 != null; n1 = n1.Next)
-            {
-                MovableCell c1 = n1.Value;
-                int numContacts = 0;
-                CellContactList cellContactList = c1.contactList;
-
-                for (LinkedListNode<MovableCell> n2 = n1.Next; n2 != null; n2 = n2.Next)
-                {
-                    MovableCell c2 = n2.Value;
-                    if (c1.Collides(c2))
-                    {
-                        cellContactList.Add(c2);
-                        ++numContacts;
-                    }
-                }
-
-                if (numContacts > 0)
-                {
-                    contacts.AddLast(cellContactList);
-                }
-            }
-
-            if (contacts.Count > 0)
-            {
-                for (LinkedListNode<CellContactList> node = contacts.First; node != null; node = node.Next)
-                {
-                    CellContactList contactList = node.Value;
-                    HandleContacts(contactList);
-                    contactList.Clear();
-                }
-                contacts.Clear();
-            }
-        }
-
-        private void HandleContacts(CellContactList contactList)
-        {
-            MovableCell targetCell = contactList.targetCell;
-            LinkedList<MovableCell> cells = contactList.cells;
-            for (LinkedListNode<MovableCell> node = cells.First; node != null; node = node.Next)
-            {
-                targetCell.HandleCollision(node.Value);
-            }
-        }
 
         public bool CheckStaticCollisions(MovableCell movable)
         {

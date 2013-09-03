@@ -24,15 +24,11 @@ namespace Bomberman.Game.Elements.Cells
 
         public bool addedToList;
 
-        public CellContactList contactList;
-
         public MovableCell(FieldCellType type, int cx, int cy)
             : base(type, cx, cy)
         {
             m_direction = Direction.DOWN;
             m_oldDirection = Direction.DOWN;
-
-            contactList = new CellContactList(this);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -49,8 +45,6 @@ namespace Bomberman.Game.Elements.Cells
             m_oldDirection = Direction.DOWN;
             m_speed = 0.0f;
             addedToList = false;
-
-            contactList.Clear();
         }
 
         #endregion

@@ -146,7 +146,6 @@
     <Compile Include="Game\Elements\Cells\PowerupCell.cs" />
     <Compile Include="Game\Elements\Cells\SolidCell.cs" />
     <Compile Include="Game\Elements\Diseases.cs" />
-    <Compile Include="Game\Elements\Fields\CellContactList.cs" />
     <Compile Include="Game\Elements\Fields\FieldCellSlot.cs" />
     <Compile Include="Game\Elements\Fields\FieldCellType.cs" />
     <Compile Include="Game\Elements\Fields\FieldComponent.cs" />
