@@ -167,6 +167,12 @@ namespace Bomberman.Game.Elements.Fields
             return null;
         }
 
+        public bool HasNearObstacle(Direction dir)
+        {
+            FieldCellSlot slot = GetNearSlot(dir);
+            return slot == null || slot.ContainsObstacle();
+        }
+
         public bool HasNearObstacle(int dcx, int dcy)
         {
             FieldCellSlot slot = GetNearSlot(dcx, dcy);
@@ -263,7 +269,9 @@ namespace Bomberman.Game.Elements.Fields
         /* Checks if objects collide */
         public virtual bool Collides(FieldCell other)
         {
-            return CheckCell2CellCollision(other);
+            return CheckBounds2BoundsCollision(other)
+                || CheckBounds2CellCollision(other)
+                || CheckCell2BoundsCollision(other);
         }
 
         /* Checks cell-to-cell collision: objects collide only if cells collide */

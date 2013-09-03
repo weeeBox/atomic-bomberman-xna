@@ -47,6 +47,7 @@ namespace Bomberman.Game.Elements.Cells
         private State m_state;
 
         private int m_triggerIndex;
+        private bool m_blocked;
 
         private BombAnimations m_animations;
         private AnimationInstance m_currentAnimation;
@@ -81,6 +82,7 @@ namespace Bomberman.Game.Elements.Cells
             m_trigger = false;
             m_state = State.Undefined;
             m_triggerIndex = 0;
+            m_blocked = false;
 
             SetSpeed(CVars.cg_bombRollSpeed.intValue);
         }
@@ -97,6 +99,14 @@ namespace Bomberman.Game.Elements.Cells
             m_updater(delta);
 
             UpdateAnimation(delta);
+        }
+
+        public override void UpdateMoving(float delta)
+        {
+            if (!m_blocked)
+            {
+                base.UpdateMoving(delta);
+            }
         }
 
         private void UpdateNormal(float delta)
@@ -246,13 +256,10 @@ namespace Bomberman.Game.Elements.Cells
 
         #region Collider
 
-        public override bool Collides(FieldCell other)
-        {
-            return CheckBounds2CellCollision(other);
-        }
-
         protected override bool HandleCollision(MovableCell other)
         {
+            Debug.Assert(isActive);
+
             if (other.IsPlayer())
             {
                 return other.AsPlayer().HandleCollision(this);
@@ -268,6 +275,8 @@ namespace Bomberman.Game.Elements.Cells
 
         internal bool HandleObstacleCollistion(FieldCell other)
         {
+            Debug.Assert(isActive);
+
             SetCell();
 
             if (TryJellyOnObstacle())
@@ -309,6 +318,7 @@ namespace Bomberman.Game.Elements.Cells
         public void Deactivate()
         {
             m_active = false;
+            CancelAllTimers();
         }
 
         public void Blow()
@@ -425,12 +435,29 @@ namespace Bomberman.Game.Elements.Cells
         private bool TryJellyOnObstacle()
         {
             if (IsJelly())
-            {   
-                SetMoveDirection(Util.Opposite(direction));
+            {
+                Direction newDir = Util.Opposite(direction);
+                m_blocked = HasNearObstacle(newDir);
+                if (m_blocked)
+                {
+                    ScheduleBlockingTimer();
+                }
+                
+                SetMoveDirection(newDir);
                 return true;
             }
 
             return false;
+        }
+
+        private void ScheduleBlockingTimer()
+        {
+            ScheduleTimerOnce(BlockedTimerCallback, 0.05f);
+        }
+
+        private void BlockedTimerCallback(Timer timer)
+        {
+            TryJellyOnObstacle();
         }
 
         private void SetState(State state)
@@ -550,6 +577,11 @@ namespace Bomberman.Game.Elements.Cells
         public bool isTrigger
         {
             get { return m_trigger; }
+        }
+
+        public bool IsBlocked
+        {
+            get { return m_blocked; }
         }
 
         public int triggerIndex

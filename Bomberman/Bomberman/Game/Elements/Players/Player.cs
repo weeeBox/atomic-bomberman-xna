@@ -392,16 +392,6 @@ namespace Bomberman.Game.Elements.Players
 
         #region Collisions
 
-        public override bool Collides(FieldCell other)
-        {
-            if (other.IsPlayer())
-            {
-                return CheckBounds2BoundsCollision(other);
-            }
-
-            return CheckBounds2CellCollision(other);
-        }
-
         protected override bool HandleCollision(MovableCell other)
         {
             if (other.IsBomb())
@@ -448,9 +438,6 @@ namespace Bomberman.Game.Elements.Players
                 }
 
                 // make sure player is out of collision
-                float oldPx = px;
-                float oldPy = py;
-
                 MoveFromOverlap(bomb);
 
                 return true;
