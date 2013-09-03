@@ -213,6 +213,17 @@ namespace Bomberman.Game.Elements.Cells
             m_direction = newDirection;
         }
 
+        public void MoveFromOverlap(FieldCell other)
+        {
+            Debug.Assert(IsMoving());
+
+            float dx = OverlapX(other);
+            float dy = OverlapY(other);
+
+            MoveBackX(dx);
+            MoveBackY(dy);
+        }
+
         public void MoveBackX(float distance)
         {
             MoveX(-m_moveKx * distance);
@@ -348,14 +359,7 @@ namespace Bomberman.Game.Elements.Cells
         /* Not movable cell */
         protected virtual bool HandleStaticCollision(FieldCell other)
         {
-            Debug.Assert(IsMoving());
-
-            float dx = OverlapX(other);
-            float dy = OverlapY(other);
-
-            MoveBackX(dx);
-            MoveBackY(dy);
-
+            MoveFromOverlap(other);
             return true;
         }
 

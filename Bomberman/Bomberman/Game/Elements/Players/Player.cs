@@ -434,6 +434,28 @@ namespace Bomberman.Game.Elements.Players
         /* Player is moving, bomb is moving */
         private bool HandlePlayerMovingBombMovingCollision(Bomb bomb)
         {
+            if (HasKick())
+            {
+
+            }
+            else // can't kick
+            {
+                // moving in opposite directions
+                if (direction == Util.Opposite(bomb.direction))
+                {
+                    // treat player as an obstacle
+                    bomb.HandleObstacleCollistion(this);
+                }
+
+                // make sure player is out of collision
+                float oldPx = px;
+                float oldPy = py;
+
+                MoveFromOverlap(bomb);
+
+                return true;
+            }
+
             return false;
         }
 

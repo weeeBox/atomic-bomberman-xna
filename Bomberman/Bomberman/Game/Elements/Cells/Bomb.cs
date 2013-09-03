@@ -48,8 +48,6 @@ namespace Bomberman.Game.Elements.Cells
 
         private int m_triggerIndex;
 
-        private bool m_jellyBounced;
-
         private BombAnimations m_animations;
         private AnimationInstance m_currentAnimation;
 
@@ -83,7 +81,6 @@ namespace Bomberman.Game.Elements.Cells
             m_trigger = false;
             m_state = State.Undefined;
             m_triggerIndex = 0;
-            m_jellyBounced = false;
 
             SetSpeed(CVars.cg_bombRollSpeed.intValue);
         }
@@ -111,11 +108,6 @@ namespace Bomberman.Game.Elements.Cells
                 {
                     Blow();
                 }
-            }
-
-            if (IsJelly())
-            {
-                m_jellyBounced = false;
             }
         }
 
@@ -277,6 +269,7 @@ namespace Bomberman.Game.Elements.Cells
         internal bool HandleObstacleCollistion(FieldCell other)
         {
             SetCell();
+
             if (TryJellyOnObstacle())
             {
                 return true;
@@ -431,14 +424,8 @@ namespace Bomberman.Game.Elements.Cells
 
         private bool TryJellyOnObstacle()
         {
-            if (m_jellyBounced)
-            {
-                return true;
-            }
-
             if (IsJelly())
             {   
-                m_jellyBounced = true;
                 SetMoveDirection(Util.Opposite(direction));
                 return true;
             }
@@ -585,11 +572,6 @@ namespace Bomberman.Game.Elements.Cells
         public float fallHeight
         {
             get { return m_fallHeight; }
-        }
-
-        public bool isJellyBounced
-        {
-            get { return m_jellyBounced; }
         }
 
         public BombAnimations animations
