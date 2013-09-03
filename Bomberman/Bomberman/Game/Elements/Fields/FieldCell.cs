@@ -255,9 +255,29 @@ namespace Bomberman.Game.Elements.Fields
 
         #region Collider
 
+        /* Checks if objects collide */
         public virtual bool Collides(FieldCell other)
         {
+            return CheckCell2CellCollision(other);
+        }
+
+        /* Checks cell-to-cell collision: objects collide only if cells collide */
+        protected bool CheckCell2CellCollision(FieldCell other)
+        {
             return cx == other.cx && cy == other.cy;
+        }
+
+        /* Checks bounds-to-cell collision: objects collide if caller's cell collides with callee's
+         * bounding box */
+        protected bool CheckBounds2CellCollision(FieldCell other)
+        {
+            return Math.Abs(px - other.CellCenterPx()) < Constant.CELL_WIDTH && Math.Abs(py - other.CellCenterPy()) < Constant.CELL_HEIGHT;
+        }
+
+        /* Checks bounds-to-bounds collision: objects collide if bounding boxes collide */
+        protected bool CheckBounds2BoundsCollision(FieldCell other)
+        {
+            return Math.Abs(px - other.px) < Constant.CELL_WIDTH && Math.Abs(py - other.py) < Constant.CELL_HEIGHT;
         }
 
         #endregion
