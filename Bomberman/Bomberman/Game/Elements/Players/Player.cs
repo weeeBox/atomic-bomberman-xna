@@ -486,6 +486,10 @@ namespace Bomberman.Game.Elements.Players
                         }
                     }
                 }
+                else // player and bomb move in perpendicular directions
+                {
+                    // TODO
+                }
             }
 
             return false;
@@ -500,8 +504,13 @@ namespace Bomberman.Game.Elements.Players
         /* Player is still, bomb is moving */
         private bool HandlePlayerStillBombMovingCollision(Bomb bomb)
         {
-            bomb.HandleObstacleCollistion(this);
-            return true;
+            if (CheckCell2BoundsCollision(bomb)) // bomb's bounds should collide player's cell
+            {
+                bomb.HandleObstacleCollistion(this);
+                return true;
+            }
+            
+            return false;
         }
 
         /* Player is still, bomb is still */
