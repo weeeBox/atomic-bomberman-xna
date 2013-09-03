@@ -461,11 +461,6 @@ namespace Bomberman.Game.Elements.Players
         /* Player and bomb are moving */
         private bool HandleBombCollision(Bomb bomb)
         {
-            if (bomb.isJellyBounced)
-            {
-                return MoveOutOfCollision(bomb);
-            }
-
             if (direction == bomb.direction)
             {
                 if (HasKick())
@@ -474,16 +469,16 @@ namespace Bomberman.Game.Elements.Players
                     switch (direction)
                     {
                         case Direction.LEFT:
-                            canKick = px - bomb.px > 0;
+                            canKick = px - bomb.CellCenterPx() > 0;
                             break;
                         case Direction.RIGHT:
-                            canKick = px - bomb.px < 0;
+                            canKick = px - bomb.CellCenterPx() < 0;
                             break;
                         case Direction.UP:
-                            canKick = py - bomb.py > 0;
+                            canKick = py - bomb.CellCenterPy() > 0;
                             break;
                         case Direction.DOWN:
-                            canKick = py - bomb.py < 0;
+                            canKick = py - bomb.CellCenterPy() < 0;
                             break;
                     }
 
