@@ -88,6 +88,36 @@ namespace Bomberman.Game.Elements.Cells
             }
         }
 
+        public void SetRelativeToTail(MovableCell cell)
+        {
+            Debug.Assert(cell.IsMoving());
+
+            switch (cell.direction)
+            {
+                case Direction.LEFT:
+                {
+                    SetRelativeTo(cell, 1, 0);
+                    break;
+                }
+                case Direction.RIGHT:
+                {
+                    SetRelativeTo(cell, -1, 0);
+                    break;
+                }
+
+                case Direction.UP:
+                {
+                    SetRelativeTo(cell, 0, 1);
+                    break;
+                }
+                case Direction.DOWN:
+                {
+                    SetRelativeTo(cell, 0, -1);
+                    break;
+                }
+            }
+        }
+
         public void SetRelativeTo(FieldCell cell, int stepX, int stepY)
         {
             float posX = stepX != 0 ? (cell.px + stepX * Constant.CELL_WIDTH) : px;

@@ -495,6 +495,12 @@ namespace Bomberman.Game.Elements.Players
                     bomb.MoveOutOfCollision(this);
                     return bomb.HandleObstacleCollision(this);
                 }
+                else // player doesn't have a kick
+                {
+                    // player position is forced to the bomb's bounding box
+                    SetRelativeToTail(bomb);
+                    return true;
+                }
             }
             else // moving in different directions
             {       
