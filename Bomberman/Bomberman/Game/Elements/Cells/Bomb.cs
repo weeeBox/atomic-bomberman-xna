@@ -61,6 +61,10 @@ namespace Bomberman.Game.Elements.Cells
             SetSpeed(CVars.cg_bombRollSpeed.intValue);
         }
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region IResettable
+
         public override void Reset()
         {
             base.Reset();
@@ -83,6 +87,12 @@ namespace Bomberman.Game.Elements.Cells
 
             SetSpeed(CVars.cg_bombRollSpeed.intValue);
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region IUpdatable
 
         public override void Update(float delta)
         {
@@ -159,6 +169,12 @@ namespace Bomberman.Game.Elements.Cells
             }
         }
 
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+        
+        #region Cell
+
         protected override void OnCellMoved()
         {
             if (IsFlying())
@@ -211,9 +227,32 @@ namespace Bomberman.Game.Elements.Cells
             }
         }
 
+        #endregion
+
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Collisions
+        #region Virtual Type
+
+        public override Bomb AsBomb()
+        {
+            return this;
+        }
+
+        public override bool IsBomb()
+        {
+            return true;
+        }
+
+        public override bool IsObstacle()
+        {
+            return true;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Collider
 
         public override bool HandleCollision(FieldCell cell)
         {
@@ -423,21 +462,6 @@ namespace Bomberman.Game.Elements.Cells
         {
             RemoveFromField();
             Fly(px, py, m_player.direction);
-        }
-
-        public override Bomb AsBomb()
-        {
-            return this;
-        }
-
-        public override bool IsBomb()
-        {
-            return true;
-        }
-
-        public override bool IsObstacle()
-        {
-            return true;
         }
 
         private bool TryJellyOnObstacle()

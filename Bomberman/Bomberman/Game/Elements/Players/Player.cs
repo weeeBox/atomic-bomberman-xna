@@ -392,6 +392,16 @@ namespace Bomberman.Game.Elements.Players
 
         #region Collisions
 
+        public override bool Collides(FieldCell other)
+        {
+            if (other.IsPlayer())
+            {
+                return CheckBounds2BoundsCollision(other);
+            }
+
+            return CheckBounds2CellCollision(other);
+        }
+
         public override bool HandleWallCollision()
         {
             return false;
