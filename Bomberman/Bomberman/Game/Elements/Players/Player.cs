@@ -402,6 +402,60 @@ namespace Bomberman.Game.Elements.Players
             return CheckBounds2CellCollision(other);
         }
 
+        protected override bool HandleCollision(MovableCell other)
+        {
+            if (other.IsBomb())
+            {
+                return HandleCollision(other.AsBomb());
+            }
+
+            return false;
+        }
+
+        internal bool HandleCollision(Bomb bomb)
+        {
+            if (IsMoving())
+            {
+                if (bomb.IsMoving())
+                {
+                    return HandlePlayerMovingBombMovingCollision(bomb);
+                }
+                return HandlePlayerMovingBombStillCollision(bomb);
+            }
+
+            if (bomb.IsMoving())
+            {
+                return HandlePlayerStillBombMovingCollision(bomb);
+            }
+
+            return HandlePlayerStillBombStillCollision(bomb);
+        }
+
+        /* Player is moving, bomb is moving */
+        private bool HandlePlayerMovingBombMovingCollision(Bomb bomb)
+        {
+            return false;
+        }
+
+        /* Player is moving, bomb is still */
+        private bool HandlePlayerMovingBombStillCollision(Bomb bomb)
+        {
+            return false;
+        }
+
+        /* Player is still, bomb is moving */
+        private bool HandlePlayerStillBombMovingCollision(Bomb bomb)
+        {
+            bomb.HandleObstacleCollistion(this);
+            return true;
+        }
+
+        /* Player is still, bomb is still */
+        private bool HandlePlayerStillBombStillCollision(Bomb bomb)
+        {
+            return false;
+        }
+
         public override bool HandleWallCollision()
         {
             return false;

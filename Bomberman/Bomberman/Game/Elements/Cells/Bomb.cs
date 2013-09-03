@@ -259,13 +259,36 @@ namespace Bomberman.Game.Elements.Cells
             return CheckBounds2CellCollision(other);
         }
 
-        public override bool HandleCollision(FieldCell cell)
+        protected override bool HandleCollision(MovableCell other)
         {
+            if (other.IsPlayer())
+            {
+                return other.AsPlayer().HandleCollision(this);
+            }
+
             return false;
+        }
+
+        protected override bool HandleStaticCollision(FieldCell other)
+        {
+            return HandleObstacleCollistion(other);
+        }
+
+        internal bool HandleObstacleCollistion(FieldCell other)
+        {
+            SetCell();
+            if (TryJellyOnObstacle())
+            {
+                return true;
+            }
+            
+            StopMoving();
+            return true;
         }
 
         public override bool HandleWallCollision()
         {
+            StopMoving();
             return false;
         }
 
