@@ -274,6 +274,13 @@ namespace Bomberman.Game.Elements.Fields
             return Math.Abs(px - other.CellCenterPx()) < Constant.CELL_WIDTH && Math.Abs(py - other.CellCenterPy()) < Constant.CELL_HEIGHT;
         }
 
+        /* Checks cell-to-bounds collision: objects collide if caller's bounding box collides with callee's
+         * cell */
+        protected bool CheckCell2BoundsCollision(FieldCell other)
+        {
+            return other.CheckBounds2CellCollision(this);
+        }
+
         /* Checks bounds-to-bounds collision: objects collide if bounding boxes collide */
         protected bool CheckBounds2BoundsCollision(FieldCell other)
         {

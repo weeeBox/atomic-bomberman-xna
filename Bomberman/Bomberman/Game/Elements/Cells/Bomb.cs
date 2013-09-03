@@ -254,6 +254,11 @@ namespace Bomberman.Game.Elements.Cells
 
         #region Collider
 
+        public override bool Collides(FieldCell other)
+        {
+            return CheckCell2BoundsCollision(other);
+        }
+
         public override bool HandleCollision(FieldCell cell)
         {
             if (cell.IsObstacle())
