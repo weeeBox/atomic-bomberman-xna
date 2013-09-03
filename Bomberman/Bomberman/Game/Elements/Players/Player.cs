@@ -526,16 +526,16 @@ namespace Bomberman.Game.Elements.Players
                 switch (direction)
                 {
                     case Direction.LEFT:
-                        canKick = px - bomb.px > Constant.CELL_WIDTH_2;
+                        canKick = px - bomb.CellCenterPx() > Constant.CELL_WIDTH_2;
                         break;
                     case Direction.RIGHT:
-                        canKick = bomb.px - px > Constant.CELL_WIDTH_2;
+                        canKick = bomb.CellCenterPx() - px > Constant.CELL_WIDTH_2;
                         break;
                     case Direction.UP:
-                        canKick = py - bomb.py > Constant.CELL_HEIGHT_2;
+                        canKick = py - bomb.CellCenterPy() > Constant.CELL_HEIGHT_2;
                         break;
                     case Direction.DOWN:
-                        canKick = bomb.py - py > Constant.CELL_HEIGHT_2;
+                        canKick = bomb.CellCenterPy() - py > Constant.CELL_HEIGHT_2;
                         break;
                 }
 
@@ -834,20 +834,12 @@ namespace Bomberman.Game.Elements.Players
             {
                 case Direction.RIGHT:
                 case Direction.LEFT:
-                    float overlapX = OverlapX(this, bomb);
-                    if (overlapX > 0)
-                    {
-                        MoveBackX(overlapX);
-                    }
+                    ForcePos(CellCenterPx(), py);
                     break;
 
                 case Direction.UP:
                 case Direction.DOWN:
-                    float overlapY = OverlapY(this, bomb);
-                    if (overlapY > 0)
-                    {
-                        MoveBackY(overlapY);
-                    }
+                    ForcePos(px, CellCenterPy());
                     break;
             }
 

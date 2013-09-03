@@ -348,6 +348,7 @@ namespace Bomberman.Game.Elements.Fields
         private void UpdatePhysics(float delta)
         {
             UpdateMoving(delta);
+            CheckContacts();
         }
 
         private void UpdateMoving(float delta)
@@ -772,6 +773,19 @@ namespace Bomberman.Game.Elements.Fields
         //////////////////////////////////////////////////////////////////////////////
 
         #region Collisions
+
+        private void CheckContacts()
+        {
+            for (LinkedListNode<MovableCell> n1 = movableCells.First; n1 != null; n1 = n1.Next)
+            {
+                MovableCell c1 = n1.Value;
+                for (LinkedListNode<MovableCell> n2 = n1.Next; n2 != null; n2 = n2.Next)
+                {
+                    MovableCell c2 = n2.Value;
+                    CheckCollision(c1, c2);
+                }
+            }
+        }
 
         public bool CheckStaticCollisions(MovableCell movable)
         {

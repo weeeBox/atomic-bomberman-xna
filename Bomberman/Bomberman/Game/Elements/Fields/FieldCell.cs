@@ -86,7 +86,12 @@ namespace Bomberman.Game.Elements.Fields
 
         public void SetCell(int cx, int cy)
         {
-            SetPos(Util.Cx2Px(cx), Util.Cy2Py(cy));
+            ForcePos(Util.Cx2Px(cx), Util.Cy2Py(cy));
+        }
+
+        public void ForcePos(float px, float py)
+        {
+            SetPos(px, py);
             oldPx = px;
             oldPy = py;
         }
