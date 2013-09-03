@@ -840,18 +840,20 @@ namespace Bomberman.Game.Elements.Fields
                 {
                     return CheckCollision(movable, staticCell);
                 }
-                
-                FlameCell flame = slot.GetFlame();
-                if (flame != null && CheckCollision(movable, flame))
+
+                bool handled = false;
+
+                List<MovableCell> movableCells = slot.movableCells;
+                for (int i = 0; i < movableCells.Count; ++i)
                 {
-                    return true;
+                    MovableCell other = movableCells[i];
+                    if (!other.IsMoving())
+                    {
+                        handled |= CheckCollision(movable, other);
+                    }
                 }
 
-                Bomb bomb = slot.GetBomb();
-                if (bomb != null && !bomb.IsMoving() && CheckCollision(movable, bomb))
-                {
-                    return true;
-                }
+                return handled;
             }
 
             return false;

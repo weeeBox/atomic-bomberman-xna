@@ -339,6 +339,16 @@ namespace Bomberman.Game.Elements.Fields
             return GetField().GetSlot(cx, cy);
         }
 
+        public float OverlapX(FieldCell other)
+        {
+            return OverlapX(this, other);
+        }
+
+        public float OverlapY(FieldCell other)
+        {
+            return OverlapY(this, other);
+        }
+
         public static float OverlapX(FieldCell a, FieldCell b)
         {
             float overlapX = Constant.CELL_WIDTH - Math.Abs(a.px - b.px);

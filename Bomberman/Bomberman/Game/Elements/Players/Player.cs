@@ -407,11 +407,6 @@ namespace Bomberman.Game.Elements.Players
             return false;
         }
 
-        public override bool HandleCollision(FieldCell cell)
-        {
-            return false;
-        }
-
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
