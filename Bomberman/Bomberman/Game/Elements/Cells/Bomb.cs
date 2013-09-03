@@ -261,75 +261,17 @@ namespace Bomberman.Game.Elements.Cells
 
         public override bool HandleCollision(FieldCell cell)
         {
-            if (cell.IsObstacle())
-            {
-                if (cell.IsBomb())
-                {
-                    return HandleCollision(cell.AsBomb());
-                }
-
-                return HandleObstacleCollision(cell);
-            }
-            if (cell.IsPowerup())
-            {
-                return HandleCollision(cell.AsPowerup());
-            }
-            if (cell.IsFlame())
-            {
-                return HandleCollision(cell.AsFlame());
-            }
-            if (cell.IsPlayer())
-            {
-                return HandleCollision(cell.AsPlayer());
-            }
-
-            return base.HandleCollision(cell);
+            return false;
         }
 
         public override bool HandleWallCollision()
         {
-            if (TryJellyOnObstacle())
-            {
-                return true;
-            }
-            return base.HandleWallCollision();
+            return false;
         }
 
         public override bool HandleObstacleCollision(FieldCell cell)
         {
-            MoveOutOfCollision(this, cell);
-            if (!TryJellyOnObstacle())
-            {
-                StopMoving();
-            }
-
-            return true;
-        }
-
-        private bool HandleCollision(Bomb bomb)
-        {
-            if (bomb.IsJelly())
-            {
-                bomb.HandleObstacleCollision(this);
-            }
-            return HandleObstacleCollision(bomb);
-        }
-
-        private bool HandleCollision(FlameCell flame)
-        {
-            Blow();
-            return true;
-        }
-
-        private bool HandleCollision(PowerupCell powerupCell)
-        {
-            GetField().RemoveCell(powerupCell);
-            return true;
-        }
-
-        private bool HandleCollision(Player player)
-        {
-            return player.HandleCollision(this);
+            return false;
         }
 
         #endregion

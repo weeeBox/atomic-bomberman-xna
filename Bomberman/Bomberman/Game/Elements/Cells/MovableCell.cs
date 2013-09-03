@@ -366,121 +366,12 @@ namespace Bomberman.Game.Elements.Cells
 
         public virtual bool HandleWallCollision()
         {
-            StopMoving();
-            return true;
+            return false;
         }
 
         public virtual bool HandleObstacleCollision(FieldCell cell)
         {
-            return MoveOutOfCollision(this, cell);
-        }
-
-        /* Move both cells out of collision */
-        public static bool MoveOutOfCollision(FieldCell a, FieldCell b)
-        {
-            bool hadCollisiton = false;
-
-            float overlapX = OverlapX(a, b);
-            if (overlapX > 0 && Math.Abs(a.oldPx - b.oldPx) >= Constant.CELL_WIDTH)
-            {
-                MovableCell ma = a.AsMovable();
-                MovableCell mb = b.AsMovable();
-
-                if (ma == null || !ma.IsMoving())
-                {
-                    mb.MoveBackX(overlapX);
-                }
-                else if (mb == null || !mb.IsMoving())
-                {
-                    ma.MoveBackX(overlapX);
-                }
-                else
-                {
-                    float speedA = ma.GetSpeedX();
-                    float speedB = mb.GetSpeedX();
-                    float speedDiff = Math.Abs(speedA - speedB);
-                    float time = overlapX / speedDiff;
-                    float overlapA = time * ma.GetSpeed();
-                    float overlapB = time * mb.GetSpeed();
-                    if (overlapA > Math.Abs(ma.moveDx))
-                    {
-                        overlapA = Math.Abs(ma.moveDx);
-                        overlapB = overlapX - overlapA;
-                    }
-                    else if (overlapB > Math.Abs(mb.moveDx))
-                    {
-                        overlapB = Math.Abs(mb.moveDx);
-                        overlapA = overlapX - overlapB;
-                    }
-
-                    ma.MoveBackX(overlapA);
-                    mb.MoveBackX(overlapB);
-                }
-
-                hadCollisiton = true;
-            }
-
-            float overlapY = OverlapY(a, b);
-            if (overlapY > 0 && Math.Abs(a.oldPy - b.oldPy) >= Constant.CELL_HEIGHT)
-            {
-                MovableCell ma = a.AsMovable();
-                MovableCell mb = b.AsMovable();
-
-                if (ma == null || !ma.IsMoving())
-                {
-                    mb.MoveBackY(overlapY);
-                }
-                else if (mb == null || !mb.IsMoving())
-                {
-                    ma.MoveBackY(overlapY);
-                }
-                else
-                {
-                    float speedA = ma.GetSpeedY();
-                    float speedB = mb.GetSpeedY();
-                    float speedDiff = Math.Abs(speedA - speedB);
-                    float time = overlapY / speedDiff;
-                    float overlapA = time * ma.GetSpeed();
-                    float overlapB = time * mb.GetSpeed();
-                    if (overlapA > Math.Abs(ma.moveDy))
-                    {
-                        overlapA = Math.Abs(ma.moveDy);
-                        overlapB = overlapY - overlapA;
-                    }
-                    else if (overlapB > Math.Abs(mb.moveDy))
-                    {
-                        overlapB = Math.Abs(mb.moveDy);
-                        overlapA = overlapY - overlapB;
-                    }
-                    ma.MoveBackY(overlapA);
-                    mb.MoveBackY(overlapB);
-                }
-
-                hadCollisiton = true;
-            }
-
-            return hadCollisiton;
-        }
-
-        public bool MoveOutOfCollision(FieldCell cell)
-        {
-            bool hadCollisiton = false;
-
-            float overlapX = OverlapX(this, cell);
-            if (overlapX > 0 && Math.Abs(oldPx - cell.oldPx) >= Constant.CELL_WIDTH)
-            {
-                MoveBackX(overlapX);
-                hadCollisiton = true;
-            }
-
-            float overlapY = OverlapY(this, cell);
-            if (overlapY > 0 && Math.Abs(oldPy - cell.oldPy) >= Constant.CELL_HEIGHT)
-            {
-                MoveBackY(overlapY);
-                hadCollisiton = true;
-            }
-
-            return hadCollisiton;
+            return false;
         }
 
         #endregion
