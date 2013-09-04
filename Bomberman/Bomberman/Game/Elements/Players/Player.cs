@@ -517,7 +517,46 @@ namespace Bomberman.Game.Elements.Players
 
             if (CheckBounds2CellCollision(bomb))
             {
+                // check player can kick a bomb
+
                 bool canKick = false;
+                
+                switch (direction)
+                {
+                    case Direction.LEFT:
+                    {
+                        float dist = px - bomb.px;
+                        canKick = dist > 0.5f * Constant.CELL_WIDTH && dist < Constant.CELL_WIDTH;
+                        break;
+                    }
+
+                    case Direction.RIGHT:
+                    {
+                        float dist = bomb.px - px;
+                        canKick = dist > 0.5f * Constant.CELL_WIDTH && dist < Constant.CELL_WIDTH;
+                        break;
+                    }
+
+                    case Direction.UP:
+                    {
+                        float dist = py - bomb.py;
+                        canKick = dist > 0.5f * Constant.CELL_HEIGHT && dist < Constant.CELL_HEIGHT;
+                        break;
+                    }
+
+                    case Direction.DOWN:
+                    {
+                        float dist = bomb.py - py;
+                        canKick = dist > 0.5f * Constant.CELL_HEIGHT && dist < Constant.CELL_HEIGHT;
+                        break;
+                    }
+                }
+
+                if (canKick)
+                {
+                    TryKick(bomb);
+                    return true;
+                }
             }
 
             return false;
