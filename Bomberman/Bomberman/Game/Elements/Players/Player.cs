@@ -433,14 +433,14 @@ namespace Bomberman.Game.Elements.Players
                     if (hasKick)
                     {
                         // kick in the moving direction
-                        bomb.Kick(direction);
-                    }
-                    else
-                    {
-                        // treat player as an obstacle
-                        bomb.HandleObstacleCollistion(this);
-                    }
+                        TryKick(bomb);
 
+                        return true;
+                    }
+                    
+                    // treat player as an obstacle
+                    bomb.HandleObstacleCollistion(this);
+                    
                     // make sure player is out of bomb`s cell
                     MoveOutOfCell(bomb);
 
@@ -486,10 +486,7 @@ namespace Bomberman.Game.Elements.Players
                         if (CheckBounds2CellCollision(bomb)) // player should collide bomb`s cell
                         {
                             // kick in the moving direction
-                            bomb.Kick(direction);
-
-                            // make sure player is out of bomb`s cell
-                            MoveOutOfCell(bomb);
+                            TryKick(bomb);
 
                             return true;
                         }
@@ -515,13 +512,21 @@ namespace Bomberman.Game.Elements.Players
         /* Player is moving, bomb is still */
         private bool HandlePlayerMovingBombStillCollision(Bomb bomb)
         {
+            Debug.Assert(IsMoving());
+            Debug.Assert(!bomb.IsMoving());
+
+            if (CheckBounds2CellCollision(bomb))
+            {
+                bool canKick = false;
+            }
+
             return false;
         }
 
         /* Player is still, bomb is moving */
         private bool HandlePlayerStillBombMovingCollision(Bomb bomb)
         {
-            if (CheckCell2BoundsCollision(bomb)) // bomb's bounds should collide player's cell
+            if (CheckCell2BoundsCollision(bomb)) // bomb`s bounds should collide player's cell
             {
                 bomb.HandleObstacleCollistion(this);
                 return true;
@@ -804,20 +809,13 @@ namespace Bomberman.Game.Elements.Players
 
         private void KickBomb(Bomb bomb)
         {
-            switch (direction)
-            {
-                case Direction.RIGHT:
-                case Direction.LEFT:
-                    ForcePos(CellCenterPx(), py);
-                    break;
+            Debug.Assert(IsMoving());
 
-                case Direction.UP:
-                case Direction.DOWN:
-                    ForcePos(px, CellCenterPy());
-                    break;
-            }
-
+            // kick in the moving direction
             bomb.Kick(direction);
+
+            // make sure player is out of the bomb`s cell
+            MoveOutOfCell(bomb);
         }
 
         public void OnBombBlown(Bomb bomb)

@@ -57,7 +57,6 @@ namespace Bomberman.Game.Elements.Cells
         {
             m_player = player;
             m_state = State.Undefined;
-            SetSpeed(CVars.cg_bombRollSpeed.intValue);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -83,8 +82,6 @@ namespace Bomberman.Game.Elements.Cells
             m_state = State.Undefined;
             m_triggerIndex = 0;
             m_blocked = false;
-
-            SetSpeed(CVars.cg_bombRollSpeed.intValue);
         }
 
         #endregion
@@ -265,6 +262,16 @@ namespace Bomberman.Game.Elements.Cells
                 return other.AsPlayer().HandleCollision(this);
             }
 
+            if (other.IsObstacle())
+            {
+                return HandleObstacleCollistion(other);
+            }
+
+            if (other.IsFlame())
+            {
+                return HandleCollision(other.AsFlame());
+            }
+
             return false;
         }
 
@@ -288,6 +295,17 @@ namespace Bomberman.Game.Elements.Cells
             return true;
         }
 
+        private bool HandleCollision(FlameCell flame)
+        {
+            if (CheckCell2CellCollision(flame))
+            {
+                Blow();
+                return true;
+            }
+
+            return false;
+        }
+
         public override bool HandleWallCollision()
         {
             StopMoving();
@@ -299,7 +317,9 @@ namespace Bomberman.Game.Elements.Cells
         //////////////////////////////////////////////////////////////////////////////
 
         public void Activate()
-        {   
+        {
+            SetSpeed(CVars.cg_bombRollSpeed.intValue);
+
             m_active = true;
             SetCell(player.cx, player.cy);
             m_radius = player.GetBombRadius();
