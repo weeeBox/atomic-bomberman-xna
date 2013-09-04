@@ -224,6 +224,46 @@ namespace Bomberman.Game.Elements.Cells
             MoveBackY(dy);
         }
 
+        public void MoveOutOfCell(FieldCell c)
+        {
+            Debug.Assert(IsMoving());
+
+            switch (direction)
+            {
+                case Direction.LEFT:
+                    Debug.Assert(c.px < px);
+                    if (px - c.px < Constant.CELL_WIDTH)
+                    {
+                        SetRelativeTo(c, 1, 0);
+                    }
+                    break;
+
+                case Direction.RIGHT:
+                    Debug.Assert(c.px > px);
+                    if (c.px - px < Constant.CELL_WIDTH)
+                    {
+                        SetRelativeTo(c, -1, 0);
+                    }
+                    break;
+
+                case Direction.UP:
+                    Debug.Assert(c.py < py);
+                    if (py - c.py < Constant.CELL_HEIGHT)
+                    {
+                        SetRelativeTo(c, 0, 1);
+                    }
+                    break;
+
+                case Direction.DOWN:
+                    Debug.Assert(c.py > py);
+                    if (c.py - py < Constant.CELL_HEIGHT)
+                    {
+                        SetRelativeTo(c, 0, -1);
+                    }
+                    break;
+            }
+        }
+
         public void MoveBackX(float distance)
         {
             MoveX(-m_moveKx * distance);

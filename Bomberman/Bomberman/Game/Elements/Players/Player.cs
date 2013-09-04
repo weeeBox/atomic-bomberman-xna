@@ -424,72 +424,89 @@ namespace Bomberman.Game.Elements.Players
         /* Player is moving, bomb is moving */
         private bool HandlePlayerMovingBombMovingCollision(Bomb bomb)
         {
-            if (HasKick())
-            {
+            bool hasKick = HasKick();
 
-            }
-            else // can't kick
+            if (direction == Util.Opposite(bomb.direction)) // moving in opposite directions
             {
-                if (direction == Util.Opposite(bomb.direction)) // moving in opposite directions
+                if (bomb.CheckBounds2CellCollision(this)) // bomb should collide with player cell when moving
                 {
-                    if (CheckCell2BoundsCollision(bomb)) // bomb should collide with player cell when moving
+                    if (hasKick)
+                    {
+                        // kick in the moving direction
+                        bomb.Kick(direction);
+                    }
+                    else
+                    {
+                        // treat player as an obstacle
+                        bomb.HandleObstacleCollistion(this);
+                    }
+
+                    // make sure player is out of bomb`s cell
+                    MoveOutOfCell(bomb);
+
+                    return true;
+                }
+            }
+            else if (direction == bomb.direction) // moving in the same direction
+            {
+                bool bombFollowsPlayer = false;
+                switch (direction)
+                {
+                    case Direction.LEFT:
+                        bombFollowsPlayer = px < bomb.px;
+                        break;
+
+                    case Direction.RIGHT:
+                        bombFollowsPlayer = px > bomb.px;
+                        break;
+
+                    case Direction.UP:
+                        bombFollowsPlayer = py < bomb.py;
+                        break;
+
+                    case Direction.DOWN:
+                        bombFollowsPlayer = py > bomb.py;
+                        break;
+                }
+
+                if (bombFollowsPlayer)
+                {
+                    if (bomb.CheckBounds2CellCollision(this)) // bomb bounds should collide player`s cell
                     {
                         // treat player as an obstacle
                         bomb.HandleObstacleCollistion(this);
 
+                        return true;
+                    }
+                }
+                else // player follows bomb
+                {
+                    if (hasKick)
+                    {
+                        if (CheckBounds2CellCollision(bomb)) // player should collide bomb`s cell
+                        {
+                            // kick in the moving direction
+                            bomb.Kick(direction);
+
+                            // make sure player is out of bomb`s cell
+                            MoveOutOfCell(bomb);
+
+                            return true;
+                        }
+                    }
+
+                    if (CheckBounds2BoundsCollision(bomb)) // bounds should collide
+                    {
                         // make sure player is out of collision
                         MoveFromOverlap(bomb);
 
                         return true;
                     }
                 }
-                else if (direction == bomb.direction) // moving in the same direction
-                {
-                    bool bombFollowsPlayer = false;
-                    switch (direction)
-                    {
-                        case Direction.LEFT:
-                            bombFollowsPlayer = px < bomb.px;
-                            break;
-
-                        case Direction.RIGHT:
-                            bombFollowsPlayer = px > bomb.px;
-                            break;
-
-                        case Direction.UP:
-                            bombFollowsPlayer = py < bomb.py;
-                            break;
-
-                        case Direction.DOWN:
-                            bombFollowsPlayer = py > bomb.py;
-                            break;
-                    }
-
-                    if (bombFollowsPlayer)
-                    {
-                        if (CheckCell2BoundsCollision(bomb)) // bomb bounds should collide player's cell
-                        {
-                            // treat player as an obstacle
-                            bomb.HandleObstacleCollistion(this);
-
-                            return true;
-                        }
-                    }
-                    else // player follows bomb
-                    {
-                        if (CheckBounds2BoundsCollision(bomb)) // bounds should collide
-                        {
-                            // make sure player is out of collision
-                            MoveFromOverlap(bomb);
-
-                            return true;
-                        }
-                    }
-                }
-                else // player and bomb move in perpendicular directions
-                {
-                    // TODO
-                }
+            }
+            else // player and bomb move in perpendicular directions
+            {
+                // TODO
             }
 
             return false;

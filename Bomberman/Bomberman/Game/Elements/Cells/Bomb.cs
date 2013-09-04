@@ -277,14 +277,14 @@ namespace Bomberman.Game.Elements.Cells
         {
             Debug.Assert(isActive);
 
-            SetCell();
-
             if (TryJellyOnObstacle())
             {
                 return true;
             }
-            
+
+            SetCell();
             StopMoving();
+
             return true;
         }
 
