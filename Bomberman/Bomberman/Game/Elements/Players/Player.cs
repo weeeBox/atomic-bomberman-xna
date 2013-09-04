@@ -424,6 +424,9 @@ namespace Bomberman.Game.Elements.Players
         /* Player is moving, bomb is moving */
         private bool HandlePlayerMovingBombMovingCollision(Bomb bomb)
         {
+            Debug.Assert(IsMoving());
+            Debug.Assert(bomb.IsMoving());
+
             bool hasKick = HasKick();
 
             if (direction == Util.Opposite(bomb.direction)) // moving in opposite directions
@@ -565,10 +568,36 @@ namespace Bomberman.Game.Elements.Players
         /* Player is still, bomb is moving */
         private bool HandlePlayerStillBombMovingCollision(Bomb bomb)
         {
+            Debug.Assert(!IsMoving());
+            Debug.Assert(bomb.IsMoving());
+
             if (CheckCell2BoundsCollision(bomb)) // bomb`s bounds should collide player's cell
             {
-                bomb.HandleObstacleCollistion(this);
-                return true;
+                bool bombMovingToPlayer = false;
+                switch (direction)
+                {
+                    case Direction.LEFT:
+                        bombMovingToPlayer = px < bomb.px;
+                        break;
+
+                    case Direction.RIGHT:
+                        bombMovingToPlayer = px > bomb.px;
+                        break;
+
+                    case Direction.UP:
+                        bombMovingToPlayer = py < bomb.py;
+                        break;
+
+                    case Direction.DOWN:
+                        bombMovingToPlayer = py > bomb.py;
+                        break;
+                }
+
+                if (bombMovingToPlayer)
+                {
+                    bomb.HandleObstacleCollistion(this);
+                    return true;
+                }
             }
             
             return false;
@@ -577,6 +606,9 @@ namespace Bomberman.Game.Elements.Players
         /* Player is still, bomb is still */
         private bool HandlePlayerStillBombStillCollision(Bomb bomb)
         {
+            Debug.Assert(!IsMoving());
+            Debug.Assert(!bomb.IsMoving());
+
             return false;
         }
 
