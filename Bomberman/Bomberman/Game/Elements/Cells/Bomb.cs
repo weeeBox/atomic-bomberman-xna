@@ -267,16 +267,21 @@ namespace Bomberman.Game.Elements.Cells
                 return HandleObstacleCollistion(other);
             }
 
-            if (other.IsFlame())
-            {
-                return HandleCollision(other.AsFlame());
-            }
-
             return false;
         }
 
         protected override bool HandleStaticCollision(FieldCell other)
         {
+            if (other.IsFlame())
+            {
+                return HandleCollision(other.AsFlame());
+            }
+
+            if (other.IsPowerup())
+            {
+                return HandleCollision(other.AsPowerup());
+            }
+
             return HandleObstacleCollistion(other);
         }
 
@@ -284,12 +289,13 @@ namespace Bomberman.Game.Elements.Cells
         {
             Debug.Assert(isActive);
 
+            SetCell();
+
             if (TryJellyOnObstacle())
             {
                 return true;
             }
-
-            SetCell();
+            
             StopMoving();
 
             return true;
@@ -300,6 +306,17 @@ namespace Bomberman.Game.Elements.Cells
             if (CheckCell2CellCollision(flame))
             {
                 Blow();
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool HandleCollision(PowerupCell powerup)
+        {
+            if (CheckBounds2CellCollision(powerup))
+            {
+                powerup.RemoveFromField();
                 return true;
             }
 

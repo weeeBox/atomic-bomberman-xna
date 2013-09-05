@@ -584,7 +584,7 @@ namespace Bomberman.Game.Elements.Players
             if (CheckCell2BoundsCollision(bomb)) // bomb`s bounds should collide player's cell
             {
                 bool bombMovingToPlayer = false;
-                switch (direction)
+                switch (bomb.direction)
                 {
                     case Direction.LEFT:
                         bombMovingToPlayer = px < bomb.px;
