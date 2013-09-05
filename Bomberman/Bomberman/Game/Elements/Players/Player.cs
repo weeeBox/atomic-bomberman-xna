@@ -623,8 +623,8 @@ namespace Bomberman.Game.Elements.Players
         }
 
         private bool HandleCollision(FlameCell cell)
-        {   
-            Kill();
+        {
+            GetField().KillPlayer(this);
             return true;
         }
 
