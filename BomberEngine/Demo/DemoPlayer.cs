@@ -23,6 +23,11 @@ namespace BomberEngine.Demo
         private bool m_stepByStep;
         private bool m_shouldRunStep;
 
+        private float m_skipTime;
+        private int m_frameSkip;
+
+        private IDictionary<KeyCode, int> m_frameSkipLookup;
+
         public DemoPlayer(String path)
         {
             m_inputManager = new DefaultInputManager();
@@ -32,6 +37,17 @@ namespace BomberEngine.Demo
             m_cmdLookup[DemoCmdType.Init] = new DemoInitCmd();
             m_cmdLookup[DemoCmdType.Input] = new DemoInputCmd();
             m_cmdLookup[DemoCmdType.Tick]  = new DemoTickCmd();
+
+            m_frameSkipLookup = new Dictionary<KeyCode, int>();
+            m_frameSkipLookup[KeyCode.D2] = 2;
+            m_frameSkipLookup[KeyCode.D3] = 3;
+            m_frameSkipLookup[KeyCode.D4] = 4;
+            m_frameSkipLookup[KeyCode.D5] = 5;
+            m_frameSkipLookup[KeyCode.D6] = 6;
+            m_frameSkipLookup[KeyCode.D7] = 7;
+            m_frameSkipLookup[KeyCode.D8] = 8;
+            m_frameSkipLookup[KeyCode.D9] = 9;
+            m_frameSkipLookup[KeyCode.D0] = 10;
 
             Read(path);
         }
@@ -101,9 +117,24 @@ namespace BomberEngine.Demo
                     m_shouldRunStep = false;
                 }
             }
+            else if (m_frameSkip > 0)
+            {
+                int skip = m_frameSkip;
+                while (skip > 0)
+                {
+                    ReadTick();
+                    --skip;
+                }
+            }
             else
             {
-                ReadTick();
+                while (m_skipTime >= 0)
+                {
+                    ReadTick();
+                    m_skipTime -= Application.frameTime;
+                }
+
+                m_skipTime = 0;
             }
         }
 
@@ -164,6 +195,41 @@ namespace BomberEngine.Demo
                 {
                     m_shouldRunStep = true;
                 }
+                else
+                {
+                    bool shiftPressed = m_inputManager.IsShiftPressed();
+                    bool ctrlPressed = m_inputManager.IsControlPressed();
+                    bool altPressed = m_inputManager.IsAltPressed();
+
+                    if (shiftPressed && ctrlPressed && altPressed)
+                    {
+                        m_skipTime = 60.0f;
+                    }
+                    else if (shiftPressed && ctrlPressed)
+                    {
+                        m_skipTime = 30.0f;
+                    }
+                    else if (shiftPressed)
+                    {
+                        m_skipTime = 10.0f;
+                    }
+                    else if (ctrlPressed)
+                    {
+                        m_skipTime = 5.0f;
+                    }
+                    else
+                    {
+                        m_skipTime = 1.0f;
+                    }
+                }
+            }
+            else
+            {
+                int skip;
+                if (m_frameSkipLookup.TryGetValue(key, out skip))
+                {
+                    m_frameSkip = skip;
+                }
             }
 
             return false;
@@ -176,6 +242,7 @@ namespace BomberEngine.Demo
 
         public bool OnKeyReleased(KeyEventArg arg)
         {
+            m_frameSkip = 0;
             return false;
         }
 
