@@ -6,18 +6,28 @@ using BomberEngine.Core.IO;
 using System.IO;
 using BomberEngine.Debugging;
 using BomberEngine.Game;
+using BomberEngine.Core.Input;
+using BomberEngine.Core;
 
 namespace BomberEngine.Demo
 {
-    public class DemoPlayer
+    public class DemoPlayer : IUpdatable, IKeyInputListener
     {
         private static int BitsPerCmdType = BitUtils.BitsToHoldUInt((int)DemoCmdType.Count);
 
         private BitReadBuffer m_buffer;
         private IDictionary<DemoCmdType, DemoCmd> m_cmdLookup;
 
+        private DefaultInputManager m_inputManager;
+
+        private bool m_stepByStep;
+        private bool m_shouldRunStep;
+
         public DemoPlayer(String path)
-        {   
+        {
+            m_inputManager = new DefaultInputManager();
+            m_inputManager.AddKeyboardListener(this);
+
             m_cmdLookup = new Dictionary<DemoCmdType, DemoCmd>();
             m_cmdLookup[DemoCmdType.Init] = new DemoInitCmd();
             m_cmdLookup[DemoCmdType.Input] = new DemoInputCmd();
@@ -79,7 +89,25 @@ namespace BomberEngine.Demo
             m_buffer = new BitReadBuffer(data, bitLength);
         }
 
-        public void ReadTick()
+        public void Update(float delta)
+        {
+            m_inputManager.Update(delta);
+
+            if (m_stepByStep)
+            {
+                if (m_shouldRunStep)
+                {
+                    ReadTick();
+                    m_shouldRunStep = false;
+                }
+            }
+            else
+            {
+                ReadTick();
+            }
+        }
+
+        private void ReadTick()
         {
             while (m_buffer.BitsAvailable > 0)
             {
@@ -117,6 +145,38 @@ namespace BomberEngine.Demo
             }
 
             return null;
+        }
+
+        #endregion
+
+        #region IKeyListener
+
+        public bool OnKeyPressed(KeyEventArg arg)
+        {
+            KeyCode key = arg.key;
+            if (key == KeyCode.Space)
+            {
+                m_stepByStep = !m_stepByStep;
+            }
+            else if (key == KeyCode.Right)
+            {
+                if (m_stepByStep)
+                {
+                    m_shouldRunStep = true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool OnKeyRepeated(KeyEventArg arg)
+        {
+            return false;
+        }
+
+        public bool OnKeyReleased(KeyEventArg arg)
+        {
+            return false;
         }
 
         #endregion

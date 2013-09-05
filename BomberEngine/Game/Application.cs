@@ -254,7 +254,7 @@ namespace BomberEngine.Game
         {
             if (m_mode == Mode.Demo)
             {
-                m_demoPlayer.ReadTick();
+                m_demoPlayer.Update(delta);
             }
             else
             {
