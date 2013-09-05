@@ -392,6 +392,16 @@ namespace Bomberman.Game.Elements.Players
 
         #region Collisions
 
+        public override bool HandleCollision(FieldCell cell)
+        {
+            if (IsAlive)
+            {
+                return base.HandleCollision(cell);
+            }
+
+            return false;
+        }
+
         protected override bool HandleCollision(MovableCell other)
         {
             if (other.IsBomb())
@@ -610,6 +620,36 @@ namespace Bomberman.Game.Elements.Players
             Debug.Assert(!bomb.IsMoving());
 
             return false;
+        }
+
+        private bool HandleCollision(FlameCell cell)
+        {   
+            Kill();
+            return true;
+        }
+
+        private bool HandleCollision(PowerupCell cell)
+        {
+            int powerup = cell.powerup;
+            TryAddPowerup(powerup);
+
+            cell.RemoveFromField();
+            return true;
+        }
+
+        protected override bool HandleStaticCollision(FieldCell other)
+        {
+            if (other.IsFlame())
+            {
+                return HandleCollision(other.AsFlame());
+            }
+
+            if (other.IsPowerup())
+            {   
+                return HandleCollision(other.AsPowerup());
+            }
+
+            return base.HandleStaticCollision(other);
         }
 
         public override bool HandleWallCollision()
