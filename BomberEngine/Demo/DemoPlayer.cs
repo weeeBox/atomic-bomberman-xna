@@ -242,7 +242,12 @@ namespace BomberEngine.Demo
 
         public bool OnKeyReleased(KeyEventArg arg)
         {
-            m_frameSkip = 0;
+            if (m_frameSkipLookup.ContainsKey(arg.key))
+            {
+                m_frameSkip = 0;
+                return true;
+            }
+            
             return false;
         }
 
