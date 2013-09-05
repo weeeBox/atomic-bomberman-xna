@@ -518,46 +518,46 @@ namespace Bomberman.Game.Elements.Players
             Debug.Assert(IsMoving());
             Debug.Assert(!bomb.IsMoving());
 
-            if (CheckBounds2CellCollision(bomb))
+            if (CheckCell2CellCollision(bomb)) // player and bomb share a cell
             {
-                // check player can kick a bomb
+                return false;
+            }
 
-                bool canKick = false;
-                
+            if (CheckBounds2CellCollision(bomb)) // player bounds collide bomb`s cell
+            {
+                // check if player is moving toward the bomb
+                bool movingToBomb = false;
+
                 switch (direction)
                 {
                     case Direction.LEFT:
-                    {
-                        float dist = px - bomb.px;
-                        canKick = dist > 0.5f * Constant.CELL_WIDTH && dist < Constant.CELL_WIDTH;
+                        movingToBomb = px - bomb.px > 0;
                         break;
-                    }
 
                     case Direction.RIGHT:
-                    {
-                        float dist = bomb.px - px;
-                        canKick = dist > 0.5f * Constant.CELL_WIDTH && dist < Constant.CELL_WIDTH;
+                        movingToBomb = px - bomb.px < 0;
                         break;
-                    }
 
                     case Direction.UP:
-                    {
-                        float dist = py - bomb.py;
-                        canKick = dist > 0.5f * Constant.CELL_HEIGHT && dist < Constant.CELL_HEIGHT;
+                        movingToBomb = py - bomb.py > 0;
                         break;
-                    }
 
                     case Direction.DOWN:
-                    {
-                        float dist = bomb.py - py;
-                        canKick = dist > 0.5f * Constant.CELL_HEIGHT && dist < Constant.CELL_HEIGHT;
+                        movingToBomb = py - bomb.py < 0;
                         break;
-                    }
                 }
 
-                if (canKick)
+                if (movingToBomb)
                 {
-                    TryKick(bomb);
+                    if (HasKick())
+                    {
+                        TryKick(bomb);
+                    }
+                    else
+                    {
+                        MoveOutOfCell(bomb);
+                    }
+
                     return true;
                 }
             }
@@ -868,19 +868,26 @@ namespace Bomberman.Game.Elements.Players
 
         private bool TryKick(Bomb bomb)
         {
+            Debug.Assert(HasKick());
+            Debug.Assert(IsMoving());
+
             FieldCellSlot blockingSlot = bomb.GetNearSlot(direction);
             if (blockingSlot != null && !blockingSlot.ContainsObstacle())
             {
                 KickBomb(bomb);
-                return true;
+            }
+            else
+            {
+                MoveOutOfCell(bomb);
             }
 
-            return false;
+            return true;
         }
 
         private void KickBomb(Bomb bomb)
         {
             Debug.Assert(IsMoving());
+            Debug.Assert(HasKick());
 
             // kick in the moving direction
             bomb.Kick(direction);
