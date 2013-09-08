@@ -863,7 +863,7 @@ namespace Bomberman.Game.Elements.Fields
                 for (int i = 0; i < movableCells.Count; ++i)
                 {
                     MovableCell other = movableCells[i];
-                    if (!other.IsMoving())
+                    if (!other.IsMoving() && movable != other)
                     {
                         handled |= CheckCollision(movable, other);
                     }

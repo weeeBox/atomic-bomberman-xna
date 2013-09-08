@@ -122,7 +122,9 @@ namespace Bomberman.Game.Elements.Cells
         #region Movable
 
         public virtual void UpdateMoving(float delta)
-        {   
+        {
+            Debug.Assert(IsMoving());
+
             float offset = GetSpeed() * delta;
 
             float dx = 0;
