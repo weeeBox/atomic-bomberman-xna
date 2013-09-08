@@ -31,7 +31,7 @@ namespace Bomberman.Game.Elements.Fields
         private LinkedList<MovableCell> movableCells;
         
         private LinkedList<FieldCell> m_tempCellsList;
-        private LinkedList<MovableCell> tempMoveList;
+        private List<MovableCell> tempMoveList;
 
         private PlayerAnimations m_playerAnimations;
         private BombAnimations m_bombAnimations;
@@ -45,7 +45,7 @@ namespace Bomberman.Game.Elements.Fields
             players = new PlayerList(timerManager, CVars.cg_maxPlayers.intValue);
 
             m_tempCellsList = new LinkedList<FieldCell>();
-            tempMoveList = new LinkedList<MovableCell>();
+            tempMoveList = new List<MovableCell>();
 
             movableCells = new LinkedList<MovableCell>();
 
@@ -353,28 +353,20 @@ namespace Bomberman.Game.Elements.Fields
 
         private void UpdateMoving(float delta)
         {
+            Debug.Assert(tempMoveList.Count == 0);
             foreach (MovableCell movable in movableCells)
             {
                 if (movable.IsMoving())
                 {
-                    tempMoveList.AddLast(movable);
+                    tempMoveList.Add(movable);
                 }
             }
-
-            if (tempMoveList.Count > 0)
+            
+            for (int i = 0; i < tempMoveList.Count; ++i)
             {
-                foreach (MovableCell movable in tempMoveList)
-                {
-                    UpdateMoving(delta, movable);
-                }
-                tempMoveList.Clear();
+                tempMoveList[i].UpdateMoving(delta);
             }
-        }
-
-        private void UpdateMoving(float delta, MovableCell cell)
-        {
-            cell.UpdateMoving(delta);
-            CheckStaticCollisions(cell);
+            tempMoveList.Clear();
         }
 
         #endregion

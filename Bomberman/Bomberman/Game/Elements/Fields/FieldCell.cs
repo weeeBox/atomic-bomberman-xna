@@ -295,7 +295,7 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         /* Checks bounds-to-bounds collision: objects collide if bounding boxes collide */
-        protected bool CheckBounds2BoundsCollision(FieldCell other)
+        public bool CheckBounds2BoundsCollision(FieldCell other)
         {
             return Math.Abs(px - other.px) < Constant.CELL_WIDTH && Math.Abs(py - other.py) < Constant.CELL_HEIGHT;
         }
