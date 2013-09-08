@@ -31,7 +31,7 @@ namespace Bomberman.Game.Elements.Fields
         private LinkedList<MovableCell> movableCells;
         
         private LinkedList<FieldCell> m_tempCellsList;
-        private List<MovableCell> tempMoveList;
+        private List<MovableCell> m_tempMovableList;
 
         private PlayerAnimations m_playerAnimations;
         private BombAnimations m_bombAnimations;
@@ -45,7 +45,7 @@ namespace Bomberman.Game.Elements.Fields
             players = new PlayerList(timerManager, CVars.cg_maxPlayers.intValue);
 
             m_tempCellsList = new LinkedList<FieldCell>();
-            tempMoveList = new List<MovableCell>();
+            m_tempMovableList = new List<MovableCell>();
 
             movableCells = new LinkedList<MovableCell>();
 
@@ -63,7 +63,7 @@ namespace Bomberman.Game.Elements.Fields
             movableCells.Clear();
             
             m_tempCellsList.Clear();
-            tempMoveList.Clear();
+            m_tempMovableList.Clear();
         }
 
         public void Destroy()
@@ -348,25 +348,25 @@ namespace Bomberman.Game.Elements.Fields
         private void UpdatePhysics(float delta)
         {
             UpdateMoving(delta);
-            CheckContacts();
+            HandleCollisions();
         }
 
         private void UpdateMoving(float delta)
         {
-            Debug.Assert(tempMoveList.Count == 0);
+            Debug.Assert(m_tempMovableList.Count == 0);
             foreach (MovableCell movable in movableCells)
             {
                 if (movable.IsMoving())
                 {
-                    tempMoveList.Add(movable);
+                    m_tempMovableList.Add(movable);
                 }
             }
             
-            for (int i = 0; i < tempMoveList.Count; ++i)
+            for (int i = 0; i < m_tempMovableList.Count; ++i)
             {
-                tempMoveList[i].UpdateMoving(delta);
+                m_tempMovableList[i].UpdateMoving(delta);
             }
-            tempMoveList.Clear();
+            m_tempMovableList.Clear();
         }
 
         #endregion
@@ -766,7 +766,7 @@ namespace Bomberman.Game.Elements.Fields
 
         #region Collisions
 
-        private void CheckContacts()
+        private void HandleCollisions()
         {
             for (LinkedListNode<MovableCell> n1 = movableCells.First; n1 != null; n1 = n1.Next)
             {
