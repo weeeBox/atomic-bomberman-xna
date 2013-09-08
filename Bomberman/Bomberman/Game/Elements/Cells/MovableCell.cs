@@ -123,54 +123,26 @@ namespace Bomberman.Game.Elements.Cells
 
         public virtual void UpdateMoving(float delta)
         {   
-            float offset = m_speed * delta;
+            float offset = GetSpeed() * delta;
 
             float dx = 0;
             float dy = 0;
 
-            float oldPx = px;
-            float oldPy = py;
-
             switch (direction)
             {
                 case Direction.LEFT:
                 case Direction.RIGHT:
                 {   
-                    dx = m_moveKx * offset;
-                    break;
-                }
-
-                case Direction.UP:
-                case Direction.DOWN:
-                {   
-                    dy = m_moveKy * offset;
-                    break;
-                }
-            }
-
-            Move(dx, dy);
-
-            // we need to calculate static collisions right away to check if player's
-            // movement is blocked by a static or a still object
-            GetField().CheckStaticCollisions(this);
-            
-            switch (direction)
-            {
-                case Direction.LEFT:
-                case Direction.RIGHT:
-                {
-                    bool blocked = Math.Abs(px - oldPx) < 0.01f;
-                    dx = 0.0f;
-                    dy = GetMoveTargetDy(delta, blocked);
+                    dx = moveKx * offset;
+                    dy = GetMoveTargetDy(delta);
                     break;
                 }
 
                 case Direction.UP:
                 case Direction.DOWN:
                 {
-                    bool blocked = Math.Abs(px - oldPx) < 0.01f;
-                    dx = GetMoveTargetDx(delta, blocked);
-                    dy = 0.0f;
+                    dx = GetMoveTargetDx(delta);
+                    dy = moveKy * offset;
                     break;
                 }
             }
@@ -296,13 +268,13 @@ namespace Bomberman.Game.Elements.Cells
             }
         }
 
-        protected virtual float GetMoveTargetDx(float delta, bool blocked)
+        protected float GetMoveTargetDx(float delta)
         {   
             float xOffset = Util.TargetPxOffset(px);
             return xOffset < 0 ? Math.Max(xOffset, -delta * m_speed) : Math.Min(xOffset, delta * m_speed);
         }
 
-        protected virtual float GetMoveTargetDy(float delta, bool blocked)
+        protected float GetMoveTargetDy(float delta)
         {
             float yOffset = Util.TargetPyOffset(py);
             return yOffset < 0 ? Math.Max(yOffset, -delta * m_speed) : Math.Min(yOffset, delta * m_speed);

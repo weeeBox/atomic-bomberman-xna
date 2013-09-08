@@ -143,15 +143,19 @@ namespace Bomberman.Game.Elements.Fields
             return null;
         }
 
-        //public bool ContainsPlayer()
-        //{
-        //    return Contains(FieldCellType.Player);
-        //}
+        public bool ContainsPlayer()
+        {
+            for (int i = 0; i < movableCells.Count; ++i)
+            {
+                MovableCell cell = movableCells[i];
+                if (cell.IsPlayer())
+                {
+                    return true;
+                }
+            }
 
-        //public Player GetPlayer()
-        //{
-        //    return (Player)Get(FieldCellType.Player);
-        //}
+            return false;
+        }
 
         public bool Contains(FieldCell cell)
         {   

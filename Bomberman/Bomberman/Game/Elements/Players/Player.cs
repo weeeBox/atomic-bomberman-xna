@@ -159,8 +159,68 @@ namespace Bomberman.Game.Elements.Players
 
         #region Movable
 
+        public override void UpdateMoving(float delta)
+        {
+            float offset = GetSpeed() * delta;
+
+            float dx = 0;
+            float dy = 0;
+
+            float oldPx = px;
+            float oldPy = py;
+
+            switch (direction)
+            {
+                case Direction.LEFT:
+                case Direction.RIGHT:
+                {
+                    dx = moveKx * offset;
+                    break;
+                }
+
+                case Direction.UP:
+                case Direction.DOWN:
+                {
+                    dy = moveKy * offset;
+                    break;
+                }
+            }
+
+            Move(dx, dy);
+
+            // we need to calculate static collisions right away to check if player's
+            // movement is blocked by a static or a still object
+            GetField().CheckStaticCollisions(this);
+
+            if (IsAlive)
+            {
+                switch (direction)
+                {
+                    case Direction.LEFT:
+                    case Direction.RIGHT:
+                    {
+                        bool blocked = Math.Abs(px - oldPx) < 0.01f;
+                        dx = 0.0f;
+                        dy = GetMoveTargetDy(delta, blocked);
+                        break;
+                    }
+
+                    case Direction.UP:
+                    case Direction.DOWN:
+                    {
+                        bool blocked = Math.Abs(px - oldPx) < 0.01f;
+                        dx = GetMoveTargetDx(delta, blocked);
+                        dy = 0.0f;
+                        break;
+                    }
+                }
+
+                Move(dx, dy);
+            }
+        }
+
         /* Player needs to overcome obstacles */
-        protected override float GetMoveTargetDx(float delta, bool blocked)
+        private float GetMoveTargetDx(float delta, bool blocked)
         {
             float xOffset;
 
@@ -206,7 +266,7 @@ namespace Bomberman.Game.Elements.Players
         }
 
         /* Player needs to overcome obstacles */
-        protected override float GetMoveTargetDy(float delta, bool blocked)
+        private float GetMoveTargetDy(float delta, bool blocked)
         {
             float yOffset;
 
