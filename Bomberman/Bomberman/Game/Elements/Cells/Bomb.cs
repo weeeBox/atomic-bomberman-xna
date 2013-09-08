@@ -324,9 +324,8 @@ namespace Bomberman.Game.Elements.Cells
         }
 
         public override bool HandleWallCollision()
-        {
-            StopMoving();
-            return false;
+        {   
+            return HandleObstacleCollistion(null);
         }
 
         #endregion
@@ -338,6 +337,7 @@ namespace Bomberman.Game.Elements.Cells
             SetSpeed(CVars.cg_bombRollSpeed.intValue);
 
             m_active = true;
+            m_blocked = false;
             SetCell(player.cx, player.cy);
             m_radius = player.GetBombRadius();
             m_timeRemains = player.GetBombTimeout();
@@ -474,7 +474,7 @@ namespace Bomberman.Game.Elements.Cells
             if (IsJelly())
             {
                 Direction newDir = Util.Opposite(direction);
-                m_blocked = HasNearObstacle(newDir);
+                m_blocked = HasJellyBlockingObstacle(newDir);
                 if (m_blocked)
                 {
                     ScheduleBlockingTimer();
@@ -485,6 +485,12 @@ namespace Bomberman.Game.Elements.Cells
             }
 
             return false;
+        }
+
+        private bool HasJellyBlockingObstacle(Direction dir)
+        {
+            FieldCellSlot slot = GetNearSlot(dir);
+            return slot == null || slot.ContainsObstacle() || slot.ContainsPlayer();
         }
 
         private void ScheduleBlockingTimer()

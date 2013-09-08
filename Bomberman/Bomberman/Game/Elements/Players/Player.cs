@@ -971,16 +971,13 @@ namespace Bomberman.Game.Elements.Players
             Debug.Assert(HasKick());
             Debug.Assert(IsMoving());
 
-            FieldCellSlot blockingSlot = bomb.GetNearSlot(direction);
-            if (blockingSlot != null && !blockingSlot.ContainsObstacle())
-            {
-                KickBomb(bomb);
-            }
-            else
+            if (!bomb.IsMoving() && bomb.HasNearObstacle(direction))
             {
                 MoveOutOfCell(bomb);
+                return false;
             }
 
+            KickBomb(bomb);
             return true;
         }
 
