@@ -505,6 +505,9 @@ namespace Bomberman.Game.Elements.Players
                 {
                     if (hasKick)
                     {
+                        // set bomb to its cell
+                        bomb.SetCell();
+
                         // kick in the moving direction
                         TryKick(bomb);
 

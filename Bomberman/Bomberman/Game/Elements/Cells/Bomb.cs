@@ -479,8 +479,11 @@ namespace Bomberman.Game.Elements.Cells
                 {
                     ScheduleBlockingTimer();
                 }
+                else
+                {
+                    SetMoveDirection(newDir);
+                }
                 
-                SetMoveDirection(newDir);
                 return true;
             }
 
@@ -500,7 +503,10 @@ namespace Bomberman.Game.Elements.Cells
 
         private void BlockedTimerCallback(Timer timer)
         {
-            TryJellyOnObstacle();
+            m_blocked = false;
+
+            Direction newDir = Util.Opposite(direction);
+            SetMoveDirection(newDir);
         }
 
         private void SetState(State state)
