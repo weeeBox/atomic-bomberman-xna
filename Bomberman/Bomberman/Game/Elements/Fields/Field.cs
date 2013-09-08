@@ -768,15 +768,39 @@ namespace Bomberman.Game.Elements.Fields
 
         private void HandleCollisions()
         {
-            for (LinkedListNode<MovableCell> n1 = movableCells.First; n1 != null; n1 = n1.Next)
+            // copy to the temp list
+            Debug.Assert(m_tempMovableList.Count == 0);
+            foreach (MovableCell movable in movableCells)
+            {   
+                m_tempMovableList.Add(movable);
+            }
+
+            // static collisions
+            for (int i = 0; i < m_tempMovableList.Count; ++i)
             {
-                MovableCell c1 = n1.Value;
-                for (LinkedListNode<MovableCell> n2 = n1.Next; n2 != null; n2 = n2.Next)
+                CheckStaticCollisions(m_tempMovableList[i]);
+            }
+            m_tempMovableList.Clear();
+
+            // copy to the temp list
+            foreach (MovableCell movable in movableCells)
+            {
+                m_tempMovableList.Add(movable);
+            }
+
+            // movable-to-movable collisions
+            for (int i = 0; i < m_tempMovableList.Count - 1; ++i)
+            {
+                MovableCell c1 = m_tempMovableList[i];
+                for (int j = i + 1; j < m_tempMovableList.Count; ++j)
                 {
-                    MovableCell c2 = n2.Value;
+                    MovableCell c2 = m_tempMovableList[j];
                     CheckCollision(c1, c2);
                 }
             }
+            
+            // clear
+            m_tempMovableList.Clear();
         }
 
         public bool CheckStaticCollisions(MovableCell movable)
