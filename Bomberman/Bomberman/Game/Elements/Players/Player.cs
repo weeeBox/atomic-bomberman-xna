@@ -434,7 +434,7 @@ namespace Bomberman.Game.Elements.Players
         
         #region Movement
 
-        private void StartMovingToDirection(Direction dir)
+        public void StartMovingToDirection(Direction dir)
         {
             SetMoveDirection(dir);
             UpdateAnimation();
@@ -501,7 +501,8 @@ namespace Bomberman.Game.Elements.Players
 
             if (direction == Util.Opposite(bomb.direction)) // moving in opposite directions
             {
-                if (bomb.CheckBounds2CellCollision(this)) // bomb should collide with player cell when moving
+                if (CheckCell2BoundsCollision(bomb) || // bomb should collide with player cell when moving 
+                    CheckBounds2CellCollision(bomb) && bomb.HasJellyBlockingObstacle(direction)) // or bomb is blocked by obstacle 
                 {
                     if (hasKick)
                     {
@@ -568,10 +569,24 @@ namespace Bomberman.Game.Elements.Players
                         }
                     }
 
-                    if (CheckBounds2BoundsCollision(bomb)) // bounds should collide
+                    if (CheckBounds2BoundsCollision(bomb))
                     {
                         // make sure player is out of collision
                         MoveFromOverlap(bomb);
+
+                        return true;
+                    }
+
+                    if (CheckBounds2CellCollision(bomb))
+                    {
+                        float oldPx = px;
+                        float oldPy = py;
+
+                        // make sure player is out of bomb`s cell
+                        MoveOutOfCell(bomb);
+
+                        float dx = px - oldPx;
+                        float dy = py - oldPy;
 
                         return true;
                     }

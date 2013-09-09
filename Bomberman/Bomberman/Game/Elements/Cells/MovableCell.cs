@@ -90,8 +90,8 @@ namespace Bomberman.Game.Elements.Cells
 
         public void SetRelativeTo(FieldCell cell, int stepX, int stepY)
         {
-            float posX = stepX != 0 ? (cell.px + stepX * Constant.CELL_WIDTH) : px;
-            float posY = stepY != 0 ? (cell.py + stepY * Constant.CELL_HEIGHT) : py;
+            float posX = stepX != 0 ? (cell.CellCenterPx() + stepX * Constant.CELL_WIDTH) : px;
+            float posY = stepY != 0 ? (cell.CellCenterPy() + stepY * Constant.CELL_HEIGHT) : py;
 
             SetPos(posX, posY);
         }
@@ -206,7 +206,7 @@ namespace Bomberman.Game.Elements.Cells
             {
                 case Direction.LEFT:
                     Debug.Assert(c.px < px);
-                    if (px - c.px < Constant.CELL_WIDTH)
+                    if (px - c.CellCenterPx() < Constant.CELL_WIDTH)
                     {
                         SetRelativeTo(c, 1, 0);
                     }
@@ -214,7 +214,7 @@ namespace Bomberman.Game.Elements.Cells
 
                 case Direction.RIGHT:
                     Debug.Assert(c.px > px);
-                    if (c.px - px < Constant.CELL_WIDTH)
+                    if (c.CellCenterPx() - px < Constant.CELL_WIDTH)
                     {
                         SetRelativeTo(c, -1, 0);
                     }
@@ -222,7 +222,7 @@ namespace Bomberman.Game.Elements.Cells
 
                 case Direction.UP:
                     Debug.Assert(c.py < py);
-                    if (py - c.py < Constant.CELL_HEIGHT)
+                    if (py - c.CellCenterPy() < Constant.CELL_HEIGHT)
                     {
                         SetRelativeTo(c, 0, 1);
                     }
@@ -230,7 +230,7 @@ namespace Bomberman.Game.Elements.Cells
 
                 case Direction.DOWN:
                     Debug.Assert(c.py > py);
-                    if (c.py - py < Constant.CELL_HEIGHT)
+                    if (c.CellCenterPy() - py < Constant.CELL_HEIGHT)
                     {
                         SetRelativeTo(c, 0, -1);
                     }

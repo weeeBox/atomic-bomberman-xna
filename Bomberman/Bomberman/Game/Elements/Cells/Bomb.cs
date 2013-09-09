@@ -474,15 +474,7 @@ namespace Bomberman.Game.Elements.Cells
             if (IsJelly())
             {
                 Direction newDir = Util.Opposite(direction);
-                m_blocked = HasJellyBlockingObstacle(newDir);
-                if (m_blocked)
-                {
-                    ScheduleBlockingTimer();
-                }
-                else
-                {
-                    SetMoveDirection(newDir);
-                }
+                SetMoveDirection(newDir);
                 
                 return true;
             }
@@ -490,7 +482,7 @@ namespace Bomberman.Game.Elements.Cells
             return false;
         }
 
-        private bool HasJellyBlockingObstacle(Direction dir)
+        public bool HasJellyBlockingObstacle(Direction dir)
         {
             FieldCellSlot slot = GetNearSlot(dir);
             return slot == null || slot.ContainsObstacle() || slot.ContainsPlayer();
