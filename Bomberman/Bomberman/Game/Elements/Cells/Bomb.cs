@@ -262,6 +262,11 @@ namespace Bomberman.Game.Elements.Cells
                 return other.AsPlayer().HandleCollision(this);
             }
 
+            if (other.IsBomb())
+            {
+                return HandleCollision(other.AsBomb());
+            }
+
             if (other.IsObstacle())
             {
                 return HandleObstacleCollistion(other);
@@ -288,6 +293,7 @@ namespace Bomberman.Game.Elements.Cells
         internal bool HandleObstacleCollistion(FieldCell other)
         {
             Debug.Assert(isActive);
+            Debug.Assert(IsMoving());
 
             SetCell();
 
@@ -299,6 +305,27 @@ namespace Bomberman.Game.Elements.Cells
             StopMoving();
 
             return true;
+        }
+
+        private bool HandleCollision(Bomb other)
+        {
+            if (CheckCell2BoundsCollision(other) || CheckBounds2CellCollision(other))
+            {
+                Debug.Assert(IsMoving() || other.IsMoving());
+
+                if (IsMoving())
+                {
+                    HandleObstacleCollistion(other);
+                }
+
+                if (other.IsMoving())
+                {
+                    other.HandleObstacleCollistion(this);
+                }
+                return true;
+            }
+
+            return false;
         }
 
         private bool HandleCollision(FlameCell flame)
