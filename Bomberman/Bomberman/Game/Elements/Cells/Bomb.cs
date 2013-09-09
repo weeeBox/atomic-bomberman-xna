@@ -10,6 +10,7 @@ using BomberEngine;
 using BomberEngine.Debugging;
 using Bomberman.Game.Elements.Fields;
 using Bomberman.Content;
+using BomberEngine.Game;
 
 namespace Bomberman.Game.Elements.Cells
 {
@@ -295,7 +296,7 @@ namespace Bomberman.Game.Elements.Cells
             Debug.Assert(isActive);
             Debug.Assert(IsMoving());
 
-            SetCell();
+            MoveOutOfCell(other);
 
             if (TryJellyOnObstacle())
             {
@@ -309,19 +310,59 @@ namespace Bomberman.Game.Elements.Cells
 
         private bool HandleCollision(Bomb other)
         {
-            if (CheckCell2BoundsCollision(other) || CheckBounds2CellCollision(other))
+            bool moving1 = IsMoving();
+            bool moving2 = other.IsMoving();
+
+            Debug.Assert(moving1 || moving2);
+
+            if (moving1 && moving2)
             {
-                Debug.Assert(IsMoving() || other.IsMoving());
-
-                if (IsMoving())
+                if (direction == Util.Opposite(other.direction)) // moving in opposite directions
                 {
+                    if (CheckCell2CellCollision(other)) // ops, share the same cell
+                    {
+                        // decide which bomb should go back
+                        bool blocked1 = HasJellyBlockingObstacle(Util.Opposite(direction));
+                        bool blocked2 = other.HasJellyBlockingObstacle(Util.Opposite(other.direction));
+   
+                        switch (direction)
+                        {
+                            case Direction.LEFT:
+                            case Direction.RIGHT:
+                            {
+                                float shift = 0.5f * OverlapX(other);
+                                MoveBackX(shift);
+                                other.MoveBackX(shift);
+                                break;
+                            }   
+
+                            case Direction.UP:
+                            case Direction.DOWN:
+                            {
+                                float shift = 0.5f * OverlapY(other);
+                                MoveBackY(shift);
+                                other.MoveBackY(shift);
+                                break;
+                            }
+                        }
+                    }
+                    
                     HandleObstacleCollistion(other);
-                }
-
-                if (other.IsMoving())
-                {
                     other.HandleObstacleCollistion(this);
                 }
+
+                return true;
+            }
+
+            if (moving1)
+            {
+                HandleObstacleCollistion(other);
+                return true;
+            }
+
+            if (moving2)
+            {
+                other.HandleObstacleCollistion(this);
                 return true;
             }
 
@@ -351,8 +392,14 @@ namespace Bomberman.Game.Elements.Cells
         }
 
         public override bool HandleWallCollision()
-        {   
-            return HandleObstacleCollistion(null);
+        {
+            if (TryJellyOnObstacle())
+            {
+                return true;
+            }
+
+            StopMoving();
+            return true;
         }
 
         #endregion
