@@ -40,7 +40,7 @@ namespace BomberEngine.Game
 
     public abstract class Application
     {
-        private enum Mode
+        protected enum Mode
         {
             Normal,
             Demo,
@@ -74,6 +74,7 @@ namespace BomberEngine.Game
 
         private float m_currentTime;
         private float m_frameTime;
+        private long m_tickIndex;
 
         private Mode m_mode;
         private DemoCmdEntry m_demoCmdEntry;
@@ -293,6 +294,8 @@ namespace BomberEngine.Game
             updatables.Update(delta);
             timerManager.Update(delta);
             OnUpdateDebug(delta);
+
+            ++m_tickIndex;
         }
 
         [System.Diagnostics.Conditional("DEBUG")]
@@ -479,6 +482,16 @@ namespace BomberEngine.Game
         public static float frameTime
         {
             get { return sharedApplication.m_frameTime; }
+        }
+
+        public static long tickIndex
+        {
+            get { return sharedApplication.m_tickIndex; }
+        }
+
+        protected Mode mode
+        {
+            get { return m_mode; }
         }
 
         #endregion

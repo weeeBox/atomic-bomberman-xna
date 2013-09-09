@@ -12,6 +12,7 @@ using BomberEngine.Core.Events;
 using BomberEngine.Consoles;
 using BomberEngine.Core.Visual;
 using System;
+using BomberEngine.Demo;
 
 namespace Bomberman
 {
@@ -33,6 +34,8 @@ namespace Bomberman
             Helper.fontFPS = new VectorFont(contentManager.Load<SpriteFont>("FPSFont"));
 
             context.SetSystemFont(systemFont);
+
+            RootController().AddDebugView(new DemoDebugView(Helper.fontSystem));
         }
 
         protected override AssetManager CreateAssetManager()
