@@ -501,34 +501,20 @@ namespace Bomberman.Game.Elements.Players
 
             if (direction == Util.Opposite(bomb.direction)) // moving in opposite directions
             {
-                if (CheckCell2BoundsCollision(bomb)) // player`s cell should collide bomb`s bounds
+                if (IsMovingTowards(bomb))
                 {
-                    if (hasKick)
+                    if (CheckCell2BoundsCollision(bomb) || CheckBounds2CellCollision(bomb))
                     {
-                        // move bomb out of player`s cell
-                        bomb.MoveOutOfCell(this);
+                        if (hasKick)
+                        {
+                            // move bomb out of player`s cell
+                            bomb.MoveOutOfCell(this);
 
-                        // kick in the moving direction
-                        TryKick(bomb);
+                            // kick in the moving direction
+                            TryKick(bomb);
 
-                        return true;
-                    }
-                    
-                    // treat player as an obstacle
-                    bomb.HandleObstacleCollistion(this);
-                    
-                    // make sure player is out of bomb`s cell
-                    MoveOutOfCell(bomb);
-
-                    return true;
-                }
-
-                if (CheckBounds2CellCollision(bomb))
-                {
-                    if (bomb.IsJelly() && bomb.HasJellyBlockingObstacle(direction))
-                    {
-                        // set bomb to the center of its cell
-                        bomb.SetCell();
+                            return true;
+                        }
 
                         // treat player as an obstacle
                         bomb.HandleObstacleCollistion(this);
@@ -552,37 +538,20 @@ namespace Bomberman.Game.Elements.Players
                         return true;
                     }
                 }
-                else // player`s following bomb
+                else if (IsMovingTowards(bomb)) // player`s following bomb
                 {
-                    if (hasKick)
+                    if (CheckCell2BoundsCollision(bomb) || CheckBounds2CellCollision(bomb))
                     {
-                        if (CheckBounds2CellCollision(bomb)) // player`s bounds should collide bomb`s cell
+                        if (hasKick)
                         {
                             // kick in the moving direction
                             TryKick(bomb);
 
                             return true;
                         }
-                    }
-
-                    if (CheckBounds2BoundsCollision(bomb))
-                    {
-                        // make sure player is out of collision
-                        MoveFromOverlap(bomb);
-
-                        return true;
-                    }
-
-                    if (CheckBounds2CellCollision(bomb))
-                    {
-                        float oldPx = px;
-                        float oldPy = py;
 
                         // make sure player is out of bomb`s cell
                         MoveOutOfCell(bomb);
-
-                        float dx = px - oldPx;
-                        float dy = py - oldPy;
 
                         return true;
                     }
@@ -971,7 +940,7 @@ namespace Bomberman.Game.Elements.Players
             TrySchedulePoops();
         }
 
-        private Bomb GetNextBomb()
+        public Bomb GetNextBomb()
         {
             if (IsInfectedConstipation())
             {

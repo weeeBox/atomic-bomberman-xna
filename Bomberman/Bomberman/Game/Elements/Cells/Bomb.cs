@@ -389,6 +389,20 @@ namespace Bomberman.Game.Elements.Cells
 
                     HandleObstacleCollistion(other);
                     other.HandleObstacleCollistion(this);
+
+                    return true;
+                }
+
+                if (direction == other.direction)
+                {
+                    if (IsMovingTowards(other))
+                    {
+                        HandleObstacleCollistion(other);
+                        return true;
+                    }
+
+                    other.HandleObstacleCollistion(this);
+                    return true;
                 }
 
                 return true;
