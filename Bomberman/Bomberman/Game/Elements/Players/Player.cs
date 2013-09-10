@@ -501,12 +501,12 @@ namespace Bomberman.Game.Elements.Players
 
             if (direction == Util.Opposite(bomb.direction)) // moving in opposite directions
             {
-                if (CheckCell2BoundsCollision(bomb)) // bomb should collide with player cell when moving
+                if (CheckCell2BoundsCollision(bomb)) // player`s cell should collide bomb`s bounds
                 {
                     if (hasKick)
                     {
-                        // set bomb to its cell
-                        bomb.SetCell();
+                        // move bomb out of player`s cell
+                        bomb.MoveOutOfCell(this);
 
                         // kick in the moving direction
                         TryKick(bomb);
@@ -541,9 +541,8 @@ namespace Bomberman.Game.Elements.Players
                 }
             }
             else if (direction == bomb.direction) // moving in the same direction
-            {
-                bool bombFollowsPlayer = bomb.IsMovingTowards(this);
-                if (bombFollowsPlayer)
+            {   
+                if (bomb.IsMovingTowards(this)) // bomb`s following player?
                 {
                     if (bomb.CheckBounds2CellCollision(this)) // bomb bounds should collide player`s cell
                     {
@@ -553,11 +552,11 @@ namespace Bomberman.Game.Elements.Players
                         return true;
                     }
                 }
-                else // player follows bomb
+                else // player`s following bomb
                 {
                     if (hasKick)
                     {
-                        if (CheckBounds2CellCollision(bomb)) // player should collide bomb`s cell
+                        if (CheckBounds2CellCollision(bomb)) // player`s bounds should collide bomb`s cell
                         {
                             // kick in the moving direction
                             TryKick(bomb);
@@ -944,14 +943,15 @@ namespace Bomberman.Game.Elements.Players
             Debug.Assert(HasKick());
             Debug.Assert(IsMoving());
 
-            if (!bomb.IsMoving() && bomb.HasNearObstacle(direction))
-            {
-                MoveOutOfCell(bomb);
-                return false;
-            }
+            MoveOutOfCell(bomb);
 
-            KickBomb(bomb);
-            return true;
+            if (!bomb.HasNearObstacle(direction))
+            {
+                KickBomb(bomb);
+                return true;
+            }
+            
+            return false;
         }
 
         private void KickBomb(Bomb bomb)
