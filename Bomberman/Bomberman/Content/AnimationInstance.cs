@@ -79,7 +79,12 @@ namespace Bomberman.Content
 
         public void Draw(Context context, float x, float y)
         {
-            m_animation.Draw(context, m_frameIndex, x, y);
+            Draw(context, x, y, Color.White);
+        }
+
+        public void Draw(Context context, float x, float y, Color color)
+        {
+            m_animation.Draw(context, m_frameIndex, x, y, color);
         }
 
         #endregion

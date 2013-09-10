@@ -22,7 +22,7 @@ namespace Bomberman.Content
             this.name = name;
         }
 
-        public void Draw(Context context, int frameIndex, float x, float y)
+        public void Draw(Context context, int frameIndex, float x, float y, Color color)
         {
             Rectangle src;
             int ox = frames[frameIndex].ox;
@@ -33,7 +33,7 @@ namespace Bomberman.Content
             src.Width = frames[frameIndex].w;
             src.Height = frames[frameIndex].h;
 
-            context.DrawImagePart(texture, src, x - ox, y - oy);
+            context.DrawImagePart(texture, src, x - ox, y - oy, color);
         }
 
         protected override void OnDispose()

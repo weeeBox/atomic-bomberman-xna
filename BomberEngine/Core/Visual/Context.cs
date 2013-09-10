@@ -257,9 +257,9 @@ namespace BomberEngine.Core.Visual
             GetSpriteBatch(BatchMode.Sprite).Draw(tex.GetTexture(), new Vector2(x, y), src, drawColor);
         }
 
-        public void DrawImagePart(TextureImage tex, Rectangle src, float x, float y, Color dc, float size)
+        public void DrawImagePart(TextureImage tex, Rectangle src, float x, float y, Color dc)
         {
-            GetSpriteBatch(BatchMode.Sprite).Draw(tex.GetTexture(), new Vector2(x, y), src, drawColor);
+            GetSpriteBatch(BatchMode.Sprite).Draw(tex.GetTexture(), new Vector2(x, y), src, dc);
         }
 
         public void DrawImage(TextureImage tex, float x, float y, SpriteEffects flip)

@@ -29,6 +29,11 @@
 	<texture file="${dir.gfx}/powerups/trig.png" />
 	<texture file="${dir.gfx}/powerups/spooge.png" />
 	<texture file="${dir.gfx}/powerups/random.png" />
+    
+    <texture file="${dir.gfx}/dir_left.png" />
+    <texture file="${dir.gfx}/dir_right.png" />
+    <texture file="${dir.gfx}/dir_down.png" />
+    <texture file="${dir.gfx}/dir_up.png" />
 
 	<animation file="${dir.anim}/bombwalk_east_green.anim" />
     <animation file="${dir.anim}/bombwalk_north_green.anim" />

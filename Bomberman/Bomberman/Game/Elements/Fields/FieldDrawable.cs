@@ -22,6 +22,7 @@ namespace Bomberman.Game.Elements.Fields
         private int cellHeight;
 
         private bool blink;
+        private IDictionary<Direction, TextureImage> dirLookup;
 
         public FieldDrawable(Field field, int x, int y, int width, int height)
             : base(x, y, width, height)
@@ -163,7 +164,13 @@ namespace Bomberman.Game.Elements.Fields
             float drawY = bomb.GetPy();
 
             AnimationInstance anim = bomb.currentAnimation;
-            anim.Draw(context, drawX, drawY + 0.5f * cellHeight);
+            anim.Draw(context, drawX, drawY + 0.5f * cellHeight, bomb.IsBlocked ? Color.Red : Color.White);
+
+            if (CVars.g_drawBombDir.boolValue)
+            {
+                TextureImage dirImage = dirLookup[bomb.direction];
+                context.DrawImage(dirImage, drawX - 0.5f * dirImage.GetWidth(), drawY - 0.5f * dirImage.GetHeight());
+            }
             
             context.DrawRect(bomb.cx * cellWidth, bomb.cy * cellHeight, cellWidth, cellHeight, Color.White);
             context.DrawRect(bomb.px - 0.5f * cellWidth, bomb.py - 0.5f * cellHeight, cellWidth, cellHeight, Color.Red);
@@ -340,6 +347,12 @@ namespace Bomberman.Game.Elements.Fields
                 Helper.GetTexture(A.gfx_powerups_ebola),
                 Helper.GetTexture(A.gfx_powerups_random),
             };
+
+            dirLookup = new Dictionary<Direction, TextureImage>();
+            dirLookup[Direction.UP] = Helper.GetTexture(A.gfx_dir_up);
+            dirLookup[Direction.DOWN] = Helper.GetTexture(A.gfx_dir_down);
+            dirLookup[Direction.LEFT] = Helper.GetTexture(A.gfx_dir_left);
+            dirLookup[Direction.RIGHT] = Helper.GetTexture(A.gfx_dir_right);
         }
     }
 }
