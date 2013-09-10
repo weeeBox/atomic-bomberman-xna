@@ -238,6 +238,28 @@ namespace Bomberman.Game.Elements.Cells
             }
         }
 
+        public bool IsMovingTowards(FieldCell other)
+        {
+            Debug.Assert(IsMoving());
+            
+            switch (direction)
+            {
+                case Direction.LEFT:
+                    return px > other.px;
+
+                case Direction.RIGHT:
+                    return px < other.px;
+
+                case Direction.UP:
+                    return py > other.py;
+
+                case Direction.DOWN:
+                    return py < other.py;
+            }
+
+            return false;
+        }
+
         public void MoveBackX(float distance)
         {
             MoveX(-m_moveKx * distance);

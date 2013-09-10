@@ -542,26 +542,7 @@ namespace Bomberman.Game.Elements.Players
             }
             else if (direction == bomb.direction) // moving in the same direction
             {
-                bool bombFollowsPlayer = false;
-                switch (direction)
-                {
-                    case Direction.LEFT:
-                        bombFollowsPlayer = px < bomb.px;
-                        break;
-
-                    case Direction.RIGHT:
-                        bombFollowsPlayer = px > bomb.px;
-                        break;
-
-                    case Direction.UP:
-                        bombFollowsPlayer = py < bomb.py;
-                        break;
-
-                    case Direction.DOWN:
-                        bombFollowsPlayer = py > bomb.py;
-                        break;
-                }
-
+                bool bombFollowsPlayer = bomb.IsMovingTowards(this);
                 if (bombFollowsPlayer)
                 {
                     if (bomb.CheckBounds2CellCollision(this)) // bomb bounds should collide player`s cell
@@ -622,36 +603,14 @@ namespace Bomberman.Game.Elements.Players
             Debug.Assert(IsMoving());
             Debug.Assert(!bomb.IsMoving());
 
-            if (CheckCell2CellCollision(bomb)) // player and bomb share a cell
+            if (CheckCell2CellCollision(bomb)) // player and bomb share the cell
             {
                 return false;
             }
 
             if (CheckBounds2CellCollision(bomb)) // player bounds collide bomb`s cell
             {
-                // check if player is moving toward the bomb
-                bool movingToBomb = false;
-
-                switch (direction)
-                {
-                    case Direction.LEFT:
-                        movingToBomb = px - bomb.px > 0;
-                        break;
-
-                    case Direction.RIGHT:
-                        movingToBomb = px - bomb.px < 0;
-                        break;
-
-                    case Direction.UP:
-                        movingToBomb = py - bomb.py > 0;
-                        break;
-
-                    case Direction.DOWN:
-                        movingToBomb = py - bomb.py < 0;
-                        break;
-                }
-
-                if (movingToBomb)
+                if (IsMovingTowards(bomb)) // check if player is moving towards the bomb
                 {
                     if (HasKick())
                     {
@@ -675,29 +634,9 @@ namespace Bomberman.Game.Elements.Players
             Debug.Assert(!IsMoving());
             Debug.Assert(bomb.IsMoving());
 
-            if (CheckCell2BoundsCollision(bomb)) // bomb`s bounds should collide player's cell
+            if (CheckCell2BoundsCollision(bomb)) // player`s cell should collide bomb`s bounds
             {
-                bool bombMovingToPlayer = false;
-                switch (bomb.direction)
-                {
-                    case Direction.LEFT:
-                        bombMovingToPlayer = px < bomb.px;
-                        break;
-
-                    case Direction.RIGHT:
-                        bombMovingToPlayer = px > bomb.px;
-                        break;
-
-                    case Direction.UP:
-                        bombMovingToPlayer = py < bomb.py;
-                        break;
-
-                    case Direction.DOWN:
-                        bombMovingToPlayer = py > bomb.py;
-                        break;
-                }
-
-                if (bombMovingToPlayer)
+                if (bomb.IsMovingTowards(this)) // bomb is moving towards the player
                 {
                     bomb.HandleObstacleCollistion(this);
                     return true;
