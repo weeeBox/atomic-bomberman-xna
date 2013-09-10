@@ -319,34 +319,74 @@ namespace Bomberman.Game.Elements.Cells
             {
                 if (direction == Util.Opposite(other.direction)) // moving in opposite directions
                 {
-                    if (CheckCell2CellCollision(other)) // ops, share the same cell
-                    {
-                        // decide which bomb should go back
-                        bool blocked1 = HasJellyBlockingObstacle(Util.Opposite(direction));
-                        bool blocked2 = other.HasJellyBlockingObstacle(Util.Opposite(other.direction));
-   
-                        switch (direction)
-                        {
-                            case Direction.LEFT:
-                            case Direction.RIGHT:
-                            {
-                                float shift = 0.5f * OverlapX(other);
-                                MoveBackX(shift);
-                                other.MoveBackX(shift);
-                                break;
-                            }   
+                    bool backBlocked1 = HasJellyBlockingObstacle(Util.Opposite(direction));
+                    bool backBlocked2 = other.HasJellyBlockingObstacle(Util.Opposite(other.direction));
 
-                            case Direction.UP:
-                            case Direction.DOWN:
+                    bool cell2cell = CheckCell2CellCollision(other);
+                    bool bounds2cell = CheckBounds2CellCollision(other);
+                    bool cell2bounds = CheckCell2BoundsCollision(other);
+                    bool bounds2bounds = CheckBounds2BoundsCollision(other);
+
+                    if (backBlocked1 && backBlocked2)
+                    {
+                        if (cell2cell)
+                        {
+                            switch (direction)
                             {
-                                float shift = 0.5f * OverlapY(other);
-                                MoveBackY(shift);
-                                other.MoveBackY(shift);
-                                break;
+                                case Direction.LEFT:
+                                case Direction.RIGHT:
+                                {
+                                    float shift = 0.5f * OverlapX(other);
+                                    MoveBackX(shift);
+                                    other.MoveBackX(shift);
+                                    break;
+                                }
+
+                                case Direction.UP:
+                                case Direction.DOWN:
+                                {
+                                    float shift = 0.5f * OverlapY(other);
+                                    MoveBackY(shift);
+                                    other.MoveBackY(shift);
+                                    break;
+                                }
                             }
                         }
                     }
-                    
+                    else if (backBlocked1)
+                    {
+                        if (bounds2cell)
+                        {
+                            HandleObstacleCollistion(other);
+                            if (bounds2bounds)
+                            {
+                                other.HandleObstacleCollistion(this);
+                            }
+
+                            return true;
+                        }
+                    }
+                    else if (backBlocked2)
+                    {
+                        if (cell2bounds)
+                        {
+                            other.HandleObstacleCollistion(this);
+                            if (bounds2bounds)
+                            {
+                                HandleObstacleCollistion(other);
+                            }
+
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if (!bounds2bounds)
+                        {
+                            return false;
+                        }
+                    }
+
                     HandleObstacleCollistion(other);
                     other.HandleObstacleCollistion(this);
                 }
