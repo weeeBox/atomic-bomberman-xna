@@ -559,7 +559,34 @@ namespace Bomberman.Game.Elements.Players
             }
             else // player and bomb move in perpendicular directions
             {
-                // TODO
+                if (CheckCell2CellCollision(bomb))
+                {
+                    return false;
+                }
+
+                if (CheckBounds2CellCollision(bomb))
+                {   
+                    if (IsMovingTowards(bomb))
+                    {
+                        if (hasKick)
+                        {
+                            TryKick(bomb);
+                        }
+
+                        MoveOutOfCell(bomb);
+
+                        return true;
+                    }
+                }
+
+                if (bomb.CheckBounds2BoundsCollision(this))
+                {
+                    if (bomb.IsMovingTowards(this))
+                    {
+                        bomb.HandleObstacleCollistion(this);
+                        return true;
+                    }
+                }
             }
 
             return false;
