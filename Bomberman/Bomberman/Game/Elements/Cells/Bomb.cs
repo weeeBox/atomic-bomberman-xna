@@ -392,8 +392,7 @@ namespace Bomberman.Game.Elements.Cells
 
                     return true;
                 }
-
-                if (direction == other.direction)
+                else if (direction == other.direction)
                 {
                     if (IsMovingTowards(other))
                     {
@@ -404,8 +403,42 @@ namespace Bomberman.Game.Elements.Cells
                     other.HandleObstacleCollistion(this);
                     return true;
                 }
+                else // perpendicular directions
+                {
+                    if (CheckBounds2CellCollision(other))
+                    {
+                        if (IsMovingTowards(other))
+                        {
+                            HandleObstacleCollistion(other);
+                            return true;
+                        }
+                    }
+                    else if (other.CheckBounds2CellCollision(this))
+                    {
+                        if (other.IsMovingTowards(this))
+                        {
+                            other.HandleObstacleCollistion(this);
+                            return true;
+                        }
+                    }
 
-                return true;
+                    if (CheckBounds2BoundsCollision(this))
+                    {
+                        if (IsMovingTowards(other))
+                        {
+                            HandleObstacleCollistion(other);
+                            return true;
+                        }
+
+                        if (other.IsMovingTowards(this))
+                        {
+                            other.HandleObstacleCollistion(this);
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
             }
 
             if (moving1)
