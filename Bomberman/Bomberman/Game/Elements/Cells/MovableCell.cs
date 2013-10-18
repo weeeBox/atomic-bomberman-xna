@@ -157,6 +157,9 @@ namespace Bomberman.Game.Elements.Cells
             SetDirection(direction);
             m_moving = true;
 
+            m_moveKx = 0;
+            m_moveKy = 0;
+
             switch (direction)
             {
                 case Direction.UP:
