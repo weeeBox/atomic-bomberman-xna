@@ -25,18 +25,23 @@ namespace BomberEngine.Demo
 
         private float m_skipTime;
         private int m_frameSkip;
+        private long m_targetFrame;
 
         private IDictionary<KeyCode, int> m_frameSkipLookup;
+
+        private DemoTickCmd m_tickCmd;
 
         public DemoPlayer(String path)
         {
             m_inputManager = new DefaultInputManager();
             m_inputManager.AddKeyboardListener(this);
 
+            m_tickCmd = new DemoTickCmd();
+
             m_cmdLookup = new Dictionary<DemoCmdType, DemoCmd>();
             m_cmdLookup[DemoCmdType.Init] = new DemoInitCmd();
             m_cmdLookup[DemoCmdType.Input] = new DemoInputCmd();
-            m_cmdLookup[DemoCmdType.Tick]  = new DemoTickCmd();
+            m_cmdLookup[DemoCmdType.Tick] = m_tickCmd;
 
             m_frameSkipLookup = new Dictionary<KeyCode, int>();
             m_frameSkipLookup[KeyCode.D2] = 2;
@@ -122,15 +127,25 @@ namespace BomberEngine.Demo
                 int skip = m_frameSkip;
                 while (skip > 0)
                 {
-                    ReadTick();
+                    if (!ReadTick()) break;
                     --skip;
                 }
             }
             else
             {
+                if (m_targetFrame > 0)
+                {
+                    while (m_targetFrame > m_tickCmd.frameIndex)
+                    {
+                        if (!ReadTick()) break;
+                    }
+
+                    m_stepByStep = true;
+                }
+
                 while (m_skipTime >= 0)
                 {
-                    ReadTick();
+                    if (!ReadTick()) break;
                     m_skipTime -= Application.frameTime;
                 }
 
@@ -138,7 +153,7 @@ namespace BomberEngine.Demo
             }
         }
 
-        private void ReadTick()
+        private bool ReadTick()
         {
             while (m_buffer.BitsAvailable > 0)
             {
@@ -146,9 +161,11 @@ namespace BomberEngine.Demo
                 bool shouldStop = cmd.Execute();
                 if (shouldStop)
                 {
-                    break;
+                    return true;
                 }
             }
+
+            return false;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -179,6 +196,8 @@ namespace BomberEngine.Demo
         }
 
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
 
         #region IKeyListener
 
@@ -249,6 +268,18 @@ namespace BomberEngine.Demo
             }
             
             return false;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
+        public long targetFrame
+        {
+            get { return m_targetFrame; }
+            set { m_targetFrame = value; }
         }
 
         #endregion

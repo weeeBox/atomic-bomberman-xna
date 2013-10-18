@@ -49,6 +49,8 @@ namespace BomberEngine.Demo
     public class DemoTickCmd : DemoCmd
     {
         private float m_frameTime;
+        private long m_frameIndex;
+
         private bool m_needsUpdate;
 
         public DemoTickCmd()
@@ -59,6 +61,7 @@ namespace BomberEngine.Demo
         public override bool Execute()
         {
             GetApplication().RunUpdate(m_frameTime);
+            ++m_frameIndex;
             return true;
         }
 
@@ -89,6 +92,11 @@ namespace BomberEngine.Demo
                 m_needsUpdate = m_frameTime != value;
                 m_frameTime = value; 
             }
+        }
+
+        public long frameIndex
+        {
+            get { return m_frameIndex; }
         }
     }
 
