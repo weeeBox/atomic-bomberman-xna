@@ -803,11 +803,15 @@ namespace Bomberman.Game.Elements.Players
             return true;
         }
 
-        public void OnInfected(Diseases desease)
+        public void OnInfected(Diseases disease)
         {
-            if (desease == Diseases.POOPS)
+            if (disease == Diseases.POOPS)
             {
                 TryPoops();
+            }
+            else if (disease == Diseases.CRACK)
+            {
+                SetSpeed(CalcPlayerSpeed());
             }
         }
 
@@ -900,6 +904,15 @@ namespace Bomberman.Game.Elements.Players
 
         private int CalcPlayerSpeed()
         {
+            if (IsInfected(Diseases.MOLASSES))
+            {
+                return CVars.cg_playerSpeedMolasses.intValue;
+            }
+            if (IsInfected(Diseases.CRACK))
+            {
+                return CVars.cg_playerSpeedCrack.intValue;
+            }
+
             int speedBase = CVars.cg_playerSpeed.intValue;
             int speedAdd = CVars.cg_playerSpeedAdd.intValue;
             return speedBase + speedAdd * m_powerups.GetCount(Powerups.Speed);

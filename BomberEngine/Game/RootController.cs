@@ -151,6 +151,7 @@ namespace BomberEngine.Game
             console.RegisterCommand(new Cmd_ctoggle());
 
             console.RegisterCvar(CVars.g_drawViewBorders);
+            console.RegisterCvar(CVars.d_demoTargetFrame);
 
             return console;
         }

@@ -78,7 +78,6 @@ namespace BomberEngine.Game
 
         private Mode m_mode;
         private DemoCmdEntry m_demoCmdEntry;
-        private IDECmdEntry m_ideCmdEntry;
 
         private DemoPlayer m_demoPlayer;
         private DemoRecorder m_demoRecorder;
@@ -106,11 +105,9 @@ namespace BomberEngine.Game
         protected virtual CommandLine CreateCommandLine()
         {
             m_demoCmdEntry = new DemoCmdEntry();
-            m_ideCmdEntry = new IDECmdEntry();
 
             CommandLine cmd = new CommandLine();
             cmd.Register(m_demoCmdEntry);
-            cmd.Register(m_ideCmdEntry);
             return cmd;
         }
 
@@ -259,7 +256,7 @@ namespace BomberEngine.Game
             }
             else
             {
-                if (m_ideCmdEntry.Flag)
+                if (Debug.IsDebuggerAttached())
                 {
                     RunUpdate(delta);
                 }

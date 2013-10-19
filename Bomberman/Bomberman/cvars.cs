@@ -18,9 +18,11 @@ namespace Bomberman
         public static readonly CVar winDelay = new CVar("winDelay", 3);         // delay between round end (everyone is dead or single player left) and results screen
 
         /* Player */
-        public static readonly CVar cg_playerSpeed = new CVar("cg_playerSpeed", 200, CFlags.Readonly);      // player's default speed
-        public static readonly CVar cg_playerSpeedAdd = new CVar("cg_playerSpeedAdd", 30, CFlags.Readonly); // player's speed addition (when speed boost is picked)
-        public static readonly CVar name = new CVar("name", "UnnamedPlayer");                               // player's default name
+        public static readonly CVar cg_playerSpeed = new CVar("cg_playerSpeed", 200, CFlags.Readonly);                // player's default speed
+        public static readonly CVar cg_playerSpeedAdd = new CVar("cg_playerSpeedAdd", 30, CFlags.Readonly);           // player's speed addition (when speed boost is picked)
+        public static readonly CVar cg_playerSpeedMolasses = new CVar("cg_playerSpeedMolasses", 67, CFlags.Readonly); // player's molasses speed
+        public static readonly CVar cg_playerSpeedCrack = new CVar("cg_playerSpeedCrack", 413, CFlags.Readonly);      // player's crack speed
+        public static readonly CVar name = new CVar("name", "UnnamedPlayer");                                         // player's default name
 
         /* Bomb */
         public static readonly CVar cg_bombRollSpeed = new CVar("cg_bombRollSpeed", 250, CFlags.Readonly);      // kicked bomb rolling speed
@@ -223,6 +225,8 @@ namespace Bomberman
 
             console.RegisterCvar(cg_playerSpeed);
             console.RegisterCvar(cg_playerSpeedAdd);
+            console.RegisterCvar(cg_playerSpeedMolasses);
+            console.RegisterCvar(cg_playerSpeedCrack);
 
             console.RegisterCvar(cg_bombRollSpeed);
             console.RegisterCvar(cg_bombFlySpeed);

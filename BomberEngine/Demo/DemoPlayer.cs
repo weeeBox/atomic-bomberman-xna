@@ -8,6 +8,7 @@ using BomberEngine.Debugging;
 using BomberEngine.Game;
 using BomberEngine.Core.Input;
 using BomberEngine.Core;
+using BomberEngine.Consoles;
 
 namespace BomberEngine.Demo
 {
@@ -25,7 +26,6 @@ namespace BomberEngine.Demo
 
         private float m_skipTime;
         private int m_frameSkip;
-        private long m_targetFrame;
 
         private IDictionary<KeyCode, int> m_frameSkipLookup;
 
@@ -133,9 +133,10 @@ namespace BomberEngine.Demo
             }
             else
             {
-                if (m_targetFrame > 0)
+                long targetFrame = CVars.d_demoTargetFrame.intValue;
+                if (targetFrame > 0)
                 {
-                    while (m_targetFrame > m_tickCmd.frameIndex)
+                    while (targetFrame > m_tickCmd.frameIndex)
                     {
                         if (!ReadTick()) break;
                     }
@@ -270,18 +271,6 @@ namespace BomberEngine.Demo
             return false;
         }
 
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Properties
-
-        public long targetFrame
-        {
-            get { return m_targetFrame; }
-            set { m_targetFrame = value; }
-        }
-
-        #endregion
+        #endregion        
     }
 }

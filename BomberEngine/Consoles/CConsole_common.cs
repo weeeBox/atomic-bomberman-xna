@@ -317,5 +317,6 @@ namespace BomberEngine.Consoles
     public class CVars
     {
         public static readonly CVar g_drawViewBorders = new CVar("g_drawViewBorders", 0, CFlags.Debug);
+        public static readonly CVar d_demoTargetFrame = new CVar("d_demoTargetFrame", 0, CFlags.Debug);
     }
 }

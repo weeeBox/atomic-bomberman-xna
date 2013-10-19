@@ -93,5 +93,32 @@ namespace BomberEngine.Debugging
         {
             System.Diagnostics.Debug.Assert(false, "Failed!", format, args);
         }
+
+        [Conditional("DEBUG")]
+        public static void BreakIf(bool condition)
+        {
+            if (condition)
+            {
+                System.Diagnostics.Debugger.Break();
+            }
+        }
+
+        [Conditional("DEBUG")]
+        public static void BreakUnless(bool condition)
+        {
+            if (!condition)
+            {
+                System.Diagnostics.Debugger.Break();
+            }
+        }
+
+        public static bool IsDebuggerAttached()
+        {
+            #if DEBUG
+                return System.Diagnostics.Debugger.IsAttached;
+            #else
+                return false;
+            #endif
+        }
     }
 }
