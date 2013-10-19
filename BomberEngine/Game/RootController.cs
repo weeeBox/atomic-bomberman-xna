@@ -218,7 +218,11 @@ namespace BomberEngine.Game
 
         public virtual bool OnKeyPressed(KeyEventArg arg)
         {
-            m_keyBindings.OnKeyPressed(arg);
+            if (!m_console.IsVisible)
+            {
+                m_keyBindings.OnKeyPressed(arg);
+            }
+            
             return HandleEvent(keyEvent.Init(arg, KeyState.Pressed));
         }
 
@@ -229,7 +233,11 @@ namespace BomberEngine.Game
 
         public virtual bool OnKeyReleased(KeyEventArg arg)
         {
-            m_keyBindings.OnKeyReleased(arg);
+            if (!m_console.IsVisible)
+            {
+                m_keyBindings.OnKeyReleased(arg);
+            }
+            
             return HandleEvent(keyEvent.Init(arg, KeyState.Released));
         }
 
