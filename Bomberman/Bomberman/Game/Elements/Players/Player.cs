@@ -815,8 +815,12 @@ namespace Bomberman.Game.Elements.Players
             }
         }
 
-        public void OnCured(Diseases desease)
+        public void OnCured(Diseases disease)
         {
+            if (disease == Diseases.CRACK)
+            {
+                SetSpeed(CalcPlayerSpeed());
+            }
         }
 
         public void InfectRandom(int count)
