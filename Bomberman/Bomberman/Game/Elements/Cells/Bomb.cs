@@ -443,14 +443,21 @@ namespace Bomberman.Game.Elements.Cells
 
             if (moving1)
             {
-                HandleObstacleCollistion(other);
-                return true;
+                if (IsMovingTowards(other))
+                {
+                    return HandleObstacleCollistion(other);
+                }
+                
+                return false;
             }
 
             if (moving2)
             {
-                other.HandleObstacleCollistion(this);
-                return true;
+                if (other.IsMovingTowards(this))
+                {
+                    return other.HandleObstacleCollistion(this);
+                }
+                return false;
             }
 
             return false;

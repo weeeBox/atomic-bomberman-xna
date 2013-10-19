@@ -134,7 +134,7 @@ namespace BomberEngine.Demo
             else
             {
                 long targetFrame = CVars.d_demoTargetFrame.intValue;
-                if (targetFrame > 0)
+                if (targetFrame > m_tickCmd.frameIndex)
                 {
                     while (targetFrame > m_tickCmd.frameIndex)
                     {
