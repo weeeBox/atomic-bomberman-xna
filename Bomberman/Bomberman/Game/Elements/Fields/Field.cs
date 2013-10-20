@@ -60,6 +60,7 @@ namespace Bomberman.Game.Elements.Fields
             cells = new FieldCellArray(width, height);
 
             timerManager = new TimerManager();
+            players = new PlayerList(timerManager, CVars.cg_maxPlayers.intValue);
 
             m_tempCellsList = new LinkedList<FieldCell>();
             m_tempMovableList = new List<MovableCell>();

@@ -436,6 +436,11 @@ namespace Bomberman.Game.Elements.Players
 
         public void StartMovingToDirection(Direction dir)
         {
+            if (IsInfected(Diseases.REVERSED))
+            {
+                dir = Util.Opposite(dir);
+            }
+
             SetMoveDirection(dir);
             UpdateAnimation();
         }
@@ -815,6 +820,16 @@ namespace Bomberman.Game.Elements.Players
                 case Diseases.MOLASSES:
                     UpdatePlayerSpeed();
                     break;
+
+                case Diseases.REVERSED:
+                    StartReversed();
+                    break;
+
+                case Diseases.SWAP:
+                    break;
+
+                case Diseases.HYPERSWAP:
+                    break;
             }
         }
 
@@ -825,6 +840,10 @@ namespace Bomberman.Game.Elements.Players
                 case Diseases.CRACK:
                 case Diseases.MOLASSES:
                     UpdatePlayerSpeed();
+                    break;
+
+                case Diseases.REVERSED:
+                    StopReversed();
                     break;
             }
         }
@@ -887,26 +906,6 @@ namespace Bomberman.Game.Elements.Players
             GetField().PlacePowerup(powerupIndex);
         }
 
-        private bool IsInfectedPoops()
-        {
-            return IsInfected(Diseases.POOPS);
-        }
-
-        private bool IsInfectedShortFuze()
-        {
-            return IsInfected(Diseases.SHORTFUZE);
-        }
-
-        private bool IsInfectedShortFlame()
-        {
-            return IsInfected(Diseases.SHORTFLAME);
-        }
-
-        private bool IsInfectedConstipation()
-        {
-            return IsInfected(Diseases.CONSTIPATION);
-        }
-
         private bool IsInfected(Diseases disease)
         {
             return m_diseases.IsInfected(disease);
@@ -942,6 +941,22 @@ namespace Bomberman.Game.Elements.Players
         private float CalcBombTimeout()
         {
             return CVars.cg_fuzeTimeNormal.intValue * 0.001f;
+        }
+
+        private void StartReversed()
+        {
+            if (IsMoving())
+            {
+                StartMovingToDirection(direction);
+            }
+        }
+
+        private void StopReversed()
+        {
+            if (IsMoving())
+            {
+                StartMovingToDirection(Util.Opposite(direction));
+            }
         }
 
         #endregion
@@ -998,7 +1013,7 @@ namespace Bomberman.Game.Elements.Players
 
         public Bomb GetNextBomb()
         {
-            if (IsInfectedConstipation())
+            if (IsInfected(Diseases.CONSTIPATION))
             {
                 return null;
             }
@@ -1338,7 +1353,7 @@ namespace Bomberman.Game.Elements.Players
 
         private bool TryPoops()
         {
-            if (IsInfectedPoops())
+            if (IsInfected(Diseases.POOPS))
             {
                 if (HasGrab())
                 {
@@ -1353,7 +1368,7 @@ namespace Bomberman.Game.Elements.Players
 
         private bool TrySchedulePoops()
         {
-            if (IsInfectedPoops())
+            if (IsInfected(Diseases.POOPS))
             {
                 ScheduleTimerOnce(TrySchedulePoopsCallback);
                 return true;
@@ -1574,13 +1589,13 @@ namespace Bomberman.Game.Elements.Players
 
         public float GetBombTimeout()
         {
-            CVar var = IsInfectedShortFuze() ? CVars.cg_fuzeTimeShort : CVars.cg_fuzeTimeNormal;
+            CVar var = IsInfected(Diseases.SHORTFUZE) ? CVars.cg_fuzeTimeShort : CVars.cg_fuzeTimeNormal;
             return var.intValue * 0.001f;
         }
 
         public int GetBombRadius()
         {
-            if (IsInfectedShortFlame())
+            if (IsInfected(Diseases.SHORTFLAME))
             {
                 return CVars.cg_bombShortFlame.intValue;
             }
