@@ -29,8 +29,8 @@ namespace Bomberman.Game.Elements.Players
 
         private Player m_player;
 
-        private bool[] flags;
-        private bool[] oldFlags;
+        private BitArray flags;
+        private BitArray oldFlags;
 
         private float[] remains;
         private int m_activeCount;
@@ -43,8 +43,8 @@ namespace Bomberman.Game.Elements.Players
 
             remains = new float[diseaseArray.Length];
 
-            flags = new bool[diseaseArray.Length];
-            oldFlags = new bool[diseaseArray.Length];
+            flags = new BitArray(diseaseArray.Length);
+            oldFlags = new BitArray(diseaseArray.Length);
 
             randomIndices = new int[diseaseArray.Length];
 
@@ -173,8 +173,9 @@ namespace Bomberman.Game.Elements.Players
 
         public void CureAll()
         {
-            ArrayUtils.Clear(flags);
-            ArrayUtils.Clear(oldFlags);
+            flags.Clear();
+            oldFlags.Clear();
+
             ArrayUtils.Clear(remains);
             m_activeCount = 0;
         }
@@ -217,8 +218,7 @@ namespace Bomberman.Game.Elements.Players
         }
 
         public bool IsInfected(int index)
-        {
-            Debug.AssertRange(index, flags);
+        {   
             return flags[index];
         }
 
@@ -234,7 +234,7 @@ namespace Bomberman.Game.Elements.Players
 
         private void UpdateFlagsChanges()
         {
-            for (int i = 0; i < flags.Length; ++i)
+            for (int i = 0; i < flags.length; ++i)
             {
                 bool flag = flags[i];
                 bool oldFlag = oldFlags[i];
