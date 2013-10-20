@@ -166,6 +166,54 @@ namespace BombermanTests.TestDiseases
             Assert.AreEqual(CVars.cg_initFlame.intValue, bomb.GetRadius());
         }
 
+        public void TestCrackPoops()
+        {
+            PlayerMock player = new PlayerMock();
+            DiseaseListMock list = new DiseaseListMock(player);
+
+            list.TryInfect(Diseases.CRACKPOOPS);
+            list.AssertInfected(Diseases.CRACK);
+            list.AssertInfected(Diseases.POOPS);
+        }
+
+        [TestMethod]
+        public void TestShortFuze()
+        {
+            List<String> result = new List<String>();
+            PlayerMock player = new PlayerMock(result);
+
+            DiseaseList list = new DiseaseListMock(player);
+
+            Diseases disease = Diseases.SHORTFUZE;
+
+            list.TryInfect(disease);
+            Bomb bomb = player.GetNextBomb();
+            Assert.AreEqual(CVars.cg_fuzeTimeShort.floatValue, 1000 * bomb.timeRemains);
+
+            bomb.Deactivate(); // hack
+
+            list.TryCure(disease);
+            bomb = player.GetNextBomb();
+            Assert.AreEqual(CVars.cg_fuzeTimeNormal.floatValue, 1000 * bomb.timeRemains);
+        }
+
+        /*
+        [TestMethod]
+        public void TestSwap()
+        {
+
+        }
+        */
+
+        /*
+        [TestMethod]
+        public void TestReversed()
+        {
+
+        }
+        */
+
+
         private static String Infected(Diseases disease)
         {
             return "i:" + disease;
