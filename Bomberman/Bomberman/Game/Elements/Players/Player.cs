@@ -803,7 +803,7 @@ namespace Bomberman.Game.Elements.Players
             return true;
         }
 
-        public void OnInfected(Diseases disease)
+        public virtual void OnInfected(Diseases disease)
         {
             if (disease == Diseases.POOPS)
             {
@@ -815,7 +815,7 @@ namespace Bomberman.Game.Elements.Players
             }
         }
 
-        public void OnCured(Diseases disease)
+        public virtual void OnCured(Diseases disease)
         {
             if (disease == Diseases.CRACK)
             {

@@ -259,6 +259,12 @@ namespace Bomberman.Game.Elements.Players
             return (int)disease;
         }
 
+        public static Disease DiseaseForType(Diseases type)
+        {
+            int index = ToIndex(type);
+            return DiseaseForIndex(index);
+        }
+
         public static Disease DiseaseForIndex(int index)
         {
             if (index >= 0 && index < diseaseArray.Length)
