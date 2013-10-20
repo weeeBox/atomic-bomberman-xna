@@ -619,8 +619,8 @@ namespace Bomberman.Game.Elements.Cells
 
         private void EndFlying()
         {
-            Field field = GetField();
-            if (field.IsObstacleCell(cx, cy))
+            FieldCellSlot slot = GetField().GetSlot(cx, cy);
+            if (slot == null || slot.ContainsObstacle() || slot.ContainsPlayer())
             {
                 Jump(px, py, direction);
             }
