@@ -9,21 +9,20 @@ namespace Bomberman.Game.Elements.Cells
 {
     public class FlameCell : FieldCell
     {
-        private float remains;
-
-        public Player player;
+        private float m_remains;
+        private Player m_player;
 
         public FlameCell(Player player, int cx, int cy)
             : base(FieldCellType.Flame, cx, cy)
         {
-            this.player = player;
-            remains = CVars.cg_timeFlame.intValue * 0.001f;
+            m_player = player;
+            m_remains = CVars.cg_timeFlame.intValue * 0.001f;
         }
 
         public override void Update(float delta)
         {
-            remains -= delta;
-            if (remains <= 0)
+            m_remains -= delta;
+            if (m_remains <= 0)
             {
                 GetField().RemoveCell(this);
             }
@@ -37,6 +36,16 @@ namespace Bomberman.Game.Elements.Cells
         public override FlameCell AsFlame()
         {
             return this;
+        }
+
+        public float remains
+        {
+            get { return m_remains; }
+        }
+
+        public Player player
+        {
+            get { return m_player; }
         }
     }
 }
