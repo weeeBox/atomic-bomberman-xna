@@ -576,7 +576,7 @@ namespace Bomberman.Game.Elements.Players
                     return false;
                 }
 
-                if (CheckBounds2CellCollision(bomb))
+                if (CheckBounds2CellCollision(bomb) && CheckBounds2BoundsCollision(bomb))
                 {   
                     if (IsMovingTowards(bomb))
                     {
