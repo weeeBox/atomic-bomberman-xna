@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BomberEngine.Debugging;
 
 namespace BomberEngine.Util
 {
@@ -39,6 +40,31 @@ namespace BomberEngine.Util
         public static float NextFloat()
         {
             return (float)s_random.NextDouble();
+        }
+
+        public static float NextFloat(float maxValue)
+        {
+            return maxValue * NextFloat();
+        }
+
+        public static float NextFloat(float minValue, float maxValue)
+        {
+            return minValue + NextFloat() * (maxValue - minValue);
+        }
+
+        public static double NextDouble()
+        {
+            return s_random.NextDouble();
+        }
+
+        public static double NextDouble(double maxValue)
+        {
+            return maxValue * NextDouble();
+        }
+
+        public static double NextDouble(double minValue, double maxValue)
+        {
+            return minValue + NextDouble() * (maxValue - minValue);
         }
     }
 }

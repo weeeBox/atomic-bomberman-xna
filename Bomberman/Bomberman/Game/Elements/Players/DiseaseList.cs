@@ -136,7 +136,7 @@ namespace Bomberman.Game.Elements.Players
             bool wasInfected = flags[index];
 
             flags[index] = true;
-            remains[index] = disease.duration;
+            remains[index] = MathHelp.NextFloat(disease.duration);
 
             switch (disease.type)
             {
@@ -220,6 +220,11 @@ namespace Bomberman.Game.Elements.Players
         public bool IsInfected(int index)
         {   
             return flags[index];
+        }
+
+        public bool IsInfectedSame(DiseaseList other)
+        {
+            return flags.Equals(other.flags);
         }
 
         public float GetInfectedRemains(int index)

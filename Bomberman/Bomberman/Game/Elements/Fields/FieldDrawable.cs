@@ -11,6 +11,7 @@ using Bomberman.Game.Elements.Cells;
 using Microsoft.Xna.Framework.Graphics;
 using BomberEngine.Game;
 using Bomberman.Content;
+using BomberEngine.Core;
 
 namespace Bomberman.Game.Elements.Fields
 {
@@ -33,6 +34,13 @@ namespace Bomberman.Game.Elements.Fields
             cellHeight = height / field.GetHeight();
 
             TempInitImages();
+
+            field.ScheduleTimer(BlinkTimerCallback, 0.01f, true);
+        }
+
+        private void BlinkTimerCallback(Timer timer)
+        {
+            blink = !blink;
         }
 
         public override void Draw(Context context)
@@ -216,7 +224,6 @@ namespace Bomberman.Game.Elements.Fields
 
             if (player.IsInfected())
             {
-                blink = !blink;
                 if (blink)
                 {
                     AnimationInstance anim = player.currentAnimation;

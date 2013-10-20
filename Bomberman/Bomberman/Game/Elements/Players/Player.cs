@@ -476,6 +476,11 @@ namespace Bomberman.Game.Elements.Players
                 return HandleCollision(other.AsBomb());
             }
 
+            if (other.IsPlayer())
+            {
+                return HandleCollision(other.AsPlayer());
+            }
+
             return false;
         }
 
@@ -670,6 +675,41 @@ namespace Bomberman.Game.Elements.Players
 
             cell.RemoveFromField();
             return true;
+        }
+
+        private bool HandleCollision(Player other)
+        {
+            if (other.IsAlive)
+            {
+                return TransmitDiseases(this, other);
+            }
+
+            return false;
+        }
+
+        private static bool TransmitDiseases(Player p1, Player p2)
+        {
+            if (p1.IsInfectedSame(p2))
+            {
+                return false;
+            }
+
+            bool transmitted = false;
+
+            int totalCount = (int)Diseases.Count;
+            for (int diseaseIndex = 0; diseaseIndex < totalCount; ++diseaseIndex)
+            {
+                if (p1.IsInfected(diseaseIndex))
+                {
+                    transmitted |= p2.TryInfect(diseaseIndex);
+                }
+                else if (p2.IsInfected(diseaseIndex))
+                {
+                    transmitted |= p1.TryInfect(diseaseIndex);
+                }
+            }
+            
+            return transmitted;
         }
 
         protected override bool HandleStaticCollision(FieldCell other)
@@ -908,6 +948,11 @@ namespace Bomberman.Game.Elements.Players
             m_powerups.SetCount(powerupIndex, 0);
 
             GetField().PlacePowerup(powerupIndex);
+        }
+
+        private bool IsInfected(int diseaseIndex)
+        {
+            return m_diseases.IsInfected(diseaseIndex);
         }
 
         private bool IsInfected(Diseases disease)
@@ -1436,6 +1481,16 @@ namespace Bomberman.Game.Elements.Players
         public bool IsInfected()
         {
             return m_diseases.activeCount > 0;
+        }
+
+        public bool IsInfectedSame(Player other)
+        {
+            return m_diseases.IsInfectedSame(other.m_diseases);
+        }
+
+        public int GetDiseasesCount()
+        {
+            return m_diseases.activeCount;
         }
 
         #endregion
