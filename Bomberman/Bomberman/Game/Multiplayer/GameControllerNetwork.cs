@@ -290,7 +290,7 @@ namespace Bomberman.Game.Multiplayer
                 }
 
                 // diseases
-                int diseasesCount = (int)Diseases.Count;
+                int diseasesCount = DiseaseList.diseaseArray.Length;
                 for (int i = 0; i < diseasesCount; ++i)
                 {
                     bool infected = p.diseases.IsInfected(i);
@@ -428,7 +428,7 @@ namespace Bomberman.Game.Multiplayer
                 }
 
                 // diseases
-                int diseasesCount = (int)Diseases.Count;
+                int diseasesCount = DiseaseList.diseaseArray.Length;
                 for (int i = 0; i < diseasesCount; ++i)
                 {
                     bool infected = msg.ReadBoolean();

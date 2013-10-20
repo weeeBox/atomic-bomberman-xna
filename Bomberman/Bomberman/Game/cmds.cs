@@ -70,21 +70,21 @@ namespace Bomberman.Game
             {
                 int diseaseIndex = IntArg(0);
 
-                Diseases disease = Diseases.FromIndex(diseaseIndex);
+                Disease disease = DiseaseList.DiseaseForIndex(diseaseIndex);
                 if (disease != null)
                 {
                     Player player = GetPlayer(0);
                     bool infected = player.TryInfect(diseaseIndex);
                     if (infected)
                     {
-                        Print("Infected: " + Diseases.FromIndex(diseaseIndex).name);
+                        Print("Infected: " + disease.name);
                     }
                 }
             }
             else
             {
                 Print("usage: " + name + " <index>");
-                Diseases[] array = Diseases.array;
+                Disease[] array = DiseaseList.diseaseArray;
                 for (int i = 0; i < array.Length; ++i)
                 {
                     PrintIndent(i + ": " + array[i].name);

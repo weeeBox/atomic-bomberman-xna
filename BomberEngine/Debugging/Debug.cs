@@ -89,6 +89,12 @@ namespace BomberEngine.Debugging
         }
 
         [Conditional("DEBUG")]
+        public static void AssertRange(int index, Array array)
+        {
+            System.Diagnostics.Debug.Assert(index >= 0 && index < array.Length, "Assertion failed", "Index {0} is out of range {1}..{2}", index, 0, array.Length);
+        }
+
+        [Conditional("DEBUG")]
         public static void Fail(String format, params Object[] args)
         {
             System.Diagnostics.Debug.Assert(false, "Failed!", format, args);

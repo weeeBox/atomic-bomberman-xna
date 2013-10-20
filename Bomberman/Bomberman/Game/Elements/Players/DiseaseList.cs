@@ -4,11 +4,29 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Util;
 using BomberEngine.Core;
+using BomberEngine.Debugging;
 
 namespace Bomberman.Game.Elements.Players
 {
     public class DiseaseList : IUpdatable, IResettable
     {
+        public static readonly Disease[] diseaseArray = 
+        {
+            new Disease("Molasses",     Diseases.MOLASSES,      15.0f),
+            new Disease("Crack",        Diseases.CRACK,         15.0f),
+            new Disease("Constipation", Diseases.CONSTIPATION,  15.0f),
+            new Disease("Poops",        Diseases.POOPS,         15.0f),
+            new Disease("Short Flame",  Diseases.SHORTFLAME,    15.0f),
+            new Disease("Crack Poops",  Diseases.CRACKPOOPS,    15.0f),
+            new Disease("Short Fuze",   Diseases.SHORTFUZE,     15.0f),
+            new Disease("Swap",         Diseases.SWAP,          0.0f),
+            new Disease("Reversed",     Diseases.REVERSED,      15.0f),
+            new Disease("Leprosy",      Diseases.LEPROSY,       15.0f),
+            new Disease("Invisible",    Diseases.INVISIBLE,     15.0f),
+            new Disease("Duds",         Diseases.DUDS,          15.0f),
+            new Disease("Hyperswap",    Diseases.HYPERSWAP,     0.0f)
+        };
+
         private Player m_player;
 
         private bool[] flags;
@@ -23,12 +41,12 @@ namespace Bomberman.Game.Elements.Players
         {
             this.m_player = player;
 
-            remains = new float[Diseases.Count];
+            remains = new float[diseaseArray.Length];
 
-            flags = new bool[Diseases.Count];
-            oldFlags = new bool[Diseases.Count];
+            flags = new bool[diseaseArray.Length];
+            oldFlags = new bool[diseaseArray.Length];
 
-            randomIndices = new int[Diseases.Count];
+            randomIndices = new int[diseaseArray.Length];
 
             for (int i = 0; i < randomIndices.Length; ++i)
             {
@@ -49,15 +67,14 @@ namespace Bomberman.Game.Elements.Players
         public void Update(float delta)
         {
             int curedCount = 0;
-            for (int i = 0; i < Diseases.Count; ++i)
+            for (int i = 0; i < diseaseArray.Length; ++i)
             {
                 if (flags[i])
                 {
                     remains[i] -= delta;
                     if (remains[i] <= 0)
-                    {
-                        Diseases disease = Diseases.FromIndex(i);
-                        bool cured = TryCure(disease);
+                    {   
+                        bool cured = TryCure(i);
                         if (cured)
                         {
                             ++curedCount;
@@ -78,18 +95,16 @@ namespace Bomberman.Game.Elements.Players
             {
                 if (count == 1)
                 {
-                    int index = MathHelp.NextInt(Diseases.Count);
-                    Diseases disease = Diseases.FromIndex(index);
-                    TryInfect(disease);
+                    int index = MathHelp.NextInt(diseaseArray.Length);
+                    TryInfect(index);
                 }
                 else if (count > 1)
                 {
                     ArrayUtils.Shuffle(randomIndices);
                     for (int i = 0; i < count; ++i)
                     {
-                        int index = randomIndices[i];
-                        Diseases disease = Diseases.FromIndex(index);
-                        TryInfect(disease);
+                        int diseaseIndex = randomIndices[i];
+                        TryInfect(diseaseIndex);
                     }
                 }
 
@@ -97,35 +112,52 @@ namespace Bomberman.Game.Elements.Players
             }
         }
 
-        private bool TryInfect(Diseases disease)
+        public bool TryInfect(Diseases disease)
         {
-            int index = disease.index;
+            int index = ToIndex(disease);
+            return TryInfect(index);
+        }
+
+        public bool TryInfect(int diseaseIndex)
+        {   
+            bool infected = TryInfectHelper(diseaseIndex);
+            UpdateFlagsChanges();
+
+            return infected;
+        }
+
+        private bool TryInfectHelper(int index)
+        {
+            Disease disease = DiseaseForIndex(index);
+            Debug.AssertNotNull(disease);
 
             bool wasInfected = flags[index];
 
             flags[index] = true;
             remains[index] = disease.duration;
 
-            if (Diseases.CRACK == disease)
+            switch (disease.type)
             {
-                TryCure(Diseases.MOLASSES);
-            }
-            if (Diseases.MOLASSES == disease)
-            {
-                TryCure(Diseases.CRACK);
-            }
-            if (Diseases.CONSTIPATION == disease)
-            {
-                TryCure(Diseases.POOPS);
-            }
-            if (Diseases.POOPS == disease)
-            {
-                TryCure(Diseases.CONSTIPATION);
-            }
-            if (Diseases.CRACKPOOPS == disease)
-            {
-                TryInfect(Diseases.CRACK);
-                TryInfect(Diseases.POOPS);
+                case Diseases.CRACK:
+                    TryCure(Diseases.MOLASSES);
+                    break;
+
+                case Diseases.MOLASSES:
+                    TryCure(Diseases.CRACK);
+                    break;
+
+                case Diseases.CONSTIPATION:
+                    TryCure(Diseases.POOPS);
+                    break;
+
+                case Diseases.POOPS:
+                    TryCure(Diseases.CONSTIPATION);
+                    break;
+
+                case Diseases.CRACKPOOPS:
+                    TryInfect(Diseases.CRACK);
+                    TryInfect(Diseases.POOPS);
+                    break;
             }
 
             if (!wasInfected && flags[index])
@@ -135,15 +167,6 @@ namespace Bomberman.Game.Elements.Players
             }
 
             return false;
-        }
-
-        public bool TryInfect(int diseaseIndex)
-        {
-            Diseases disease = Diseases.FromIndex(diseaseIndex);
-            bool infected = TryInfect(disease);
-            UpdateFlagsChanges();
-
-            return infected;
         }
 
         public void CureAll()
@@ -156,7 +179,7 @@ namespace Bomberman.Game.Elements.Players
 
         public bool TryCure(Diseases disease)
         {   
-            return TryCure(disease.index);
+            return TryCure((int)disease);
         }
 
         public bool TryCure(int index)
@@ -174,11 +197,13 @@ namespace Bomberman.Game.Elements.Players
 
         public bool IsInfected(Diseases disease)
         {
-            return IsInfected(disease.index);
+            int index = ToIndex(disease);
+            return IsInfected(index);
         }
 
         public bool IsInfected(int index)
         {
+            Debug.AssertRange(index, flags);
             return flags[index];
         }
 
@@ -201,11 +226,13 @@ namespace Bomberman.Game.Elements.Players
 
                 if (flag && !oldFlag)
                 {
-                    m_player.OnInfected(Diseases.FromIndex(i));
+                    Diseases disease = ToDisease(i);
+                    m_player.OnInfected(disease);
                 }
                 else if (!flag && oldFlag)
                 {
-                    m_player.OnCured(Diseases.FromIndex(i));
+                    Diseases disease = ToDisease(i);
+                    m_player.OnCured(disease);
                 }
 
                 oldFlags[i] = flag;
@@ -215,6 +242,31 @@ namespace Bomberman.Game.Elements.Players
         public int activeCount
         {
             get { return m_activeCount; }
+        }
+
+        public static Diseases ToDisease(int index)
+        {
+            if (index >= 0 && index < (int)Diseases.Count)
+            {
+                return (Diseases)index;
+            }
+
+            return Diseases.Count;
+        }
+
+        public static int ToIndex(Diseases disease)
+        {
+            return (int)disease;
+        }
+
+        public static Disease DiseaseForIndex(int index)
+        {
+            if (index >= 0 && index < diseaseArray.Length)
+            {
+                return diseaseArray[index];
+            }
+
+            return null;
         }
     }
 }
