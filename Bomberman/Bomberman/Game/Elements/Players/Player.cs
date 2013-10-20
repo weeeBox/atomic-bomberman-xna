@@ -65,6 +65,8 @@ namespace Bomberman.Game.Elements.Players
         private bool m_punchingBomb; // true if player is in the middle of punching a bomb (animation is playing)
         private bool m_pickingBomb; // true if player is in the middle of picking a bomb (animation is playing)
 
+        private static Player[] s_tempArray;
+
         public Player(int index)
             : base(FieldCellType.Player, 0, 0)
         {
@@ -826,9 +828,11 @@ namespace Bomberman.Game.Elements.Players
                     break;
 
                 case Diseases.SWAP:
+                    Swap();
                     break;
 
                 case Diseases.HYPERSWAP:
+                    SwapAll();
                     break;
             }
         }
@@ -957,6 +961,48 @@ namespace Bomberman.Game.Elements.Players
             {
                 StartMovingToDirection(Util.Opposite(direction));
             }
+        }
+
+        private void Swap()
+        {
+            PlayerList players = GetField().GetPlayers();
+
+            Player[] temp = GetTempArray(players.GetCount());
+            int count = players.GetAlivePlayers(temp, this);
+
+            if (count > 0)
+            {
+                int index = MathHelp.NextInt(count);
+                Swap(temp[index]);
+                ArrayUtils.Clear(temp);
+            }
+        }
+
+        private void SwapAll()
+        {
+            PlayerList players = GetField().GetPlayers();
+
+            Player[] temp = GetTempArray(players.GetCount());
+            int count = players.GetAlivePlayers(temp);
+
+            if (count > 1)
+            {
+                ArrayUtils.Shuffle(temp, count);
+                for (int i = 1; i < count; i += 2)
+                {
+                    temp[i - 1].Swap(temp[i]);
+                }
+                ArrayUtils.Clear(temp);
+            }
+        }
+
+        private void Swap(Player other)
+        {
+            float tpx = other.px;
+            float tpy = other.py;
+
+            other.SetPos(px, py);
+            SetPos(tpx, tpy);
         }
 
         #endregion
@@ -1687,6 +1733,22 @@ namespace Bomberman.Game.Elements.Players
         public AnimationInstance currentAnimation
         {
             get { return m_currentAnimation; }
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Helpers
+
+        private Player[] GetTempArray(int size)
+        {
+            if (s_tempArray == null || s_tempArray.Length < size)
+            {
+                s_tempArray = new Player[size];
+            }
+
+            return s_tempArray;
         }
 
         #endregion

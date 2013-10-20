@@ -20,7 +20,7 @@ namespace Bomberman.Game.Elements
         LEPROSY,      // Lepra ???
         INVISIBLE,    // player is invisible
         DUDS,         // player drops only duds
-        HYPERSWAP,     // all players swap
+        HYPERSWAP,    // all players swap
 
         Count
     }

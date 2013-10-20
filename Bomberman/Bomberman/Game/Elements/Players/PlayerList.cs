@@ -11,28 +11,27 @@ namespace Bomberman.Game.Elements.Players
 {
     public class PlayerList : BaseObject, IResettable
     {
-        public List<Player> list;
-
-        private TimerManager timerManager;
+        private List<Player> m_list;
+        private TimerManager m_timerManager;
 
         public PlayerList(TimerManager timerManager, int capacity)
         {
-            this.timerManager = timerManager;
-            list = new List<Player>(capacity);
+            m_timerManager = timerManager;
+            m_list = new List<Player>(capacity);
         }
 
         public void Reset()
         {
-            for (int i = 0; i < list.Count; ++i)
+            for (int i = 0; i < m_list.Count; ++i)
             {
-                list[i].Reset();
+                m_list[i].Reset();
             }
         }
 
         public void Add(Player player)
         {
-            Debug.Assert(!list.Contains(player));
-            list.Add(player);
+            Debug.Assert(!m_list.Contains(player));
+            m_list.Add(player);
         }
 
         public void Remove(Player player)
@@ -48,18 +47,18 @@ namespace Bomberman.Game.Elements.Players
 
         private void Remove(Player player, bool removeFromList)
         {
-            Debug.Assert(list.Contains(player));
+            Debug.Assert(m_list.Contains(player));
             if (removeFromList)
             {
-                list.Remove(player);
+                m_list.Remove(player);
             }
         }
 
         public Player TryGet(int playerIndex)
         {
-            if (playerIndex >= 0 && playerIndex < list.Count)
+            if (playerIndex >= 0 && playerIndex < m_list.Count)
             {
-                return list[playerIndex];
+                return m_list[playerIndex];
             }
 
             return null;
@@ -67,12 +66,12 @@ namespace Bomberman.Game.Elements.Players
 
         public Player Get(int playerIndex)
         {
-            return list[playerIndex];
+            return m_list[playerIndex];
         }
 
         public int GetCount()
         {
-            return list.Count;
+            return m_list.Count;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -82,9 +81,9 @@ namespace Bomberman.Game.Elements.Players
         public int GetAlivePlayerCount()
         {
             int count = 0;
-            for (int i = 0; i < list.Count; ++i)
+            for (int i = 0; i < m_list.Count; ++i)
             {
-                if (list[i].IsAlive)
+                if (m_list[i].IsAlive)
                 {
                     ++count;
                 }
@@ -95,9 +94,9 @@ namespace Bomberman.Game.Elements.Players
 
         public bool AllPlayersAreReady()
         {
-            for (int i = 0; i < list.Count; ++i)
+            for (int i = 0; i < m_list.Count; ++i)
             {
-                if (!list[i].IsReady)
+                if (!m_list[i].IsReady)
                 {
                     return false;
                 }
@@ -108,10 +107,32 @@ namespace Bomberman.Game.Elements.Players
 
         public void SetPlayersReady(bool ready)
         {
-            for (int i = 0; i < list.Count; ++i)
+            for (int i = 0; i < m_list.Count; ++i)
             {
-                list[i].IsReady = ready;
+                m_list[i].IsReady = ready;
             }
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Array
+
+        public int GetAlivePlayers(Player[] array, Player ignoredPlayer = null)
+        {
+            int count = 0;
+            for (int i = 0; i < m_list.Count; ++i)
+            {
+                Player player = m_list[i];
+                if (player != ignoredPlayer && player.IsAlive)
+                {
+                    array[count] = player;
+                    ++count;
+                }
+            }
+
+            return count;
         }
 
         #endregion
@@ -122,7 +143,18 @@ namespace Bomberman.Game.Elements.Players
 
         private void ScheduleTimer(TimerCallback callback, float delay = 0.0f)
         {
-            timerManager.Schedule(callback, delay);
+            m_timerManager.Schedule(callback, delay);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
+        public List<Player> list
+        {
+            get { return m_list; }
         }
 
         #endregion
