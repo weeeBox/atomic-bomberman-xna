@@ -744,7 +744,7 @@ namespace Bomberman.Game.Elements.Players
 
                 case Powerups.Speed:
                 {
-                    SetSpeed(CalcPlayerSpeed());
+                    UpdatePlayerSpeed();
                     break;
                 }
 
@@ -805,21 +805,27 @@ namespace Bomberman.Game.Elements.Players
 
         public virtual void OnInfected(Diseases disease)
         {
-            if (disease == Diseases.POOPS)
+            switch (disease)
             {
-                TryPoops();
-            }
-            else if (disease == Diseases.CRACK)
-            {
-                SetSpeed(CalcPlayerSpeed());
+                case Diseases.POOPS:
+                    TryPoops();
+                    break;
+
+                case Diseases.CRACK:
+                case Diseases.MOLASSES:
+                    UpdatePlayerSpeed();
+                    break;
             }
         }
 
         public virtual void OnCured(Diseases disease)
         {
-            if (disease == Diseases.CRACK)
+            switch (disease)
             {
-                SetSpeed(CalcPlayerSpeed());
+                case Diseases.CRACK:
+                case Diseases.MOLASSES:
+                    UpdatePlayerSpeed();
+                    break;
             }
         }
 
@@ -904,6 +910,12 @@ namespace Bomberman.Game.Elements.Players
         private bool IsInfected(Diseases disease)
         {
             return m_diseases.IsInfected(disease);
+        }
+
+        private void UpdatePlayerSpeed()
+        {
+            int newSpeed = CalcPlayerSpeed();
+            SetSpeed(newSpeed);
         }
 
         private int CalcPlayerSpeed()
@@ -1129,20 +1141,24 @@ namespace Bomberman.Game.Elements.Players
 
         #region Actions
 
-        public void TryAction()
+        public bool TryAction()
         {
             bool bombSet = TryBomb();
             if (!bombSet)
             {
                 if (HasSpooger())
                 {
-                    TrySpooger();
+                    return TrySpooger();
                 }
-                else if (HasGrab())
+                if (HasGrab())
                 {
-                    TryGrab();
+                    return TryGrab();
                 }
+
+                return false;
             }
+
+            return true;
         }
 
         private void TrySpecialAction()
@@ -1609,6 +1625,7 @@ namespace Bomberman.Game.Elements.Players
         public DiseaseList diseases
         {
             get { return m_diseases; }
+            protected set { m_diseases = value; }
         }
 
         public int lastAckPacketId

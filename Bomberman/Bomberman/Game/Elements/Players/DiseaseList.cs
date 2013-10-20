@@ -107,8 +107,6 @@ namespace Bomberman.Game.Elements.Players
                         TryInfect(diseaseIndex);
                     }
                 }
-
-                UpdateFlagsChanges();
             }
         }
 
@@ -118,10 +116,14 @@ namespace Bomberman.Game.Elements.Players
             return TryInfect(index);
         }
 
-        public bool TryInfect(int diseaseIndex)
+        public bool TryInfect(int index)
         {   
-            bool infected = TryInfectHelper(diseaseIndex);
-            UpdateFlagsChanges();
+            bool infected = TryInfectHelper(index);
+            if (infected)
+            {
+                Diseases disease = ToDisease(index);
+                m_player.OnInfected(disease);
+            }
 
             return infected;
         }
@@ -178,11 +180,24 @@ namespace Bomberman.Game.Elements.Players
         }
 
         public bool TryCure(Diseases disease)
-        {   
-            return TryCure((int)disease);
+        {
+            int index = ToIndex(disease);
+            return TryCure(index);
         }
 
         public bool TryCure(int index)
+        {
+            bool cured = TryCureHelper(index);
+            if (cured)
+            {
+                Diseases disease = ToDisease(index);
+                m_player.OnCured(disease);
+            }
+
+            return cured;
+        }
+
+        private bool TryCureHelper(int index)
         {
             bool wasInfected = flags[index];
             flags[index] = false;

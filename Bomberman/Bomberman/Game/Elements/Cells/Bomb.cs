@@ -759,22 +759,25 @@ namespace Bomberman.Game.Elements.Cells
 
         private void UpdateAnimation()
         {
-            BombAnimations.AnimationType type;
-            if (isTrigger)
+            if (m_animations != null)
             {
-                type = BombAnimations.AnimationType.Trigger;
-            }
-            else if (IsJelly())
-            {
-                type = BombAnimations.AnimationType.Jelly;
-            }
-            else
-            {
-                type = BombAnimations.AnimationType.Default;
-            }
+                BombAnimations.AnimationType type;
+                if (isTrigger)
+                {
+                    type = BombAnimations.AnimationType.Trigger;
+                }
+                else if (IsJelly())
+                {
+                    type = BombAnimations.AnimationType.Jelly;
+                }
+                else
+                {
+                    type = BombAnimations.AnimationType.Default;
+                }
 
-            Animation animation = m_animations.Find(type);
-            m_currentAnimation.Init(animation);
+                Animation animation = m_animations.Find(type);
+                m_currentAnimation.Init(animation);
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////

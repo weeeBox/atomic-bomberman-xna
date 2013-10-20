@@ -53,6 +53,20 @@ namespace Bomberman.Game.Elements.Fields
             m_bombAnimations = new BombAnimations();
         }
 
+        /* mock constructor */
+        protected Field(int width, int height)
+        {
+            currentField = this;
+            cells = new FieldCellArray(width, height);
+
+            timerManager = new TimerManager();
+
+            m_tempCellsList = new LinkedList<FieldCell>();
+            m_tempMovableList = new List<MovableCell>();
+
+            movableCells = new LinkedList<MovableCell>();
+        }
+
         public void Reset()
         {
             timerManager.CancelAll();

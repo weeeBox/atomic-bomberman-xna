@@ -5,12 +5,21 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements;
+using Bomberman;
+using Bomberman.Game.Elements.Fields;
+using Bomberman.Game.Elements.Cells;
 
-namespace BombermanTests
+namespace BombermanTests.TestDiseases
 {
     [TestClass]
     public class DiseaseListTest : TestBase
     {
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            new FieldMock();
+        }
+
         [TestMethod]
         public void TestIndices()
         {
@@ -29,7 +38,7 @@ namespace BombermanTests
         public void TestInfect()
         {
             List<String> result = new List<String>();
-            DiseaseMockPlayer player = new DiseaseMockPlayer(result);
+            PlayerMock player = new PlayerMock(result);
 
             DiseaseList list = new DiseaseList(player);
 
@@ -50,7 +59,7 @@ namespace BombermanTests
         [TestMethod]
         public void TestExclusiveInfect()
         {
-            DiseaseMockPlayer player = new DiseaseMockPlayer();
+            PlayerMock player = new PlayerMock();
 
             DiseaseListMock list = new DiseaseListMock(player);
 
@@ -77,6 +86,86 @@ namespace BombermanTests
             list.AssertNotInfected(Diseases.POOPS);
         }
 
+        [TestMethod]
+        public void TestMolasses()
+        {
+            List<String> result = new List<String>();
+            PlayerMock player = new PlayerMock(result);
+
+            DiseaseList list = new DiseaseListMock(player);
+
+            Diseases disease = Diseases.MOLASSES;
+
+            list.TryInfect(disease);
+            Assert.AreEqual(CVars.cg_playerSpeedMolasses.floatValue, player.GetSpeed());
+
+            list.TryCure(disease);
+            Assert.AreEqual(CVars.cg_playerSpeed.floatValue, player.GetSpeed());
+        }
+
+        [TestMethod]
+        public void TestCrack()
+        {
+            List<String> result = new List<String>();
+            PlayerMock player = new PlayerMock(result);
+
+            DiseaseList list = new DiseaseListMock(player);
+
+            Diseases disease = Diseases.CRACK;
+
+            list.TryInfect(disease);
+            Assert.AreEqual(CVars.cg_playerSpeedCrack.floatValue, player.GetSpeed());
+
+            list.TryCure(disease);
+            Assert.AreEqual(CVars.cg_playerSpeed.floatValue, player.GetSpeed());
+        }
+
+        [TestMethod]
+        public void TestConstipation()
+        {
+            List<String> result = new List<String>();
+            PlayerMock player = new PlayerMock(result);
+
+            DiseaseList list = new DiseaseListMock(player);
+
+            Diseases disease = Diseases.CONSTIPATION;
+
+            list.TryInfect(disease);
+            Assert.IsFalse(player.TryAction());
+
+            list.TryCure(disease);
+            Assert.IsTrue(player.TryAction());
+        }
+
+        /*
+        [TestMethod]
+        public void TestPoops()
+        {
+
+        }
+        */
+
+        [TestMethod]
+        public void TestShortFlame()
+        {
+            List<String> result = new List<String>();
+            PlayerMock player = new PlayerMock(result);
+
+            DiseaseList list = new DiseaseListMock(player);
+
+            Diseases disease = Diseases.SHORTFLAME;
+
+            list.TryInfect(disease);
+            Bomb bomb = player.GetNextBomb();
+            Assert.AreEqual(CVars.cg_bombShortFlame.intValue, bomb.GetRadius());
+
+            bomb.Deactivate(); // hack
+
+            list.TryCure(disease);
+            bomb = player.GetNextBomb();
+            Assert.AreEqual(CVars.cg_initFlame.intValue, bomb.GetRadius());
+        }
+
         private static String Infected(Diseases disease)
         {
             return "i:" + disease;
@@ -88,11 +177,11 @@ namespace BombermanTests
         }
     }
 
-    class DiseaseMockPlayer : Player
+    class PlayerMock : Player
     {
         private List<String> m_list;
 
-        public DiseaseMockPlayer(List<String> list = null)
+        public PlayerMock(List<String> list = null)
             : base(0)
         {
             m_list = list;
@@ -104,6 +193,8 @@ namespace BombermanTests
             {
                 m_list.Add("i:" + disease);
             }
+
+            base.OnInfected(disease);
         }
 
         public override void OnCured(Diseases disease)
@@ -112,14 +203,22 @@ namespace BombermanTests
             {
                 m_list.Add("c:" + disease);
             }
+
+            base.OnCured(disease);
+        }
+
+        public void SetDiseaseList(DiseaseList list)
+        {
+            diseases = list;
         }
     }
 
     class DiseaseListMock : DiseaseList
     {
-        public DiseaseListMock(Player player)
+        public DiseaseListMock(PlayerMock player)
             : base(player)
-        {   
+        {
+            player.SetDiseaseList(this);
         }
 
         public void AssertInfected(Diseases disease)
@@ -130,6 +229,14 @@ namespace BombermanTests
         public void AssertNotInfected(Diseases disease)
         {
             Assert.IsFalse(IsInfected(disease));
+        }
+    }
+
+    class FieldMock : Field
+    {
+        public FieldMock()
+            : base(15, 11)
+        {
         }
     }
 }
