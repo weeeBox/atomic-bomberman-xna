@@ -53,6 +53,9 @@ namespace Bomberman.Game.Elements.Cells
         private BombAnimations m_animations;
         private AnimationInstance m_currentAnimation;
 
+        private bool m_short;
+        private bool m_golden;
+
         public Bomb(Player player)
            : base(FieldCellType.Bomb, player.GetCx(), player.GetCy())
         {
@@ -83,6 +86,8 @@ namespace Bomberman.Game.Elements.Cells
             m_state = State.Undefined;
             m_triggerIndex = 0;
             m_blocked = false;
+            m_short = false;
+            m_golden = false;
         }
 
         #endregion
@@ -513,6 +518,10 @@ namespace Bomberman.Game.Elements.Cells
             m_dudFlag = false;
             m_jelly = player.IsJelly();
             m_trigger = player.IsTrigger();
+
+            isShort = player.IsInfected(Diseases.SHORTFLAME);
+            isGolden = player.HasPowerup(Powerups.GoldFlame);
+
             if (m_trigger)
             {
                 m_triggerIndex = s_nextTriggerIndex++;
@@ -782,6 +791,8 @@ namespace Bomberman.Game.Elements.Cells
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Properties
+
         public Player player
         {
             get { return m_player; }
@@ -791,6 +802,18 @@ namespace Bomberman.Game.Elements.Cells
         public bool isTrigger
         {
             get { return m_trigger; }
+        }
+
+        public bool isShort
+        {
+            get { return m_short; }
+            set { m_short = value; }
+        }
+
+        public bool isGolden
+        {
+            get { return m_golden; }
+            set { m_golden = value; }
         }
 
         public bool IsBlocked
@@ -837,5 +860,7 @@ namespace Bomberman.Game.Elements.Cells
         {
             get { return m_currentAnimation; }
         }
+
+        #endregion
     }
 }

@@ -922,7 +922,7 @@ namespace Bomberman.Game.Elements.Players
             return HasPowerup(Powerups.Grab);
         }
 
-        private bool HasPowerup(int powerupIndex)
+        public bool HasPowerup(int powerupIndex)
         {
             return m_powerups.HasPowerup(powerupIndex);
         }
@@ -955,7 +955,7 @@ namespace Bomberman.Game.Elements.Players
             return m_diseases.IsInfected(diseaseIndex);
         }
 
-        private bool IsInfected(Diseases disease)
+        public bool IsInfected(Diseases disease)
         {
             return m_diseases.IsInfected(disease);
         }

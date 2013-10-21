@@ -184,11 +184,17 @@ namespace Bomberman.Game.Elements.Fields
             context.DrawRect(bomb.px - 0.5f * cellWidth, bomb.py - 0.5f * cellHeight, cellWidth, cellHeight, Color.Red);
         }
 
-        private void DrawFlame(Context context, FieldCell cell)
+        private void DrawFlame(Context context, FlameCell flame)
         {
-            int x = cell.GetCx() * cellWidth;
-            int y = cell.GetCy() * cellHeight;
-            context.FillRect(x, y, cellWidth, cellHeight, Color.Red);
+            int x = flame.GetCx() * cellWidth;
+            int y = flame.GetCy() * cellHeight;
+            context.FillRect(x, y, cellWidth, cellHeight, flame.isCap ? Color.Yellow : Color.Red);
+
+            if (!flame.isCenter)
+            {
+                TextureImage dirImage = dirLookup[flame.direction];
+                context.DrawImage(dirImage, flame.GetPx() - 0.5f * dirImage.GetWidth(), flame.GetPy() - 0.5f * dirImage.GetHeight());
+            }
         }
 
         private void DrawPowerup(Context context, PowerupCell powerupCell)

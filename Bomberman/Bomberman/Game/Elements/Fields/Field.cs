@@ -582,19 +582,48 @@ namespace Bomberman.Game.Elements.Fields
                 }
             }
 
-            SetFlame(bomb.player, cx, cy);
+            SetFlameHelper(bomb, cx, cy);
             return true;
         }
 
-        private void SetFlame(Player player, int cx, int cy)
+        private void SetFlameHelper(Bomb bomb, int cx, int cy)
         {
+            Player player = bomb.player;
+            Debug.AssertNotNull(player);
+
             FieldCellSlot slot = GetSlot(cx, cy);
             FlameCell flame = slot.GetFlame();
             if (flame != null && flame.player == player)
             {
                 flame.RemoveFromField();
             }
-            AddCell(new FlameCell(player, cx, cy));
+
+            // create flame
+            int dx = cx - bomb.cx;
+            int dy = cy - bomb.cy;
+            
+            flame = new FlameCell(player, cx, cy);
+
+            // center?
+            flame.isCenter = dx == 0 && dy == 0;
+            if (!flame.isCenter)
+            {
+                // direction?
+                flame.direction = dx > 0 ? Direction.RIGHT :
+                    (dx < 0 ? Direction.LEFT :
+                    (dy > 0 ? Direction.DOWN : Direction.UP));
+
+                // short?
+                flame.isShort = bomb.isShort;
+                if (!flame.isShort)
+                {
+                    // cap?
+                    int radius = bomb.GetRadius();
+                    flame.isCap = Math.Abs(dx) == radius || Math.Abs(dy) == radius;
+                }
+            }
+
+            AddCell(flame);
         }
 
         public void DestroyBrick(BrickCell brick)
