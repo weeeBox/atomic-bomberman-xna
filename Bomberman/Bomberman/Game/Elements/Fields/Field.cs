@@ -633,7 +633,11 @@ namespace Bomberman.Game.Elements.Fields
 
                 // short?
                 flame.isShort = bomb.isShort;
-                if (!flame.isShort)
+                if (flame.isShort)
+                {
+                    flame.isCap = true;
+                }
+                else
                 {
                     // cap?
                     int radius = bomb.GetRadius();
