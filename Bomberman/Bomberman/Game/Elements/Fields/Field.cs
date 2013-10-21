@@ -36,6 +36,9 @@ namespace Bomberman.Game.Elements.Fields
         private PlayerAnimations m_playerAnimations;
         private BombAnimations m_bombAnimations;
 
+        private List<Bomb> m_detonatedBombs;
+        private bool m_detonating;
+
         public Field(Game game)
         {
             m_game = game;
@@ -51,6 +54,8 @@ namespace Bomberman.Game.Elements.Fields
 
             m_playerAnimations = new PlayerAnimations();
             m_bombAnimations = new BombAnimations();
+
+            m_detonatedBombs = new List<Bomb>(16);
         }
 
         /* mock constructor */
@@ -526,6 +531,19 @@ namespace Bomberman.Game.Elements.Fields
                 down = down && SetFlame(bomb, cx, cy + i);
                 right = right && SetFlame(bomb, cx + i, cy);
             }
+
+            if (m_detonatedBombs.Count > 0 && !m_detonating)
+            {
+                m_detonating = true;
+
+                for (int i = 0; i < m_detonatedBombs.Count; ++i)
+                {
+                    m_detonatedBombs[i].Blow();
+                }
+
+                m_detonating = false;
+                m_detonatedBombs.Clear();
+            }
         }
 
         /* Returns true if can be spread more */
@@ -573,7 +591,7 @@ namespace Bomberman.Game.Elements.Fields
                 {
                     if (cell.IsBomb())
                     {
-                        cell.AsBomb().Blow();
+                        m_detonatedBombs.Add(cell.AsBomb()); // I'll blow you later
                     }
                     else if (cell.IsPlayer())
                     {
