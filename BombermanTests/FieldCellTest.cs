@@ -10,7 +10,7 @@ using Bomberman.Game;
 namespace BombermanTests
 {
     [TestClass]
-    public class FieldCellTests
+    public class FieldCellTest
     {
         [TestMethod]
         public void TestCell2CellCollision()
