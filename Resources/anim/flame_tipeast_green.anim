@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="flame_tipeast_green" file="flame_tipeast_green.png">
+  <frame x="0" y="27" ox="20" oy="11" w="34" h="22"/>
+  <frame x="0" y="0" ox="20" oy="13" w="36" h="27"/>
+  <frame x="0" y="49" ox="20" oy="11" w="34" h="22"/>
+  <frame x="0" y="71" ox="20" oy="12" w="34" h="24"/>
+  <frame x="0" y="95" ox="20" oy="11" w="34" h="23"/>
+</animation>

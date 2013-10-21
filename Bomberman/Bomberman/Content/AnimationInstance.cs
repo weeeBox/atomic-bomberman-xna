@@ -32,6 +32,15 @@ namespace Bomberman.Content
         private AnimationInstanceDelegate m_delegate;
         private Object m_userData;
 
+        public AnimationInstance()
+        {
+        }
+
+        public AnimationInstance(Animation animation, Mode mode = Mode.Looped)
+        {
+            Init(animation, mode);
+        }
+
         public void Init(Animation animation, Mode mode = Mode.Looped)
         {
             Reset();

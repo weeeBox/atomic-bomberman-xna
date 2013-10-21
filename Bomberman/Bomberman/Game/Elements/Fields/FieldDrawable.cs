@@ -25,6 +25,45 @@ namespace Bomberman.Game.Elements.Fields
         private bool blink;
         private IDictionary<Direction, TextureImage> dirLookup;
 
+        private const int anim_flame_center_green = 0;
+		private const int anim_flame_mideast_green = 1;
+		private const int anim_flame_midnorth_green = 2;
+		private const int anim_flame_midsouth_green = 3;
+		private const int anim_flame_midwest_green = 4;
+		private const int anim_flame_tipeast_green = 5;
+		private const int anim_flame_tipnorth_green = 6;
+		private const int anim_flame_tipsouth_green = 7;
+        private const int anim_flame_tipwest_green = 8;
+
+        private AnimationInstance[] flameAnimations = 
+        {
+            new AnimationInstance(BmApplication.Assets().GetAnimation(A.anim_flame_center_green)),
+		    new AnimationInstance(BmApplication.Assets().GetAnimation(A.anim_flame_mideast_green)),
+		    new AnimationInstance(BmApplication.Assets().GetAnimation(A.anim_flame_midnorth_green)),
+		    new AnimationInstance(BmApplication.Assets().GetAnimation(A.anim_flame_midsouth_green)),
+		    new AnimationInstance(BmApplication.Assets().GetAnimation(A.anim_flame_midwest_green)),
+		    new AnimationInstance(BmApplication.Assets().GetAnimation(A.anim_flame_tipeast_green)),
+		    new AnimationInstance(BmApplication.Assets().GetAnimation(A.anim_flame_tipnorth_green)),
+		    new AnimationInstance(BmApplication.Assets().GetAnimation(A.anim_flame_tipsouth_green)),
+		    new AnimationInstance(BmApplication.Assets().GetAnimation(A.anim_flame_tipwest_green)),
+        };
+
+        private int[] flameAnimationsMidIdx =
+        {
+            anim_flame_midnorth_green,
+            anim_flame_midsouth_green,
+            anim_flame_midwest_green,
+            anim_flame_mideast_green,
+        };
+
+        private int[] flameAnimationsTipIdx =
+        {
+            anim_flame_tipnorth_green,
+            anim_flame_tipsouth_green,
+            anim_flame_tipwest_green,
+            anim_flame_tipeast_green,
+        };
+
         public FieldDrawable(Field field, int x, int y, int width, int height)
             : base(x, y, width, height)
         {
@@ -36,11 +75,21 @@ namespace Bomberman.Game.Elements.Fields
             TempInitImages();
 
             field.ScheduleTimer(BlinkTimerCallback, 0.01f, true);
+            field.ScheduleTimer(FlameAnimationUpdateCallback, 0.0f, true);
         }
 
         private void BlinkTimerCallback(Timer timer)
         {
             blink = !blink;
+        }
+
+        private void FlameAnimationUpdateCallback(Timer timer)
+        {
+            float delta = Application.frameTime;
+            for (int i = 0; i < flameAnimations.Length; ++i)
+            {
+                flameAnimations[i].Update(delta);
+            }
         }
 
         public override void Draw(Context context)
@@ -186,15 +235,19 @@ namespace Bomberman.Game.Elements.Fields
 
         private void DrawFlame(Context context, FlameCell flame)
         {
-            int x = flame.GetCx() * cellWidth;
-            int y = flame.GetCy() * cellHeight;
-            context.FillRect(x, y, cellWidth, cellHeight, flame.isCap ? Color.Yellow : Color.Red);
-
-            if (!flame.isCenter)
+            int index = 0;
+            if (flame.isCenter)
             {
-                TextureImage dirImage = dirLookup[flame.direction];
-                context.DrawImage(dirImage, flame.GetPx() - 0.5f * dirImage.GetWidth(), flame.GetPy() - 0.5f * dirImage.GetHeight());
+                index = anim_flame_center_green;
             }
+            else
+            {
+                int[] idxs = flame.isCap ? flameAnimationsTipIdx : flameAnimationsMidIdx;
+                index = idxs[(int)flame.direction];
+            }
+
+            AnimationInstance anim = flameAnimations[index];
+            anim.Draw(context, flame.px, flame.py);
         }
 
         private void DrawPowerup(Context context, PowerupCell powerupCell)

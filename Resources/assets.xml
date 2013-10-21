@@ -113,6 +113,16 @@
     <animation file="${dir.anim}/walk_north.anim" />
     <animation file="${dir.anim}/walk_south.anim" />
     <animation file="${dir.anim}/walk_west.anim" />
+        
+    <animation file="${dir.anim}/flame_center_green.anim" />
+    <animation file="${dir.anim}/flame_mideast_green.anim" />
+    <animation file="${dir.anim}/flame_midnorth_green.anim" />
+    <animation file="${dir.anim}/flame_midsouth_green.anim" />
+    <animation file="${dir.anim}/flame_midwest_green.anim" />
+    <animation file="${dir.anim}/flame_tipeast_green.anim" />
+    <animation file="${dir.anim}/flame_tipnorth_green.anim" />
+    <animation file="${dir.anim}/flame_tipsouth_green.anim" />
+    <animation file="${dir.anim}/flame_tipwest_green.anim" />
 
 	<scheme file="${dir.schemes}/4corners.sch" />
 	<scheme file="${dir.schemes}/airchaos.sch" />

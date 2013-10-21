@@ -118,75 +118,84 @@ namespace Assets
 		public const int anim_walk_north = 106;
 		public const int anim_walk_south = 107;
 		public const int anim_walk_west = 108;
-		public const int maps_4corners = 109;
-		public const int maps_airchaos = 110;
-		public const int maps_airmail = 111;
-		public const int maps_alleys = 112;
-		public const int maps_alleys2 = 113;
-		public const int maps_antfarm = 114;
-		public const int maps_asylum = 115;
-		public const int maps_back = 116;
-		public const int maps_back2 = 117;
-		public const int maps_basic = 118;
-		public const int maps_basicsml = 119;
-		public const int maps_bman93 = 120;
-		public const int maps_border = 121;
-		public const int maps_bowling = 122;
-		public const int maps_boxed = 123;
-		public const int maps_breakout = 124;
-		public const int maps_bunch = 125;
-		public const int maps_castle = 126;
-		public const int maps_castle2 = 127;
-		public const int maps_chain = 128;
-		public const int maps_chase = 129;
-		public const int maps_checkers = 130;
-		public const int maps_chicane = 131;
-		public const int maps_clear = 132;
-		public const int maps_clearing = 133;
-		public const int maps_confused = 134;
-		public const int maps_cubic = 135;
-		public const int maps_cutter = 136;
-		public const int maps_cutthrot = 137;
-		public const int maps_deadend = 138;
-		public const int maps_diamond = 139;
-		public const int maps_dograce = 140;
-		public const int maps_dome = 141;
-		public const int maps_e_vs_w = 142;
-		public const int maps_fair = 143;
-		public const int maps_fargo = 144;
-		public const int maps_fort = 145;
-		public const int maps_freeway = 146;
-		public const int maps_gridlock = 147;
-		public const int maps_happy = 148;
-		public const int maps_jail = 149;
-		public const int maps_leak = 150;
-		public const int maps_neighbor = 151;
-		public const int maps_neil = 152;
-		public const int maps_n_vs_s = 153;
-		public const int maps_obstacle = 154;
-		public const int maps_og = 155;
-		public const int maps_pattern = 156;
-		public const int maps_pingpong = 157;
-		public const int maps_purist = 158;
-		public const int maps_racer1 = 159;
-		public const int maps_rail1 = 160;
-		public const int maps_railroad = 161;
-		public const int maps_roommate = 162;
-		public const int maps_r_garden = 163;
-		public const int maps_spiral = 164;
-		public const int maps_spread = 165;
-		public const int maps_tennis = 166;
-		public const int maps_thatthis = 167;
-		public const int maps_the_rim = 168;
-		public const int maps_thisthat = 169;
-		public const int maps_tight = 170;
-		public const int maps_toilet = 171;
-		public const int maps_uturn = 172;
-		public const int maps_volley = 173;
-		public const int maps_wallybom = 174;
-		public const int maps_x = 175;
+		public const int anim_flame_center_green = 109;
+		public const int anim_flame_mideast_green = 110;
+		public const int anim_flame_midnorth_green = 111;
+		public const int anim_flame_midsouth_green = 112;
+		public const int anim_flame_midwest_green = 113;
+		public const int anim_flame_tipeast_green = 114;
+		public const int anim_flame_tipnorth_green = 115;
+		public const int anim_flame_tipsouth_green = 116;
+		public const int anim_flame_tipwest_green = 117;
+		public const int maps_4corners = 118;
+		public const int maps_airchaos = 119;
+		public const int maps_airmail = 120;
+		public const int maps_alleys = 121;
+		public const int maps_alleys2 = 122;
+		public const int maps_antfarm = 123;
+		public const int maps_asylum = 124;
+		public const int maps_back = 125;
+		public const int maps_back2 = 126;
+		public const int maps_basic = 127;
+		public const int maps_basicsml = 128;
+		public const int maps_bman93 = 129;
+		public const int maps_border = 130;
+		public const int maps_bowling = 131;
+		public const int maps_boxed = 132;
+		public const int maps_breakout = 133;
+		public const int maps_bunch = 134;
+		public const int maps_castle = 135;
+		public const int maps_castle2 = 136;
+		public const int maps_chain = 137;
+		public const int maps_chase = 138;
+		public const int maps_checkers = 139;
+		public const int maps_chicane = 140;
+		public const int maps_clear = 141;
+		public const int maps_clearing = 142;
+		public const int maps_confused = 143;
+		public const int maps_cubic = 144;
+		public const int maps_cutter = 145;
+		public const int maps_cutthrot = 146;
+		public const int maps_deadend = 147;
+		public const int maps_diamond = 148;
+		public const int maps_dograce = 149;
+		public const int maps_dome = 150;
+		public const int maps_e_vs_w = 151;
+		public const int maps_fair = 152;
+		public const int maps_fargo = 153;
+		public const int maps_fort = 154;
+		public const int maps_freeway = 155;
+		public const int maps_gridlock = 156;
+		public const int maps_happy = 157;
+		public const int maps_jail = 158;
+		public const int maps_leak = 159;
+		public const int maps_neighbor = 160;
+		public const int maps_neil = 161;
+		public const int maps_n_vs_s = 162;
+		public const int maps_obstacle = 163;
+		public const int maps_og = 164;
+		public const int maps_pattern = 165;
+		public const int maps_pingpong = 166;
+		public const int maps_purist = 167;
+		public const int maps_racer1 = 168;
+		public const int maps_rail1 = 169;
+		public const int maps_railroad = 170;
+		public const int maps_roommate = 171;
+		public const int maps_r_garden = 172;
+		public const int maps_spiral = 173;
+		public const int maps_spread = 174;
+		public const int maps_tennis = 175;
+		public const int maps_thatthis = 176;
+		public const int maps_the_rim = 177;
+		public const int maps_thisthat = 178;
+		public const int maps_tight = 179;
+		public const int maps_toilet = 180;
+		public const int maps_uturn = 181;
+		public const int maps_volley = 182;
+		public const int maps_wallybom = 183;
+		public const int maps_x = 184;
 		// total resources count
-		public const int RES_COUNT = 176;
+		public const int RES_COUNT = 185;
 		
 		
 		public enum Packs
@@ -308,6 +317,15 @@ namespace Assets
 				new AssetLoadInfo(anim_walk_north, typeof(Animation), "anim\\walk_north.anim"),
 				new AssetLoadInfo(anim_walk_south, typeof(Animation), "anim\\walk_south.anim"),
 				new AssetLoadInfo(anim_walk_west, typeof(Animation), "anim\\walk_west.anim"),
+				new AssetLoadInfo(anim_flame_center_green, typeof(Animation), "anim\\flame_center_green.anim"),
+				new AssetLoadInfo(anim_flame_mideast_green, typeof(Animation), "anim\\flame_mideast_green.anim"),
+				new AssetLoadInfo(anim_flame_midnorth_green, typeof(Animation), "anim\\flame_midnorth_green.anim"),
+				new AssetLoadInfo(anim_flame_midsouth_green, typeof(Animation), "anim\\flame_midsouth_green.anim"),
+				new AssetLoadInfo(anim_flame_midwest_green, typeof(Animation), "anim\\flame_midwest_green.anim"),
+				new AssetLoadInfo(anim_flame_tipeast_green, typeof(Animation), "anim\\flame_tipeast_green.anim"),
+				new AssetLoadInfo(anim_flame_tipnorth_green, typeof(Animation), "anim\\flame_tipnorth_green.anim"),
+				new AssetLoadInfo(anim_flame_tipsouth_green, typeof(Animation), "anim\\flame_tipsouth_green.anim"),
+				new AssetLoadInfo(anim_flame_tipwest_green, typeof(Animation), "anim\\flame_tipwest_green.anim"),
 				new AssetLoadInfo(maps_4corners, typeof(Scheme), "maps\\4corners.sch"),
 				new AssetLoadInfo(maps_airchaos, typeof(Scheme), "maps\\airchaos.sch"),
 				new AssetLoadInfo(maps_airmail, typeof(Scheme), "maps\\airmail.sch"),

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="flame_tipsouth_green" file="flame_tipsouth_green.png">
+  <frame x="0" y="72" ox="11" oy="18" w="23" h="36"/>
+  <frame x="0" y="0" ox="13" oy="18" w="27" h="36"/>
+  <frame x="0" y="144" ox="11" oy="18" w="22" h="36"/>
+  <frame x="0" y="36" ox="12" oy="18" w="24" h="36"/>
+  <frame x="0" y="108" ox="11" oy="18" w="23" h="36"/>
+</animation>

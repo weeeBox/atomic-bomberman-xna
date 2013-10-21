@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<animation name="flame_midnorth_green" file="flame_midnorth_green.png">
+  <frame x="0" y="111" ox="11" oy="18" w="22" h="37"/>
+  <frame x="0" y="0" ox="13" oy="18" w="27" h="37"/>
+  <frame x="0" y="148" ox="11" oy="18" w="22" h="37"/>
+  <frame x="0" y="74" ox="12" oy="18" w="24" h="37"/>
+  <frame x="0" y="37" ox="12" oy="18" w="25" h="37"/>
+</animation>
