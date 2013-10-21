@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BomberEngine.Core.IO;
 
 namespace BomberEngine.Util
 {
@@ -27,20 +28,13 @@ namespace BomberEngine.Util
             get
             {
                 CheckIndex(index);
-                return (m_value & (1L << index)) != 0;
+                return BitUtils.GetBit(m_value, index);
             }
 
             set
             {
                 CheckIndex(index);
-                if (value)
-                {
-                    m_value |= 1L << index;
-                }
-                else
-                {
-                    m_value &= ~(1L << index);
-                }
+                m_value = BitUtils.SetBit(m_value, index, value);
             }
         }
 

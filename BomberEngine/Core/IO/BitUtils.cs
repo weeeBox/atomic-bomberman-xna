@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BomberEngine.Core.IO
 {
-    public class BitUtils
+    public sealed class BitUtils
     {
         /// <summary>
         /// Returns how many bits are necessary to hold a certain number
@@ -24,6 +24,28 @@ namespace BomberEngine.Core.IO
         public static int BytesToHoldBits(int numBits)
         {
             return (numBits + 7) / 8;
+        }
+
+        public static bool GetBit(long value, int index)
+        {
+            return (value & (1L << index)) != 0;
+        }
+
+        public static long SetBit(long value, int index, bool flag)
+        {
+            return flag ? (value | (1L << index)) : 
+                          (value & ~(1L << index));
+        }
+
+        public static bool GetBit(int value, int index)
+        {
+            return (value & (1 << index)) != 0;
+        }
+
+        public static int SetBit(int value, int index, bool flag)
+        {
+            return flag ? (value | (1 << index)) :
+                          (value & ~(1 << index));
         }
     }
 }
