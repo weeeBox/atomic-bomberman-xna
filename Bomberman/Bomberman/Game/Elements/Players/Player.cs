@@ -57,6 +57,7 @@ namespace Bomberman.Game.Elements.Players
         private float m_errDy;
 
         private int m_winsCount;
+        private int m_killsCount;
         private int m_suicidesCount;
 
         private PlayerAnimations m_animations;
@@ -664,7 +665,7 @@ namespace Bomberman.Game.Elements.Players
 
         private bool HandleCollision(FlameCell cell)
         {
-            GetField().KillPlayer(this);
+            GetField().KillPlayer(this, cell.player);
             return true;
         }
 
@@ -1503,6 +1504,12 @@ namespace Bomberman.Game.Elements.Players
         {
             get { return m_winsCount; }
             set { m_winsCount = value; }
+        }
+
+        public int killsCount
+        {
+            get { return m_killsCount; }
+            set { m_killsCount = value; }
         }
 
         public int suicidesCount

@@ -446,7 +446,7 @@ namespace Bomberman.Game.Multiplayer
             }
             else if (p.IsAlive)
             {
-                Field.KillPlayer(p);
+                Field.KillPlayer(p, p); // TODO: report killer
             }
 
             Bomb[] bombs = p.bombs.array;

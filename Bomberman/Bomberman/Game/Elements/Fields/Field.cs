@@ -439,15 +439,25 @@ namespace Bomberman.Game.Elements.Fields
             CancelAllTimers(player);
         }
 
-        public void KillPlayer(Player player)
+        public void KillPlayer(Player victim, Player killer)
         {
-            if (player.IsAlive && !CVars.c_noKills.boolValue)
+            if (victim.IsAlive && !CVars.c_noKills.boolValue)
             {
-                players.Kill(player);
+                players.Kill(victim);
+
+                // update score points
+                if (victim == killer) // dumb idiot kills himself?
+                {
+                    victim.suicidesCount++;
+                }
+                else
+                {
+                    killer.killsCount++;
+                }
 
                 if (!IsGameDumbMuliplayerClient)
                 {   
-                    DropPowerups(player);
+                    DropPowerups(victim);
                 }
 
                 ScheduleRoundEndCheck();
@@ -595,7 +605,7 @@ namespace Bomberman.Game.Elements.Fields
                     }
                     else if (cell.IsPlayer())
                     {
-                        KillPlayer(cell.AsPlayer());
+                        KillPlayer(cell.AsPlayer(), bomb.player);
                     }
                 }
             }
