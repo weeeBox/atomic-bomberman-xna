@@ -42,7 +42,7 @@ namespace BomberEngine.Core.Visual
 
         protected FormattedString[] formattedStrings;
 
-        public TextView(Font font, Object obj)
+        public TextView(Font font, Object obj = null)
             : this(font, obj, Int32.MaxValue)
         {
         }

@@ -7,6 +7,7 @@ using BomberEngine.Core.Visual;
 using BomberEngine.Core.Assets.Types;
 using Bomberman.UI;
 using Bomberman.Game.Elements.Players;
+using Microsoft.Xna.Framework;
 
 namespace Bomberman.Game.Screens
 {
@@ -24,35 +25,56 @@ namespace Bomberman.Game.Screens
 
             // table
             View tableView = new View(0, 25, contentView.width, 330);
+            tableView.debugColor = Color.Red;
 
-            float nameColWidth = 320;
-            float winsColWidth = 0.5f * (tableView.width - nameColWidth);
-            float suicidesColWidth = winsColWidth;
+            float indent = 20;
+            float suicidesColWidth = 94;
+            float winsColWidth = 54;
+            float killsColWidth = 54;
+            float nameColWidth = tableView.width - (indent + winsColWidth + indent + killsColWidth + indent + suicidesColWidth);
+
+            float nameColX = 0.5f * nameColWidth;
+            float winsColX = nameColX + 0.5f * (nameColWidth + winsColWidth) + indent;
+            float killsColX = winsColX + 0.5f * (winsColWidth + killsColWidth) + indent;
+            float suicidesColX = killsColX + 0.5f * (killsColWidth + suicidesColWidth) + indent;
 
             Font font = Helper.fontButton;
 
+            // header
             TextView textView = new TextView(font, "PLAYER");
             textView.alignX = View.ALIGN_CENTER;
-            textView.x = 0.5f * nameColWidth;
+            textView.x = nameColX;
             tableView.AddView(textView);
 
             textView = new TextView(font, "WINS");
             textView.alignX = View.ALIGN_CENTER;
-            textView.x = nameColWidth + 0.5f * winsColWidth;
+            textView.x = winsColX;
+            tableView.AddView(textView);
+
+            textView = new TextView(font, "KILLS");
+            textView.alignX = View.ALIGN_CENTER;
+            textView.x = killsColX;
             tableView.AddView(textView);
 
             textView = new TextView(font, "SUICIDES");
             textView.alignX = View.ALIGN_CENTER;
-            textView.x = nameColWidth + winsColWidth + 0.5f * suicidesColWidth;
+            textView.x = suicidesColX;
             tableView.AddView(textView);
 
+            // data
             List<Player> players = game.GetPlayersList();
-            float px = 0.5f * nameColWidth;
-            float py = textView.y + textView.height + 10;
+            float px = 0;
+            float py = textView.y + textView.height + indent;
             for (int i = 0; i < players.Count; ++i)
             {
-                PlayerResultView pv = new PlayerResultView(players[i]);
-                pv.alignX = View.ALIGN_CENTER;
+                PlayerResultView pv = new PlayerResultView(players[i], tableView.width);
+                pv.debugColor = Color.Green;
+
+                pv.readyTextView.x = nameColX;
+                pv.winsView.x = winsColX;
+                pv.killsView.x = killsColX;
+                pv.suicidesView.x = suicidesColX;
+
                 pv.x = px;
                 pv.y = py;
 
@@ -93,39 +115,49 @@ namespace Bomberman.Game.Screens
     class PlayerResultView : View
     {
         private Player m_player;
-        private TextView m_readyTextView;
-        private TextView m_winsView;
-        private TextView m_suicidesView;
 
-        public PlayerResultView(Player player)
+        public TextView readyTextView;
+        public TextView winsView;
+        public TextView killsView;
+        public TextView suicidesView;
+
+        public PlayerResultView(Player player, float width)
+            : base(width, 0)
         {
             m_player = player;
 
             Font font = Helper.fontButton;
 
-            m_readyTextView = new TextView(font, "Not Ready");
-            m_winsView = new TextView(font, "99");
-            m_suicidesView = new TextView(font, "99");
+            readyTextView = new TextView(font);
+            readyTextView.alignX = View.ALIGN_CENTER;
+            AddView(readyTextView);
 
-            UpdateState();
-            AddView(m_readyTextView);
-            AddView(m_winsView);
-            AddView(m_suicidesView);
+            winsView = new TextView(font);
+            winsView.alignX = View.ALIGN_CENTER;
+            AddView(winsView);
 
-            LayoutHor(10);
-            ResizeToFitViews();
+            killsView = new TextView(font);
+            killsView.alignX = View.ALIGN_CENTER;
+            AddView(killsView);
+
+            suicidesView = new TextView(font);
+            suicidesView.alignX = View.ALIGN_CENTER;
+            AddView(suicidesView);
+
+            ResizeToFitViewsVer();
         }
 
         public override void Update(float delta)
         {
-            UpdateState();
+            UpdateState(); // TODO: send notification
         }
 
         private void UpdateState()
         {
-            m_readyTextView.SetText(m_player.IsReady ? "Ready" : "Not Ready");
-            m_winsView.SetText(m_player.winsCount);
-            m_suicidesView.SetText(m_player.suicidesCount);
+            readyTextView.SetText(m_player.IsReady ? "Ready" : "Not Ready");
+            winsView.SetText(m_player.winsCount);
+            killsView.SetText(m_player.killsCount);
+            suicidesView.SetText(m_player.suicidesCount);
         }
     }
 }

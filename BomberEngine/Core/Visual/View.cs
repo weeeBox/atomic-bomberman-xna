@@ -47,6 +47,8 @@ namespace BomberEngine.Core.Visual
         protected View parent;
         protected ViewList viewList;
 
+        public Color debugColor = Color.White;
+
         public View()
             : this(0, 0)
         {
@@ -186,7 +188,7 @@ namespace BomberEngine.Core.Visual
         {
             if (CVars.g_drawViewBorders.boolValue)
             {   
-                context.DrawRect(0, 0, width, height, Color.White);
+                context.DrawRect(0, 0, width, height, debugColor);
             }
         }
 
