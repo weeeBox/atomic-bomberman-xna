@@ -415,6 +415,16 @@ namespace Bomberman.Game.Elements.Fields
 
         private void RoundEndTimerCallback(Timer timer)
         {
+            // find a winner
+            foreach (Player player in players.list)
+            {
+                if (player.IsAlive)
+                {
+                    player.statistics.winsCount++;
+                    break;
+                }
+            }
+
             GetGame().EndRound();
         }
 
