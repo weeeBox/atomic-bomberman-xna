@@ -155,9 +155,11 @@ namespace Bomberman.Game.Screens
         private void UpdateState()
         {
             readyTextView.SetText(m_player.IsReady ? "Ready" : "Not Ready");
-            winsView.SetText(m_player.winsCount);
-            killsView.SetText(m_player.killsCount);
-            suicidesView.SetText(m_player.suicidesCount);
+
+            PlayerStatistics statistics = m_player.statistics;
+            winsView.SetText(statistics.winsCount);
+            killsView.SetText(statistics.killsCount);
+            suicidesView.SetText(statistics.suicidesCount);
         }
     }
 }

@@ -448,11 +448,11 @@ namespace Bomberman.Game.Elements.Fields
                 // update score points
                 if (victim == killer) // dumb idiot kills himself?
                 {
-                    victim.suicidesCount++;
+                    victim.statistics.suicidesCount++;
                 }
                 else
                 {
-                    killer.killsCount++;
+                    killer.statistics.killsCount++;
                 }
 
                 if (!IsGameDumbMuliplayerClient)

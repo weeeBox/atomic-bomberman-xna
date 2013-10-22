@@ -506,8 +506,8 @@ namespace Bomberman.Game.Multiplayer
             for (int i = 0; i < players.Count; ++i)
             {
                 Player p = players[i];
-                buffer.Write((byte)p.winsCount);
-                buffer.Write((byte)p.suicidesCount);
+                buffer.Write((byte)p.statistics.winsCount);
+                buffer.Write((byte)p.statistics.suicidesCount);
             }
         }
 
@@ -523,8 +523,8 @@ namespace Bomberman.Game.Multiplayer
             for (int i = 0; i < players.Count; ++i)
             {
                 Player p = players[i];
-                p.winsCount = buffer.ReadByte();
-                p.suicidesCount = buffer.ReadByte();
+                p.statistics.winsCount = buffer.ReadByte();
+                p.statistics.suicidesCount = buffer.ReadByte();
             }
         }
 

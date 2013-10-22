@@ -16,6 +16,20 @@ using Bomberman.Content;
 
 namespace Bomberman.Game.Elements.Players
 {
+    public class PlayerStatistics : IResettable
+    {
+        public int winsCount;
+        public int killsCount;
+        public int suicidesCount;
+
+        public void Reset()
+        {
+            winsCount = 0;
+            killsCount = 0;
+            suicidesCount = 0;
+        }
+    }
+
     public class Player : MovableCell
     {
         private static readonly PlayerAction[] ACTIONS = 
@@ -56,9 +70,7 @@ namespace Bomberman.Game.Elements.Players
         private float m_errDx;
         private float m_errDy;
 
-        private int m_winsCount;
-        private int m_killsCount;
-        private int m_suicidesCount;
+        private PlayerStatistics m_statistics;
 
         private PlayerAnimations m_animations;
         private AnimationInstance m_currentAnimation;
@@ -80,6 +92,7 @@ namespace Bomberman.Game.Elements.Players
             InitPlayer();
 
             m_thrownBombs = new List<Bomb>();
+            m_statistics = new PlayerStatistics();
 
             ResetNetworkState();
         }
@@ -1498,30 +1511,6 @@ namespace Bomberman.Game.Elements.Players
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Round
-
-        public int winsCount
-        {
-            get { return m_winsCount; }
-            set { m_winsCount = value; }
-        }
-
-        public int killsCount
-        {
-            get { return m_killsCount; }
-            set { m_killsCount = value; }
-        }
-
-        public int suicidesCount
-        {
-            get { return m_suicidesCount; }
-            set { m_suicidesCount = value; }
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
         #region Animations
 
         private void InitAnimation()
@@ -1766,6 +1755,11 @@ namespace Bomberman.Game.Elements.Players
         public int networkPackageDiff
         {
             get { return m_lastSentPacketId - m_lastAckPacketId; }
+        }
+
+        public PlayerStatistics statistics
+        {
+            get { return m_statistics; }
         }
 
         public PlayerAnimations animations
