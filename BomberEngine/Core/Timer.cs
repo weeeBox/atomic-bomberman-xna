@@ -10,14 +10,14 @@ namespace BomberEngine.Core
 
     public class Timer
     {
-        public static Timer freeRoot;
+        internal static Timer freeRoot;
 
-        public bool cancelled;
+        internal bool cancelled;
 
         internal TimerCallback callback;
 
-        public Timer next;
-        public Timer prev;
+        internal Timer next;
+        internal Timer prev;
 
         internal TimerManager manager;
 
