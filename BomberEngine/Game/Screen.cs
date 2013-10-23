@@ -206,9 +206,23 @@ namespace BomberEngine.Game
 
         #region TimerManager
 
+        public void ScheduleTimer(TimerCallback1 callback, float delay = 0.0f, bool repeated = false)
+        {
+            ScheduleTimer(callback, delay, repeated ? 0 : 1);
+        }
+
         public void ScheduleTimer(TimerCallback2 callback, float delay = 0.0f, bool repeated = false)
         {
             ScheduleTimer(callback, delay, repeated ? 0 : 1);
+        }
+
+        public void ScheduleTimer(TimerCallback1 callback, float delay, int numRepeats)
+        {
+            if (timerManager == TimerManager.Null)
+            {
+                timerManager = new TimerManager();
+            }
+            timerManager.Schedule(callback, delay, numRepeats);
         }
 
         public void ScheduleTimer(TimerCallback2 callback, float delay, int numRepeats)
@@ -220,9 +234,23 @@ namespace BomberEngine.Game
             timerManager.Schedule(callback, delay, numRepeats);
         }
 
+        public void ScheduleTimerOnce(TimerCallback1 callback, float delay = 0.0f, bool repeated = false)
+        {
+            ScheduleTimerOnce(callback, delay, repeated ? 0 : 1);
+        }
+
         public void ScheduleTimerOnce(TimerCallback2 callback, float delay = 0.0f, bool repeated = false)
         {
             ScheduleTimerOnce(callback, delay, repeated ? 0 : 1);
+        }
+
+        public void ScheduleTimerOnce(TimerCallback1 callback, float delay, int numRepeats)
+        {
+            if (timerManager == TimerManager.Null)
+            {
+                timerManager = new TimerManager();
+            }
+            timerManager.ScheduleOnce(callback, delay, numRepeats);
         }
 
         public void ScheduleTimerOnce(TimerCallback2 callback, float delay, int numRepeats)
@@ -232,6 +260,11 @@ namespace BomberEngine.Game
                 timerManager = new TimerManager();
             }
             timerManager.ScheduleOnce(callback, delay, numRepeats);
+        }
+
+        public void CancelTimer(TimerCallback1 callback)
+        {
+            timerManager.Cancel(callback);
         }
 
         public void CancelTimer(TimerCallback2 callback)

@@ -672,10 +672,10 @@ namespace Bomberman.Game.Elements.Cells
 
         private void ScheduleBlockingTimer()
         {
-            ScheduleTimerOnce(BlockedTimerCallback, 0.05f);
+            ScheduleTimerOnce(Block, 0.05f);
         }
 
-        private void BlockedTimerCallback(Timer timer)
+        private void Block()
         {
             m_blocked = false;
         }

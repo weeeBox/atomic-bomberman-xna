@@ -74,16 +74,16 @@ namespace Bomberman.Game.Elements.Fields
 
             TempInitImages();
 
-            field.ScheduleTimer(BlinkTimerCallback, 0.01f, true);
-            field.ScheduleTimer(FlameAnimationUpdateCallback, 0.0f, true);
+            field.ScheduleTimer(ToggleBlink, 0.01f, true);
+            field.ScheduleTimer(UpdateFlameAnimation, 0.0f, true);
         }
 
-        private void BlinkTimerCallback(Timer timer)
+        private void ToggleBlink()
         {
             blink = !blink;
         }
 
-        private void FlameAnimationUpdateCallback(Timer timer)
+        private void UpdateFlameAnimation()
         {
             float delta = Application.frameTime;
             for (int i = 0; i < flameAnimations.Length; ++i)

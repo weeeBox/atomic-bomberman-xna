@@ -395,25 +395,25 @@ namespace Bomberman.Game.Elements.Fields
 
         #region Round
 
-        private void EndRound()
+        private void ScheduleEndRound()
         {
-            ScheduleTimer(RoundEndTimerCallback, CVars.winDelay.floatValue);
+            ScheduleTimer(EndRound, CVars.winDelay.floatValue);
         }
 
         private void ScheduleRoundEndCheck()
         {
-            ScheduleTimerOnce(RoundEndCheckTimerCallback);
+            ScheduleTimerOnce(CheckEndRound);
         }
 
-        private void RoundEndCheckTimerCallback(Timer timer)
+        private void CheckEndRound()
         {
             if (players.GetAlivePlayerCount() < 2)
             {
-                EndRound();
+                ScheduleEndRound();
             }
         }
 
-        private void RoundEndTimerCallback(Timer timer)
+        private void EndRound()
         {
             // find a winner
             foreach (Player player in players.list)
@@ -1134,14 +1134,29 @@ namespace Bomberman.Game.Elements.Fields
 
         #region TimerManager
 
+        public Timer ScheduleTimer(TimerCallback1 callback, float delay = 0.0f, bool repeated = false)
+        {
+            return timerManager.Schedule(callback, delay, repeated);
+        }
+
         public Timer ScheduleTimer(TimerCallback2 callback, float delay = 0.0f, bool repeated = false)
         {
             return timerManager.Schedule(callback, delay, repeated);
         }
 
+        public Timer ScheduleTimerOnce(TimerCallback1 callback, float delay = 0.0f, bool repeated = false)
+        {
+            return timerManager.ScheduleOnce(callback, delay, repeated);
+        }
+
         public Timer ScheduleTimerOnce(TimerCallback2 callback, float delay = 0.0f, bool repeated = false)
         {
             return timerManager.ScheduleOnce(callback, delay, repeated);
+        }
+
+        public void CancelTimer(TimerCallback1 callback)
+        {
+            timerManager.Cancel(callback);
         }
 
         public void CancelTimer(TimerCallback2 callback)

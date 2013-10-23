@@ -307,9 +307,19 @@ namespace BomberEngine.Game
 
         //////////////////////////////////////////////////////////////////////////////
 
+        public static Timer ScheduleTimer(TimerCallback1 callback, float delay = 0.0f, bool repeated = false)
+        {
+            return ScheduleTimer(callback, delay, repeated ? 0 : 1);
+        }
+
         public static Timer ScheduleTimer(TimerCallback2 callback, float delay = 0.0f, bool repeated = false)
         {
             return ScheduleTimer(callback, delay, repeated ? 0 : 1);
+        }
+
+        public static Timer ScheduleTimerOnce(TimerCallback1 callback, float delay = 0.0f, bool repeated = false)
+        {
+            return ScheduleTimerOnce(callback, delay, repeated ? 0 : 1);
         }
 
         public static Timer ScheduleTimerOnce(TimerCallback2 callback, float delay = 0.0f, bool repeated = false)
@@ -317,14 +327,29 @@ namespace BomberEngine.Game
             return ScheduleTimerOnce(callback, delay, repeated ? 0 : 1);
         }
 
+        public static Timer ScheduleTimer(TimerCallback1 callback, float delay, int numRepeats)
+        {
+            return sharedApplication.timerManager.Schedule(callback, delay, numRepeats);
+        }
+
         public static Timer ScheduleTimer(TimerCallback2 callback, float delay, int numRepeats)
         {
             return sharedApplication.timerManager.Schedule(callback, delay, numRepeats);
         }
 
+        public static Timer ScheduleTimerOnce(TimerCallback1 callback, float delay, int numRepeats)
+        {
+            return sharedApplication.timerManager.ScheduleOnce(callback, delay, numRepeats);
+        }
+
         public static Timer ScheduleTimerOnce(TimerCallback2 callback, float delay, int numRepeats)
         {
             return sharedApplication.timerManager.ScheduleOnce(callback, delay, numRepeats);
+        }
+
+        public static void CancelTimer(TimerCallback1 callback)
+        {
+            sharedApplication.timerManager.Cancel(callback);
         }
 
         public static void CancelTimer(TimerCallback2 callback)

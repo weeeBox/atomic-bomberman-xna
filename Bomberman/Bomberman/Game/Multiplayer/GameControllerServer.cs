@@ -84,19 +84,14 @@ namespace Bomberman.Game.Multiplayer
         private void SetPacketRate(int packetRate)
         {
             float packetDelay = 1.0f / packetRate;
-            Application.CancelTimer(SendServerPacketCallback);
-            Application.ScheduleTimer(SendServerPacketCallback, packetDelay, true);
+            Application.CancelTimer(SendServerPacket);
+            Application.ScheduleTimer(SendServerPacket, packetDelay, true);
         }
 
         private void ServerRateVarChangedCallback(Notification notification)
         {
             CVar var = notification.GetNotNullData<CVar>();
             SetPacketRate(var.intValue);
-        }
-
-        private void SendServerPacketCallback(Timer timer)
-        {
-            SendServerPacket();
         }
 
         //////////////////////////////////////////////////////////////////////////////

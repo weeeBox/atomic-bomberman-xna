@@ -1113,7 +1113,7 @@ namespace Bomberman.Game.Elements.Players
 
         public void OnBombBlown(Bomb bomb)
         {
-            TrySchedulePoops();
+            ScheduleTryPoops();
         }
 
         public Bomb GetNextBomb()
@@ -1471,18 +1471,18 @@ namespace Bomberman.Game.Elements.Players
             return false;
         }
 
-        private bool TrySchedulePoops()
+        private bool ScheduleTryPoops()
         {
             if (IsInfected(Diseases.POOPS))
             {
-                ScheduleTimerOnce(TrySchedulePoopsCallback);
+                ScheduleTimerOnce(TryPoopsDelayed);
                 return true;
             }
 
             return false;
         }
 
-        private void TrySchedulePoopsCallback(Timer timer)
+        private void TryPoopsDelayed()
         {
             TryPoops();
         }
@@ -1583,12 +1583,7 @@ namespace Bomberman.Game.Elements.Players
 
         private void ScheduleAnimationUpdate()
         {
-            ScheduleTimerOnce(UpdateAnimationCallback);
-        }
-
-        private void UpdateAnimationCallback(Timer timer)
-        {
-            UpdateAnimation();
+            ScheduleTimerOnce(UpdateAnimation);
         }
 
         private void ResetAnimation()

@@ -122,7 +122,7 @@ namespace BomberEngine.Consoles
             keyShiftBindings[KeyCode.OemSemicolon] = ':';
             keyShiftBindings[KeyCode.OemTilde] = '"';
 
-            ScheduleTimer(OnBlinkTimer, 0.25f, true);
+            ScheduleTimer(ToggleBlink, 0.25f, true);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -607,12 +607,12 @@ namespace BomberEngine.Consoles
 
         #region Timers
 
-        private void OnBlinkTimer(Timer timer)
+        private void ToggleBlink()
         {
             carretVisible = !carretVisible;
         }
 
-        private void OnSaveCvarsTimerCallback(Timer timer)
+        private void SaveCvars()
         {
             TryExecuteCommand("write default.cfg");
         }
@@ -625,7 +625,7 @@ namespace BomberEngine.Consoles
 
         internal void ScheduleConfigUpdate()
         {
-            ScheduleTimerOnce(OnSaveCvarsTimerCallback);
+            ScheduleTimerOnce(SaveCvars);
         }
 
         #endregion

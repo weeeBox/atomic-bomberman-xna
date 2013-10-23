@@ -79,15 +79,15 @@ namespace BomberEngine.Util
 
         private void ScheduleRecycle()
         {
-            m_timerManager.ScheduleOnce(RecycleObjectLaterCallback);
+            m_timerManager.ScheduleOnce(Recycle);
         }
 
         private void CancelRecycle()
         {
-            m_timerManager.Cancel(RecycleObjectLaterCallback);
+            m_timerManager.Cancel(Recycle);
         }
 
-        private void RecycleObjectLaterCallback(Timer timer)
+        private void Recycle()
         {
             Debug.Assert(m_recycleList != null && m_recycleList.size > 0);
 

@@ -124,15 +124,15 @@ namespace BomberEngine.Core.Storage
         public void SaveImmediately()
         {
             Save(m_filename);
-            m_timerManager.Cancel(SaveCallback);
+            m_timerManager.Cancel(Save);
         }
 
         private void ScheduleSave()
         {
-            m_timerManager.ScheduleOnce(SaveCallback);
+            m_timerManager.ScheduleOnce(Save);
         }
 
-        private void SaveCallback(Timer timer)
+        private void Save()
         {
             Save(m_filename);
         }
