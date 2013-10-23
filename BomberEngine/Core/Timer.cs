@@ -61,9 +61,9 @@ namespace BomberEngine.Core
             }
         }
 
-        private void DefaultTimerCallback(Timer timer)
+        internal static void DefaultTimerCallback(Timer timer)
         {
-            callback1();
+            timer.callback1();
         }
 
         public bool IsRepeated
@@ -98,8 +98,7 @@ namespace BomberEngine.Core
             {
                 timer = new Timer();
             }
-
-            timer.Init();
+            
             return timer;
         }
 
@@ -113,11 +112,6 @@ namespace BomberEngine.Core
             }
 
             freeRoot = timer;
-        }
-
-        private void Init()
-        {
-            callback2 = DefaultTimerCallback;
         }
 
         private void Reset()

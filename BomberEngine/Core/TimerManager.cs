@@ -28,7 +28,7 @@ namespace BomberEngine.Core
 
         #region Updatable
 
-        public void Update(float delta)
+        public override void Update(float delta)
         {
             currentTime += delta;
 
@@ -83,83 +83,23 @@ namespace BomberEngine.Core
 
         #region Schedule
 
-        public Timer Schedule(TimerCallback2 callback)
+        public override Timer Schedule(TimerCallback1 callback, float delay, int numRepeats, String name = null)
         {
-            return Schedule(callback, 0.0f, null);
+            return Schedule(callback, Timer.DefaultTimerCallback, delay, numRepeats, name);
         }
 
-        public Timer Schedule(TimerCallback2 callback, float delay)
+        public override Timer Schedule(TimerCallback2 callback, float delay, int numRepeats, String name = null)
         {
-            return Schedule(callback, delay, null);
+            return Schedule(null, callback, delay, numRepeats, name);
         }
 
-        public Timer Schedule(TimerCallback2 callback, float delay, String name)
-        {
-            return Schedule(callback, delay, false, name);
-        }
-
-        public Timer Schedule(TimerCallback2 callback, float delay, bool repeated)
-        {
-            return Schedule(callback, delay, repeated, null);
-        }
-
-        public Timer Schedule(TimerCallback2 callback, float delay, bool repeated, String name)
-        {
-            return Schedule(callback, delay, repeated ? 0 : 1, name);
-        }
-
-        public Timer Schedule(TimerCallback2 callback, float delay, int numRepeats)
-        {
-            return Schedule(callback, delay, numRepeats, null);
-        }
-
-        public Timer ScheduleOnce(TimerCallback2 callback)
-        {
-            return ScheduleOnce(callback, 0.0f, null);
-        }
-
-        public Timer ScheduleOnce(TimerCallback2 callback, float delay)
-        {
-            return ScheduleOnce(callback, delay, null);
-        }
-
-        public Timer ScheduleOnce(TimerCallback2 callback, float delay, String name)
-        {
-            return ScheduleOnce(callback, delay, false, name);
-        }
-
-        public Timer ScheduleOnce(TimerCallback2 callback, float delay, bool repeated)
-        {
-            return ScheduleOnce(callback, delay, repeated, null);
-        }
-
-        public Timer ScheduleOnce(TimerCallback2 callback, float delay, bool repeated, String name)
-        {
-            return ScheduleOnce(callback, delay, repeated ? 0 : 1, name);
-        }
-
-        public Timer ScheduleOnce(TimerCallback2 callback, float delay, int numRepeats)
-        {
-            return ScheduleOnce(callback, delay, numRepeats, null);
-        }
-
-        public Timer ScheduleOnce(TimerCallback2 callback, float delay, int numRepeats, String name)
-        {
-            Timer timer = FindTimer(callback);
-            if (timer != null)
-            {
-                return timer;
-            }
-            
-            return Schedule(callback, delay, numRepeats, name);
-        }
-
-        public Timer Schedule(TimerCallback2 callback, float delay, int numRepeats, String name)
+        private Timer Schedule(TimerCallback1 callback1, TimerCallback2 callback2, float delay, int numRepeats, String name)
         {
             float timeout = delay < 0 ? 0 : delay;
 
             Timer timer = NextFreeTimer();
-            timer.callback2 = callback;
+            timer.callback1 = callback1;
+            timer.callback2 = callback2;
             timer.timeout = timeout;
             timer.numRepeats = numRepeats;
             timer.scheduleTime = currentTime;
@@ -178,7 +118,20 @@ namespace BomberEngine.Core
             return timer;
         }
 
-        public Timer FindTimer(TimerCallback2 callback)
+        public override Timer FindTimer(TimerCallback1 callback)
+        {
+            for (Timer timer = rootTimer; timer != null; timer = timer.next)
+            {
+                if (timer.callback1 == callback)
+                {
+                    return timer;
+                }
+            }
+
+            return null;
+        }
+
+        public override Timer FindTimer(TimerCallback2 callback)
         {
             for (Timer timer = rootTimer; timer != null; timer = timer.next)
             {
@@ -191,12 +144,21 @@ namespace BomberEngine.Core
             return null;
         }
 
-        public bool IsScheduled(TimerCallback2 callback)
+        public override void Cancel(TimerCallback1 callback)
         {
-            return FindTimer(callback) != null;
+            for (Timer timer = rootTimer; timer != null; )
+            {
+                Timer t = timer;
+                timer = timer.next;
+
+                if (t.callback1 == callback)
+                {
+                    t.Cancel();
+                }
+            }
         }
 
-        public void Cancel(TimerCallback2 callback)
+        public override void Cancel(TimerCallback2 callback)
         {
             for (Timer timer = rootTimer; timer != null;)
             {
@@ -210,7 +172,7 @@ namespace BomberEngine.Core
             }
         }
 
-        public void Cancel(String name)
+        public override void Cancel(String name)
         {
             for (Timer timer = rootTimer; timer != null; )
             {
@@ -224,7 +186,7 @@ namespace BomberEngine.Core
             }
         }
 
-        public void CancelAll(Object target)
+        public override void CancelAll(Object target)
         {
             for (Timer timer = rootTimer; timer != null; )
             {
@@ -238,7 +200,7 @@ namespace BomberEngine.Core
             }
         }
 
-        public void CancelAll()
+        public override void CancelAll()
         {
             for (Timer timer = rootTimer; timer != null; )
             {
@@ -255,7 +217,7 @@ namespace BomberEngine.Core
 
         #region Destroyable
 
-        public void Destroy()
+        public override void Destroy()
         {
             CancelAll();
         }
@@ -373,7 +335,7 @@ namespace BomberEngine.Core
             
         }
 
-        public int Count()
+        public override int Count()
         {
             return timersCount;
         }
@@ -383,113 +345,49 @@ namespace BomberEngine.Core
 
     internal class NullTimerManager : ITimerManager
     {
-        public Timer Schedule(TimerCallback2 callback)
+        public override Timer Schedule(TimerCallback1 callback, float delay, int numRepeats, string name = null)
         {
-            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
+            throw new InvalidOperationException("Can't schedule timer on a 'null' timer manager");
         }
 
-        public Timer Schedule(TimerCallback2 callback, float delay)
+        public override Timer Schedule(TimerCallback2 callback, float delay, int numRepeats, string name = null)
         {
-            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
+            throw new InvalidOperationException("Can't schedule timer on a 'null' timer manager");
         }
 
-        public Timer Schedule(TimerCallback2 callback, float delay, bool repeated)
-        {
-            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
-        }
-
-        public Timer Schedule(TimerCallback2 callback, float delay, bool repeated, string name)
-        {
-            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
-        }
-
-        public Timer Schedule(TimerCallback2 callback, float delay, int numRepeats)
-        {
-            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
-        }
-
-        public Timer Schedule(TimerCallback2 callback, float delay, int numRepeats, string name)
-        {
-            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
-        }
-
-        public Timer Schedule(TimerCallback2 callback, float delay, string name)
-        {
-            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
-        }
-
-        public Timer ScheduleOnce(TimerCallback2 callback)
-        {
-            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
-        }
-
-        public Timer ScheduleOnce(TimerCallback2 callback, float delay)
-        {
-            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
-        }
-
-        public Timer ScheduleOnce(TimerCallback2 callback, float delay, bool repeated)
-        {
-            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
-        }
-
-        public Timer ScheduleOnce(TimerCallback2 callback, float delay, bool repeated, string name)
-        {
-            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
-        }
-
-        public Timer ScheduleOnce(TimerCallback2 callback, float delay, int numRepeats)
-        {
-            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
-        }
-
-        public Timer ScheduleOnce(TimerCallback2 callback, float delay, int numRepeats, string name)
-        {
-            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
-        }
-
-        public Timer ScheduleOnce(TimerCallback2 callback, float delay, string name)
-        {
-            throw new InvalidOperationException("Can't schedule timer on 'null' timer manager");
-        }
-
-        public void Cancel(TimerCallback2 callback)
-        {
-        }
-
-        public void Cancel(String name)
-        {
-        }
-
-        public void CancelAll()
-        {
-        }
-
-        public void CancelAll(object target)
+        public override void Cancel(TimerCallback1 callback)
         {   
         }
 
-        public Timer FindTimer(TimerCallback2 callback)
+        public override void Cancel(TimerCallback2 callback)
+        {
+        }
+
+        public override void Cancel(string name)
+        {
+        }
+
+        public override void CancelAll()
+        {
+        }
+
+        public override void CancelAll(object target)
+        {
+        }
+
+        public override Timer FindTimer(TimerCallback1 callback)
         {
             return null;
         }
 
-        public bool IsScheduled(TimerCallback2 callback)
+        public override Timer FindTimer(TimerCallback2 callback)
         {
-            return false;
+            return null;
         }
 
-        public int Count()
+        public override int Count()
         {
             return 0;
-        }
-
-        public void Update(float delta)
-        {
-        }
-
-        public void Destroy()
-        {   
         }
     }
 }

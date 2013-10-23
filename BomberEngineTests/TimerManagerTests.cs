@@ -278,5 +278,10 @@ namespace BomberEngineTests
         {
             get { return rootTimer; }
         }
+
+        public Timer Schedule(TimerCallback2 callback, float delay, String name)
+        {
+            return Schedule(callback, delay, false, name);
+        }
     }
 }
