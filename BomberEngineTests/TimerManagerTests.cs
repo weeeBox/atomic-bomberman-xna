@@ -10,7 +10,8 @@ namespace BomberEngineTests
     [TestClass]
     public class TimerManagerTests
     {
-        private List<TimerCallback2> callbacks = new List<TimerCallback2>();
+        private List<TimerCallback1> callbacks1 = new List<TimerCallback1>();
+        private List<TimerCallback2> callbacks2 = new List<TimerCallback2>();
 
         [TestMethod]
         public void testSortingTimers1()
@@ -18,11 +19,11 @@ namespace BomberEngineTests
             Reset();
 
             TestTimerManager manager = new TestTimerManager();
-            manager.Schedule(TimerCallback1, 0.0f,  "timer1");
-            manager.Schedule(TimerCallback1, 0.25f, "timer2");
-            manager.Schedule(TimerCallback1, 0.25f, "timer3");
-            manager.Schedule(TimerCallback1, 0.5f,  "timer4");
-            manager.Schedule(TimerCallback1, 0.75f, "timer5");
+            manager.Schedule(TimerCallbackEx1, 0.0f,  "timer1");
+            manager.Schedule(TimerCallbackEx1, 0.25f, "timer2");
+            manager.Schedule(TimerCallbackEx1, 0.25f, "timer3");
+            manager.Schedule(TimerCallbackEx1, 0.5f,  "timer4");
+            manager.Schedule(TimerCallbackEx1, 0.75f, "timer5");
 
             Timer timer = manager.RootTimer;
             Assert.AreEqual(timer.name, "timer1"); timer = timer.next;
@@ -39,11 +40,11 @@ namespace BomberEngineTests
             Reset();
 
             TestTimerManager manager = new TestTimerManager();
-            manager.Schedule(TimerCallback1, 0.75f, "timer1");
-            manager.Schedule(TimerCallback1, 0.5f,  "timer2");
-            manager.Schedule(TimerCallback1, 0.25f, "timer3");
-            manager.Schedule(TimerCallback1, 0.25f, "timer4");
-            manager.Schedule(TimerCallback1, 0.0f,  "timer5");
+            manager.Schedule(TimerCallbackEx1, 0.75f, "timer1");
+            manager.Schedule(TimerCallbackEx1, 0.5f,  "timer2");
+            manager.Schedule(TimerCallbackEx1, 0.25f, "timer3");
+            manager.Schedule(TimerCallbackEx1, 0.25f, "timer4");
+            manager.Schedule(TimerCallbackEx1, 0.0f,  "timer5");
 
             Timer timer = manager.RootTimer;
             Assert.AreEqual(timer.name, "timer5"); timer = timer.next;
@@ -76,7 +77,54 @@ namespace BomberEngineTests
         }
 
         [TestMethod]
+        public void testAddTimerEx()
+        {
+            Reset();
+
+            TestTimerManager manager = new TestTimerManager();
+            manager.Schedule(TimerCallbackEx1, 0.5f);
+
+            manager.Update(0.25f);
+            AssertCallbacksEx();
+            Assert.AreEqual(1, manager.Count());
+
+            manager.Update(0.25f);
+            AssertCallbacksEx(TimerCallbackEx1);
+            Assert.AreEqual(0, manager.Count());
+
+            manager.Update(0.25f);
+            AssertCallbacksEx(TimerCallbackEx1);
+            Assert.AreEqual(0, manager.Count());
+        }
+
+        [TestMethod]
         public void testAddTimers()
+        {
+            Reset();
+
+            TestTimerManager manager = new TestTimerManager();
+            manager.Schedule(TimerCallbackEx1, 0.75f);
+            manager.Schedule(TimerCallbackEx2, 0.5f);
+
+            manager.Update(0.25f);
+            AssertCallbacksEx();
+            Assert.AreEqual(2, manager.Count());
+
+            manager.Update(0.25f);
+            AssertCallbacksEx(TimerCallbackEx2);
+            Assert.AreEqual(1, manager.Count());
+
+            manager.Update(0.25f);
+            AssertCallbacksEx(TimerCallbackEx2, TimerCallbackEx1);
+            Assert.AreEqual(0, manager.Count());
+
+            manager.Update(0.25f);
+            AssertCallbacksEx(TimerCallbackEx2, TimerCallbackEx1);
+            Assert.AreEqual(0, manager.Count());
+        }
+
+        [TestMethod]
+        public void testAddTimersEx()
         {
             Reset();
 
@@ -130,6 +178,34 @@ namespace BomberEngineTests
         }
 
         [TestMethod]
+        public void testAddMoreTimersEx()
+        {
+            Reset();
+
+            TestTimerManager manager = new TestTimerManager();
+            manager.Schedule(TimerCallbackEx1, 0.75f);
+            manager.Schedule(TimerCallbackEx2, 0.5f);
+            manager.Schedule(TimerCallbackEx3, 0.5f);
+            manager.Schedule(TimerCallbackEx4, 1.0f);
+
+            manager.Update(0.25f);
+            AssertCallbacksEx();
+            Assert.AreEqual(4, manager.Count());
+
+            manager.Update(0.25f);
+            AssertCallbacksEx(TimerCallbackEx2, TimerCallbackEx3);
+            Assert.AreEqual(2, manager.Count());
+
+            manager.Update(0.25f);
+            AssertCallbacksEx(TimerCallbackEx2, TimerCallbackEx3, TimerCallbackEx1);
+            Assert.AreEqual(1, manager.Count());
+
+            manager.Update(0.25f);
+            AssertCallbacksEx(TimerCallbackEx2, TimerCallbackEx3, TimerCallbackEx1, TimerCallbackEx4);
+            Assert.AreEqual(0, manager.Count());
+        }
+
+        [TestMethod]
         public void testAddMoreTimersLater()
         {
             Reset();
@@ -170,6 +246,50 @@ namespace BomberEngineTests
 
             manager.Update(0.25f); // 1.75
             AssertCallbacks(TimerCallback2, TimerCallback1, TimerCallback4, TimerCallback3);
+            Assert.AreEqual(0, manager.Count());
+        }
+
+        [TestMethod]
+        public void testAddMoreTimersLaterEx()
+        {
+            Reset();
+
+            TestTimerManager manager = new TestTimerManager();
+            manager.Schedule(TimerCallbackEx1, 0.75f);
+            manager.Schedule(TimerCallbackEx2, 0.5f);
+
+            manager.Update(0.25f); // 0.25
+            AssertCallbacksEx();
+            Assert.AreEqual(2, manager.Count());
+
+            manager.Update(0.25f); // 0.5
+            AssertCallbacksEx(TimerCallbackEx2);
+            Assert.AreEqual(1, manager.Count());
+
+            manager.Schedule(TimerCallbackEx3, 1.0f); // fires at 1.5
+            Assert.AreEqual(2, manager.Count());
+
+            manager.Update(0.25f); // 0.75
+            AssertCallbacksEx(TimerCallbackEx2, TimerCallbackEx1);
+            Assert.AreEqual(1, manager.Count());
+
+            manager.Update(0.25f); // 1.0
+            AssertCallbacksEx(TimerCallbackEx2, TimerCallbackEx1);
+            Assert.AreEqual(1, manager.Count());
+
+            manager.Schedule(TimerCallbackEx4, 0.15f); // fires at 1.15
+            Assert.AreEqual(2, manager.Count());
+
+            manager.Update(0.25f); // 1.25
+            AssertCallbacksEx(TimerCallbackEx2, TimerCallbackEx1, TimerCallbackEx4);
+            Assert.AreEqual(1, manager.Count());
+
+            manager.Update(0.25f); // 1.5
+            AssertCallbacksEx(TimerCallbackEx2, TimerCallbackEx1, TimerCallbackEx4, TimerCallbackEx3);
+            Assert.AreEqual(0, manager.Count());
+
+            manager.Update(0.25f); // 1.75
+            AssertCallbacksEx(TimerCallbackEx2, TimerCallbackEx1, TimerCallbackEx4, TimerCallbackEx3);
             Assert.AreEqual(0, manager.Count());
         }
 
@@ -221,35 +341,112 @@ namespace BomberEngineTests
             Assert.AreEqual(0, manager.Count());
         }
 
-        private void TimerCallback1(Timer timer)
+        [TestMethod]
+        public void testCancelTimerEx()
         {
-            callbacks.Add(TimerCallback1);
+            Reset();
+
+            TestTimerManager manager = new TestTimerManager();
+            manager.Schedule(TimerCallbackEx1, 0.75f);
+            manager.Schedule(TimerCallbackEx2, 0.5f);
+
+            manager.Update(0.25f); // 0.25
+            AssertCallbacksEx();
+            Assert.AreEqual(2, manager.Count());
+
+            manager.Update(0.25f); // 0.5
+            AssertCallbacksEx(TimerCallbackEx2);
+            Assert.AreEqual(1, manager.Count());
+
+            manager.Schedule(TimerCallbackEx3, 1.0f); // fires at 1.5
+            Assert.AreEqual(2, manager.Count());
+
+            manager.Cancel(TimerCallbackEx1);
+
+            manager.Update(0.25f); // 0.75
+            AssertCallbacksEx(TimerCallbackEx2);
+            Assert.AreEqual(1, manager.Count());
+
+            manager.Update(0.25f); // 1.0
+            AssertCallbacksEx(TimerCallbackEx2);
+            Assert.AreEqual(1, manager.Count());
+
+            manager.Schedule(TimerCallbackEx4, 0.15f); // fires at 1.15
+            Assert.AreEqual(2, manager.Count());
+
+            manager.Cancel(TimerCallbackEx3);
+
+            manager.Update(0.25f); // 1.25
+            AssertCallbacksEx(TimerCallbackEx2, TimerCallbackEx4);
+            Assert.AreEqual(0, manager.Count());
+
+            manager.Update(0.25f); // 1.5
+            AssertCallbacksEx(TimerCallbackEx2, TimerCallbackEx4);
+            Assert.AreEqual(0, manager.Count());
+
+            manager.Update(0.25f); // 1.75
+            AssertCallbacksEx(TimerCallbackEx2, TimerCallbackEx4);
+            Assert.AreEqual(0, manager.Count());
         }
 
-        private void TimerCallback2(Timer timer)
+        private void TimerCallback1()
         {
-            callbacks.Add(TimerCallback2);
+            callbacks1.Add(TimerCallback1);
         }
 
-        private void TimerCallback3(Timer timer)
+        private void TimerCallback2()
         {
-            callbacks.Add(TimerCallback3);
+            callbacks1.Add(TimerCallback2);
         }
 
-        private void TimerCallback4(Timer timer)
+        private void TimerCallback3()
         {
-            callbacks.Add(TimerCallback4);
+            callbacks1.Add(TimerCallback3);
         }
 
-        private void AssertCallbacks(params TimerCallback2[] expected)
+        private void TimerCallback4()
         {
-            TimerCallback2[] actual = GetCallbacks();
-            Assert.AreEqual(expected.Length, actual.Length);
+            callbacks1.Add(TimerCallback4);
+        }
+
+        private void TimerCallbackEx1(Timer timer)
+        {
+            callbacks2.Add(TimerCallbackEx1);
+        }
+
+        private void TimerCallbackEx2(Timer timer)
+        {
+            callbacks2.Add(TimerCallbackEx2);
+        }
+
+        private void TimerCallbackEx3(Timer timer)
+        {
+            callbacks2.Add(TimerCallbackEx3);
+        }
+
+        private void TimerCallbackEx4(Timer timer)
+        {
+            callbacks2.Add(TimerCallbackEx4);
+        }
+
+        private void AssertCallbacks(params TimerCallback1[] expected)
+        {
+            AssertCallbacksHelper(callbacks1, expected);
+        }
+
+        private void AssertCallbacksEx(params TimerCallback2[] expected)
+        {
+            AssertCallbacksHelper(callbacks2, expected);
+        }
+
+        private void AssertCallbacksHelper<T>(List<T> actual, params T[] expected) where T : class
+        {   
+            Assert.AreEqual(expected.Length, actual.Count);
 
             String message = "";
             for (int i = 0; i < expected.Length; ++i)
             {
-                if (expected[i] != actual[i])
+                if (!expected[i].Equals(actual[i]))
                 {
                     message += expected[i] + "!=" + actual[i];
                 }
@@ -258,16 +455,10 @@ namespace BomberEngineTests
             Assert.IsTrue(message.Length == 0, message);
         }
 
-        private TimerCallback2[] GetCallbacks()
-        {
-            TimerCallback2[] array = new TimerCallback2[callbacks.Count];
-            callbacks.CopyTo(array);
-            return array;
-        }
-
         private void Reset()
         {
-            callbacks.Clear();
+            callbacks1.Clear();
+            callbacks2.Clear();
             Timer.freeRoot = null;
         }
     }
