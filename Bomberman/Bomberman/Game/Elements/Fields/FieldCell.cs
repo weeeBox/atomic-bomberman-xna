@@ -306,17 +306,17 @@ namespace Bomberman.Game.Elements.Fields
 
         #region TimerManager
 
-        protected Timer ScheduleTimer(TimerCallback callback, float delay = 0.0f, bool repeated = false)
+        protected Timer ScheduleTimer(TimerCallback2 callback, float delay = 0.0f, bool repeated = false)
         {
             return GetField().ScheduleTimer(callback, delay, repeated);
         }
 
-        protected Timer ScheduleTimerOnce(TimerCallback callback, float delay = 0.0f, bool repeated = false)
+        protected Timer ScheduleTimerOnce(TimerCallback2 callback, float delay = 0.0f, bool repeated = false)
         {
             return GetField().ScheduleTimerOnce(callback, delay, repeated);
         }
 
-        protected void CancelTimer(TimerCallback callback)
+        protected void CancelTimer(TimerCallback2 callback)
         {
             GetField().CancelTimer(callback);
         }

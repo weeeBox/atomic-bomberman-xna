@@ -141,7 +141,7 @@ namespace Bomberman.Game.Elements.Players
 
         #region Helpers
 
-        private void ScheduleTimer(TimerCallback callback, float delay = 0.0f)
+        private void ScheduleTimer(TimerCallback2 callback, float delay = 0.0f)
         {
             m_timerManager.Schedule(callback, delay);
         }

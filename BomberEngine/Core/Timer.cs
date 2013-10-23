@@ -6,7 +6,8 @@ using BomberEngine.Debugging;
 
 namespace BomberEngine.Core
 {
-    public delegate void TimerCallback(Timer call);
+    public delegate void TimerCallback1();
+    public delegate void TimerCallback2(Timer call);
 
     public class Timer
     {
@@ -14,7 +15,8 @@ namespace BomberEngine.Core
 
         internal bool cancelled;
 
-        internal TimerCallback callback;
+        internal TimerCallback1 callback1;
+        internal TimerCallback2 callback2;
 
         internal Timer next;
         internal Timer prev;
@@ -43,7 +45,7 @@ namespace BomberEngine.Core
 
         internal void Fire()
         {
-            callback(this);
+            callback2(this);
 
             if (!cancelled)
             {
@@ -57,6 +59,11 @@ namespace BomberEngine.Core
                     fireTime = manager.currentTime + timeout;
                 }
             }
+        }
+
+        private void DefaultTimerCallback(Timer timer)
+        {
+            callback1();
         }
 
         public bool IsRepeated
@@ -92,6 +99,7 @@ namespace BomberEngine.Core
                 timer = new Timer();
             }
 
+            timer.Init();
             return timer;
         }
 
@@ -107,11 +115,17 @@ namespace BomberEngine.Core
             freeRoot = timer;
         }
 
+        private void Init()
+        {
+            callback2 = DefaultTimerCallback;
+        }
+
         private void Reset()
         {
             next = prev = null;
             manager = null;
-            callback = null;
+            callback1 = null;
+            callback2 = null;
             numRepeats = numRepeated = 0;
             timeout = 0;
             fireTime = 0;

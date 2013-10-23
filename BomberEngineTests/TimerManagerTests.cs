@@ -10,7 +10,7 @@ namespace BomberEngineTests
     [TestClass]
     public class TimerManagerTests
     {
-        private List<TimerCallback> callbacks = new List<TimerCallback>();
+        private List<TimerCallback2> callbacks = new List<TimerCallback2>();
 
         [TestMethod]
         public void testSortingTimers1()
@@ -241,9 +241,9 @@ namespace BomberEngineTests
             callbacks.Add(TimerCallback4);
         }
 
-        private void AssertCallbacks(params TimerCallback[] expected)
+        private void AssertCallbacks(params TimerCallback2[] expected)
         {
-            TimerCallback[] actual = GetCallbacks();
+            TimerCallback2[] actual = GetCallbacks();
             Assert.AreEqual(expected.Length, actual.Length);
 
             String message = "";
@@ -258,9 +258,9 @@ namespace BomberEngineTests
             Assert.IsTrue(message.Length == 0, message);
         }
 
-        private TimerCallback[] GetCallbacks()
+        private TimerCallback2[] GetCallbacks()
         {
-            TimerCallback[] array = new TimerCallback[callbacks.Count];
+            TimerCallback2[] array = new TimerCallback2[callbacks.Count];
             callbacks.CopyTo(array);
             return array;
         }
