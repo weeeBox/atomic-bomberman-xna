@@ -8,6 +8,8 @@ using Bomberman.UI;
 using Assets;
 using BombermanCommon.Resources;
 using Bomberman.Content;
+using BomberEngine.Core.Events;
+using BomberEngine.Core.Input;
 
 namespace Bomberman.Game.Screens
 {
@@ -18,6 +20,8 @@ namespace Bomberman.Game.Screens
             Continue,
             Back
         }
+
+        private const int MapsPerPage = 6;
 
         private static readonly int[] MapIDs = 
         {
@@ -90,33 +94,20 @@ namespace Bomberman.Game.Screens
 		    A.maps_x,
         };
 
+        private View m_contentView;
+        private int m_index;
+
         public MapScreen(ButtonDelegate buttonDelegate)
         {
-            View contentView = new View(64, 48, 521, 363);
+            m_contentView = new View(64, 48, 521, 363);
 
-            int sw = 153;
-            int sh = 143;
-            float indent = (contentView.width - (3 * sw)) / 2;
+            m_index = 0;
+            FillMaps(m_index);
 
-            int index = 0;
-            for (int i = 0; i < 2; ++i)
-            {
-                for (int j = 0; j < 3; ++j)
-                {
-                    Scheme scheme = BmApplication.Assets().GetScheme(MapIDs[index]);
-                    SchemeView schemeView = new SchemeView(scheme, SchemeView.Style.Small);
-                    schemeView.x = j * (sw + indent);
-                    schemeView.y = i * (sh + indent);
-                    contentView.AddView(schemeView);
-
-                    ++index;
-                }
-            }
-
-            AddView(contentView);
+            AddView(m_contentView);
 
             // buttons
-            View buttons = new View(0.5f * width, contentView.y + contentView.height, 0, 0);
+            View buttons = new View(0.5f * width, m_contentView.y + m_contentView.height, 0, 0);
             buttons.alignX = View.ALIGN_CENTER;
 
             Button button = new TempButton("BACK");
@@ -135,6 +126,78 @@ namespace Bomberman.Game.Screens
             buttons.LayoutHor(20);
             buttons.ResizeToFitViews();
             AddView(buttons);
+        }
+
+        public override bool HandleEvent(Event evt)
+        {
+            if (evt.code == Event.KEY)
+            {
+                KeyEvent keyEvent = (KeyEvent)evt;
+                if (keyEvent.IsKeyPressed(KeyCode.OemOpenBrackets))
+                {
+                    Prev();
+                    return true;
+                }
+
+                if (keyEvent.IsKeyPressed(KeyCode.OemCloseBrackets))
+                {
+                    Next();
+                    return true;
+                }
+            }
+
+            return base.HandleEvent(evt);
+        }
+
+        private void Next()
+        {
+            int newIndex = m_index + MapsPerPage;
+            if (newIndex < MapIDs.Length)
+            {
+                SetIndex(newIndex);
+            }
+        }
+
+        private void Prev()
+        {
+            int newIndex = m_index - MapsPerPage;
+            if (newIndex >= 0)
+            {
+                SetIndex(newIndex);
+            }
+        }
+
+        private void SetIndex(int index)
+        {
+            m_index = index;
+            FillMaps(m_index);
+        }
+
+        private void FillMaps(int index)
+        {
+            m_contentView.RemoveViews();
+
+            int sw = 153;
+            int sh = 143;
+            float indent = (m_contentView.width - (3 * sw)) / 2;
+
+            for (int i = 0; i < 2; ++i)
+            {
+                for (int j = 0; j < 3; ++j)
+                {
+                    Scheme scheme = BmApplication.Assets().GetScheme(MapIDs[index]);
+                    SchemeView schemeView = new SchemeView(scheme, SchemeView.Style.Small);
+                    schemeView.x = j * (sw + indent);
+                    schemeView.y = i * (sh + indent);
+                    m_contentView.AddView(schemeView);
+
+                    ++index;
+                    if (index == MapIDs.Length)
+                    {
+                        return;
+                    }
+                }
+            }
         }
     }
 }
