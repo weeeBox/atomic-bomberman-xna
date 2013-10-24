@@ -43,7 +43,7 @@ namespace Bomberman.Game
             selectedScheme = Assets().GetScheme(A.maps_x);
             InitInputTypes(selectedScheme);
 
-            StartScreen(new PlayersScreen(selectedScheme, inputTypes, InputTypeSelectDelegate, PlayersScreenButtonDelegate));
+            StartScreen(new MapScreen(MapScreenButtonDelegate));
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -194,6 +194,17 @@ namespace Bomberman.Game
         //////////////////////////////////////////////////////////////////////////////
 
         #region Button delegates
+
+        private void MapScreenButtonDelegate(Button button)
+        {
+            MapScreen.ButtonId buttonId = (MapScreen.ButtonId)button.id;
+            switch (buttonId)
+            {
+                case MapScreen.ButtonId.Continue:
+                    StartScreen(new PlayersScreen(selectedScheme, inputTypes, InputTypeSelectDelegate, PlayersScreenButtonDelegate));
+                    break;
+            }
+        }
 
         private void PlayersScreenButtonDelegate(Button button)
         {
