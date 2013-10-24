@@ -66,5 +66,10 @@ namespace BomberEngine.Util
         {
             return minValue + NextDouble() * (maxValue - minValue);
         }
+
+        public static int ForceRange(int x, int min, int max)
+        {
+            return Math.Max(min, Math.Min(x, max));
+        }
     }
 }
