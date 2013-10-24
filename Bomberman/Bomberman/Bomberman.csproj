@@ -181,6 +181,7 @@
     <Compile Include="Game\Screens\BlockingScreen.cs" />
     <Compile Include="Game\Screens\GameResultScreen.cs" />
     <Compile Include="Game\Screens\PlayersScreen.cs" />
+    <Compile Include="Game\Screens\ResultScreen.cs" />
     <Compile Include="Game\Screens\RoundResultScreen.cs" />
     <Compile Include="Game\Screens\SchemeScreen.cs" />
     <Compile Include="Game\Screens\SchemeSelectionView.cs" />

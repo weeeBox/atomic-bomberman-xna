@@ -9,31 +9,27 @@ using Bomberman.UI;
 
 namespace Bomberman.Game.Screens
 {
-    public class GameResultScreen : Screen
+    public class GameResultScreen : BaseResultScreen
     {
-        public enum ButtonId
+        public GameResultScreen(Game game, ButtonDelegate buttonDelegate) :
+            base(game)
         {
-            Exit
-        }
-
-        public GameResultScreen(Game game, ButtonDelegate buttonDelegate)
-        {
-            Font font = Helper.fontButton;
-            TextView text = new TextView(font, "GAME ENDED");
-            text.alignX = View.ALIGN_CENTER;
-            text.alignY = View.ALIGN_CENTER;
-            text.x = 0.5f * width;
-            text.y = 0.5f * height;
+            // buttons
+            View buttons = new View(0.5f * contentView.width, contentView.height, 0, 0);
+            buttons.alignX = View.ALIGN_CENTER;
+            buttons.alignY = View.ALIGN_MAX;
 
             Button button = new TempButton("EXIT");
-            button.alignX = View.ALIGN_CENTER;
-            button.buttonDelegate = buttonDelegate;
             button.id = (int)ButtonId.Exit;
-            button.x = 0.5f * width;
-            button.y = text.y + 50;
-            AddView(button);
-
+            button.buttonDelegate = buttonDelegate;
             SetCancelButton(button);
+            SetConfirmButton(button);
+            buttons.AddView(button);
+            FocusView(button);
+
+            buttons.LayoutHor(20);
+            buttons.ResizeToFitViews();
+            contentView.AddView(buttons);
         }
     }
 }
