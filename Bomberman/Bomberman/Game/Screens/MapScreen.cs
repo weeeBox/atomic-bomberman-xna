@@ -10,6 +10,8 @@ using BombermanCommon.Resources;
 using Bomberman.Content;
 using BomberEngine.Core.Events;
 using BomberEngine.Core.Input;
+using BomberEngine.Core.Visual.UI;
+using Microsoft.Xna.Framework;
 
 namespace Bomberman.Game.Screens
 {
@@ -21,6 +23,7 @@ namespace Bomberman.Game.Screens
             Back
         }
 
+        private static readonly String KeyLastIndex = "LastIndex";
         private const int MapsPerPage = 6;
 
         private static readonly int[] MapIDs = 
@@ -95,14 +98,25 @@ namespace Bomberman.Game.Screens
         };
 
         private View m_contentView;
+        private RectView[] m_pageViews;
+
         private int m_index;
 
         public MapScreen(ButtonDelegate buttonDelegate)
         {
             m_contentView = new View(64, 48, 521, 363);
 
-            m_index = 0;
-            FillMaps(m_index);
+            int pagesCount = (MapIDs.Length / MapsPerPage) + (MapIDs.Length % MapsPerPage != 0 ? 1 : 0);
+
+            View indicatorView = CreateIndicator(pagesCount);
+            indicatorView.x = 0.5f * width;
+            indicatorView.y = m_contentView.y - 10;
+            indicatorView.alignX = View.ALIGN_CENTER;
+            indicatorView.alignY = View.ALIGN_MAX;
+            AddView(indicatorView);
+
+            m_index = Application.Storage().GetInt(KeyLastIndex);
+            SetIndex(m_index);
 
             AddView(m_contentView);
 
@@ -126,6 +140,22 @@ namespace Bomberman.Game.Screens
             buttons.LayoutHor(20);
             buttons.ResizeToFitViews();
             AddView(buttons);
+        }
+
+        private View CreateIndicator(int pagesCount)
+        {
+            View view = new View();
+            m_pageViews = new RectView[pagesCount];
+            for (int i = 0; i < m_pageViews.Length; ++i)
+            {
+                RectView r = new RectView(0, 0, 10, 10, Color.Transparent, Color.White);
+                m_pageViews[i] = r;
+                view.AddView(r);
+            }
+            view.LayoutHor(3);
+            view.ResizeToFitViews();
+
+            return view;
         }
 
         public override bool HandleEvent(Event evt)
@@ -169,8 +199,16 @@ namespace Bomberman.Game.Screens
 
         private void SetIndex(int index)
         {
+            int oldPageIndex = m_index / MapsPerPage;
+            int newPageIndex = index / MapsPerPage;
+
             m_index = index;
             FillMaps(m_index);
+
+            m_pageViews[oldPageIndex].fillColor = Color.Transparent;
+            m_pageViews[newPageIndex].fillColor = Color.Yellow;
+
+            Application.Storage().Set(KeyLastIndex, m_index);
         }
 
         private void FillMaps(int index)
