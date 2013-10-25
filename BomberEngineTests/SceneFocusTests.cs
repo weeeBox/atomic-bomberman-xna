@@ -6,157 +6,177 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BomberEngine.Game;
 using BomberEngine.Core.Visual.UI;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core.Visual;
+using BomberEngine.Core.Events;
+using BomberEngine.Core.Input;
 
 namespace BomberEngineTests
 {
     [TestClass]
     public class SceneFocusTests
     {
-        //[TestMethod]
-        //public void TestDefaultFocus1()
-        //{
-        //    Screen screen = new Screen(0, 0);
+        [TestMethod]
+        public void TestDefaultFocus1()
+        {
+            Screen screen = new Screen(0, 0);
 
-        //    FocusableView f1 = new FocusableView("f1");
-        //    Assert.IsFalse(f1.focused);
+            FocusableView view = new FocusableView("f1");
+            screen.AddView(view);
 
-        //    View container = new View();
-        //    container.AddView(f1);
+            screen.Start();
 
-        //    //screen.SetRootView(container);
+            Assert.IsTrue(view.focused);
+        }
 
-        //    Assert.IsTrue(f1.focused);
-        //    Assert.AreEqual(screen.focusedView, f1);
-        //}
+        [TestMethod]
+        public void TestDefaultFocus2()
+        {
+            Screen screen = new Screen(0, 0);
 
-        //[TestMethod]
-        //public void TestDefaultFocus2()
-        //{
-        //    Screen screen = new Screen(0, 0);
+            FocusableView view = new FocusableView("f1");
+            View container = new View();
+            container.AddView(view);
 
-        //    FocusableView f1 = new FocusableView("f1");
-        //    Assert.IsFalse(f1.focused);
+            screen.AddView(container);
 
-        //    View container1 = new View();
-        //    container1.AddView(f1);
+            screen.Start();
 
-        //    View container2 = new View();
-        //    container2.AddView(container1);
+            Assert.IsTrue(view.focused);
+        }
 
-        //    //screen.SetRootView(container2);
+        [TestMethod]
+        public void TestDefaultFocus3()
+        {
+            Screen screen = new Screen(0, 0);
 
-        //    Assert.IsTrue(f1.focused);
-        //    Assert.AreEqual(screen.focusedView, f1);
-        //}
+            screen.AddView(new View());
 
-        //[TestMethod]
-        //public void TestDefaultFocus3()
-        //{
-        //    Screen screen = new Screen(0, 0);
+            FocusableView view = new FocusableView("f1");
+            View container = new View();
+            container.AddView(view);
 
-        //    FocusableView f1 = new FocusableView("f1");
-        //    Assert.IsFalse(f1.focused);
+            screen.AddView(container);
+            screen.Start();
 
-        //    View container1 = new View();
-        //    container1.AddView(f1);
+            Assert.IsTrue(view.focused);
+        }
 
-        //    View container2 = new View();
-        //    container2.AddView(container1);
+        [TestMethod]
+        public void TestDefaultFocus4()
+        {
+            Screen screen = new Screen(0, 0);
 
-        //    View container3 = new View();
-        //    container3.AddView(container2);
+            FocusableView f1 = new FocusableView("f1");
 
-        //    //screen.SetRootView(container3);
+            View container1 = new View();
+            container1.AddView(f1);
 
-        //    Assert.IsTrue(f1.focused);
-        //    Assert.AreEqual(screen.focusedView, f1);
-        //}
+            View container2 = new View();
+            container2.AddView(container1);
 
-        //[TestMethod]
-        //public void TestDefaultFocus4()
-        //{
-        //    Screen screen = new Screen(0, 0);
+            screen.AddView(container2);
+            screen.Start();
 
-        //    NotFocusableView n1 = new NotFocusableView("n1");
-        //    Assert.IsFalse(n1.focused);
+            Assert.IsTrue(f1.focused);
+            Assert.AreEqual(screen.focusedView, f1);
+        }
 
-        //    NotFocusableView n2 = new NotFocusableView("n2");
-        //    Assert.IsFalse(n2.focused);
+        [TestMethod]
+        public void TestDefaultFocus5()
+        {
+            Screen screen = new Screen(0, 0);
 
-        //    FocusableView f1 = new FocusableView("f1");
-        //    Assert.IsFalse(f1.focused);
+            FocusableView f1 = new FocusableView("f1");
+            Assert.IsFalse(f1.focused);
 
-        //    FocusableView f2 = new FocusableView("f3");
-        //    Assert.IsFalse(f1.focused);
+            View container1 = new View();
+            container1.AddView(f1);
 
-        //    View container1 = new View();
-        //    container1.AddView(n1);
-        //    container1.AddView(n2);
-        //    container1.AddView(f1);
+            View container2 = new View();
+            container2.AddView(container1);
 
-        //    View container2 = new View();
+            View container3 = new View();
+            container3.AddView(container2);
 
-        //    View container3 = new View();
-        //    container3.AddView(f2);
+            screen.AddView(container3);
+            screen.Start();
 
-        //    View rootView = new View();
-        //    rootView.AddView(container1);
-        //    rootView.AddView(container2);
-        //    rootView.AddView(container3);
+            Assert.IsTrue(f1.focused);
+            Assert.AreEqual(screen.focusedView, f1);
+        }
 
-        //    //screen.SetRootView(rootView);
+        [TestMethod]
+        public void TestDefaultFocus6()
+        {
+            Screen screen = new Screen(0, 0);
 
-        //    Assert.IsTrue(f1.focused);
-        //    Assert.AreEqual(screen.focusedView, f1);
-        //}
+            NotFocusableView n1 = new NotFocusableView("n1");
+            NotFocusableView n2 = new NotFocusableView("n2");
 
-        //[TestMethod]
-        //public void TestDefaultFocus5()
-        //{
-        //    Screen screen = new Screen(0, 0);
+            FocusableView f1 = new FocusableView("f1");
+            FocusableView f2 = new FocusableView("f3");
 
-        //    NotFocusableView n1 = new NotFocusableView("n1");
-        //    Assert.IsFalse(n1.focused);
+            View container1 = new View();
+            container1.AddView(n1);
+            container1.AddView(n2);
+            container1.AddView(f1);
 
-        //    NotFocusableView n2 = new NotFocusableView("n2");
-        //    Assert.IsFalse(n2.focused);
+            View container2 = new View();
 
-        //    FocusableView f1 = new FocusableView("f1");
-        //    Assert.IsFalse(f1.focused);
+            View container3 = new View();
+            container3.AddView(f2);
 
-        //    FocusableView f2 = new FocusableView("f3");
-        //    Assert.IsFalse(f1.focused);
+            View rootView = new View();
+            rootView.AddView(container1);
+            rootView.AddView(container2);
+            rootView.AddView(container3);
 
-        //    View container1 = new NotFocusableView("c1");
-        //    container1.AddView(n1);
-        //    container1.AddView(n2);
-        //    container1.AddView(f1);
+            screen.AddView(rootView);
+            screen.Start();
 
-        //    View container2 = new NotFocusableView("c2");
+            Assert.IsTrue(f1.focused);
+            Assert.AreEqual(screen.focusedView, f1);
+        }
 
-        //    View container3 = new NotFocusableView("c3");
-        //    container3.AddView(f2);
+        [TestMethod]
+        public void TestDefaultFocus7()
+        {
+            Screen screen = new Screen(0, 0);
 
-        //    View rootView = new NotFocusableView("root");
-        //    rootView.AddView(container1);
-        //    rootView.AddView(container2);
-        //    rootView.AddView(container3);
+            NotFocusableView n1 = new NotFocusableView("n1");
+            NotFocusableView n2 = new NotFocusableView("n2");
+            
+            FocusableView f1 = new FocusableView("f1");
+            FocusableView f2 = new FocusableView("f3");
+            
+            View container1 = new NotFocusableView("c1");
+            container1.AddView(n1);
+            container1.AddView(n2);
+            container1.AddView(f1);
 
-        //    //screen.SetRootView(rootView);
+            View container2 = new NotFocusableView("c2");
 
-        //    Assert.IsTrue(f1.focused);
-        //    Assert.AreEqual(screen.focusedView, f1);
+            View container3 = new NotFocusableView("c3");
+            container3.AddView(f2);
 
-        //    //screen.OnKeyPressed(KeyCode.Down);
+            View rootView = new NotFocusableView("root");
+            rootView.AddView(container1);
+            rootView.AddView(container2);
+            rootView.AddView(container3);
 
-        //    Assert.IsTrue(f2.focused);
-        //    Assert.AreEqual(screen.focusedView, f2);
+            screen.AddView(rootView);
+            screen.Start();
 
-        //    Assert.IsFalse(f1.focused);
-        //}
+            Assert.IsTrue(f1.focused);
+            Assert.AreEqual(screen.focusedView, f1);
+
+            screen.HandleEvent(new KeyEvent().Init(new KeyEventArg(KeyCode.Down), KeyState.Pressed));
+
+            Assert.IsTrue(f2.focused);
+            Assert.AreEqual(screen.focusedView, f2);
+
+            Assert.IsFalse(f1.focused);
+        }
     }
 
     //////////////////////////////////////////////////////////////////////////////
