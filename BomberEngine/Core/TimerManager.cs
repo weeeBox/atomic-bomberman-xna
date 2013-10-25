@@ -193,7 +193,7 @@ namespace BomberEngine.Core
                 Timer t = timer;
                 timer = timer.next;
 
-                if (t.callback2.Target == target)
+                if (t.callback1.Target == target || t.callback2.Target == target)
                 {
                     t.Cancel();
                 }
