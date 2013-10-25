@@ -26,7 +26,7 @@ namespace Bomberman.Game.Screens
         }
 
         private static readonly String KeyLastPageIndex = "LastPageIndex";
-        private static readonly String KeyLastMapIndex = "LastMapIndex";
+        private static readonly String KeyLastMapIndex  = "LastMapIndex";
 
         private const int MapsPerPage = 6;
 
@@ -112,25 +112,30 @@ namespace Bomberman.Game.Screens
 
             AddView(table);
 
-            // buttons
-            View buttons = new View(0.5f * width, 411, 0, 0);
-            buttons.alignX = View.ALIGN_CENTER;
+            // controls
+            View controls = new View(0.5f * width, 411, 0, 0);
+            controls.alignX = View.ALIGN_CENTER;
 
+            // hint left
+            TextView hintView = new TextView(Helper.fontSystem, "Ctrl+Left");
+            hintView.alignY = hintView.parentAlignY = View.ALIGN_CENTER;
+            controls.AddView(hintView);
+
+            // button
             Button button = new TempButton("BACK");
             button.id = (int)ButtonId.Back;
             button.buttonDelegate = buttonDelegate;
             SetCancelButton(button);
-            buttons.AddView(button);
+            controls.AddView(button);
 
-            button = new TempButton("CONTINUE");
-            button.id = (int)ButtonId.Continue;
-            button.buttonDelegate = buttonDelegate;
-            SetConfirmButton(button);
-            buttons.AddView(button);
-
-            buttons.LayoutHor(20);
-            buttons.ResizeToFitViews();
-            AddView(buttons);
+            // hint right
+            hintView = new TextView(Helper.fontSystem, "Ctrl+Right");
+            hintView.alignY = hintView.parentAlignY = View.ALIGN_CENTER;
+            controls.AddView(hintView);
+            
+            controls.LayoutHor(20);
+            controls.ResizeToFitViews();
+            AddView(controls);
 
             FocusView(table);
         }
@@ -144,7 +149,7 @@ namespace Bomberman.Game.Screens
 
         private int[] m_ids;
 
-        private int m_firstVisibleIndex;
+        private int m_pageIndex;
         private int m_selectedIndex;
 
         private RectView[] m_indicatorViews;
@@ -152,19 +157,12 @@ namespace Bomberman.Game.Screens
 
         private View m_contentView;
 
-        private int m_rowsCount;
-        private int m_colsCount;
-
-        public SchemeTableView(int[] ids, int firstVisibleIndex, int selectedIndex)
+        public SchemeTableView(int[] ids, int pageIndex, int selectedIndex)
         {
             focusable = true;
 
             m_ids = ids;
-            m_rowsCount = RowsPerPage;
-            m_colsCount = m_ids.Length / m_rowsCount + (m_ids.Length % m_rowsCount != 0 ? 1 : 0);
             m_schemeViews = new SchemeView[SchemesPerPage];
-
-            int pagesCount = (ids.Length / SchemesPerPage) + (ids.Length % SchemesPerPage != 0 ? 1 : 0);
 
             // indicators
             View indicatorView = CreateIndicator(pagesCount);
@@ -174,7 +172,7 @@ namespace Bomberman.Game.Screens
             // maps
             m_contentView = new View(0, 0, 521, 0);
             m_contentView.debugColor = Color.Red;
-            UpdateMaps(firstVisibleIndex);
+            SetPage(pageIndex, selectedIndex);
             m_contentView.ResizeToFitViews();
 
             m_schemeViews[0].focused = true;
@@ -205,13 +203,27 @@ namespace Bomberman.Game.Screens
 
                 if (keyEvent.IsKeyPressed(KeyCode.Left))
                 {
-                    Move(-1, 0);
+                    if (keyEvent.IsCtrlPressed())
+                    {
+                        MovePage(-1);
+                    }
+                    else
+                    {
+                        Move(-1, 0);
+                    }
                     return true;
                 }
 
                 if (keyEvent.IsKeyPressed(KeyCode.Right))
                 {
-                    Move(1, 0);
+                    if (keyEvent.IsCtrlPressed())
+                    {
+                        MovePage(1);
+                    }
+                    else
+                    {
+                        Move(1, 0);
+                    }
                     return true;
                 }
             }
@@ -235,46 +247,58 @@ namespace Bomberman.Game.Screens
             return view;
         }
 
-        private void UpdateMaps(int startIndex)
+        private void SetPage(int pageIndex, int selectedIndex)
         {
+            Debug.AssertRange(pageIndex, 0, pagesCount);
+            Debug.AssertRange(selectedIndex, 0, SchemesPerPage);
+
             m_contentView.RemoveViews();
+            m_pageIndex = pageIndex;
 
             int sw = 153;
             int sh = 143;
 
             float indent = (m_contentView.width - (ColsPerPage * sw)) / (ColsPerPage - 1);
 
-            int startRow = ToRow(startIndex);
-            int startCol = ToCol(startIndex);
-
             int index = 0;
+            int arrayIndex = pageIndex * SchemesPerPage;
 
             ArrayUtils.Clear(m_schemeViews);
 
-            for (int i = 0; i < RowsPerPage; ++i)
-            {
-                int schemeIndex = ToIndex(startRow + i, startCol);
-                for (int j = 0; j < ColsPerPage; ++j)
+            for (int i = 0; i < RowsPerPage && arrayIndex < m_ids.Length; ++i)
+            {   
+                for (int j = 0; j < ColsPerPage && arrayIndex < m_ids.Length; ++j)
                 {
-                    if (schemeIndex == m_ids.Length)
-                    {
-                        return;
-                    }
-
-                    Scheme scheme = BmApplication.Assets().GetScheme(m_ids[schemeIndex]);
+                    Scheme scheme = BmApplication.Assets().GetScheme(m_ids[arrayIndex]);
 
                     SchemeView schemeView = new SchemeView(scheme, SchemeView.Style.Small);
                     schemeView.x = j * (sw + indent);
                     schemeView.y = i * (sh + indent);
-                    schemeView.id = schemeIndex;
+                    schemeView.id = arrayIndex;
                     m_schemeViews[index] = schemeView;
 
                     m_contentView.AddView(schemeView);
 
-                    ++schemeIndex;
+                    ++arrayIndex;
                     ++index;
                 }
             }
+
+            m_selectedIndex = 0;
+            m_schemeViews[m_selectedIndex].focused = true;
+        }
+
+        private bool MovePage(int delta)
+        {   
+            int oldPage = m_pageIndex;
+            int newPage = MathHelp.ForceRange(m_pageIndex + delta, 0, pagesCount - 1);
+            if (oldPage != newPage)
+            {
+                SetPage(newPage, 0);
+                return true;
+            }
+
+            return false;
         }
 
         private bool Move(int dx, int dy)
@@ -282,32 +306,18 @@ namespace Bomberman.Game.Screens
             int col = ToCol(m_selectedIndex);
             int row = ToRow(m_selectedIndex);
 
-            int newCol = MathHelp.ForceRange(col + dx, 0, m_colsCount - 1);
-            int newRow = MathHelp.ForceRange(row + dy, 0, m_rowsCount - 1);
+            int newCol = MathHelp.ForceRange(col + dx, 0, ColsPerPage - 1);
+            int newRow = MathHelp.ForceRange(row + dy, 0, RowsPerPage - 1);
 
             int newIndex = ToIndex(newRow, newCol);
             if (newIndex != m_selectedIndex)
             {
+                // deselect old
                 int oldSchemeIndex = ToSchemeArrayIndex(m_selectedIndex);
                 Debug.Assert(m_schemeViews[oldSchemeIndex].focused);
                 m_schemeViews[oldSchemeIndex].focused = false;
 
-                if (dx != 0)
-                {
-                    int firstCol = ToCol(m_firstVisibleIndex);
-                    int diff = newCol - firstCol;
-                    if (diff >= ColsPerPage)
-                    {
-                        m_firstVisibleIndex = ToIndex(0, newCol-(ColsPerPage-1));
-                        UpdateMaps(m_firstVisibleIndex);
-                    }
-                    else if (diff <= -1)
-                    {
-                        m_firstVisibleIndex = ToIndex(0, newCol);
-                        UpdateMaps(m_firstVisibleIndex);
-                    }
-                }
-
+                // select new
                 int newSchemeIndex = ToSchemeArrayIndex(newIndex);
                 Debug.Assert(!m_schemeViews[newSchemeIndex].focused);
                 m_schemeViews[newSchemeIndex].focused = true;
@@ -321,56 +331,27 @@ namespace Bomberman.Game.Screens
 
         private int ToSchemeArrayIndex(int index)
         {
-            int row = ToRow(index);
-            int col = ToCol(index);
-            int firstCol = ToCol(m_firstVisibleIndex);
-
-            return row * ColsPerPage + (col - firstCol);
+            return m_pageIndex * SchemesPerPage + index;
         }
 
         private int ToIndex(int row, int col)
         {
-            return row * m_colsCount + col;
+            return row * ColsPerPage + col;
         }
 
         private int ToRow(int index)
         {
-            return index / m_colsCount;
+            return index / ColsPerPage;
         }
 
         private int ToCol(int index)
         {
-            return index % m_colsCount;
+            return index % ColsPerPage;
         }
 
-        //private void Next()
-        //{
-        //    int newIndex = m_pageIndex + MapsPerPage;
-        //    if (newIndex < MapIDs.Length)
-        //    {
-        //        SetPage(newIndex);
-        //    }
-        //}
-
-        //private void Prev()
-        //{
-        //    int newIndex = m_pageIndex - MapsPerPage;
-        //    if (newIndex >= 0)
-        //    {
-        //        SetPage(newIndex);
-        //    }
-        //}
-
-        //private void SetPage(int index)
-        //{
-        //    int oldIndex = index;
-        //    m_pageIndex = index;
-        //    FillMaps(m_pageIndex);
-
-        //    m_pageViews[oldIndex].fillColor = Color.Transparent;
-        //    m_pageViews[index].fillColor = Color.Yellow;
-
-        //    Application.Storage().Set(KeyLastPageIndex, m_pageIndex);
-        //}
+        private int pagesCount
+        {
+            get { return m_ids.Length / SchemesPerPage + (m_ids.Length % SchemesPerPage != 0 ? 1 : 0); }
+        }
     }
 }

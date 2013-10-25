@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Input;
 using BomberEngine.Core.Input;
+using BomberEngine.Game;
 
 namespace BomberEngine.Core.Events
 {
@@ -66,6 +67,21 @@ namespace BomberEngine.Core.Events
             return IsOneOfKeysState(KeyState.Released, keys);
         }
 
+        public bool IsCtrlPressed()
+        {
+            return Input.IsKeyPressed(KeyCode.LeftControl) || Input.IsKeyPressed(KeyCode.RightControl);
+        }
+
+        public bool IsAltPressed()
+        {
+            return Input.IsKeyPressed(KeyCode.LeftAlt) || Input.IsKeyPressed(KeyCode.RightAlt);
+        }
+
+        public bool IsShiftPressed()
+        {
+            return Input.IsKeyPressed(KeyCode.LeftShift) || Input.IsKeyPressed(KeyCode.RightShift);
+        }
+
         private bool IsKeyState(KeyState s, KeyCode key)
         {
             return state == s && arg.key == key;
@@ -83,6 +99,11 @@ namespace BomberEngine.Core.Events
             }
 
             return false;
+        }
+
+        public InputManager Input
+        {
+            get { return Application.Input(); }
         }
 
         #endregion

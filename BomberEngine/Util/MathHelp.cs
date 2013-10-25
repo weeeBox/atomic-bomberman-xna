@@ -69,6 +69,7 @@ namespace BomberEngine.Util
 
         public static int ForceRange(int x, int min, int max)
         {
+            Debug.Assert(min <= max);
             return Math.Max(min, Math.Min(x, max));
         }
     }
