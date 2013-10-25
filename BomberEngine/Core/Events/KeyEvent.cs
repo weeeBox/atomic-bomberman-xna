@@ -82,6 +82,16 @@ namespace BomberEngine.Core.Events
             return Input.IsKeyPressed(KeyCode.LeftShift) || Input.IsKeyPressed(KeyCode.RightShift);
         }
 
+        public bool IsConfirmKey()
+        {
+            return KeyHelper.IsConfirmKey(key) && (IsKeyboard || IsGamePad && playerIndex == 1);
+        }
+
+        public bool IsCancelKey()
+        {
+            return KeyHelper.IsCancelKey(key) && (IsKeyboard || IsGamePad && playerIndex == 1);
+        }
+
         private bool IsKeyState(KeyState s, KeyCode key)
         {
             return state == s && arg.key == key;
@@ -99,6 +109,41 @@ namespace BomberEngine.Core.Events
             }
 
             return false;
+        }
+
+        public bool IsPressed
+        {
+            get { return state == KeyState.Pressed; }
+        }
+
+        public bool IsRepeated
+        {
+            get { return state == KeyState.Repeated; }
+        }
+
+        public bool IsReleased
+        {
+            get { return state == KeyState.Released; }
+        }
+
+        public bool IsKeyboard
+        {
+            get { return playerIndex == -1; }
+        }
+
+        public bool IsGamePad
+        {
+            get { return playerIndex != -1; }
+        }
+
+        public KeyCode key
+        {
+            get { return arg.key; }
+        }
+
+        public int playerIndex
+        {
+            get { return arg.playerIndex; }
         }
 
         public InputManager Input

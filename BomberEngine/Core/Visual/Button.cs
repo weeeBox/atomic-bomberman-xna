@@ -27,15 +27,15 @@ namespace BomberEngine.Core.Visual
             if (evt.code == Event.KEY)
             {
                 KeyEvent keyEvent = evt as KeyEvent;
-                if (keyEvent.arg.key == KeyCode.Enter)
+                if (keyEvent.IsConfirmKey())
                 {
-                    if (keyEvent.state == KeyState.Pressed)
+                    if (keyEvent.IsPressed)
                     {
                         OnPress();
                         return true;                        
                     }
 
-                    if (keyEvent.state == KeyState.Released)
+                    if (keyEvent.IsReleased)
                     {
                         OnRelease();
                         return true;

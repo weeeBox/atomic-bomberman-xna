@@ -59,12 +59,9 @@ namespace BomberEngine.Core.Visual
             if (evt.code == Event.KEY)
             {
                 KeyEvent keyEvent = evt as KeyEvent;
-                if (keyEvent.arg.key == KeyCode.Escape)
-                {
-                    if (keyEvent.state == KeyState.Pressed)
-                    {
-                        Hide();
-                    }
+                if (keyEvent.IsPressed && keyEvent.IsCancelKey())
+                {   
+                    Hide();
                     return true;
                 }
             }

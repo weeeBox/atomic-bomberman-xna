@@ -295,19 +295,17 @@ namespace BomberEngine.Game
                 KeyEvent keyEvent = evt as KeyEvent;
                 if (keyEvent.state == KeyState.Pressed)
                 {
-                    if (keyEvent.IsKeyPressed(KeyCode.Escape) || 
-                        keyEvent.IsKeyPressed(KeyCode.GP_B) || keyEvent.IsKeyPressed(KeyCode.GP_Back))
+                    if (keyEvent.IsConfirmKey())
                     {
-                        if (OnCancelPressed(keyEvent.arg))
+                        if (OnConfirmPressed(keyEvent.arg))
                         {
                             return true;
                         }
                     }
 
-                    if (keyEvent.IsKeyPressed(KeyCode.Enter) || 
-                        keyEvent.IsKeyPressed(KeyCode.GP_A) || keyEvent.IsKeyPressed(KeyCode.GP_Start))
+                    if (keyEvent.IsCancelKey())
                     {
-                        if (OnConfirmPressed(keyEvent.arg))
+                        if (OnCancelPressed(keyEvent.arg))
                         {
                             return true;
                         }
