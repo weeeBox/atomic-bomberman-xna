@@ -473,7 +473,7 @@ namespace BomberEngine.Game
                 }
 
                 mFocusedView = view;
-                return true;
+                return mFocusedView != null;
             }
 
             return false;
