@@ -21,7 +21,7 @@ namespace Bomberman.Game.Screens
     {
         public enum ButtonId
         {
-            Continue,
+            Scheme,
             Back
         }
 
@@ -106,7 +106,7 @@ namespace Bomberman.Game.Screens
             int pageIndex = Application.Storage().GetInt(KeyLastPageIndex);
             int mapIndex = Application.Storage().GetInt(KeyLastMapIndex);
 
-            SchemeTableView table = new SchemeTableView(MapIDs, pageIndex, mapIndex);
+            SchemeTableView table = new SchemeTableView(MapIDs, pageIndex, mapIndex, buttonDelegate);
             table.x = 64;
             table.y = 48;
 
@@ -137,6 +137,7 @@ namespace Bomberman.Game.Screens
             controls.ResizeToFitViews();
             AddView(controls);
 
+            // focus
             FocusView(table);
         }
     }
@@ -150,19 +151,18 @@ namespace Bomberman.Game.Screens
         private int[] m_ids;
 
         private int m_pageIndex;
-        private int m_selectedIndex;
 
         private RectView[] m_indicatorViews;
-        private SchemeView[] m_schemeViews;
+        private SchemeButton[] m_schemeButtons;
 
         private View m_contentView;
+        private ButtonDelegate m_buttonDelegate;
 
-        public SchemeTableView(int[] ids, int pageIndex, int selectedIndex)
+        public SchemeTableView(int[] ids, int pageIndex, int selectedIndex, ButtonDelegate buttonDelegate)
         {
-            focusable = true;
-
             m_ids = ids;
-            m_schemeViews = new SchemeView[SchemesPerPage];
+            m_schemeButtons = new SchemeButton[SchemesPerPage];
+            m_buttonDelegate = buttonDelegate;
 
             // indicators
             View indicatorView = CreateIndicator(pagesCount);
@@ -174,8 +174,6 @@ namespace Bomberman.Game.Screens
             m_contentView.debugColor = Color.Red;
             SetPage(pageIndex, selectedIndex);
             m_contentView.ResizeToFitViews();
-
-            m_schemeViews[0].focused = true;
 
             AddView(m_contentView);
 
@@ -189,29 +187,13 @@ namespace Bomberman.Game.Screens
             if (evt.code == Event.KEY)
             {
                 KeyEvent keyEvent = (KeyEvent)evt;
-                if (keyEvent.IsKeyPressed(KeyCode.Up))
-                {
-                    Move(0, -1);
-                    return true;
-                }
-
-                if (keyEvent.IsKeyPressed(KeyCode.Down))
-                {
-                    Move(0, 1);
-                    return true;
-                }
-
                 if (keyEvent.IsKeyPressed(KeyCode.Left))
                 {
                     if (keyEvent.IsCtrlPressed())
                     {
                         MovePage(-1);
+                        return true;
                     }
-                    else
-                    {
-                        Move(-1, 0);
-                    }
-                    return true;
                 }
 
                 if (keyEvent.IsKeyPressed(KeyCode.Right))
@@ -219,12 +201,8 @@ namespace Bomberman.Game.Screens
                     if (keyEvent.IsCtrlPressed())
                     {
                         MovePage(1);
+                        return true;
                     }
-                    else
-                    {
-                        Move(1, 0);
-                    }
-                    return true;
                 }
             }
 
@@ -263,7 +241,7 @@ namespace Bomberman.Game.Screens
             int index = 0;
             int arrayIndex = pageIndex * SchemesPerPage;
 
-            ArrayUtils.Clear(m_schemeViews);
+            ArrayUtils.Clear(m_schemeButtons);
 
             for (int i = 0; i < RowsPerPage && arrayIndex < m_ids.Length; ++i)
             {   
@@ -271,11 +249,12 @@ namespace Bomberman.Game.Screens
                 {
                     Scheme scheme = BmApplication.Assets().GetScheme(m_ids[arrayIndex]);
 
-                    SchemeView schemeView = new SchemeView(scheme, SchemeView.Style.Small);
+                    SchemeButton schemeView = new SchemeButton(scheme);
                     schemeView.x = j * (sw + indent);
                     schemeView.y = i * (sh + indent);
                     schemeView.id = arrayIndex;
-                    m_schemeViews[index] = schemeView;
+                    schemeView.buttonDelegate = m_buttonDelegate;
+                    m_schemeButtons[index] = schemeView;
 
                     m_contentView.AddView(schemeView);
 
@@ -283,9 +262,6 @@ namespace Bomberman.Game.Screens
                     ++index;
                 }
             }
-
-            m_selectedIndex = 0;
-            m_schemeViews[m_selectedIndex].focused = true;
         }
 
         private bool MovePage(int delta)
@@ -295,34 +271,6 @@ namespace Bomberman.Game.Screens
             if (oldPage != newPage)
             {
                 SetPage(newPage, 0);
-                return true;
-            }
-
-            return false;
-        }
-
-        private bool Move(int dx, int dy)
-        {
-            int col = ToCol(m_selectedIndex);
-            int row = ToRow(m_selectedIndex);
-
-            int newCol = MathHelp.ForceRange(col + dx, 0, ColsPerPage - 1);
-            int newRow = MathHelp.ForceRange(row + dy, 0, RowsPerPage - 1);
-
-            int newIndex = ToIndex(newRow, newCol);
-            if (newIndex != m_selectedIndex)
-            {
-                // deselect old
-                int oldSchemeIndex = ToSchemeArrayIndex(m_selectedIndex);
-                Debug.Assert(m_schemeViews[oldSchemeIndex].focused);
-                m_schemeViews[oldSchemeIndex].focused = false;
-
-                // select new
-                int newSchemeIndex = ToSchemeArrayIndex(newIndex);
-                Debug.Assert(!m_schemeViews[newSchemeIndex].focused);
-                m_schemeViews[newSchemeIndex].focused = true;
-
-                m_selectedIndex = newIndex;
                 return true;
             }
 
@@ -352,6 +300,37 @@ namespace Bomberman.Game.Screens
         private int pagesCount
         {
             get { return m_ids.Length / SchemesPerPage + (m_ids.Length % SchemesPerPage != 0 ? 1 : 0); }
+        }
+    }
+
+    class SchemeButton : Button
+    {
+        private const int BorderSize = 3;
+
+        private SchemeView m_schemeView;
+        private Scheme m_scheme;
+
+        public SchemeButton(Scheme scheme)
+        {
+            m_scheme = scheme;
+            m_schemeView = new SchemeView(scheme, SchemeView.Style.Small);
+            SetSize(m_schemeView.width + 2 * BorderSize, m_schemeView.height + 2 * BorderSize);
+        }
+
+        public override void Draw(Context context)
+        {
+            PreDraw(context);
+            if (focused)
+            {
+                context.FillRect(0, 0, width - 1, height - 1, Color.Yellow);
+            }
+            m_schemeView.Draw(context);
+            PostDraw(context);
+        }
+
+        public Scheme scheme
+        {
+            get { return m_scheme; }
         }
     }
 }

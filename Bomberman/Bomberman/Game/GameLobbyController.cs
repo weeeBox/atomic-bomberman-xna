@@ -40,9 +40,6 @@ namespace Bomberman.Game
 
         protected override void OnStart()
         {
-            selectedScheme = Assets().GetScheme(A.maps_x);
-            InitInputTypes(selectedScheme);
-
             StartScreen(new MapScreen(MapScreenButtonDelegate));
         }
 
@@ -200,7 +197,11 @@ namespace Bomberman.Game
             MapScreen.ButtonId buttonId = (MapScreen.ButtonId)button.id;
             switch (buttonId)
             {
-                case MapScreen.ButtonId.Continue:
+                case MapScreen.ButtonId.Scheme:
+
+                    selectedScheme = (button as SchemeButton).scheme;
+                    InitInputTypes(selectedScheme);
+
                     StartScreen(new PlayersScreen(selectedScheme, inputTypes, InputTypeSelectDelegate, PlayersScreenButtonDelegate));
                     break;
             }

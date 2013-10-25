@@ -5,9 +5,15 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using BomberEngine.Debugging;
 using BomberEngine.Consoles;
+using BomberEngine.Game;
 
 namespace BomberEngine.Core.Visual
 {
+    public enum FocusDirection
+    {
+        None, Up, Down, Left, Right
+    }
+
     public class View : BaseElement
     {
         public const float ALIGN_MIN = 0.0f;
@@ -269,7 +275,7 @@ namespace BomberEngine.Core.Visual
             return focusable && visible && enabled;
         }
 
-        public void focus()
+        internal void focus()
         {
             bool oldFocused = focused;
             focused = true;
@@ -279,7 +285,7 @@ namespace BomberEngine.Core.Visual
             }
         }
 
-        public void blur()
+        internal void blur()
         {
             bool oldFocused = focused;
             focused = false;

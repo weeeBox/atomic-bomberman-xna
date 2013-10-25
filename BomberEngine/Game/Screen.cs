@@ -10,11 +10,6 @@ namespace BomberEngine.Game
 {
     public class Screen : BaseElement, IDestroyable
     {
-        protected enum FocusDirection
-        {
-            None, Up, Down, Left, Right
-        }
-
         public float width;
         public float height;
 
@@ -470,7 +465,18 @@ namespace BomberEngine.Game
 
                 if (view != null)
                 {
-                    view.focus();
+                    if (view.CanFocus())
+                    {
+                        view.focus();
+                    }
+                    else
+                    {
+                        view = FindFocusView(view, FocusDirection.Down);
+                        if (view != null)
+                        {
+                            return FocusView(view);
+                        }
+                    }
                 }
 
                 mFocusedView = view;

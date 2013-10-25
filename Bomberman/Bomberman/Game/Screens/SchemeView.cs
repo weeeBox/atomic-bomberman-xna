@@ -20,7 +20,6 @@ namespace Bomberman.Game.Screens
         }
 
         private static readonly Color COLOR_BACK = new Color(115, 89, 166);
-        private const int FocusedBorder = 3;
 
         public SchemeView(Scheme scheme, Style style)
         {
@@ -65,17 +64,6 @@ namespace Bomberman.Game.Screens
             nameView.y = 0.5f * (height + (dataView.y + dataView.height));
             nameView.alignX = nameView.alignY = View.ALIGN_CENTER;
             AddView(nameView);
-        }
-
-        public override void Draw(Context context)
-        {
-            PreDraw(context);
-            if (focused)
-            {
-                context.FillRect(-FocusedBorder, -FocusedBorder, width + 2 * FocusedBorder, height + 2 * FocusedBorder, Color.White);
-            }
-
-            PostDraw(context);
         }
     }
 

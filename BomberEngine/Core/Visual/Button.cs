@@ -11,6 +11,11 @@ namespace BomberEngine.Core.Visual
         public ButtonDelegate buttonDelegate;
         public Object data;
 
+        public Button()
+            : this(0, 0, 0, 0)
+        {
+        }
+
         public Button(float width, float height)
             : this(0, 0, width, height)
         {
