@@ -412,7 +412,7 @@ namespace BomberEngine.Game
                 }
             }
 
-            return root.focusable ? root : null;
+            return root.CanFocus() ? root : null;
         }
 
         private View FindFocusView(View root, View current, FocusDirection direction)
@@ -465,17 +465,10 @@ namespace BomberEngine.Game
 
                 if (view != null)
                 {
-                    if (view.CanFocus())
+                    view = FindFocusView(view, FocusDirection.Down);
+                    if (view != null)
                     {
                         view.focus();
-                    }
-                    else
-                    {
-                        view = FindFocusView(view, FocusDirection.Down);
-                        if (view != null)
-                        {
-                            return FocusView(view);
-                        }
                     }
                 }
 
