@@ -249,6 +249,7 @@ namespace BomberEngine.Core.Visual
             {
                 viewList.Remove(child);
                 child.parent = null;
+                currentScreen.OnViewRemoved(child);
             }
         }
 
@@ -271,6 +272,12 @@ namespace BomberEngine.Core.Visual
         {
             if (viewList.Count() > 0)
             {
+                for (int i = 0; i < viewList.Count(); ++i)
+                {
+                    View view = viewList.Get(i);
+                    view.parent = null;
+                    currentScreen.OnViewRemoved(view);
+                }
                 viewList.Clear();
             }
         }
@@ -580,6 +587,17 @@ namespace BomberEngine.Core.Visual
         {
             this.parentAlignX = alignX;
             this.parentAlignY = alignY;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
+        public Screen currentScreen
+        {
+            get { return Screen.current; }
         }
 
         #endregion

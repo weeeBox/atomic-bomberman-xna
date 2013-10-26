@@ -34,6 +34,8 @@ namespace BomberEngine.Game
         private Button confirmButton;
         private ButtonDelegate confirmButtonDelegate;
 
+        internal static Screen current;
+
         public Screen(int id = 0)
             : this(Application.GetWidth(), Application.GetHeight())
         {
@@ -81,6 +83,24 @@ namespace BomberEngine.Game
             AddView(view);
             view.x = x;
             view.y = y;
+        }
+
+        internal void OnViewRemoved(View view)
+        {
+            if (view == mFocusedView)
+            {
+                Debug.Assert(view.focused);
+                mFocusedView = null;
+            }
+            else if (view == mFocusLockView)
+            {
+                Debug.Assert(view.focused);
+                mFocusLockView = null;
+            }
+            else if (view == mRootView)
+            {
+                mRootView = null;
+            }
         }
 
         #endregion
@@ -378,7 +398,7 @@ namespace BomberEngine.Game
             return mRootView.FindFocusView(this, direction);
         }
 
-        protected bool FocusView(View view)
+        public bool FocusView(View view)
         {
             if (view != mFocusedView)
             {
@@ -428,7 +448,7 @@ namespace BomberEngine.Game
 
         public void LockFocus(View view)
         {
-            Debug.AssertNull(mFocusLockView);
+            Debug.Assert(mFocusLockView == null || mFocusLockView == view);
             mFocusLockView = view;
         }
 
@@ -468,6 +488,11 @@ namespace BomberEngine.Game
         //////////////////////////////////////////////////////////////////////////////
 
         #region Properties
+
+        public static Screen Current
+        {
+            get { return current; }
+        }
 
         public bool AllowsDrawPrevious
         {

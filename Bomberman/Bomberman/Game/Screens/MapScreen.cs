@@ -107,6 +107,7 @@ namespace Bomberman.Game.Screens
             int mapIndex = Application.Storage().GetInt(KeyLastMapIndex);
 
             SchemeTableView table = new SchemeTableView(MapIDs, pageIndex, mapIndex, buttonDelegate);
+            table.screen = this;
             table.x = 64;
             table.y = 48;
 
@@ -159,6 +160,7 @@ namespace Bomberman.Game.Screens
         private ButtonDelegate m_buttonDelegate;
 
         private int m_focusedItem;
+        public Screen screen;
 
         public SchemeTableView(int[] ids, int pageIndex, int selectedIndex, ButtonDelegate buttonDelegate)
         {
@@ -236,6 +238,7 @@ namespace Bomberman.Game.Screens
 
             m_contentView.RemoveViews();
             m_pageIndex = pageIndex;
+            m_focusedItem = selectedIndex;
 
             int sw = 153;
             int sh = 143;
@@ -266,6 +269,8 @@ namespace Bomberman.Game.Screens
                     ++index;
                 }
             }
+
+            
         }
 
         private bool MovePage(int delta)
@@ -275,6 +280,7 @@ namespace Bomberman.Game.Screens
             if (oldPage != newPage)
             {
                 SetPage(newPage, 0);
+                screen.FocusView(m_schemeButtons[0]);
                 return true;
             }
 
@@ -301,7 +307,7 @@ namespace Bomberman.Game.Screens
                 return FindFocusView(focusManager, direction);
             }
 
-            int oldIndex = currentButton.id;
+            int oldIndex = currentButton.id % SchemesPerPage;
             int dx = 0;
             int dy = 0;
 

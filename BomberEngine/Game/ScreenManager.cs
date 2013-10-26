@@ -118,6 +118,7 @@ namespace BomberEngine.Game
             }
 
             currentScreen = screen;
+            Screen.current = currentScreen;
 
             screens.Add(screen);
             screen.screenManager = this;
@@ -166,6 +167,7 @@ namespace BomberEngine.Game
                 }
             }
 
+            Screen.current = currentScreen;
             screen.screenManager = null;
             Stop(screen);
         }
