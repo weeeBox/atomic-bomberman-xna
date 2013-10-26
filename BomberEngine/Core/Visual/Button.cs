@@ -29,11 +29,6 @@ namespace BomberEngine.Core.Visual
 
         public override bool HandleEvent(Event evt)
         {
-            if (base.HandleEvent(evt))
-            {
-                return true;
-            }
-
             if (evt.code == Event.KEY)
             {
                 KeyEvent keyEvent = evt as KeyEvent;
@@ -53,7 +48,7 @@ namespace BomberEngine.Core.Visual
                 }
             }
 
-            return false;
+            return base.HandleEvent(evt);
         }
 
         protected virtual void OnPress()

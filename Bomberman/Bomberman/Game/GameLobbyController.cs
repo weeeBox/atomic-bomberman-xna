@@ -11,6 +11,7 @@ using BomberEngine.Debugging;
 using BomberEngine.Core.Visual;
 using Bomberman.Game.Elements.Players.Input;
 using Bomberman.Game.Elements.Players;
+using BomberEngine.Game;
 
 namespace Bomberman.Game
 {
@@ -23,6 +24,9 @@ namespace Bomberman.Game
 
     public class GameLobbyController : BmController
     {
+        private static readonly String KeyLastPageIndex   = "LastPageIndex";
+        private static readonly String KeyLastSchemeIndex = "LastMapIndex";
+
         public enum ExitCode
         {
             StartGame,
@@ -40,7 +44,10 @@ namespace Bomberman.Game
 
         protected override void OnStart()
         {
-            StartScreen(new SchemePickScreen(MapScreenButtonDelegate));
+            int pageIndex = Application.Storage().GetInt(KeyLastPageIndex);
+            int selectedIndex = Application.Storage().GetInt(KeyLastSchemeIndex);
+
+            StartScreen(new SchemePickScreen(SchemePickButtonDelegate, pageIndex, selectedIndex));
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -192,18 +199,23 @@ namespace Bomberman.Game
 
         #region Button delegates
 
-        private void MapScreenButtonDelegate(Button button)
+        private void SchemePickButtonDelegate(Button button)
         {
-            SchemePickScreen.ButtonId buttonId = (SchemePickScreen.ButtonId)button.id;
-            switch (buttonId)
+            SchemeButton schemeButton = button as SchemeButton;
+            if (schemeButton != null)
             {
-                case SchemePickScreen.ButtonId.Scheme:
+                SchemePickScreen screen = CurrentScreen() as SchemePickScreen;
+                int pageIndex = screen.pageIndex;
+                int selectedIndex = screen.selectedIndex;
 
-                    selectedScheme = (button as SchemeButton).scheme;
-                    InitInputTypes(selectedScheme);
+                Application.Storage().Set(KeyLastPageIndex, pageIndex);
+                Application.Storage().Set(KeyLastSchemeIndex, selectedIndex);
 
-                    StartScreen(new PlayersScreen(selectedScheme, inputTypes, InputTypeSelectDelegate, PlayersScreenButtonDelegate));
-                    break;
+                selectedScheme = schemeButton.scheme;
+
+                InitInputTypes(selectedScheme);
+
+                StartScreen(new PlayersScreen(selectedScheme, inputTypes, InputTypeSelectDelegate, PlayersScreenButtonDelegate));
             }
         }
 
