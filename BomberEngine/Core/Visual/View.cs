@@ -6,12 +6,17 @@ using Microsoft.Xna.Framework;
 using BomberEngine.Debugging;
 using BomberEngine.Consoles;
 using BomberEngine.Game;
+using BomberEngine.Core.IO;
 
 namespace BomberEngine.Core.Visual
 {
     public enum FocusDirection
     {
-        None, Up, Down, Left, Right
+        None  = 0x0, 
+        Up    = 0x1, 
+        Down  = 0x2, 
+        Left  = 0x4, 
+        Right = 0x8
     }
 
     public interface IFocusManager
@@ -61,6 +66,8 @@ namespace BomberEngine.Core.Visual
 
         public Color debugColor = Color.White;
 
+        private FocusDirection focusEnabledDirections;
+
         public View()
             : this(0, 0)
         {
@@ -94,6 +101,9 @@ namespace BomberEngine.Core.Visual
             viewList = ViewList.Null;
 
             visible = enabled = true;
+
+            EnableFocus(FocusDirection.Up);
+            EnableFocus(FocusDirection.Down);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -307,6 +317,11 @@ namespace BomberEngine.Core.Visual
 
         public virtual View FindFocusView(IFocusManager focusManager, FocusDirection direction)
         {
+            if (!IsFocusEnabled(direction))
+            {
+                return null;
+            }
+
             if (direction == FocusDirection.Down || direction == FocusDirection.Right)
             {
                 for (int i = 0; i < ChildCount(); ++i)
@@ -347,6 +362,11 @@ namespace BomberEngine.Core.Visual
                 
         public virtual View FindFocusView(IFocusManager focusManager, View current, FocusDirection direction)
         {
+            if (!IsFocusEnabled(direction))
+            {
+                return null;
+            }
+
             int index = IndexOf(current);
             Debug.Assert(index != -1);
 
@@ -382,6 +402,21 @@ namespace BomberEngine.Core.Visual
             }
 
             return null;
+        }
+
+        public void EnableFocus(FocusDirection direction)
+        {
+            focusEnabledDirections |= direction;
+        }
+
+        public void DisableFocus(FocusDirection direction)
+        {
+            focusEnabledDirections &= ~direction;
+        }
+
+        public bool IsFocusEnabled(FocusDirection direction)
+        {
+            return (focusEnabledDirections & direction) != 0;
         }
 
         #endregion
