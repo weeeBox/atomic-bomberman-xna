@@ -283,10 +283,8 @@ namespace BomberEngine.Game
 
             if (evt.code == Event.KEY)
             {
-                if (mFocusedView != null)
-                {
-                    if (mFocusedView.HandleEvent(evt)) return true;
-                }
+                if (mFocusLockView != null && mFocusLockView.HandleEvent(evt)) return true;
+                if (mFocusedView != null && mFocusedView.HandleEvent(evt)) return true;
 
                 KeyEvent keyEvent = evt as KeyEvent;
                 if (keyEvent.state == KeyState.Pressed)

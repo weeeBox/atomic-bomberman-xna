@@ -388,6 +388,7 @@ namespace Bomberman.Game.Screens
         {
             m_scheme = scheme;
             m_schemeView = new SchemeView(scheme, SchemeView.Style.Small);
+            m_schemeView.x = m_schemeView.y = BorderSize;
             SetSize(m_schemeView.width + 2 * BorderSize, m_schemeView.height + 2 * BorderSize);
         }
 
