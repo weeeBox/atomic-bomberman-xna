@@ -17,7 +17,7 @@ using BomberEngine.Debugging;
 
 namespace Bomberman.Game.Screens
 {
-    public class MapScreen : Screen
+    public class SchemePickScreen : Screen
     {
         public enum ButtonId
         {
@@ -101,7 +101,7 @@ namespace Bomberman.Game.Screens
 		    A.maps_x,
         };
 
-        public MapScreen(ButtonDelegate buttonDelegate)
+        public SchemePickScreen(ButtonDelegate buttonDelegate)
         {
             int pageIndex = Application.Storage().GetInt(KeyLastPageIndex);
             int mapIndex = Application.Storage().GetInt(KeyLastMapIndex);

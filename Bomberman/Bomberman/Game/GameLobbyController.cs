@@ -40,7 +40,7 @@ namespace Bomberman.Game
 
         protected override void OnStart()
         {
-            StartScreen(new MapScreen(MapScreenButtonDelegate));
+            StartScreen(new SchemePickScreen(MapScreenButtonDelegate));
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -194,10 +194,10 @@ namespace Bomberman.Game
 
         private void MapScreenButtonDelegate(Button button)
         {
-            MapScreen.ButtonId buttonId = (MapScreen.ButtonId)button.id;
+            SchemePickScreen.ButtonId buttonId = (SchemePickScreen.ButtonId)button.id;
             switch (buttonId)
             {
-                case MapScreen.ButtonId.Scheme:
+                case SchemePickScreen.ButtonId.Scheme:
 
                     selectedScheme = (button as SchemeButton).scheme;
                     InitInputTypes(selectedScheme);
