@@ -225,6 +225,8 @@ namespace Bomberman.Game.Screens
             return view;
         }
 
+        #region Paging
+
         private void SetPage(int pageIndex, int selectedIndex)
         {
             Debug.AssertRange(pageIndex, 0, pagesCount);
@@ -277,6 +279,67 @@ namespace Bomberman.Game.Screens
             return false;
         }
 
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Focus
+
+        public override View FindFocusView(IFocusManager focusManager, FocusDirection direction)
+        {
+            focusManager.LockFocus(this);
+            return m_schemeButtons[0];
+        }
+
+        public override View FindFocusView(IFocusManager focusManager, View current, FocusDirection direction)
+        {
+            SchemeButton currentButton = current as SchemeButton;
+            if (currentButton == null)
+            {
+                return FindFocusView(focusManager, direction);
+            }
+
+            int m_selectedIndex = currentButton.id;
+            int dx = 0;
+            int dy = 0;
+
+            switch (direction)
+            {
+                case FocusDirection.Up:     dy = -1; break;
+                case FocusDirection.Down:   dy = 1; break;
+                case FocusDirection.Left:   dx = -1; break;
+                case FocusDirection.Right:  dx = 1; break;
+            }
+
+            int col = ToCol(m_selectedIndex);
+            int row = ToRow(m_selectedIndex);
+
+            int newCol = MathHelp.ForceRange(col + dx, 0, ColsPerPage - 1);
+            int newRow = MathHelp.ForceRange(row + dy, 0, RowsPerPage - 1);
+
+            int newIndex = ToIndex(newRow, newCol);
+            if (newIndex != m_selectedIndex)
+            {   
+                return m_schemeButtons[newIndex];
+            }
+
+            if (direction == FocusDirection.Down)
+            {
+                focusManager.UnlockFocus(this);
+
+                View parent = Parent();
+                return parent.FindFocusView(focusManager, this, direction);
+            }
+            
+            return null;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Helpers
+
         private int ToSchemeArrayIndex(int index)
         {
             return m_pageIndex * SchemesPerPage + index;
@@ -297,10 +360,18 @@ namespace Bomberman.Game.Screens
             return index % ColsPerPage;
         }
 
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
         private int pagesCount
         {
             get { return m_ids.Length / SchemesPerPage + (m_ids.Length % SchemesPerPage != 0 ? 1 : 0); }
         }
+
+        #endregion
     }
 
     class SchemeButton : Button

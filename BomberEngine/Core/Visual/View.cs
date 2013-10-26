@@ -14,6 +14,12 @@ namespace BomberEngine.Core.Visual
         None, Up, Down, Left, Right
     }
 
+    public interface IFocusManager
+    {
+        void LockFocus(View view);
+        void UnlockFocus(View view);
+    }
+
     public class View : BaseElement
     {
         public const float ALIGN_MIN = 0.0f;
@@ -297,6 +303,85 @@ namespace BomberEngine.Core.Visual
 
         protected virtual void OnFocusChanged(bool focused)
         {
+        }
+
+        public virtual View FindFocusView(IFocusManager focusManager, FocusDirection direction)
+        {
+            if (direction == FocusDirection.Down || direction == FocusDirection.Right)
+            {
+                for (int i = 0; i < ChildCount(); ++i)
+                {
+                    View child = ViewAt(i);
+                    View view = child.FindFocusView(focusManager, direction);
+                    if (view != null)
+                    {
+                        return view;
+                    }
+
+                    if (child.CanFocus())
+                    {
+                        return child;
+                    }
+                }
+            }
+            else if (direction == FocusDirection.Up || direction == FocusDirection.Left)
+            {
+                for (int i = ChildCount() - 1; i >= 0; --i)
+                {
+                    View child = ViewAt(i);
+                    View view = child.FindFocusView(focusManager, direction);
+                    if (view != null)
+                    {
+                        return view;
+                    }
+
+                    if (child.CanFocus())
+                    {
+                        return child;
+                    }
+                }
+            }
+
+            return CanFocus() ? this : null;
+        }
+                
+        public virtual View FindFocusView(IFocusManager focusManager, View current, FocusDirection direction)
+        {
+            int index = IndexOf(current);
+            Debug.Assert(index != -1);
+
+            if (direction == FocusDirection.Down || direction == FocusDirection.Right)
+            {
+                for (int i = index + 1; i < ChildCount(); ++i)
+                {
+                    View child = ViewAt(i);
+                    View view = child.FindFocusView(focusManager, direction);
+                    if (view != null)
+                    {
+                        return view;
+                    }
+                }
+            }
+            else if (direction == FocusDirection.Up || direction == FocusDirection.Left)
+            {
+                for (int i = index - 1; i >= 0; --i)
+                {
+                    View child = ViewAt(i);
+                    View view = child.FindFocusView(focusManager, direction);
+                    if (view != null)
+                    {
+                        return view;
+                    }
+                }
+            }
+
+            View parent = Parent();
+            if (parent != null)
+            {
+                return parent.FindFocusView(focusManager, this, direction);
+            }
+
+            return null;
         }
 
         #endregion

@@ -8,13 +8,14 @@ using System.Collections.Generic;
 
 namespace BomberEngine.Game
 {
-    public class Screen : BaseElement, IDestroyable
+    public class Screen : BaseElement, IDestroyable, IFocusManager
     {
         public float width;
         public float height;
 
         private View mRootView;
         private View mFocusedView;
+        private View mFocusLockView;
 
         private ITimerManager timerManager;
 
@@ -354,104 +355,29 @@ namespace BomberEngine.Game
 
         private bool TryMoveFocus(FocusDirection direction)
         {
-            if (mFocusedView != null)
+            View view = FindFocusView(direction);
+            if (view != null)
             {
-                View parentView = mFocusedView.Parent();
-                View view = FindFocusView(parentView, mFocusedView, direction);
-                if (view != null)
-                {
-                    return FocusView(view);
-                }
-            }
-            else
-            {
-                View view = FindFocusView(mRootView, direction);
-                if (view != null)
-                {
-                    return FocusView(view);
-                }
+                return FocusView(view);
             }
 
             return false;
         }
 
-        private View FindFocusView(View root, FocusDirection direction)
-        {
-            if (direction == FocusDirection.Down || direction == FocusDirection.Right)
+        private View FindFocusView(FocusDirection direction)
+        {   
+            if (mFocusLockView != null)
             {
-                for (int i = 0; i < root.ChildCount(); ++i)
-                {
-                    View child = root.ViewAt(i);
-                    View view = FindFocusView(child, direction);
-                    if (view != null)
-                    {
-                        return view;
-                    }
-
-                    if (child.CanFocus())
-                    {
-                        return child;
-                    }
-                }
-            }
-            else if (direction == FocusDirection.Up || direction == FocusDirection.Left)
-            {
-                for (int i = root.ChildCount() - 1; i >= 0; --i)
-                {
-                    View child = root.ViewAt(i);
-                    View view = FindFocusView(child, direction);
-                    if (view != null)
-                    {
-                        return view;
-                    }
-
-                    if (child.CanFocus())
-                    {
-                        return child;
-                    }
-                }
+                return mFocusLockView.FindFocusView(this, mFocusedView, direction);
             }
 
-            return root.CanFocus() ? root : null;
-        }
-
-        private View FindFocusView(View root, View current, FocusDirection direction)
-        {
-            int index = root.IndexOf(current);
-            Debug.Assert(index != -1);
-
-            if (direction == FocusDirection.Down || direction == FocusDirection.Right)
+            if (mFocusedView != null)
             {
-                for (int i = index + 1; i < root.ChildCount(); ++i)
-                {
-                    View child = root.ViewAt(i);
-                    View view = FindFocusView(child, direction);
-                    if (view != null)
-                    {
-                        return view;
-                    }
-                }
+                View parentView = mFocusedView.Parent();
+                return parentView.FindFocusView(this, mFocusedView, direction);
             }
-            else if (direction == FocusDirection.Up || direction == FocusDirection.Left)
-            {
-                for (int i = index - 1; i >= 0; --i)
-                {
-                    View child = root.ViewAt(i);
-                    View view = FindFocusView(child, direction);
-                    if (view != null)
-                    {
-                        return view;
-                    }
-                }
-            }
-
-            View parent = root.Parent();
-            if (parent != null)
-            {
-                return FindFocusView(parent, root, direction);
-            }
-
-            return null;
+            
+            return mRootView.FindFocusView(this, direction);
         }
 
         protected bool FocusView(View view)
@@ -465,7 +391,7 @@ namespace BomberEngine.Game
 
                 if (view != null)
                 {
-                    view = FindFocusView(view, FocusDirection.Down);
+                    view = view.FindFocusView(this, FocusDirection.Down);
                     if (view != null)
                     {
                         view.focus();
@@ -494,6 +420,24 @@ namespace BomberEngine.Game
             }
 
             return FocusDirection.None;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region IFocusManager
+
+        public void LockFocus(View view)
+        {
+            Debug.AssertNull(mFocusLockView);
+            mFocusLockView = view;
+        }
+
+        public void UnlockFocus(View view)
+        {
+            Debug.Assert(mFocusLockView == view);
+            mFocusLockView = null;
         }
 
         #endregion
