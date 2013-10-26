@@ -158,6 +158,8 @@ namespace Bomberman.Game.Screens
         private View m_contentView;
         private ButtonDelegate m_buttonDelegate;
 
+        private int m_focusedItem;
+
         public SchemeTableView(int[] ids, int pageIndex, int selectedIndex, ButtonDelegate buttonDelegate)
         {
             m_ids = ids;
@@ -288,7 +290,7 @@ namespace Bomberman.Game.Screens
         public override View FindFocusView(IFocusManager focusManager, FocusDirection direction)
         {
             focusManager.LockFocus(this);
-            return m_schemeButtons[0];
+            return m_schemeButtons[m_focusedItem];
         }
 
         public override View FindFocusView(IFocusManager focusManager, View current, FocusDirection direction)
@@ -299,7 +301,7 @@ namespace Bomberman.Game.Screens
                 return FindFocusView(focusManager, direction);
             }
 
-            int m_selectedIndex = currentButton.id;
+            int oldIndex = currentButton.id;
             int dx = 0;
             int dy = 0;
 
@@ -311,15 +313,16 @@ namespace Bomberman.Game.Screens
                 case FocusDirection.Right:  dx = 1; break;
             }
 
-            int col = ToCol(m_selectedIndex);
-            int row = ToRow(m_selectedIndex);
+            int col = ToCol(oldIndex);
+            int row = ToRow(oldIndex);
 
             int newCol = MathHelp.ForceRange(col + dx, 0, ColsPerPage - 1);
             int newRow = MathHelp.ForceRange(row + dy, 0, RowsPerPage - 1);
 
             int newIndex = ToIndex(newRow, newCol);
-            if (newIndex != m_selectedIndex)
-            {   
+            if (newIndex != oldIndex)
+            {
+                m_focusedItem = newIndex;
                 return m_schemeButtons[newIndex];
             }
 
