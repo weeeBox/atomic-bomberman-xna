@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using BomberEngine.Util;
 
-namespace BomberEngine.Consoles
+namespace BomberEngine
 {
     public enum CFlags
     {   

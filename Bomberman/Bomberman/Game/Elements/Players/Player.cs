@@ -8,7 +8,7 @@ using Bomberman.Game.Elements.Players.Input;
 using Bomberman.Game.Elements.Fields;
 using BomberEngine.Debugging;
 using BomberEngine.Util;
-using BomberEngine.Consoles;
+using BomberEngine;
 using Lidgren.Network;
 using BomberEngine.Game;
 using BomberEngine.Core;

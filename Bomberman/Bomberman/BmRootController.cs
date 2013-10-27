@@ -1,6 +1,6 @@
 ﻿using System;
 using Assets;
-using BomberEngine.Consoles;
+using BomberEngine;
 using BomberEngine.Core.Input;
 using BomberEngine.Game;
 using Bomberman.Game;

@@ -9,7 +9,7 @@ using Bomberman.Networking;
 using Lidgren.Network;
 using BomberEngine.Core;
 using BomberEngine.Core.Events;
-using BomberEngine.Consoles;
+using BomberEngine;
 using Bomberman.Game.Elements.Fields;
 using Bomberman.Multiplayer;
 using BomberEngine.Core.Visual;

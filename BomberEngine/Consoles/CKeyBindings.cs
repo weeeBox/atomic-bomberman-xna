@@ -7,7 +7,7 @@ using BomberEngine.Util;
 using BomberEngine.Debugging;
 using BomberEngine.Game;
 
-namespace BomberEngine.Consoles
+namespace BomberEngine
 {
     public struct CKeyBinding
     {

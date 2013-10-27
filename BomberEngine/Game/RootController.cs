@@ -4,7 +4,7 @@ using BomberEngine.Core.Input;
 using BomberEngine.Core.Visual;
 using BomberEngine.Debugging;
 using BomberEngine.Core.Events;
-using BomberEngine.Consoles;
+using BomberEngine;
 using BomberEngine.Core.Assets.Types;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;

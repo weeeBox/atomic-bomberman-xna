@@ -10,7 +10,7 @@ using Bomberman.Content;
 using BomberEngine.Debugging;
 using BomberEngine.Game;
 using BomberEngine.Core.Events;
-using BomberEngine.Consoles;
+using BomberEngine;
 
 namespace Bomberman.Game
 {

@@ -10,7 +10,7 @@ using BomberEngine.Native;
 using BomberEngine.Core.Events;
 using BomberEngine.Core.Storage;
 using BomberEngine.Util;
-using BomberEngine.Consoles;
+using BomberEngine;
 using BomberEngine.Demo;
 using BomberEngine.Core.IO;
 

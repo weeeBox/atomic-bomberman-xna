@@ -8,7 +8,7 @@ using Bomberman.Content;
 using BomberEngine.Core.Input;
 using BomberEngine.Core.Visual;
 using BomberEngine.Core.Events;
-using BomberEngine.Consoles;
+using BomberEngine;
 using Bomberman.Networking;
 using BomberEngine.Debugging;
 using System.Net;

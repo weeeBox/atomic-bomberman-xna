@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BomberEngine.Game;
-using BomberEngine.Consoles;
+using BomberEngine;
 using BomberEngine.Core.IO;
 using BomberEngine.Core.Input;
 
-namespace BomberEngine.Consoles
+namespace BomberEngine
 {
     public class Cmd_listcmds : CCommand
     {

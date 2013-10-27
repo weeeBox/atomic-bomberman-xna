@@ -9,7 +9,7 @@ using BomberEngine.Native;
 using Bomberman.Game;
 using BomberEngine.Core.Assets.Types;
 using BomberEngine.Core.Events;
-using BomberEngine.Consoles;
+using BomberEngine;
 using BomberEngine.Core.Visual;
 using System;
 using BomberEngine.Demo;

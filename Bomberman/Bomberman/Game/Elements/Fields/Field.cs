@@ -13,7 +13,7 @@ using Bomberman.Game.Elements.Items;
 using Bomberman.Content;
 using BombermanCommon.Resources.Scheme;
 using BomberEngine.Util;
-using BomberEngine.Consoles;
+using BomberEngine;
 using BomberEngine.Core.Events;
 
 namespace Bomberman.Game.Elements.Fields

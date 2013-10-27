@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using BomberEngine.Consoles;
+using BomberEngine;
 using BomberEngine.Core;
 using BomberEngine.Core.Assets.Types;
 using BomberEngine.Core.Events;
@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework;
 using BomberEngine.Util;
 using BomberEngine.Debugging;
 
-namespace BomberEngine.Consoles
+namespace BomberEngine
 {
     public class CConsole : Screen
     {

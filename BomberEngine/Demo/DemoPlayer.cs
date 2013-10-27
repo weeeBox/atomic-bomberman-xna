@@ -8,7 +8,7 @@ using BomberEngine.Debugging;
 using BomberEngine.Game;
 using BomberEngine.Core.Input;
 using BomberEngine.Core;
-using BomberEngine.Consoles;
+using BomberEngine;
 
 namespace BomberEngine.Demo
 {

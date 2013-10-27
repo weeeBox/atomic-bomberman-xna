@@ -6,7 +6,7 @@ using BomberEngine.Util;
 using BomberEngine.Game;
 using BomberEngine.Core;
 
-namespace BomberEngine.Consoles
+namespace BomberEngine
 {
     public abstract class CCommand : BaseObject
     {

@@ -6,7 +6,7 @@ using BomberEngine.Util;
 using BomberEngine.Game;
 using BomberEngine.Core.Events;
 
-namespace BomberEngine.Consoles
+namespace BomberEngine
 {
     public class CVarCommand : CCommand
     {

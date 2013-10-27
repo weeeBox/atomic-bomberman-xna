@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using BomberEngine.Debugging;
-using BomberEngine.Consoles;
+using BomberEngine;
 using BomberEngine.Game;
 using BomberEngine.Core.IO;
 
