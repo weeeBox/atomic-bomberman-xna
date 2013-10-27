@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 
-namespace BomberEngine.Core.Assets
+namespace BomberEngine
 {
     public interface AssetReader
     {

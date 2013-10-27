@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Core.IO;
 using System.IO;
-using BomberEngine.Debugging;
-using BomberEngine.Game;
-using BomberEngine.Core.Input;
-using BomberEngine.Core;
-using BomberEngine;
 
-namespace BomberEngine.Demo
+namespace BomberEngine
 {
     public class DemoPlayer : IUpdatable, IKeyInputListener
     {

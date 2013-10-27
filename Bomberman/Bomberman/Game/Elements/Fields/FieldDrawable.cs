@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Core.Visual;
 using Assets;
-using Microsoft.Xna.Framework;
-using BomberEngine.Core.Assets.Types;
-using Bomberman.Game.Elements.Players;
-using Bomberman.Game.Elements.Cells;
-using Microsoft.Xna.Framework.Graphics;
-using BomberEngine.Game;
+using BomberEngine;
 using Bomberman.Content;
-using BomberEngine.Core;
+using Bomberman.Game.Elements.Cells;
+using Bomberman.Game.Elements.Players;
+using Microsoft.Xna.Framework;
 
 namespace Bomberman.Game.Elements.Fields
 {

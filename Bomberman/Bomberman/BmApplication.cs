@@ -1,18 +1,7 @@
-﻿using BomberEngine.Core.Assets;
-using BomberEngine.Debugging;
-using BomberEngine.Game;
+﻿using BomberEngine;
+using Bomberman.Game;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using BomberEngine.Core.Input;
-using Microsoft.Xna.Framework.Input;
-using BomberEngine.Native;
-using Bomberman.Game;
-using BomberEngine.Core.Assets.Types;
-using BomberEngine.Core.Events;
-using BomberEngine;
-using BomberEngine.Core.Visual;
-using System;
-using BomberEngine.Demo;
 
 namespace Bomberman
 {

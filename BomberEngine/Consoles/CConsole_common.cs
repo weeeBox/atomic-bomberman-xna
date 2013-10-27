@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Game;
-using BomberEngine;
-using BomberEngine.Core.IO;
-using BomberEngine.Core.Input;
 
 namespace BomberEngine
 {

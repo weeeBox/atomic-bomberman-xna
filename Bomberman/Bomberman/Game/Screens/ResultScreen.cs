@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Game;
-using BomberEngine.Core.Visual;
-using BomberEngine.Core.Assets.Types;
-using Bomberman.UI;
+﻿using System.Collections.Generic;
+using BomberEngine;
 using Bomberman.Game.Elements.Players;
 using Microsoft.Xna.Framework;
 

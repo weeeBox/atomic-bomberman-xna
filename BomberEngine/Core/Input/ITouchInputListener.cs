@@ -1,4 +1,4 @@
-﻿namespace BomberEngine.Core.Input
+﻿namespace BomberEngine
 {
     public interface ITouchInputListener
     {

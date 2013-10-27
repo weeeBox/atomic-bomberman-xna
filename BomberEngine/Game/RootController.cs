@@ -1,15 +1,8 @@
 ﻿using System;
-using BomberEngine.Core;
-using BomberEngine.Core.Input;
-using BomberEngine.Core.Visual;
-using BomberEngine.Debugging;
-using BomberEngine.Core.Events;
-using BomberEngine;
-using BomberEngine.Core.Assets.Types;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace BomberEngine.Game
+namespace BomberEngine
 {
     public abstract class RootController : BaseElement, IInputListener
     {

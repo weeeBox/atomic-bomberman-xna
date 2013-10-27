@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Core;
-using BomberEngine.Core.Input;
-using BomberEngine.Core.IO;
-using BomberEngine.Util;
 using System.IO;
-using BomberEngine.Game;
 
-namespace BomberEngine.Demo
+namespace BomberEngine
 {
     public class DemoRecorder : IUpdatable, IInputListener
     {

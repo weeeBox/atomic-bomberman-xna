@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Bomberman.Networking;
-using BomberEngine.Debugging;
 using System.Net;
-using BomberEngine.Core;
+using BomberEngine;
 using Lidgren.Network;
 
 namespace Bomberman.Networking

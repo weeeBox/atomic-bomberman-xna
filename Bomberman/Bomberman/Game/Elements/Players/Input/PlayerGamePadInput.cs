@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Core.Input;
-using BomberEngine.Core;
-using BomberEngine.Game;
+using BomberEngine;
 using Microsoft.Xna.Framework;
-using BomberEngine.Util;
-using BomberEngine.Core.Events;
 
 namespace Bomberman.Game.Elements.Players.Input
 {

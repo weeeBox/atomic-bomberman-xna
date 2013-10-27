@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Debugging;
 
-namespace BomberEngine.Core.IO
+namespace BomberEngine
 {
     public class BitWriter
     {

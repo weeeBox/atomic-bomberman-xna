@@ -1,8 +1,6 @@
 ﻿using System;
-using BomberEngine.Core.Input;
-using BomberEngine.Core.Events;
 
-namespace BomberEngine.Core.Visual
+namespace BomberEngine
 {
     public delegate void ButtonDelegate(Button button);
     

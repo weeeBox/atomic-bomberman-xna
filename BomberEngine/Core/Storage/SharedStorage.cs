@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using BomberEngine.Core.IO;
-using BomberEngine.Game;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
-using BomberEngine.Debugging;
+using System.Runtime.Serialization.Formatters.Binary;
 
-namespace BomberEngine.Core.Storage
+namespace BomberEngine
 {
     public class SharedStorage : IDestroyable
     {

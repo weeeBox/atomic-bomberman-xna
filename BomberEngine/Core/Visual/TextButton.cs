@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Core.Assets.Types;
+using BomberEngine.UI;
 using Microsoft.Xna.Framework;
-using BomberEngine.Game;
-using BomberEngine.Core.Visual.UI;
 
-namespace BomberEngine.Core.Visual
+namespace BomberEngine
 {
     public class TextButton : Button
     {

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Debugging;
 
-namespace BomberEngine.Core
+namespace BomberEngine
 {
     public delegate void TimerCallback1();
     public delegate void TimerCallback2(Timer call);

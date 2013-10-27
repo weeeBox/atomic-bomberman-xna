@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Util;
-using BomberEngine.Core.Visual;
 
-namespace BomberEngine.Core
+namespace BomberEngine
 {
     public class DrawableList : IDrawable, IBaseCollection<IDrawable>
     {

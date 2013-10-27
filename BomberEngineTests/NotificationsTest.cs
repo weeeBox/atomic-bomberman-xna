@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Text;
 using System.Collections.Generic;
-using System.Linq;
+using BomberEngine;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using BomberEngine.Core.Events;
-using BomberEngine.Core;
 
 namespace BomberEngineTests
 {

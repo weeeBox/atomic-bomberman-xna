@@ -1,13 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using BomberEngine.Game;
-using BomberEngine.Core.Assets.Types;
-using BomberEngine.Core.Assets;
 using System.IO;
+using BomberEngine;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Bomberman.Content
 {

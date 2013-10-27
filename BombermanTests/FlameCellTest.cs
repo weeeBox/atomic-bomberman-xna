@@ -1,10 +1,6 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Bomberman.Game.Elements;
 using Bomberman.Game.Elements.Cells;
-using Bomberman.Game.Elements;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BombermanTests
 {

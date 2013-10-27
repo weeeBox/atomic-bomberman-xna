@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Game;
-using BomberEngine.Core.Visual;
-using BomberEngine.Core.Assets.Types;
-using Assets;
-using Bomberman.Networking;
+﻿using System.Collections.Generic;
+using BomberEngine;
 using Bomberman.Game;
-using Microsoft.Xna.Framework;
-using BomberEngine.Core.Visual.UI;
 using Bomberman.UI;
+using Microsoft.Xna.Framework;
 
 namespace Bomberman.Multiplayer
 {

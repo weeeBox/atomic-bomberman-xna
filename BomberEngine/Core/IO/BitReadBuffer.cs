@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Net;
-using BomberEngine.Debugging;
-using System.Runtime.InteropServices;
 
-namespace BomberEngine.Core.IO
+namespace BomberEngine
 {
     public class BitReadBuffer : BitBuffer
     {

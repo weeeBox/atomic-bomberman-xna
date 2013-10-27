@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Game;
-using BomberEngine.Core.Visual.UI;
-using Microsoft.Xna.Framework;
-using BomberEngine.Core.Visual;
-using BomberEngine.Util;
-using BomberEngine.Core.Assets.Types;
+using BomberEngine;
+using BomberEngine.UI;
 using Bomberman.Game;
-using Assets;
-using Bomberman.Menu;
 using Bomberman.UI;
+using Microsoft.Xna.Framework;
 
 namespace Bomberman.Common.Popups
 {

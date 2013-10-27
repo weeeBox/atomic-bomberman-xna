@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Core.Visual;
-using BomberEngine.Core.Assets.Types;
-using Bomberman.Game;
-using Assets;
+using BomberEngine;
 using Bomberman.UI;
 
 namespace Bomberman.Menu

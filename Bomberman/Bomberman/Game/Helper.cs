@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Assets;
-using BomberEngine.Core.Visual;
-using BomberEngine.Game;
-using BomberEngine.Core.Assets.Types;
+﻿using BomberEngine;
 using Bomberman.Content;
 
 namespace Bomberman.Game

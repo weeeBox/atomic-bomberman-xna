@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Bomberman.Game.Screens;
-using BombermanCommon.Resources;
+using BomberEngine;
 using Bomberman.Content;
-using Assets;
-using BomberEngine.Core.Input;
-using BomberEngine.Debugging;
-using BomberEngine.Core.Visual;
 using Bomberman.Game.Elements.Players.Input;
-using Bomberman.Game.Elements.Players;
-using BomberEngine.Game;
+using Bomberman.Game.Screens;
 
 namespace Bomberman.Game
 {

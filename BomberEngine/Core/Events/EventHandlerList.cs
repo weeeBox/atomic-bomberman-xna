@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace BomberEngine.Core.Events
+namespace BomberEngine
 {
     public class EventHandlerList : BaseList<IEventHandler>, IEventHandler
     {

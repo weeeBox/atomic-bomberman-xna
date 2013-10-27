@@ -1,16 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using BomberEngine;
-using BomberEngine.Core;
-using BomberEngine.Core.Assets.Types;
-using BomberEngine.Core.Events;
-using BomberEngine.Core.Input;
-using BomberEngine.Core.Visual;
-using BomberEngine.Game;
 using Microsoft.Xna.Framework;
-using BomberEngine.Util;
-using BomberEngine.Debugging;
 
 namespace BomberEngine
 {

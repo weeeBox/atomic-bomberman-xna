@@ -1,15 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Core.IO;
-using Microsoft.Xna.Framework.Input;
-using BomberEngine.Core.Input;
-using BomberEngine.Game;
-using BomberEngine.Debugging;
-using BomberEngine.Util;
 
-namespace BomberEngine.Demo
+namespace BomberEngine
 {
     public enum DemoCmdType
     {

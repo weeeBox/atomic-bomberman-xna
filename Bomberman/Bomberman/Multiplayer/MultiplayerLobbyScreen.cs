@@ -1,18 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Game;
-using BomberEngine.Core.Visual;
-using BomberEngine.Core.Assets.Types;
-using Assets;
-using Bomberman.Networking;
+using BomberEngine;
 using Bomberman.Game;
-using Bomberman.Content;
-using Lidgren.Network;
-using System.Collections;
-using BomberEngine.Debugging;
 using Bomberman.UI;
+using Lidgren.Network;
 
 namespace Bomberman.Multiplayer
 {

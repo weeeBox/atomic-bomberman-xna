@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
-using BomberEngine.Debugging;
-using BomberEngine;
-using BomberEngine.Game;
-using BomberEngine.Core.IO;
 
-namespace BomberEngine.Core.Visual
+namespace BomberEngine
 {
     public enum FocusDirection
     {

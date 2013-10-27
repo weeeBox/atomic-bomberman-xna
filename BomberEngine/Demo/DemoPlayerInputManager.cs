@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Core.Input;
 using Microsoft.Xna.Framework;
-using BomberEngine.Core;
-using BomberEngine.Util;
-using BomberEngine.Debugging;
 
-namespace BomberEngine.Demo
+namespace BomberEngine
 {
     public class  DemoPlayerInputManager : InputManager, IResettable
     {

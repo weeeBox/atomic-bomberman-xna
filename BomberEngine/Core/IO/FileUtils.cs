@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Debugging;
 using System.IO;
+using System.Text;
 
-namespace BomberEngine.Core.IO
+namespace BomberEngine
 {
     public class FileUtils
     {

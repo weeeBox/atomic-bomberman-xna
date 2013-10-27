@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using BomberEngine.Debugging;
-using System;
-using BomberEngine.Game;
-using BomberEngine.Core.Events;
 
-namespace BomberEngine.Core.Input
+namespace BomberEngine
 {
     public struct KeyEventArg
     {

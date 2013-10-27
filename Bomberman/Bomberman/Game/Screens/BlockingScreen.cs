@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Game;
-using BomberEngine.Core.Operations;
-using BomberEngine.Core.Visual.UI;
-using Microsoft.Xna.Framework;
-using Bomberman.UI;
+using BomberEngine.UI;
 using Bomberman.Game;
+using Bomberman.UI;
+using Microsoft.Xna.Framework;
 
-namespace BomberEngine.Core.Visual
+namespace BomberEngine
 {
     public class BlockingScreen : Screen
     {

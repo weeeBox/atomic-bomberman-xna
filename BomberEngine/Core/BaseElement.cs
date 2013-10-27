@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Core.Input;
-using Microsoft.Xna.Framework.Input;
-using BomberEngine.Core.Visual;
-using BomberEngine.Core.Events;
-
-namespace BomberEngine.Core
+﻿
+namespace BomberEngine
 {
     public abstract class BaseElement : BaseObject, IUpdatable, IDrawable, IEventHandler
     {

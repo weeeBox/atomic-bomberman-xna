@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Debugging;
 
-namespace BomberEngine.Util
+namespace BomberEngine
 {
     public sealed class MathHelp
     {

@@ -1,5 +1,4 @@
-﻿using System;
-namespace BomberEngine.Core
+﻿namespace BomberEngine
 {
     public abstract class ITimerManager : IUpdatable, IDestroyable // not a good idea to name abstract class as interface, but what you gonna do
     {

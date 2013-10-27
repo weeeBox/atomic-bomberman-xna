@@ -1,20 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Core;
-using BomberEngine.Core.Visual;
-using Assets;
-using BomberEngine.Game;
-using Bomberman.Game.Elements.Players;
-using Bomberman.Game.Elements.Cells;
-using BomberEngine.Debugging;
-using Bomberman.Game.Elements.Items;
-using Bomberman.Content;
-using BombermanCommon.Resources.Scheme;
-using BomberEngine.Util;
 using BomberEngine;
-using BomberEngine.Core.Events;
+using Bomberman.Content;
+using Bomberman.Game.Elements.Cells;
+using Bomberman.Game.Elements.Players;
+using BombermanCommon.Resources.Scheme;
 
 namespace Bomberman.Game.Elements.Fields
 {

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Core.Assets;
+using BomberEngine;
 using BombermanCommon.Resources.Scheme;
 
 namespace Bomberman.Content

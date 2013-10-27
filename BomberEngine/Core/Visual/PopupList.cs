@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using BomberEngine.UI;
 using Microsoft.Xna.Framework;
-using BomberEngine.Core.Assets.Types;
-using BomberEngine.Core.Events;
-using BomberEngine.Core.Input;
-using BomberEngine.Core.Visual.UI;
 
-namespace BomberEngine.Core.Visual
+namespace BomberEngine
 {
     public delegate void PopupListDelegate(PopupList list);
 

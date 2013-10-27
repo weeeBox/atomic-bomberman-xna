@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace BomberEngine.Core.Assets.Types
-{   
-    using BomberEngine.Core.Visual;
+namespace BomberEngine
+{
     using System.Collections.ObjectModel;
 
     public class VectorFont : Font

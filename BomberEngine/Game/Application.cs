@@ -1,20 +1,7 @@
 ﻿using System;
-using BomberEngine.Core;
-using BomberEngine.Core.Assets;
-using BomberEngine.Core.Input;
-using BomberEngine.Core.Visual;
-using BomberEngine.Debugging;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using BomberEngine.Native;
-using BomberEngine.Core.Events;
-using BomberEngine.Core.Storage;
-using BomberEngine.Util;
-using BomberEngine;
-using BomberEngine.Demo;
-using BomberEngine.Core.IO;
 
-namespace BomberEngine.Game
+namespace BomberEngine
 {
     public struct ApplicationInfo
     {

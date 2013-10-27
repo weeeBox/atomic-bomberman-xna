@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Input;
-using BomberEngine.Core.Input;
-using BomberEngine.Game;
-
-namespace BomberEngine.Core.Events
+﻿
+namespace BomberEngine
 {
     public enum KeyState
     {

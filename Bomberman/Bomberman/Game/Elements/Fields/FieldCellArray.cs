@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Debugging;
-using BombermanCommon.Resources.Scheme;
-using Bomberman.Game.Elements.Cells;
-using BomberEngine.Core;
+﻿using BomberEngine;
 
 namespace Bomberman.Game.Elements.Fields
 {

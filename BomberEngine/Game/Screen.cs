@@ -1,12 +1,7 @@
 ﻿using System;
-using BomberEngine.Core;
-using BomberEngine.Core.Input;
-using BomberEngine.Core.Visual;
-using BomberEngine.Debugging;
-using BomberEngine.Core.Events;
 using System.Collections.Generic;
 
-namespace BomberEngine.Game
+namespace BomberEngine
 {
     public class Screen : BaseElement, IDestroyable, IFocusManager
     {

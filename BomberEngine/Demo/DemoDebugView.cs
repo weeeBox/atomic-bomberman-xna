@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Core.Visual;
-using BomberEngine.Core.Assets.Types;
-using BomberEngine.Game;
-
-namespace BomberEngine.Demo
+﻿
+namespace BomberEngine
 {
     public class DemoDebugView : View
     {

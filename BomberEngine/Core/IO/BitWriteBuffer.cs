@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.InteropServices;
 using System.Net;
-using BomberEngine.Debugging;
+using System.Runtime.InteropServices;
+using System.Text;
 
-namespace BomberEngine.Core.IO
+namespace BomberEngine
 {
     /// <summary>
     /// Utility struct for writing Singles

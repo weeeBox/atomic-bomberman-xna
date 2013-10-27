@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Core.IO;
 
-namespace BomberEngine.Demo
+namespace BomberEngine
 {
     public class DemoCmdEntry : CommandLineEntry
     {

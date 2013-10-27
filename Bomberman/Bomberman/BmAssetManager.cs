@@ -1,5 +1,5 @@
 ﻿using Assets;
-using BomberEngine.Core.Assets;
+using BomberEngine;
 using Bomberman.Content;
 using Microsoft.Xna.Framework.Content;
 

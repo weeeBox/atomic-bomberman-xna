@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Core;
+﻿using BomberEngine;
 using Bomberman.Game.Elements.Cells;
 using Bomberman.Game.Elements.Players;
-using BomberEngine;
-using BomberEngine.Debugging;
 
 namespace Bomberman.Game.Elements.Items
 {

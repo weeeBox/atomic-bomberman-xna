@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Core;
-using BomberEngine.Debugging;
-using BomberEngine.Core.Assets.Types;
-using BomberEngine.Core.Visual;
+using BomberEngine;
 using Microsoft.Xna.Framework;
-using BomberEngine.Game;
 
 namespace Bomberman.Content
 {

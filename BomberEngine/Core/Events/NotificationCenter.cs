@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Util;
-using BomberEngine.Debugging;
-using BomberEngine.Game;
 
-namespace BomberEngine.Core.Events
+namespace BomberEngine
 {
     public delegate void NotificationDelegate(Notification notification);
 

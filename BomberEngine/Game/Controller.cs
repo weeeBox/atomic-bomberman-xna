@@ -1,16 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Core;
-using BomberEngine.Core.Input;
-using BomberEngine.Core.Visual;
-using Microsoft.Xna.Framework.Input;
-using BomberEngine.Debugging;
-using BomberEngine.Core.Events;
-using BomberEngine;
 
-namespace BomberEngine.Game
+namespace BomberEngine
 {
     public class Controller : BaseElement, IScreenManagerListener, IDestroyable
     {

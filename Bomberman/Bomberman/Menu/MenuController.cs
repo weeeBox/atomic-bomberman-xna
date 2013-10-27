@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Game;
-using Bomberman.Menu.Screens;
-using BomberEngine.Core.Visual;
-using Bomberman.Game;
-using Bomberman.Networking;
-using BomberEngine.Debugging;
+using BomberEngine;
 using Bomberman.Game.Screens;
+using Bomberman.Menu.Screens;
 
 namespace Bomberman.Menu
 {

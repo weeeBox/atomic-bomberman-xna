@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Core.Assets.Types;
-
-namespace BomberEngine.Core.Visual
+﻿
+namespace BomberEngine
 {
     public class ImageView : View
     {

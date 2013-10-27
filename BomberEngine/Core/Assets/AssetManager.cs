@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using BomberEngine.Core.Assets.Readers;
-using BomberEngine.Core.Assets.Types;
-using BomberEngine.Debugging;
-using BomberEngine.Game;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 
-namespace BomberEngine.Core.Assets
+namespace BomberEngine
 {
     public abstract class AssetManager : BaseObject
     {

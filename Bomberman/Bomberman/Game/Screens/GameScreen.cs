@@ -1,21 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Game;
-using BomberEngine.Core.Visual;
+﻿using System.Collections.Generic;
 using Assets;
-using BomberEngine.Core.Assets.Types;
-using Bomberman.Game.Elements;
+using BomberEngine;
 using Bomberman.Game.Elements.Fields;
-using Bomberman.Game.Elements.Cells;
 using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Elements.Players.Input;
-using Bomberman.Content;
-using Microsoft.Xna.Framework.Input;
-using BomberEngine.Core.Input;
-using BomberEngine.Core.Events;
-using BomberEngine.Debugging;
 
 namespace Bomberman.Game.Screens
 {

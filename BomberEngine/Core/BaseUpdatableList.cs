@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Util;
+﻿using System.Collections.Generic;
 
-namespace BomberEngine.Core
+namespace BomberEngine
 {
     public abstract class BaseUpdatableList<T> : BaseList<T>, IUpdatable where T : class, IUpdatable
     {   

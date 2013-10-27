@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BomberEngine.Debugging;
-using BomberEngine.Game;
-using BomberEngine.Util;
 
-namespace BomberEngine.Core.Operations
+namespace BomberEngine
 {
     public class BaseOperation : ObjectsPoolEntry<BaseOperation>
     {
