@@ -27,14 +27,6 @@ namespace Bomberman.Game.Screens
 
             // powerups info
             AddPowerupsView();
-
-            // HACK: disable updating keyboard input when console is showing
-            SetKeyboardInputActive(!Application.RootController().Console.IsVisible);
-        }
-
-        protected override void OnStart()
-        {
-            RegisterNotification(Notifications.ConsoleVisiblityChanged, ConsoleVisiblityChangedNotification);
         }
 
         protected override void OnStop()
@@ -62,26 +54,6 @@ namespace Bomberman.Game.Screens
             container.LayoutVer(0);
             container.ResizeToFitViews();
             AddDebugView(container);
-        }
-
-        private void ConsoleVisiblityChangedNotification(Notification notification)
-        {
-            bool visible = notification.GetData<bool>();
-            SetKeyboardInputActive(!visible);
-        }
-
-        private static void SetKeyboardInputActive(bool active)
-        {
-            Field field = Field.Current();
-            List<Player> players = field.GetPlayers().list;
-            foreach (Player player in players)
-            {
-                PlayerInput input = player.input;
-                if (input is PlayerKeyInput)
-                {
-                    input.IsActive = active;
-                }
-            }
         }
     }
 }

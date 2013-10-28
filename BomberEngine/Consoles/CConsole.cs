@@ -857,6 +857,14 @@ namespace BomberEngine
         public void ToggleVisible()
         {
             IsVisible = !IsVisible;
+            if (IsVisible)
+            {
+                Application.RootController().SetKeyCatch(KeyCatch.Console);
+            }
+            else
+            {
+                Application.RootController().RemoveKeyCatch(KeyCatch.Console);
+            }
         }
 
         #endregion

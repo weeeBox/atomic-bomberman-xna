@@ -4,6 +4,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BomberEngine
 {
+    public enum KeyCatch
+    {
+        None    = 0x0,
+        Console = 0x01,
+    }
+
     public abstract class RootController : BaseElement, IInputListener
     {
         private ContentManager m_contentManager;
@@ -13,11 +19,13 @@ namespace BomberEngine
         private View m_debugView;
 
         private CKeyBindings m_keyBindings;
+        private KeyCatch m_keyCatch;
 
         public RootController(ContentManager contentManager)
         {
             this.m_contentManager = contentManager;
             m_keyBindings = new CKeyBindings();
+            m_keyCatch = KeyCatch.None;
 
             InitDebugView();
         }
@@ -202,6 +210,31 @@ namespace BomberEngine
         #region Events
 
         private KeyEvent keyEvent = new KeyEvent();
+
+        internal void SetKeyCatch(KeyCatch keyCatch)
+        {
+            m_keyCatch |= keyCatch;
+        }
+
+        internal void RemoveKeyCatch(KeyCatch keyCatch)
+        {
+            m_keyCatch &= ~keyCatch;
+        }
+
+        internal bool HasKeyCatch(KeyCatch keyCatch)
+        {
+            return (m_keyCatch & keyCatch) != 0;
+        }
+
+        internal bool HasKeyCatch()
+        {
+            return m_keyCatch != KeyCatch.None;
+        }
+
+        internal void ClearKeyCatch()
+        {
+            m_keyCatch = KeyCatch.None;
+        }
         
         #endregion
 
@@ -211,7 +244,7 @@ namespace BomberEngine
 
         public virtual bool OnKeyPressed(KeyEventArg arg)
         {
-            if (!m_console.IsVisible)
+            if (!HasKeyCatch())
             {
                 m_keyBindings.OnKeyPressed(arg);
             }
@@ -226,7 +259,7 @@ namespace BomberEngine
 
         public virtual bool OnKeyReleased(KeyEventArg arg)
         {
-            if (!m_console.IsVisible)
+            if (!HasKeyCatch())
             {
                 m_keyBindings.OnKeyReleased(arg);
             }

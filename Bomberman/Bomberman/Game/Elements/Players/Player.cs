@@ -329,11 +329,8 @@ namespace Bomberman.Game.Elements.Players
 
         private void UpdateInput(float delta)
         {
-            if (m_input.IsActive)
-            {
-                m_input.Update(delta);
-            }
-
+            m_input.Update(delta);
+            
             if (!GetField().IsGameDumbMuliplayerClient || IsNetworkPlayer)
             {
                 for (int i = 0; i < ACTIONS.Length; ++i)

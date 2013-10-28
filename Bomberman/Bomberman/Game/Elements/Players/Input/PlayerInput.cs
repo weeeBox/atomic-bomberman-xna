@@ -8,11 +8,9 @@ namespace Bomberman.Game.Elements.Players
         private int m_stateBitsOld;
 
         private int m_pressedCount;
-        private bool m_active;
 
         public PlayerInput()
-        {
-            m_active = true;
+        {   
         }
 
         public virtual void Update(float delta)
@@ -25,7 +23,6 @@ namespace Bomberman.Game.Elements.Players
             m_stateBits = 0;
             m_stateBitsOld = 0;
             m_pressedCount = 0;
-            m_active = true;
         }
 
         public void SetActionPressed(PlayerAction action, bool flag)
@@ -107,12 +104,6 @@ namespace Bomberman.Game.Elements.Players
         public int GetPressedActionCount()
         {
             return m_pressedCount;
-        }
-
-        public bool IsActive
-        {
-            get { return m_active; }
-            set { m_active = value; }
         }
     }
 }
