@@ -172,7 +172,7 @@ namespace BomberEngine
 
         public override void Execute()
         {
-            if (ArgsCount() != 2)
+            if (ArgsCount() < 1)
             {
                 Print("usage: " + name + " <key> <command>");
                 return;
@@ -186,10 +186,32 @@ namespace BomberEngine
                 return;
             }
 
-            String cmd = StrArg(1);
-
             CKeyBindings bindings = GetRootController().GetKeyBindings();
-            bindings.Bind(code, cmd);
+
+            if (ArgsCount() == 1)
+            {
+                String cmd = bindings.FindCmd(code);
+                if (cmd != null)
+                {
+                    Print("\"" + cmd + "\"");
+                }
+                else
+                {
+                    Print("No bind");
+                }
+            }
+            else if (ArgsCount() == 2)
+            {
+                String cmdArg = StrArg(1);
+                if (cmdArg != null && cmdArg.Length > 0)
+                {
+                    bindings.Bind(code, cmdArg);
+                }
+            }
+            else
+            {
+                Print("usage: " + name + " <key> <command>");
+            }
         }
     }
 

@@ -214,15 +214,16 @@ namespace BomberEngine
             SetCommandText("");
         }
 
-        public void TryExecuteCommand(String commandString)
+        public bool TryExecuteCommand(String commandString)
         {
-            TryExecuteCommand(commandString, false);
+            return TryExecuteCommand(commandString, false);
         }
 
-        private void TryExecuteCommand(String commandString, bool manual)
+        private bool TryExecuteCommand(String commandString, bool manual)
         {
             List<String> args = extractArgs(commandString);
 
+            bool succeed = false;
             if (args.Count > 0)
             {
                 String name = args[0];
@@ -247,6 +248,8 @@ namespace BomberEngine
                     {
                         command.Execute();
                     }
+
+                    succeed = true;
                 }
                 else
                 {
@@ -258,6 +261,8 @@ namespace BomberEngine
                     PushHistory(commandString);
                 }
             }
+
+            return succeed;
         }
 
         protected List<String> extractArgs(String str)

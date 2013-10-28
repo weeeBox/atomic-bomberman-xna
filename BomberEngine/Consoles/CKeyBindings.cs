@@ -85,8 +85,20 @@ namespace BomberEngine
             String cmd = FindCmd(code);
             if (cmd != null)
             {
-                TryExecuteCommand(cmd);
-                return true;
+                if (TryExecuteCommand(cmd))
+                {
+                    return true;
+                }
+
+                if (cmd[0] == '+')
+                {
+                    CVar var = FindVar(cmd.Substring(1));
+                    if (var != null && var.intValue == 0)
+                    {
+                        var.SetValue(1);
+                    }
+                    return true;
+                }
             }
 
             return false;
@@ -104,22 +116,42 @@ namespace BomberEngine
             String cmd = FindCmd(code);
             if (cmd != null && cmd[0] == '+')
             {
-                String newCmd = '-' + cmd.Substring(1);
-                TryExecuteCommand(newCmd);
+                String cmdBase = cmd.Substring(1);
+                String newCmd = '-' + cmdBase;
+                if (TryExecuteCommand(newCmd))
+                {
+                    return true;
+                }
+
+                CVar var = FindVar(cmdBase);
+                if (var != null && var.intValue == 1)
+                {
+                    var.SetValue(0);
+                }
                 return true;
             }
 
             return cmd != null;
         }
 
-        private void TryExecuteCommand(String cmd)
+        private CVar FindVar(String name)
         {
-            Application.RootController().Console.TryExecuteCommand(cmd);
+            return Console.FindCvar(name);
+        }
+
+        private bool TryExecuteCommand(String cmd)
+        {
+            return Console.TryExecuteCommand(cmd);
         }
 
         private void ScheduleConfigUpdate()
         {
-            Application.RootController().Console.ScheduleConfigUpdate();
+            Console.ScheduleConfigUpdate();
+        }
+
+        private CConsole Console
+        {
+            get { return Application.RootController().Console; }
         }
     }
 }
