@@ -15,10 +15,13 @@ namespace Bomberman
         private MenuController menuController;
         private NetworkManager networkManager;
 
+        private InputMapping m_mapping;
+
         public BmRootController(ContentManager contentManager)
             : base(contentManager)
         {
             networkManager = new NetworkManager();
+            m_mapping = new InputMapping();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -45,6 +48,12 @@ namespace Bomberman
                     menuController.Stop((int)MenuController.ExitCode.DebugServerStart);
                 }
             }
+        }
+
+        protected override void OnStop()
+        {
+            m_mapping.Dispose();
+            base.OnStop();
         }
 
         #endregion

@@ -7,7 +7,7 @@ using Bomberman.Game.Elements.Players;
 
 namespace Bomberman.Game
 {
-    public delegate void ExecuteDelegate();
+    public delegate void ActionDelegate();
 
     public abstract class GameCCommand : CCommand
     {
@@ -160,11 +160,11 @@ namespace Bomberman.Game
 
     //////////////////////////////////////////////////////////////////////////////
 
-    public class Cmd_test : GameCCommand
+    public class Cmd_action : GameCCommand
     {
-        private ExecuteDelegate m_delegate;
+        private ActionDelegate m_delegate;
 
-        public Cmd_test(String name, ExecuteDelegate del)
+        public Cmd_action(String name, ActionDelegate del)
             : base(name)
         {
             m_delegate = del;

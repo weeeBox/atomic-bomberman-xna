@@ -26,13 +26,42 @@ namespace Bomberman.Game
         Count
     }
 
-    public class InputMapping
+    public class InputMapping : IDisposable
     {
-        private static PlayerKeyInput[] keyboardInputs;
-        private static PlayerGamePadInput[] gamePadInputs;
+        private static InputMapping instance;
 
-        public static PlayerInput CreatePlayerInput(InputType inputType)
+        private PlayerKeyInput[] keyboardInputs;
+        private PlayerGamePadInput[] gamePadInputs;
+
+        public InputMapping()
         {
+            instance = this;
+
+            keyboardInputs = new PlayerKeyInput[6];
+            for (int i = 0; i < keyboardInputs.Length; ++i)
+            {
+                keyboardInputs[i] = new PlayerKeyInput();
+            }
+
+            gamePadInputs = new PlayerGamePadInput[4];
+            for (int i = 0; i < gamePadInputs.Length; ++i)
+            {
+                gamePadInputs[i] = new PlayerGamePadInput(i);
+            }
+        }
+
+        public void Dispose()
+        {
+            if (this == instance)
+            {
+                instance = null;
+            }
+        }
+
+        private PlayerInput CreatePlayerInputHelper(InputType inputType)
+        {
+            PlayerInput input;
+
             switch (inputType)
             {
                 case InputType.Keyboard1:
@@ -41,91 +70,51 @@ namespace Bomberman.Game
                 case InputType.Keyboard4:
                 case InputType.Keyboard5:
                 case InputType.Keyboard6:
-                    {
-                        int index = inputType - InputType.Keyboard1;
-                        return CreateKeyBoardInput(index);
-                    }
+                {
+                    int index = inputType - InputType.Keyboard1;
+                    input = keyboardInputs[index];
+                    break;
+                }
 
                 case InputType.GamePad1:
                 case InputType.GamePad2:
                 case InputType.GamePad3:
                 case InputType.GamePad4:
-                    {
-                        int index = inputType - InputType.GamePad1;
-                        return CreateGamePadInput(index);
-                    }
+                {
+                    int index = inputType - InputType.GamePad1;
+                    input = gamePadInputs[index];
+                    break;
+                }
 
                 case InputType.None:
-                    {
-                        throw new ArgumentException("Can't create input for 'none' type");
-                    }
+                {
+                    throw new ArgumentException("Can't create input for 'none' type");
+                }
+
+                default:
+                {
+                    throw new NotImplementedException("Unsupported input type: " + inputType);
+                }
             }
 
-            throw new NotImplementedException("Unsupported input type: " + inputType);
-        }
-
-        private static PlayerKeyInput CreateKeyBoardInput(int index)
-        {
-            if (keyboardInputs == null)
-            {
-                keyboardInputs = new PlayerKeyInput[CVars.sy_maxKeyboards.intValue];
-            }
-
-            PlayerKeyInput input = keyboardInputs[index];
-            if (input == null)
-            {
-                input = new PlayerKeyInput();
-                keyboardInputs[index] = InitKeyboardInput(index, input);
-            }
-
+            input.Reset();
             return input;
         }
 
-        private static PlayerKeyInput InitKeyboardInput(int index, PlayerKeyInput input)
+        private void SetKeyboardActionHelper(int index, PlayerAction action, bool flag)
         {
-            // TODO: don't hard code
-            switch (index)
-            {
-                case 0:
-                    {
-                        input.Map(KeyCode.W, PlayerAction.Up);
-                        input.Map(KeyCode.A, PlayerAction.Left);
-                        input.Map(KeyCode.S, PlayerAction.Down);
-                        input.Map(KeyCode.D, PlayerAction.Right);
-                        input.Map(KeyCode.OemCloseBrackets, PlayerAction.Bomb);
-                        input.Map(KeyCode.OemOpenBrackets, PlayerAction.Special);
-                        break;
-                    }
-                case 1:
-                    {
-                        input.Map(KeyCode.Up, PlayerAction.Up);
-                        input.Map(KeyCode.Left, PlayerAction.Left);
-                        input.Map(KeyCode.Down, PlayerAction.Down);
-                        input.Map(KeyCode.Right, PlayerAction.Right);
-                        input.Map(KeyCode.M, PlayerAction.Bomb);
-                        input.Map(KeyCode.N, PlayerAction.Special);
-                        break;
-                    }
-            }
-
-            return input;
+            Debug.AssertRange(index, 0, keyboardInputs.Length);
+            keyboardInputs[index].actionsArray[(int)action] = flag;
         }
 
-        private static PlayerGamePadInput CreateGamePadInput(int index)
+        public static PlayerInput CreatePlayerInput(InputType inputType)
         {
-            if (gamePadInputs == null)
-            {
-                gamePadInputs = new PlayerGamePadInput[CVars.sy_maxControllers.intValue];
-            }
+            return instance.CreatePlayerInputHelper(inputType);
+        }
 
-            PlayerGamePadInput input = gamePadInputs[index];
-            if (input == null)
-            {
-                input = new PlayerGamePadInput(index);
-                gamePadInputs[index] = input;
-            }
-
-            return input;
+        public static void SetKeyboardAction(int index, PlayerAction action, bool flag)
+        {
+            instance.SetKeyboardActionHelper(index, action, flag);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Bomberman.Game.Elements.Players
             m_stateBitsOld = m_stateBits;
         }
 
-        public void Reset()
+        public virtual void Reset()
         {
             m_stateBits = 0;
             m_stateBitsOld = 0;

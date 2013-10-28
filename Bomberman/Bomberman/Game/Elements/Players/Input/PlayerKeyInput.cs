@@ -5,28 +5,32 @@ namespace Bomberman.Game.Elements.Players
 {
     public class PlayerKeyInput : PlayerInput
     {
-        private Dictionary<KeyCode, PlayerAction> actionLookup;
+        private BitArray m_actionsArray;
 
         public PlayerKeyInput()
         {
-            actionLookup = new Dictionary<KeyCode, PlayerAction>();
+            m_actionsArray = new BitArray((int)PlayerAction.Count);
         }
 
         public override void Update(float delta)
         {
             base.Update(delta);
 
-            foreach (KeyValuePair<KeyCode, PlayerAction> e in actionLookup)
+            for (int i = 0; i < m_actionsArray.length; ++i)
             {
-                KeyCode key = e.Key;
-                PlayerAction action = e.Value;
-                SetActionPressed(action, Input.IsKeyPressed(key));
+                SetActionPressed(i, m_actionsArray[i]);
             }
         }
 
-        public void Map(KeyCode key, PlayerAction action)
+        public override void Reset()
         {
-            actionLookup.Add(key, action);
+            base.Reset();
+            m_actionsArray.Clear();
+        }
+
+        internal BitArray actionsArray
+        {
+            get { return m_actionsArray; }
         }
     }
 }

@@ -101,7 +101,15 @@ namespace BomberEngine
         public bool OnKeyReleased(KeyEventArg arg)
         {
             KeyCode code = arg.key;
-            return FindCmd(code) != null;
+            String cmd = FindCmd(code);
+            if (cmd != null && cmd[0] == '+')
+            {
+                String newCmd = '-' + cmd.Substring(1);
+                TryExecuteCommand(newCmd);
+                return true;
+            }
+
+            return cmd != null;
         }
 
         private void TryExecuteCommand(String cmd)
