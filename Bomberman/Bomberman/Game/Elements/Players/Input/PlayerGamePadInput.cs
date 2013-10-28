@@ -2,7 +2,7 @@
 using BomberEngine;
 using Microsoft.Xna.Framework;
 
-namespace Bomberman.Game.Elements.Players.Input
+namespace Bomberman.Game.Elements.Players
 {
     public class PlayerGamePadInput : PlayerKeyInput
     {
@@ -26,7 +26,7 @@ namespace Bomberman.Game.Elements.Players.Input
         {
             base.Update(delta);
 
-            InputManager im = Application.Input();
+            InputManager im = Input.Manager;
 
             Vector2 stick = im.LeftThumbStick(playerIndex);
             float dx = stick.X;

@@ -159,6 +159,7 @@ namespace BomberEngine
 
             sharedStorage.Destroy();
             timerManager.Destroy();
+            inputManager.Destroy();
 
             SaveDemo();
         }
@@ -431,11 +432,6 @@ namespace BomberEngine
         public static AssetManager Assets()
         {
             return sharedApplication.assetManager;
-        }
-
-        public static InputManager Input()
-        {
-            return sharedApplication.inputManager;
         }
 
         public static RootController RootController()

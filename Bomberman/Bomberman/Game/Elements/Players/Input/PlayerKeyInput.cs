@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using BomberEngine;
 
-namespace Bomberman.Game.Elements.Players.Input
+namespace Bomberman.Game.Elements.Players
 {
     public class PlayerKeyInput : PlayerInput
     {
@@ -20,7 +20,7 @@ namespace Bomberman.Game.Elements.Players.Input
             {
                 KeyCode key = e.Key;
                 PlayerAction action = e.Value;
-                SetActionPressed(action, Application.Input().IsKeyPressed(key));
+                SetActionPressed(action, Input.IsKeyPressed(key));
             }
         }
 

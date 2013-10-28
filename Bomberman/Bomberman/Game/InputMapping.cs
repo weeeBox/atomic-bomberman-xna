@@ -1,7 +1,6 @@
 ﻿using System;
 using BomberEngine;
 using Bomberman.Game.Elements.Players;
-using Bomberman.Game.Elements.Players.Input;
 
 namespace Bomberman.Game
 {

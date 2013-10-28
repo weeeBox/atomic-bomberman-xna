@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using BomberEngine;
 using Bomberman.Game.Elements.Players;
-using Bomberman.Game.Elements.Players.Input;
 using Bomberman.Game.Screens;
 using Bomberman.Networking;
 using Lidgren.Network;

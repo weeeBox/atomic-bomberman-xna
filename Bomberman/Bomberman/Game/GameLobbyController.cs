@@ -1,7 +1,7 @@
 ﻿using System;
 using BomberEngine;
 using Bomberman.Content;
-using Bomberman.Game.Elements.Players.Input;
+using Bomberman.Game.Elements.Players;
 using Bomberman.Game.Screens;
 
 namespace Bomberman.Game
@@ -66,7 +66,7 @@ namespace Bomberman.Game
             SetInputState(InputType.Keyboard5, InputState.Available);
             SetInputState(InputType.Keyboard6, InputState.Available);
 
-            InputManager im = Input();
+            InputManager im = Input.Manager;
             SetInputState(InputType.GamePad1, im.IsGamePadConnected(0) ? InputState.Available : InputState.Disabled);
             SetInputState(InputType.GamePad2, im.IsGamePadConnected(1) ? InputState.Available : InputState.Disabled);
             SetInputState(InputType.GamePad3, im.IsGamePadConnected(2) ? InputState.Available : InputState.Disabled);

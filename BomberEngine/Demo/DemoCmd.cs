@@ -161,7 +161,7 @@ namespace BomberEngine
 
         public override bool Execute()
         {
-            DemoPlayerInputManager im = Application.Input() as DemoPlayerInputManager;
+            DemoPlayerInputManager im = Input.Manager as DemoPlayerInputManager;
             Debug.Assert(im != null);
 
             // set pressed states

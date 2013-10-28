@@ -29,11 +29,6 @@ namespace Bomberman
             return BmApplication.Assets();
         }
 
-        protected InputManager Input()
-        {
-            return BmApplication.Input();
-        }
-
         #endregion
     }
 }

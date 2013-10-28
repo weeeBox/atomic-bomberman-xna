@@ -3,7 +3,6 @@ using Assets;
 using BomberEngine;
 using Bomberman.Game.Elements.Fields;
 using Bomberman.Game.Elements.Players;
-using Bomberman.Game.Elements.Players.Input;
 
 namespace Bomberman.Game.Screens
 {

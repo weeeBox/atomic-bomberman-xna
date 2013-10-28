@@ -139,11 +139,6 @@ namespace BomberEngine
             get { return arg.playerIndex; }
         }
 
-        public InputManager Input
-        {
-            get { return Application.Input(); }
-        }
-
         #endregion
     }
 }

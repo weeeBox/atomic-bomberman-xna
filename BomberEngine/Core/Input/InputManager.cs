@@ -24,22 +24,17 @@ namespace BomberEngine
 
         public bool IsShiftPressed()
         {
-            return GetInputManager().IsShiftPressed();
+            return Input.IsShiftPressed();
         }
 
         public bool IsAltPressed()
         {
-            return GetInputManager().IsAltPressed();
+            return Input.IsAltPressed();
         }
 
         public bool IsCtrlPressed()
         {
-            return GetInputManager().IsControlPressed();
-        }
-
-        public InputManager GetInputManager()
-        {
-            return Application.Input();
+            return Input.IsControlPressed();
         }
 
         public static bool Equals(ref KeyEventArg a, ref KeyEventArg b)
@@ -48,18 +43,40 @@ namespace BomberEngine
         }
     }
 
-    public abstract class InputManager : BaseObject
+    public abstract class InputManager : BaseObject, IDestroyable
     {
         protected const int MAX_GAMEPADS_COUNT = 4;
 
         private List<IKeyInputListener> keyListeners;
         private List<ITouchInputListener> touchListeners;
 
+        private static InputManager instance;
+
         public InputManager()
         {
+            instance = this;
+
             keyListeners = new List<IKeyInputListener>();
             touchListeners = new List<ITouchInputListener>();
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region IDestroyable
+
+        public void Destroy()
+        {
+            if (instance == this)
+            {
+                instance = null;
+            }
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Public
 
         public abstract bool IsKeyPressed(KeyCode code);
         public abstract bool IsButtonPressed(int playerIndex, KeyCode code);
@@ -70,6 +87,10 @@ namespace BomberEngine
 
         public abstract float LeftTrigger(int playerIndex = 0);
         public abstract float RightTrigger(int playerIndex = 0);
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
 
         #region Listeners
 
@@ -117,6 +138,8 @@ namespace BomberEngine
 
         #endregion
 
+        //////////////////////////////////////////////////////////////////////////////
+
         #region Keys
 
         public bool IsShiftPressed()
@@ -136,6 +159,8 @@ namespace BomberEngine
 
         #endregion
 
+        //////////////////////////////////////////////////////////////////////////////
+
         #region Gamepad
 
         protected void NotifyGamePadConnected(int playerIndex)
@@ -149,6 +174,75 @@ namespace BomberEngine
         }
 
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
+        public static InputManager Current
+        {
+            get { return instance; }
+        }
+
+        #endregion
+    }
+
+    public class Input
+    {
+        public static bool IsKeyPressed(KeyCode code)
+        {
+            return Manager.IsKeyPressed(code);
+        }
+
+        public static bool IsButtonPressed(int playerIndex, KeyCode code)
+        {
+            return Manager.IsButtonPressed(playerIndex, code);
+        }
+
+        public static bool IsGamePadConnected(int playerIndex)
+        {
+            return Manager.IsGamePadConnected(playerIndex);
+        }
+
+        public static Vector2 LeftThumbStick(int playerIndex = 0)
+        {
+            return Manager.LeftThumbStick(playerIndex);
+        }
+
+        public static Vector2 RightThumbStick(int playerIndex = 0)
+        {
+            return Manager.RightThumbStick(playerIndex);
+        }
+
+        public static float LeftTrigger(int playerIndex = 0)
+        {
+            return Manager.LeftTrigger(playerIndex);
+        }
+
+        public static float RightTrigger(int playerIndex = 0)
+        {
+            return Manager.RightTrigger(playerIndex);
+        }
+
+        public static bool IsShiftPressed()
+        {
+            return Manager.IsShiftPressed();
+        }
+
+        public static bool IsAltPressed()
+        {
+            return Manager.IsAltPressed();
+        }
+
+        public static bool IsControlPressed()
+        {
+            return Manager.IsControlPressed();
+        }
+
+        public static InputManager Manager
+        {
+            get { return InputManager.Current; }
+        }
     }
 
     public class DefaultInputManager : InputManager, IUpdatable

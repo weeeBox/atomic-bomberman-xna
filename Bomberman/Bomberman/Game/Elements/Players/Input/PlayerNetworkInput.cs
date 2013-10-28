@@ -1,5 +1,5 @@
 ﻿
-namespace Bomberman.Game.Elements.Players.Input
+namespace Bomberman.Game.Elements.Players
 {
     public class PlayerNetworkInput : PlayerInput
     {

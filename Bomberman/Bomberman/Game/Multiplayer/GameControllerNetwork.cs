@@ -5,7 +5,6 @@ using Bomberman.Game.Elements;
 using Bomberman.Game.Elements.Cells;
 using Bomberman.Game.Elements.Fields;
 using Bomberman.Game.Elements.Players;
-using Bomberman.Game.Elements.Players.Input;
 using Bomberman.Networking;
 using Lidgren.Network;
 
