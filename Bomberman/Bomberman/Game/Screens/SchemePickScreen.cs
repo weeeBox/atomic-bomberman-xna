@@ -170,10 +170,9 @@ namespace Bomberman.Game.Screens
             AddView(indicatorView);
 
             // maps
-            m_contentView = new View(0, 0, 521, 0);
+            m_contentView = new View(0, 0, 521, 323);
             m_contentView.debugColor = Color.Red;
             SetPage(pageIndex, selectedIndex);
-            m_contentView.ResizeToFitViews();
 
             AddView(m_contentView);
 
