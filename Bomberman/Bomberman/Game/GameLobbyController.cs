@@ -21,7 +21,6 @@ namespace Bomberman.Game
         public enum ExitCode
         {
             StartGame,
-            Cancel
         }
 
         private Scheme selectedScheme;
@@ -206,7 +205,7 @@ namespace Bomberman.Game
 
                 InitInputTypes(selectedScheme);
 
-                StartScreen(new PlayersScreen(selectedScheme, inputTypes, InputTypeSelectDelegate, PlayersScreenButtonDelegate));
+                StartNextScreen(new PlayersScreen(selectedScheme, inputTypes, InputTypeSelectDelegate, PlayersScreenButtonDelegate));
             }
         }
 

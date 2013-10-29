@@ -5,6 +5,8 @@ namespace BomberEngine
 {
     public class Controller : BaseElement, IScreenManagerListener, IDestroyable
     {
+        private const int StopExit = -1;
+
         protected ScreenManager screenManager;
 
         protected Controller childController;
@@ -61,7 +63,7 @@ namespace BomberEngine
 
         public void Stop()
         {   
-            Stop(exitCode);
+            Stop(StopExit);
         }
 
         public void Stop(int exitCode, Object exitData = null)
@@ -110,6 +112,11 @@ namespace BomberEngine
 
         protected virtual void OnResume()
         {
+        }
+
+        public bool IsExiting
+        {
+            get { return exitCode == StopExit; }
         }
 
         #endregion
@@ -246,6 +253,10 @@ namespace BomberEngine
 
         public virtual void OnScreenStopped(ScreenManager manager, Screen screen)
         {
+            if (manager.IsEmpty)
+            {
+                Stop();
+            }
         }
 
         #endregion

@@ -22,6 +22,7 @@ namespace BomberEngine
 
         private bool allowsDrawPrevious;
         private bool allowsUpdatePrevious;
+        private bool m_finishOnCancel;
 
         private Button cancelButton;
         private ButtonDelegate cancelButtonDelegate;
@@ -48,6 +49,7 @@ namespace BomberEngine
             drawables = DrawableList.Null;
             eventHandlers = EventHandlerList.Null;
 
+            m_finishOnCancel = true;
             mRootView = CreateRootView();
         }
 
@@ -575,7 +577,7 @@ namespace BomberEngine
             {
                 OnCancelButtonPress(cancelButton);
             }
-            else
+            else if (IsFinishOnCancel)
             {
                 Finish();
             }
@@ -591,6 +593,18 @@ namespace BomberEngine
             }
 
             return false;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
+        public bool IsFinishOnCancel
+        {
+            get { return m_finishOnCancel; }
+            protected set { m_finishOnCancel = value; }
         }
 
         #endregion

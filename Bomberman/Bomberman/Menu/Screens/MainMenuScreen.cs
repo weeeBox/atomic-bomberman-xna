@@ -20,6 +20,8 @@ namespace Bomberman.Menu.Screens
         public MainMenuScreen(ButtonDelegate buttonDelegate)
             : base((int)MenuController.ScreenID.MainMenu)
         {
+            IsFinishOnCancel = false;
+
             Font font = Helper.fontButton;
 
             View rootView = new View();

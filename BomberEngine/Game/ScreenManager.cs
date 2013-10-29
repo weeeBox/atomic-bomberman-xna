@@ -224,6 +224,11 @@ namespace BomberEngine
             return null;
         }
 
+        public bool IsEmpty
+        {
+            get { return screens.Count == 0; }
+        }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////

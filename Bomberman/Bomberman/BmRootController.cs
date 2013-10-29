@@ -78,13 +78,12 @@ namespace Bomberman
         {
             if (controller is MenuController)
             {
-                MenuController.ExitCode exitCode = (MenuController.ExitCode)controller.exitCode;
-                if (exitCode == MenuController.ExitCode.Quit)
-                {
-                    Application.sharedApplication.Stop();
+                if (controller.IsExiting)
+                {   
                     return;
                 }
 
+                MenuController.ExitCode exitCode = (MenuController.ExitCode)controller.exitCode;
                 switch (exitCode)
                 {
                     case MenuController.ExitCode.SingleStart:
@@ -110,17 +109,23 @@ namespace Bomberman
                         StartController(new DebugMultiplayerController(DebugMultiplayerController.Mode.Server));
                         break;
                     }
+
+                    case MenuController.ExitCode.Exit:
+                    {
+                        Application.sharedApplication.Stop();
+                        break;
+                    }
                 }
             }
             else if (controller is MultiplayerController)
             {
-                MultiplayerController.ExitCode exitCode = (MultiplayerController.ExitCode)controller.exitCode;
-                if (exitCode == MultiplayerController.ExitCode.Cancel)
+                if (controller.IsExiting)
                 {
                     StartMainMenuController();
                     return;
                 }
 
+                MultiplayerController.ExitCode exitCode = (MultiplayerController.ExitCode)controller.exitCode;
                 switch (exitCode)
                 {
                     case MultiplayerController.ExitCode.Create:
@@ -136,6 +141,12 @@ namespace Bomberman
             }
             else if (controller is GameLobbyController)
             {
+                if (controller.IsExiting)
+                {
+                    StartMainMenuController();
+                    return;
+                }
+
                 GameLobbyController.ExitCode exitCode = (GameLobbyController.ExitCode)controller.exitCode;
                 switch (exitCode)
                 {
@@ -149,24 +160,19 @@ namespace Bomberman
                         StartController(GameController.Local(settings));
                         break;
                     }
-
-                    case GameLobbyController.ExitCode.Cancel:
-                    {
-                        StartMainMenuController();
-                        break;
-                    }
                 }
             }
             else if (controller is DebugMultiplayerController)
             {
+                if (controller.IsExiting)
+                {
+                    StartMainMenuController();
+                    return;
+                }
+
                 DebugMultiplayerController.ExitCode exitCode = (DebugMultiplayerController.ExitCode)controller.exitCode;
                 switch (exitCode)
                 {
-                    case DebugMultiplayerController.ExitCode.Cancel:
-                    {
-                        StartMainMenuController();
-                        break;
-                    }
                     case DebugMultiplayerController.ExitCode.ClientStarted:
                     {
                         ServerInfo info = controller.exitData as ServerInfo;

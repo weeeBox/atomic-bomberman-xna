@@ -39,7 +39,6 @@ namespace Bomberman.Multiplayer
 
         public enum ExitCode
         {
-            Cancel,
             Create,
             Join,
         }
@@ -318,7 +317,7 @@ namespace Bomberman.Multiplayer
             {
                 case MultiplayerScreen.ButtonId.Back:
                 {
-                    Stop(ExitCode.Cancel);
+                    Stop();
                     break;
                 }
 

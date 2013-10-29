@@ -8,8 +8,8 @@ namespace Bomberman.Menu
     public class MenuController : Controller
     {
         public enum ExitCode
-        {
-            Quit,
+        {   
+            Exit,
             SingleStart,
             MultiplayerStart,
             DebugServerStart,
@@ -65,7 +65,7 @@ namespace Bomberman.Menu
                     StartNextScreen(new SettingsScreen(OnSettingsButtonPress));
                     break;
                 case MainMenuScreen.ButtonId.Exit:
-                    Stop(ExitCode.Quit);
+                    Stop(ExitCode.Exit);
                     break;
                 case MainMenuScreen.ButtonId.Test:
                     TestSomething();

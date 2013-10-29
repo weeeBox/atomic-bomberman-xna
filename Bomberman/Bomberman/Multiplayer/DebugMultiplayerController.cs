@@ -24,8 +24,7 @@ namespace Bomberman.Multiplayer
         }
 
         public enum ExitCode
-        {
-            Cancel,
+        {   
             ClientStarted,
             ServerStarted,
         }
@@ -80,7 +79,7 @@ namespace Bomberman.Multiplayer
         private void OnCancelButtonPressed(Button button)
         {
             StopPeer();
-            Stop(ExitCode.Cancel);
+            Stop();
         }
 
         //////////////////////////////////////////////////////////////////////////////
