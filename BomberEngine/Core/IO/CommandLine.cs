@@ -46,7 +46,8 @@ namespace BomberEngine
                     CommandLineEntry entry = FindEntry(longParam, false);
                     if (entry == null)
                     {
-                        throw new CommandLineException("Unknown param: " + arg);
+                        Log.e("Unknown param: " + arg);
+                        continue;
                     }
 
                     entry.Parse(iter);
@@ -62,7 +63,8 @@ namespace BomberEngine
                     CommandLineEntry entry = FindEntry(shortParam, true);
                     if (entry == null)
                     {
-                        throw new CommandLineException("Unknown param: " + arg);
+                        Log.e("Unknown param: " + arg);
+                        continue;
                     }
 
                     entry.Parse(iter);
