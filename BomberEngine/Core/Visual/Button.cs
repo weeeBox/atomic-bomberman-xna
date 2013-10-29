@@ -51,14 +51,19 @@ namespace BomberEngine
 
         protected virtual void OnPress()
         {
-            if (buttonDelegate != null)
-            {
-                buttonDelegate(this);
-            }
+            Application.ScheduleTimer(NotifyDelegate);
         }
 
         protected virtual void OnRelease()
         {
+        }
+
+        protected void NotifyDelegate()
+        {
+            if (buttonDelegate != null)
+            {
+                buttonDelegate(this);
+            }
         }
     }
 }

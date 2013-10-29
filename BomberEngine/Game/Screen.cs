@@ -571,7 +571,33 @@ namespace BomberEngine
             }
         }
 
+        protected virtual bool OnConfirmPressed(KeyEventArg arg)
+        {
+            bool result = confirmButton != null;
+            if (result)
+            {
+                ScheduleTimer(HandleConfirm);
+                return true;
+            }
+
+            return false;
+        }
+
         protected virtual bool OnCancelPressed(KeyEventArg arg)
+        {
+            ScheduleTimer(HandleCancel);
+            return true;
+        }
+
+        private void HandleConfirm()
+        {
+            if (confirmButton != null)
+            {
+                OnConfirmButtonPress(confirmButton);
+            }
+        }
+
+        private void HandleCancel()
         {
             if (cancelButton != null)
             {
@@ -581,18 +607,6 @@ namespace BomberEngine
             {
                 Finish();
             }
-            return true;
-        }
-
-        protected virtual bool OnConfirmPressed(KeyEventArg arg)
-        {
-            if (confirmButton != null)
-            {
-                OnConfirmButtonPress(confirmButton);
-                return true;
-            }
-
-            return false;
         }
 
         #endregion

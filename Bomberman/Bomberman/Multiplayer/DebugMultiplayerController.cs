@@ -54,7 +54,6 @@ namespace Bomberman.Multiplayer
             Screen screen = new Screen();
             Button button = new TempButton("Cancel");
             button.id = (int)ButtonId.Cancel;
-            button.buttonDelegate = OnCancelButtonPressed;
             button.alignX = button.alignY = button.parentAlignX = button.parentAlignY = View.ALIGN_CENTER;
             screen.AddView(button);
             screen.SetCancelButton(button);
@@ -72,14 +71,7 @@ namespace Bomberman.Multiplayer
         protected override void OnStop()
         {
             StopDiscovery();
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        private void OnCancelButtonPressed(Button button)
-        {
             StopPeer();
-            Stop();
         }
 
         //////////////////////////////////////////////////////////////////////////////
