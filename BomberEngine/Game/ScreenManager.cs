@@ -3,17 +3,9 @@ using System.Collections.Generic;
 
 namespace BomberEngine
 {
-    public interface IScreenManagerListener
-    {
-        void OnScreenStarted(ScreenManager manager, Screen screen);
-        void OnScreenSuspended(ScreenManager manager, Screen screen);
-        void OnScreenResumed(ScreenManager manager, Screen screen);
-        void OnScreenStopped(ScreenManager manager, Screen screen);
-    }
-
     public class ScreenManager : BaseElement, IDestroyable
     {
-        public IScreenManagerListener listener;
+        private Controller m_controller;
 
         private List<Screen> screens;
 
@@ -22,8 +14,10 @@ namespace BomberEngine
 
         private Screen currentScreen;
 
-        public ScreenManager()
+        public ScreenManager(Controller controller)
         {
+            m_controller = controller;
+
             screens = new List<Screen>();
             updatables = new UpdatableList();
             drawables = new DrawableList();
@@ -92,13 +86,13 @@ namespace BomberEngine
                     drawables.Remove(currentScreen);
                     screens.Remove(currentScreen);
 
-                    Stop(currentScreen);
+                    currentScreen.Stop();
                 }
                 else
                 {
                     if (!screen.AllowsUpdatePrevious)
                     {
-                        Suspend(currentScreen);
+                        currentScreen.Suspend();
                         updatables.Remove(currentScreen);
                     }
 
@@ -115,7 +109,7 @@ namespace BomberEngine
             screens.Add(screen);
             screen.screenManager = this;
 
-            Start(screen);
+            screen.Start();
 
             updatables.Add(screen);
             drawables.Add(screen);
@@ -149,7 +143,7 @@ namespace BomberEngine
 
                     if (!screen.AllowsUpdatePrevious)
                     {
-                        Resume(currentScreen);
+                        currentScreen.Resume();
                         updatables.Add(currentScreen);
                     }
                 }
@@ -161,42 +155,11 @@ namespace BomberEngine
 
             Screen.current = currentScreen;
             screen.screenManager = null;
-            Stop(screen);
-        }
-
-        private void Start(Screen screen)
-        {
-            screen.Start();
-            if (listener != null)
-            {
-                listener.OnScreenStarted(this, screen);
-            }
-        }
-
-        private void Suspend(Screen screen)
-        {
-            screen.Suspend();
-            if (listener != null)
-            {
-                listener.OnScreenSuspended(this, screen);
-            }
-        }
-
-        private void Resume(Screen screen)
-        {
-            screen.Resume();
-            if (listener != null)
-            {
-                listener.OnScreenResumed(this, screen);
-            }
-        }
-
-        private void Stop(Screen screen)
-        {
             screen.Stop();
-            if (listener != null)
+
+            if (IsEmpty)
             {
-                listener.OnScreenStopped(this, screen);
+                m_controller.OnEmptyScreenStack(this);
             }
         }
 

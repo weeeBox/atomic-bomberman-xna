@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BomberEngine
 {
-    public class Controller : BaseElement, IScreenManagerListener, IDestroyable
+    public class Controller : BaseElement, IDestroyable
     {
         private const int StopExit = -1;
 
@@ -17,8 +17,7 @@ namespace BomberEngine
 
         public Controller()
         {   
-            screenManager = new ScreenManager();
-            screenManager.listener = this;
+            screenManager = new ScreenManager(this);
         }
 
         public virtual void Destroy()
@@ -237,26 +236,11 @@ namespace BomberEngine
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region IScreenManagerListener
+        #region Screen stack
 
-        public virtual void OnScreenStarted(ScreenManager manager, Screen screen)
-        {   
-        }
-
-        public virtual void OnScreenSuspended(ScreenManager manager, Screen screen)
-        {   
-        }
-
-        public virtual void OnScreenResumed(ScreenManager manager, Screen screen)
+        internal void OnEmptyScreenStack(ScreenManager manager)
         {
-        }
-
-        public virtual void OnScreenStopped(ScreenManager manager, Screen screen)
-        {
-            if (manager.IsEmpty)
-            {
-                Stop();
-            }
+            Stop();
         }
 
         #endregion
