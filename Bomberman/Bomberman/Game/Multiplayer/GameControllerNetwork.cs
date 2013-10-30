@@ -13,14 +13,12 @@ namespace Bomberman.Game.Multiplayer
     public struct ClientPacket
     {
         public int id;
-        public int lastAckServerPacketId;
         public int actions;
     }
 
     public struct ServerPacket
     {
         public int id;
-        public int lastAckClientPacketId;
     }
 
     public abstract class GameControllerNetwork : GameController, IPeerListener
@@ -42,6 +40,7 @@ namespace Bomberman.Game.Multiplayer
         }
 
         private State m_state;
+        protected int m_nextPacketId;
 
         public GameControllerNetwork(GameSettings settings)
             : base(settings)
@@ -75,25 +74,6 @@ namespace Bomberman.Game.Multiplayer
 
         private static readonly int BITS_FOR_STATIC_CELL = NetUtility.BitsToHoldUInt(2);
         private static readonly int BITS_FOR_POWERUP = NetUtility.BitsToHoldUInt(Powerups.Count - 1);
-
-        /* a client sends data to the server */
-        protected void WriteClientPacket(NetBuffer buffer, ref ClientPacket packet)
-        {
-            buffer.Write(packet.id);
-            buffer.Write(packet.lastAckServerPacketId);
-            buffer.Write(packet.actions, (int)PlayerAction.Count);
-        }
-
-        /* the server reads data from a client */
-        protected ClientPacket ReadClientPacket(NetBuffer msg)
-        {
-            ClientPacket packet;
-            packet.id = msg.ReadInt32();
-            packet.lastAckServerPacketId = msg.ReadInt32();
-            packet.actions = msg.ReadInt32((int)PlayerAction.Count);
-
-            return packet;
-        }
 
         #region "RoundStart" message
 

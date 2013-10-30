@@ -177,6 +177,9 @@ namespace Bomberman.Game.Multiplayer
 
             SetState(State.Playing);
 
+            m_localPlayer.lastReceivedPackedId = msg.ReadInt32();
+            m_localPlayer.lastAckPacketId = msg.ReadInt32();
+
             ReadPlayingMessage(msg);
 
             if (!CVars.sv_dumbClient.boolValue)
@@ -200,13 +203,16 @@ namespace Bomberman.Game.Multiplayer
             }
 
             ClientPacket packet;
-            packet.id = player.lastSentPacketId;
-            packet.lastAckServerPacketId = player.lastAckPacketId;
+            packet.id = m_nextPacketId;
             packet.actions = actions;
 
-            WriteClientPacket(msg, ref packet);
+            msg.Write(packet.id);                   // packet to be acknowledged by server
+            msg.Write(player.lastReceivedPackedId); // packet acknowledged by client
+            msg.Write(packet.actions, (int)PlayerAction.Count);
 
             PushPacket(ref packet);
+
+            ++m_nextPacketId;
         }
 
         private void ReadRoundEndMessage(Peer peer, NetIncomingMessage msg)
@@ -432,7 +438,6 @@ namespace Bomberman.Game.Multiplayer
             public override void Update(float delta)
             {
                 m_cordErrView.SetText("px: " + m_player.errDx + "\npy: " + m_player.errDy);
-                m_packetDiffView.SetText("packet diff: " + m_player.networkPackageDiff);
             }
         }
     }

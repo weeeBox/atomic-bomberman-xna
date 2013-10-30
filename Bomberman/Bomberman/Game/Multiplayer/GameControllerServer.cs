@@ -127,6 +127,8 @@ namespace Bomberman.Game.Multiplayer
                         Player player = networkPlayers[i];
 
                         NetOutgoingMessage message = CreateMessage(PeerMessageId.Playing);
+                        message.Write(m_nextPacketId);              // packet to be acknowledged by client
+                        message.Write(player.lastReceivedPackedId); // package acknowledged by server
                         message.Write(payloadMessage);
 
                         NetConnection connection = player.connection;
@@ -134,6 +136,8 @@ namespace Bomberman.Game.Multiplayer
 
                         SendMessage(message, connection);
                     }
+
+                    ++m_nextPacketId;
 
                     RecycleMessage(payloadMessage);
                     break;
@@ -198,13 +202,14 @@ namespace Bomberman.Game.Multiplayer
             Player player = FindPlayer(msg.SenderConnection);
             player.IsReady = true;
 
-            ClientPacket packet = ReadClientPacket(msg);
-            player.lastAckPacketId = packet.id;
+            player.lastReceivedPackedId = msg.ReadInt32();
+            player.lastAckPacketId = msg.ReadInt32();
+            int actions = msg.ReadInt32((int)PlayerAction.Count);
 
             PlayerNetworkInput input = player.input as PlayerNetworkInput;
             Debug.Assert(input != null);
 
-            input.SetNetActionBits(packet.actions);
+            input.SetNetActionBits(actions);
         }
 
         private void ReadRoundStartMessage(Peer peer, NetIncomingMessage msg)
@@ -412,7 +417,14 @@ namespace Bomberman.Game.Multiplayer
                     Debug.Assert(oldState == State.Playing, "Unexpected old state: " + oldState);
 
                     Restart();
-                    StartRoundResultScreen();
+                    if (game.IsGameEnded)
+                    {
+                        StartGameResultScreen();
+                    }
+                    else
+                    {
+                        StartRoundResultScreen();
+                    }
                     break;
                 }
 

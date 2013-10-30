@@ -40,8 +40,6 @@ namespace Bomberman.Game.Elements.Players
 
         private bool m_alive;
 
-        private bool m_ready;
-
         public bool needsFieldState;
         public bool needsRoundResults;
         
@@ -57,8 +55,10 @@ namespace Bomberman.Game.Elements.Players
 
         private NetConnection m_connection;
 
-        private int m_lastAckPacketId;  // last acknowledged packet id
-        private int m_lastSentPacketId; // last sent packet id
+        private bool m_ready;
+        public int lastAckPacketId;      // last acknowledged packet
+        public int lastReceivedPackedId; // last received packet
+        
 
         private float m_errDx;
         private float m_errDy;
@@ -114,6 +114,8 @@ namespace Bomberman.Game.Elements.Players
         public void ResetNetworkState()
         {
             m_ready = false;
+            lastAckPacketId = 0;
+            lastReceivedPackedId = 0;
             needsFieldState = true;
             needsRoundResults = true;
         }
@@ -1723,23 +1725,6 @@ namespace Bomberman.Game.Elements.Players
         {
             get { return m_diseases; }
             protected set { m_diseases = value; }
-        }
-
-        public int lastAckPacketId
-        {
-            get { return m_lastAckPacketId; }
-            set { m_lastAckPacketId = value; }
-        }
-
-        public int lastSentPacketId
-        {
-            get { return m_lastSentPacketId; }
-            set { m_lastSentPacketId = value; }
-        }
-
-        public int networkPackageDiff
-        {
-            get { return m_lastSentPacketId - m_lastAckPacketId; }
         }
 
         public PlayerStatistics statistics
