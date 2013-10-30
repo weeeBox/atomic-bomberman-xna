@@ -87,8 +87,6 @@ namespace Bomberman.Game.Elements.Fields
         public void ForcePos(float px, float py)
         {
             SetPos(px, py);
-            oldPx = px;
-            oldPy = py;
         }
         
         public virtual void SetPos(float px, float py)
@@ -403,28 +401,6 @@ namespace Bomberman.Game.Elements.Fields
         public float py
         {
             get { return m_py; }
-        }
-
-        public float oldPx
-        {
-            get { return m_oldPx; }
-            protected set { m_oldPx = value; }
-        }
-
-        public float oldPy
-        {
-            get { return m_oldPy; }
-            protected set { m_oldPy = value; }
-        }
-
-        public float moveDx
-        {
-            get { return m_px - m_oldPx; }
-        }
-
-        public float moveDy
-        {
-            get { return m_py - m_oldPy; }
         }
 
         #endregion

@@ -952,56 +952,45 @@ namespace Bomberman.Game.Elements.Fields
         }
 
         private bool CheckWallCollisions(MovableCell movable)
-        {
-            float dx = movable.moveDx;
-            float dy = movable.moveDy;
+        {   
+            float minX = GetMinPx();
+            float maxX = GetMaxPx();
 
-            if (dx > 0)
+            if (movable.GetPx() > maxX)
             {
-                float maxX = GetMaxPx();
-                if (movable.GetPx() > maxX)
-                {
-                    movable.SetPosX(maxX);
-                    movable.HandleWallCollision();
+                movable.SetPosX(maxX);
+                movable.HandleWallCollision();
 
-                    return true;
-                }
-            }
-            else if (dx < 0)
-            {
-                float minX = GetMinPx();
-                if (movable.GetPx() < minX)
-                {
-                    movable.SetPosX(minX);
-                    movable.HandleWallCollision();
-
-                    return true;
-                }
+                return true;
             }
 
-            if (dy > 0)
+            if (movable.GetPx() < minX)
             {
-                float maxY = GetMaxPy();
-                if (movable.GetPy() > maxY)
-                {
-                    movable.SetPosY(maxY);
-                    movable.HandleWallCollision();
+                movable.SetPosX(minX);
+                movable.HandleWallCollision();
 
-                    return true;
-                }
+                return true;
             }
-            else if (dy < 0)
-            {
-                float minY = GetMinPy();
-                if (movable.GetPy() < minY)
-                {
-                    movable.SetPosY(minY);
-                    movable.HandleWallCollision();
+            
+            float minY = GetMinPy();
+            float maxY = GetMaxPy();
 
-                    return true;
-                }
+            if (movable.GetPy() > maxY)
+            {
+                movable.SetPosY(maxY);
+                movable.HandleWallCollision();
+                
+                return true;
             }
 
+            if (movable.GetPy() < minY)
+            {
+                movable.SetPosY(minY);
+                movable.HandleWallCollision();
+
+                return true;
+            }
+            
             return false;
         }
 

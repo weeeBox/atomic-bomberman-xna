@@ -47,18 +47,6 @@ namespace Bomberman.Game.Elements.Cells
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region IUpdatable
-
-        public override void Update(float delta)
-        {
-            oldPx = px;
-            oldPy = py;
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
         #region Cell
 
         public void SetPosX(float px)
