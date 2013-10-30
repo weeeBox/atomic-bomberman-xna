@@ -565,9 +565,9 @@ namespace Bomberman.Game.Elements.Fields
                 if (staticCell.IsBrick())
                 {
                     BrickCell brick = staticCell.AsBrick();
-                    if (!brick.destroyed)
+                    if (!brick.hit)
                     {
-                        brick.Destroy();
+                        brick.Hit();
                     }
 
                     return false;

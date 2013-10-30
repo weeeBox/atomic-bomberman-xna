@@ -390,13 +390,6 @@ namespace Bomberman.Game
 
         private void GameResultScreenButtonDelegate(Button button)
         {
-            GameResultScreen.ButtonId buttonId = (GameResultScreen.ButtonId)button.id;
-            switch (buttonId)
-            {
-                case GameResultScreen.ButtonId.Exit:
-                    Stop(ExitCode.Exit);
-                    break;
-            }
         }
 
         #endregion

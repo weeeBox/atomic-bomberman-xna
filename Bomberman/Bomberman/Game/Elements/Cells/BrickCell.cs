@@ -5,8 +5,7 @@ namespace Bomberman.Game.Elements.Cells
     public class BrickCell : FieldCell
     {
         public int powerup;
-        public bool destroyed;
-        public float remains;
+        public bool hit;
 
         public BrickCell(int cx, int cy)
             : base(FieldCellType.Brick, cx, cy)
@@ -14,25 +13,18 @@ namespace Bomberman.Game.Elements.Cells
             powerup = Powerups.None;
         }
 
-        public void Destroy()
+        public void Hit()
         {
-            if (!destroyed)
+            if (!hit)
             {
-                destroyed = true;
-                remains = 0.5f;
+                hit = true;
+                GetField().ScheduleTimer(Destroy, 0.5f);
             }
         }
 
-        public override void Update(float delta)
+        private void Destroy()
         {
-            if (destroyed)
-            {
-                remains -= delta;
-                if (remains <= 0)
-                {
-                    GetField().DestroyBrick(this);
-                }
-            }
+            GetField().DestroyBrick(this);
         }
 
         public bool HasPowerup()

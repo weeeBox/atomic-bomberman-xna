@@ -189,7 +189,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private void DrawBrick(Context context, BrickCell cell)
         {
-            DrawCellImage(context, cell, breakableImage);
+            DrawCellImage(context, cell, breakableImage, cell.hit ? Color.Red : Color.White);
 
             if (CVars.g_drawHiddenPowerups.boolValue)
             {
@@ -319,9 +319,14 @@ namespace Bomberman.Game.Elements.Fields
 
         private void DrawCellImage(Context context, FieldCell cell, TextureImage image)
         {
+            DrawCellImage(context, cell, image, color);
+        }
+
+        private void DrawCellImage(Context context, FieldCell cell, TextureImage image, Color color)
+        {
             float drawX = cell.GetPx() - 0.5f * image.GetWidth();
             float drawY = cell.GetPy() - 0.5f * image.GetHeight();
-            context.DrawImage(image, drawX, drawY);
+            context.DrawImage(image, drawX, drawY, color);
         }
 
         private void DrawCellRect(Context context, int cx, int cy, Color color)
