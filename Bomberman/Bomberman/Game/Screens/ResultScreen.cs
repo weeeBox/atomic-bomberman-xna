@@ -17,7 +17,14 @@ namespace Bomberman.Game.Screens
 
         protected BaseResultScreen(Game game)
         {
+            Font font = Helper.fontButton;
+
             contentView = new View(64, 48, 512, 384);
+
+            // status
+            TextView statusView = new TextView(font, "Round " + (game.roundIndex + 1) + " out of " + game.roundsCount);
+            statusView.alignX = statusView.parentAlignX = View.ALIGN_CENTER;
+            contentView.AddView(statusView);
 
             // table
             View tableView = new View(0, 25, contentView.width, 330);
@@ -33,8 +40,6 @@ namespace Bomberman.Game.Screens
             float winsColX = nameColX + 0.5f * (nameColWidth + winsColWidth) + indent;
             float killsColX = winsColX + 0.5f * (winsColWidth + killsColWidth) + indent;
             float suicidesColX = killsColX + 0.5f * (killsColWidth + suicidesColWidth) + indent;
-
-            Font font = Helper.fontButton;
 
             // header
             TextView textView = new TextView(font, "PLAYER");

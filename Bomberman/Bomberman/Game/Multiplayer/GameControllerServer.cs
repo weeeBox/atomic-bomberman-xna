@@ -238,14 +238,14 @@ namespace Bomberman.Game.Multiplayer
                 player.IsReady = msg.ReadBoolean();
                 player.needsRoundResults = msg.ReadBoolean();
 
-                if (game.IsGameEnded)
+                if (player.IsReady && AllPlayersAreReady())
                 {
-                    // TODO
-                }
-                else
-                {
-                    if (player.IsReady && AllPlayersAreReady())
+                    if (game.IsGameEnded)
                     {
+                        SetState(State.GameEnd);
+                    }
+                    else
+                    {                    
                         Log.d("Clients are ready for the next round");
                         game.StartNextRound();
 
@@ -415,6 +415,12 @@ namespace Bomberman.Game.Multiplayer
                     StartRoundResultScreen();
                     break;
                 }
+
+                case State.GameEnd:
+                {
+                    Stop();
+                    break;
+                }
                   
                 default:
                 {
@@ -438,11 +444,6 @@ namespace Bomberman.Game.Multiplayer
         //////////////////////////////////////////////////////////////////////////////
 
         #region Helpers
-
-        private bool AllPlayersAreReady()
-        {
-            return game.GetPlayers().AllPlayersAreReady();
-        }
 
         private bool NetworkPlayersAreReady()
         {

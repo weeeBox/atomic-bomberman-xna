@@ -31,6 +31,7 @@ namespace Bomberman.Game.Multiplayer
             RoundStart,
             Playing,
             RoundEnd,
+            GameEnd,
         }
 
         public enum PeerMessageId
@@ -627,6 +628,11 @@ namespace Bomberman.Game.Multiplayer
         protected void SetPlayersReady(bool ready)
         {
             game.GetPlayers().SetPlayersReady(ready);
+        }
+
+        protected bool AllPlayersAreReady()
+        {
+            return game.GetPlayers().AllPlayersAreReady();
         }
 
         #endregion

@@ -223,6 +223,14 @@ namespace Bomberman.Game.Multiplayer
                 m_localPlayer.needsRoundResults = false;
                 StartRoundResultScreen();
             }
+
+            if (AllPlayersAreReady())
+            {
+                if (game.IsGameEnded)
+                {
+                    SetState(State.GameEnd);
+                }
+            }
         }
 
         private void WriteRoundEndMessage(NetBuffer buffer, Player player)
@@ -296,6 +304,12 @@ namespace Bomberman.Game.Multiplayer
                 {
                     SetPlayersReady(false);
                     StartScreen(new BlockingScreen("Waiting round results..."));
+                    break;
+                }
+
+                case State.GameEnd:
+                {
+                    Stop();
                     break;
                 }
 
