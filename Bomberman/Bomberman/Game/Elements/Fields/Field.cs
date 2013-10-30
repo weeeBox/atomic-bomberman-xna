@@ -295,17 +295,9 @@ namespace Bomberman.Game.Elements.Fields
         public void Update(float delta)
         {
             timerManager.Update(delta);
-
-            if (IsGameDumbMuliplayerClient)
-            {
-                UpdateDumb(delta);
-                // the server sends game state: no need to calculate it
-            }
-            else
-            {
-                UpdateCells(delta);
-                UpdatePhysics(delta);
-            }
+            
+            UpdateCells(delta);
+            UpdatePhysics(delta);
         }
 
         private void UpdateDumb(float delta)
@@ -454,12 +446,8 @@ namespace Bomberman.Game.Elements.Fields
                 {
                     killer.statistics.killsCount++;
                 }
-
-                if (!IsGameDumbMuliplayerClient)
-                {   
-                    DropPowerups(victim);
-                }
-
+  
+                DropPowerups(victim);
                 ScheduleRoundEndCheck();
             }
         }
@@ -1078,11 +1066,6 @@ namespace Bomberman.Game.Elements.Fields
         public bool IsGameLocal
         {
             get { return m_game.IsLocal; }
-        }
-
-        public bool IsGameDumbMuliplayerClient
-        {
-            get { return m_game.IsMuliplayerClient && CVars.sv_dumbClient.boolValue; }
         }
 
         #endregion

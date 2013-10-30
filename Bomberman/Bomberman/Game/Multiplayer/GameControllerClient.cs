@@ -83,23 +83,23 @@ namespace Bomberman.Game.Multiplayer
 
         private void ReplayPlayerActions(Player player)
         {
-            //float delta = Application.frameTime;
-            //player.input.Reset();
+            Log.d("Diff: " + (m_lastPacketId - player.lastAckPacketId));
 
-            //for (int id = player.lastAckPacketId; id <= m_lastSentPacketId; ++id)
-            //{
-            //    ClientPacket packet = GetPacket(id);
-            //    int actions = packet.actions;
-            //    int actionsCount = (int)PlayerAction.Count;
-            //    for (int i = 0; i < actionsCount; ++i)
-            //    {
-            //        player.input.SetActionPressed(i, (actions & (1 << i)) != 0);
-            //    }
+            float delta = Application.frameTime;
+            player.input.Reset();
 
-            //    player.UpdateMoving(delta);
-            //}
+            for (int id = player.lastAckPacketId; id <= m_lastPacketId; ++id)
+            {
+                ClientPacket packet = GetPacket(id);
+                int actions = packet.actions;
+                int actionsCount = (int)PlayerAction.Count;
+                for (int i = 0; i < actionsCount; ++i)
+                {
+                    player.input.SetActionPressed(i, (actions & (1 << i)) != 0);
+                }
 
-            throw new NotImplementedException();
+                player.UpdateMoving(delta);
+            }
         }
 
         #endregion
@@ -181,11 +181,7 @@ namespace Bomberman.Game.Multiplayer
             m_localPlayer.lastAckPacketId = msg.ReadInt32();
 
             ReadPlayingMessage(msg);
-
-            if (!CVars.sv_dumbClient.boolValue)
-            {
-                ReplayPlayerActions(m_localPlayer);
-            }
+            // ReplayPlayerActions(m_localPlayer);
         }
 
         private void WritePlayingMessage(NetOutgoingMessage msg, Player player)
@@ -203,7 +199,7 @@ namespace Bomberman.Game.Multiplayer
             }
 
             ClientPacket packet;
-            packet.id = m_nextPacketId;
+            packet.id = ++m_lastPacketId;
             packet.actions = actions;
 
             msg.Write(packet.id);                   // packet to be acknowledged by server
@@ -211,8 +207,6 @@ namespace Bomberman.Game.Multiplayer
             msg.Write(packet.actions, (int)PlayerAction.Count);
 
             PushPacket(ref packet);
-
-            ++m_nextPacketId;
         }
 
         private void ReadRoundEndMessage(Peer peer, NetIncomingMessage msg)

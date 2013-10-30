@@ -122,12 +122,14 @@ namespace Bomberman.Game.Multiplayer
                     NetOutgoingMessage payloadMessage = CreateMessage();
                     WritePlayingMessage(payloadMessage);
 
+                    ++m_lastPacketId;
+
                     for (int i = 0; i < networkPlayers.Count; ++i)
                     {
                         Player player = networkPlayers[i];
 
                         NetOutgoingMessage message = CreateMessage(PeerMessageId.Playing);
-                        message.Write(m_nextPacketId);              // packet to be acknowledged by client
+                        message.Write(m_lastPacketId);              // packet to be acknowledged by client
                         message.Write(player.lastReceivedPackedId); // package acknowledged by server
                         message.Write(payloadMessage);
 
@@ -136,8 +138,6 @@ namespace Bomberman.Game.Multiplayer
 
                         SendMessage(message, connection);
                     }
-
-                    ++m_nextPacketId;
 
                     RecycleMessage(payloadMessage);
                     break;

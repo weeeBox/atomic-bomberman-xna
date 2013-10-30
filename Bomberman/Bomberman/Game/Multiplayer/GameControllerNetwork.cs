@@ -40,12 +40,13 @@ namespace Bomberman.Game.Multiplayer
         }
 
         private State m_state;
-        protected int m_nextPacketId;
+        protected int m_lastPacketId;
 
         public GameControllerNetwork(GameSettings settings)
             : base(settings)
         {
             m_state = State.Undefined;
+            m_lastPacketId = -1;
         }
 
         protected override void OnStart()

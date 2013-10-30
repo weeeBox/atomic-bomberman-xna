@@ -333,24 +333,21 @@ namespace Bomberman.Game.Elements.Players
         {
             m_input.Update(delta);
             
-            if (!GetField().IsGameDumbMuliplayerClient || IsNetworkPlayer)
+            for (int i = 0; i < ACTIONS.Length; ++i)
             {
-                for (int i = 0; i < ACTIONS.Length; ++i)
+                PlayerAction action = ACTIONS[i];
+                if (m_input.IsActionJustPressed(action))
                 {
-                    PlayerAction action = ACTIONS[i];
-                    if (m_input.IsActionJustPressed(action))
-                    {
-                        OnActionPressed(m_input, action);
-                    }
+                    OnActionPressed(m_input, action);
                 }
+            }
 
-                for (int i = 0; i < ACTIONS.Length; ++i)
+            for (int i = 0; i < ACTIONS.Length; ++i)
+            {
+                PlayerAction action = ACTIONS[i];
+                if (m_input.IsActionJustReleased(action))
                 {
-                    PlayerAction action = ACTIONS[i];
-                    if (m_input.IsActionJustReleased(action))
-                    {
-                        OnActionReleased(m_input, action);
-                    }
+                    OnActionReleased(m_input, action);
                 }
             }
         }
