@@ -89,14 +89,13 @@ namespace Bomberman.Game.Multiplayer
             for (int id = player.lastAckPacketId; id < m_lastPacketId; ++id)
             {
                 ClientPacket packet = GetPacket(id);
-                if (!packet.replayed)
-                {
-                    int actions = packet.actions;
-                    player.input.Force(packet.actions);
+                Debug.Assert(!packet.replayed);
+                
+                int actions = packet.actions;
+                player.input.Force(packet.actions);
 
-                    player.ReplayUpdate(delta);
-                    MarkReplayed(id);
-                }
+                player.ReplayUpdate(delta);
+                MarkReplayed(id);
             }            
             Debug.Assert(oldMask == player.input.mask);
         }
@@ -176,11 +175,20 @@ namespace Bomberman.Game.Multiplayer
 
             SetState(State.Playing);
 
+            int lastAckPacketId = m_localPlayer.lastAckPacketId;
+
             m_localPlayer.lastReceivedPackedId = msg.ReadInt32();
             m_localPlayer.lastAckPacketId = msg.ReadInt32();
 
-            ReadPlayingMessage(msg);
-            ReplayPlayerActions(m_localPlayer);
+            if (lastAckPacketId != m_localPlayer.lastAckPacketId)
+            {
+                ReadPlayingMessage(msg);
+                ReplayPlayerActions(m_localPlayer);
+            }
+            else
+            {
+                Log.d("Identical payload package");
+            }
         }
 
         private void WritePlayingMessage(NetOutgoingMessage msg, Player player)
