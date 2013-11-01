@@ -14,6 +14,7 @@ namespace Bomberman.Game.Multiplayer
     {
         public int id;
         public int actions;
+        public bool replayed;
     }
 
     public struct ServerPacket

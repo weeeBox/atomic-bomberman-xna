@@ -34,8 +34,7 @@ namespace Bomberman.Game.Elements.Players
         }
 
         public void SetActionPressed(int index, bool flag)
-        {
-            bool wasPressed = IsActionPressed(index);
+        {   
             if (flag)
             {   
                 m_stateBits |= 1 << index;
@@ -107,6 +106,11 @@ namespace Bomberman.Game.Elements.Players
             }
 
             return pressedCount;
+        }
+
+        public int mask
+        {
+            get { return m_stateBits; }
         }
     }
 }

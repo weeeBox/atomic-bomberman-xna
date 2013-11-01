@@ -58,10 +58,9 @@ namespace Bomberman.Game.Elements.Players
         private bool m_ready;
         public int lastAckPacketId;      // last acknowledged packet
         public int lastReceivedPackedId; // last received packet
-        
 
-        private float m_errDx;
-        private float m_errDy;
+        private float m_calculatedX;
+        private float m_calculatedY;
 
         private PlayerStatistics m_statistics;
 
@@ -160,7 +159,10 @@ namespace Bomberman.Game.Elements.Players
             if (IsAlive)
             {
                 UpdateInput(delta);
-                UpdateMoving(delta);
+                if (IsMoving())
+                {
+                    UpdateMoving(delta);
+                }
             }
         }
 
@@ -172,6 +174,8 @@ namespace Bomberman.Game.Elements.Players
 
         public override void UpdateMoving(float delta)
         {
+            Debug.Assert(IsMoving());
+
             float offset = GetSpeed() * delta;
 
             float dx = 0;
@@ -1645,8 +1649,8 @@ namespace Bomberman.Game.Elements.Players
         {
             m_lockAnimations = true;
 
-            m_errDx = px - newPx;
-            m_errDy = py - newPy;
+            m_calculatedX = px;
+            m_calculatedY = py;
 
             if (px != newPx || py != newPy)
             {   
@@ -1656,12 +1660,9 @@ namespace Bomberman.Game.Elements.Players
             if (moving)
             {
                 SetSpeed(newSpeed);
-                if (newDir != direction)
-                {
-                    StartMovingToDirection(newDir);
-                }
+                SetMoveDirection(newDir);
             }
-            if (IsMoving())
+            else if (IsMoving())
             {
                 StopMoving();
             }
@@ -1809,14 +1810,24 @@ namespace Bomberman.Game.Elements.Players
             set { m_ready = value; }
         }
 
+        public float calculatedX
+        {
+            get { return m_calculatedX; }
+        }
+
+        public float calculatedY
+        {
+            get { return m_calculatedY; }
+        }
+
         public float errDx
         {
-            get { return m_errDx; }
+            get { return m_calculatedX - px; }
         }
 
         public float errDy
         {
-            get { return m_errDy; }
+            get { return m_calculatedY - py; }
         }
 
         #endregion

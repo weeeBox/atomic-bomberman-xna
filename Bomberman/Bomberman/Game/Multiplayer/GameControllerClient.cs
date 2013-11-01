@@ -83,29 +83,22 @@ namespace Bomberman.Game.Multiplayer
 
         private void ReplayPlayerActions(Player player)
         {
-            if (player.lastAckPacketId == 0)
-            {
-                return;
-            }
-
-            int diff =  (m_lastPacketId - player.lastAckPacketId);
-
             float delta = Application.frameTime;
-            ClientPacket lastPacket = GetPacket(player.lastAckPacketId - 1); // user prev packet as an input start
-            player.input.Force(lastPacket.actions);
+            int oldMask = player.input.mask;
 
-            for (int id = player.lastAckPacketId; id <= m_lastPacketId; ++id)
+            for (int id = player.lastAckPacketId; id < m_lastPacketId; ++id)
             {
                 ClientPacket packet = GetPacket(id);
-                int actions = packet.actions;
-                int actionsCount = (int)PlayerAction.Count;
-                for (int i = 0; i < actionsCount; ++i)
+                if (!packet.replayed)
                 {
-                    player.input.SetActionPressed(i, (actions & (1 << i)) != 0);
-                }
+                    int actions = packet.actions;
+                    player.input.Force(packet.actions);
 
-                player.ReplayUpdate(delta);
-            }
+                    player.ReplayUpdate(delta);
+                    MarkReplayed(id);
+                }
+            }            
+            Debug.Assert(oldMask == player.input.mask);
         }
 
         #endregion
@@ -187,7 +180,7 @@ namespace Bomberman.Game.Multiplayer
             m_localPlayer.lastAckPacketId = msg.ReadInt32();
 
             ReadPlayingMessage(msg);
-            // ReplayPlayerActions(m_localPlayer);
+            ReplayPlayerActions(m_localPlayer);
         }
 
         private void WritePlayingMessage(NetOutgoingMessage msg, Player player)
@@ -207,6 +200,7 @@ namespace Bomberman.Game.Multiplayer
             ClientPacket packet;
             packet.id = ++m_lastPacketId;
             packet.actions = actions;
+            packet.replayed = false;
 
             msg.Write(packet.id);                   // packet to be acknowledged by server
             msg.Write(player.lastReceivedPackedId); // packet acknowledged by client
@@ -364,6 +358,15 @@ namespace Bomberman.Game.Multiplayer
             return m_sentPackets[index];
         }
 
+        private void MarkReplayed(int id)
+        {
+            int index = id % SENT_HISTORY_SIZE;
+            if (m_sentPackets[index].id == id)
+            {
+                m_sentPackets[index].replayed = true;
+            }
+        }
+
         #endregion
 
         private class NetworkTraceView : View
@@ -437,7 +440,7 @@ namespace Bomberman.Game.Multiplayer
 
             public override void Update(float delta)
             {
-                m_cordErrView.SetText("px: " + m_player.errDx + "\npy: " + m_player.errDy);
+                m_cordErrView.SetText("dpx: " + m_player.errDx + "\ndpy: " + m_player.errDy);
             }
         }
     }
