@@ -83,10 +83,16 @@ namespace Bomberman.Game.Multiplayer
 
         private void ReplayPlayerActions(Player player)
         {
-            Log.d("Diff: " + (m_lastPacketId - player.lastAckPacketId));
+            if (player.lastAckPacketId == 0)
+            {
+                return;
+            }
+
+            int diff =  (m_lastPacketId - player.lastAckPacketId);
 
             float delta = Application.frameTime;
-            player.input.Reset();
+            ClientPacket lastPacket = GetPacket(player.lastAckPacketId - 1); // user prev packet as an input start
+            player.input.Force(lastPacket.actions);
 
             for (int id = player.lastAckPacketId; id <= m_lastPacketId; ++id)
             {
@@ -98,7 +104,7 @@ namespace Bomberman.Game.Multiplayer
                     player.input.SetActionPressed(i, (actions & (1 << i)) != 0);
                 }
 
-                player.UpdateMoving(delta);
+                player.ReplayUpdate(delta);
             }
         }
 

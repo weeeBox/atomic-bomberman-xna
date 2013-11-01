@@ -67,6 +67,7 @@ namespace Bomberman.Game.Elements.Players
 
         private PlayerAnimations m_animations;
         private AnimationInstance m_currentAnimation;
+        private bool m_lockAnimations;
 
         private bool m_punchingBomb; // true if player is in the middle of punching a bomb (animation is playing)
         private bool m_pickingBomb; // true if player is in the middle of picking a bomb (animation is playing)
@@ -154,15 +155,14 @@ namespace Bomberman.Game.Elements.Players
             }
         }
 
-        public override void UpdateDumb(float delta)
-        {
-            base.UpdateDumb(delta);
+        public void ReplayUpdate(float delta)
+        {   
             if (IsAlive)
             {
                 UpdateInput(delta);
+                UpdateMoving(delta);
             }
         }
-
 
         #endregion
 
@@ -1518,6 +1518,11 @@ namespace Bomberman.Game.Elements.Players
 
         private void UpdateAnimation()
         {
+            if (m_lockAnimations)
+            {
+                return;
+            }
+
             PlayerAnimations.Id id;
             PlayerAnimations.Id currentId = (PlayerAnimations.Id)m_currentAnimation.id;
             AnimationInstance.Mode mode = AnimationInstance.Mode.Looped;
@@ -1579,6 +1584,7 @@ namespace Bomberman.Game.Elements.Players
         {
             m_pickingBomb = false;
             m_punchingBomb = false;
+            m_lockAnimations = false;
 
             UpdateAnimation();
         }
@@ -1637,6 +1643,8 @@ namespace Bomberman.Game.Elements.Players
         /* Sets player state received from the server as a part of game packet */
         internal void UpdateFromNetwork(float newPx, float newPy, bool moving, Direction newDir, float newSpeed)
         {
+            m_lockAnimations = true;
+
             m_errDx = px - newPx;
             m_errDy = py - newPy;
 
@@ -1645,14 +1653,7 @@ namespace Bomberman.Game.Elements.Players
                 SetPos(newPx, newPy);
             }
 
-            if (!moving)
-            {
-                if (IsMoving())
-                {
-                    StopMoving();
-                }
-            }
-            else
+            if (moving)
             {
                 SetSpeed(newSpeed);
                 if (newDir != direction)
@@ -1660,6 +1661,12 @@ namespace Bomberman.Game.Elements.Players
                     StartMovingToDirection(newDir);
                 }
             }
+            if (IsMoving())
+            {
+                StopMoving();
+            }
+
+            m_lockAnimations = false;
         }
 
         #endregion

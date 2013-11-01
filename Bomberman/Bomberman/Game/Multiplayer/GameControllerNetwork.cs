@@ -579,10 +579,23 @@ namespace Bomberman.Game.Multiplayer
         {
             PeerMessageId id = (PeerMessageId) msg.ReadByte();
             ReadPeerMessage(peer, id, msg);
+
+            #if DEBUG
+            if (CVars.d_closeInnactive.floatValue > 0)
+            {
+                Application.CancelTimer(CloseInnactive);
+                Application.ScheduleTimer(CloseInnactive, CVars.d_closeInnactive.floatValue);
+            }
+            #endif
         }
 
         protected virtual void ReadPeerMessage(Peer peer, PeerMessageId id, NetIncomingMessage msg)
         {   
+        }
+
+        private void CloseInnactive()
+        {
+            Application.sharedApplication.Stop();
         }
 
         #endregion

@@ -97,6 +97,7 @@ namespace Bomberman
         public static readonly CVar d_breakPoint3 = new CVar("d_breakPoint3", 0, CFlags.Debug|CFlags.DontSave);
         public static readonly CVar d_breakPoint4 = new CVar("d_breakPoint4", 0, CFlags.Debug|CFlags.DontSave);
         public static readonly CVar d_breakPoint5 = new CVar("d_breakPoint5", 0, CFlags.Debug|CFlags.DontSave);
+        public static readonly CVar d_closeInnactive = new CVar("d_closeInnactive", -1, CFlags.Debug);
 
         /* Network */
         public static readonly CVar sv_port = new CVar("sv_port", 1334);
@@ -174,6 +175,7 @@ namespace Bomberman
             d_breakPoint3,
             d_breakPoint4,
             d_breakPoint5,
+            d_closeInnactive,
         };
 
         private static readonly CVar[] cheatVars =

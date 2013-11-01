@@ -7,7 +7,6 @@ namespace Bomberman.Game.Elements.Cells
     public class MovableCell : FieldCell
     {
         private Direction m_direction;
-        private Direction m_oldDirection;
 
         /* Points per second */
         private float m_speed;
@@ -24,7 +23,6 @@ namespace Bomberman.Game.Elements.Cells
             : base(type, cx, cy)
         {
             m_direction = Direction.DOWN;
-            m_oldDirection = Direction.DOWN;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -38,7 +36,6 @@ namespace Bomberman.Game.Elements.Cells
             StopMoving();
 
             m_direction = Direction.DOWN;
-            m_oldDirection = Direction.DOWN;
             m_speed = 0.0f;
             addedToList = false;
         }
@@ -169,8 +166,7 @@ namespace Bomberman.Game.Elements.Cells
         }
 
         public void SetDirection(Direction newDirection)
-        {
-            m_oldDirection = m_direction;
+        {   
             m_direction = newDirection;
         }
 
@@ -326,17 +322,12 @@ namespace Bomberman.Game.Elements.Cells
             get { return m_direction; }
         }
 
-        public Direction oldDirection
-        {
-            get { return m_oldDirection; }
-        }
-
-        protected float moveKx
+        public float moveKx
         {
             get { return m_moveKx; }
         }
 
-        protected float moveKy
+        public float moveKy
         {
             get { return m_moveKy; }
         }

@@ -7,8 +7,6 @@ namespace Bomberman.Game.Elements.Players
         private int m_stateBits;
         private int m_stateBitsOld;
 
-        private int m_pressedCount;
-
         public PlayerInput()
         {   
         }
@@ -22,7 +20,11 @@ namespace Bomberman.Game.Elements.Players
         {
             m_stateBits = 0;
             m_stateBitsOld = 0;
-            m_pressedCount = 0;
+        }
+
+        public void Force(int mask)
+        {
+            m_stateBits = m_stateBitsOld = mask;
         }
 
         public void SetActionPressed(PlayerAction action, bool flag)
@@ -37,19 +39,10 @@ namespace Bomberman.Game.Elements.Players
             if (flag)
             {   
                 m_stateBits |= 1 << index;
-                if (!wasPressed)
-                {
-                    ++m_pressedCount;
-                }
             }
             else
             {
                 m_stateBits &= ~(1 << index);
-                if (wasPressed)
-                {
-                    Debug.Assert(m_pressedCount > 0);
-                    --m_pressedCount;
-                }
             }
         }
         
@@ -103,7 +96,17 @@ namespace Bomberman.Game.Elements.Players
 
         public int GetPressedActionCount()
         {
-            return m_pressedCount;
+            int pressedCount = 0;
+            int actionsCount = (int)PlayerAction.Count;
+            for (int i = 0; i < actionsCount; ++i)
+            {
+                if (IsActionPressed(i))
+                {
+                    ++pressedCount;
+                }
+            }
+
+            return pressedCount;
         }
     }
 }

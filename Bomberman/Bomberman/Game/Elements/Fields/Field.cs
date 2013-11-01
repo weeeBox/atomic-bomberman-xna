@@ -300,24 +300,6 @@ namespace Bomberman.Game.Elements.Fields
             UpdatePhysics(delta);
         }
 
-        private void UpdateDumb(float delta)
-        {
-            FieldCellSlot[] slots = cells.slots;
-            foreach (FieldCellSlot slot in slots)
-            {
-                slot.GetCells(m_tempCellsList);
-            }
-
-            if (m_tempCellsList.Count > 0)
-            {
-                foreach (FieldCell cell in m_tempCellsList)
-                {
-                    cell.UpdateDumb(delta);
-                }
-                m_tempCellsList.Clear();
-            }
-        }
-
         private void UpdateCells(float delta)
         {
             FieldCellSlot[] slots = cells.slots;
