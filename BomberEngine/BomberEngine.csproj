@@ -179,7 +179,7 @@
     <Compile Include="Util\BitArray.cs" />
     <Compile Include="Util\IBaseCollection.cs" />
     <Compile Include="Util\Constants.cs" />
-    <Compile Include="Util\FastLinkedList.cs" />
+    <Compile Include="Util\FastList.cs" />
     <Compile Include="Util\ObjectsPool.cs" />
     <Compile Include="Util\OutResult.cs" />
     <Compile Include="Util\MathHelp.cs" />

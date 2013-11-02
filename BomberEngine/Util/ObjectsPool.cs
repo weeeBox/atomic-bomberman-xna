@@ -1,58 +1,36 @@
 ﻿
 namespace BomberEngine
 {
-    public class ObjectsPool<T> : IDestroyable where T : ObjectsPoolEntry<T>, new()
+    internal interface IObjectsPool
     {
-        private FastLinkedList<T> m_list;
-        private FastLinkedList<T> m_recycleList; // put object here if it should be recycled later
+        void Recycle(ObjectsPoolEntry entry);
+    }
 
-        private TimerManager m_timerManager;
-
+    public class ObjectsPool<T> : FastList<ObjectsPoolEntry>, IObjectsPool, IDestroyable
+        where T : ObjectsPoolEntry, new()
+    {
         public ObjectsPool()
-            : this(Application.TimerManager())
         {
-        }
-
-        public ObjectsPool(TimerManager timerManager)
-        {
-            m_timerManager = timerManager;
-            m_list = new FastLinkedList<T>();
         }
 
         public T NextObject()
         {
-            T first = m_list.RemoveFirstItem();
-            if (first != null)
+            ObjectsPoolEntry first = RemoveFirstItem();
+            if (first == null)
             {
-                return first;
+                first = new T();
             }
-            return new T();
+
+            first.pool = this;
+            return (T)first;
         }
 
-        public void RecycleObject(T t)
+        public void Recycle(ObjectsPoolEntry e)
         {
-            t.RecycleObject();
-            m_list.AddLastItem(t);
-        }
+            Debug.Assert(e is T);
+            Debug.Assert(e.pool == this);
 
-        public void RecycleObjectLater(T t)
-        {
-            if (m_recycleList == null)
-            {
-                m_recycleList = new FastLinkedList<T>();
-            }
-            m_recycleList.AddLastItem(t);
-            ScheduleRecycle();
-        }
-
-        public void Clear()
-        {
-            CancelRecycle();
-            m_list.Clear();
-            if (m_recycleList != null)
-            {
-                m_recycleList.Clear();
-            }
+            AddLastItem(e);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -65,50 +43,20 @@ namespace BomberEngine
         }
 
         #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Delayed recycle
-
-        private void ScheduleRecycle()
-        {
-            m_timerManager.ScheduleOnce(Recycle);
-        }
-
-        private void CancelRecycle()
-        {
-            m_timerManager.Cancel(Recycle);
-        }
-
-        private void Recycle()
-        {
-            Debug.Assert(m_recycleList != null && m_recycleList.size > 0);
-
-            T t;
-            while ((t = m_recycleList.RemoveFirstItem()) != null)
-            {
-                RecycleObject(t);
-            }
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Properties
-
-        public int size
-        {
-            get { return m_list.size; }
-        }
-
-        #endregion
+        
     }
 
-    public class ObjectsPoolEntry<T> : FastLinkedListNode<T>
+    public class ObjectsPoolEntry : FastListNode
     {
-        internal void RecycleObject()
-        {
+        internal IObjectsPool pool;
+
+        public void Recycle()
+        {   
+            if (pool != null)
+            {
+                pool.Recycle(this);
+            }
+            
             OnRecycleObject();
         }
 

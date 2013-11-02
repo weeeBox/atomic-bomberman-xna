@@ -1,14 +1,14 @@
 ﻿
 namespace BomberEngine
 {
-    public interface IFastLinkedList // marker interface: we need to store a list instance inside ListNode class, but generics don't allow that
+    internal interface IFastList
     {
     }
 
-    public class FastLinkedList<T> : IFastLinkedList where T : FastLinkedListNode<T>
+    public class FastList<T> : IFastList where T : FastListNode
     {
-        private T m_listFirst;
-        private T m_listLast;
+        internal FastListNode m_listFirst;
+        internal FastListNode m_listLast;
 
         private int m_size;
 
@@ -37,8 +37,8 @@ namespace BomberEngine
             Debug.Assert(m_size > 0);
             Debug.Assert(item.m_list == this);
 
-            T prev = item.m_listPrev;
-            T next = item.m_listNext;
+            FastListNode prev = item.m_listPrev;
+            FastListNode next = item.m_listNext;
 
             if (prev != null)
             {
@@ -65,7 +65,7 @@ namespace BomberEngine
 
         public T RemoveFirstItem()
         {
-            T node = m_listFirst;
+            T node = listFirst;
             if (node != null)
             {
                 RemoveItem(node);
@@ -76,7 +76,7 @@ namespace BomberEngine
 
         public T RemoveLastItem()
         {
-            T node = m_listLast;
+            T node = listLast;
             if (node != null)
             {
                 RemoveItem(node);
@@ -85,14 +85,14 @@ namespace BomberEngine
             return node;
         }
 
-        public bool ContainsItem(T item)
+        public bool ContainsItem(FastListNode item)
         {
             if (item.m_list != this)
             {
                 return false;
             }
 
-            for (T t = m_listFirst; t != null; t = t.m_listNext)
+            for (FastListNode t = m_listFirst; t != null; t = t.m_listNext)
             {
                 if (t == item)
                 {
@@ -103,7 +103,7 @@ namespace BomberEngine
             return false;
         }
 
-        private void InsertItem(T item, T prev, T next)
+        private void InsertItem(FastListNode item, FastListNode prev, FastListNode next)
         {
             Debug.Assert(item.m_list == null);
 
@@ -133,9 +133,9 @@ namespace BomberEngine
 
         public void Clear()
         {
-            for (T t = m_listFirst; t != null; )
+            for (FastListNode t = m_listFirst; t != null; )
             {
-                T next = t.listNext;
+                FastListNode next = t.m_listNext;
                 t.m_listPrev = t.m_listNext = null;
                 t.m_list = null;
                 t = next;
@@ -152,33 +152,31 @@ namespace BomberEngine
 
         public T listFirst
         {
-            get { return m_listFirst; }
+            get { return (T)m_listFirst; }
             protected set { m_listFirst = value; }
         }
 
         public T listLast
         {
-            get { return m_listLast; }
+            get { return (T)m_listLast; }
             protected set { m_listLast = value; }
         }
     }
 
-    public class FastLinkedListNode<T>
+    public class FastListNode
     {
-        internal T m_listPrev;
-        internal T m_listNext;
-        internal IFastLinkedList m_list;
+        internal FastListNode m_listPrev;
+        internal FastListNode m_listNext;
+        internal IFastList m_list;
 
-        public T listPrev
+        protected FastListNode listPrev
         {
             get { return m_listPrev; }
-            protected set { m_listPrev = value; }
         }
 
-        public T listNext
+        protected FastListNode listNext
         {
             get { return m_listNext; }
-            protected set { m_listNext = value; }
         }
     }
 }

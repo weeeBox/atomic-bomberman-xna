@@ -49,7 +49,7 @@
     <Compile Include="BitArrayTests.cs" />
     <Compile Include="BitBufferTests.cs" />
     <Compile Include="CConsoleTests.cs" />
-    <Compile Include="FastLinkedListTests.cs" />
+    <Compile Include="FastListTests.cs" />
     <Compile Include="NotificationsTest.cs" />
     <Compile Include="ObjectsPoolTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -213,6 +213,7 @@
     <Compile Include="Game\Screens\SchemeView.cs" />
     <Compile Include="Game\Screens\TestScreen.cs" />
     <Compile Include="Multiplayer\DebugMultiplayerController.cs" />
+    <Compile Include="Networking\NetChannel.cs" />
     <Compile Include="Networking\NetworkManager.cs" />
     <Compile Include="Multiplayer\MultiplayerLobbyScreen.cs" />
     <Compile Include="Multiplayer\MultiplayerController.cs" />

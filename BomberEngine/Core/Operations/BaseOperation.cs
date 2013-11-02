@@ -2,7 +2,7 @@
 
 namespace BomberEngine
 {
-    public class BaseOperation : ObjectsPoolEntry<BaseOperation>
+    public class BaseOperation : ObjectsPoolEntry
     {
         private enum State
         {

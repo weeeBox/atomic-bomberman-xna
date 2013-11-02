@@ -4,12 +4,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace BomberEngineTests
 {
     [TestClass]
-    public class FastLinkedListTests
+    public class FastListTests
     {
         [TestMethod]
         public void TestAddFirst()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             Node node = new Node(1);
             list.AddFirstItem(node);
@@ -19,17 +19,17 @@ namespace BomberEngineTests
             Assert.AreEqual(list.listFirst, node);
             Assert.AreEqual(list.listLast, node);
 
-            Assert.IsNull(list.listFirst.listPrev);
-            Assert.IsNull(list.listFirst.listNext);
+            Assert.IsNull(list.listFirst.m_listPrev);
+            Assert.IsNull(list.listFirst.m_listNext);
 
-            Assert.IsNull(list.listLast.listPrev);
-            Assert.IsNull(list.listLast.listNext);
+            Assert.IsNull(list.listLast.m_listPrev);
+            Assert.IsNull(list.listLast.m_listNext);
         }
 
         [TestMethod]
         public void TestAddLast()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             Node node = new Node(1);
             list.AddLastItem(node);
@@ -39,17 +39,17 @@ namespace BomberEngineTests
             Assert.AreEqual(list.listFirst, node);
             Assert.AreEqual(list.listLast, node);
 
-            Assert.IsNull(list.listFirst.listPrev);
-            Assert.IsNull(list.listFirst.listNext);
+            Assert.IsNull(list.listFirst.m_listPrev);
+            Assert.IsNull(list.listFirst.m_listNext);
 
-            Assert.IsNull(list.listLast.listPrev);
-            Assert.IsNull(list.listLast.listNext);
+            Assert.IsNull(list.listLast.m_listPrev);
+            Assert.IsNull(list.listLast.m_listNext);
         }
 
         [TestMethod]
         public void TestAdd1()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             Node node1 = new Node(1);
             list.AddLastItem(node1);
@@ -62,17 +62,17 @@ namespace BomberEngineTests
             Assert.AreEqual(list.listFirst, node1);
             Assert.AreEqual(list.listLast, node2);
 
-            Assert.IsNull(list.listFirst.listPrev);
-            Assert.AreEqual(list.listFirst.listNext, node2);
+            Assert.IsNull(list.listFirst.m_listPrev);
+            Assert.AreEqual(list.listFirst.m_listNext, node2);
 
-            Assert.AreEqual(list.listLast.listPrev, node1);
-            Assert.IsNull(list.listLast.listNext);
+            Assert.AreEqual(list.listLast.m_listPrev, node1);
+            Assert.IsNull(list.listLast.m_listNext);
         }
 
         [TestMethod]
         public void TestAdd2()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             Node node1 = new Node(1);
             list.AddFirstItem(node1);
@@ -85,17 +85,17 @@ namespace BomberEngineTests
             Assert.AreEqual(list.listFirst, node2);
             Assert.AreEqual(list.listLast, node1);
 
-            Assert.IsNull(list.listFirst.listPrev);
-            Assert.AreEqual(list.listFirst.listNext, node1);
+            Assert.IsNull(list.listFirst.m_listPrev);
+            Assert.AreEqual(list.listFirst.m_listNext, node1);
 
-            Assert.AreEqual(list.listLast.listPrev, node2);
-            Assert.IsNull(list.listLast.listNext);
+            Assert.AreEqual(list.listLast.m_listPrev, node2);
+            Assert.IsNull(list.listLast.m_listNext);
         }
 
         [TestMethod]
         public void TestAdd3()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -119,7 +119,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestAdd4()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -143,7 +143,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestInsert1()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             Node node = new Node(1);
             list.InsertBeforeItem(list.listFirst, node);
@@ -153,17 +153,17 @@ namespace BomberEngineTests
             Assert.AreEqual(list.listFirst, node);
             Assert.AreEqual(list.listLast, node);
 
-            Assert.IsNull(list.listFirst.listPrev);
-            Assert.IsNull(list.listFirst.listNext);
+            Assert.IsNull(list.listFirst.m_listPrev);
+            Assert.IsNull(list.listFirst.m_listNext);
 
-            Assert.IsNull(list.listLast.listPrev);
-            Assert.IsNull(list.listLast.listNext);
+            Assert.IsNull(list.listLast.m_listPrev);
+            Assert.IsNull(list.listLast.m_listNext);
         }
 
         [TestMethod]
         public void TestInsert2()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             Node node = new Node(1);
             list.InsertAfterItem(list.listFirst, node);
@@ -173,17 +173,17 @@ namespace BomberEngineTests
             Assert.AreEqual(list.listFirst, node);
             Assert.AreEqual(list.listLast, node);
 
-            Assert.IsNull(list.listFirst.listPrev);
-            Assert.IsNull(list.listFirst.listNext);
+            Assert.IsNull(list.listFirst.m_listPrev);
+            Assert.IsNull(list.listFirst.m_listNext);
 
-            Assert.IsNull(list.listLast.listPrev);
-            Assert.IsNull(list.listLast.listNext);
+            Assert.IsNull(list.listLast.m_listPrev);
+            Assert.IsNull(list.listLast.m_listNext);
         }
 
         [TestMethod]
         public void TestInsert3()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             Node node = new Node(1);
             list.InsertBeforeItem(list.listLast, node);
@@ -193,17 +193,17 @@ namespace BomberEngineTests
             Assert.AreEqual(list.listFirst, node);
             Assert.AreEqual(list.listLast, node);
 
-            Assert.IsNull(list.listFirst.listPrev);
-            Assert.IsNull(list.listFirst.listNext);
+            Assert.IsNull(list.listFirst.m_listPrev);
+            Assert.IsNull(list.listFirst.m_listNext);
 
-            Assert.IsNull(list.listLast.listPrev);
-            Assert.IsNull(list.listLast.listNext);
+            Assert.IsNull(list.listLast.m_listPrev);
+            Assert.IsNull(list.listLast.m_listNext);
         }
 
         [TestMethod]
         public void TestInsert4()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             Node node = new Node(1);
             list.InsertAfterItem(list.listLast, node);
@@ -213,17 +213,17 @@ namespace BomberEngineTests
             Assert.AreEqual(list.listFirst, node);
             Assert.AreEqual(list.listLast, node);
 
-            Assert.IsNull(list.listFirst.listPrev);
-            Assert.IsNull(list.listFirst.listNext);
+            Assert.IsNull(list.listFirst.m_listPrev);
+            Assert.IsNull(list.listFirst.m_listNext);
 
-            Assert.IsNull(list.listLast.listPrev);
-            Assert.IsNull(list.listLast.listNext);
+            Assert.IsNull(list.listLast.m_listPrev);
+            Assert.IsNull(list.listLast.m_listNext);
         }
 
         [TestMethod]
         public void TestInsert5()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -241,7 +241,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestInsert6()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -259,7 +259,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestInsert7()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -277,7 +277,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestInsert8()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -297,7 +297,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestInsert9()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -317,7 +317,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestInsert10()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -337,7 +337,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestInsert11()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -357,7 +357,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestInsert12()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -375,7 +375,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestInsert13()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -393,7 +393,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestRemove1()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -411,7 +411,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestRemove2()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -429,7 +429,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestRemove3()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -457,7 +457,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestRemove4()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -475,7 +475,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestRemove5()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -492,7 +492,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestRemove6()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -509,7 +509,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestRemove7()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -526,7 +526,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestRemove8()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -545,7 +545,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestRemove9()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -557,14 +557,14 @@ namespace BomberEngineTests
             Node node = Find(list, 2);
             list.RemoveItem(node);
 
-            Assert.IsNull(node.listPrev);
-            Assert.IsNull(node.listNext);
+            Assert.IsNull(node.m_listPrev);
+            Assert.IsNull(node.m_listNext);
         }
 
         [TestMethod]
         public void TestMix1()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -583,7 +583,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestMix2()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -604,7 +604,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestMix3()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -624,7 +624,7 @@ namespace BomberEngineTests
         [TestMethod]
         public void TestMix4()
         {
-            FastLinkedList<Node> list = new FastLinkedList<Node>();
+            FastList<Node> list = new FastList<Node>();
 
             int[] values = { 1, 2, 3 };
 
@@ -641,7 +641,7 @@ namespace BomberEngineTests
             AssertValues(list);
         }
 
-        private void AssertValues(FastLinkedList<Node> list, params int[] values)
+        private void AssertValues(FastList<Node> list, params int[] values)
         {
             Assert.AreEqual(list.size, values.Length);
 
@@ -655,7 +655,7 @@ namespace BomberEngineTests
             Assert.IsNull(node);
         }
 
-        private Node Find(FastLinkedList<Node> list, int value)
+        private Node Find(FastList<Node> list, int value)
         {
             for (Node node = list.listFirst; node != null; node = node.listNext)
             {
@@ -669,13 +669,23 @@ namespace BomberEngineTests
         }
     }
 
-    class Node : FastLinkedListNode<Node>
+    class Node : FastListNode
     {
         public int value;
 
         public Node(int value)
         {
             this.value = value;
+        }
+
+        public new Node listPrev
+        {
+            get { return (Node)base.listPrev; }
+        }
+
+        public new Node listNext
+        {
+            get { return (Node)base.listNext; }
         }
     }
 }

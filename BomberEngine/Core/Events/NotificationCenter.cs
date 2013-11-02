@@ -21,7 +21,7 @@ namespace BomberEngine
         {
             m_timerManager = timerManager;
             m_registerMap = new Dictionary<String, NotificationDelegateList>();
-            m_notificatoinsPool = new ObjectsPool<Notification>(timerManager);
+            m_notificatoinsPool = new ObjectsPool<Notification>();
         }
 
         public void Destroy()
@@ -98,8 +98,7 @@ namespace BomberEngine
                 notification.Init(sender, name, data, data2, data3, data4);
 
                 list.NotifyDelegates(notification);
-
-                m_notificatoinsPool.RecycleObject(notification);
+                notification.Recycle();
             }
         }
 
@@ -111,7 +110,7 @@ namespace BomberEngine
             {
                 list.NotifyDelegates(notification);
             }
-            m_notificatoinsPool.RecycleObject(notification);
+            notification.Recycle();
         }
 
         private NotificationDelegateList FindList(String name)
@@ -145,7 +144,7 @@ namespace BomberEngine
         }
     }
 
-    public class Notification : ObjectsPoolEntry<Notification>
+    public class Notification : ObjectsPoolEntry
     {
         private Object m_sender;
         private String m_name;
