@@ -22,20 +22,25 @@ namespace Bomberman.Networking
         {
             m_connection = connection;
             m_players = players;
+
+            Reset();
         }
 
         //////////////////////////////////////////////////////////////////////////////
 
-        // TODO: refactor these methods
+        #region IResettable
 
         public void Reset()
         {
-            IsReady = false;
-            acknowledgedSequence = 0;
-            incomingSequence = 0;
-            needsFieldState = true;
-            needsRoundResults = true;
+            IsReady                 = false;
+            outgoingSequence        = -1;
+            incomingSequence        = 0;
+            acknowledgedSequence    = 0;
+            needsFieldState         = true;
+            needsRoundResults       = true;
         }
+
+        #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 

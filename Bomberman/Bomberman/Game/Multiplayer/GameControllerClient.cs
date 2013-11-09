@@ -167,28 +167,9 @@ namespace Bomberman.Game.Multiplayer
         }
 
         private void WriteRoundStartMessage(NetBuffer buffer, NetChannel channel)
-        {
-            List<Player> localPlayers = channel.players;
-            buffer.Write(localPlayers.Count);
-
-            for (int i = 0; i < localPlayers.Count; ++i)
-            {   
-                WriteRoundStartMessage(buffer, localPlayers[i]);
-            }
-        }
-
-        private void WriteRoundStartMessage(NetBuffer buffer, Player player)
-        {
-            if (player == null)
-            {
-                buffer.Write(false); // player is not ready
-                buffer.Write(true);  // player needs field state
-            }
-            else
-            {
-                buffer.Write(player.IsReady);
-                buffer.Write(player.needsFieldState);
-            }
+        {   
+            buffer.Write(channel.IsReady);
+            buffer.Write(channel.needsFieldState);
         }
 
         private void ReadPlayingMessage(Peer peer, NetIncomingMessage msg)
@@ -216,8 +197,12 @@ namespace Bomberman.Game.Multiplayer
 
         private void WritePlayingMessage(NetOutgoingMessage msg, NetChannel channel)
         {
+            channel.outgoingSequence++;
+
+            msg.Write(channel.outgoingSequence);    // packet to be acknowledged by server
+            msg.Write(channel.incomingSequence);    // packet acknowledged by client
+
             List<Player> localPlayers = channel.players;
-            msg.Write(localPlayers.Count);
             for (int i = 0; i < localPlayers.Count; ++i)
             {
                 WritePlayingMessage(msg, localPlayers[i]);
@@ -226,28 +211,7 @@ namespace Bomberman.Game.Multiplayer
 
         private void WritePlayingMessage(NetOutgoingMessage msg, Player player)
         {
-            Assert.IsTrue(player != null);
-
-            int actions = 0;
-            int actionsCount = (int)PlayerAction.Count;
-            for (int i = 0; i < actionsCount; ++i)
-            {
-                if (player.input.IsActionPressed(i))
-                {
-                    actions |= 1 << i;
-                }
-            }
-
-            ClientPacket packet;
-            packet.id = ++m_lastPacketId;
-            packet.actions = actions;
-            packet.replayed = false;
-
-            msg.Write(packet.id);                   // packet to be acknowledged by server
-            msg.Write(player.incomingSequence); // packet acknowledged by client
-            msg.Write(packet.actions, (int)PlayerAction.Count);
-
-            PushPacket(ref packet);
+            msg.Write(player.input.mask);
         }
 
         private void ReadRoundEndMessage(Peer peer, NetIncomingMessage msg)
