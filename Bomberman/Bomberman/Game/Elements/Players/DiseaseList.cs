@@ -125,7 +125,7 @@ namespace Bomberman.Game.Elements.Players
         private bool TryInfectHelper(int index)
         {
             Disease disease = DiseaseForIndex(index);
-            Assert.NotNull(disease);
+            Assert.IsNotNull(disease);
 
             bool wasInfected = flags[index];
 

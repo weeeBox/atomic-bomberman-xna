@@ -110,7 +110,7 @@ namespace Bomberman.Game.Multiplayer
                         }
 
                         NetConnection connection = player.connection;
-                        Assert.True(connection != null);
+                        Assert.IsTrue(connection != null);
 
                         SendMessage(message, connection);
                     }
@@ -134,7 +134,7 @@ namespace Bomberman.Game.Multiplayer
                         message.Write(payloadMessage);
 
                         NetConnection connection = player.connection;
-                        Assert.True(connection != null);
+                        Assert.IsTrue(connection != null);
 
                         SendMessage(message, connection);
                     }
@@ -162,7 +162,7 @@ namespace Bomberman.Game.Multiplayer
                         }
 
                         NetConnection connection = player.connection;
-                        Assert.True(connection != null);
+                        Assert.IsTrue(connection != null);
 
                         SendMessage(message, connection);
                     }
@@ -207,7 +207,7 @@ namespace Bomberman.Game.Multiplayer
             int actions = msg.ReadInt32((int)PlayerAction.Count);
 
             PlayerNetworkInput input = player.input as PlayerNetworkInput;
-            Assert.True(input != null);
+            Assert.IsTrue(input != null);
 
             input.SetNetActionBits(actions);
         }
@@ -279,7 +279,7 @@ namespace Bomberman.Game.Multiplayer
             NetConnection connection = notification.GetData<NetConnection>();
 
             Player player = FindPlayer(connection);
-            Assert.True(player != null);
+            Assert.IsTrue(player != null);
 
             RemovePlayerConnection(connection);
             // TODO: notify gameplay
@@ -298,25 +298,25 @@ namespace Bomberman.Game.Multiplayer
 
         private void AddPlayerConnection(NetConnection connection, Player player)
         {
-            Assert.True(!networkPlayersLookup.ContainsKey(connection));
+            Assert.IsTrue(!networkPlayersLookup.ContainsKey(connection));
             networkPlayersLookup.Add(connection, player);
 
-            Assert.True(player.connection == null);
+            Assert.IsTrue(player.connection == null);
             player.connection = connection;
 
-            Assert.True(!networkPlayers.Contains(player));
+            Assert.IsTrue(!networkPlayers.Contains(player));
             networkPlayers.Add(player);
         }
 
         private void RemovePlayerConnection(NetConnection connection)
         {
             Player player = FindPlayer(connection);
-            Assert.True(player != null && player.connection == connection);
+            Assert.IsTrue(player != null && player.connection == connection);
             player.connection = null;
 
             networkPlayersLookup.Remove(connection);
 
-            Assert.True(networkPlayers.Contains(player));
+            Assert.IsTrue(networkPlayers.Contains(player));
             networkPlayers.Remove(player);
         }
 
@@ -334,7 +334,7 @@ namespace Bomberman.Game.Multiplayer
         private Player FindPlayer(NetConnection connection)
         {
             Player player = TryFindPlayer(connection);
-            Assert.True(player != null);
+            Assert.IsTrue(player != null);
 
             return player;
         }
@@ -345,7 +345,7 @@ namespace Bomberman.Game.Multiplayer
 
         protected override void OnRoundEnded()
         {
-            Assert.True(GetState() == State.Playing);
+            Assert.IsTrue(GetState() == State.Playing);
 
             SetPlayersReady(false);
             SetState(State.RoundEnd);
@@ -353,7 +353,7 @@ namespace Bomberman.Game.Multiplayer
 
         protected override void OnGameEnded()
         {
-            Assert.True(GetState() == State.Playing);
+            Assert.IsTrue(GetState() == State.Playing);
 
             SetPlayersReady(false);
             SetState(State.RoundEnd);
@@ -384,7 +384,7 @@ namespace Bomberman.Game.Multiplayer
             {
                 case State.RoundStart:
                 {
-                    Assert.True(oldState == State.RoundEnd || oldState == State.Undefined,
+                    Assert.IsTrue(oldState == State.RoundEnd || oldState == State.Undefined,
                         "Unexpected old state: " + oldState);
 
                     StartScreen(new BlockingScreen("Waiting for clients..."));
@@ -404,8 +404,8 @@ namespace Bomberman.Game.Multiplayer
 
                 case State.Playing:
                 {
-                    Assert.True(oldState == State.RoundStart, "Unexpected old state: " + oldState);
-                    Assert.True(!(CurrentScreen() is GameScreen));
+                    Assert.IsTrue(oldState == State.RoundStart, "Unexpected old state: " + oldState);
+                    Assert.IsTrue(!(CurrentScreen() is GameScreen));
 
                     gameScreen = new GameScreen();
                     StartScreen(gameScreen);
@@ -414,7 +414,7 @@ namespace Bomberman.Game.Multiplayer
 
                 case State.RoundEnd:
                 {
-                    Assert.True(oldState == State.Playing, "Unexpected old state: " + oldState);
+                    Assert.IsTrue(oldState == State.Playing, "Unexpected old state: " + oldState);
 
                     Restart();
                     if (game.IsGameEnded)

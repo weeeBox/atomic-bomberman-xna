@@ -34,8 +34,8 @@ namespace BomberEngine
 
         public void RemoveItem(T item)
         {
-            Assert.True(m_size > 0);
-            Assert.True(item.m_list == this);
+            Assert.IsTrue(m_size > 0);
+            Assert.IsTrue(item.m_list == this);
 
             FastListNode prev = item.m_listPrev;
             FastListNode next = item.m_listNext;
@@ -105,7 +105,7 @@ namespace BomberEngine
 
         private void InsertItem(FastListNode item, FastListNode prev, FastListNode next)
         {
-            Assert.True(item.m_list == null);
+            Assert.IsTrue(item.m_list == null);
 
             if (next != null)
             {

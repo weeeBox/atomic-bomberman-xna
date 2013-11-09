@@ -176,7 +176,7 @@ namespace Bomberman
                     case DebugMultiplayerController.ExitCode.ClientStarted:
                     {
                         ServerInfo info = controller.exitData as ServerInfo;
-                        Assert.True(info != null);
+                        Assert.IsTrue(info != null);
 
                         GameSettings settings = new GameSettings(info.scheme);
                         StartController(GameController.Client(settings));
@@ -186,7 +186,7 @@ namespace Bomberman
                     case DebugMultiplayerController.ExitCode.ServerStarted:
                     {
                         ServerInfo info = controller.exitData as ServerInfo;
-                        Assert.True(info != null);
+                        Assert.IsTrue(info != null);
 
                         GameSettings settings = new GameSettings(info.scheme);
                         settings.inputEntries = new GameSettings.InputEntry[]

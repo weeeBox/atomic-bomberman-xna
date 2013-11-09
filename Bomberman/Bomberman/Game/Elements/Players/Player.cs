@@ -174,7 +174,7 @@ namespace Bomberman.Game.Elements.Players
 
         public override void UpdateMoving(float delta)
         {
-            Assert.True(IsMoving());
+            Assert.IsTrue(IsMoving());
 
             float offset = GetSpeed() * delta;
 
@@ -250,8 +250,8 @@ namespace Bomberman.Game.Elements.Players
                 int dcx = Math.Sign(cOffset);
                 int dcy = Math.Sign(moveKy);
 
-                Assert.True(dcx != 0);
-                Assert.True(dcy != 0);
+                Assert.IsTrue(dcx != 0);
+                Assert.IsTrue(dcy != 0);
 
                 if (HasNearObstacle(0, dcy)) // can't go ahead?
                 {
@@ -296,8 +296,8 @@ namespace Bomberman.Game.Elements.Players
                 int dcx = Math.Sign(moveKx);
                 int dcy = Math.Sign(cOffset);
 
-                Assert.True(dcx != 0);
-                Assert.True(dcy != 0);
+                Assert.IsTrue(dcx != 0);
+                Assert.IsTrue(dcy != 0);
 
                 if (HasNearObstacle(dcx, 0)) // can't go ahead?
                 {
@@ -513,8 +513,8 @@ namespace Bomberman.Game.Elements.Players
         /* Player is moving, bomb is moving */
         private bool HandlePlayerMovingBombMovingCollision(Bomb bomb)
         {
-            Assert.True(IsMoving());
-            Assert.True(bomb.IsMoving());
+            Assert.IsTrue(IsMoving());
+            Assert.IsTrue(bomb.IsMoving());
 
             bool hasKick = HasKick();
 
@@ -614,8 +614,8 @@ namespace Bomberman.Game.Elements.Players
         /* Player is moving, bomb is still */
         private bool HandlePlayerMovingBombStillCollision(Bomb bomb)
         {
-            Assert.True(IsMoving());
-            Assert.True(!bomb.IsMoving());
+            Assert.IsTrue(IsMoving());
+            Assert.IsTrue(!bomb.IsMoving());
 
             if (CheckCell2CellCollision(bomb)) // player and bomb share the cell
             {
@@ -645,8 +645,8 @@ namespace Bomberman.Game.Elements.Players
         /* Player is still, bomb is moving */
         private bool HandlePlayerStillBombMovingCollision(Bomb bomb)
         {
-            Assert.True(!IsMoving());
-            Assert.True(bomb.IsMoving());
+            Assert.IsTrue(!IsMoving());
+            Assert.IsTrue(bomb.IsMoving());
 
             if (CheckCell2BoundsCollision(bomb)) // player`s cell should collide bomb`s bounds
             {
@@ -663,8 +663,8 @@ namespace Bomberman.Game.Elements.Players
         /* Player is still, bomb is still */
         private bool HandlePlayerStillBombStillCollision(Bomb bomb)
         {
-            Assert.True(!IsMoving());
-            Assert.True(!bomb.IsMoving());
+            Assert.IsTrue(!IsMoving());
+            Assert.IsTrue(!bomb.IsMoving());
 
             return false;
         }
@@ -951,7 +951,7 @@ namespace Bomberman.Game.Elements.Players
 
         private void GivePowerupBack(int powerupIndex)
         {
-            Assert.True(m_powerups.GetCount(powerupIndex) == 1);
+            Assert.IsTrue(m_powerups.GetCount(powerupIndex) == 1);
             m_powerups.SetCount(powerupIndex, 0);
 
             GetField().PlacePowerup(powerupIndex);
@@ -1078,8 +1078,8 @@ namespace Bomberman.Game.Elements.Players
 
         private bool TryKick(Bomb bomb)
         {
-            Assert.True(HasKick());
-            Assert.True(IsMoving());
+            Assert.IsTrue(HasKick());
+            Assert.IsTrue(IsMoving());
 
             MoveOutOfCell(bomb);
 
@@ -1094,8 +1094,8 @@ namespace Bomberman.Game.Elements.Players
 
         private void KickBomb(Bomb bomb)
         {
-            Assert.True(IsMoving());
-            Assert.True(HasKick());
+            Assert.IsTrue(IsMoving());
+            Assert.IsTrue(HasKick());
 
             // kick in the moving direction
             bomb.Kick(direction);
@@ -1134,7 +1134,7 @@ namespace Bomberman.Game.Elements.Players
         private void RemoveThrownBomb(Bomb bomb)
         {
             bool removed = m_thrownBombs.Remove(bomb);
-            Assert.True(removed);
+            Assert.IsTrue(removed);
         }
 
         public void OnBombLanded(Bomb bomb)
@@ -1211,7 +1211,7 @@ namespace Bomberman.Game.Elements.Players
         // should be only called from PlayeList
         internal void Kill()
         {
-            Assert.True(m_alive);
+            Assert.IsTrue(m_alive);
             m_alive = false;
             
             StopMoving();
@@ -1327,7 +1327,7 @@ namespace Bomberman.Game.Elements.Players
                     return TrySpooger(1, 0);
 
                 default:
-                    Assert.True(false, "Unknown direction: " + direction);
+                    Assert.IsTrue(false, "Unknown direction: " + direction);
                     break;
             }
 
@@ -1600,7 +1600,7 @@ namespace Bomberman.Game.Elements.Players
             {
                 case PlayerAnimations.Id.Die:
                 {
-                    Assert.True(!IsAlive);
+                    Assert.IsTrue(!IsAlive);
                     RemoveFromField();
                     break;
                 }

@@ -161,13 +161,13 @@ namespace BomberEngine
 
         public String Next()
         {
-            Assert.True(HasNext());
+            Assert.IsTrue(HasNext());
             return m_args[++m_index];
         }
 
         public String PeekNext()
         {
-            Assert.True(HasNext());
+            Assert.IsTrue(HasNext());
             return m_args[m_index + 1];
         }
     }

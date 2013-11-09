@@ -182,7 +182,7 @@ namespace Bomberman.Multiplayer
         private void OnDisconnectedFromServerDialogFinish(DialogPopup popup, int buttonId)
         {
             MultiplayerLobbyScreen lobbyScreen = FindLobbyScreen();
-            Assert.True(lobbyScreen != null);
+            Assert.IsTrue(lobbyScreen != null);
 
             lobbyScreen.Finish();
         }
@@ -207,7 +207,7 @@ namespace Bomberman.Multiplayer
 
         public void OnDiscoveryResponse(Server server, NetOutgoingMessage msg)
         {
-            Assert.True(serverInfo != null);
+            Assert.IsTrue(serverInfo != null);
             WriteServerInfo(msg, serverInfo);
         }
 
@@ -339,7 +339,7 @@ namespace Bomberman.Multiplayer
                 case MultiplayerScreen.ButtonId.Join:
                 {
                     ServerInfo info = button.data as ServerInfo;
-                    Assert.True(info != null);
+                    Assert.IsTrue(info != null);
 
                     serverInfo = info;
                     StartClient(info.endPoint);

@@ -89,7 +89,7 @@ namespace Bomberman.Game.Multiplayer
             for (int id = player.lastAckPacketId; id < m_lastPacketId; ++id)
             {
                 ClientPacket packet = GetPacket(id);
-                Assert.True(!packet.replayed);
+                Assert.IsTrue(!packet.replayed);
                 
                 int actions = packet.actions;
                 player.input.Force(packet.actions);
@@ -97,7 +97,7 @@ namespace Bomberman.Game.Multiplayer
                 player.ReplayUpdate(delta);
                 MarkReplayed(id);
             }            
-            Assert.True(oldMask == player.input.mask);
+            Assert.IsTrue(oldMask == player.input.mask);
         }
 
         #endregion
@@ -170,8 +170,8 @@ namespace Bomberman.Game.Multiplayer
 
         private void ReadPlayingMessage(Peer peer, NetIncomingMessage msg)
         {
-            Assert.True(game != null);
-            Assert.True(m_localPlayer != null && m_localPlayer.IsReady);
+            Assert.IsTrue(game != null);
+            Assert.IsTrue(m_localPlayer != null && m_localPlayer.IsReady);
 
             SetState(State.Playing);
 
@@ -193,7 +193,7 @@ namespace Bomberman.Game.Multiplayer
 
         private void WritePlayingMessage(NetOutgoingMessage msg, Player player)
         {
-            Assert.True(player != null);
+            Assert.IsTrue(player != null);
 
             int actions = 0;
             int actionsCount = (int)PlayerAction.Count;
@@ -219,7 +219,7 @@ namespace Bomberman.Game.Multiplayer
 
         private void ReadRoundEndMessage(Peer peer, NetIncomingMessage msg)
         {
-            Assert.True(m_localPlayer != null);
+            Assert.IsTrue(m_localPlayer != null);
 
             SetState(State.RoundEnd);
 
@@ -271,7 +271,7 @@ namespace Bomberman.Game.Multiplayer
                 }
             }
 
-            Assert.True(m_localPlayer != null);
+            Assert.IsTrue(m_localPlayer != null);
             m_localPlayer.connection = peer.RemoteConnection;
             m_localPlayer.IsReady = true;
             m_localPlayer.needsFieldState = false;
@@ -293,9 +293,9 @@ namespace Bomberman.Game.Multiplayer
 
                 case State.Playing:
                 {
-                    Assert.True(m_localPlayer != null);
-                    Assert.True(m_localPlayer.IsReady);
-                    Assert.True(m_localPlayer.connection != null);
+                    Assert.IsTrue(m_localPlayer != null);
+                    Assert.IsTrue(m_localPlayer.IsReady);
+                    Assert.IsTrue(m_localPlayer.connection != null);
 
                     gameScreen = new GameScreen();
                     StartScreen(gameScreen);
@@ -362,7 +362,7 @@ namespace Bomberman.Game.Multiplayer
         private ClientPacket GetPacket(int id)
         {
             int index = id % SENT_HISTORY_SIZE;
-            Assert.True(m_sentPackets[index].id == id);
+            Assert.IsTrue(m_sentPackets[index].id == id);
             return m_sentPackets[index];
         }
 

@@ -11,7 +11,7 @@ namespace Bomberman.Game.Elements.Players
 
         public PowerupList(Player player, int totalCount)
         {
-            Assert.True(player != null);
+            Assert.IsTrue(player != null);
             m_player = player;
 
             powerups = new int[totalCount];

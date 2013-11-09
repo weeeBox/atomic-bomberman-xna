@@ -151,7 +151,7 @@ namespace BomberEngine
 
         private void StopChildController(Controller controller)
         {
-            Assert.True(controller == childController);
+            Assert.IsTrue(controller == childController);
             OnChildControllerStopped(controller);
             childController.parentController = null;
             childController = null;

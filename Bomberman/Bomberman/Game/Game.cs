@@ -93,7 +93,7 @@ namespace Bomberman.Game
 
         public void StartNextRound()
         {
-            Assert.True(m_roundIndex < m_totalRounds - 1);
+            Assert.IsTrue(m_roundIndex < m_totalRounds - 1);
             ++m_roundIndex;
 
             Restart();

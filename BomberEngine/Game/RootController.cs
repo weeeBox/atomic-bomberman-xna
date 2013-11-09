@@ -118,7 +118,7 @@ namespace BomberEngine
 
         internal void ControllerStopped(Controller controller)
         {
-            Assert.True(controller == m_currentController);
+            Assert.IsTrue(controller == m_currentController);
             m_currentController = null;
 
             OnControllerStop(controller);

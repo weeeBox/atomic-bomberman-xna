@@ -147,13 +147,13 @@ namespace Bomberman.Networking
 
         private void AddConnection(NetConnection connection)
         {
-            Assert.True(!connections.Contains(connection));
+            Assert.IsTrue(!connections.Contains(connection));
             connections.Add(connection);
         }
 
         private void RemoveConnection(NetConnection connection)
         {
-            Assert.True(connections.Contains(connection));
+            Assert.IsTrue(connections.Contains(connection));
             connections.Remove(connection);
         }
 

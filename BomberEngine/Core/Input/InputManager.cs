@@ -102,13 +102,13 @@ namespace BomberEngine
 
         public void AddKeyboardListener(IKeyInputListener listener)
         {
-            Assert.True(!keyListeners.Contains(listener));
+            Assert.IsTrue(!keyListeners.Contains(listener));
             keyListeners.Add(listener);
         }
 
         public void AddTouchListener(ITouchInputListener listener)
         {
-            Assert.True(!touchListeners.Contains(listener));
+            Assert.IsTrue(!touchListeners.Contains(listener));
             touchListeners.Add(listener);
         }
 

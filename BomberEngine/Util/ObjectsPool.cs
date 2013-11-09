@@ -27,8 +27,8 @@ namespace BomberEngine
 
         public void Recycle(ObjectsPoolEntry e)
         {
-            Assert.True(e is T);
-            Assert.True(e.pool == this);
+            Assert.IsTrue(e is T);
+            Assert.IsTrue(e.pool == this);
 
             AddLastItem(e);
         }

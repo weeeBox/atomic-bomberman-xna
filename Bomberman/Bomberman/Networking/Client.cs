@@ -56,7 +56,7 @@ namespace Bomberman.Networking
         protected override void OnPeerConnected(NetConnection connection)
         {
             Log.i("Connected to the server: " + connection.RemoteEndPoint);
-            Assert.True(m_remoteConnection == null);
+            Assert.IsTrue(m_remoteConnection == null);
             m_remoteConnection = connection;
 
             PostNotification(NetworkNotifications.ConnectedToServer, connection);
@@ -65,7 +65,7 @@ namespace Bomberman.Networking
         protected override void OnPeerDisconnected(NetConnection connection)
         {
             Log.i("Disconnected from the server: " + connection.RemoteEndPoint);
-            Assert.True(m_remoteConnection == connection);
+            Assert.IsTrue(m_remoteConnection == connection);
             m_remoteConnection = null;
 
             PostNotification(NetworkNotifications.DisconnectedFromServer, connection);

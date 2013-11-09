@@ -101,7 +101,7 @@ namespace Bomberman.Game.Multiplayer
             List<Player> players = game.GetPlayers().list;
 
             int senderIndex = players.IndexOf(player);
-            Assert.True(senderIndex != -1);
+            Assert.IsTrue(senderIndex != -1);
 
             buffer.Write((byte)senderIndex);
             buffer.Write((byte)players.Count);
@@ -166,7 +166,7 @@ namespace Bomberman.Game.Multiplayer
         {
             List<Player> players = game.GetPlayers().list;
             int playersCount = buffer.ReadByte();
-            Assert.True(players.Count == playersCount);
+            Assert.IsTrue(players.Count == playersCount);
 
             for (int i = 0; i < playersCount; ++i)
             {   
@@ -331,7 +331,7 @@ namespace Bomberman.Game.Multiplayer
                     {
                         case CELL_BRICK:
                         {
-                            Assert.True(slot.ContainsBrick());
+                            Assert.IsTrue(slot.ContainsBrick());
                             break;
                         }
 
@@ -474,7 +474,7 @@ namespace Bomberman.Game.Multiplayer
 
         protected void WriteRoundResults(NetBuffer buffer)
         {
-            Assert.True(game != null);
+            Assert.IsTrue(game != null);
 
             buffer.Write((byte)game.roundIndex);
             buffer.Write((byte)game.roundsCount);
@@ -491,7 +491,7 @@ namespace Bomberman.Game.Multiplayer
 
         protected void ReadRoundResults(NetBuffer buffer)
         {
-            Assert.True(game != null);
+            Assert.IsTrue(game != null);
 
             game.roundIndex = buffer.ReadByte();
             game.roundsCount = buffer.ReadByte();

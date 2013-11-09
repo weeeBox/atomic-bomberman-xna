@@ -230,8 +230,8 @@ namespace Bomberman.Game.Screens
 
         private void SetPage(int pageIndex, int selectedIndex)
         {
-            Assert.Range(pageIndex, 0, pagesCount);
-            Assert.Range(selectedIndex, 0, SchemesPerPage);
+            Assert.IsRange(pageIndex, 0, pagesCount);
+            Assert.IsRange(selectedIndex, 0, SchemesPerPage);
 
             m_contentView.RemoveViews();
             m_pageIndex = pageIndex;

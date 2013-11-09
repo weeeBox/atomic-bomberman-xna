@@ -31,8 +31,8 @@ namespace BomberEngine
 
         public void Register(String name, NotificationDelegate del)
         {
-            Assert.True(name != null);
-            Assert.True(del != null);
+            Assert.IsTrue(name != null);
+            Assert.IsTrue(del != null);
 
             NotificationDelegateList list = FindList(name);
             if (list == null)
@@ -138,7 +138,7 @@ namespace BomberEngine
         private void PostCallback(Timer timer)
         {
             Notification notification = timer.userData as Notification;
-            Assert.True(notification != null);
+            Assert.IsTrue(notification != null);
 
             PostImmediately(notification);
         }
@@ -189,7 +189,7 @@ namespace BomberEngine
         public T GetNotNullData<T>()
         {
             T t = (T)m_data;
-            Assert.NotNull(t);
+            Assert.IsNotNull(t);
             return t;
         }
 
@@ -201,7 +201,7 @@ namespace BomberEngine
         public T GetNotNullData2<T>()
         {
             T t = (T)m_data2;
-            Assert.NotNull(t);
+            Assert.IsNotNull(t);
             return t;
         }
 
@@ -213,7 +213,7 @@ namespace BomberEngine
         public T GetNotNullData3<T>()
         {
             T t = (T)m_data3;
-            Assert.NotNull(t);
+            Assert.IsNotNull(t);
             return t;
         }
 
@@ -225,7 +225,7 @@ namespace BomberEngine
         public T GetNotNullData4<T>()
         {
             T t = (T)m_data4;
-            Assert.NotNull(t);
+            Assert.IsNotNull(t);
             return t;
         }
 
@@ -263,7 +263,7 @@ namespace BomberEngine
 
         public override bool Add(NotificationDelegate del)
         {
-            Assert.True(!Contains(del));
+            Assert.IsTrue(!Contains(del));
             return base.Add(del);
         }
 

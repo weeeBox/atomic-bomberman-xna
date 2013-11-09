@@ -40,7 +40,7 @@ namespace Bomberman.Networking
 
         public void StartLocalServerDiscovery()
         {
-            Assert.True(serverDiscovery == null);
+            Assert.IsTrue(serverDiscovery == null);
 
             String appId = CVars.sv_appId.value;
             int port = CVars.sv_port.intValue;
@@ -98,7 +98,7 @@ namespace Bomberman.Networking
 
         private void CreateServer(String appIdentifier, int port)
         {
-            Assert.True(networkPeer == null);
+            Assert.IsTrue(networkPeer == null);
             networkPeer = new Server(appIdentifier, port); ;
 
             Log.d("Created network server");
@@ -106,7 +106,7 @@ namespace Bomberman.Networking
 
         private void CreateClient(String appIdetifier, IPEndPoint remoteEndPoint, int port)
         {
-            Assert.True(networkPeer == null);
+            Assert.IsTrue(networkPeer == null);
             networkPeer = new Client(appIdetifier, remoteEndPoint);
 
             Log.d("Created network client");
@@ -114,7 +114,7 @@ namespace Bomberman.Networking
 
         private void Start()
         {
-            Assert.True(networkPeer != null);
+            Assert.IsTrue(networkPeer != null);
             networkPeer.Start();
 
             Log.d("Started network peer");
@@ -172,7 +172,7 @@ namespace Bomberman.Networking
         internal Server GetServer()
         {
             Server server = networkPeer as Server;
-            Assert.True(server != null);
+            Assert.IsTrue(server != null);
 
             return server;
         }
@@ -180,7 +180,7 @@ namespace Bomberman.Networking
         internal Client GetClient()
         {
             Client client = networkPeer as Client;
-            Assert.True(client != null);
+            Assert.IsTrue(client != null);
 
             return client;
         }

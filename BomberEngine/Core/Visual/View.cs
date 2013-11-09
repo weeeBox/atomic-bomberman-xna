@@ -368,7 +368,7 @@ namespace BomberEngine
             }
 
             int index = IndexOf(current);
-            Assert.True(index != -1);
+            Assert.IsTrue(index != -1);
 
             if (direction == FocusDirection.Down || direction == FocusDirection.Right)
             {
@@ -478,7 +478,7 @@ namespace BomberEngine
 
         public void ResizeToFitViews(bool horizontal, bool vertical, float leftBorder, float topBorder, float rightBorder, float bottomBorder)
         {
-            Assert.True(horizontal | vertical);
+            Assert.IsTrue(horizontal | vertical);
 
             if (ChildCount() > 0)
             {

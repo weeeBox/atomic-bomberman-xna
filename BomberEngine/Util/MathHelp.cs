@@ -65,7 +65,7 @@ namespace BomberEngine
 
         public static int ForceRange(int x, int min, int max)
         {
-            Assert.True(min <= max);
+            Assert.IsTrue(min <= max);
             return Math.Max(min, Math.Min(x, max));
         }
     }

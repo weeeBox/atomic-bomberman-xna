@@ -42,7 +42,7 @@ namespace BomberEngine
             int index = (int)code;
             if (bindings[index] != null)
             {
-                Assert.True(bindingsCount > 0);
+                Assert.IsTrue(bindingsCount > 0);
                 --bindingsCount;
                 ScheduleConfigUpdate();
             }

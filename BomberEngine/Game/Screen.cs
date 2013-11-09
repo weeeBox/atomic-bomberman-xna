@@ -86,12 +86,12 @@ namespace BomberEngine
         {
             if (view == mFocusedView)
             {
-                Assert.True(view.focused);
+                Assert.IsTrue(view.focused);
                 mFocusedView = null;
             }
             else if (view == mFocusLockView)
             {
-                Assert.True(view.focused);
+                Assert.IsTrue(view.focused);
                 mFocusLockView = null;
             }
             else if (view == mRootView)
@@ -445,13 +445,13 @@ namespace BomberEngine
 
         public void LockFocus(View view)
         {
-            Assert.True(mFocusLockView == null || mFocusLockView == view);
+            Assert.IsTrue(mFocusLockView == null || mFocusLockView == view);
             mFocusLockView = view;
         }
 
         public void UnlockFocus(View view)
         {
-            Assert.True(mFocusLockView == view);
+            Assert.IsTrue(mFocusLockView == view);
             mFocusLockView = null;
         }
 

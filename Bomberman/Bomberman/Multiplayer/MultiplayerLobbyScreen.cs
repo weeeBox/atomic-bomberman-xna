@@ -76,7 +76,7 @@ namespace Bomberman.Multiplayer
 
         public void AddClient(String name, NetConnection connection)
         {
-            Assert.True(FindClientView(connection) == null);
+            Assert.IsTrue(FindClientView(connection) == null);
 
             ClientInfoView clientView = new ClientInfoView(name, connection);
             clientsView.AddView(clientView);
@@ -88,7 +88,7 @@ namespace Bomberman.Multiplayer
         public void RemoveClient(NetConnection connection)
         {
             ClientInfoView clientView = FindClientView(connection);
-            Assert.True(clientView != null);
+            Assert.IsTrue(clientView != null);
 
             viewsLookup.Remove(connection);
 

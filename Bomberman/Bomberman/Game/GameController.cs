@@ -83,7 +83,7 @@ namespace Bomberman.Game
 
         protected override void OnStart()
         {
-            Assert.Null(gameCommands);
+            Assert.IsNull(gameCommands);
             gameCommands = CreateCommands();
 
             GetConsole().RegisterCommands(gameCommands);
@@ -95,7 +95,7 @@ namespace Bomberman.Game
 
         protected override void OnStop()
         {
-            Assert.NotNull(gameCommands);
+            Assert.IsNotNull(gameCommands);
             GetConsole().UnregisterCommands(gameCommands);
             gameCommands = null;
 
@@ -131,7 +131,7 @@ namespace Bomberman.Game
 
         public void ShowPauseScreen()
         {
-            Assert.True(CurrentScreen() is GameScreen);
+            Assert.IsTrue(CurrentScreen() is GameScreen);
             StartNextScreen(new PauseScreen(OnPauseScreenButtonPress));
         }
 
@@ -375,7 +375,7 @@ namespace Bomberman.Game
             RoundResultScreen.ButtonId buttonId = (RoundResultScreen.ButtonId)button.id;
 
             RoundResultScreen resultScreen = CurrentScreen() as RoundResultScreen;
-            Assert.True(resultScreen != null);
+            Assert.IsTrue(resultScreen != null);
 
             switch (buttonId)
             {

@@ -43,7 +43,7 @@ namespace BomberEngine
 
         public TextView(Font font, Object obj, int wrapWidth = Int32.MaxValue)
         {
-            Assert.True(font != null);
+            Assert.IsTrue(font != null);
 
             m_font = font;
             SetText(obj, wrapWidth);

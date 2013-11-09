@@ -27,7 +27,7 @@ namespace BomberEngine
 
         public void Start(bool immediately = false)
         {
-            Assert.True(m_state == State.Created);
+            Assert.IsTrue(m_state == State.Created);
             m_state = State.Started;
 
             OnStart();
@@ -35,7 +35,7 @@ namespace BomberEngine
 
         public void Finish()
         {
-            Assert.True(m_state == State.Started);
+            Assert.IsTrue(m_state == State.Started);
             m_state = State.Finished;
 
             OnFinish();
@@ -52,7 +52,7 @@ namespace BomberEngine
 
         public void Fail(String message)
         {
-            Assert.True(m_state == State.Started);
+            Assert.IsTrue(m_state == State.Started);
             m_state = State.Failed;
             m_errorMessage = message;
 

@@ -103,7 +103,7 @@ namespace Bomberman.Game
 
         private void SetKeyboardActionHelper(int index, PlayerAction action, bool flag)
         {
-            Assert.Range(index, 0, keyboardInputs.Length);
+            Assert.IsRange(index, 0, keyboardInputs.Length);
             keyboardInputs[index].actionsArray[(int)action] = flag;
         }
 
