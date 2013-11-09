@@ -156,7 +156,7 @@ namespace Bomberman.Game.Elements.Players
         private Animation GetAnimation(int id)
         {
             Animation anim = BmApplication.Assets().GetAnimation(id);
-            Debug.Assert(anim != null);
+            Assert.True(anim != null);
             return anim;
         }
     }

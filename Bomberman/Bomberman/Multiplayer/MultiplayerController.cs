@@ -79,7 +79,7 @@ namespace Bomberman.Multiplayer
 
         private void StartDiscovery()
         {
-            //Debug.Assert(serverDiscovery == null);
+            //Assert.True(serverDiscovery == null);
 
             //String name = CVars.sv_appId.value;
             //int port = CVars.sv_port.intValue;
@@ -182,7 +182,7 @@ namespace Bomberman.Multiplayer
         private void OnDisconnectedFromServerDialogFinish(DialogPopup popup, int buttonId)
         {
             MultiplayerLobbyScreen lobbyScreen = FindLobbyScreen();
-            Debug.Assert(lobbyScreen != null);
+            Assert.True(lobbyScreen != null);
 
             lobbyScreen.Finish();
         }
@@ -207,7 +207,7 @@ namespace Bomberman.Multiplayer
 
         public void OnDiscoveryResponse(Server server, NetOutgoingMessage msg)
         {
-            Debug.Assert(serverInfo != null);
+            Assert.True(serverInfo != null);
             WriteServerInfo(msg, serverInfo);
         }
 
@@ -339,7 +339,7 @@ namespace Bomberman.Multiplayer
                 case MultiplayerScreen.ButtonId.Join:
                 {
                     ServerInfo info = button.data as ServerInfo;
-                    Debug.Assert(info != null);
+                    Assert.True(info != null);
 
                     serverInfo = info;
                     StartClient(info.endPoint);

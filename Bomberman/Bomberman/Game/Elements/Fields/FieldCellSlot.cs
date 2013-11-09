@@ -38,7 +38,7 @@ namespace Bomberman.Game.Elements.Fields
             }
             else
             {
-                Debug.Assert(staticCell == null);
+                Assert.True(staticCell == null);
                 staticCell = cell;
             }
         }
@@ -51,7 +51,7 @@ namespace Bomberman.Game.Elements.Fields
             }
             else
             {
-                Debug.Assert(staticCell == cell);
+                Assert.True(staticCell == cell);
                 staticCell = null;
             }
         }

@@ -104,7 +104,7 @@ namespace Bomberman.Game.Elements.Cells
 
         public virtual void UpdateMoving(float delta)
         {
-            Debug.Assert(IsMoving());
+            Assert.True(IsMoving());
 
             float offset = GetSpeed() * delta;
 
@@ -172,7 +172,7 @@ namespace Bomberman.Game.Elements.Cells
 
         public void MoveFromOverlap(FieldCell other)
         {
-            Debug.Assert(IsMoving());
+            Assert.True(IsMoving());
 
             float dx = OverlapX(other);
             float dy = OverlapY(other);
@@ -183,12 +183,12 @@ namespace Bomberman.Game.Elements.Cells
 
         public void MoveOutOfCell(FieldCell c)
         {
-            Debug.Assert(IsMoving());
+            Assert.True(IsMoving());
 
             switch (direction)
             {
                 case Direction.LEFT:
-                    Debug.Assert(c.px < px);
+                    Assert.True(c.px < px);
                     if (px - c.CellCenterPx() < Constant.CELL_WIDTH)
                     {
                         SetRelativeTo(c, 1, 0);
@@ -196,7 +196,7 @@ namespace Bomberman.Game.Elements.Cells
                     break;
 
                 case Direction.RIGHT:
-                    Debug.Assert(c.px > px);
+                    Assert.True(c.px > px);
                     if (c.CellCenterPx() - px < Constant.CELL_WIDTH)
                     {
                         SetRelativeTo(c, -1, 0);
@@ -204,7 +204,7 @@ namespace Bomberman.Game.Elements.Cells
                     break;
 
                 case Direction.UP:
-                    Debug.Assert(c.py < py);
+                    Assert.True(c.py < py);
                     if (py - c.CellCenterPy() < Constant.CELL_HEIGHT)
                     {
                         SetRelativeTo(c, 0, 1);
@@ -212,7 +212,7 @@ namespace Bomberman.Game.Elements.Cells
                     break;
 
                 case Direction.DOWN:
-                    Debug.Assert(c.py > py);
+                    Assert.True(c.py > py);
                     if (c.CellCenterPy() - py < Constant.CELL_HEIGHT)
                     {
                         SetRelativeTo(c, 0, -1);
@@ -223,7 +223,7 @@ namespace Bomberman.Game.Elements.Cells
 
         public bool IsMovingTowards(FieldCell other)
         {
-            Debug.Assert(IsMoving());
+            Assert.True(IsMoving());
             
             switch (direction)
             {

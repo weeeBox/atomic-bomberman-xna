@@ -163,7 +163,7 @@ namespace BomberEngine
 #if UNSAFE
 		public static unsafe ushort ReadUInt16(byte[] fromBuffer, int numberOfBits, int readBitOffset)
 		{
-			Debug.Assert(((numberOfBits > 0) && (numberOfBits <= 16)), "ReadUInt16() can only read between 1 and 16 bits");
+			Assert.True(((numberOfBits > 0) && (numberOfBits <= 16)), "ReadUInt16() can only read between 1 and 16 bits");
 
 			if (numberOfBits == 16 && ((readBitOffset % 8) == 0))
 			{

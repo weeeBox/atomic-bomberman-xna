@@ -38,7 +38,7 @@ namespace BomberEngine
 
             public bool IsButtonPressed(KeyCode code)
             {
-                Debug.Assert(code >= KeyMin && code <= KeyMax);
+                Assert.True(code >= KeyMin && code <= KeyMax);
                 int index = code - KeyMin;
 
                 return m_keyPressedFlags[index];
@@ -46,7 +46,7 @@ namespace BomberEngine
 
             public void SetButtonPressed(KeyCode code, bool flag)
             {
-                Debug.Assert(code >= KeyMin && code <= KeyMax);
+                Assert.True(code >= KeyMin && code <= KeyMax);
                 int index = code - KeyMin;
 
                 m_keyPressedFlags[index] = flag;
@@ -102,7 +102,7 @@ namespace BomberEngine
 
             public bool IsKeyPressed(KeyCode code)
             {
-                Debug.Assert(code >= KeyMin && code <= KeyMax);
+                Assert.True(code >= KeyMin && code <= KeyMax);
                 int index = code - KeyMin;
 
                 return m_keyPressedFlags[index];
@@ -110,7 +110,7 @@ namespace BomberEngine
 
             public void SetKeyPressed(KeyCode code, bool flag)
             {
-                Debug.Assert(code >= KeyMin && code <= KeyMax);
+                Assert.True(code >= KeyMin && code <= KeyMax);
                 int index = code - KeyMin;
 
                 m_keyPressedFlags[index] = flag;

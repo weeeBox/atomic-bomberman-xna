@@ -31,8 +31,8 @@ namespace BomberEngine
 
         public void Register(String name, NotificationDelegate del)
         {
-            Debug.Assert(name != null);
-            Debug.Assert(del != null);
+            Assert.True(name != null);
+            Assert.True(del != null);
 
             NotificationDelegateList list = FindList(name);
             if (list == null)
@@ -138,7 +138,7 @@ namespace BomberEngine
         private void PostCallback(Timer timer)
         {
             Notification notification = timer.userData as Notification;
-            Debug.Assert(notification != null);
+            Assert.True(notification != null);
 
             PostImmediately(notification);
         }
@@ -263,7 +263,7 @@ namespace BomberEngine
 
         public override bool Add(NotificationDelegate del)
         {
-            Debug.Assert(!Contains(del));
+            Assert.True(!Contains(del));
             return base.Add(del);
         }
 

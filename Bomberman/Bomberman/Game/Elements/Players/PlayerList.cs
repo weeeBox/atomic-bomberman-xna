@@ -24,7 +24,7 @@ namespace Bomberman.Game.Elements.Players
 
         public void Add(Player player)
         {
-            Debug.Assert(!m_list.Contains(player));
+            Assert.True(!m_list.Contains(player));
             m_list.Add(player);
         }
 
@@ -41,7 +41,7 @@ namespace Bomberman.Game.Elements.Players
 
         private void Remove(Player player, bool removeFromList)
         {
-            Debug.Assert(m_list.Contains(player));
+            Assert.True(m_list.Contains(player));
             if (removeFromList)
             {
                 m_list.Remove(player);

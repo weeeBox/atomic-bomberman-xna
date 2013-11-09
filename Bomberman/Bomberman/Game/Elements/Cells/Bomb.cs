@@ -243,7 +243,7 @@ namespace Bomberman.Game.Elements.Cells
 
         protected override bool HandleCollision(MovableCell other)
         {
-            Debug.Assert(isActive);
+            Assert.True(isActive);
 
             if (other.IsPlayer())
             {
@@ -280,8 +280,8 @@ namespace Bomberman.Game.Elements.Cells
 
         internal bool HandleObstacleCollistion(FieldCell other)
         {
-            Debug.Assert(isActive);
-            Debug.Assert(IsMoving());
+            Assert.True(isActive);
+            Assert.True(IsMoving());
 
             MoveOutOfCell(other);
 
@@ -300,7 +300,7 @@ namespace Bomberman.Game.Elements.Cells
             bool moving1 = IsMoving();
             bool moving2 = other.IsMoving();
 
-            Debug.Assert(moving1 || moving2);
+            Assert.True(moving1 || moving2);
 
             if (moving1 && moving2)
             {
@@ -671,7 +671,7 @@ namespace Bomberman.Game.Elements.Cells
                     break;
 
                 case State.Grabbed:
-                    Debug.Assert(m_state == State.Normal);
+                    Assert.True(m_state == State.Normal);
                     m_updater = UpdateGrabbed;
                     break;
 

@@ -131,7 +131,7 @@ namespace Bomberman.Game
 
         public void ShowPauseScreen()
         {
-            Debug.Assert(CurrentScreen() is GameScreen);
+            Assert.True(CurrentScreen() is GameScreen);
             StartNextScreen(new PauseScreen(OnPauseScreenButtonPress));
         }
 
@@ -375,7 +375,7 @@ namespace Bomberman.Game
             RoundResultScreen.ButtonId buttonId = (RoundResultScreen.ButtonId)button.id;
 
             RoundResultScreen resultScreen = CurrentScreen() as RoundResultScreen;
-            Debug.Assert(resultScreen != null);
+            Assert.True(resultScreen != null);
 
             switch (buttonId)
             {

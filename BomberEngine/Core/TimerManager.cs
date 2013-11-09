@@ -262,7 +262,7 @@ namespace BomberEngine
 
         private void AddTimer(Timer timer)
         {
-            Debug.Assert(timer.manager == this);
+            Assert.True(timer.manager == this);
             ++timersCount;
 
             if (rootTimer != null)
@@ -308,8 +308,8 @@ namespace BomberEngine
 
         internal void CancelTimer(Timer timer)
         {   
-            Debug.Assert(timer.manager == this);
-            Debug.Assert(timersCount > 0);
+            Assert.True(timer.manager == this);
+            Assert.True(timersCount > 0);
             --timersCount;
 
             Timer prev = timer.prev;

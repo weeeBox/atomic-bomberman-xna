@@ -35,8 +35,8 @@ namespace BomberEngine
 
         public void AddToQueue(AssetLoadInfo info)
         {
-            Debug.Assert(!IsAssetLoaded(info.id), "Resource already loaded: " + info.id);
-            Debug.Assert(!loadingQueue.Contains(info), "Resource already in the loading queue: " + info.id);
+            Assert.True(!IsAssetLoaded(info.id), "Resource already loaded: " + info.id);
+            Assert.True(!loadingQueue.Contains(info), "Resource already in the loading queue: " + info.id);
 
             loadingQueue.Add(info);
         }
@@ -77,7 +77,7 @@ namespace BomberEngine
 
         protected bool LoadAsset(AssetLoadInfo info)
         {
-            Debug.Assert(!IsAssetLoaded(info.id));
+            Assert.True(!IsAssetLoaded(info.id));
 
             Asset asset = LoadAsset(info.path, info.type);
             assets[info.id] = asset;

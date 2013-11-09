@@ -120,7 +120,7 @@ namespace Bomberman.Game
                 case Direction.RIGHT:
                     return Direction.LEFT;
                 default:
-                    Debug.Assert(false, "Unknown direction: " + direction);
+                    Assert.True(false, "Unknown direction: " + direction);
                     break;
             }
 

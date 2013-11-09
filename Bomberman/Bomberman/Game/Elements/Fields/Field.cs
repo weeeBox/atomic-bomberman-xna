@@ -142,7 +142,7 @@ namespace Bomberman.Game.Elements.Fields
 
                         default:
                         {
-                            Debug.Assert(false, "Unsupported cell type: " + block);
+                            Assert.True(false, "Unsupported cell type: " + block);
                             break;
                         }
                     }
@@ -337,7 +337,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private void UpdateMoving(float delta)
         {
-            Debug.Assert(m_tempMovableList.Count == 0);
+            Assert.True(m_tempMovableList.Count == 0);
             foreach (MovableCell movable in movableCells)
             {
                 if (movable.IsMoving())
@@ -815,7 +815,7 @@ namespace Bomberman.Game.Elements.Fields
         private void HandleCollisions()
         {
             // copy to the temp list
-            Debug.Assert(m_tempMovableList.Count == 0);
+            Assert.True(m_tempMovableList.Count == 0);
             foreach (MovableCell movable in movableCells)
             {   
                 m_tempMovableList.Add(movable);

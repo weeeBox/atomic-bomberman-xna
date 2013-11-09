@@ -164,7 +164,7 @@ namespace Bomberman.Game
 
         private void SetInputType(int slotIndex, InputType type)
         {
-            Debug.Assert(inputStates[(int)type] == InputState.Available);
+            Assert.True(inputStates[(int)type] == InputState.Available);
             inputTypes[slotIndex] = type;
             switch (type)
             {

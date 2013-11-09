@@ -27,7 +27,7 @@ namespace BomberEngine
 
         public virtual bool Add(T e)
         {
-            Debug.Assert(!list.Contains(e));
+            Assert.True(!list.Contains(e));
             list.Add(e);
             return true;
         }

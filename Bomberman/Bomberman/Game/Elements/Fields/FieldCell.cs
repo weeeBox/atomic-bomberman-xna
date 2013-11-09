@@ -148,7 +148,7 @@ namespace Bomberman.Game.Elements.Fields
                 case Direction.RIGHT:
                     return GetNearSlot(1, 0);
                 default:
-                    Debug.Assert(false, "Unknown dir: " + dir);
+                    Assert.True(false, "Unknown dir: " + dir);
                     break;
             }
 

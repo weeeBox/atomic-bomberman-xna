@@ -46,7 +46,7 @@ namespace BomberEngine
 
         private void BeginSpriteBatch(SpriteBatch sb, BlendMode blendMode, Matrix m, BatchMode mode)
         {
-            Debug.Assert(mode != BatchMode.None);
+            Assert.True(mode != BatchMode.None);
 
             if (mode == BatchMode.Sprite)
             {
@@ -135,7 +135,7 @@ namespace BomberEngine
 
         public void Begin(GraphicsDevice gd)
         {
-            Debug.Assert(batchMode == BatchMode.None, "Bad batch mode: " + batchMode);
+            Assert.True(batchMode == BatchMode.None, "Bad batch mode: " + batchMode);
 
             matrixStack.Clear();
             matrix = Matrix.Identity;

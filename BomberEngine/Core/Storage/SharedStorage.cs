@@ -63,28 +63,28 @@ namespace BomberEngine
         public String GetString(String key, String defaultValue = null)
         {
             String value = GetObject(key) as String;
-            Debug.Assert(value == null || value is String);
+            Assert.True(value == null || value is String);
             return value != null ? value : defaultValue;
         }
 
         public int GetInt(String key, int defaultValue = 0)
         {
             Object value = GetObject(key);
-            Debug.Assert(value == null || value is Int32);
+            Assert.True(value == null || value is Int32);
             return value is Int32 ? (int)value : defaultValue;
         }
 
         public float GetFloat(String key, float defaultValue = 0.0f)
         {
             Object value = GetObject(key);
-            Debug.Assert(value == null || value is Single || value is Int32);
+            Assert.True(value == null || value is Single || value is Int32);
             return (value is Single) ? (float)value : (value is Int32 ? (int)value : defaultValue);
         }
 
         public bool GetBool(String key, bool defaultValue = false)
         {
             Object value = GetObject(key);
-            Debug.Assert(value == null || value is Boolean);
+            Assert.True(value == null || value is Boolean);
             return value is Boolean ? (bool)value : defaultValue;
         }
 
