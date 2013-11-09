@@ -189,7 +189,7 @@ namespace BomberEngine
         public T GetNotNullData<T>()
         {
             T t = (T)m_data;
-            Debug.AssertNotNull(t);
+            Assert.NotNull(t);
             return t;
         }
 
@@ -201,7 +201,7 @@ namespace BomberEngine
         public T GetNotNullData2<T>()
         {
             T t = (T)m_data2;
-            Debug.AssertNotNull(t);
+            Assert.NotNull(t);
             return t;
         }
 
@@ -213,7 +213,7 @@ namespace BomberEngine
         public T GetNotNullData3<T>()
         {
             T t = (T)m_data3;
-            Debug.AssertNotNull(t);
+            Assert.NotNull(t);
             return t;
         }
 
@@ -225,7 +225,7 @@ namespace BomberEngine
         public T GetNotNullData4<T>()
         {
             T t = (T)m_data4;
-            Debug.AssertNotNull(t);
+            Assert.NotNull(t);
             return t;
         }
 

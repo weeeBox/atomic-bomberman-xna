@@ -83,7 +83,7 @@ namespace Bomberman.Game
 
         protected override void OnStart()
         {
-            Debug.AssertNull(gameCommands);
+            Assert.Null(gameCommands);
             gameCommands = CreateCommands();
 
             GetConsole().RegisterCommands(gameCommands);
@@ -95,7 +95,7 @@ namespace Bomberman.Game
 
         protected override void OnStop()
         {
-            Debug.AssertNotNull(gameCommands);
+            Assert.NotNull(gameCommands);
             GetConsole().UnregisterCommands(gameCommands);
             gameCommands = null;
 

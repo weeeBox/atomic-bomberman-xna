@@ -587,7 +587,7 @@ namespace Bomberman.Game.Elements.Fields
         private void SetFlameHelper(Bomb bomb, int cx, int cy)
         {
             Player player = bomb.player;
-            Debug.AssertNotNull(player);
+            Assert.NotNull(player);
 
             FieldCellSlot slot = GetSlot(cx, cy);
             FlameCell flame = slot.GetFlame();
