@@ -4,6 +4,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BomberEngineTests
 {
+    using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+
     [TestClass]
     public class BitBufferTests
     {
