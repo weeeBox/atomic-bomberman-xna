@@ -1127,7 +1127,7 @@ namespace Bomberman.Game.Elements.Players
 
         private void AddThrownBomb(Bomb bomb)
         {
-            Debug.AssertNotContains(m_thrownBombs, bomb);
+            Assert.NotContains(m_thrownBombs, bomb);
             m_thrownBombs.Add(bomb);
         }
 
