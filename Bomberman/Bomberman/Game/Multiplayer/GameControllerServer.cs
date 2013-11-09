@@ -10,8 +10,8 @@ namespace Bomberman.Game.Multiplayer
 {
     public class GameControllerServer : GameControllerNetwork
     {
-        private IDictionary<NetConnection, Player> networkPlayersLookup;
-        private List<Player> networkPlayers;
+        private IDictionary<NetConnection, Player> m_channelLookup;
+        private List<Player> m_channels;
 
         public GameControllerServer(GameSettings settings) :
             base(settings)
@@ -26,8 +26,8 @@ namespace Bomberman.Game.Multiplayer
 
             game = new Game(MultiplayerMode.Server);
 
-            networkPlayersLookup = new Dictionary<NetConnection, Player>();
-            networkPlayers = new List<Player>();
+            m_channelLookup = new Dictionary<NetConnection, Player>();
+            m_channels = new List<Player>();
 
             // local players are ready
             int playerIndex = 0;
@@ -66,8 +66,8 @@ namespace Bomberman.Game.Multiplayer
 
         protected override void OnStop()
         {
-            networkPlayersLookup = null;
-            networkPlayers = null;
+            m_channelLookup = null;
+            m_channels = null;
             Application.CancelAllTimers(this);
 
             base.OnStop();
@@ -97,9 +97,9 @@ namespace Bomberman.Game.Multiplayer
             {
                 case State.RoundStart:
                 {
-                    for (int i = 0; i < networkPlayers.Count; ++i)
+                    for (int i = 0; i < m_channels.Count; ++i)
                     {
-                        Player player = networkPlayers[i];
+                        Player player = m_channels[i];
                         NetOutgoingMessage message = CreateMessage(PeerMessageId.RoundStart);
 
                         WriteReadyFlags(message);
@@ -124,9 +124,9 @@ namespace Bomberman.Game.Multiplayer
 
                     ++m_lastPacketId;
 
-                    for (int i = 0; i < networkPlayers.Count; ++i)
+                    for (int i = 0; i < m_channels.Count; ++i)
                     {
-                        Player player = networkPlayers[i];
+                        Player player = m_channels[i];
 
                         NetOutgoingMessage message = CreateMessage(PeerMessageId.Playing);
                         message.Write(m_lastPacketId);              // packet to be acknowledged by client
@@ -148,9 +148,9 @@ namespace Bomberman.Game.Multiplayer
                     NetOutgoingMessage payload = CreateMessage();
                     WriteRoundResults(payload);
 
-                    for (int i = 0; i < networkPlayers.Count; ++i)
+                    for (int i = 0; i < m_channels.Count; ++i)
                     {
-                        Player player = networkPlayers[i];
+                        Player player = m_channels[i];
 
                         NetOutgoingMessage message = CreateMessage(PeerMessageId.RoundEnd);
 
@@ -298,14 +298,14 @@ namespace Bomberman.Game.Multiplayer
 
         private void AddPlayerConnection(NetConnection connection, Player player)
         {
-            Assert.IsTrue(!networkPlayersLookup.ContainsKey(connection));
-            networkPlayersLookup.Add(connection, player);
+            Assert.IsTrue(!m_channelLookup.ContainsKey(connection));
+            m_channelLookup.Add(connection, player);
 
             Assert.IsTrue(player.connection == null);
             player.connection = connection;
 
-            Assert.IsTrue(!networkPlayers.Contains(player));
-            networkPlayers.Add(player);
+            Assert.IsTrue(!m_channels.Contains(player));
+            m_channels.Add(player);
         }
 
         private void RemovePlayerConnection(NetConnection connection)
@@ -314,16 +314,16 @@ namespace Bomberman.Game.Multiplayer
             Assert.IsTrue(player != null && player.connection == connection);
             player.connection = null;
 
-            networkPlayersLookup.Remove(connection);
+            m_channelLookup.Remove(connection);
 
-            Assert.IsTrue(networkPlayers.Contains(player));
-            networkPlayers.Remove(player);
+            Assert.IsTrue(m_channels.Contains(player));
+            m_channels.Remove(player);
         }
 
         private Player TryFindPlayer(NetConnection connection)
         {
             Player player;
-            if (networkPlayersLookup.TryGetValue(connection, out player))
+            if (m_channelLookup.TryGetValue(connection, out player))
             {
                 return player;
             }
@@ -459,9 +459,9 @@ namespace Bomberman.Game.Multiplayer
 
         private bool NetworkPlayersAreReady()
         {
-            for (int i = 0; i < networkPlayers.Count; ++i)
+            for (int i = 0; i < m_channels.Count; ++i)
             {
-                if (!networkPlayers[i].IsReady)
+                if (!m_channels[i].IsReady)
                 {
                     return false;
                 }
@@ -472,9 +472,9 @@ namespace Bomberman.Game.Multiplayer
 
         private void SetNetworkPlayersAreReady(bool ready)
         {
-            for (int i = 0; i < networkPlayers.Count; ++i)
+            for (int i = 0; i < m_channels.Count; ++i)
             {
-                networkPlayers[i].IsReady = ready;
+                m_channels[i].IsReady = ready;
             }
         }
 
