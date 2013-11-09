@@ -62,6 +62,11 @@ namespace BomberEngine
             timer.callback1();
         }
 
+        public T UserData<T>() where T : class
+        {
+            return ClassUtils.Cast<T>(userData);
+        }
+
         public bool IsRepeated
         {
             get { return numRepeats != 1; }

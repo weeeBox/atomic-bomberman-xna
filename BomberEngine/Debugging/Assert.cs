@@ -85,6 +85,12 @@ namespace BomberEngine
         }
 
         [Conditional("DEBUG")]
+        public static void IsInstance<T>(Object obj)
+        {
+            System.Diagnostics.Debug.Assert(obj is T, "Assertion failed"); // TODO: message
+        }
+
+        [Conditional("DEBUG")]
         public static void Fail(String format, params Object[] args)
         {
             System.Diagnostics.Debug.Assert(false, "Failed!", format, args);
