@@ -12,8 +12,9 @@ namespace Bomberman.Game.Multiplayer
     {
         private const int SENT_HISTORY_SIZE = 32;
         
-        private Player m_localPlayer; // TODO: don't store the reference (multiplayer local players may exist)
         private ClientPacket[] m_sentPackets;
+
+        private NetChannel m_channel;
         
         public GameControllerClient(GameSettings settings)
             : base(settings)
@@ -31,6 +32,17 @@ namespace Bomberman.Game.Multiplayer
             RegisterNotification(NetworkNotifications.DisconnectedFromServer, DisconnectedFromServerNotification);
 
             StartScreen(new BlockingScreen("Waiting for server..."));
+
+            List<Player> localPlayers = new List<Player>();
+            int index = 0;
+            foreach (GameSettings.InputEntry entry in settings.inputEntries)
+            {
+                Player player = new Player(index++);
+                player.SetPlayerInput(entry.input);
+            }
+
+            Client peer = GetClient();
+            m_channel = new NetChannel(peer.RemoteConnection, localPlayers);
         }
 
         public override void Update(float delta)
@@ -52,7 +64,7 @@ namespace Bomberman.Game.Multiplayer
                 case State.RoundStart:
                 {
                     NetOutgoingMessage msg = CreateMessage(PeerMessageId.RoundStart);
-                    WriteRoundStartMessage(msg, m_localPlayer);
+                    WriteRoundStartMessage(msg, m_channel);
                     SendMessage(msg);
                     break;
                 }
@@ -60,7 +72,7 @@ namespace Bomberman.Game.Multiplayer
                 case State.Playing:
                 {
                     NetOutgoingMessage msg = CreateMessage(PeerMessageId.Playing);
-                    WritePlayingMessage(msg, m_localPlayer);
+                    WritePlayingMessage(msg, m_channel);
                     SendMessage(msg);
                     break;
                 }
@@ -68,7 +80,7 @@ namespace Bomberman.Game.Multiplayer
                 case State.RoundEnd:
                 {
                     NetOutgoingMessage msg = CreateMessage(PeerMessageId.RoundEnd);
-                    WriteRoundEndMessage(msg, m_localPlayer);
+                    WriteRoundEndMessage(msg, m_channel);
                     SendMessage(msg);
                     break;
                 }
@@ -81,23 +93,23 @@ namespace Bomberman.Game.Multiplayer
             }
         }
 
-        private void ReplayPlayerActions(Player player)
+        private void ReplayPlayerActions(NetChannel channel)
         {
-            float delta = Application.frameTime;
-            int oldMask = player.input.mask;
+            //float delta = Application.frameTime;
+            //int oldMask = player.input.mask;
 
-            for (int id = player.lastAckPacketId; id < m_lastPacketId; ++id)
-            {
-                ClientPacket packet = GetPacket(id);
-                Assert.IsTrue(!packet.replayed);
+            //for (int id = player.acknowledgedSequence; id < m_lastPacketId; ++id)
+            //{
+            //    ClientPacket packet = GetPacket(id);
+            //    Assert.IsTrue(!packet.replayed);
                 
-                int actions = packet.actions;
-                player.input.Force(packet.actions);
+            //    int actions = packet.actions;
+            //    player.input.Force(packet.actions);
 
-                player.ReplayUpdate(delta);
-                MarkReplayed(id);
-            }            
-            Assert.IsTrue(oldMask == player.input.mask);
+            //    player.ReplayUpdate(delta);
+            //    MarkReplayed(id);
+            //}            
+            //Assert.IsTrue(oldMask == player.input.mask);
         }
 
         #endregion
@@ -139,7 +151,7 @@ namespace Bomberman.Game.Multiplayer
         {
             SetState(State.RoundStart);
 
-            if (m_localPlayer != null)
+            if (m_channel != null)
             {
                 ReadReadyFlags(msg);
             }
@@ -148,9 +160,20 @@ namespace Bomberman.Game.Multiplayer
                 SkipReadyFlags(msg);
             }
 
-            if (m_localPlayer == null || m_localPlayer.needsFieldState)
+            if (m_channel == null || m_channel.needsFieldState)
             {   
                 ReadFieldState(peer, msg);
+            }
+        }
+
+        private void WriteRoundStartMessage(NetBuffer buffer, NetChannel channel)
+        {
+            List<Player> localPlayers = channel.players;
+            buffer.Write(localPlayers.Count);
+
+            for (int i = 0; i < localPlayers.Count; ++i)
+            {   
+                WriteRoundStartMessage(buffer, localPlayers[i]);
             }
         }
 
@@ -171,23 +194,33 @@ namespace Bomberman.Game.Multiplayer
         private void ReadPlayingMessage(Peer peer, NetIncomingMessage msg)
         {
             Assert.IsTrue(game != null);
-            Assert.IsTrue(m_localPlayer != null && m_localPlayer.IsReady);
+            Assert.IsTrue(m_channel != null && m_channel.IsReady);
 
             SetState(State.Playing);
 
-            int lastAckPacketId = m_localPlayer.lastAckPacketId;
+            int acknowledgedSequence = m_channel.acknowledgedSequence;
 
-            m_localPlayer.lastReceivedPackedId = msg.ReadInt32();
-            m_localPlayer.lastAckPacketId = msg.ReadInt32();
+            m_channel.incomingSequence = msg.ReadInt32();
+            m_channel.acknowledgedSequence = msg.ReadInt32();
 
-            if (lastAckPacketId != m_localPlayer.lastAckPacketId)
+            if (acknowledgedSequence != m_channel.acknowledgedSequence)
             {
                 ReadPlayingMessage(msg);
-                ReplayPlayerActions(m_localPlayer);
+                ReplayPlayerActions(m_channel);
             }
             else
             {
                 Log.d("Identical payload package");
+            }
+        }
+
+        private void WritePlayingMessage(NetOutgoingMessage msg, NetChannel channel)
+        {
+            List<Player> localPlayers = channel.players;
+            msg.Write(localPlayers.Count);
+            for (int i = 0; i < localPlayers.Count; ++i)
+            {
+                WritePlayingMessage(msg, localPlayers[i]);
             }
         }
 
@@ -211,7 +244,7 @@ namespace Bomberman.Game.Multiplayer
             packet.replayed = false;
 
             msg.Write(packet.id);                   // packet to be acknowledged by server
-            msg.Write(player.lastReceivedPackedId); // packet acknowledged by client
+            msg.Write(player.incomingSequence); // packet acknowledged by client
             msg.Write(packet.actions, (int)PlayerAction.Count);
 
             PushPacket(ref packet);
@@ -219,16 +252,16 @@ namespace Bomberman.Game.Multiplayer
 
         private void ReadRoundEndMessage(Peer peer, NetIncomingMessage msg)
         {
-            Assert.IsTrue(m_localPlayer != null);
+            Assert.IsTrue(m_channel != null);
 
             SetState(State.RoundEnd);
 
             ReadReadyFlags(msg);
 
-            if (m_localPlayer.needsRoundResults)
+            if (m_channel.needsRoundResults)
             {
                 ReadRoundResults(msg);
-                m_localPlayer.needsRoundResults = false;
+                m_channel.needsRoundResults = false;
                 StartRoundResultScreen();
             }
 
@@ -241,40 +274,25 @@ namespace Bomberman.Game.Multiplayer
             }
         }
 
-        private void WriteRoundEndMessage(NetBuffer buffer, Player player)
+        private void WriteRoundEndMessage(NetBuffer buffer, NetChannel channel)
         {
-            buffer.Write(player.IsReady);
-            buffer.Write(player.needsRoundResults);
+            buffer.Write(channel.IsReady);
+            buffer.Write(channel.needsRoundResults);
         }
 
         //////////////////////////////////////////////////////////////////////////////
 
         #region Field state
 
-        private void ReadFieldState(Peer peer, NetIncomingMessage message)
+        private void ReadFieldState(Peer peer, NetIncomingMessage msg)
         {
             game = new Game(MultiplayerMode.Client);
 
             SetupField(settings.scheme);
-            ReadFieldState(message);
+            ReadFieldState(msg);
 
-            m_localPlayer = null;
-
-            List<Player> players = game.GetPlayers().list;
-            for (int i = 0; i < players.Count; ++i)
-            {
-                if (players[i].input == null)
-                {
-                    m_localPlayer = players[i];
-                    m_localPlayer.SetPlayerInput(InputMapping.CreatePlayerInput(InputType.Keyboard1));
-                    break;
-                }
-            }
-
-            Assert.IsTrue(m_localPlayer != null);
-            m_localPlayer.connection = peer.RemoteConnection;
-            m_localPlayer.IsReady = true;
-            m_localPlayer.needsFieldState = false;
+            m_channel.IsReady = true;
+            m_channel.needsFieldState = false;
         }
 
         #endregion
@@ -293,18 +311,18 @@ namespace Bomberman.Game.Multiplayer
 
                 case State.Playing:
                 {
-                    Assert.IsTrue(m_localPlayer != null);
-                    Assert.IsTrue(m_localPlayer.IsReady);
-                    Assert.IsTrue(m_localPlayer.connection != null);
+                    Assert.IsTrue(m_channel != null);
+                    Assert.IsTrue(m_channel.IsReady);
+                    Assert.IsTrue(m_channel.connection != null);
 
                     gameScreen = new GameScreen();
                     StartScreen(gameScreen);
 
-                    m_localPlayer.ResetNetworkState();
-                    m_localPlayer.IsReady = true;
+                    m_channel.Reset();
+                    m_channel.IsReady = true;
 
-                    gameScreen.AddDebugView(new NetworkTraceView(m_localPlayer.connection));
-                    gameScreen.AddDebugView(new LocalPlayerView(m_localPlayer));
+                    gameScreen.AddDebugView(new NetworkTraceView(m_channel.connection));
+                    gameScreen.AddDebugView(new LocalPlayerView(m_channel));
                     break;
                 }
 
@@ -340,7 +358,7 @@ namespace Bomberman.Game.Multiplayer
 
         protected override void RoundResultScreenAccepted(RoundResultScreen screen)
         {
-            m_localPlayer.IsReady = true;
+            m_channel.IsReady = true;
             StartScreen(new BlockingScreen("Waiting for server..."));
         }
 
@@ -425,13 +443,13 @@ namespace Bomberman.Game.Multiplayer
 
         private class LocalPlayerView : View
         {
-            private Player m_player;
+            private NetChannel m_channel;
             private TextView m_cordErrView;
             private TextView m_packetDiffView;
 
-            public LocalPlayerView(Player player)
+            public LocalPlayerView(NetChannel channel)
             {
-                m_player = player;
+                m_channel = channel;
 
                 m_packetDiffView = AddTextView();
                 m_cordErrView = AddTextView("px: 0\npy: 0"); // HACK: need to adjust height
@@ -448,7 +466,7 @@ namespace Bomberman.Game.Multiplayer
 
             public override void Update(float delta)
             {
-                m_cordErrView.SetText("dpx: " + m_player.errDx + "\ndpy: " + m_player.errDy);
+                // m_cordErrView.SetText("dpx: " + m_channel.errDx + "\ndpy: " + m_channel.errDy);
             }
         }
     }

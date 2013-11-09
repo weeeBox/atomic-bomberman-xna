@@ -130,7 +130,7 @@ namespace Bomberman.Game.Multiplayer
 
                         NetOutgoingMessage message = CreateMessage(PeerMessageId.Playing);
                         message.Write(m_lastPacketId);              // packet to be acknowledged by client
-                        message.Write(player.lastReceivedPackedId); // package acknowledged by server
+                        message.Write(player.incomingSequence); // package acknowledged by server
                         message.Write(payloadMessage);
 
                         NetConnection connection = player.connection;
@@ -202,8 +202,8 @@ namespace Bomberman.Game.Multiplayer
             Player player = FindPlayer(msg.SenderConnection);
             player.IsReady = true;
 
-            player.lastReceivedPackedId = msg.ReadInt32();
-            player.lastAckPacketId = msg.ReadInt32();
+            player.incomingSequence = msg.ReadInt32();
+            player.acknowledgedSequence = msg.ReadInt32();
             int actions = msg.ReadInt32((int)PlayerAction.Count);
 
             PlayerNetworkInput input = player.input as PlayerNetworkInput;

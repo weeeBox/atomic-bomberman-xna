@@ -9,54 +9,32 @@ using BomberEngine;
 
 namespace Bomberman.Networking
 {
-    public class NetChannel
+    public class NetChannel : IResettable
     {
         private List<Player> m_players;     // players for this channel
-        private Peer m_peer;                // network peer for this channel
         private NetConnection m_connection; // network connection for this channel
 
         public int outgoingSequence;        // the last sent packet sequence
         public int incomingSequence;        // the last received packet sequence
         public int acknowledgedSequence;    // the last acknowledged packet (by remote peer)
 
-        public NetChannel(Peer peer, NetConnection connection, int playersCount)
+        public NetChannel(NetConnection connection, List<Player> players)
         {
-            m_peer = peer;
             m_connection = connection;
-            m_players = new List<Player>(playersCount);
+            m_players = players;
         }
 
         //////////////////////////////////////////////////////////////////////////////
 
-        public NetOutgoingMessage CreateMessage(bool autoRecycle = false)
-        {
-            NetOutgoingMessage msg = m_peer.CreateMessage();
-            if (autoRecycle)
-            {
-                Application.TimerManager().Schedule(MessageRecycleCallback);
-            }
-            return msg;
-        }
+        // TODO: refactor these methods
 
-        public void SendMessage(NetOutgoingMessage msg, NetConnection recipient)
+        public void Reset()
         {
-            m_peer.SendMessage(msg, recipient);
-        }
-
-        public void SendMessage(NetOutgoingMessage msg, IPEndPoint recipient)
-        {
-            throw new NotImplementedException(); // TODO
-        }
-
-        public void RecycleMessage(NetOutgoingMessage msg)
-        {
-            m_peer.RecycleMessage(msg);
-        }
-
-        private void MessageRecycleCallback(Timer timer)
-        {
-            NetOutgoingMessage msg = timer.UserData<NetOutgoingMessage>();
-            m_peer.RecycleMessage(msg);
+            IsReady = false;
+            acknowledgedSequence = 0;
+            incomingSequence = 0;
+            needsFieldState = true;
+            needsRoundResults = true;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -68,15 +46,16 @@ namespace Bomberman.Networking
             get { return m_players; }
         }
 
-        public Peer peer
-        {
-            get { return m_peer; }
-        }
-
         public NetConnection connection
         {
             get { return m_connection; }
         }
+
+        // TODO: refactor these properties
+
+        public bool IsReady { get; set; }
+        public bool needsFieldState { get; set; }
+        public bool needsRoundResults { get; set; }
 
         #endregion
     }

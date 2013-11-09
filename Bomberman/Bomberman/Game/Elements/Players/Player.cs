@@ -56,8 +56,8 @@ namespace Bomberman.Game.Elements.Players
         private NetConnection m_connection;
 
         private bool m_ready;
-        public int lastAckPacketId;      // last acknowledged packet
-        public int lastReceivedPackedId; // last received packet
+        public int acknowledgedSequence;      // last acknowledged packet
+        public int incomingSequence; // last received packet
 
         private float m_calculatedX;
         private float m_calculatedY;
@@ -114,8 +114,8 @@ namespace Bomberman.Game.Elements.Players
         public void ResetNetworkState()
         {
             m_ready = false;
-            lastAckPacketId = 0;
-            lastReceivedPackedId = 0;
+            acknowledgedSequence = 0;
+            incomingSequence = 0;
             needsFieldState = true;
             needsRoundResults = true;
         }
