@@ -1,5 +1,5 @@
 ﻿
-namespace Bomberman.Game.Elements
+namespace Bomberman.Gameplay.Elements
 {
     public enum Direction
     {

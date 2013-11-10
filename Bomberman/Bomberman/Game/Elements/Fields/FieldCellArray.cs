@@ -1,6 +1,6 @@
 ﻿using BomberEngine;
 
-namespace Bomberman.Game.Elements.Fields
+namespace Bomberman.Gameplay.Elements.Fields
 {
     public class FieldCellArray : IResettable
     {

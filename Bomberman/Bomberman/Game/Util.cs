@@ -1,8 +1,8 @@
 ﻿using System;
 using BomberEngine;
-using Bomberman.Game.Elements;
+using Bomberman.Gameplay.Elements;
 
-namespace Bomberman.Game
+namespace Bomberman.Gameplay
 {
     public class Util
     {

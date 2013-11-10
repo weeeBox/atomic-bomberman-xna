@@ -3,7 +3,7 @@ using System.Net;
 using Assets;
 using BomberEngine;
 using Bomberman.Content;
-using Bomberman.Game;
+using Bomberman.Gameplay;
 using Bomberman.Networking;
 using Bomberman.UI;
 using Lidgren.Network;

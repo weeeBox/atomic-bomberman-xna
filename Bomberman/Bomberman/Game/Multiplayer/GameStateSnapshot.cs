@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using Bomberman.Game.Elements;
-using Bomberman.Game.Elements.Cells;
-using Bomberman.Game.Elements.Players;
+using Bomberman.Gameplay.Elements;
+using Bomberman.Gameplay.Elements.Cells;
+using Bomberman.Gameplay.Elements.Players;
 
-namespace Bomberman.Game.Multiplayer
+namespace Bomberman.Gameplay.Multiplayer
 {
     public class GameStateSnapshot
     {   

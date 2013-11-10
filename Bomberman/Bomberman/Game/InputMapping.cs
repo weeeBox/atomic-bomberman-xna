@@ -1,8 +1,8 @@
 ﻿using System;
 using BomberEngine;
-using Bomberman.Game.Elements.Players;
+using Bomberman.Gameplay.Elements.Players;
 
-namespace Bomberman.Game
+namespace Bomberman.Gameplay
 {
     public enum InputType
     {

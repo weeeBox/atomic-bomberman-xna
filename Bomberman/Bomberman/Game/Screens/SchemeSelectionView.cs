@@ -1,7 +1,7 @@
 ﻿using BomberEngine;
 using Bomberman.Content;
 
-namespace Bomberman.Game.Screens
+namespace Bomberman.Gameplay.Screens
 {
     public class SchemeSelectionView : View
     {

@@ -2,7 +2,7 @@
 using BomberEngine;
 using Bomberman.Content;
 
-namespace Bomberman.Game.Elements.Cells
+namespace Bomberman.Gameplay.Elements.Cells
 {
     public class BombAnimations
     {

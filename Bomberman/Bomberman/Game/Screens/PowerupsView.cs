@@ -1,11 +1,11 @@
 ﻿using Assets;
 using BomberEngine;
 using BomberEngine.UI;
-using Bomberman.Game.Elements;
-using Bomberman.Game.Elements.Players;
+using Bomberman.Gameplay.Elements;
+using Bomberman.Gameplay.Elements.Players;
 using Microsoft.Xna.Framework;
 
-namespace Bomberman.Game.Screens
+namespace Bomberman.Gameplay.Screens
 {
     public class PowerupsView : View
     {

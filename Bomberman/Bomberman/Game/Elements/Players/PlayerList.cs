@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using BomberEngine;
 
-namespace Bomberman.Game.Elements.Players
+namespace Bomberman.Gameplay.Elements.Players
 {
     public class PlayerList : BaseObject, IResettable
     {

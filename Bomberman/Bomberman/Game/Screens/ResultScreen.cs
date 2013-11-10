@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using BomberEngine;
-using Bomberman.Game.Elements.Players;
+using Bomberman.Gameplay.Elements.Players;
 using Microsoft.Xna.Framework;
 
-namespace Bomberman.Game.Screens
+namespace Bomberman.Gameplay.Screens
 {
     public class BaseResultScreen : Screen
     {

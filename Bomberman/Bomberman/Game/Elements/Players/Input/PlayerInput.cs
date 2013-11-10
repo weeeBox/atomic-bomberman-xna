@@ -1,6 +1,6 @@
 ﻿using BomberEngine;
 
-namespace Bomberman.Game.Elements.Players
+namespace Bomberman.Gameplay.Elements.Players
 {
     public abstract class PlayerInput : IUpdatable, IResettable
     {

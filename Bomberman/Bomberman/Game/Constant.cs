@@ -1,5 +1,5 @@
 ﻿
-namespace Bomberman.Game
+namespace Bomberman.Gameplay
 {
     public class Constant
     {

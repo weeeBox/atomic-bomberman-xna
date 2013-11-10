@@ -1,5 +1,5 @@
 ﻿using BomberEngine;
-using Bomberman.Game;
+using Bomberman.Gameplay;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 

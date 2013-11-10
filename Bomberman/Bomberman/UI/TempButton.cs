@@ -1,6 +1,6 @@
 ﻿using System;
 using BomberEngine;
-using Bomberman.Game;
+using Bomberman.Gameplay;
 
 namespace Bomberman.UI
 {

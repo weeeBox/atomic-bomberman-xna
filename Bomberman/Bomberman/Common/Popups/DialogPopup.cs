@@ -1,7 +1,7 @@
 ﻿using System;
 using BomberEngine;
 using BomberEngine.UI;
-using Bomberman.Game;
+using Bomberman.Gameplay;
 using Bomberman.UI;
 using Microsoft.Xna.Framework;
 

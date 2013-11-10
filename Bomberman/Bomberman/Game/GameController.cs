@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using BomberEngine;
 using Bomberman.Content;
-using Bomberman.Game.Elements.Fields;
-using Bomberman.Game.Elements.Players;
-using Bomberman.Game.Multiplayer;
-using Bomberman.Game.Screens;
+using Bomberman.Gameplay.Elements.Fields;
+using Bomberman.Gameplay.Elements.Players;
+using Bomberman.Gameplay.Multiplayer;
+using Bomberman.Gameplay.Screens;
 using Bomberman.Multiplayer;
 
-namespace Bomberman.Game
+namespace Bomberman.Gameplay
 {
     public class GameSettings
     {

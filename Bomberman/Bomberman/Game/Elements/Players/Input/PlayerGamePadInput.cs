@@ -2,7 +2,7 @@
 using BomberEngine;
 using Microsoft.Xna.Framework;
 
-namespace Bomberman.Game.Elements.Players
+namespace Bomberman.Gameplay.Elements.Players
 {
     public class PlayerGamePadInput : PlayerKeyInput
     {

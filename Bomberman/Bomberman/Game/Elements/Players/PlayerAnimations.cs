@@ -3,7 +3,7 @@ using Assets;
 using BomberEngine;
 using Bomberman.Content;
 
-namespace Bomberman.Game.Elements.Players
+namespace Bomberman.Gameplay.Elements.Players
 {
     public class PlayerAnimations
     {

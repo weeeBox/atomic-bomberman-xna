@@ -1,5 +1,5 @@
 ﻿
-namespace Bomberman.Game.Multiplayer
+namespace Bomberman.Gameplay.Multiplayer
 {
     public abstract class GamePacket
     {

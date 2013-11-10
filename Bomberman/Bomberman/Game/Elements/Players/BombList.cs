@@ -1,8 +1,8 @@
 ﻿using BomberEngine;
-using Bomberman.Game.Elements.Cells;
-using Bomberman.Game.Elements.Players;
+using Bomberman.Gameplay.Elements.Cells;
+using Bomberman.Gameplay.Elements.Players;
 
-namespace Bomberman.Game.Elements.Items
+namespace Bomberman.Gameplay.Elements.Items
 {
     public class BombList : IResettable
     {

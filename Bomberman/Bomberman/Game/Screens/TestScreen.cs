@@ -4,7 +4,7 @@ using BomberEngine;
 using Bomberman.Content;
 using Microsoft.Xna.Framework;
 
-namespace Bomberman.Game.Screens
+namespace Bomberman.Gameplay.Screens
 {
     public class TestScreen : Screen
     {

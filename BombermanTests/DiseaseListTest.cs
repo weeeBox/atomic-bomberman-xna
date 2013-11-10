@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Bomberman;
-using Bomberman.Game.Elements;
-using Bomberman.Game.Elements.Cells;
-using Bomberman.Game.Elements.Fields;
-using Bomberman.Game.Elements.Players;
+using Bomberman.Gameplay.Elements;
+using Bomberman.Gameplay.Elements.Cells;
+using Bomberman.Gameplay.Elements.Fields;
+using Bomberman.Gameplay.Elements.Players;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BombermanTests.Mocks;
 

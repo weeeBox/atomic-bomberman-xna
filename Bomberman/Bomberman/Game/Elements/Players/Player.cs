@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using BomberEngine;
 using Bomberman.Content;
-using Bomberman.Game.Elements.Cells;
-using Bomberman.Game.Elements.Fields;
-using Bomberman.Game.Elements.Items;
+using Bomberman.Gameplay.Elements.Cells;
+using Bomberman.Gameplay.Elements.Fields;
+using Bomberman.Gameplay.Elements.Items;
 using Lidgren.Network;
 using Bomberman.Networking;
 
-namespace Bomberman.Game.Elements.Players
+namespace Bomberman.Gameplay.Elements.Players
 {
     public class PlayerStatistics : IResettable
     {

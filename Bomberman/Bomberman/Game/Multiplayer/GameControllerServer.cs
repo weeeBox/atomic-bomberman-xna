@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using BomberEngine;
-using Bomberman.Game.Elements.Players;
-using Bomberman.Game.Screens;
+using Bomberman.Gameplay.Elements.Players;
+using Bomberman.Gameplay.Screens;
 using Bomberman.Networking;
 using Lidgren.Network;
 
-namespace Bomberman.Game.Multiplayer
+namespace Bomberman.Gameplay.Multiplayer
 {
     public class GameControllerServer : GameControllerNetwork
     {

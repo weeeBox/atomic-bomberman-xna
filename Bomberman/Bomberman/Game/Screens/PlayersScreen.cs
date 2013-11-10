@@ -5,7 +5,7 @@ using Bomberman.Content;
 using Bomberman.UI;
 using Microsoft.Xna.Framework;
 
-namespace Bomberman.Game.Screens
+namespace Bomberman.Gameplay.Screens
 {
     public class PlayersScreen : Screen
     {

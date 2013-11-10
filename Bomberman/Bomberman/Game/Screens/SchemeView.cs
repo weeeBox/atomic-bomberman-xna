@@ -5,7 +5,7 @@ using Bomberman.Content;
 using BombermanCommon.Resources.Scheme;
 using Microsoft.Xna.Framework;
 
-namespace Bomberman.Game.Screens
+namespace Bomberman.Gameplay.Screens
 {
     public class SchemeView : View
     {

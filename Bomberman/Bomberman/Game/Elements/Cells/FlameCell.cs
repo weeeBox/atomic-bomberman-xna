@@ -1,8 +1,8 @@
 ﻿using BomberEngine;
-using Bomberman.Game.Elements.Fields;
-using Bomberman.Game.Elements.Players;
+using Bomberman.Gameplay.Elements.Fields;
+using Bomberman.Gameplay.Elements.Players;
 
-namespace Bomberman.Game.Elements.Cells
+namespace Bomberman.Gameplay.Elements.Cells
 {
     public class FlameCell : FieldCell
     {

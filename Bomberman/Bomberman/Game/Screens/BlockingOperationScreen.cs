@@ -1,7 +1,7 @@
 ﻿using System;
 using BomberEngine;
 
-namespace Bomberman.Game.Screens
+namespace Bomberman.Gameplay.Screens
 {
     public class BlockingOperationScreen : BlockingScreen
     {

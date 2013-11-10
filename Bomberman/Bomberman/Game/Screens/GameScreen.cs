@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Assets;
 using BomberEngine;
-using Bomberman.Game.Elements.Fields;
-using Bomberman.Game.Elements.Players;
+using Bomberman.Gameplay.Elements.Fields;
+using Bomberman.Gameplay.Elements.Players;
 
-namespace Bomberman.Game.Screens
+namespace Bomberman.Gameplay.Screens
 {
     public class GameScreen : Screen
     {

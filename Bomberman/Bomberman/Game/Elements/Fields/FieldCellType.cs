@@ -1,5 +1,5 @@
 ﻿
-namespace Bomberman.Game.Elements.Fields
+namespace Bomberman.Gameplay.Elements.Fields
 {
     public enum FieldCellType
     {

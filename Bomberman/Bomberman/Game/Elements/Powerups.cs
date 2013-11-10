@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bomberman.Game.Elements
+namespace Bomberman.Gameplay.Elements
 {
     public class Powerups
     {

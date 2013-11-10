@@ -1,9 +1,9 @@
 ﻿using System;
 using BomberEngine;
-using Bomberman.Game.Elements.Cells;
-using Bomberman.Game.Elements.Players;
+using Bomberman.Gameplay.Elements.Cells;
+using Bomberman.Gameplay.Elements.Players;
 
-namespace Bomberman.Game.Elements.Fields
+namespace Bomberman.Gameplay.Elements.Fields
 {
     public class FieldCell : BaseObject, IUpdatable, IResettable, IDestroyable
     {

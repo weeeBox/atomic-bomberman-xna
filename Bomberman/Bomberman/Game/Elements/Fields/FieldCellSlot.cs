@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using BomberEngine;
-using Bomberman.Game.Elements.Cells;
+using Bomberman.Gameplay.Elements.Cells;
 
-namespace Bomberman.Game.Elements.Fields
+namespace Bomberman.Gameplay.Elements.Fields
 {
     public class FieldCellSlot : IResettable
     {

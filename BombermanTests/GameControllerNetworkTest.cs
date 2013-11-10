@@ -3,22 +3,22 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Bomberman.Game.Multiplayer;
-using Bomberman.Game;
+using Bomberman.Gameplay.Multiplayer;
+using Bomberman.Gameplay;
 using BombermanTests.Mocks;
 using Lidgren.Network;
 using Bomberman.Networking;
-using Bomberman.Game.Elements.Players;
+using Bomberman.Gameplay.Elements.Players;
 using BombermanCommon.Resources;
 using Bomberman.Content;
 using BombermanCommon.Resources.Scheme;
-using Bomberman.Game.Elements.Fields;
+using Bomberman.Gameplay.Elements.Fields;
 using BomberEngine;
 
 namespace BombermanTests
 {
     using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
-    using Bomberman.Game.Elements;
+    using Bomberman.Gameplay.Elements;
 
     [TestClass]
     public class GameControllerNetworkTest

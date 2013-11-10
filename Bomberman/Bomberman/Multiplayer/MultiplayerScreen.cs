@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using BomberEngine;
-using Bomberman.Game;
+using Bomberman.Gameplay;
 using Bomberman.UI;
 using Microsoft.Xna.Framework;
 

@@ -1,8 +1,8 @@
 ﻿using System;
 using BomberEngine;
-using Bomberman.Game.Elements.Fields;
+using Bomberman.Gameplay.Elements.Fields;
 
-namespace Bomberman.Game.Elements.Cells
+namespace Bomberman.Gameplay.Elements.Cells
 {
     public class MovableCell : FieldCell
     {

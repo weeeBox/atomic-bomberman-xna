@@ -1,5 +1,5 @@
-﻿using Bomberman.Game.Elements;
-using Bomberman.Game.Elements.Cells;
+﻿using Bomberman.Gameplay.Elements;
+using Bomberman.Gameplay.Elements.Cells;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BombermanTests

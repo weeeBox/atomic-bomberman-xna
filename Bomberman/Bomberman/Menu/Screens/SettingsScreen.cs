@@ -1,5 +1,5 @@
 ﻿using BomberEngine;
-using Bomberman.Game;
+using Bomberman.Gameplay;
 using Bomberman.UI;
 
 namespace Bomberman.Menu.Screens

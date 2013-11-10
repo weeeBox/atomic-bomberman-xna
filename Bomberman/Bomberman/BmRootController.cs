@@ -2,7 +2,7 @@
 using Assets;
 using BomberEngine;
 using Bomberman.Content;
-using Bomberman.Game;
+using Bomberman.Gameplay;
 using Bomberman.Menu;
 using Bomberman.Multiplayer;
 using Bomberman.Networking;

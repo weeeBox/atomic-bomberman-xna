@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using Assets;
 using BomberEngine;
 using Bomberman.Content;
-using Bomberman.Game.Elements.Cells;
-using Bomberman.Game.Elements.Players;
+using Bomberman.Gameplay.Elements.Cells;
+using Bomberman.Gameplay.Elements.Players;
 using Microsoft.Xna.Framework;
 
-namespace Bomberman.Game.Elements.Fields
+namespace Bomberman.Gameplay.Elements.Fields
 {
     public class FieldDrawable : View
     {

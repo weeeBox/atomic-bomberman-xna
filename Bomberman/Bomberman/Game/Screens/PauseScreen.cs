@@ -3,7 +3,7 @@ using BomberEngine.UI;
 using Bomberman.Menu;
 using Microsoft.Xna.Framework;
 
-namespace Bomberman.Game.Screens
+namespace Bomberman.Gameplay.Screens
 {
     public class PauseScreen : Screen
     {

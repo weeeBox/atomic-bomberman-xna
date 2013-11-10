@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Bomberman.Game;
+using Bomberman.Gameplay;
 
 namespace BombermanTests.Mocks
 {

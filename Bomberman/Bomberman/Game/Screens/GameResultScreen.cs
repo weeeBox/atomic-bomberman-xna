@@ -1,7 +1,7 @@
 ﻿using BomberEngine;
 using Bomberman.UI;
 
-namespace Bomberman.Game.Screens
+namespace Bomberman.Gameplay.Screens
 {
     public class GameResultScreen : BaseResultScreen
     {

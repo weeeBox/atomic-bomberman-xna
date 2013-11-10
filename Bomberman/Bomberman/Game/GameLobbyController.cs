@@ -1,10 +1,10 @@
 ﻿using System;
 using BomberEngine;
 using Bomberman.Content;
-using Bomberman.Game.Elements.Players;
-using Bomberman.Game.Screens;
+using Bomberman.Gameplay.Elements.Players;
+using Bomberman.Gameplay.Screens;
 
-namespace Bomberman.Game
+namespace Bomberman.Gameplay
 {
     public enum InputState
     {

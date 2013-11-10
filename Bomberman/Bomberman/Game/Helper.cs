@@ -1,7 +1,7 @@
 ﻿using BomberEngine;
 using Bomberman.Content;
 
-namespace Bomberman.Game
+namespace Bomberman.Gameplay
 {
     public class Helper
     {

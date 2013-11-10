@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using BomberEngine;
 using Bomberman.Content;
-using Bomberman.Game.Elements.Cells;
-using Bomberman.Game.Elements.Players;
+using Bomberman.Gameplay.Elements.Cells;
+using Bomberman.Gameplay.Elements.Players;
 using BombermanCommon.Resources.Scheme;
 
-namespace Bomberman.Game.Elements.Fields
+namespace Bomberman.Gameplay.Elements.Fields
 {
     public class Field : BaseObject, IUpdatable, IDestroyable, IResettable
     {

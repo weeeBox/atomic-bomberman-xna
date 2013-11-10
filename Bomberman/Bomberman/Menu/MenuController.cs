@@ -1,6 +1,6 @@
 ﻿using System;
 using BomberEngine;
-using Bomberman.Game.Screens;
+using Bomberman.Gameplay.Screens;
 using Bomberman.Menu.Screens;
 
 namespace Bomberman.Menu

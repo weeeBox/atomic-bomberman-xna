@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using BomberEngine;
-using Bomberman.Game.Elements;
-using Bomberman.Game.Elements.Fields;
-using Bomberman.Game.Elements.Players;
+using Bomberman.Gameplay.Elements;
+using Bomberman.Gameplay.Elements.Fields;
+using Bomberman.Gameplay.Elements.Players;
 
-namespace Bomberman.Game
+namespace Bomberman.Gameplay
 {
     public delegate void ActionDelegate();
 
