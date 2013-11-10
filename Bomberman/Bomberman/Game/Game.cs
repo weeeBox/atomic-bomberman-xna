@@ -14,7 +14,7 @@ namespace Bomberman.Gameplay
         public static readonly String GameEnded      = "GameEnded";
     }
 
-    public class Game : BaseObject, IDestroyable
+    public class Game : BaseObject, IResettable, IDestroyable
     {
         private PlayerList      m_players;
         private Field           m_field;
@@ -31,10 +31,9 @@ namespace Bomberman.Gameplay
 
             m_field = new Field(this);
 
-            m_roundIndex = 0;
-            m_totalRounds = CVars.roundsToWin.intValue;
-
             RegisterNotification(Notifications.ConsoleVariableChanged, ConsoleVariableChanged);
+
+            Reset();
         }
 
         /// <summary>
@@ -45,10 +44,30 @@ namespace Bomberman.Gameplay
             m_field = new Field(width, height);
         }
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region IResettable
+
+        public void Reset()
+        {
+            m_roundIndex = 0;
+            m_totalRounds = CVars.roundsToWin.intValue;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region IDestroyable
+
         public void Destroy()
         {
             UnregisterNotifications();
         }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
 
         public void AddPlayer(Player player)
         {
