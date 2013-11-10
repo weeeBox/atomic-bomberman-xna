@@ -179,6 +179,11 @@ namespace Bomberman
                         Assert.IsTrue(info != null);
 
                         GameSettings settings = new GameSettings(info.scheme);
+                        settings.inputEntries = new GameSettings.InputEntry[]
+                        {
+                            new GameSettings.InputEntry(0, InputMapping.CreatePlayerInput(InputType.Keyboard1))
+                        };
+
                         StartController(GameController.Client(settings));
                         break;
                     }

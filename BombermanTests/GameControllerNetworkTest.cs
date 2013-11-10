@@ -100,7 +100,7 @@ namespace BombermanTests
         }
 
         [TestMethod]
-        public void TestRoundStartMessage()
+        public void TestFieldState()
         {
             Scheme scheme = new SchemeMock("Test", 90);
             GameSettings settings = new GameSettings(scheme);

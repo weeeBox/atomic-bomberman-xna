@@ -23,7 +23,7 @@ namespace Bomberman.Networking
             m_connection = connection;
 
             m_players = new List<Player>(1);
-            m_players[0] = player;
+            m_players.Add(player);
 
             player.NetChannel = this;
 
