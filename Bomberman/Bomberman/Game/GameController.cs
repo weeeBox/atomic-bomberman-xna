@@ -48,8 +48,6 @@ namespace Bomberman.Gameplay
         protected GameScreen gameScreen;
         protected PauseScreen pauseScreen;
         
-        private Game m_game;
-
         protected GameSettings settings;
 
         private CCommand[] gameCommands;
@@ -72,13 +70,6 @@ namespace Bomberman.Gameplay
         protected GameController(GameSettings settings)
         {
             this.settings = settings;
-        }
-
-        public override void Destroy()
-        {
-            game = null;
-            
-            base.Destroy();
         }
 
         protected override void OnStart()
@@ -481,15 +472,7 @@ namespace Bomberman.Gameplay
 
         public Game game
         {
-            get { return m_game; }
-            protected set
-            {
-                if (m_game != value && m_game != null)
-                {
-                    m_game.Destroy();
-                }
-                m_game = value;
-            }
+            get { return Game.Current; }
         }
 
         #endregion
@@ -511,8 +494,6 @@ namespace Bomberman.Gameplay
         protected override void OnStart()
         {
             base.OnStart();
-
-            game = new Game();
 
             GameSettings.InputEntry[] entries = settings.inputEntries;
             for (int i = 0; i < entries.Length; ++i)

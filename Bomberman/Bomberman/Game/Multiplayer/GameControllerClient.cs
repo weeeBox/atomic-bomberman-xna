@@ -250,8 +250,6 @@ namespace Bomberman.Gameplay.Multiplayer
 
         private void ReadFieldState(Peer peer, NetIncomingMessage msg)
         {
-            game = new Game();
-
             SetupField(settings.scheme);
             ReadFieldState(msg);
 

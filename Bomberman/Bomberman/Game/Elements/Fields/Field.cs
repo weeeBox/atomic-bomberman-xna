@@ -37,9 +37,6 @@ namespace Bomberman.Gameplay.Elements.Fields
 
             m_movableCells = new LinkedList<MovableCell>();
 
-            m_playerAnimations = new PlayerAnimations();
-            m_bombAnimations = new BombAnimations();
-
             m_detonatedBombs = new List<Bomb>(16);
         }
 
@@ -393,6 +390,10 @@ namespace Bomberman.Gameplay.Elements.Fields
         public void AddPlayer(Player player)
         {
             players.Add(player);
+
+            if (m_playerAnimations == null) m_playerAnimations = new PlayerAnimations();
+            if (m_bombAnimations == null) m_bombAnimations = new BombAnimations();
+
             player.animations = m_playerAnimations;
             player.bombAnimations = m_bombAnimations;
         }

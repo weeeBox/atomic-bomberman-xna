@@ -15,6 +15,7 @@ namespace Bomberman
         private MenuController menuController;
         private NetworkManager networkManager;
 
+        private Game m_game;
         private InputMapping m_mapping;
 
         public BmRootController(ContentManager contentManager)
@@ -22,6 +23,7 @@ namespace Bomberman
         {
             networkManager = new NetworkManager();
             m_mapping = new InputMapping();
+            m_game = new Game();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -255,6 +257,22 @@ namespace Bomberman
         public NetworkManager GetNetwork()
         {
             return networkManager;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
+        public static BmRootController Current
+        {
+            get { return BmApplication.RootController(); }
+        }
+
+        public Game game
+        {
+            get { return m_game; }
         }
 
         #endregion

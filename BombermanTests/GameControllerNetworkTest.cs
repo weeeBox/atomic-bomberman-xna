@@ -195,8 +195,7 @@ namespace BombermanTests
     {
         public GameControllerNetworkMock(Game game, GameSettings settings)
             : base(settings)
-        {
-            this.game = game;
+        {   
         }
 
         public new void WriteFieldState(NetBuffer buffer, NetChannel channel)

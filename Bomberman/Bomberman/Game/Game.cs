@@ -16,8 +16,6 @@ namespace Bomberman.Gameplay
 
     public class Game : BaseObject, IDestroyable
     {
-        private static Game s_current;
-
         private PlayerList      m_players;
         private Field           m_field;
         private Scheme          m_currentScheme;
@@ -28,8 +26,6 @@ namespace Bomberman.Gameplay
 
         public Game()
         {
-            s_current = this;
-
             m_timerManager = new TimerManager();
             m_players = new PlayerList(m_timerManager, CVars.cg_maxPlayers.intValue);
 
@@ -46,7 +42,6 @@ namespace Bomberman.Gameplay
         /// </summary>
         protected Game(int width, int height)
         {
-            s_current = this;
             m_field = new Field(width, height);
         }
 
@@ -155,7 +150,7 @@ namespace Bomberman.Gameplay
 
         public static Game Current
         {
-            get { return s_current; }
+            get { return BmRootController.Current.game; }
         }
 
         public TimerManager timerManager
@@ -165,7 +160,7 @@ namespace Bomberman.Gameplay
 
         public static PlayerList Players()
         {
-            return s_current.GetPlayers();
+            return Current.GetPlayers();
         }
 
         public Field Field
