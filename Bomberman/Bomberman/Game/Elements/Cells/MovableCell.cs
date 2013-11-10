@@ -393,15 +393,15 @@ namespace Bomberman.Game.Elements.Cells
 
         #region Equality
 
-        public virtual bool EqualsTo(MovableCell other)
+        public override bool EqualsTo(FieldCell other)
         {
             MovableCell movable = other as MovableCell;
             return base.EqualsTo(movable) &&
-                other.m_direction == m_direction &&
-                other.m_speed == m_speed &&
-                other.m_moveKx == m_moveKx &&
-                other.m_moveKy == m_moveKy &&
-                other.m_moving == m_moving;
+                movable.m_direction == m_direction &&
+                movable.m_speed == m_speed &&
+                movable.m_moveKx == m_moveKx &&
+                movable.m_moveKy == m_moveKy &&
+                movable.m_moving == m_moving;
         }
 
         #endregion
