@@ -1032,26 +1032,6 @@ namespace Bomberman.Game.Elements.Fields
             get { return m_game.timerManager; }
         }
 
-        public bool IsGameMuliplayerClient
-        {
-            get { return m_game.IsMuliplayerClient; }
-        }
-
-        public bool IsGameMuliplayerServer
-        {
-            get { return m_game.IsMuliplayerServer; }
-        }
-
-        public bool IsGameNetworkMultiplayer
-        {
-            get { return m_game.IsNetworkMultiplayer; }
-        }
-
-        public bool IsGameLocal
-        {
-            get { return m_game.IsLocal; }
-        }
-
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
