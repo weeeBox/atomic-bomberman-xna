@@ -1772,6 +1772,18 @@ namespace Bomberman.Game.Elements.Players
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Equality
+
+        public virtual bool EqualsTo(FieldCell other)
+        {
+            Player player = other as Player;
+            return base.EqualsTo(player) && player.GetIndex() == GetIndex();
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
         #region Helpers
 
         private Player[] GetTempArray(int size)

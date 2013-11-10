@@ -388,5 +388,22 @@ namespace Bomberman.Game.Elements.Cells
         }
 
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Equality
+
+        public virtual bool EqualsTo(MovableCell other)
+        {
+            MovableCell movable = other as MovableCell;
+            return base.EqualsTo(movable) &&
+                other.m_direction == m_direction &&
+                other.m_speed == m_speed &&
+                other.m_moveKx == m_moveKx &&
+                other.m_moveKy == m_moveKy &&
+                other.m_moving == m_moving;
+        }
+
+        #endregion
     }
 }

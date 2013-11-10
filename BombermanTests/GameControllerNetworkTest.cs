@@ -153,11 +153,7 @@ namespace BombermanTests
             Assert.AreEqual(players1.Count, players2.Count);
             for (int i = 0; i < players1.Count; ++i)
             {
-                Assert.AreEqual(players1[i].cx, players2[i].cx);
-                Assert.AreEqual(players1[i].cy, players2[i].cy);
-
-                Assert.AreEqual(players1[i].px, players2[i].px);
-                Assert.AreEqual(players1[i].py, players2[i].py);
+                Assert.IsTrue(players1[i].EqualsTo(players2[i]));
             }
 
             // check local/multiplayer
