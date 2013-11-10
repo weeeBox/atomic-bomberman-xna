@@ -64,12 +64,6 @@ namespace Bomberman.Game
             UnregisterNotifications();
         }
 
-        public void AddPlayer(Player player, int cx, int cy)
-        {
-            AddPlayer(player);
-            player.SetCell(cx, cy);
-        }
-
         public void AddPlayer(Player player)
         {
             m_field.AddPlayer(player);
@@ -110,6 +104,10 @@ namespace Bomberman.Game
             PostNotification(GameNotifications.RoundRestarted);
         }
 
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Round
+
         public void StartNextRound()
         {
             Assert.IsTrue(m_roundIndex < m_totalRounds - 1);
@@ -117,10 +115,6 @@ namespace Bomberman.Game
 
             Restart();
         }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Round
 
         public void EndRound()
         {
