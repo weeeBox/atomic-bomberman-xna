@@ -14,9 +14,9 @@ namespace Bomberman.Game.Elements.Fields
 
         private Game m_game;
 
-        private FieldCellArray cells;
+        private FieldCellArray m_cells;
 
-        private LinkedList<MovableCell> movableCells;
+        private LinkedList<MovableCell> m_movableCells;
         
         private LinkedList<FieldCell> m_tempCellsList;
         private List<MovableCell> m_tempMovableList;
@@ -35,7 +35,7 @@ namespace Bomberman.Game.Elements.Fields
             m_tempCellsList = new LinkedList<FieldCell>();
             m_tempMovableList = new List<MovableCell>();
 
-            movableCells = new LinkedList<MovableCell>();
+            m_movableCells = new LinkedList<MovableCell>();
 
             m_playerAnimations = new PlayerAnimations();
             m_bombAnimations = new BombAnimations();
@@ -47,22 +47,22 @@ namespace Bomberman.Game.Elements.Fields
         internal Field(int width, int height)
         {
             currentField = this;
-            cells = new FieldCellArray(width, height);
+            m_cells = new FieldCellArray(width, height);
 
             m_tempCellsList = new LinkedList<FieldCell>();
             m_tempMovableList = new List<MovableCell>();
 
-            movableCells = new LinkedList<MovableCell>();
+            m_movableCells = new LinkedList<MovableCell>();
         }
 
         public void Reset()
         {
             timerManager.CancelAll();
 
-            cells.Reset();
+            m_cells.Reset();
             players.Reset();
             
-            movableCells.Clear();
+            m_movableCells.Clear();
             
             m_tempCellsList.Clear();
             m_tempMovableList.Clear();
@@ -101,9 +101,9 @@ namespace Bomberman.Game.Elements.Fields
             int width = data.GetWidth();
             int height = data.GetHeight();
 
-            cells = new FieldCellArray(width, height);
+            m_cells = new FieldCellArray(width, height);
 
-            movableCells = new LinkedList<MovableCell>();
+            m_movableCells = new LinkedList<MovableCell>();
 
             for (int y = 0; y < height; ++y)
             {
@@ -236,7 +236,7 @@ namespace Bomberman.Game.Elements.Fields
         private int GetBrickCells(BrickCell[] array)
         {
             int count = 0;
-            FieldCellSlot[] slots = cells.slots;
+            FieldCellSlot[] slots = m_cells.slots;
             foreach (FieldCellSlot slot in slots)
             {   
                 BrickCell brickCell = slot.GetBrick();
@@ -255,7 +255,7 @@ namespace Bomberman.Game.Elements.Fields
         private int GetEmptySlots(FieldCellSlot[] array)
         {
             int count = 0;
-            FieldCellSlot[] slots = cells.slots;
+            FieldCellSlot[] slots = m_cells.slots;
             for (int i = 0; i < slots.Length; ++i)
             {
                 FieldCellSlot slot = slots[i];
@@ -294,7 +294,7 @@ namespace Bomberman.Game.Elements.Fields
 
         private void UpdateCells(float delta)
         {
-            FieldCellSlot[] slots = cells.slots;
+            FieldCellSlot[] slots = m_cells.slots;
             foreach (FieldCellSlot slot in slots)
             {
                 UpdateSlot(delta, slot);
@@ -330,7 +330,7 @@ namespace Bomberman.Game.Elements.Fields
         private void UpdateMoving(float delta)
         {
             Assert.IsTrue(m_tempMovableList.Count == 0);
-            foreach (MovableCell movable in movableCells)
+            foreach (MovableCell movable in m_movableCells)
             {
                 if (movable.IsMoving())
                 {
@@ -657,7 +657,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public FieldCellSlot GetSlot(int index)
         {
-            FieldCellSlot[] slots = cells.slots;
+            FieldCellSlot[] slots = m_cells.slots;
             return slots[index];
         }
 
@@ -668,12 +668,12 @@ namespace Bomberman.Game.Elements.Fields
 
         public FieldCellSlot GetSlot(int cx, int cy)
         {
-            return IsInsideField(cx, cy) ? cells.Get(cx, cy) : null;
+            return IsInsideField(cx, cy) ? m_cells.Get(cx, cy) : null;
         }
 
         public void AddCell(FieldCell cell)
         {
-            cells.Add(cell.GetCx(), cell.GetCy(), cell);
+            m_cells.Add(cell.GetCx(), cell.GetCy(), cell);
             if (cell.IsMovable())
             {
                 AddMovable(cell.AsMovable());
@@ -682,7 +682,7 @@ namespace Bomberman.Game.Elements.Fields
 
         public void RemoveCell(FieldCell cell)
         {   
-            cells.Remove(cell);
+            m_cells.Remove(cell);
             if (cell.IsMovable())
             {
                 RemoveMovable(cell.AsMovable());
@@ -709,15 +709,15 @@ namespace Bomberman.Game.Elements.Fields
                 cell.addedToList = true;
 
                 // added into the list sorted bombs first, players next
-                for (LinkedListNode<MovableCell> node = movableCells.First; node != null; node = node.Next)
+                for (LinkedListNode<MovableCell> node = m_movableCells.First; node != null; node = node.Next)
                 {
                     if (cell.type <= node.Value.type)
                     {
-                        movableCells.AddBefore(node, cell);
+                        m_movableCells.AddBefore(node, cell);
                         return;
                     }
                 }
-                movableCells.AddLast(cell);
+                m_movableCells.AddLast(cell);
             }
         }
 
@@ -725,7 +725,7 @@ namespace Bomberman.Game.Elements.Fields
         {
             if (cell.addedToList)
             {
-                movableCells.Remove(cell);
+                m_movableCells.Remove(cell);
                 cell.addedToList = false;
             }
         }
@@ -747,17 +747,17 @@ namespace Bomberman.Game.Elements.Fields
 
         private bool CheckCell(FieldCell cell)
         {
-            return cells.Contains(cell);
+            return m_cells.Contains(cell);
         }
 
         public FieldCellArray GetCells()
         {
-            return cells;
+            return m_cells;
         }
 
         public FieldCellSlot[] GetSlots()
         {
-            return cells.slots;
+            return m_cells.slots;
         }
 
         #endregion
@@ -808,7 +808,7 @@ namespace Bomberman.Game.Elements.Fields
         {
             // copy to the temp list
             Assert.IsTrue(m_tempMovableList.Count == 0);
-            foreach (MovableCell movable in movableCells)
+            foreach (MovableCell movable in m_movableCells)
             {   
                 m_tempMovableList.Add(movable);
             }
@@ -821,7 +821,7 @@ namespace Bomberman.Game.Elements.Fields
             m_tempMovableList.Clear();
 
             // copy to the temp list
-            foreach (MovableCell movable in movableCells)
+            foreach (MovableCell movable in m_movableCells)
             {
                 m_tempMovableList.Add(movable);
             }
@@ -989,12 +989,12 @@ namespace Bomberman.Game.Elements.Fields
 
         public int GetWidth()
         {
-            return cells.GetWidth();
+            return m_cells.GetWidth();
         }
 
         public int GetHeight()
         {
-            return cells.GetHeight();
+            return m_cells.GetHeight();
         }
 
         public float GetMinPx()
