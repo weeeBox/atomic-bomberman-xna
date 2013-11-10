@@ -25,10 +25,11 @@ namespace Bomberman.Game
     {
         private static Game s_current;
 
-        private Field m_field;
+        private PlayerList      m_players;
+        private Field           m_field;
+        private Scheme          m_currentScheme;
+        private TimerManager    m_timerManager;
         private MultiplayerMode m_multiplayerMode;
-
-        private Scheme m_currentScheme;
 
         private int m_roundIndex;
         private int m_totalRounds;
@@ -36,6 +37,9 @@ namespace Bomberman.Game
         public Game(MultiplayerMode mode)
         {
             s_current = this;
+
+            m_timerManager = new TimerManager();
+            m_players = new PlayerList(m_timerManager, CVars.cg_maxPlayers.intValue);
 
             m_multiplayerMode = mode;
             m_field = new Field(this);
@@ -73,17 +77,17 @@ namespace Bomberman.Game
 
         public PlayerList GetPlayers()
         {
-            return m_field.GetPlayers();
+            return m_players;
         }
 
         public List<Player> GetPlayersList()
         {
-            return m_field.GetPlayers().list;
+            return m_players.list;
         }
 
         public int GetPlayersCount()
         {
-            return m_field.GetPlayers().GetCount();
+            return m_players.GetCount();
         }
 
         /* Loads field from scheme: setups bricks, powerups and players */
@@ -167,6 +171,11 @@ namespace Bomberman.Game
         public static Game Current
         {
             get { return s_current; }
+        }
+
+        public TimerManager timerManager
+        {
+            get { return m_timerManager; }
         }
 
         public static PlayerList Players()
