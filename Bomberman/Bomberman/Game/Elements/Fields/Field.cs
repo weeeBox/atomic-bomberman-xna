@@ -54,11 +54,13 @@ namespace Bomberman.Gameplay.Elements.Fields
 
         public void Reset()
         {
-            timerManager.CancelAll();
+            timerManager.CancelAll(this);
 
-            m_cells.Reset();
-            players.Reset();
-            
+            if (m_cells != null)
+            {
+                m_cells.Reset();
+            }
+
             m_movableCells.Clear();
             
             m_tempCellsList.Clear();

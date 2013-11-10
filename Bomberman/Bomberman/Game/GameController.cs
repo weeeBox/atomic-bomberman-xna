@@ -89,6 +89,7 @@ namespace Bomberman.Gameplay
             Assert.IsNotNull(gameCommands);
             GetConsole().UnregisterCommands(gameCommands);
             gameCommands = null;
+            game.Reset();
 
             base.OnStop();
         }

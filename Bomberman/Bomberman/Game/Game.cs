@@ -50,8 +50,12 @@ namespace Bomberman.Gameplay
 
         public void Reset()
         {
+            m_timerManager.CancelAll(this);
+
             m_roundIndex = 0;
             m_totalRounds = CVars.roundsToWin.intValue;
+            m_players.Reset();
+            m_field.Reset();
         }
 
         #endregion
