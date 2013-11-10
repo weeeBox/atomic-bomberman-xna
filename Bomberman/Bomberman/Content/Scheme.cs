@@ -13,8 +13,7 @@ namespace Bomberman.Content
         public int brickDensity;
 
         public Scheme()
-        {
-            
+        {   
         }
 
         public String GetName()

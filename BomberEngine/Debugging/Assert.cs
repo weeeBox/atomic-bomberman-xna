@@ -67,7 +67,7 @@ namespace BomberEngine
         }
 
         [Conditional("DEBUG")]
-        public static void IsRange(int index, Array array)
+        public static void IsIndex(int index, Array array)
         {
             System.Diagnostics.Debug.Assert(index >= 0 && index < array.Length, "Assertion failed", "Index {0} is out of range {1}..{2}", index, 0, array.Length);
         }
@@ -75,7 +75,13 @@ namespace BomberEngine
         [Conditional("DEBUG")]
         public static void IsRange(int index, int min, int max)
         {
-            System.Diagnostics.Debug.Assert(index >= min && index < max, "Assertion failed", "Index {0} is out of range {1}..{2}", index, min, max);
+            System.Diagnostics.Debug.Assert(index >= min && index <= max, "Assertion failed", "Index {0} is out of range {1}..{2}", index, min, max);
+        }
+
+        [Conditional("DEBUG")]
+        public static void IsRange(int index, uint min, uint max)
+        {
+            System.Diagnostics.Debug.Assert(index >= min && index <= max, "Assertion failed", "Index {0} is out of range {1}..{2}", index, min, max);
         }
 
         [Conditional("DEBUG")]

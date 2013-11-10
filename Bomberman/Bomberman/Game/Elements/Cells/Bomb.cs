@@ -773,12 +773,29 @@ namespace Bomberman.Game.Elements.Cells
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Equality
+
+        public override bool EqualsTo(FieldCell other)
+        {
+            Bomb bomb = other as Bomb;
+            return base.EqualsTo(bomb) && bomb.playerIndex == playerIndex;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
         #region Properties
 
         public Player player
         {
             get { return m_player; }
             set { m_player = value; }
+        }
+
+        public int playerIndex
+        {
+            get { return m_player.GetIndex(); }
         }
 
         public bool isTrigger

@@ -46,9 +46,24 @@ namespace Bomberman.Game
             RegisterNotification(Notifications.ConsoleVariableChanged, ConsoleVariableChanged);
         }
 
+        /// <summary>
+        /// Mock constructor
+        /// </summary>
+        protected Game(int width, int height)
+        {
+            s_current = this;
+            m_field = new Field(width, height);
+        }
+
         public void Destroy()
         {
             UnregisterNotifications();
+        }
+
+        public void AddPlayer(Player player, int cx, int cy)
+        {
+            AddPlayer(player);
+            player.SetCell(cx, cy);
         }
 
         public void AddPlayer(Player player)

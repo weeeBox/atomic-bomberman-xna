@@ -67,6 +67,17 @@ namespace Bomberman.Game.Elements.Fields
 
         //////////////////////////////////////////////////////////////////////////////
 
+        #region Equality
+
+        public virtual bool EqualsTo(FieldCell other)
+        {
+            return other != null && other.type == type && other.px == px && other.py == py;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
         #region Cell
 
         public void SetCell()

@@ -6,6 +6,7 @@ using Bomberman.Game.Elements.Cells;
 using Bomberman.Game.Elements.Fields;
 using Bomberman.Game.Elements.Players;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using BombermanTests.Mocks;
 
 namespace BombermanTests.TestDiseases
 {
@@ -275,14 +276,6 @@ namespace BombermanTests.TestDiseases
         public void AssertNotInfected(Diseases disease)
         {
             Assert.IsFalse(IsInfected(disease));
-        }
-    }
-
-    class FieldMock : Field
-    {
-        public FieldMock()
-            : base(15, 11)
-        {
         }
     }
 }

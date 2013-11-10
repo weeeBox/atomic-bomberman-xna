@@ -6,6 +6,7 @@ using Bomberman.Game.Elements.Cells;
 using Bomberman.Game.Elements.Fields;
 using Bomberman.Game.Elements.Items;
 using Lidgren.Network;
+using Bomberman.Networking;
 
 namespace Bomberman.Game.Elements.Players
 {
@@ -63,6 +64,7 @@ namespace Bomberman.Game.Elements.Players
         private float m_calculatedY;
 
         private PlayerStatistics m_statistics;
+        private NetChannel m_netChannel;
 
         private PlayerAnimations m_animations;
         private AnimationInstance m_currentAnimation;
@@ -1808,6 +1810,12 @@ namespace Bomberman.Game.Elements.Players
         {
             get { return m_ready; }
             set { m_ready = value; }
+        }
+
+        public NetChannel NetChannel
+        {
+            get { return m_netChannel; }
+            set { m_netChannel = value; }
         }
 
         public float calculatedX

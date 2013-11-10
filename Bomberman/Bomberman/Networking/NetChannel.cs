@@ -18,11 +18,24 @@ namespace Bomberman.Networking
         public int incomingSequence;        // the last received packet sequence
         public int acknowledgedSequence;    // the last acknowledged packet (by remote peer)
 
+        public NetChannel(NetConnection connection, Player player)            
+        {
+            m_connection = connection;
+
+            m_players = new List<Player>(1);
+            m_players[0] = player;
+
+            player.NetChannel = this;
+
+            Reset();
+        }
+
         public NetChannel(NetConnection connection, List<Player> players)
         {
             m_connection = connection;
             m_players = players;
 
+            SetChannel(players);
             Reset();
         }
 
@@ -38,6 +51,20 @@ namespace Bomberman.Networking
             acknowledgedSequence    = 0;
             needsFieldState         = true;
             needsRoundResults       = true;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Helpers
+
+        private void SetChannel(List<Player> players)
+        {
+            for (int i = 0; i < players.Count; ++i)
+            {
+                players[i].NetChannel = this;
+            }
         }
 
         #endregion

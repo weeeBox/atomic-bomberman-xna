@@ -10,8 +10,7 @@ namespace Bomberman.Game.Multiplayer
 {
     public class GameControllerServer : GameControllerNetwork
     {
-        private IDictionary<NetConnection, Player> m_channelLookup;
-        private List<Player> m_channels;
+        private List<NetChannel> m_channels;
 
         public GameControllerServer(GameSettings settings) :
             base(settings)
@@ -26,8 +25,7 @@ namespace Bomberman.Game.Multiplayer
 
             game = new Game(MultiplayerMode.Server);
 
-            m_channelLookup = new Dictionary<NetConnection, Player>();
-            m_channels = new List<Player>();
+            m_channels = new List<NetChannel>();
 
             // local players are ready
             int playerIndex = 0;
@@ -40,7 +38,6 @@ namespace Bomberman.Game.Multiplayer
                 game.AddPlayer(player);
             }
 
-
             // network players are not ready
             List<NetConnection> connections = GetServer().GetConnections();
             for (int i = 0; i < connections.Count; ++i)
@@ -50,7 +47,7 @@ namespace Bomberman.Game.Multiplayer
                 player.ResetNetworkState();
                 game.AddPlayer(player);
 
-                AddPlayerConnection(connections[i], player);
+                AddChannel(connections[i], new NetChannel(connections[i], player));
             }
 
             LoadField(settings.scheme);
@@ -66,7 +63,6 @@ namespace Bomberman.Game.Multiplayer
 
         protected override void OnStop()
         {
-            m_channelLookup = null;
             m_channels = null;
             Application.CancelAllTimers(this);
 
@@ -99,17 +95,17 @@ namespace Bomberman.Game.Multiplayer
                 {
                     for (int i = 0; i < m_channels.Count; ++i)
                     {
-                        Player player = m_channels[i];
+                        NetChannel channel = m_channels[i];
                         NetOutgoingMessage message = CreateMessage(PeerMessageId.RoundStart);
 
                         WriteReadyFlags(message);
 
-                        if (player.needsFieldState)
+                        if (channel.needsFieldState)
                         {   
-                            WriteFieldState(message, player);
+                            WriteFieldState(message, channel);
                         }
 
-                        NetConnection connection = player.connection;
+                        NetConnection connection = channel.connection;
                         Assert.IsTrue(connection != null);
 
                         SendMessage(message, connection);
@@ -122,18 +118,17 @@ namespace Bomberman.Game.Multiplayer
                     NetOutgoingMessage payloadMessage = CreateMessage();
                     WritePlayingMessage(payloadMessage);
 
-                    ++m_lastPacketId;
-
                     for (int i = 0; i < m_channels.Count; ++i)
                     {
-                        Player player = m_channels[i];
+                        NetChannel channel = m_channels[i];
+                        ++channel.outgoingSequence;
 
                         NetOutgoingMessage message = CreateMessage(PeerMessageId.Playing);
-                        message.Write(m_lastPacketId);              // packet to be acknowledged by client
-                        message.Write(player.incomingSequence); // package acknowledged by server
+                        message.Write(channel.outgoingSequence);    // to be acknowledged by client
+                        message.Write(channel.incomingSequence);    // last acknowledged by server
                         message.Write(payloadMessage);
 
-                        NetConnection connection = player.connection;
+                        NetConnection connection = channel.connection;
                         Assert.IsTrue(connection != null);
 
                         SendMessage(message, connection);
@@ -150,18 +145,18 @@ namespace Bomberman.Game.Multiplayer
 
                     for (int i = 0; i < m_channels.Count; ++i)
                     {
-                        Player player = m_channels[i];
+                        NetChannel channel = m_channels[i];
 
                         NetOutgoingMessage message = CreateMessage(PeerMessageId.RoundEnd);
 
                         WriteReadyFlags(message);
 
-                        if (player.needsRoundResults)
+                        if (channel.needsRoundResults)
                         {
                             message.Write(payload);
                         }
 
-                        NetConnection connection = player.connection;
+                        NetConnection connection = channel.connection;
                         Assert.IsTrue(connection != null);
 
                         SendMessage(message, connection);
@@ -199,17 +194,20 @@ namespace Bomberman.Game.Multiplayer
 
         private void ReadPlayingMessage(Peer peer, NetIncomingMessage msg)
         {
-            Player player = FindPlayer(msg.SenderConnection);
-            player.IsReady = true;
+            NetChannel channel = GetChannel(msg.SenderConnection);
+            channel.IsReady = true;
 
-            player.incomingSequence = msg.ReadInt32();
-            player.acknowledgedSequence = msg.ReadInt32();
-            int actions = msg.ReadInt32((int)PlayerAction.Count);
+            channel.incomingSequence = msg.ReadInt32();
+            channel.acknowledgedSequence = msg.ReadInt32();
 
-            PlayerNetworkInput input = player.input as PlayerNetworkInput;
-            Assert.IsTrue(input != null);
+            List<Player> players = channel.players;
+            for (int i = 0; i < players.Count; ++i)
+            {
+                int actions = msg.ReadInt32((int)PlayerAction.Count);
 
-            input.SetNetActionBits(actions);
+                PlayerNetworkInput input = ClassUtils.Cast<PlayerNetworkInput>(players[i].input);
+                input.SetNetActionBits(actions);
+            }
         }
 
         private void ReadRoundStartMessage(Peer peer, NetIncomingMessage msg)
@@ -217,11 +215,11 @@ namespace Bomberman.Game.Multiplayer
             State state = GetState();
             if (state == State.RoundStart)
             {
-                Player player = FindPlayer(msg.SenderConnection);
-                player.IsReady = msg.ReadBoolean();
-                player.needsFieldState = msg.ReadBoolean();
+                NetChannel channel = GetChannel(msg.SenderConnection);
+                channel.IsReady = msg.ReadBoolean();
+                channel.needsFieldState = msg.ReadBoolean();
 
-                if (player.IsReady && AllPlayersAreReady())
+                if (channel.IsReady && AllPlayersAreReady())
                 {
                     Log.d("Clients are ready to play");
                     SetState(State.Playing);
@@ -238,12 +236,12 @@ namespace Bomberman.Game.Multiplayer
             State state = GetState();
             if (state == State.RoundEnd)
             {
-                Player player = FindPlayer(msg.SenderConnection);
+                NetChannel channel = GetChannel(msg.SenderConnection);
 
-                player.IsReady = msg.ReadBoolean();
-                player.needsRoundResults = msg.ReadBoolean();
+                channel.IsReady = msg.ReadBoolean();
+                channel.needsRoundResults = msg.ReadBoolean();
 
-                if (player.IsReady && AllPlayersAreReady())
+                if (channel.IsReady && AllPlayersAreReady())
                 {
                     if (game.IsGameEnded)
                     {
@@ -277,11 +275,9 @@ namespace Bomberman.Game.Multiplayer
         private void ClientDisconnectedNotification(Notification notification)
         {
             NetConnection connection = notification.GetData<NetConnection>();
+            Assert.IsNotNull(connection);
 
-            Player player = FindPlayer(connection);
-            Assert.IsTrue(player != null);
-
-            RemovePlayerConnection(connection);
+            RemoveChannel(connection);
             // TODO: notify gameplay
 
             if (CVars.g_startupMultiplayerMode.value != "server")
@@ -294,49 +290,28 @@ namespace Bomberman.Game.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Player connection
+        #region Channels
 
-        private void AddPlayerConnection(NetConnection connection, Player player)
+        private void AddChannel(NetConnection connection, NetChannel channel)
         {
-            Assert.IsTrue(!m_channelLookup.ContainsKey(connection));
-            m_channelLookup.Add(connection, player);
+            Assert.IsNull(connection.Tag);
+            connection.Tag = channel;
 
-            Assert.IsTrue(player.connection == null);
-            player.connection = connection;
-
-            Assert.IsTrue(!m_channels.Contains(player));
-            m_channels.Add(player);
+            Assert.IsFalse(m_channels.Contains(channel));
+            m_channels.Add(channel);
         }
 
-        private void RemovePlayerConnection(NetConnection connection)
+        private void RemoveChannel(NetConnection connection)
         {
-            Player player = FindPlayer(connection);
-            Assert.IsTrue(player != null && player.connection == connection);
-            player.connection = null;
+            NetChannel channel = GetChannel(connection);
 
-            m_channelLookup.Remove(connection);
-
-            Assert.IsTrue(m_channels.Contains(player));
-            m_channels.Remove(player);
+            bool removed = m_channels.Remove(channel);
+            Assert.IsTrue(removed);
         }
 
-        private Player TryFindPlayer(NetConnection connection)
+        private NetChannel GetChannel(NetConnection connection)
         {
-            Player player;
-            if (m_channelLookup.TryGetValue(connection, out player))
-            {
-                return player;
-            }
-
-            return null;
-        }
-
-        private Player FindPlayer(NetConnection connection)
-        {
-            Player player = TryFindPlayer(connection);
-            Assert.IsTrue(player != null);
-
-            return player;
+            return ClassUtils.Cast<NetChannel>(connection.Tag);
         }
 
         #endregion

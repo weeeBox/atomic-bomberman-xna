@@ -48,6 +48,10 @@
     <Compile Include="DiseaseListTest.cs" />
     <Compile Include="FlameCellTest.cs" />
     <Compile Include="FieldCellTest.cs" />
+    <Compile Include="GameControllerNetworkTest.cs" />
+    <Compile Include="Mocks\FieldMock.cs" />
+    <Compile Include="Mocks\GameMock.cs" />
+    <Compile Include="Mocks\SchemeMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestBase.cs" />
   </ItemGroup>
@@ -59,6 +63,10 @@
     <ProjectReference Include="..\Bomberman\Bomberman\Bomberman.csproj">
       <Project>{25BF6344-885F-4CC0-99CF-9CE2F95C539A}</Project>
       <Name>Bomberman</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lidgren.Network\Lidgren.Network.csproj">
+      <Project>{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}</Project>
+      <Name>Lidgren.Network</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

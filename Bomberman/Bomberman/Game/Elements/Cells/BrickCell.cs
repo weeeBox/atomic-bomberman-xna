@@ -18,11 +18,11 @@ namespace Bomberman.Game.Elements.Cells
             if (!hit)
             {
                 hit = true;
-                GetField().ScheduleTimer(Destroy, 0.5f);
+                GetField().ScheduleTimer(DestroyCallback, 0.5f);
             }
         }
 
-        private void Destroy()
+        private void DestroyCallback()
         {
             GetField().DestroyBrick(this);
         }
@@ -46,5 +46,19 @@ namespace Bomberman.Game.Elements.Cells
         {
             return true;
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Equality
+
+        public override bool EqualsTo(FieldCell other)
+        {
+            BrickCell brick = other as BrickCell;
+            return base.EqualsTo(brick) && brick.powerup == powerup;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
     }
 }

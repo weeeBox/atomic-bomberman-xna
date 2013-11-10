@@ -41,13 +41,11 @@ namespace Bomberman.Game.Multiplayer
         }
 
         private State m_state;
-        protected int m_lastPacketId;
 
         public GameControllerNetwork(GameSettings settings)
             : base(settings)
         {
             m_state = State.Undefined;
-            m_lastPacketId = -1;
         }
 
         protected override void OnStart()
@@ -70,81 +68,56 @@ namespace Bomberman.Game.Multiplayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        private const byte CELL_FLAME   = 0;
-        private const byte CELL_BRICK   = 1;
-        private const byte CELL_POWERUP = 2;
-
-        private static readonly int BITS_FOR_STATIC_CELL = NetUtility.BitsToHoldUInt(2);
-        private static readonly int BITS_FOR_POWERUP = NetUtility.BitsToHoldUInt(Powerups.Count - 1);
-
         #region "RoundStart" message
 
-        protected void WriteFieldState(NetBuffer buffer, Player player)
-        {   
-            // bricks & powerups
-            FieldCellSlot[] slots = game.Field.GetCells().slots;
-            for (int i = 0; i < slots.Length; ++i)
-            {
-                BrickCell brick = slots[i].GetBrick();
-                if (brick != null)
-                {
-                    bool hasPowerup = brick.HasPowerup();
-                    buffer.Write(hasPowerup);
-                    if (hasPowerup)
-                    {
-                        buffer.Write((byte)brick.powerup);
-                    }
-                }
-            }
+        protected void WriteFieldState(NetBuffer buffer, NetChannel channel)
+        {
+            // field
+            WriteFieldState(buffer, game.Field);
 
             // players
             List<Player> players = game.GetPlayers().list;
-
-            int senderIndex = players.IndexOf(player);
-            Assert.IsTrue(senderIndex != -1);
-
-            buffer.Write((byte)senderIndex);
             buffer.Write((byte)players.Count);
             for (int i = 0; i < players.Count; ++i)
             {
                 Player p = players[i];
-                buffer.Write((byte)p.cx);
-                buffer.Write((byte)p.cy);
+                buffer.WriteCellCords(p);
+                buffer.Write(p.NetChannel == channel);
             }
         }
 
         protected void ReadFieldState(NetBuffer buffer)
         {
-            // bricks & powerups
-            FieldCellSlot[] slots = game.Field.GetCells().slots;
-            for (int i = 0; i < slots.Length; ++i)
-            {
-                BrickCell brick = slots[i].GetBrick();
-                if (brick != null)
-                {
-                    bool hasPowerup = buffer.ReadBoolean();
-                    if (hasPowerup)
-                    {
-                        brick.powerup = buffer.ReadByte();
-                    }
-                }
-            }
+            // field
+            ReadFieldState(buffer, game.Field);
 
             // players
-            int senderIndex = buffer.ReadByte();
             int playersCount = buffer.ReadByte();
-            for (int i = 0; i < playersCount; ++i)
+            for (int i = 0, localIndex = 0; i < playersCount; ++i)
             {
+                int cx = buffer.ReadCellCord();
+                int cy = buffer.ReadCellCord();
+                bool isLocal = buffer.ReadBoolean();
+
                 Player player = new Player(i);
-                int cx = buffer.ReadByte();
-                int cy = buffer.ReadByte();
+                
+                // position
                 player.SetCell(cx, cy);
-                if (i != senderIndex)
+                game.AddPlayer(player);
+
+                // input
+                PlayerInput input;
+                if (isLocal)
                 {
-                    player.SetPlayerInput(new PlayerNetworkInput());
+                    Assert.IsIndex(localIndex, settings.inputEntries);
+                    input = settings.inputEntries[localIndex++].input;
+                }
+                else
+                {
+                    input = new PlayerNetworkInput();
                 }
 
-                game.AddPlayer(player);
+                player.SetPlayerInput(input);
             }
         }
 
@@ -204,8 +177,6 @@ namespace Bomberman.Game.Multiplayer
 
         private void WriteFieldState(NetBuffer buffer, Field field)
         {
-            int bitsForPlayerIndex = NetUtility.BitsToHoldUInt((uint)(field.GetPlayers().GetCount()-1));
-
             FieldCellSlot[] slots = field.GetCells().slots;
             for (int i = 0; i < slots.Length; ++i)
             {
@@ -215,29 +186,30 @@ namespace Bomberman.Game.Multiplayer
                 buffer.Write(shouldWrite);
 
                 if (shouldWrite)
-                {   
+                {
+                    buffer.WriteStaticCellType(staticCell.type);
                     switch (staticCell.type)
                     {
                         case FieldCellType.Brick:
                         {
                             BrickCell brick = staticCell.AsBrick();
-                            buffer.Write(CELL_BRICK, BITS_FOR_STATIC_CELL);
+                            buffer.WritePowerup(brick.powerup, true);
                             break;
                         }
+
                         case FieldCellType.Powerup:
                         {
                             PowerupCell powerup = staticCell.AsPowerup();
-                            buffer.Write(CELL_POWERUP, BITS_FOR_STATIC_CELL);
-                            buffer.Write(powerup.powerup, BITS_FOR_POWERUP);
+                            buffer.WritePowerup(powerup.powerup);
                             break;
                         }
+
                         case FieldCellType.Flame:
                         {
                             FlameCell flame = staticCell.AsFlame();
-                            buffer.Write(CELL_FLAME, BITS_FOR_STATIC_CELL);
-                            buffer.Write(flame.player.GetIndex(), bitsForPlayerIndex);
+                            buffer.WritePlayerIndex(flame.player);
                             break;
-                        }  
+                        }
                     }
                 }
             }
@@ -249,10 +221,9 @@ namespace Bomberman.Game.Multiplayer
             buffer.Write(alive);
             if (alive)
             {
-                buffer.Write(p.px);
-                buffer.Write(p.py);
+                buffer.WriteCellCords(p);
                 buffer.Write(p.IsMoving());
-                buffer.Write((byte)p.direction);
+                buffer.Write(p.direction);
                 buffer.Write(p.GetSpeed());
 
                 // powerups
@@ -295,7 +266,7 @@ namespace Bomberman.Game.Multiplayer
                 msg.WriteTime(NetTime.Now + b.timeRemains, false);
                 msg.Write(b.px);
                 msg.Write(b.py);
-                msg.Write((byte)b.direction);
+                msg.Write(b.direction);
                 msg.Write(b.GetSpeed());
                 msg.Write(b.IsJelly());
                 msg.Write(b.IsTrigger());
@@ -314,30 +285,31 @@ namespace Bomberman.Game.Multiplayer
             }
         }
 
-        private void ReadFieldState(NetBuffer msg, Field field)
+        private void ReadFieldState(NetBuffer buffer, Field field)
         {
-            int bitsForPlayerIndex = NetUtility.BitsToHoldUInt((uint)(field.GetPlayers().GetCount() - 1));
-
             FieldCellSlot[] slots = field.GetCells().slots;
             for (int i = 0; i < slots.Length; ++i)
             {
                 FieldCellSlot slot = slots[i];
 
-                bool hasStaticCell = msg.ReadBoolean();
+                bool hasStaticCell = buffer.ReadBoolean();
                 if (hasStaticCell)
-                {   
-                    byte type = msg.ReadByte(BITS_FOR_STATIC_CELL);
+                {
+                    FieldCellType type = buffer.ReadStaticCellType();
                     switch (type)
                     {
-                        case CELL_BRICK:
+                        case FieldCellType.Brick:
                         {
-                            Assert.IsTrue(slot.ContainsBrick());
+                            BrickCell brick = slot.GetBrick();
+                            Assert.IsNotNull(brick);
+
+                            brick.powerup = buffer.ReadPowerup(true);
                             break;
                         }
 
-                        case CELL_POWERUP:
+                        case FieldCellType.Powerup:
                         {
-                            int powerup = msg.ReadInt32(BITS_FOR_POWERUP);
+                            int powerup = buffer.ReadPowerup();
                             if (slot.staticCell == null)
                             {
                                 field.AddCell(new PowerupCell(powerup, slot.cx, slot.cy));
@@ -350,9 +322,9 @@ namespace Bomberman.Game.Multiplayer
                             break;
                         }
 
-                        case CELL_FLAME:
+                        case FieldCellType.Flame:
                         {
-                            int playerIndex = msg.ReadInt32(bitsForPlayerIndex);
+                            int playerIndex = buffer.ReadPlayerIndex();
                             if (slot.staticCell == null)
                             {
                                 Player player = field.GetPlayers().Get(playerIndex);
@@ -383,7 +355,7 @@ namespace Bomberman.Game.Multiplayer
                 float px = msg.ReadFloat();
                 float py = msg.ReadFloat();
                 bool moving = msg.ReadBoolean();
-                Direction direction = (Direction)msg.ReadByte();
+                Direction direction = msg.ReadDirection();
                 float speed = msg.ReadFloat();
 
                 // player state
@@ -442,7 +414,7 @@ namespace Bomberman.Game.Multiplayer
                 float remains = (float)(msg.ReadTime(false) - NetTime.Now);
                 float px = msg.ReadFloat();
                 float py = msg.ReadFloat();
-                Direction dir = (Direction)msg.ReadByte();
+                Direction dir = msg.ReadDirection();
                 float speed = msg.ReadFloat();
                 bool jelly = msg.ReadBoolean();
                 bool trigger = msg.ReadBoolean();
@@ -677,6 +649,113 @@ namespace Bomberman.Game.Multiplayer
 
                 m_textView.SetText(buf.ToString());
             }
+        }
+    }
+
+    public static class CellNetBuffer
+    {
+        private static readonly uint MaxStaticCellType  = (uint)FieldCellType.Flame;
+        private static readonly uint MaxCellCord        = 15;
+        private static readonly uint MaxPlayerIndex     = 15;
+        private static readonly uint MaxPowerupValue    = Powerups.Count - 1;
+        private static readonly uint MaxDirectionValue  = (uint)Direction.Count - 1;
+
+        private static readonly int CellStaticTypeBitsCount = NetUtility.BitsToHoldUInt(MaxStaticCellType);
+        private static readonly int CellCordBitsCount       = NetUtility.BitsToHoldUInt(MaxCellCord);
+
+        private static readonly int PlayerIndexBitsCount    = NetUtility.BitsToHoldUInt(MaxPlayerIndex);
+        private static readonly int PowerupValueBitsCount   = NetUtility.BitsToHoldUInt(MaxPowerupValue);
+
+        private static readonly int DirectionBitsCount      = NetUtility.BitsToHoldUInt(MaxDirectionValue);
+
+        // TODO: use bit packing
+
+        public static void WriteCellCords(this NetBuffer buffer, FieldCell cell)
+        {
+            buffer.WriteCellCord(cell.cx); 
+            buffer.WriteCellCord(cell.cy);
+        }
+
+        public static void WriteCellCord(this NetBuffer buffer, int value)
+        {
+            Assert.IsRange(value, 0, MaxCellCord);
+            buffer.Write((byte)value, CellCordBitsCount);
+        }
+
+        public static int ReadCellCord(this NetBuffer buffer)
+        {
+            return buffer.ReadByte(CellCordBitsCount);
+        }
+
+        public static void WriteStaticCellType(this NetBuffer buffer, FieldCellType type)
+        {
+            Assert.IsRange((int)type, 0, MaxStaticCellType);
+            buffer.Write((byte)type, CellStaticTypeBitsCount);
+        }
+
+        public static FieldCellType ReadStaticCellType(this NetBuffer buffer)
+        {
+            return (FieldCellType)buffer.ReadByte(CellStaticTypeBitsCount);
+        }
+
+        public static void WritePowerup(this NetBuffer buffer, int value, bool writeFlag = false)
+        {
+            if (writeFlag)
+            {
+                bool valid = value != Powerups.None;
+                buffer.Write(valid);
+
+                if (valid)
+                {
+                    Assert.IsRange(value, 0, MaxPowerupValue);
+                    buffer.Write((byte)value, PowerupValueBitsCount);
+                }
+            }
+            else
+            {
+                Assert.IsRange(value, 0, MaxPowerupValue);
+                buffer.Write((byte)value, PowerupValueBitsCount);
+            }
+        }
+
+        public static int ReadPowerup(this NetBuffer buffer, bool readFlag = false)
+        {
+            if (readFlag)
+            {
+                bool valid = buffer.ReadBoolean();
+                if (!valid)
+                {
+                    return Powerups.None;
+                }
+            }
+            return buffer.ReadByte(PowerupValueBitsCount);
+        }
+
+        public static void WritePlayerIndex(this NetBuffer buffer, Player player)
+        {   
+            buffer.WritePlayerIndex(player.GetIndex());
+        }
+
+        public static void WritePlayerIndex(this NetBuffer buffer, int value)
+        {
+            Assert.IsRange(value, 0, MaxPlayerIndex);
+            buffer.Write((byte)value, PlayerIndexBitsCount);
+        }
+
+        public static int ReadPlayerIndex(this NetBuffer buffer)
+        {
+            return buffer.ReadByte(PlayerIndexBitsCount);
+        }
+
+        public static void Write(this NetBuffer buffer, Direction direction)
+        {
+            Assert.IsRange((int)direction, 0, MaxDirectionValue);
+            buffer.Write((byte)direction, DirectionBitsCount);
+        }
+
+        public static Direction ReadDirection(this NetBuffer buffer)
+        {
+            return (Direction)buffer.ReadByte(DirectionBitsCount);
         }
     }
 }
