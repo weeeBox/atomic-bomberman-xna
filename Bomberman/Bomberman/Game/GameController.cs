@@ -512,7 +512,7 @@ namespace Bomberman.Game
         {
             base.OnStart();
 
-            game = new Game(MultiplayerMode.None);
+            game = new Game();
 
             GameSettings.InputEntry[] entries = settings.inputEntries;
             for (int i = 0; i < entries.Length; ++i)

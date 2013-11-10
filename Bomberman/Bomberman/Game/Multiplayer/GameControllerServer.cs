@@ -23,7 +23,7 @@ namespace Bomberman.Game.Multiplayer
 
             Application.SetWindowTitle("Server");
 
-            game = new Game(MultiplayerMode.Server);
+            game = new Game();
 
             m_channels = new List<NetChannel>();
 

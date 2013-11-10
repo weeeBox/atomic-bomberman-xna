@@ -14,13 +14,6 @@ namespace Bomberman.Game
         public static readonly String GameEnded      = "GameEnded";
     }
 
-    public enum MultiplayerMode
-    {
-        None,
-        Client,
-        Server,
-    }
-
     public class Game : BaseObject, IDestroyable
     {
         private static Game s_current;
@@ -29,19 +22,17 @@ namespace Bomberman.Game
         private Field           m_field;
         private Scheme          m_currentScheme;
         private TimerManager    m_timerManager;
-        private MultiplayerMode m_multiplayerMode;
 
         private int m_roundIndex;
         private int m_totalRounds;
 
-        public Game(MultiplayerMode mode)
+        public Game()
         {
             s_current = this;
 
             m_timerManager = new TimerManager();
             m_players = new PlayerList(m_timerManager, CVars.cg_maxPlayers.intValue);
 
-            m_multiplayerMode = mode;
             m_field = new Field(this);
 
             m_roundIndex = 0;
