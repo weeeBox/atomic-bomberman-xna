@@ -182,26 +182,6 @@ namespace Bomberman.Game
             get { return m_field; }
         }
 
-        public bool IsMuliplayerClient
-        {
-            get { return m_multiplayerMode == MultiplayerMode.Client; }
-        }
-
-        public bool IsMuliplayerServer
-        {
-            get { return m_multiplayerMode == MultiplayerMode.Server; }
-        }
-
-        public bool IsNetworkMultiplayer
-        {
-            get { return IsMuliplayerClient || IsMuliplayerServer; }
-        }
-
-        public bool IsLocal
-        {
-            get { return m_multiplayerMode == MultiplayerMode.None; }
-        }
-
         public bool IsGameEnded
         {
             get { return m_roundIndex == m_totalRounds - 1; }
