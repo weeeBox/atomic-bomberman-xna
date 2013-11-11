@@ -11,6 +11,7 @@ namespace Bomberman.Gameplay.Multiplayer
     public class GameControllerClient : GameControllerNetwork
     {
         private const int SENT_HISTORY_SIZE = 32;
+        private const int SENT_HISTORY_MASK = SENT_HISTORY_SIZE-1;
         
         private ClientPacket[] m_sentPackets;
 
@@ -20,6 +21,10 @@ namespace Bomberman.Gameplay.Multiplayer
             : base(game, settings)
         {
             m_sentPackets = new ClientPacket[SENT_HISTORY_SIZE];
+            for (int i = 0; i < SENT_HISTORY_SIZE; ++i)
+            {
+                m_sentPackets[i] = new ClientPacket();
+            }
         }
 
         protected override void OnStart()
@@ -78,6 +83,17 @@ namespace Bomberman.Gameplay.Multiplayer
                     NetOutgoingMessage msg = CreateMessage(PeerMessageId.Playing);
                     WritePlayingMessage(msg, m_channel);
                     SendMessage(msg);
+
+                    // push packet
+                    ClientPacket packet = m_sentPackets[m_channel.outgoingSequence & SENT_HISTORY_MASK];
+                    packet.sequence = m_channel.outgoingSequence;
+                    packet.replayed = false;
+                    packet.frameTime = Application.frameTime;
+                    for (int i = 0; i < m_channel.players.Count; ++i)
+                    {
+                        packet.actions[i] = m_channel.players[i].input.mask;
+                    }
+
                     break;
                 }
 
@@ -99,21 +115,22 @@ namespace Bomberman.Gameplay.Multiplayer
 
         private void ReplayPlayerActions(NetChannel channel)
         {
-            //float delta = Application.frameTime;
-            //int oldMask = player.input.mask;
+            List<Player> players = channel.players;
+            for (int seq = channel.acknowledgedSequence; seq < channel.outgoingSequence; ++seq)
+            {
+                ClientPacket packet = m_sentPackets[seq & SENT_HISTORY_MASK];
+                for (int playerIndex = 0; playerIndex < channel.players.Count; ++playerIndex)
+                {
+                    channel.players[playerIndex].input.Force(packet.actions[playerIndex]);
+                }
 
-            //for (int id = player.acknowledgedSequence; id < m_lastPacketId; ++id)
-            //{
-            //    ClientPacket packet = GetPacket(id);
-            //    Assert.IsTrue(!packet.replayed);
-                
-            //    int actions = packet.actions;
-            //    player.input.Force(packet.actions);
+                for (int playerIndex = 0; playerIndex < channel.players.Count; ++playerIndex)
+                {
+                    channel.players[playerIndex].ReplayUpdate(packet.frameTime);
+                }
 
-            //    player.ReplayUpdate(delta);
-            //    MarkReplayed(id);
-            //}            
-            //Assert.IsTrue(oldMask == player.input.mask);
+                packet.replayed = true;
+            }
         }
 
         #endregion
@@ -315,34 +332,6 @@ namespace Bomberman.Gameplay.Multiplayer
         {
             Stop(ExitCode.StopClient);
         }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        #region Packet history
-
-        private void PushPacket(ref ClientPacket packet)
-        {
-            int index = packet.id % SENT_HISTORY_SIZE;
-            m_sentPackets[index] = packet;
-        }
-
-        private ClientPacket GetPacket(int id)
-        {
-            int index = id % SENT_HISTORY_SIZE;
-            Assert.IsTrue(m_sentPackets[index].id == id);
-            return m_sentPackets[index];
-        }
-
-        private void MarkReplayed(int id)
-        {
-            int index = id % SENT_HISTORY_SIZE;
-            if (m_sentPackets[index].id == id)
-            {
-                m_sentPackets[index].replayed = true;
-            }
-        }
-
-        #endregion
 
         //////////////////////////////////////////////////////////////////////////////
 

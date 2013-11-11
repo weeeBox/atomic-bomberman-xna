@@ -11,10 +11,11 @@ using System;
 
 namespace Bomberman.Gameplay.Multiplayer
 {
-    public struct ClientPacket
+    public class ClientPacket
     {
-        public int id;
-        public int actions;
+        public int sequence;
+        public float frameTime;
+        public int[] actions = new int[10]; // max players count TODO: use smarter approach
         public bool replayed;
     }
 
@@ -523,7 +524,7 @@ namespace Bomberman.Gameplay.Multiplayer
         {
             NetOutgoingMessage msg = CreateMessage();
 
-            channel.outgoingSequence++;
+            ++channel.outgoingSequence;
 
             msg.Write(channel.outgoingSequence);    // packet to be acknowledged by server
             msg.Write(channel.incomingSequence);    // packet acknowledged by client
