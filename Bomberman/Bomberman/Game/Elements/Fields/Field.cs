@@ -41,8 +41,10 @@ namespace Bomberman.Gameplay.Elements.Fields
         }
 
         /* mock constructor */
-        internal Field(int width, int height)
+        internal Field(Game game, int width, int height)
         {
+            m_game = game;
+
             currentField = this;
             m_cells = new FieldCellArray(width, height);
 

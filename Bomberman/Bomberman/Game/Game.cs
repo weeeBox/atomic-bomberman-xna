@@ -41,7 +41,9 @@ namespace Bomberman.Gameplay
         /// </summary>
         protected Game(int width, int height)
         {
-            m_field = new Field(width, height);
+            m_timerManager = new TimerManager();
+            m_players = new PlayerList(m_timerManager, CVars.cg_maxPlayers.intValue);
+            m_field = new Field(this, width, height);
         }
 
         //////////////////////////////////////////////////////////////////////////////
