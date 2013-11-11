@@ -33,18 +33,18 @@ namespace Bomberman.Gameplay.Multiplayer
 
             StartScreen(new BlockingScreen("Waiting for server..."));
 
-            //List<Player> localPlayers = new List<Player>();
-            //int index = 0;
-            //foreach (GameSettings.InputEntry entry in settings.inputEntries)
-            //{
-            //    Player player = new Player(index++);
-            //    player.SetPlayerInput(entry.input);
-            //}
+            List<Player> localPlayers = game.GetPlayersList();
 
-            //Client peer = GetClient();
-            //m_channel = new NetChannel(peer.RemoteConnection, localPlayers);
+            #if DEBUG
+            for (int i = 0; i < localPlayers.Count; ++i)
+            {
+                Assert.AreEqual(-1, localPlayers[i].index);
+                Assert.IsTrue(localPlayers[i].input.IsLocal);
+            }
+            #endif
 
-            throw new NotImplementedException();
+            Client peer = GetClient();
+            m_channel = new NetChannel(peer.RemoteConnection, localPlayers);
         }
 
         public override void Update(float delta)
