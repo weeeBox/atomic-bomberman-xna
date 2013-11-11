@@ -224,7 +224,8 @@ namespace Bomberman.Gameplay.Multiplayer
             buffer.Write(alive);
             if (alive)
             {
-                buffer.WriteCellCords(p);
+                buffer.Write(p.px);
+                buffer.Write(p.py);
                 buffer.Write(p.IsMoving());
                 buffer.Write(p.direction);
                 buffer.Write(p.GetSpeed());
