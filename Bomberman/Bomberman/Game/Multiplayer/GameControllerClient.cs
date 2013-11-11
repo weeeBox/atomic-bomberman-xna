@@ -192,7 +192,7 @@ namespace Bomberman.Gameplay.Multiplayer
             m_channel.incomingSequence = msg.ReadInt32();
             m_channel.acknowledgedSequence = msg.ReadInt32();
 
-            if (acknowledgedSequence != m_channel.acknowledgedSequence)
+            if (acknowledgedSequence < m_channel.acknowledgedSequence)
             {
                 ReadPlayingMessage(msg);
                 ReplayPlayerActions(m_channel);
@@ -212,14 +212,9 @@ namespace Bomberman.Gameplay.Multiplayer
 
             List<Player> localPlayers = channel.players;
             for (int i = 0; i < localPlayers.Count; ++i)
-            {
-                WritePlayingMessage(msg, localPlayers[i]);
+            {   
+                msg.Write(localPlayers[i].input.mask);
             }
-        }
-
-        private void WritePlayingMessage(NetOutgoingMessage msg, Player player)
-        {
-            msg.Write(player.input.mask);
         }
 
         private void ReadRoundEndMessage(Peer peer, NetIncomingMessage msg)
