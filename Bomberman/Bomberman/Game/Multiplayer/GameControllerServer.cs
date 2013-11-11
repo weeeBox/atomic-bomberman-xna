@@ -27,14 +27,14 @@ namespace Bomberman.Gameplay.Multiplayer
 
             // local players are ready
             int playerIndex = 0;
-            GameSettings.InputEntry[] entries = settings.inputEntries;
-            for (; playerIndex < entries.Length; ++playerIndex)
-            {
-                Player player = new Player(entries[playerIndex].playerIndex);
-                player.SetPlayerInput(entries[playerIndex].input);
-                player.IsReady = true;
-                game.AddPlayer(player);
-            }
+            //GameSettings.InputEntry[] entries = settings.inputEntries;
+            //for (; playerIndex < entries.Length; ++playerIndex)
+            //{
+            //    Player player = new Player(entries[playerIndex].playerIndex);
+            //    player.SetPlayerInput(entries[playerIndex].input);
+            //    player.IsReady = true;
+            //    game.AddPlayer(player);
+            //}
 
             // network players are not ready
             List<NetConnection> connections = GetServer().GetConnections();
@@ -57,6 +57,8 @@ namespace Bomberman.Gameplay.Multiplayer
             RegisterNotification(Notifications.ConsoleVariableChanged, ServerRateVarChangedCallback);
             RegisterNotification(NetworkNotifications.ClientConnected, ClientConnectedNotification);
             RegisterNotification(NetworkNotifications.ClientDisconnected, ClientDisconnectedNotification);
+
+            throw new NotImplementedException();
         }
 
         protected override void OnStop()

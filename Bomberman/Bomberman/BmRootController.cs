@@ -158,7 +158,6 @@ namespace Bomberman
                         Scheme selectedScheme = glc.GetSelectedScheme();
 
                         GameSettings settings = new GameSettings(selectedScheme);
-                        settings.inputEntries = glc.CreateInputEntries();
                         StartController(GameController.Local(settings));
                         break;
                     }
@@ -181,11 +180,6 @@ namespace Bomberman
                         Assert.IsTrue(info != null);
 
                         GameSettings settings = new GameSettings(info.scheme);
-                        settings.inputEntries = new GameSettings.InputEntry[]
-                        {
-                            new GameSettings.InputEntry(0, InputMapping.CreatePlayerInput(InputType.Keyboard1))
-                        };
-
                         StartController(GameController.Client(settings));
                         break;
                     }
@@ -196,10 +190,6 @@ namespace Bomberman
                         Assert.IsTrue(info != null);
 
                         GameSettings settings = new GameSettings(info.scheme);
-                        settings.inputEntries = new GameSettings.InputEntry[]
-                        {
-                            new GameSettings.InputEntry(0, InputMapping.CreatePlayerInput(InputType.Keyboard1))
-                        };
                         StartController(GameController.Server(settings));
                         break;
                     }

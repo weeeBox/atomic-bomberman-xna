@@ -27,8 +27,6 @@ namespace Bomberman.Gameplay
         public Scheme scheme;
         public ServerInfo serverInfo;
 
-        public InputEntry[] inputEntries;
-
         public GameSettings(Scheme scheme)
         {
             Debug.CheckArgumentNotNull("scheme", scheme);
@@ -487,22 +485,12 @@ namespace Bomberman.Gameplay
     {
         public LocalGameController(GameSettings settings)
             : base(settings)
-        {
-            Debug.CheckArgumentNotNull(settings.inputEntries);
-            Debug.CheckArgument(settings.inputEntries.Length > 0);
+        {   
         }
 
         protected override void OnStart()
         {
             base.OnStart();
-
-            GameSettings.InputEntry[] entries = settings.inputEntries;
-            for (int i = 0; i < entries.Length; ++i)
-            {
-                Player player = new Player(entries[i].playerIndex);
-                player.SetPlayerInput(entries[i].input);
-                game.AddPlayer(player);
-            }
 
             LoadField(settings.scheme);
 

@@ -104,10 +104,12 @@ namespace BombermanTests
         {
             Scheme scheme = new SchemeMock("Test", 90);
             GameSettings settings = new GameSettings(scheme);
-            settings.inputEntries = new GameSettings.InputEntry[] {
-                new GameSettings.InputEntry(0, InputMapping.CreatePlayerInput(InputType.Keyboard1)),
-                new GameSettings.InputEntry(1, InputMapping.CreatePlayerInput(InputType.Keyboard2))
-            };
+            //settings.inputEntries = new GameSettings.InputEntry[] {
+            //    new GameSettings.InputEntry(0, InputMapping.CreatePlayerInput(InputType.Keyboard1)),
+            //    new GameSettings.InputEntry(1, InputMapping.CreatePlayerInput(InputType.Keyboard2))
+            //};
+
+            Assert.Fail();
 
             GameControllerNetworkMock controller1 = CreateNetworkController(settings);
 

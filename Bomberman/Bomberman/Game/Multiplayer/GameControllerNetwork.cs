@@ -7,6 +7,7 @@ using Bomberman.Gameplay.Elements.Fields;
 using Bomberman.Gameplay.Elements.Players;
 using Bomberman.Networking;
 using Lidgren.Network;
+using System;
 
 namespace Bomberman.Gameplay.Multiplayer
 {
@@ -107,17 +108,19 @@ namespace Bomberman.Gameplay.Multiplayer
 
                 // input
                 PlayerInput input;
-                if (isLocal)
-                {
-                    Assert.IsIndex(localIndex, settings.inputEntries);
-                    input = settings.inputEntries[localIndex++].input;
-                }
-                else
-                {
-                    input = new PlayerNetworkInput();
-                }
+                //if (isLocal)
+                //{
+                //    Assert.IsIndex(localIndex, settings.inputEntries);
+                //    input = settings.inputEntries[localIndex++].input;
+                //}
+                //else
+                //{
+                //    input = new PlayerNetworkInput();
+                //}
 
-                player.SetPlayerInput(input);
+                //player.SetPlayerInput(input);
+
+                throw new NotImplementedException();
             }
         }
 
