@@ -79,6 +79,12 @@ namespace Bomberman.Gameplay
             m_field.AddPlayer(player);
         }
 
+        public void AddPlayer(Player player, PlayerInput input)
+        {
+            player.SetPlayerInput(input);
+            m_field.AddPlayer(player);
+        }
+
         public PlayerList GetPlayers()
         {
             return m_players;

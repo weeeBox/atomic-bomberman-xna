@@ -1821,7 +1821,7 @@ namespace Bomberman.Gameplay.Elements.Players
         public int index
         {
             get { return m_index; }
-            set { m_index = index; }
+            set { m_index = value; }
         }
 
         public bool IsReady

@@ -105,58 +105,60 @@ namespace BombermanTests
             Scheme scheme = new SchemeMock("Test", 90);
             GameSettings settings = new GameSettings(scheme);
 
-            GameControllerNetworkMock controller1 = CreateNetworkController(settings);
+            GameControllerNetworkMock serverController = CreateNetworkController(settings);
 
-            Game game1 = controller1.game;
-            game1.AddPlayer(new Player(0));
-            game1.AddPlayer(new Player(1));
-            game1.AddPlayer(new Player(2));
-            game1.AddPlayer(new Player(3));
+            Game serverGame = serverController.game;
+            serverGame.AddPlayer(new Player(0));
+            serverGame.AddPlayer(new Player(1));
+            serverGame.AddPlayer(new Player(2));
+            serverGame.AddPlayer(new Player(3));
 
-            game1.LoadField(scheme);
+            serverGame.LoadField(scheme);
             List<Player> localPlayers = new List<Player>();
-            localPlayers.Add(game1.GetPlayersList()[2]);
-            localPlayers.Add(game1.GetPlayersList()[3]);
+            localPlayers.Add(serverGame.GetPlayersList()[2]);
+            localPlayers.Add(serverGame.GetPlayersList()[3]);
 
             NetChannel channel = new NetChannel(null, localPlayers);
 
             NetBuffer buffer = new NetBuffer();
-            controller1.WriteFieldState(buffer, channel);
+            serverController.WriteFieldState(buffer, channel);
 
-            GameControllerNetworkMock controller2 = CreateNetworkController(settings);
-            Game game2 = controller2.game;
-            game2.SetupField(scheme);
+            GameControllerNetworkMock clientController = CreateNetworkController(settings);
+            Game clientGame = clientController.game;
+            clientGame.AddPlayer(new Player(), InputMapping.CreatePlayerInput(InputType.Keyboard1));
+            clientGame.AddPlayer(new Player(), InputMapping.CreatePlayerInput(InputType.Keyboard2));
+            clientGame.SetupField(scheme);
 
-            controller2.ReadFieldState(buffer);
+            clientController.ReadFieldState(buffer);
 
             // check field
-            FieldCellSlot[] slots1 = game1.Field.GetSlots();
-            FieldCellSlot[] slots2 = game2.Field.GetSlots();
+            FieldCellSlot[] serverSlots = serverGame.Field.GetSlots();
+            FieldCellSlot[] clientSlots = clientGame.Field.GetSlots();
 
-            Assert.AreEqual(slots1.Length, slots2.Length);
-            for (int i = 0; i < slots1.Length; ++i)
+            Assert.AreEqual(serverSlots.Length, clientSlots.Length);
+            for (int i = 0; i < serverSlots.Length; ++i)
             {
-                FieldCell cell1 = slots1[i].staticCell;
-                FieldCell cell2 = slots2[i].staticCell;
+                FieldCell servereCell = serverSlots[i].staticCell;
+                FieldCell clientCell = clientSlots[i].staticCell;
 
-                Assert.IsTrue(cell1 == null && cell2 == null || cell1.EqualsTo(cell2));
+                Assert.IsTrue(servereCell == null && clientCell == null || servereCell.EqualsTo(clientCell));
             }
 
-            List<Player> players1 = game1.GetPlayersList();
-            List<Player> players2 = game2.GetPlayersList();
+            List<Player> serverPlayers = serverGame.GetPlayersList();
+            List<Player> clientPlayers = clientGame.GetPlayersList();
 
             // check positions
-            Assert.AreEqual(players1.Count, players2.Count);
-            for (int i = 0; i < players1.Count; ++i)
+            Assert.AreEqual(serverPlayers.Count, clientPlayers.Count);
+            for (int i = 0; i < serverPlayers.Count; ++i)
             {
-                Assert.IsTrue(players1[i].EqualsTo(players2[i]));
+                Assert.IsTrue(serverPlayers[i].EqualsTo(clientPlayers[i]));
             }
 
             // check local/multiplayer
-            Assert.IsTrue(players2[0].IsNetworkPlayer);
-            Assert.IsTrue(players2[1].IsNetworkPlayer);
-            Assert.IsFalse(players2[2].IsNetworkPlayer);
-            Assert.IsFalse(players2[3].IsNetworkPlayer);
+            Assert.IsTrue(clientPlayers[0].IsNetworkPlayer);
+            Assert.IsTrue(clientPlayers[1].IsNetworkPlayer);
+            Assert.IsFalse(clientPlayers[2].IsNetworkPlayer);
+            Assert.IsFalse(clientPlayers[3].IsNetworkPlayer);
         }
 
         #region Helpers
