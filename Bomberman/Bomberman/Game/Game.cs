@@ -54,7 +54,7 @@ namespace Bomberman.Gameplay
 
             m_roundIndex = 0;
             m_totalRounds = CVars.roundsToWin.intValue;
-            m_players.Reset();
+            m_players.Clear();
             m_field.Reset();
         }
 

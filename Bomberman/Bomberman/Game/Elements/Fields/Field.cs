@@ -56,6 +56,8 @@ namespace Bomberman.Gameplay.Elements.Fields
         {
             timerManager.CancelAll(this);
 
+            players.Reset();
+
             if (m_cells != null)
             {
                 m_cells.Reset();

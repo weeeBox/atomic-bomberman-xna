@@ -14,6 +14,12 @@ namespace Bomberman.Gameplay.Elements.Players
             m_list = new List<Player>(capacity);
         }
 
+        public void Clear()
+        {
+            m_timerManager.CancelAll(this);
+            m_list.Clear();
+        }
+
         public void Reset()
         {
             for (int i = 0; i < m_list.Count; ++i)
