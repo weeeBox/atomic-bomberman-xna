@@ -85,6 +85,12 @@ namespace BomberEngine
         }
 
         [Conditional("DEBUG")]
+        public static void AreEqual(int expected, int actual)
+        {
+            System.Diagnostics.Debug.Assert(expected == actual, "Assertion failed", "{0} != {1}", expected, actual);
+        }
+
+        [Conditional("DEBUG")]
         public static void AreEqual(Object o1, Object o2)
         {
             System.Diagnostics.Debug.Assert(o1 == o2, "Assertion failed", "{0} != {1}", o1, o2);

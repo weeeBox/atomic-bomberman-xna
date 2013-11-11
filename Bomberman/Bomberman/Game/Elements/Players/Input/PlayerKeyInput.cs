@@ -32,5 +32,10 @@ namespace Bomberman.Gameplay.Elements.Players
         {
             get { return m_actionsArray; }
         }
+
+        public override bool IsLocal
+        {
+            get { return true; }
+        }
     }
 }

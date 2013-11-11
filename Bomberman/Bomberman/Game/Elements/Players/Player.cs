@@ -75,7 +75,7 @@ namespace Bomberman.Gameplay.Elements.Players
 
         private static Player[] s_tempArray;
 
-        public Player(int index)
+        public Player(int index = -1)
             : base(FieldCellType.Player, 0, 0)
         {
             m_index = index;
@@ -1816,6 +1816,12 @@ namespace Bomberman.Gameplay.Elements.Players
         public int GetIndex()
         {
             return m_index;
+        }
+
+        public int index
+        {
+            get { return m_index; }
+            set { m_index = index; }
         }
 
         public bool IsReady

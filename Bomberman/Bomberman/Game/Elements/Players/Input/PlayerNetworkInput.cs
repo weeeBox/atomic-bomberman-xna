@@ -20,5 +20,10 @@ namespace Bomberman.Gameplay.Elements.Players
         {
             m_netActionBits = bits;
         }
+
+        public override bool IsLocal
+        {
+            get { return false; }
+        }
     }
 }

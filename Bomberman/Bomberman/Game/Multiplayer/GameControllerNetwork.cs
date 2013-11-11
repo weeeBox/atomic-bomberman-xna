@@ -92,35 +92,41 @@ namespace Bomberman.Gameplay.Multiplayer
             // field
             ReadFieldState(buffer, game.Field);
 
+            // sync players list with server
+            List<Player> localPlayers = new List<Player>(game.GetPlayersList());
+            game.GetPlayers().Clear();
+
             // players
             int playersCount = buffer.ReadByte();
-            for (int i = 0, localIndex = 0; i < playersCount; ++i)
+            for (int playerIndex = 0, localIndex = 0; playerIndex < playersCount; ++playerIndex)
             {
                 int cx = buffer.ReadCellCord();
                 int cy = buffer.ReadCellCord();
                 bool isLocal = buffer.ReadBoolean();
 
-                Player player = new Player(i);
-                
+                Player player;
+
+                // input
+                if (isLocal)
+                {
+                    Assert.IsRange(localIndex, 0, localPlayers.Count - 1);
+                    player = localPlayers[localIndex++];
+
+                    Assert.IsNotNull(player.input);         // player should have an input
+                    Assert.IsTrue(player.input.IsLocal);    // and it should be local
+                    Assert.AreEqual(-1, player.index);      // no index should be assigned yet
+
+                    player.index = playerIndex;
+                }
+                else
+                {
+                    player = new Player(playerIndex);
+                    player.SetPlayerInput(new PlayerNetworkInput());
+                }
+
                 // position
                 player.SetCell(cx, cy);
                 game.AddPlayer(player);
-
-                // input
-                PlayerInput input;
-                //if (isLocal)
-                //{
-                //    Assert.IsIndex(localIndex, settings.inputEntries);
-                //    input = settings.inputEntries[localIndex++].input;
-                //}
-                //else
-                //{
-                //    input = new PlayerNetworkInput();
-                //}
-
-                //player.SetPlayerInput(input);
-
-                throw new NotImplementedException();
             }
         }
 

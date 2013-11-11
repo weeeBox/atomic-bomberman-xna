@@ -112,5 +112,10 @@ namespace Bomberman.Gameplay.Elements.Players
         {
             get { return m_stateBits; }
         }
+
+        public abstract bool IsLocal
+        {
+            get;
+        }
     }
 }

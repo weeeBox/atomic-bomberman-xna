@@ -66,7 +66,12 @@ namespace Bomberman.Gameplay.Elements.Players
 
         public Player Get(int playerIndex)
         {
-            return m_list[playerIndex];
+            Player player = m_list[playerIndex];
+
+            Assert.IsNotNull(player);
+            Assert.AreEqual(player.GetIndex(), playerIndex);
+
+            return player;
         }
 
         public int GetCount()
