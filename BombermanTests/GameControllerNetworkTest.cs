@@ -105,9 +105,9 @@ namespace BombermanTests
             Scheme scheme = new SchemeMock("Test", 90);
             GameSettings settings = new GameSettings(scheme);
 
-            GameControllerNetworkMock serverController = CreateNetworkController(settings);
+            GameControllerNetworkMock server = new GameControllerNetworkMock();
 
-            Game serverGame = serverController.game;
+            Game serverGame = server.game;
             serverGame.AddPlayer(new Player(0));
             serverGame.AddPlayer(new Player(1));
             serverGame.AddPlayer(new Player(2));
@@ -121,15 +121,15 @@ namespace BombermanTests
             NetChannel channel = new NetChannel(null, localPlayers);
 
             NetBuffer buffer = new NetBuffer();
-            serverController.WriteFieldState(buffer, channel);
+            server.WriteFieldState(buffer, channel);
 
-            GameControllerNetworkMock clientController = CreateNetworkController(settings);
-            Game clientGame = clientController.game;
+            GameControllerNetworkMock client = new GameControllerNetworkMock();
+            Game clientGame = client.game;
             clientGame.AddPlayer(new Player(), InputMapping.CreatePlayerInput(InputType.Keyboard1));
             clientGame.AddPlayer(new Player(), InputMapping.CreatePlayerInput(InputType.Keyboard2));
             clientGame.SetupField(scheme);
 
-            clientController.ReadFieldState(buffer);
+            client.ReadFieldState(buffer);
 
             // check field
             FieldCellSlot[] serverSlots = serverGame.Field.GetSlots();
@@ -161,49 +161,70 @@ namespace BombermanTests
             Assert.IsFalse(clientPlayers[3].IsNetworkPlayer);
         }
 
-        #region Helpers
-
-        private GameControllerNetworkMock CreateNetworkController(GameSettings settings)
+        [TestMethod]
+        public void TestPlayingMessage()
         {
-            Scheme scheme = settings.scheme;
-            FieldData fieldData = scheme.fieldData;
+            GameControllerServer server = new GameControllerServerMock();
+            GameControllerClientMock client = new GameControllerClientMock();
 
-            GameMock game = new GameMock(fieldData.GetWidth(), fieldData.GetHeight());
-            return new GameControllerNetworkMock(game, settings);
+            Game serverGame = server.game;
+            serverGame.AddPlayer(new Player(0), new PlayerKeyInput());
+            serverGame.AddPlayer(new Player(1), new PlayerNetworkInput());
+
+            Player svLocalPlayer = serverGame.GetPlayersList()[0];
+            Player svRemotePlayer = serverGame.GetPlayersList()[1];
+
+            Game clientGame = client.game;
+            clientGame.AddPlayer(new Player(0), new PlayerNetworkInput());
+            clientGame.AddPlayer(new Player(1), new PlayerKeyInput());
+
+            Player clRemotePlayer = clientGame.GetPlayersList()[0];
+            Player clLocalPlayer = clientGame.GetPlayersList()[1];
+
+            NetChannel svChannel = new NetChannel(null, svRemotePlayer);
+            NetChannel clChannel = new NetChannel(null, clLocalPlayer);
+
+            svChannel.outgoingSequence = 100;
+            svChannel.incomingSequence = 200;
+
+            clChannel.outgoingSequence = 250;
+            clChannel.incomingSequence = 50;
+
+            clLocalPlayer.input.SetActionPressed(PlayerAction.Down, true);
+            clLocalPlayer.input.SetActionPressed(PlayerAction.Left, true);
+
+            NetBuffer buffer = new NetBuffer();
+            client.WritePlayingMessage(buffer, clChannel);
+
+            server.ReadPlayingMessage(buffer, svChannel);
+
+            Assert.AreEqual(svLocalPlayer.input.mask, clRemotePlayer.input.mask);
+            Assert.AreEqual(clChannel.incomingSequence, svChannel.acknowledgedSequence);
+            Assert.AreEqual(clChannel.outgoingSequence, svChannel.incomingSequence);
         }
-
-        private Scheme Create(int[] values, int width, int height)
-        {
-            FieldBlocks[] blocks = new FieldBlocks[width * height];
-            for (int i = 0; i < values.Length; ++i)
-            {
-                blocks[i] = (FieldBlocks)values[i];
-            }
-
-            Scheme scheme = new Scheme();
-            scheme.fieldData = new FieldData(width, height, blocks);
-
-            return scheme;
-        }
-
-        #endregion
     }
 
     class GameControllerNetworkMock : GameControllerNetwork
     {
-        public GameControllerNetworkMock(Game game, GameSettings settings)
-            : base(game, settings)
+        public GameControllerNetworkMock() :
+            base(new GameMock(15, 11), new GameSettings(new SchemeMock("test", 90)))
         {
         }
+    }
 
-        public new void WriteFieldState(NetBuffer buffer, NetChannel channel)
+    class GameControllerClientMock : GameControllerClient
+    {
+        public GameControllerClientMock() :
+            base(new GameMock(15, 11), new GameSettings(new SchemeMock("test", 90)))
         {
-            base.WriteFieldState(buffer, channel);
         }
+    }
 
-        public new void ReadFieldState(NetBuffer buffer)
+    class GameControllerServerMock : GameControllerServer
+    {
+        public GameControllerServerMock() :
+            base(new GameMock(15, 11), new GameSettings(new SchemeMock("test", 90)))
         {
-            base.ReadFieldState(buffer);
         }
     }
 }

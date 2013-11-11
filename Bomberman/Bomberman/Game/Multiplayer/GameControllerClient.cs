@@ -203,7 +203,7 @@ namespace Bomberman.Gameplay.Multiplayer
             }
         }
 
-        private void WritePlayingMessage(NetOutgoingMessage msg, NetChannel channel)
+        internal void WritePlayingMessage(NetBuffer msg, NetChannel channel)
         {
             channel.outgoingSequence++;
 
@@ -213,7 +213,7 @@ namespace Bomberman.Gameplay.Multiplayer
             List<Player> localPlayers = channel.players;
             for (int i = 0; i < localPlayers.Count; ++i)
             {   
-                msg.Write(localPlayers[i].input.mask);
+                msg.Write(localPlayers[i].input.mask); // TODO: use bit packing
             }
         }
 

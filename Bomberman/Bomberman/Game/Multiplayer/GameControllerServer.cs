@@ -201,13 +201,18 @@ namespace Bomberman.Gameplay.Multiplayer
             NetChannel channel = GetChannel(msg.SenderConnection);
             channel.IsReady = true;
 
+            ReadPlayingMessage(msg, channel);
+        }
+
+        internal void ReadPlayingMessage(NetBuffer msg, NetChannel channel)
+        {
             channel.incomingSequence = msg.ReadInt32();
             channel.acknowledgedSequence = msg.ReadInt32();
 
             List<Player> players = channel.players;
             for (int i = 0; i < players.Count; ++i)
             {
-                int actions = msg.ReadInt32((int)PlayerAction.Count);
+                int actions = msg.ReadInt32(); // TODO: use bit packing
 
                 PlayerNetworkInput input = ClassUtils.Cast<PlayerNetworkInput>(players[i].input);
                 input.SetNetActionBits(actions);

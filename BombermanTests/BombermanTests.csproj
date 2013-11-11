@@ -52,6 +52,7 @@
     <Compile Include="GameControllerNetworkTest.cs" />
     <Compile Include="Mocks\FieldMock.cs" />
     <Compile Include="Mocks\GameMock.cs" />
+    <Compile Include="Mocks\PeerMock.cs" />
     <Compile Include="Mocks\SchemeMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestBase.cs" />

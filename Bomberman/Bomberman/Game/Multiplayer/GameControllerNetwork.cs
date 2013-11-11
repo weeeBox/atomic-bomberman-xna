@@ -71,7 +71,7 @@ namespace Bomberman.Gameplay.Multiplayer
 
         #region "RoundStart" message
 
-        protected void WriteFieldState(NetBuffer buffer, NetChannel channel)
+        internal void WriteFieldState(NetBuffer buffer, NetChannel channel)
         {
             // field
             WriteFieldState(buffer, game.Field);
@@ -87,7 +87,7 @@ namespace Bomberman.Gameplay.Multiplayer
             }
         }
 
-        protected void ReadFieldState(NetBuffer buffer)
+        internal void ReadFieldState(NetBuffer buffer)
         {
             // field
             ReadFieldState(buffer, game.Field);
