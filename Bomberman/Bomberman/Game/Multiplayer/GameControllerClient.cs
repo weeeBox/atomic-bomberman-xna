@@ -34,6 +34,7 @@ namespace Bomberman.Gameplay.Multiplayer
             StartScreen(new BlockingScreen("Waiting for server..."));
 
             List<Player> localPlayers = game.GetPlayersList();
+            Assert.IsTrue(localPlayers.Count > 0);
 
             #if DEBUG
             for (int i = 0; i < localPlayers.Count; ++i)
@@ -152,11 +153,25 @@ namespace Bomberman.Gameplay.Multiplayer
         private void ReadRoundStartMessage(Peer peer, NetIncomingMessage msg)
         {
             SetState(State.RoundStart);
-            ReadReadyFlags(msg);
-            if (m_channel.needsFieldState)
-            {   
-                ReadFieldState(peer, msg);
+
+            bool hasFieldState = msg.ReadBoolean();
+            if (hasFieldState)
+            {
+                if (m_channel.needsFieldState)
+                {
+                    ReadFieldState(peer, msg);
+                }
+                else
+                {
+                    return; // we don't know the chunk size, so just skip it
+                }
             }
+            else // no field state
+            {
+                Assert.IsFalse(m_channel.needsFieldState);
+            }
+
+            ReadReadyFlags(msg);
         }
 
         private void WriteRoundStartMessage(NetBuffer buffer, NetChannel channel)

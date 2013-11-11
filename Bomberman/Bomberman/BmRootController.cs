@@ -188,6 +188,8 @@ namespace Bomberman
                         ServerInfo info = controller.exitData as ServerInfo;
                         Assert.IsTrue(info != null);
 
+                        game.AddPlayer(new Player(), InputMapping.CreatePlayerInput(InputType.Keyboard1));
+
                         GameSettings settings = new GameSettings(info.scheme);
                         StartController(GameController.Client(game, settings));
                         break;
@@ -197,6 +199,8 @@ namespace Bomberman
                     {
                         ServerInfo info = controller.exitData as ServerInfo;
                         Assert.IsTrue(info != null);
+
+                        game.AddPlayer(new Player(0), InputMapping.CreatePlayerInput(InputType.Keyboard1));
 
                         GameSettings settings = new GameSettings(info.scheme);
                         StartController(GameController.Server(game, settings));

@@ -37,6 +37,8 @@ namespace Bomberman.Gameplay.Multiplayer
                 Assert.IsTrue(player.input.IsLocal);
             }
 
+            Assert.IsTrue(playerIndex > 0); // should be some local players at the point
+
             // network players are not ready
             List<NetConnection> connections = GetServer().GetConnections();
             for (int i = 0; i < connections.Count; ++i)
@@ -95,19 +97,22 @@ namespace Bomberman.Gameplay.Multiplayer
                     for (int i = 0; i < m_channels.Count; ++i)
                     {
                         NetChannel channel = m_channels[i];
-                        NetOutgoingMessage message = CreateMessage(PeerMessageId.RoundStart);
+                        NetOutgoingMessage msg = CreateMessage(PeerMessageId.RoundStart);
 
-                        WriteReadyFlags(message);
-
+                        // field state
+                        msg.Write(channel.needsFieldState);
                         if (channel.needsFieldState)
                         {   
-                            WriteFieldState(message, channel);
+                            WriteFieldState(msg, channel);
                         }
+
+                        // ready flags
+                        WriteReadyFlags(msg);
 
                         NetConnection connection = channel.connection;
                         Assert.IsTrue(connection != null);
 
-                        SendMessage(message, connection);
+                        SendMessage(msg, connection);
                     }
                     break;
                 }

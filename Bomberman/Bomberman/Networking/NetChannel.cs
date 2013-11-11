@@ -18,6 +18,8 @@ namespace Bomberman.Networking
         public int incomingSequence;        // the last received packet sequence
         public int acknowledgedSequence;    // the last acknowledged packet (by remote peer)
 
+        private bool m_ready;
+
         public NetChannel(NetConnection connection, Player player)            
         {
             m_connection = connection;
@@ -85,7 +87,18 @@ namespace Bomberman.Networking
 
         // TODO: refactor these properties
 
-        public bool IsReady { get; set; }
+        public bool IsReady 
+        {
+            get { return m_ready; }
+            set 
+            {
+                m_ready = value;
+                for (int i = 0; i < m_players.Count; ++i)
+                {
+                    m_players[i].IsReady = value;
+                }
+            }
+        }
         public bool needsFieldState { get; set; }
         public bool needsRoundResults { get; set; }
 
