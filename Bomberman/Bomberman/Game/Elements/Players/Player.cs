@@ -41,9 +41,6 @@ namespace Bomberman.Gameplay.Elements.Players
 
         private bool m_alive;
 
-        public bool needsFieldState;
-        public bool needsRoundResults;
-        
         private PlayerInput m_input;
         private BombList m_bombs;
         private PowerupList m_powerups;
@@ -54,11 +51,7 @@ namespace Bomberman.Gameplay.Elements.Players
         /* Kicked/Punched bombs */
         private List<Bomb> m_thrownBombs;
 
-        private NetConnection m_connection;
-
         private bool m_ready;
-        public int acknowledgedSequence;      // last acknowledged packet
-        public int incomingSequence; // last received packet
 
         private float m_calculatedX;
         private float m_calculatedY;
@@ -116,16 +109,6 @@ namespace Bomberman.Gameplay.Elements.Players
         public void ResetNetworkState()
         {
             m_ready = false;
-            acknowledgedSequence = 0;
-            incomingSequence = 0;
-            needsFieldState = true;
-            needsRoundResults = true;
-        }
-
-        public override void Destroy()
-        {
-            base.Destroy();
-            m_connection = null;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -1720,12 +1703,6 @@ namespace Bomberman.Gameplay.Elements.Players
         public PlayerInput input
         {
             get { return m_input; }
-        }
-
-        public NetConnection connection
-        {
-            get { return m_connection; }
-            set { m_connection = value; }
         }
 
         public DiseaseList diseases

@@ -634,23 +634,23 @@ namespace Bomberman.Gameplay.Multiplayer
 
             private void UpdateState()
             {
-                StringBuilder buf = new StringBuilder();
-                buf.Append("State: " + m_controller.GetState());
+                //StringBuilder buf = new StringBuilder();
+                //buf.Append("State: " + m_controller.GetState());
 
-                if (m_controller.game != null)
-                {
-                    List<Player> players = m_controller.game.GetPlayersList();
-                    for (int i = 0; i < players.Count; ++i)
-                    {
-                        Player p = players[i];
-                        buf.Append("\n" + i + ": isReady=" + p.IsReady +
-                            " net=" + p.IsNetworkPlayer +
-                            " needsFieldState=" + p.needsFieldState + 
-                            " needsRoundResults=" + p.needsRoundResults);
-                    }
-                }
+                //if (m_controller.game != null)
+                //{
+                //    List<Player> players = m_controller.game.GetPlayersList();
+                //    for (int i = 0; i < players.Count; ++i)
+                //    {
+                //        Player p = players[i];
+                //        buf.Append("\n" + i + ": isReady=" + p.IsReady +
+                //            " net=" + p.IsNetworkPlayer +
+                //            " needsFieldState=" + p.needsFieldState + 
+                //            " needsRoundResults=" + p.needsRoundResults);
+                //    }
+                //}
 
-                m_textView.SetText(buf.ToString());
+                //m_textView.SetText(buf.ToString());
             }
         }
     }
