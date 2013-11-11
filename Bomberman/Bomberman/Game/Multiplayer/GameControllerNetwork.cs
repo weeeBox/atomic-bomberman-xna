@@ -162,12 +162,6 @@ namespace Bomberman.Gameplay.Multiplayer
             }
         }
 
-        protected void SkipReadyFlags(NetBuffer buffer)
-        {
-            int playersCount = buffer.ReadByte();
-            buffer.ReadInt64(playersCount);
-        }
-
         #endregion
 
         #region "Playing" message

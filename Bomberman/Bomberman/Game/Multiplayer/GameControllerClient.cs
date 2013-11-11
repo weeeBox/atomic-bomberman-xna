@@ -152,17 +152,8 @@ namespace Bomberman.Gameplay.Multiplayer
         private void ReadRoundStartMessage(Peer peer, NetIncomingMessage msg)
         {
             SetState(State.RoundStart);
-
-            if (m_channel != null)
-            {
-                ReadReadyFlags(msg);
-            }
-            else
-            {
-                SkipReadyFlags(msg);
-            }
-
-            if (m_channel == null || m_channel.needsFieldState)
+            ReadReadyFlags(msg);
+            if (m_channel.needsFieldState)
             {   
                 ReadFieldState(peer, msg);
             }
