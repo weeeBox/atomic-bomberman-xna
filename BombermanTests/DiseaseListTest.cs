@@ -16,8 +16,7 @@ namespace BombermanTests.TestDiseases
         [TestInitialize]
         public void TestInitialize()
         {
-            GameMock mock = new GameMock(15, 11);
-            new FieldMock(mock);
+            new GameMock(15, 11);
         }
 
         [TestMethod]

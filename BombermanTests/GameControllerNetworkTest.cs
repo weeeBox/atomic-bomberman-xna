@@ -104,12 +104,6 @@ namespace BombermanTests
         {
             Scheme scheme = new SchemeMock("Test", 90);
             GameSettings settings = new GameSettings(scheme);
-            //settings.inputEntries = new GameSettings.InputEntry[] {
-            //    new GameSettings.InputEntry(0, InputMapping.CreatePlayerInput(InputType.Keyboard1)),
-            //    new GameSettings.InputEntry(1, InputMapping.CreatePlayerInput(InputType.Keyboard2))
-            //};
-
-            Assert.Fail();
 
             GameControllerNetworkMock controller1 = CreateNetworkController(settings);
 
@@ -195,9 +189,12 @@ namespace BombermanTests
 
     class GameControllerNetworkMock : GameControllerNetwork
     {
+        private Game m_game;
+
         public GameControllerNetworkMock(Game game, GameSettings settings)
             : base(settings)
-        {   
+        {
+            m_game = game;
         }
 
         public new void WriteFieldState(NetBuffer buffer, NetChannel channel)
@@ -208,6 +205,11 @@ namespace BombermanTests
         public new void ReadFieldState(NetBuffer buffer)
         {
             base.ReadFieldState(buffer);
+        }
+
+        public new Game game
+        {
+            get { return m_game; }
         }
     }
 }

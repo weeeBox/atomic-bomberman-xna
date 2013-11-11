@@ -15,5 +15,9 @@ namespace BombermanTests.Mocks
         {
             MathHelp.InitRandom(0);
         }
+
+        protected override void InitAnimations()
+        {   
+        }
     }
 }

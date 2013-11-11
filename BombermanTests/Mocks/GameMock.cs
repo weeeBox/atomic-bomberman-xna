@@ -11,6 +11,7 @@ namespace BombermanTests.Mocks
         public GameMock(int width, int height)
             : base(width, height)
         {
+            Field = new FieldMock(this);
         }
     }
 }

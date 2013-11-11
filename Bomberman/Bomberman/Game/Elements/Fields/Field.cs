@@ -151,6 +151,8 @@ namespace Bomberman.Gameplay.Elements.Fields
             foreach (Player player in playerList)
             {
                 int index = player.GetIndex();
+                Assert.IsRange(index, 0, locations.Length - 1);
+
                 PlayerLocationInfo info = locations[index];
                 int cx = info.x;
                 int cy = info.y;
@@ -397,8 +399,8 @@ namespace Bomberman.Gameplay.Elements.Fields
         {
             players.Add(player);
 
-            if (m_playerAnimations == null) m_playerAnimations = new PlayerAnimations();
-            if (m_bombAnimations == null) m_bombAnimations = new BombAnimations();
+            // TODO: remove animations
+            InitAnimations();
 
             player.animations = m_playerAnimations;
             player.bombAnimations = m_bombAnimations;
@@ -461,6 +463,12 @@ namespace Bomberman.Gameplay.Elements.Fields
                     AddCell(cell);
                 }   
             }
+        }
+
+        protected virtual void InitAnimations()
+        {
+            if (m_playerAnimations == null) m_playerAnimations = new PlayerAnimations();
+            if (m_bombAnimations == null) m_bombAnimations = new BombAnimations();
         }
 
         #endregion

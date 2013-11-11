@@ -43,7 +43,6 @@ namespace Bomberman.Gameplay
         {
             m_timerManager = new TimerManager();
             m_players = new PlayerList(m_timerManager, CVars.cg_maxPlayers.intValue);
-            m_field = new Field(this, width, height);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -191,6 +190,7 @@ namespace Bomberman.Gameplay
         public Field Field
         {
             get { return m_field; }
+            protected set { m_field = value; }
         }
 
         public bool IsGameEnded
