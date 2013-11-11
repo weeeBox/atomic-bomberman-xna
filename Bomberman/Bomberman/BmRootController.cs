@@ -7,6 +7,7 @@ using Bomberman.Menu;
 using Bomberman.Multiplayer;
 using Bomberman.Networking;
 using Microsoft.Xna.Framework.Content;
+using Bomberman.Gameplay.Elements.Players;
 
 namespace Bomberman
 {
@@ -156,6 +157,14 @@ namespace Bomberman
                     {
                         GameLobbyController glc = controller as GameLobbyController;
                         Scheme selectedScheme = glc.GetSelectedScheme();
+
+                        PlayerInput[] inputs = glc.CreateInputEntries();
+                        for (int i = 0; i < inputs.Length; ++i)
+                        {
+                            Player player = new Player(i);
+                            player.SetPlayerInput(inputs[i]);
+                            game.AddPlayer(player);
+                        }
 
                         GameSettings settings = new GameSettings(selectedScheme);
                         StartController(GameController.Local(settings));

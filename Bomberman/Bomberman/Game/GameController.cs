@@ -12,18 +12,6 @@ namespace Bomberman.Gameplay
 {
     public class GameSettings
     {
-        public struct InputEntry
-        {
-            public int playerIndex;
-            public PlayerInput input;
-
-            public InputEntry(int playerIndex, PlayerInput input)
-            {
-                this.playerIndex = playerIndex;
-                this.input = input;
-            }
-        }
-
         public Scheme scheme;
         public ServerInfo serverInfo;
 

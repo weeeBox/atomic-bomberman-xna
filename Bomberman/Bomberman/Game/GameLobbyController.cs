@@ -231,7 +231,7 @@ namespace Bomberman.Gameplay
             return selectedScheme;
         }
 
-        public GameSettings.InputEntry[] CreateInputEntries()
+        public PlayerInput[] CreateInputEntries()
         {
             int count = 0;
             for (int i = 0; i < inputTypes.Length; ++i)
@@ -242,13 +242,12 @@ namespace Bomberman.Gameplay
                 }
             }
 
-            GameSettings.InputEntry[] entries = new GameSettings.InputEntry[count];
+            PlayerInput[] entries = new PlayerInput[count];
             for (int i = 0, j = 0; i < inputTypes.Length && j < count; ++i)
             {
                 if (inputTypes[i] != InputType.None)
                 {
-                    PlayerInput input = InputMapping.CreatePlayerInput(inputTypes[i]);
-                    entries[i] = new GameSettings.InputEntry(i, input);
+                    entries[i] = InputMapping.CreatePlayerInput(inputTypes[i]);
                 }
             }
 
