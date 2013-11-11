@@ -184,12 +184,6 @@ namespace BombermanTests
             NetChannel svChannel = new NetChannel(null, svRemotePlayer);
             NetChannel clChannel = new NetChannel(null, clLocalPlayer);
 
-            svChannel.outgoingSequence = 100;
-            svChannel.incomingSequence = 200;
-
-            clChannel.outgoingSequence = 250;
-            clChannel.incomingSequence = 50;
-
             clLocalPlayer.input.SetActionPressed(PlayerAction.Down, true);
             clLocalPlayer.input.SetActionPressed(PlayerAction.Left, true);
 
@@ -199,8 +193,6 @@ namespace BombermanTests
             server.ReadPlayingMessage(buffer, svChannel);
 
             Assert.AreEqual(svLocalPlayer.input.mask, clRemotePlayer.input.mask);
-            Assert.AreEqual(clChannel.incomingSequence, svChannel.acknowledgedSequence);
-            Assert.AreEqual(clChannel.outgoingSequence, svChannel.incomingSequence);
         }
     }
 

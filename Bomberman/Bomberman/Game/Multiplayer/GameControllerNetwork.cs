@@ -519,9 +519,15 @@ namespace Bomberman.Gameplay.Multiplayer
             return GetNetwork().CreateMessage();
         }
 
-        protected NetOutgoingMessage CreateMessage(PeerMessageId messageId)
+        protected NetOutgoingMessage CreateMessage(PeerMessageId messageId, NetChannel channel)
         {
             NetOutgoingMessage msg = CreateMessage();
+
+            channel.outgoingSequence++;
+
+            msg.Write(channel.outgoingSequence);    // packet to be acknowledged by server
+            msg.Write(channel.incomingSequence);    // packet acknowledged by client
+
             msg.Write((byte)messageId);
             return msg;
         }
@@ -554,8 +560,23 @@ namespace Bomberman.Gameplay.Multiplayer
 
         public virtual void OnPeerMessageReceived(Peer peer, NetIncomingMessage msg)
         {
-            PeerMessageId id = (PeerMessageId) msg.ReadByte();
-            ReadPeerMessage(peer, id, msg);
+            NetChannel channel = ClassUtils.Cast<NetChannel>(msg.SenderConnection.Tag);
+
+            int incomingSequence = msg.ReadInt32();
+            int acknowledgedSequence = msg.ReadInt32();
+
+            if (incomingSequence > channel.incomingSequence)
+            {
+                channel.incomingSequence = incomingSequence;
+                channel.acknowledgedSequence = acknowledgedSequence;
+
+                PeerMessageId id = (PeerMessageId)msg.ReadByte();
+                ReadPeerMessage(peer, id, msg);
+            }
+            else
+            {
+                Log.d("Packet drop");
+            }
 
             #if DEBUG
             if (CVars.d_closeInnactive.floatValue > 0)

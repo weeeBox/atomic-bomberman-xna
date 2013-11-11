@@ -46,6 +46,7 @@ namespace Bomberman.Gameplay.Multiplayer
 
             Client peer = GetClient();
             m_channel = new NetChannel(peer.RemoteConnection, localPlayers);
+            peer.RemoteConnection.Tag = m_channel;
         }
 
         public override void Update(float delta)
@@ -186,30 +187,13 @@ namespace Bomberman.Gameplay.Multiplayer
             Assert.IsTrue(m_channel != null && m_channel.IsReady);
 
             SetState(State.Playing);
-
-            int acknowledgedSequence = m_channel.acknowledgedSequence;
-
-            m_channel.incomingSequence = msg.ReadInt32();
-            m_channel.acknowledgedSequence = msg.ReadInt32();
-
-            if (acknowledgedSequence < m_channel.acknowledgedSequence)
-            {
-                ReadPlayingMessage(msg);
-                ReplayPlayerActions(m_channel);
-            }
-            else
-            {
-                Log.d("Identical payload package");
-            }
+            
+            ReadPlayingMessage(msg);
+            ReplayPlayerActions(m_channel);
         }
 
         internal void WritePlayingMessage(NetBuffer msg, NetChannel channel)
         {
-            channel.outgoingSequence++;
-
-            msg.Write(channel.outgoingSequence);    // packet to be acknowledged by server
-            msg.Write(channel.incomingSequence);    // packet acknowledged by client
-
             List<Player> localPlayers = channel.players;
             for (int i = 0; i < localPlayers.Count; ++i)
             {   
@@ -359,6 +343,13 @@ namespace Bomberman.Gameplay.Multiplayer
         }
 
         #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        private NetOutgoingMessage CreateMessage(PeerMessageId messageId)
+        {
+            return CreateMessage(messageId, m_channel);
+        }
 
         private class NetworkTraceView : View
         {

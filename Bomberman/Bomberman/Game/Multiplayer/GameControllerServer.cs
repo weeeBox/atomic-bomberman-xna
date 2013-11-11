@@ -97,7 +97,7 @@ namespace Bomberman.Gameplay.Multiplayer
                     for (int i = 0; i < m_channels.Count; ++i)
                     {
                         NetChannel channel = m_channels[i];
-                        NetOutgoingMessage msg = CreateMessage(PeerMessageId.RoundStart);
+                        NetOutgoingMessage msg = CreateMessage(PeerMessageId.RoundStart, channel);
 
                         // field state
                         msg.Write(channel.needsFieldState);
@@ -125,11 +125,8 @@ namespace Bomberman.Gameplay.Multiplayer
                     for (int i = 0; i < m_channels.Count; ++i)
                     {
                         NetChannel channel = m_channels[i];
-                        ++channel.outgoingSequence;
 
-                        NetOutgoingMessage message = CreateMessage(PeerMessageId.Playing);
-                        message.Write(channel.outgoingSequence);    // to be acknowledged by client
-                        message.Write(channel.incomingSequence);    // last acknowledged by server
+                        NetOutgoingMessage message = CreateMessage(PeerMessageId.Playing, channel);
                         message.Write(payloadMessage);
 
                         NetConnection connection = channel.connection;
@@ -151,7 +148,7 @@ namespace Bomberman.Gameplay.Multiplayer
                     {
                         NetChannel channel = m_channels[i];
 
-                        NetOutgoingMessage message = CreateMessage(PeerMessageId.RoundEnd);
+                        NetOutgoingMessage message = CreateMessage(PeerMessageId.RoundEnd, channel);
 
                         WriteReadyFlags(message);
 
@@ -206,9 +203,6 @@ namespace Bomberman.Gameplay.Multiplayer
 
         internal void ReadPlayingMessage(NetBuffer msg, NetChannel channel)
         {
-            channel.incomingSequence = msg.ReadInt32();
-            channel.acknowledgedSequence = msg.ReadInt32();
-
             List<Player> players = channel.players;
             for (int i = 0; i < players.Count; ++i)
             {
