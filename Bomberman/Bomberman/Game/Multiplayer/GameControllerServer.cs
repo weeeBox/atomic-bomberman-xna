@@ -48,7 +48,7 @@ namespace Bomberman.Gameplay.Multiplayer
                 player.ResetNetworkState();
                 game.AddPlayer(player);
 
-                AddChannel(connections[i], new NetChannel(connections[i], player));
+                AddChannel(connections[i], new NetChannel(connections[i], player)); // TODO: support multiple local remote players
             }
 
             LoadField(settings.scheme);

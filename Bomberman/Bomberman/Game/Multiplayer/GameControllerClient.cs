@@ -33,7 +33,7 @@ namespace Bomberman.Gameplay.Multiplayer
 
             StartScreen(new BlockingScreen("Waiting for server..."));
 
-            List<Player> localPlayers = game.GetPlayersList();
+            List<Player> localPlayers = new List<Player>(game.GetPlayersList());
             Assert.IsTrue(localPlayers.Count > 0);
 
             #if DEBUG
