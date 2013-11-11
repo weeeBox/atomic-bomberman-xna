@@ -167,7 +167,7 @@ namespace Bomberman
                         }
 
                         GameSettings settings = new GameSettings(selectedScheme);
-                        StartController(GameController.Local(settings));
+                        StartController(GameController.Local(game, settings));
                         break;
                     }
                 }
@@ -189,7 +189,7 @@ namespace Bomberman
                         Assert.IsTrue(info != null);
 
                         GameSettings settings = new GameSettings(info.scheme);
-                        StartController(GameController.Client(settings));
+                        StartController(GameController.Client(game, settings));
                         break;
                     }
 
@@ -199,7 +199,7 @@ namespace Bomberman
                         Assert.IsTrue(info != null);
 
                         GameSettings settings = new GameSettings(info.scheme);
-                        StartController(GameController.Server(settings));
+                        StartController(GameController.Server(game, settings));
                         break;
                     }
                 }

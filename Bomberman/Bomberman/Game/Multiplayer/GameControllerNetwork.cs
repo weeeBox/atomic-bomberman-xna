@@ -43,8 +43,8 @@ namespace Bomberman.Gameplay.Multiplayer
 
         private State m_state;
 
-        public GameControllerNetwork(GameSettings settings)
-            : base(settings)
+        public GameControllerNetwork(Game game, GameSettings settings)
+            : base(game, settings)
         {
             m_state = State.Undefined;
         }

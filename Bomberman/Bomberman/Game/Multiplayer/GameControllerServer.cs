@@ -12,8 +12,8 @@ namespace Bomberman.Gameplay.Multiplayer
     {
         private List<NetChannel> m_channels;
 
-        public GameControllerServer(GameSettings settings) :
-            base(settings)
+        public GameControllerServer(Game game, GameSettings settings) :
+            base(game, settings)
         {
         }
 

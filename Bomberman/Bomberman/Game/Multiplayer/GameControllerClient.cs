@@ -16,8 +16,8 @@ namespace Bomberman.Gameplay.Multiplayer
 
         private NetChannel m_channel;
         
-        public GameControllerClient(GameSettings settings)
-            : base(settings)
+        public GameControllerClient(Game game, GameSettings settings)
+            : base(game, settings)
         {
             m_sentPackets = new ClientPacket[SENT_HISTORY_SIZE];
         }

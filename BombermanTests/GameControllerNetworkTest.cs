@@ -189,12 +189,9 @@ namespace BombermanTests
 
     class GameControllerNetworkMock : GameControllerNetwork
     {
-        private Game m_game;
-
         public GameControllerNetworkMock(Game game, GameSettings settings)
-            : base(settings)
+            : base(game, settings)
         {
-            m_game = game;
         }
 
         public new void WriteFieldState(NetBuffer buffer, NetChannel channel)
@@ -205,11 +202,6 @@ namespace BombermanTests
         public new void ReadFieldState(NetBuffer buffer)
         {
             base.ReadFieldState(buffer);
-        }
-
-        public new Game game
-        {
-            get { return m_game; }
         }
     }
 }

@@ -31,6 +31,8 @@ namespace Bomberman.Gameplay
             Exit
         }
 
+        private Game m_game;
+
         protected GameScreen gameScreen;
         protected PauseScreen pauseScreen;
         
@@ -38,23 +40,24 @@ namespace Bomberman.Gameplay
 
         private CCommand[] gameCommands;
 
-        public static GameController Client(GameSettings settings)
+        public static GameController Client(Game game, GameSettings settings)
         {
-            return new GameControllerClient(settings);
+            return new GameControllerClient(game, settings);
         }
 
-        public static GameController Server(GameSettings settings)
+        public static GameController Server(Game game, GameSettings settings)
         {
-            return new GameControllerServer(settings);
+            return new GameControllerServer(game, settings);
         }
 
-        public static GameController Local(GameSettings settings)
+        public static GameController Local(Game game, GameSettings settings)
         {
-            return new LocalGameController(settings);
+            return new LocalGameController(game, settings);
         }
 
-        protected GameController(GameSettings settings)
+        protected GameController(Game game, GameSettings settings)
         {
+            m_game = game;
             this.settings = settings;
         }
 
@@ -459,7 +462,7 @@ namespace Bomberman.Gameplay
 
         public Game game
         {
-            get { return Game.Current; }
+            get { return m_game; }
         }
 
         #endregion
@@ -471,8 +474,8 @@ namespace Bomberman.Gameplay
 
     internal class LocalGameController : GameController
     {
-        public LocalGameController(GameSettings settings)
-            : base(settings)
+        public LocalGameController(Game game, GameSettings settings)
+            : base(game, settings)
         {   
         }
 
