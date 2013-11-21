@@ -49,8 +49,8 @@ namespace Bomberman.Networking
         {
             IsReady                 = false;
             outgoingSequence        = -1;
-            incomingSequence        = 0;
-            acknowledgedSequence    = 0;
+            incomingSequence        = -1;
+            acknowledgedSequence    = -1;
             needsFieldState         = true;
             needsRoundResults       = true;
         }

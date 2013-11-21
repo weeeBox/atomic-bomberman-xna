@@ -422,17 +422,6 @@ namespace Bomberman.Gameplay.Multiplayer
         
         //////////////////////////////////////////////////////////////////////////////
 
-        #region Game state
-
-        private void FillGameState(GameStateSnapshot state)
-        {   
-            state.SetFrom(game.GetPlayers().list);
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
         #region Helpers
 
         private bool NetworkPlayersAreReady()

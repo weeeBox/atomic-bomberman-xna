@@ -85,7 +85,7 @@ namespace Bomberman.Gameplay.Multiplayer
                     SendMessage(msg);
 
                     // push packet
-                    ClientPacket packet = m_sentPackets[m_channel.outgoingSequence & SENT_HISTORY_MASK];
+                    ClientPacket packet = GetPacket(m_channel.outgoingSequence);
                     packet.sequence = m_channel.outgoingSequence;
                     packet.replayed = false;
                     packet.frameTime = Application.frameTime;
@@ -131,6 +131,11 @@ namespace Bomberman.Gameplay.Multiplayer
 
                 packet.replayed = true;
             }
+        }
+
+        internal ClientPacket GetPacket(int seq)
+        {
+            return m_sentPackets[seq & SENT_HISTORY_MASK];
         }
 
         #endregion
@@ -368,8 +373,8 @@ namespace Bomberman.Gameplay.Multiplayer
 
             public override void Update(float delta)
             {
-                m_roundTripView.SetText("Round trip: " + m_connection.AverageRoundtripTime);
-                m_remoteTimeOffsetView.SetText("Remote time offset: " + m_connection.RemoteTimeOffset);
+                m_roundTripView.SetText("Round trip: " + (int)(m_connection.AverageRoundtripTime * 1000));
+                m_remoteTimeOffsetView.SetText("Remote time offset: " + (int)(m_connection.RemoteTimeOffset * 1000));
 
                 NetConnectionStatistics stats = m_connection.Statistics;
                 m_sentPacketsView.SetText("Sent packet: " + stats.SentPackets);
@@ -411,7 +416,7 @@ namespace Bomberman.Gameplay.Multiplayer
 
             public override void Update(float delta)
             {
-                // m_cordErrView.SetText("dpx: " + m_channel.errDx + "\ndpy: " + m_channel.errDy);
+                m_cordErrView.SetText("dpx: " + m_channel.players[0].errDx + "\ndpy: " + m_channel.players[0].errDy);
             }
         }
     }

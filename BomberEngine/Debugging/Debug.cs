@@ -44,7 +44,6 @@ namespace BomberEngine
         }
 
         [Conditional("DEBUG")]
-        [Conditional("DEBUG")]
         public static void Fail(String format, params Object[] args)
         {
             System.Diagnostics.Debug.Assert(false, "Failed!", format, args);
