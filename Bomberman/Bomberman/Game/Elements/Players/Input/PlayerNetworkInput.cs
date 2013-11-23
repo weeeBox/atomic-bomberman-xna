@@ -1,24 +1,11 @@
 ﻿
 namespace Bomberman.Gameplay.Elements.Players
 {
-    public class PlayerNetworkInput : PlayerInput
+    public class PlayerNetworkInput : PlayerBitArrayInput
     {
-        private int m_netActionBits;
-
-        public override void Update(float delta)
+        public void SetNetActionBits(int value)
         {
-            base.Update(delta);
-
-            int actionsCount = (int)PlayerAction.Count;
-            for (int i = 0; i < actionsCount; ++i)
-            {
-                SetActionPressed(i, (m_netActionBits & (1 << i)) != 0);
-            }
-        }
-
-        public void SetNetActionBits(int bits)
-        {
-            m_netActionBits = bits;
+            actionsArray.value = value;
         }
 
         public override bool IsLocal

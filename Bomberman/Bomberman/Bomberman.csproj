@@ -174,6 +174,7 @@
     <Compile Include="Game\Elements\Fields\FieldCellType.cs" />
     <Compile Include="Game\Elements\Fields\FieldComponent.cs" />
     <Compile Include="Game\Elements\Players\DiseaseList.cs" />
+    <Compile Include="Game\Elements\Players\Input\PlayerBitArrayInput.cs" />
     <Compile Include="Game\Elements\Players\Input\PlayerGamePadInput.cs" />
     <Compile Include="Game\Elements\Players\Input\PlayerNetworkInput.cs" />
     <Compile Include="Game\Elements\Players\PlayerAnimations.cs" />

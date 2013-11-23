@@ -50,7 +50,7 @@
     <Compile Include="FlameCellTest.cs" />
     <Compile Include="FieldCellTest.cs" />
     <Compile Include="GameControllerNetworkTest.cs" />
-    <Compile Include="Input\PlayerKeyInputTest.cs" />
+    <Compile Include="Input\PlayerBitArrayInputTest.cs" />
     <Compile Include="Mocks\FieldMock.cs" />
     <Compile Include="Mocks\GameMock.cs" />
     <Compile Include="Mocks\PeerMock.cs" />

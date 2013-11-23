@@ -8,12 +8,12 @@ using Bomberman.Gameplay.Elements.Players;
 namespace BombermanTests.Input
 {
     [TestClass]
-    public class PlayerKeyInputTest
+    public class PlayerBitArrayInputTest
     {
         [TestMethod]
         public void TestPressAndRelease()
         {
-            PlayerKeyInput input = new PlayerKeyInput();
+            PlayerBitArrayInput input = new DummyBitArrayInput();
 
             input.Update(0.016f);
 
@@ -89,7 +89,7 @@ namespace BombermanTests.Input
         [TestMethod]
         public void TestPressedCount()
         {
-            PlayerKeyInput input = new PlayerKeyInput();
+            PlayerBitArrayInput input = new DummyBitArrayInput();
 
             int pressedCount = 0;
             for (int i = 0; i < (int)PlayerAction.Count; ++i)
@@ -120,7 +120,7 @@ namespace BombermanTests.Input
                 }
             }
 
-            PlayerKeyInput input = new PlayerKeyInput();
+            PlayerBitArrayInput input = new DummyBitArrayInput();
             input.Update(0.016f);
 
             input.Reset(mask);
@@ -162,7 +162,7 @@ namespace BombermanTests.Input
                 }
             }
 
-            PlayerKeyInput input = new PlayerKeyInput();
+            PlayerBitArrayInput input = new DummyBitArrayInput();
             input.Update(0.016f);
 
             input.Force(mask);
@@ -174,6 +174,14 @@ namespace BombermanTests.Input
                 Assert.AreEqual(pressed, input.IsActionJustPressed(i));
                 Assert.IsFalse(input.IsActionJustReleased(i));
             }
+        }
+    }
+
+    public class DummyBitArrayInput : PlayerBitArrayInput
+    {
+        public override bool IsLocal
+        {
+            get { return true; }
         }
     }
 }
