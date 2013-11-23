@@ -15,7 +15,7 @@ using BombermanCommon.Resources.Scheme;
 using Bomberman.Gameplay.Elements.Fields;
 using BomberEngine;
 
-namespace BombermanTests
+namespace BombermanTests.Network
 {
     using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
     using Bomberman.Gameplay.Elements;

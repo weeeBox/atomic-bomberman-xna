@@ -49,7 +49,7 @@
     <Compile Include="DiseaseListTest.cs" />
     <Compile Include="FlameCellTest.cs" />
     <Compile Include="FieldCellTest.cs" />
-    <Compile Include="GameControllerNetworkTest.cs" />
+    <Compile Include="Network\GameControllerNetworkTest.cs" />
     <Compile Include="Input\PlayerBitArrayInputTest.cs" />
     <Compile Include="Mocks\FieldMock.cs" />
     <Compile Include="Mocks\GameMock.cs" />

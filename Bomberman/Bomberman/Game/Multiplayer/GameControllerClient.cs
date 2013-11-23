@@ -116,12 +116,21 @@ namespace Bomberman.Gameplay.Multiplayer
         private void ReplayPlayerActions(NetChannel channel)
         {
             List<Player> players = channel.players;
-            for (int seq = channel.acknowledgedSequence; seq < channel.outgoingSequence; ++seq)
+
+            // reset actions
+            ClientPacket packet = GetPacket(channel.acknowledgedSequence);
+            for (int playerIndex = 0; playerIndex < channel.players.Count; ++playerIndex)
             {
-                ClientPacket packet = m_sentPackets[seq & SENT_HISTORY_MASK];
+                channel.players[playerIndex].input.Reset(packet.actions[playerIndex]);
+            }
+
+            // replay packets
+            for (int seq = channel.acknowledgedSequence + 1; seq <= channel.outgoingSequence; ++seq)
+            {
+                packet = GetPacket(seq);
                 for (int playerIndex = 0; playerIndex < channel.players.Count; ++playerIndex)
                 {
-                    channel.players[playerIndex].input.Reset(packet.actions[playerIndex]);
+                    channel.players[playerIndex].input.Force(packet.actions[playerIndex]);
                 }
 
                 for (int playerIndex = 0; playerIndex < channel.players.Count; ++playerIndex)
