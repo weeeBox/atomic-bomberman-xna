@@ -35,29 +35,29 @@ namespace BomberEngine
 
         public static Application sharedApplication;
 
-        private RootController rootController;
+        private RootController m_rootController;
 
-        protected Context context;
+        protected Context m_context;
 
-        private bool started;
-        private bool stoped;
+        private bool m_started;
+        private bool m_stoped;
 
-        private CommandLine cmdLine;
+        private CommandLine m_cmdLine;
 
-        private TimerManager timerManager;
-        private InputManager inputManager;
-        private AssetManager assetManager;
-        private NotificationCenter notifications;
-        private SharedStorage sharedStorage;
+        private TimerManager m_timerManager;
+        private InputManager m_inputManager;
+        private AssetManager m_assetManager;
+        private NotificationCenter m_notifications;
+        private SharedStorage m_sharedStorage;
 
-        private UpdatableList updatables;
-        private DrawableList drawables;
+        private UpdatableList m_updatables;
+        private DrawableList m_drawables;
 
-        private INativeInterface nativeInterface;
-        private int width;
-        private int height;
-        private int realWidth;
-        private int realHeight;
+        private INativeInterface m_nativeInterface;
+        private int m_width;
+        private int m_height;
+        private int m_realWidth;
+        private int m_realHeight;
 
         private float m_currentTime;
         private float m_frameTime;
@@ -71,20 +71,20 @@ namespace BomberEngine
 
         public Application(ApplicationInfo info)
         {
-            nativeInterface = info.nativeInterface;
-            width = info.width;
-            height = info.height;
-            realWidth = info.realWidth;
-            realHeight = info.realHeight;
+            m_nativeInterface = info.nativeInterface;
+            m_width = info.width;
+            m_height = info.height;
+            m_realWidth = info.realWidth;
+            m_realHeight = info.realHeight;
 
             sharedApplication = this;
 
-            context = new Context();
-            updatables = new UpdatableList(1);
-            drawables = new DrawableList(1);
+            m_context = new Context();
+            m_updatables = new UpdatableList(1);
+            m_drawables = new DrawableList(1);
 
-            cmdLine = CreateCommandLine();
-            cmdLine.Parse(info.args);
+            m_cmdLine = CreateCommandLine();
+            m_cmdLine.Parse(info.args);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -127,7 +127,7 @@ namespace BomberEngine
 
         public void Start()
         {
-            if (started)
+            if (m_started)
             {
                 throw new InvalidOperationException("Application already started");
             }
@@ -144,22 +144,22 @@ namespace BomberEngine
 
         public void Stop()
         {
-            stoped = true;
+            m_stoped = true;
         }
 
         public void RunStop()
         {
-            if (!started)
+            if (!m_started)
             {
                 throw new InvalidOperationException("Application not started");
             }
 
-            rootController.Stop();
+            m_rootController.Stop();
             OnStop();
 
-            sharedStorage.Destroy();
-            timerManager.Destroy();
-            inputManager.Destroy();
+            m_sharedStorage.Destroy();
+            m_timerManager.Destroy();
+            m_inputManager.Destroy();
 
             SaveDemo();
         }
@@ -185,51 +185,51 @@ namespace BomberEngine
 
             MathHelp.InitRandom();
 
-            timerManager = CreateTimerManager();
-            notifications = CreateNotifications(timerManager);
-            sharedStorage = CreateSharedStorage("storage", timerManager);
+            m_timerManager = CreateTimerManager();
+            m_notifications = CreateNotifications(m_timerManager);
+            m_sharedStorage = CreateSharedStorage("storage", m_timerManager);
 
-            inputManager = CreateInputManager();
-            if (inputManager is IUpdatable)
+            m_inputManager = CreateInputManager();
+            if (m_inputManager is IUpdatable)
             {
-                AddUpdatable(inputManager as IUpdatable);
+                AddUpdatable(m_inputManager as IUpdatable);
             }
 
             CreateDemoRecorder();
             
-            assetManager = CreateAssetManager();
+            m_assetManager = CreateAssetManager();
 
-            rootController = CreateRootController();
-            AddGameObject(rootController);
+            m_rootController = CreateRootController();
+            AddGameObject(m_rootController);
 
-            started = true;
+            m_started = true;
             OnStart();
 
-            inputManager.AddInputListener(rootController);
-            rootController.Start();
+            m_inputManager.AddInputListener(m_rootController);
+            m_rootController.Start();
         }
 
         private void StartDemo(String path)
         {
             m_mode = Mode.Demo;
 
-            timerManager = CreateTimerManager();
-            notifications = CreateNotifications(timerManager);
-            sharedStorage = CreateSharedStorage("storage", timerManager);
+            m_timerManager = CreateTimerManager();
+            m_notifications = CreateNotifications(m_timerManager);
+            m_sharedStorage = CreateSharedStorage("storage", m_timerManager);
 
             m_demoPlayer = new DemoPlayer(path);
 
-            inputManager = new DemoPlayerInputManager();
-            assetManager = CreateAssetManager();
+            m_inputManager = new DemoPlayerInputManager();
+            m_assetManager = CreateAssetManager();
 
-            rootController = CreateRootController();
-            AddGameObject(rootController);
+            m_rootController = CreateRootController();
+            AddGameObject(m_rootController);
 
-            started = true;
+            m_started = true;
             OnStart();
 
-            inputManager.AddInputListener(rootController);
-            rootController.Start();
+            m_inputManager.AddInputListener(m_rootController);
+            m_rootController.Start();
         }
 
         #endregion
@@ -265,10 +265,10 @@ namespace BomberEngine
 
         public void Draw(GraphicsDevice graphicsDevice)
         {
-            context.Begin(graphicsDevice);
-            drawables.Draw(context);
-            OnDrawDebug(context);
-            context.End();
+            m_context.Begin(graphicsDevice);
+            m_drawables.Draw(m_context);
+            OnDrawDebug(m_context);
+            m_context.End();
         }
 
         public void RunUpdate(float delta)
@@ -276,8 +276,8 @@ namespace BomberEngine
             m_currentTime += delta;
             m_frameTime = delta;
 
-            updatables.Update(delta);
-            timerManager.Update(delta);
+            m_updatables.Update(delta);
+            m_timerManager.Update(delta);
             OnUpdateDebug(delta);
 
             ++m_tickIndex;
@@ -317,63 +317,63 @@ namespace BomberEngine
 
         public static Timer ScheduleTimer(TimerCallback1 callback, float delay, int numRepeats)
         {
-            return sharedApplication.timerManager.Schedule(callback, delay, numRepeats);
+            return sharedApplication.m_timerManager.Schedule(callback, delay, numRepeats);
         }
 
         public static Timer ScheduleTimer(TimerCallback2 callback, float delay, int numRepeats)
         {
-            return sharedApplication.timerManager.Schedule(callback, delay, numRepeats);
+            return sharedApplication.m_timerManager.Schedule(callback, delay, numRepeats);
         }
 
         public static Timer ScheduleTimerOnce(TimerCallback1 callback, float delay, int numRepeats)
         {
-            return sharedApplication.timerManager.ScheduleOnce(callback, delay, numRepeats);
+            return sharedApplication.m_timerManager.ScheduleOnce(callback, delay, numRepeats);
         }
 
         public static Timer ScheduleTimerOnce(TimerCallback2 callback, float delay, int numRepeats)
         {
-            return sharedApplication.timerManager.ScheduleOnce(callback, delay, numRepeats);
+            return sharedApplication.m_timerManager.ScheduleOnce(callback, delay, numRepeats);
         }
 
         public static void CancelTimer(TimerCallback1 callback)
         {
-            sharedApplication.timerManager.Cancel(callback);
+            sharedApplication.m_timerManager.Cancel(callback);
         }
 
         public static void CancelTimer(TimerCallback2 callback)
         {
-            sharedApplication.timerManager.Cancel(callback);
+            sharedApplication.m_timerManager.Cancel(callback);
         }
 
         public static void CancelAllTimers(Object target)
         {
-            sharedApplication.timerManager.CancelAll(target);
+            sharedApplication.m_timerManager.CancelAll(target);
         }
 
         public static void CancelAllTimers()
         {
-            sharedApplication.timerManager.CancelAll();
+            sharedApplication.m_timerManager.CancelAll();
         }
 
         //////////////////////////////////////////////////////////////////////////////
         protected void AddUpdatable(IUpdatable updatable)
         {
-            updatables.Add(updatable);
+            m_updatables.Add(updatable);
         }
 
         protected void RemoveUpdatable(IUpdatable updatable)
         {
-            updatables.Remove(updatable);
+            m_updatables.Remove(updatable);
         }
 
         protected void AddDrawable(IDrawable drawable)
         {
-            drawables.Add(drawable);
+            m_drawables.Add(drawable);
         }
 
         protected void RemoveDrawable(IDrawable drawable)
         {
-            drawables.Remove(drawable);
+            m_drawables.Remove(drawable);
         }
 
         protected void AddGameObject(BaseElement obj)
@@ -398,7 +398,7 @@ namespace BomberEngine
             m_demoRecorder = new DemoRecorder();
             AddUpdatable(m_demoRecorder);
 
-            inputManager.AddInputListener(m_demoRecorder);
+            m_inputManager.AddInputListener(m_demoRecorder);
         }
 
         [System.Diagnostics.Conditional("DEBUG_DEMO")]
@@ -420,7 +420,7 @@ namespace BomberEngine
 
         public static void SetWindowTitle(String title)
         {
-            sharedApplication.nativeInterface.SetWindowTitle(title);
+            sharedApplication.m_nativeInterface.SetWindowTitle(title);
         }
 
         #endregion
@@ -431,52 +431,52 @@ namespace BomberEngine
 
         public static AssetManager Assets()
         {
-            return sharedApplication.assetManager;
+            return sharedApplication.m_assetManager;
         }
 
         public static RootController RootController()
         {
-            return sharedApplication.rootController;
+            return sharedApplication.m_rootController;
         }
 
         public static TimerManager TimerManager()
         {
-            return sharedApplication.timerManager;
+            return sharedApplication.m_timerManager;
         }
 
         public static SharedStorage Storage()
         {
-            return sharedApplication.sharedStorage;
+            return sharedApplication.m_sharedStorage;
         }
 
         public static NotificationCenter NotificationCenter()
         {
-            return sharedApplication.notifications;
+            return sharedApplication.m_notifications;
         }
 
         public bool IsRunning()
         {
-            return !stoped;
+            return !m_stoped;
         }
 
         public static int GetWidth()
         {
-            return sharedApplication.width;
+            return sharedApplication.m_width;
         }
 
         public static int GetHeight()
         {
-            return sharedApplication.height;
+            return sharedApplication.m_height;
         }
 
         public static int GetRealWidth()
         {
-            return sharedApplication.realWidth;
+            return sharedApplication.m_realWidth;
         }
 
         public static int GetRealHeight()
         {
-            return sharedApplication.realWidth;
+            return sharedApplication.m_realWidth;
         }
 
         public static float CurrentTime
@@ -487,6 +487,10 @@ namespace BomberEngine
         public static float frameTime
         {
             get { return sharedApplication.m_frameTime; }
+
+            #if UNIT_TESTING
+            set { sharedApplication.m_frameTime = value; }
+            #endif
         }
 
         public static long tickIndex
@@ -498,6 +502,12 @@ namespace BomberEngine
         {
             get { return m_mode; }
         }
+
+        #if UNIT_TESTING
+
+        
+
+        #endif
 
         #endregion
     }
