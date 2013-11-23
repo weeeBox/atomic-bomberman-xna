@@ -22,7 +22,7 @@ namespace Bomberman
             Helper.fontButton = new VectorFont(contentManager.Load<SpriteFont>("ButtonFont"));
             Helper.fontFPS = new VectorFont(contentManager.Load<SpriteFont>("FPSFont"));
 
-            context.SetSystemFont(systemFont);
+            m_context.SetSystemFont(systemFont);
 
             RootController().AddDebugView(new DemoDebugView(Helper.fontSystem));
         }
