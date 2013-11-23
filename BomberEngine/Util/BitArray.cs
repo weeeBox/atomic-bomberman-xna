@@ -61,6 +61,7 @@ namespace BomberEngine
         public long value
         {
             get { return m_value; }
+            set { m_value = value; }
         }
 
         public int length

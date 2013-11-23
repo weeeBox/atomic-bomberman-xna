@@ -8,13 +8,13 @@ using Bomberman.Gameplay.Elements.Players;
 namespace BombermanTests.Input
 {
     [TestClass]
-    public class PlayerInputTest
+    public class PlayerKeyInputTest
     {
         [TestMethod]
         public void TestPressAndRelease()
         {
-            PlayerInput input = new DummyInput();
-            
+            PlayerKeyInput input = new PlayerKeyInput();
+
             input.Update(0.016f);
 
             for (int i = 0; i < (int)PlayerAction.Count; ++i)
@@ -24,12 +24,12 @@ namespace BombermanTests.Input
                 Assert.IsFalse(input.IsActionPressed(i));
             }
 
-            input.Update(0.016f);
-
             for (int i = 0; i < (int)PlayerAction.Count; ++i)
             {
-                input.SetActionPressed(i, true);
+                input.actionsArray[i] = true;
             }
+
+            input.Update(0.016f);
 
             for (int i = 0; i < (int)PlayerAction.Count; ++i)
             {
@@ -47,12 +47,12 @@ namespace BombermanTests.Input
                 Assert.IsTrue(input.IsActionPressed(i));
             }
 
-            input.Update(0.016f);
-
             for (int i = 0; i < (int)PlayerAction.Count; ++i)
             {
-                input.SetActionPressed(i, false);
+                input.actionsArray[i] = false;
             }
+
+            input.Update(0.016f);
 
             for (int i = 0; i < (int)PlayerAction.Count; ++i)
             {
@@ -70,30 +70,12 @@ namespace BombermanTests.Input
                 Assert.IsFalse(input.IsActionPressed(i));
             }
 
-            input.Update(0.016f);
-
             for (int i = 0; i < (int)PlayerAction.Count; ++i)
             {
-                input.SetActionPressed(i, true);
+                input.actionsArray[i] = true;
             }
 
             input.Update(0.016f);
-            input.Reset();
-
-            for (int i = 0; i < (int)PlayerAction.Count; ++i)
-            {
-                Assert.IsFalse(input.IsActionJustPressed(i));
-                Assert.IsFalse(input.IsActionJustReleased(i));
-                Assert.IsFalse(input.IsActionPressed(i));
-            }
-
-            input.Update(0.016f);
-
-            for (int i = 0; i < (int)PlayerAction.Count; ++i)
-            {
-                input.SetActionPressed(i, true);
-            }
-
             input.Reset();
 
             for (int i = 0; i < (int)PlayerAction.Count; ++i)
@@ -107,23 +89,21 @@ namespace BombermanTests.Input
         [TestMethod]
         public void TestPressedCount()
         {
-            PlayerInput input = new DummyInput();
-
-            input.Update(0.016f);
+            PlayerKeyInput input = new PlayerKeyInput();
 
             int pressedCount = 0;
             for (int i = 0; i < (int)PlayerAction.Count; ++i)
             {
                 bool pressed = i % 2 == 0;
-                input.SetActionPressed(i, pressed);
+                input.actionsArray[i] = pressed;
 
                 if (pressed) ++pressedCount;
             }
 
+            input.Update(0.016f);
             Assert.AreEqual(pressedCount, input.GetPressedActionCount());
 
             input.Reset();
-
             Assert.AreEqual(0, input.GetPressedActionCount());
         }
 
@@ -140,7 +120,7 @@ namespace BombermanTests.Input
                 }
             }
 
-            PlayerInput input = new DummyInput();
+            PlayerKeyInput input = new PlayerKeyInput();
             input.Update(0.016f);
 
             input.Reset(mask);
@@ -155,7 +135,7 @@ namespace BombermanTests.Input
 
             for (int i = 0; i < (int)PlayerAction.Count; ++i)
             {
-                input.SetActionPressed(i, true);
+                input.actionsArray[i] = true;
             }
 
             input.Reset(mask);
@@ -182,7 +162,7 @@ namespace BombermanTests.Input
                 }
             }
 
-            PlayerInput input = new DummyInput();
+            PlayerKeyInput input = new PlayerKeyInput();
             input.Update(0.016f);
 
             input.Force(mask);
@@ -194,14 +174,6 @@ namespace BombermanTests.Input
                 Assert.AreEqual(pressed, input.IsActionJustPressed(i));
                 Assert.IsFalse(input.IsActionJustReleased(i));
             }
-        }
-    }
-
-    class DummyInput : PlayerInput
-    {
-        public override bool IsLocal
-        {
-            get { return true; }
         }
     }
 }

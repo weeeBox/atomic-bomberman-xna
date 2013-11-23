@@ -28,6 +28,18 @@ namespace Bomberman.Gameplay.Elements.Players
             m_actionsArray.Clear();
         }
 
+        public override void Reset(int mask)
+        {
+            base.Reset(mask);
+            m_actionsArray.value = mask;
+        }
+
+        public override void Force(int mask)
+        {
+            base.Force(mask);
+            m_actionsArray.value = mask;
+        }
+
         internal BitArray actionsArray
         {
             get { return m_actionsArray; }
