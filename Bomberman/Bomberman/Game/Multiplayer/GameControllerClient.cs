@@ -72,36 +72,19 @@ namespace Bomberman.Gameplay.Multiplayer
             {
                 case State.RoundStart:
                 {
-                    NetOutgoingMessage msg = CreateMessage(PeerMessageId.RoundStart);
-                    WriteRoundStartMessage(msg, m_channel);
-                    SendMessage(msg);
+                    SendRoundStartMessage();
                     break;
                 }
 
                 case State.Playing:
                 {
-                    NetOutgoingMessage msg = CreateMessage(PeerMessageId.Playing);
-                    WritePlayingMessage(msg, m_channel);
-                    SendMessage(msg);
-
-                    // push packet
-                    ClientPacket packet = GetPacket(m_channel.outgoingSequence);
-                    packet.sequence = m_channel.outgoingSequence;
-                    packet.replayed = false;
-                    packet.frameTime = Application.frameTime;
-                    for (int i = 0; i < m_channel.players.Count; ++i)
-                    {
-                        packet.actions[i] = m_channel.players[i].input.mask;
-                    }
-
+                    SendPlayingSendMessage();
                     break;
                 }
 
                 case State.RoundEnd:
                 {
-                    NetOutgoingMessage msg = CreateMessage(PeerMessageId.RoundEnd);
-                    WriteRoundEndMessage(msg, m_channel);
-                    SendMessage(msg);
+                    SendRoundEndMessage();
                     break;
                 }
 
@@ -111,6 +94,37 @@ namespace Bomberman.Gameplay.Multiplayer
                     break;
                 }
             }
+        }
+
+        internal void SendRoundStartMessage()
+        {
+            NetOutgoingMessage msg = CreateMessage(PeerMessageId.RoundStart);
+            WriteRoundStartMessage(msg, m_channel);
+            SendMessage(msg);
+        }
+
+        internal void SendPlayingSendMessage()
+        {
+            NetOutgoingMessage msg = CreateMessage(PeerMessageId.Playing);
+            WritePlayingMessage(msg, m_channel);
+            SendMessage(msg);
+
+            // push packet
+            ClientPacket packet = GetPacket(m_channel.outgoingSequence);
+            packet.sequence = m_channel.outgoingSequence;
+            packet.replayed = false;
+            packet.frameTime = Application.frameTime;
+            for (int i = 0; i < m_channel.players.Count; ++i)
+            {
+                packet.actions[i] = m_channel.players[i].input.mask;
+            }
+        }
+
+        internal void SendRoundEndMessage()
+        {
+            NetOutgoingMessage msg = CreateMessage(PeerMessageId.RoundEnd);
+            WriteRoundEndMessage(msg, m_channel);
+            SendMessage(msg);
         }
 
         private void ReplayPlayerActions(NetChannel channel)

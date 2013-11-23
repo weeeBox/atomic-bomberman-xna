@@ -5,6 +5,7 @@ using System.Text;
 using Bomberman.Gameplay.Multiplayer;
 using BombermanTests.Mocks;
 using Bomberman.Gameplay;
+using Lidgren.Network;
 
 namespace BombermanTests.Network
 {
@@ -20,6 +21,18 @@ namespace BombermanTests.Network
     {
         public GameControllerClientMock() :
             base(new GameMock(15, 11), new GameSettings(new SchemeMock("test", 90)))
+        {
+        }
+
+        protected override void SendMessage(NetOutgoingMessage message, NetConnection recipient)
+        {
+        }
+
+        protected override void SendMessage(NetOutgoingMessage message)
+        {
+        }
+
+        protected override void RecycleMessage(NetOutgoingMessage message)
         {
         }
     }
