@@ -121,7 +121,7 @@ namespace Bomberman.Gameplay.Multiplayer
                 ClientPacket packet = m_sentPackets[seq & SENT_HISTORY_MASK];
                 for (int playerIndex = 0; playerIndex < channel.players.Count; ++playerIndex)
                 {
-                    channel.players[playerIndex].input.Force(packet.actions[playerIndex]);
+                    channel.players[playerIndex].input.Reset(packet.actions[playerIndex]);
                 }
 
                 for (int playerIndex = 0; playerIndex < channel.players.Count; ++playerIndex)

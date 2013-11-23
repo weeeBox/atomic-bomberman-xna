@@ -18,13 +18,17 @@ namespace Bomberman.Gameplay.Elements.Players
 
         public virtual void Reset()
         {
-            m_stateBits = 0;
-            m_stateBitsOld = 0;
+            Reset(0);
         }
 
-        public void Force(int mask)
+        public virtual void Reset(int mask)
         {
             m_stateBits = m_stateBitsOld = mask;
+        }
+
+        public virtual void Force(int mask)
+        {
+            m_stateBits = mask;
         }
 
         public void SetActionPressed(PlayerAction action, bool flag)

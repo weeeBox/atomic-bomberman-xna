@@ -50,10 +50,12 @@
     <Compile Include="FlameCellTest.cs" />
     <Compile Include="FieldCellTest.cs" />
     <Compile Include="GameControllerNetworkTest.cs" />
+    <Compile Include="Input\PlayerKeyInputTest.cs" />
     <Compile Include="Mocks\FieldMock.cs" />
     <Compile Include="Mocks\GameMock.cs" />
     <Compile Include="Mocks\PeerMock.cs" />
     <Compile Include="Mocks\SchemeMock.cs" />
+    <Compile Include="Input\PlayerInputTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestBase.cs" />
   </ItemGroup>
@@ -71,6 +73,7 @@
       <Name>Lidgren.Network</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

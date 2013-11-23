@@ -109,6 +109,12 @@ namespace BomberEngine
         }
 
         [Conditional("DEBUG")]
+        public static void AreEqual<T>(T expected, T actual) where T : struct, IConvertible, IComparable
+        {
+            System.Diagnostics.Debug.Assert(expected.CompareTo(actual) == 0, "Assertion failed", "{0} != {1}", expected, actual);
+        }
+
+        [Conditional("DEBUG")]
         public static void IsInstance<T>(Object obj)
         {
             System.Diagnostics.Debug.Assert(obj is T, "Assertion failed"); // TODO: message

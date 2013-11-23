@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace Bomberman.Gameplay.Elements.Players
 {
-    public class PlayerGamePadInput : PlayerKeyInput
+    public class PlayerGamePadInput : PlayerInput
     {
         private const float STICK_DEAD_ZONE = 0.125f;
         private const float STICK_DEAD_ZONE_2 = STICK_DEAD_ZONE * STICK_DEAD_ZONE;
@@ -69,6 +69,11 @@ namespace Bomberman.Gameplay.Elements.Players
 
             SetActionPressed(PlayerAction.Bomb, im.IsButtonPressed(playerIndex, KeyCode.GP_A) || im.IsButtonPressed(playerIndex, KeyCode.GP_Y));
             SetActionPressed(PlayerAction.Special, im.IsButtonPressed(playerIndex, KeyCode.GP_X) || im.IsButtonPressed(playerIndex, KeyCode.GP_B));
+        }
+
+        public override bool IsLocal
+        {
+            get { return true; }
         }
     }
 }
