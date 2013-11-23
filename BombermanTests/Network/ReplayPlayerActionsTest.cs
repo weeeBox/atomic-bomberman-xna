@@ -7,6 +7,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BombermanTests.Network
 {
+    using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+
     [TestClass]
     public class ReplayPlayerActionsTest
     {
@@ -20,8 +22,10 @@ namespace BombermanTests.Network
         [TestMethod]
         public void TestReplayActions()
         {
+            const float FrameTime = 0.016f;
+
             Application.sharedApplication = new ApplicationMock();
-            Application.frameTime = 0.016f;
+            Application.frameTime = FrameTime;
 
             Scheme scheme = new EmptySchemeMock("Test", 90);
             GameSettings settings = new GameSettings(scheme);
@@ -45,13 +49,36 @@ namespace BombermanTests.Network
                 new PlayerAction[] { PlayerAction.Down },
             };
 
+            PlayerState[] states = new PlayerState[actions.Length];
+
             Player player = clientGame.GetPlayers().list[0];
+            player.lockAnimations = true;
             for (int i = 0; i < actions.Length; ++i)
             {
                 player.input.Force(CreateInputMask(actions[i]));
-                player.Update(0.016f);
+                player.Update(FrameTime);
+                if (player.IsMoving())
+                {
+                    player.UpdateMoving(FrameTime);
+                }
+                player.FillState(ref states[i]);
+
                 client.SendPlayingSendMessage();
             }
+
+            int ackSeq = 0;
+            client.channel.acknowledgedSequence = ackSeq;
+            player.UpdateFromNetwork(ref states[ackSeq]);
+
+            player.lockAnimations = true;
+            client.ReplayPlayerActions(client.channel);
+
+            PlayerState finalState = states[states.Length - 1];
+            Assert.AreEqual(finalState.px, player.px);
+            Assert.AreEqual(finalState.py, player.py);
+            Assert.AreEqual(finalState.direction, player.direction);
+            Assert.AreEqual(finalState.moving, player.IsMoving());
+            Assert.AreEqual(finalState.speed, player.GetSpeed());
         }
 
         private int CreateInputMask(params PlayerAction[] actions)

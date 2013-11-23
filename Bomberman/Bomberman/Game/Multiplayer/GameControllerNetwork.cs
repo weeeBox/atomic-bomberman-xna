@@ -533,17 +533,17 @@ namespace Bomberman.Gameplay.Multiplayer
             return msg;
         }
 
-        protected virtual void SendMessage(NetOutgoingMessage message, NetConnection recipient)
+        protected void SendMessage(NetOutgoingMessage message, NetConnection recipient)
         {
             GetNetwork().SendMessage(message, recipient);
         }
 
-        protected virtual void SendMessage(NetOutgoingMessage message)
+        protected void SendMessage(NetOutgoingMessage message)
         {
             GetNetwork().SendMessage(message);
         }
 
-        protected virtual void RecycleMessage(NetOutgoingMessage message)
+        protected void RecycleMessage(NetOutgoingMessage message)
         {
             GetNetwork().RecycleMessage(message);
         }

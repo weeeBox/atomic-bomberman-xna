@@ -23,18 +23,6 @@ namespace BombermanTests.Network
             base(new GameMock(15, 11), new GameSettings(new SchemeMock("test", 90)))
         {
         }
-
-        protected override void SendMessage(NetOutgoingMessage message, NetConnection recipient)
-        {
-        }
-
-        protected override void SendMessage(NetOutgoingMessage message)
-        {
-        }
-
-        protected override void RecycleMessage(NetOutgoingMessage message)
-        {
-        }
     }
 
     public class GameControllerServerMock : GameControllerServer

@@ -24,6 +24,15 @@ namespace Bomberman.Gameplay.Elements.Players
         }
     }
 
+    public struct PlayerState
+    {
+        public float px;
+        public float py;
+        public bool moving;
+        public Direction direction;
+        public float speed;
+    }
+
     public class Player : MovableCell
     {
         private static readonly PlayerAction[] ACTIONS = 
@@ -1629,6 +1638,11 @@ namespace Bomberman.Gameplay.Elements.Players
 
         #region Network
 
+        internal void UpdateFromNetwork(ref PlayerState state)
+        {
+            UpdateFromNetwork(state.px, state.py, state.moving, state.direction, state.speed);
+        }
+
         /* Sets player state received from the server as a part of game packet */
         internal void UpdateFromNetwork(float newPx, float newPy, bool moving, Direction newDir, float newSpeed)
         {
@@ -1653,6 +1667,15 @@ namespace Bomberman.Gameplay.Elements.Players
             }
 
             m_lockAnimations = false;
+        }
+
+        internal void FillState(ref PlayerState state)
+        {
+            state.px = px;
+            state.py = py;
+            state.direction = direction;
+            state.moving = IsMoving();
+            state.speed = GetSpeed();
         }
 
         #endregion
@@ -1832,6 +1855,16 @@ namespace Bomberman.Gameplay.Elements.Players
         {
             get { return m_calculatedY - py; }
         }
+
+        #if UNIT_TESTING
+
+        public bool lockAnimations
+        {
+            get { return m_lockAnimations; }
+            set { m_lockAnimations = value; }
+        }
+
+        #endif
 
         #endregion
     }

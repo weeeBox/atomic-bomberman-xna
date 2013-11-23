@@ -15,6 +15,8 @@ namespace BombermanTests.Input
         {
             PlayerBitArrayInput input = new DummyBitArrayInput();
 
+            ////////////////////////////////////////////////////
+
             input.Update(0.016f);
 
             for (int i = 0; i < (int)PlayerAction.Count; ++i)
@@ -23,6 +25,8 @@ namespace BombermanTests.Input
                 Assert.IsFalse(input.IsActionJustReleased(i));
                 Assert.IsFalse(input.IsActionPressed(i));
             }
+
+            ////////////////////////////////////////////////////
 
             for (int i = 0; i < (int)PlayerAction.Count; ++i)
             {
@@ -38,6 +42,8 @@ namespace BombermanTests.Input
                 Assert.IsTrue(input.IsActionPressed(i));
             }
 
+            ////////////////////////////////////////////////////
+
             input.Update(0.016f);
 
             for (int i = 0; i < (int)PlayerAction.Count; ++i)
@@ -46,6 +52,8 @@ namespace BombermanTests.Input
                 Assert.IsFalse(input.IsActionJustReleased(i));
                 Assert.IsTrue(input.IsActionPressed(i));
             }
+
+            ////////////////////////////////////////////////////
 
             for (int i = 0; i < (int)PlayerAction.Count; ++i)
             {
@@ -61,6 +69,8 @@ namespace BombermanTests.Input
                 Assert.IsFalse(input.IsActionPressed(i));
             }
 
+            ////////////////////////////////////////////////////
+
             input.Update(0.016f);
 
             for (int i = 0; i < (int)PlayerAction.Count; ++i)
@@ -69,6 +79,8 @@ namespace BombermanTests.Input
                 Assert.IsFalse(input.IsActionJustReleased(i));
                 Assert.IsFalse(input.IsActionPressed(i));
             }
+
+            ////////////////////////////////////////////////////
 
             for (int i = 0; i < (int)PlayerAction.Count; ++i)
             {
@@ -163,9 +175,9 @@ namespace BombermanTests.Input
             }
 
             PlayerBitArrayInput input = new DummyBitArrayInput();
-            input.Update(0.016f);
 
             input.Force(mask);
+            input.Update(0.016f);
 
             for (int i = 0; i < (int)PlayerAction.Count; ++i)
             {

@@ -134,7 +134,7 @@ namespace Bomberman.Gameplay.Multiplayer
             SendMessage(msg);
         }
 
-        private void ReplayPlayerActions(NetChannel channel)
+        internal void ReplayPlayerActions(NetChannel channel)
         {
             List<Player> players = channel.players;
 
@@ -374,6 +374,15 @@ namespace Bomberman.Gameplay.Multiplayer
         {
             return CreateMessage(messageId, m_channel);
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        public NetChannel channel
+        {
+            get { return m_channel; }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
 
         private class NetworkTraceView : View
         {

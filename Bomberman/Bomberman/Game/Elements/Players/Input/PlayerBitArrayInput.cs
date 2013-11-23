@@ -39,7 +39,6 @@ namespace Bomberman.Gameplay.Elements.Players
 
         public override void Force(int mask)
         {
-            base.Force(mask);
             m_actionsArray.value = mask;
         }
 
