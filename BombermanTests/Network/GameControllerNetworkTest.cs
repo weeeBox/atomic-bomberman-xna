@@ -195,28 +195,4 @@ namespace BombermanTests.Network
             Assert.AreEqual(svLocalPlayer.input.mask, clRemotePlayer.input.mask);
         }
     }
-
-    class GameControllerNetworkMock : GameControllerNetwork
-    {
-        public GameControllerNetworkMock() :
-            base(new GameMock(15, 11), new GameSettings(new SchemeMock("test", 90)))
-        {
-        }
-    }
-
-    class GameControllerClientMock : GameControllerClient
-    {
-        public GameControllerClientMock() :
-            base(new GameMock(15, 11), new GameSettings(new SchemeMock("test", 90)))
-        {
-        }
-    }
-
-    class GameControllerServerMock : GameControllerServer
-    {
-        public GameControllerServerMock() :
-            base(new GameMock(15, 11), new GameSettings(new SchemeMock("test", 90)))
-        {
-        }
-    }
 }
