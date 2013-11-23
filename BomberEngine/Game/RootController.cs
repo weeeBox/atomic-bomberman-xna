@@ -30,6 +30,12 @@ namespace BomberEngine
             InitDebugView();
         }
 
+        #if UNIT_TESTING
+        protected RootController()
+        {
+        }
+        #endif
+
         //////////////////////////////////////////////////////////////////////////////
 
         #region Lifecycle

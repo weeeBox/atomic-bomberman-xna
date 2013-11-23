@@ -54,6 +54,13 @@ namespace Bomberman.Gameplay.Multiplayer
             peer.RemoteConnection.Tag = m_channel;
         }
 
+        #if UNIT_TESTING
+        public void CreateNetChannel(NetConnection connection, List<Player>players)
+        {
+            m_channel = new NetChannel(connection, players);
+        }
+        #endif
+
         public override void Update(float delta)
         {
             base.Update(delta);

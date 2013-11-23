@@ -49,6 +49,10 @@
     <Compile Include="DiseaseListTest.cs" />
     <Compile Include="FlameCellTest.cs" />
     <Compile Include="FieldCellTest.cs" />
+    <Compile Include="Mocks\ApplicationMock.cs" />
+    <Compile Include="Mocks\AssetManagerMock.cs" />
+    <Compile Include="Mocks\NetworkManagerMock.cs" />
+    <Compile Include="Mocks\BmRootControllerMock.cs" />
     <Compile Include="Network\GameControllerNetworkTest.cs" />
     <Compile Include="Input\PlayerBitArrayInputTest.cs" />
     <Compile Include="Mocks\FieldMock.cs" />

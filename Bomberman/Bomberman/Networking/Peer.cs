@@ -113,22 +113,22 @@ namespace Bomberman.Networking
 
         public abstract void SendMessage(NetOutgoingMessage message);
         
-        public NetOutgoingMessage CreateMessage()
+        public virtual NetOutgoingMessage CreateMessage()
         {
             return m_peer.CreateMessage();
         }
 
-        public NetOutgoingMessage CreateMessage(int initialCapacity)
+        public virtual NetOutgoingMessage CreateMessage(int initialCapacity)
         {
             return m_peer.CreateMessage(initialCapacity);
         }
 
-        public void RecycleMessage(NetOutgoingMessage msg)
+        public virtual void RecycleMessage(NetOutgoingMessage msg)
         {
             m_peer.Recycle(msg);
         }
 
-        public void RecycleMessage(NetIncomingMessage msg)
+        public virtual void RecycleMessage(NetIncomingMessage msg)
         {
             m_peer.Recycle(msg);
         }

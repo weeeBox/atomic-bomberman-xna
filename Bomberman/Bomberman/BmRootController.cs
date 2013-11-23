@@ -13,8 +13,8 @@ namespace Bomberman
 {
     public class BmRootController : RootController
     {
-        private MenuController menuController;
-        private NetworkManager networkManager;
+        private MenuController m_menuController;
+        private NetworkManager m_networkManager;
 
         private Game m_game;
         private InputMapping m_mapping;
@@ -22,10 +22,16 @@ namespace Bomberman
         public BmRootController(ContentManager contentManager)
             : base(contentManager)
         {
-            networkManager = new NetworkManager();
+            m_networkManager = new NetworkManager();
             m_mapping = new InputMapping();
             m_game = new Game();
         }
+
+        #if UNIT_TESTING
+        protected BmRootController()
+        {
+        }
+        #endif
 
         //////////////////////////////////////////////////////////////////////////////
 
@@ -44,11 +50,11 @@ namespace Bomberman
             {
                 if (mode.Equals("client"))
                 {
-                    menuController.Stop((int)MenuController.ExitCode.DebugClientStart);
+                    m_menuController.Stop((int)MenuController.ExitCode.DebugClientStart);
                 }
                 else if (mode.Equals("server"))
                 {
-                    menuController.Stop((int)MenuController.ExitCode.DebugServerStart);
+                    m_menuController.Stop((int)MenuController.ExitCode.DebugServerStart);
                 }
             }
         }
@@ -68,7 +74,7 @@ namespace Bomberman
         public override void Update(float delta)
         {
             base.Update(delta);
-            networkManager.Update(delta);
+            m_networkManager.Update(delta);
         }
 
         #endregion
@@ -253,13 +259,13 @@ namespace Bomberman
 
         private void StartMainMenuController()
         {
-            menuController = new MenuController();
-            StartController(menuController);
+            m_menuController = new MenuController();
+            StartController(m_menuController);
         }
 
         public NetworkManager GetNetwork()
         {
-            return networkManager;
+            return m_networkManager;
         }
 
         #endregion
@@ -277,6 +283,16 @@ namespace Bomberman
         {
             get { return m_game; }
         }
+
+        #if UNIT_TESTING
+
+        protected NetworkManager networkManager
+        {
+            get { return m_networkManager; }
+            set { m_networkManager = value; }
+        }
+
+        #endif
 
         #endregion
     }

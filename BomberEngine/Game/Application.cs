@@ -503,9 +503,25 @@ namespace BomberEngine
             get { return m_mode; }
         }
 
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Unit Testing
+
         #if UNIT_TESTING
 
-        
+        public AssetManager assetManager
+        {
+            get { return m_assetManager; }
+            set { m_assetManager = value; }
+        }
+
+        public RootController rootController
+        {
+            get { return m_rootController; }
+            set { m_rootController = value; }
+        }
 
         #endif
 

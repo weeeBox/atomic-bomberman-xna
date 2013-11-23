@@ -1,24 +1,28 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using BomberEngine;
 using Bomberman.Content;
-using BombermanTests.Mocks;
 using Bomberman.Gameplay;
 using Bomberman.Gameplay.Elements.Players;
-using Bomberman.Networking;
-using Lidgren.Network;
-using Bomberman.Gameplay.Elements.Fields;
+using BombermanTests.Mocks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BombermanTests.Network
 {
     [TestClass]
     public class ReplayPlayerActionsTest
     {
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            new InputMapping();
+            MathHelp.InitRandom(0);
+        }
+
         [TestMethod]
         public void TestReplayActions()
         {
+            Application.sharedApplication = new ApplicationMock();
+            Application.frameTime = 0.016f;
+
             Scheme scheme = new EmptySchemeMock("Test", 90);
             GameSettings settings = new GameSettings(scheme);
 
@@ -27,7 +31,7 @@ namespace BombermanTests.Network
             clientGame.AddPlayer(new Player(), InputMapping.CreatePlayerInput(InputType.Keyboard1));
             clientGame.SetupField(scheme);
 
-            client.CreateNetChannel();
+            client.CreateNetChannel(null, clientGame.GetPlayers().list);
 
             PlayerAction[][] actions =
             {
@@ -40,10 +44,13 @@ namespace BombermanTests.Network
                 new PlayerAction[] { PlayerAction.Down },
                 new PlayerAction[] { PlayerAction.Down },
             };
-            
+
+            Player player = clientGame.GetPlayers().list[0];
             for (int i = 0; i < actions.Length; ++i)
             {
-                PlayerAction[] arr = actions[i];
+                player.input.Force(CreateInputMask(actions[i]));
+                player.Update(0.016f);
+                client.SendPlayingSendMessage();
             }
         }
 

@@ -19,18 +19,18 @@ namespace Bomberman.Networking
 
     public class NetworkManager : IUpdatable
     {
-        private Peer networkPeer;
-        private LocalServersDiscovery serverDiscovery;
+        private Peer m_networkPeer;
+        private LocalServersDiscovery m_serverDiscovery;
 
         public void Update(float delta)
         {
-            if (networkPeer != null)
+            if (m_networkPeer != null)
             {
-                networkPeer.Update(delta);
+                m_networkPeer.Update(delta);
             }
-            if (serverDiscovery != null)
+            if (m_serverDiscovery != null)
             {
-                serverDiscovery.Update(delta);
+                m_serverDiscovery.Update(delta);
             }
         }
 
@@ -40,23 +40,23 @@ namespace Bomberman.Networking
 
         public void StartLocalServerDiscovery()
         {
-            Assert.IsTrue(serverDiscovery == null);
+            Assert.IsTrue(m_serverDiscovery == null);
 
             String appId = CVars.sv_appId.value;
             int port = CVars.sv_port.intValue;
 
-            serverDiscovery = new LocalServersDiscovery(appId, port);
-            serverDiscovery.Start();
+            m_serverDiscovery = new LocalServersDiscovery(appId, port);
+            m_serverDiscovery.Start();
 
             Log.i("Started local servers discovery...");
         }
 
         public void StopLocalServerDiscovery()
         {
-            if (serverDiscovery != null)
+            if (m_serverDiscovery != null)
             {
-                serverDiscovery.Stop();
-                serverDiscovery = null;
+                m_serverDiscovery.Stop();
+                m_serverDiscovery = null;
 
                 Log.i("Stopped local servers discovery");
             }
@@ -98,24 +98,24 @@ namespace Bomberman.Networking
 
         private void CreateServer(String appIdentifier, int port)
         {
-            Assert.IsTrue(networkPeer == null);
-            networkPeer = new Server(appIdentifier, port); ;
+            Assert.IsTrue(m_networkPeer == null);
+            m_networkPeer = new Server(appIdentifier, port); ;
 
             Log.d("Created network server");
         }
 
         private void CreateClient(String appIdetifier, IPEndPoint remoteEndPoint, int port)
         {
-            Assert.IsTrue(networkPeer == null);
-            networkPeer = new Client(appIdetifier, remoteEndPoint);
+            Assert.IsTrue(m_networkPeer == null);
+            m_networkPeer = new Client(appIdetifier, remoteEndPoint);
 
             Log.d("Created network client");
         }
 
         private void Start()
         {
-            Assert.IsTrue(networkPeer != null);
-            networkPeer.Start();
+            Assert.IsTrue(m_networkPeer != null);
+            m_networkPeer.Start();
 
             Log.d("Started network peer");
         }
@@ -124,10 +124,10 @@ namespace Bomberman.Networking
         {
             StopLocalServerDiscovery();
 
-            if (networkPeer != null)
+            if (m_networkPeer != null)
             {
-                networkPeer.Stop();
-                networkPeer = null;
+                m_networkPeer.Stop();
+                m_networkPeer = null;
 
                 Log.d("Stopped network peer");
             }
@@ -139,39 +139,39 @@ namespace Bomberman.Networking
 
         public NetOutgoingMessage CreateMessage()
         {
-            return networkPeer.CreateMessage();
+            return m_networkPeer.CreateMessage();
         }
 
         public void SendMessage(NetOutgoingMessage message, NetConnection recipient)
         {
-            networkPeer.SendMessage(message, recipient);
+            m_networkPeer.SendMessage(message, recipient);
         }
 
         public void SendMessage(NetOutgoingMessage message)
         {
-            networkPeer.SendMessage(message);
+            m_networkPeer.SendMessage(message);
         }
 
         public void RecycleMessage(NetOutgoingMessage msg)
         {
-            networkPeer.RecycleMessage(msg);
+            m_networkPeer.RecycleMessage(msg);
         }
 
         public void RecycleMessage(NetIncomingMessage msg)
         {
-            networkPeer.RecycleMessage(msg);
+            m_networkPeer.RecycleMessage(msg);
         }
 
         //////////////////////////////////////////////////////////////////////////////
 
         internal Peer GetPeer()
         {
-            return networkPeer;
+            return m_networkPeer;
         }
 
         internal Server GetServer()
         {
-            Server server = networkPeer as Server;
+            Server server = m_networkPeer as Server;
             Assert.IsTrue(server != null);
 
             return server;
@@ -179,10 +179,20 @@ namespace Bomberman.Networking
 
         internal Client GetClient()
         {
-            Client client = networkPeer as Client;
+            Client client = m_networkPeer as Client;
             Assert.IsTrue(client != null);
 
             return client;
         }
+
+        #if UNIT_TESTING
+
+        public Peer networkPeer
+        {
+            get { return m_networkPeer; }
+            set { m_networkPeer = value; }
+        }
+
+        #endif
     }
 }

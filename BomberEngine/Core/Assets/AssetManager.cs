@@ -27,6 +27,12 @@ namespace BomberEngine
             InitReaders();
         }
 
+        #if UNIT_TESTING
+        protected AssetManager()
+        {
+        }
+        #endif
+
         private void InitReaders()
         {
             readers = new Dictionary<Type, AssetReader>();
