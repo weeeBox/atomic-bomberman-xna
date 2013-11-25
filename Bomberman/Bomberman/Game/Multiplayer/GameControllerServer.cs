@@ -55,7 +55,7 @@ namespace Bomberman.Gameplay.Multiplayer
 
             GetConsole().TryExecuteCommand("exec game.cfg");
 
-            SetPacketRate(CVars.sv_packetRate.intValue);
+            // SetPacketRate(CVars.sv_packetRate.intValue);
 
             RegisterNotification(Notifications.ConsoleVariableChanged, ServerRateVarChangedCallback);
             RegisterNotification(NetworkNotifications.ClientConnected, ClientConnectedNotification);
@@ -68,6 +68,13 @@ namespace Bomberman.Gameplay.Multiplayer
             Application.CancelAllTimers(this);
 
             base.OnStop();
+        }
+
+        public override void Update(float delta)
+        {
+            GetNetwork().Update(delta); // read client packets
+            base.Update(delta);         // run tick
+            SendServerPacket();         // send client packets
         }
 
         private void SetPacketRate(int packetRate)

@@ -74,6 +74,12 @@ namespace Bomberman.Multiplayer
             StopDiscovery();
         }
 
+        public override void Update(float delta)
+        {
+            base.Update(delta);
+            GetNetwork().Update(delta);
+        }
+
         //////////////////////////////////////////////////////////////////////////////
 
         private void OnCancelButtonPressed(Button button)

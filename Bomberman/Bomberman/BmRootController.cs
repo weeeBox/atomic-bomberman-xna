@@ -69,18 +69,6 @@ namespace Bomberman
 
         //////////////////////////////////////////////////////////////////////////////
 
-        #region IUpdatable
-
-        public override void Update(float delta)
-        {
-            base.Update(delta);
-            m_networkManager.Update(delta);
-        }
-
-        #endregion
-
-        //////////////////////////////////////////////////////////////////////////////
-
         #region Child controllers
 
         protected override void OnControllerStop(Controller controller)

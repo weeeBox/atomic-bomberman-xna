@@ -62,8 +62,7 @@ namespace Bomberman.Gameplay.Elements.Players
 
         private bool m_ready;
 
-        private float m_calculatedX;
-        private float m_calculatedY;
+        private PlayerState m_calculatedState;
 
         private PlayerStatistics m_statistics;
         private NetChannel m_netChannel;
@@ -1648,8 +1647,8 @@ namespace Bomberman.Gameplay.Elements.Players
         {
             m_lockAnimations = true;
 
-            m_calculatedX = px;
-            m_calculatedY = py;
+            m_calculatedState = new PlayerState();
+            FillState(ref m_calculatedState);
 
             if (px != newPx || py != newPy)
             {   
@@ -1836,24 +1835,29 @@ namespace Bomberman.Gameplay.Elements.Players
             set { m_netChannel = value; }
         }
 
+        public PlayerState calculatedState
+        {
+            get { return m_calculatedState; }
+        }
+
         public float calculatedX
         {
-            get { return m_calculatedX; }
+            get { return m_calculatedState.px; }
         }
 
         public float calculatedY
         {
-            get { return m_calculatedY; }
+            get { return m_calculatedState.py; }
         }
 
         public float errDx
         {
-            get { return m_calculatedX - px; }
+            get { return calculatedX - px; }
         }
 
         public float errDy
         {
-            get { return m_calculatedY - py; }
+            get { return calculatedY - py; }
         }
 
         #if UNIT_TESTING

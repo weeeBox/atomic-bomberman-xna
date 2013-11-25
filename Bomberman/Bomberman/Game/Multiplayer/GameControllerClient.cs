@@ -62,10 +62,10 @@ namespace Bomberman.Gameplay.Multiplayer
         #endif
 
         public override void Update(float delta)
-        {
-            base.Update(delta);
-
-            SendClientPacket();
+        {   
+            base.Update(delta);         // run tick
+            SendClientPacket();         // send client packet
+            GetNetwork().Update(delta); // read server packet
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -123,6 +123,7 @@ namespace Bomberman.Gameplay.Multiplayer
             packet.frameTime = Application.frameTime;
             for (int i = 0; i < m_channel.players.Count; ++i)
             {
+                Assert.IsTrue(m_channel.players[i].IsMoving() || m_channel.players[i].input.mask == 0);
                 packet.actions[i] = m_channel.players[i].input.mask;
             }
         }
@@ -134,12 +135,23 @@ namespace Bomberman.Gameplay.Multiplayer
             SendMessage(msg);
         }
 
+        private int[] m_masks = new int[10];
+
         internal void ReplayPlayerActions(NetChannel channel)
         {
             List<Player> players = channel.players;
 
+            PlayerState calculatedState = players[0].calculatedState;
+            for (int i = 0; i < players.Count; ++i)
+            {
+                m_masks[i] = players[i].input.mask;
+            }
+
+            // Debug.BreakIf(calculatedState.moving);
+
             // reset actions
             ClientPacket packet = GetPacket(channel.acknowledgedSequence);
+            int lastSeq = packet.sequence;
             for (int playerIndex = 0; playerIndex < channel.players.Count; ++playerIndex)
             {
                 channel.players[playerIndex].input.Reset(packet.actions[playerIndex]);
@@ -149,6 +161,9 @@ namespace Bomberman.Gameplay.Multiplayer
             for (int seq = channel.acknowledgedSequence + 1; seq <= channel.outgoingSequence; ++seq)
             {
                 packet = GetPacket(seq);
+                Assert.IsTrue(lastSeq < packet.sequence);
+                lastSeq = packet.sequence;
+
                 for (int playerIndex = 0; playerIndex < channel.players.Count; ++playerIndex)
                 {
                     channel.players[playerIndex].input.Force(packet.actions[playerIndex]);
@@ -161,6 +176,18 @@ namespace Bomberman.Gameplay.Multiplayer
 
                 packet.replayed = true;
             }
+
+            for (int i = 0; i < players.Count; ++i)
+            {
+                Assert.AreEqual(m_masks[i], players[i].input.mask);
+            }
+
+            //Player player = players[0];
+            //Assert.AreEqual(calculatedState.px, player.px);
+            //Assert.AreEqual(calculatedState.py, player.py);
+            //Assert.AreEqual(calculatedState.direction, player.direction);
+            //Assert.AreEqual(calculatedState.moving, player.IsMoving());
+            //Assert.AreEqual(calculatedState.speed, player.GetSpeed());
         }
 
         internal ClientPacket GetPacket(int seq)
