@@ -29,7 +29,7 @@ namespace Bomberman.Networking
 
             player.NetChannel = this;
 
-            Reset();
+            Init();
         }
 
         public NetChannel(NetConnection connection, List<Player> players)
@@ -38,7 +38,17 @@ namespace Bomberman.Networking
             m_players = players;
 
             SetChannel(players);
+
+            Init();
+        }
+
+        private void Init()
+        {
             Reset();
+
+            outgoingSequence = -1;
+            incomingSequence = -1;
+            acknowledgedSequence = -1;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -48,9 +58,6 @@ namespace Bomberman.Networking
         public void Reset()
         {
             IsReady                 = false;
-            outgoingSequence        = -1;
-            incomingSequence        = -1;
-            acknowledgedSequence    = -1;
             needsFieldState         = true;
             needsRoundResults       = true;
         }

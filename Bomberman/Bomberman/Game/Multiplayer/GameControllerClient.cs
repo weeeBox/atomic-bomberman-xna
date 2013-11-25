@@ -125,6 +125,7 @@ namespace Bomberman.Gameplay.Multiplayer
             {
                 Assert.IsTrue(m_channel.players[i].IsMoving() || m_channel.players[i].input.mask == 0);
                 packet.actions[i] = m_channel.players[i].input.mask;
+                m_channel.players[i].FillState(ref packet.states[i]);
             }
         }
 
@@ -149,15 +150,29 @@ namespace Bomberman.Gameplay.Multiplayer
 
             // Debug.BreakIf(calculatedState.moving);
 
+            // Log.d("---\n{0}\nout:{1} ack:{2}\ncx:{3} cy:{4}\nrx:{5} ry:{6}", Application.tickIndex, channel.outgoingSequence, channel.acknowledgedSequence, calculatedState.px, calculatedState.py, players[0].px, players[0].py);
+
             // reset actions
             ClientPacket packet = GetPacket(channel.acknowledgedSequence);
+            if (packet.frameTime == 0)
+            {
+                return;
+            }
+
             int lastSeq = packet.sequence;
             for (int playerIndex = 0; playerIndex < channel.players.Count; ++playerIndex)
             {
                 channel.players[playerIndex].input.Reset(packet.actions[playerIndex]);
+                //Assert.AreEqual(packet.states[playerIndex].px, channel.players[playerIndex].px);
+                //Assert.AreEqual(packet.states[playerIndex].py, channel.players[playerIndex].py);
+                //Assert.AreEqual(packet.states[playerIndex].direction, channel.players[playerIndex].direction);
+                //Assert.AreEqual(packet.states[playerIndex].moving, channel.players[playerIndex].IsMoving());
+                //Assert.AreEqual(packet.states[playerIndex].speed, channel.players[playerIndex].GetSpeed());
             }
 
             // replay packets
+            float px = 0;
+            float py = 0;
             for (int seq = channel.acknowledgedSequence + 1; seq <= channel.outgoingSequence; ++seq)
             {
                 packet = GetPacket(seq);
@@ -169,9 +184,12 @@ namespace Bomberman.Gameplay.Multiplayer
                     channel.players[playerIndex].input.Force(packet.actions[playerIndex]);
                 }
 
+                px = channel.players[0].px;
+                py = channel.players[0].py;
                 for (int playerIndex = 0; playerIndex < channel.players.Count; ++playerIndex)
                 {
                     channel.players[playerIndex].ReplayUpdate(packet.frameTime);
+                    // Log.d("  dx:{0} dy:{1}", channel.players[0].px - px, channel.players[0].py - py);
                 }
 
                 packet.replayed = true;

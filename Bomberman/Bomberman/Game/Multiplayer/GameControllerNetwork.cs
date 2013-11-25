@@ -16,6 +16,7 @@ namespace Bomberman.Gameplay.Multiplayer
         public int sequence;
         public float frameTime;
         public int[] actions = new int[10]; // max players count TODO: use smarter approach
+        public PlayerState[] states = new PlayerState[10];
         public bool replayed;
     }
 
@@ -525,6 +526,8 @@ namespace Bomberman.Gameplay.Multiplayer
             NetOutgoingMessage msg = CreateMessage();
 
             ++channel.outgoingSequence;
+
+            // Log.d(Debug.IsDebuggerAttached(), "out:{0}", channel.outgoingSequence);
 
             msg.Write(channel.outgoingSequence);    // packet to be acknowledged by server
             msg.Write(channel.incomingSequence);    // packet acknowledged by client

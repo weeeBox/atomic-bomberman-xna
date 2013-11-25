@@ -1637,6 +1637,8 @@ namespace Bomberman.Gameplay.Elements.Players
 
         #region Network
 
+        private long m_lastCalcTick;
+
         internal void UpdateFromNetwork(ref PlayerState state)
         {
             UpdateFromNetwork(state.px, state.py, state.moving, state.direction, state.speed);
@@ -1647,22 +1649,35 @@ namespace Bomberman.Gameplay.Elements.Players
         {
             m_lockAnimations = true;
 
-            m_calculatedState = new PlayerState();
-            FillState(ref m_calculatedState);
+            if (Application.tickIndex != m_lastCalcTick)
+            {
+                m_lastCalcTick = Application.tickIndex;
+                m_calculatedState = new PlayerState();
+                FillState(ref m_calculatedState);
+            }
+
+            // Log.d(GetIndex() == 1, "x:{0} y:{1} m:{2} d:{3} s:{4}", newPx, newPy, moving ? 1 : 0, newDir, newSpeed);
 
             if (px != newPx || py != newPy)
             {   
                 SetPos(newPx, newPy);
             }
 
-            if (moving)
+            if (input.IsLocal)
             {
                 SetSpeed(newSpeed);
-                SetMoveDirection(newDir);
             }
-            else if (IsMoving())
+            else
             {
-                StopMoving();
+                if (moving)
+                {
+                    SetSpeed(newSpeed);
+                    SetMoveDirection(newDir);
+                }
+                else if (IsMoving())
+                {
+                    StopMoving();
+                }
             }
 
             m_lockAnimations = false;

@@ -11,6 +11,8 @@ namespace Bomberman.Gameplay.Multiplayer
     public class GameControllerServer : GameControllerNetwork
     {
         private List<NetChannel> m_channels;
+        private float m_packetDelay;
+        private float m_timeSinceLastPacket;
 
         public GameControllerServer(Game game, GameSettings settings) :
             base(game, settings)
@@ -55,7 +57,7 @@ namespace Bomberman.Gameplay.Multiplayer
 
             GetConsole().TryExecuteCommand("exec game.cfg");
 
-            // SetPacketRate(CVars.sv_packetRate.intValue);
+            SetPacketRate(CVars.sv_packetRate.intValue);
 
             RegisterNotification(Notifications.ConsoleVariableChanged, ServerRateVarChangedCallback);
             RegisterNotification(NetworkNotifications.ClientConnected, ClientConnectedNotification);
@@ -74,14 +76,18 @@ namespace Bomberman.Gameplay.Multiplayer
         {
             GetNetwork().Update(delta); // read client packets
             base.Update(delta);         // run tick
-            SendServerPacket();         // send client packets
+
+            m_timeSinceLastPacket += delta;
+            if (m_timeSinceLastPacket >= m_packetDelay)
+            {
+                SendServerPacket();         // send client packets
+                m_timeSinceLastPacket = 0.0f;
+            }
         }
 
         private void SetPacketRate(int packetRate)
         {
-            float packetDelay = 1.0f / packetRate;
-            Application.CancelTimer(SendServerPacket);
-            Application.ScheduleTimer(SendServerPacket, packetDelay, true);
+            m_packetDelay = 1.0f / packetRate;
         }
 
         private void ServerRateVarChangedCallback(Notification notification)
