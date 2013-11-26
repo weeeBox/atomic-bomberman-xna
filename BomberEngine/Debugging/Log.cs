@@ -9,7 +9,7 @@ namespace BomberEngine
         public static void d(Object format, params Object[] args)
         {
             String message = Format(format, args);
-            Console.WriteLine("D/" + message);
+            Console.WriteLine("D/{0}", message);
         }
 
         [Conditional("DEBUG")]
@@ -25,14 +25,14 @@ namespace BomberEngine
         public static void e(Object format, params Object[] args)
         {
             String message = Format(format, args);
-            Console.WriteLine("E/" + message);
+            Console.WriteLine("E/{0}", message);
         }
 
         [Conditional("DEBUG")]
         public static void i(Object format, params Object[] args)
         {
             String message = Format(format, args);
-            Console.WriteLine("I/" + message);
+            Console.WriteLine("I/{0}", message);
         }
 
         [Conditional("DEBUG")]

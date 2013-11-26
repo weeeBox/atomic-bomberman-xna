@@ -150,7 +150,7 @@ namespace Bomberman.Gameplay.Multiplayer
 
             // Debug.BreakIf(calculatedState.moving);
 
-            // Log.d("---\n{0}\nout:{1} ack:{2}\ncx:{3} cy:{4}\nrx:{5} ry:{6}", Application.tickIndex, channel.outgoingSequence, channel.acknowledgedSequence, calculatedState.px, calculatedState.py, players[0].px, players[0].py);
+            // Log.d("---\n{0}\nout:{1} ack:{2}\n  cx:{3} cy:{4}\n  rx:{5} ry:{6}", Application.tickIndex, channel.outgoingSequence, channel.acknowledgedSequence, calculatedState.px, calculatedState.py, players[0].px, players[0].py);
 
             // reset actions
             ClientPacket packet = GetPacket(channel.acknowledgedSequence);

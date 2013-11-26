@@ -1662,22 +1662,15 @@ namespace Bomberman.Gameplay.Elements.Players
             {   
                 SetPos(newPx, newPy);
             }
-
-            if (input.IsLocal)
+            
+            if (moving)
             {
                 SetSpeed(newSpeed);
+                SetMoveDirection(newDir);
             }
-            else
+            else if (IsMoving())
             {
-                if (moving)
-                {
-                    SetSpeed(newSpeed);
-                    SetMoveDirection(newDir);
-                }
-                else if (IsMoving())
-                {
-                    StopMoving();
-                }
+                StopMoving();
             }
 
             m_lockAnimations = false;
