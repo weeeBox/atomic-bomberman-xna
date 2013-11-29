@@ -8,6 +8,12 @@ using BombermanCommon.Resources.Scheme;
 
 namespace Bomberman.Gameplay.Elements.Fields
 {
+    public interface IFieldDrawable : IUpdatable, IResettable
+    {
+        void AddPlayer(Player player);
+        void RemovePlayer(Player player);
+    }
+
     public class Field : BaseObject, IUpdatable, IDestroyable, IResettable
     {
         private static Field currentField;
@@ -26,6 +32,8 @@ namespace Bomberman.Gameplay.Elements.Fields
 
         private List<Bomb> m_detonatedBombs;
         private bool m_detonating;
+
+        private IFieldDrawable m_drawable;
 
         public Field(Game game)
         {
@@ -69,6 +77,7 @@ namespace Bomberman.Gameplay.Elements.Fields
             
             m_tempCellsList.Clear();
             m_tempMovableList.Clear();
+            m_drawable.Reset();
         }
 
         public void Destroy()
@@ -398,19 +407,13 @@ namespace Bomberman.Gameplay.Elements.Fields
         public void AddPlayer(Player player)
         {
             players.Add(player);
-
-            // TODO: remove animations
-            InitAnimations();
-
-            player.animations = m_playerAnimations;
-            player.bombAnimations = m_bombAnimations;
+            m_drawable.AddPlayer(player);
         }
 
         public void RemovePlayer(Player player)
         {
             players.Remove(player);
-            player.animations = null;
-            player.bombAnimations = null;
+            m_drawable.RemovePlayer(player);
             CancelAllTimers(player);
         }
 

@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace Bomberman.Gameplay.Elements.Fields
 {
-    public class FieldDrawable : View
+    public class FieldDrawable : View, IFieldDrawable
     {
         private Field field;
 
@@ -58,6 +58,8 @@ namespace Bomberman.Gameplay.Elements.Fields
             anim_flame_tipeast_green,
         };
 
+        private List<PlayerDrawable> m_playersDrawables;
+
         public FieldDrawable(Field field, int x, int y, int width, int height)
             : base(x, y, width, height)
         {
@@ -70,6 +72,8 @@ namespace Bomberman.Gameplay.Elements.Fields
 
             field.ScheduleTimer(ToggleBlink, 0.01f, true);
             field.ScheduleTimer(UpdateFlameAnimation, 0.0f, true);
+
+            m_playersDrawables = new List<PlayerDrawable>(10);
         }
 
         private void ToggleBlink()
@@ -275,18 +279,17 @@ namespace Bomberman.Gameplay.Elements.Fields
                 context.DrawRect(drawX, drawY, cellWidth, cellHeight, Color.Yellow);
             }
 
+            PlayerDrawable drawable = (PlayerDrawable)player.PlayerDrawable;
             if (player.IsInfected())
             {
                 if (blink)
-                {
-                    AnimationInstance anim = player.currentAnimation;
-                    anim.Draw(context, drawX + 0.5f * cellWidth, drawY + cellHeight);
+                {   
+                    drawable.Draw(context, drawX + 0.5f * cellWidth, drawY + cellHeight);
                 }
             }
             else
             {   
-                AnimationInstance anim = player.currentAnimation;
-                anim.Draw(context, drawX + 0.5f * cellWidth, drawY + cellHeight);
+                drawable.Draw(context, drawX + 0.5f * cellWidth, drawY + cellHeight);
             }
 
             if (CVars.g_drawPlayerStepRect.boolValue)
@@ -354,6 +357,43 @@ namespace Bomberman.Gameplay.Elements.Fields
                 }
             }
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        public void AddPlayer(Player player)
+        {
+            Assert.IsTrue(IndexOf(player) == -1);
+            PlayerDrawable drawable = new PlayerDrawable(player);
+            player.PlayerDrawable = drawable;
+
+            m_playersDrawables.Add(drawable);
+        }
+
+        public void RemovePlayer(Player player)
+        {
+            int index = IndexOf(player);
+            m_playersDrawables.RemoveAt(index);
+        }
+
+        public void Reset()
+        {
+            m_playersDrawables.Clear();
+        }
+
+        private int IndexOf(Player player)
+        {
+            for (int i = 0; i < m_playersDrawables.Count; ++i)
+            {
+                if (m_playersDrawables[i].Player == player)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
 
         private Dictionary<Direction, TextureImage> playerImages;
         private Dictionary<Direction, TextureImage> playerGrabImages;

@@ -33,7 +33,20 @@ namespace Bomberman.Gameplay.Elements.Players
         public float speed;
     }
 
-    public class Player : MovableCell
+    public interface IPlayerDrawable : IResettable
+    {
+        bool IsPickingUpBomb { get; set; }
+        bool IsPunchingBomb { get; set; }
+
+        void SetNeedUpdateAnimation();
+    }
+
+    public interface IPlayerAnimationDelegate
+    {
+        void OnAnimationFinished(PlayerAnimations.Id id);
+    }
+
+    public class Player : MovableCell, IPlayerAnimationDelegate
     {
         private static readonly PlayerAction[] ACTIONS = 
         {
@@ -71,8 +84,7 @@ namespace Bomberman.Gameplay.Elements.Players
         private AnimationInstance m_currentAnimation;
         private bool m_lockAnimations;
 
-        private bool m_punchingBomb; // true if player is in the middle of punching a bomb (animation is playing)
-        private bool m_pickingBomb; // true if player is in the middle of picking a bomb (animation is playing)
+        private IPlayerDrawable m_drawable;
 
         private static Player[] s_tempArray;
 
@@ -444,13 +456,13 @@ namespace Bomberman.Gameplay.Elements.Players
             }
 
             SetMoveDirection(dir);
-            UpdateAnimation();
+            m_drawable.SetNeedUpdateAnimation();
         }
 
         public override void StopMoving()
         {
             base.StopMoving();
-            UpdateAnimation();
+            m_drawable.SetNeedUpdateAnimation();
         }
 
         #endregion
@@ -1215,8 +1227,7 @@ namespace Bomberman.Gameplay.Elements.Players
             }
 
             m_diseases.CureAll();
-
-            UpdateAnimation();
+            m_drawable.SetNeedUpdateAnimation();
         }
 
         #endregion
@@ -1499,96 +1510,13 @@ namespace Bomberman.Gameplay.Elements.Players
 
         #region Animations
 
-        private void InitAnimation()
-        {
-            m_currentAnimation = new AnimationInstance();
-            UpdateAnimation();
-        }
-
-        public override void UpdateAnimation(float delta)
-        {
-            if (m_currentAnimation != null)
-            {
-                m_currentAnimation.Update(delta);
-            }
-        }
-
-        private void UpdateAnimation()
-        {
-            if (m_lockAnimations)
-            {
-                return;
-            }
-
-            PlayerAnimations.Id id;
-            PlayerAnimations.Id currentId = (PlayerAnimations.Id)m_currentAnimation.id;
-            AnimationInstance.Mode mode = AnimationInstance.Mode.Looped;
-
-            if (IsAlive)
-            {
-                if (IsPunchingBomb)
-                {
-                    if (currentId == PlayerAnimations.Id.PunchBomb)
-                    {
-                        return; // don't play animation again
-                    }
-
-                    id = PlayerAnimations.Id.PunchBomb;
-                    mode = AnimationInstance.Mode.Normal;
-                }
-                else if (IsPickingUpBomb)
-                {
-                    id = PlayerAnimations.Id.PickupBomb;
-                    mode = AnimationInstance.Mode.Normal;
-                }
-                else if (IsHoldingBomb())
-                {
-                    id = IsMoving() ? PlayerAnimations.Id.WalkBomb : PlayerAnimations.Id.StandBomb;
-                    mode = AnimationInstance.Mode.Normal;
-                }
-                else if (IsMoving())
-                {
-                    id = PlayerAnimations.Id.Walk;
-                    Animation newAnimation = m_animations.Find(id, direction);
-                    if (m_currentAnimation.Animation == newAnimation)
-                    {
-                        return;
-                    }
-                }
-                else
-                {
-                    id = PlayerAnimations.Id.Stand;
-                }
-            }
-            else
-            {
-                id = PlayerAnimations.Id.Die;
-                mode = AnimationInstance.Mode.Normal;
-            }
-
-            Animation animation = m_animations.Find(id, direction);
-            m_currentAnimation.Init(animation, mode);
-            m_currentAnimation.id = (int)id;
-            m_currentAnimation.animationDelegate = AnimationFinishedCallback;
-        }
-
-        private void ScheduleAnimationUpdate()
-        {
-            ScheduleTimerOnce(UpdateAnimation);
-        }
-
         private void ResetAnimation()
         {
-            m_pickingBomb = false;
-            m_punchingBomb = false;
-            m_lockAnimations = false;
-
-            UpdateAnimation();
+            m_drawable.Reset();
         }
 
-        private void AnimationFinishedCallback(AnimationInstance animation)
-        {
-            PlayerAnimations.Id id = (PlayerAnimations.Id)animation.id;
+        public void OnAnimationFinished(PlayerAnimations.Id id)
+        {   
             switch (id)
             {
                 case PlayerAnimations.Id.Die:
@@ -1597,40 +1525,21 @@ namespace Bomberman.Gameplay.Elements.Players
                     RemoveFromField();
                     break;
                 }
-
-                case PlayerAnimations.Id.PunchBomb:
-                {
-                    IsPunchingBomb = false;
-                    break;
-                }
-
-                case PlayerAnimations.Id.PickupBomb:
-                {
-                    IsPickingUpBomb = false;
-                    break;
-                }
             }
         }
 
         private bool IsPickingUpBomb
         {
-            get { return m_pickingBomb; }
-            set
-            {   
-                m_pickingBomb = value;
-                ScheduleAnimationUpdate();
-            }
+            get { return m_drawable.IsPickingUpBomb; }
+            set { m_drawable.IsPickingUpBomb = value; }
         }
 
         private bool IsPunchingBomb
         {
-            get { return m_punchingBomb; }
-            set
-            {   
-                m_punchingBomb = value;
-                ScheduleAnimationUpdate();
-            }
+            get { return m_drawable.IsPunchingBomb; }
+            set { m_drawable.IsPunchingBomb = value; }
         }
+
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
@@ -1746,35 +1655,6 @@ namespace Bomberman.Gameplay.Elements.Players
             get { return m_statistics; }
         }
 
-        public PlayerAnimations animations
-        {
-            get { return m_animations; }
-            set 
-            { 
-                m_animations = value;
-                if (m_animations != null)
-                {
-                    InitAnimation();
-                }
-            }
-        }
-
-        public BombAnimations bombAnimations
-        {
-            set
-            {
-                for (int i = 0; i < bombs.array.Length; ++i)
-                {
-                    bombs.array[i].animations = value;
-                }
-            }
-        }
-
-        public AnimationInstance currentAnimation
-        {
-            get { return m_currentAnimation; }
-        }
-
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////
@@ -1866,6 +1746,12 @@ namespace Bomberman.Gameplay.Elements.Players
         public float errDy
         {
             get { return calculatedY - py; }
+        }
+
+        public IPlayerDrawable PlayerDrawable
+        {
+            get { return m_drawable; }
+            set { m_drawable = value; }
         }
 
         #if UNIT_TESTING
