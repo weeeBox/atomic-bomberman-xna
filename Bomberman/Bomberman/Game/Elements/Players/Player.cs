@@ -80,10 +80,6 @@ namespace Bomberman.Gameplay.Elements.Players
         private PlayerStatistics m_statistics;
         private NetChannel m_netChannel;
 
-        private PlayerAnimations m_animations;
-        private AnimationInstance m_currentAnimation;
-        private bool m_lockAnimations;
-
         private IPlayerDrawable m_drawable;
 
         private static Player[] s_tempArray;
@@ -150,8 +146,6 @@ namespace Bomberman.Gameplay.Elements.Players
 
                 m_diseases.Update(delta);
             }
-
-            UpdateAnimation(delta);
 
             for (int bombIndex = 0; bombIndex < m_thrownBombs.Count; ++bombIndex)
             {
@@ -1556,8 +1550,6 @@ namespace Bomberman.Gameplay.Elements.Players
         /* Sets player state received from the server as a part of game packet */
         internal void UpdateFromNetwork(float newPx, float newPy, bool moving, Direction newDir, float newSpeed)
         {
-            m_lockAnimations = true;
-
             if (Application.tickIndex != m_lastCalcTick)
             {
                 m_lastCalcTick = Application.tickIndex;
@@ -1581,8 +1573,6 @@ namespace Bomberman.Gameplay.Elements.Players
             {
                 StopMoving();
             }
-
-            m_lockAnimations = false;
         }
 
         internal void FillState(ref PlayerState state)

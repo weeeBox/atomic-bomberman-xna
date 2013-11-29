@@ -6,6 +6,11 @@ using Bomberman.Gameplay.Elements.Players;
 
 namespace Bomberman.Gameplay.Elements.Cells
 {
+    public interface IBombDrawable : IUpdatable, IResettable
+    {
+        void SetNeedUpdateAnimation();
+    }
+
     public class Bomb : MovableCell
     {
         private enum State
@@ -41,9 +46,6 @@ namespace Bomberman.Gameplay.Elements.Cells
 
         private int m_triggerIndex;
         private bool m_blocked;
-
-        private BombAnimations m_animations;
-        private AnimationInstance m_currentAnimation;
 
         private bool m_short;
         private bool m_golden;
@@ -92,8 +94,6 @@ namespace Bomberman.Gameplay.Elements.Cells
         {
             base.Update(delta);
             m_updater(delta);
-
-            UpdateAnimation(delta);
         }
 
         public override void UpdateMoving(float delta)
@@ -735,40 +735,9 @@ namespace Bomberman.Gameplay.Elements.Cells
 
         //////////////////////////////////////////////////////////////////////////////
 
-        private void InitAnimations()
-        {
-            m_currentAnimation = new AnimationInstance();
-        }
-
-        public override void UpdateAnimation(float delta)
-        {
-            if (m_currentAnimation != null)
-            {
-                m_currentAnimation.Update(delta);
-            }
-        }
-
         private void UpdateAnimation()
         {
-            if (m_animations != null)
-            {
-                BombAnimations.AnimationType type;
-                if (isTrigger)
-                {
-                    type = BombAnimations.AnimationType.Trigger;
-                }
-                else if (IsJelly())
-                {
-                    type = BombAnimations.AnimationType.Jelly;
-                }
-                else
-                {
-                    type = BombAnimations.AnimationType.Default;
-                }
-
-                Animation animation = m_animations.Find(type);
-                m_currentAnimation.Init(animation);
-            }
+            BombDrawable.SetNeedUpdateAnimation();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -842,23 +811,7 @@ namespace Bomberman.Gameplay.Elements.Cells
             get { return m_fallHeight; }
         }
 
-        public BombAnimations animations
-        {
-            get { return m_animations; }
-            set
-            {
-                m_animations = value;
-                if (m_animations != null)
-                {
-                    InitAnimations();
-                }
-            }
-        }
-
-        public AnimationInstance currentAnimation
-        {
-            get { return m_currentAnimation; }
-        }
+        public IBombDrawable BombDrawable { get; set; }
 
         #endregion
     }

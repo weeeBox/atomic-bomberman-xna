@@ -59,10 +59,6 @@ namespace Bomberman.Gameplay.Elements.Fields
         {   
         }
 
-        public virtual void UpdateAnimation(float delta)
-        {
-        }
-
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////

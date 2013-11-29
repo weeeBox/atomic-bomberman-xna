@@ -218,8 +218,8 @@ namespace Bomberman.Gameplay.Elements.Fields
             float drawX = bomb.GetPx();
             float drawY = bomb.GetPy();
 
-            AnimationInstance anim = bomb.currentAnimation;
-            anim.Draw(context, drawX, drawY + 0.5f * cellHeight, bomb.IsBlocked ? Color.Red : Color.White);
+            BombDrawable drawable = (BombDrawable)bomb.BombDrawable;
+            drawable.Draw(context, drawX, drawY + 0.5f * cellHeight);
 
             if (CVars.g_drawBombDir.boolValue)
             {
