@@ -123,7 +123,6 @@ namespace Bomberman.Gameplay.Multiplayer
             packet.frameTime = Application.frameTime;
             for (int i = 0; i < m_channel.players.Count; ++i)
             {
-                Assert.IsTrue(m_channel.players[i].IsMoving() || m_channel.players[i].input.mask == 0);
                 packet.actions[i] = m_channel.players[i].input.mask;
                 m_channel.players[i].FillState(ref packet.states[i]);
             }
