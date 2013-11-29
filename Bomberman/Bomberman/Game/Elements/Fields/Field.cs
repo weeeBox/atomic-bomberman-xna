@@ -27,9 +27,6 @@ namespace Bomberman.Gameplay.Elements.Fields
         private LinkedList<FieldCell> m_tempCellsList;
         private List<MovableCell> m_tempMovableList;
 
-        private PlayerAnimations m_playerAnimations;
-        private BombAnimations m_bombAnimations;
-
         private List<Bomb> m_detonatedBombs;
         private bool m_detonating;
 
@@ -77,7 +74,11 @@ namespace Bomberman.Gameplay.Elements.Fields
             
             m_tempCellsList.Clear();
             m_tempMovableList.Clear();
-            m_drawable.Reset();
+
+            if (m_drawable != null)
+            {
+                m_drawable.Reset();
+            }
         }
 
         public void Destroy()
@@ -407,13 +408,19 @@ namespace Bomberman.Gameplay.Elements.Fields
         public void AddPlayer(Player player)
         {
             players.Add(player);
-            m_drawable.AddPlayer(player);
+            if (m_drawable != null)
+            {
+                m_drawable.AddPlayer(player);
+            }
         }
 
         public void RemovePlayer(Player player)
         {
             players.Remove(player);
-            m_drawable.RemovePlayer(player);
+            if (m_drawable != null)
+            {
+                m_drawable.RemovePlayer(player);
+            }
             CancelAllTimers(player);
         }
 
@@ -466,12 +473,6 @@ namespace Bomberman.Gameplay.Elements.Fields
                     AddCell(cell);
                 }   
             }
-        }
-
-        protected virtual void InitAnimations()
-        {
-            if (m_playerAnimations == null) m_playerAnimations = new PlayerAnimations();
-            if (m_bombAnimations == null) m_bombAnimations = new BombAnimations();
         }
 
         #endregion
@@ -1048,6 +1049,12 @@ namespace Bomberman.Gameplay.Elements.Fields
         public TimerManager timerManager
         {
             get { return m_game.timerManager; }
+        }
+
+        public IFieldDrawable FieldDrawable
+        {
+            get { return m_drawable; }
+            set { m_drawable = value; }
         }
 
         #endregion

@@ -33,7 +33,7 @@ namespace Bomberman.Gameplay.Elements.Players
         public float speed;
     }
 
-    public interface IPlayerDrawable : IResettable
+    public interface IPlayerDrawable : IUpdatable, IResettable
     {
         bool IsPickingUpBomb { get; set; }
         bool IsPunchingBomb { get; set; }
@@ -145,12 +145,15 @@ namespace Bomberman.Gameplay.Elements.Players
                 }
 
                 m_diseases.Update(delta);
+                m_drawable.Update(delta);
             }
 
             for (int bombIndex = 0; bombIndex < m_thrownBombs.Count; ++bombIndex)
             {
                 m_thrownBombs[bombIndex].Update(delta);
             }
+
+            m_drawable.SetNeedUpdateAnimation();
         }
 
         public void ReplayUpdate(float delta)

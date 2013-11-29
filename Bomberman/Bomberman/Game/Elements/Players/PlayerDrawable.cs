@@ -9,27 +9,23 @@ using Bomberman.Gameplay.Elements.Cells;
 
 namespace Bomberman.Gameplay.Elements.Players
 {
-    public class PlayerDrawable : IPlayerDrawable, IUpdatable
+    public class PlayerDrawable : IPlayerDrawable
     {
         private Player m_player;
         private PlayerAnimations m_animations;
         private AnimationInstance m_currentAnimation;
 
-        private BombDrawable[] m_bombDrawables;
         private bool m_needUpdateAnimation;
 
-        public PlayerDrawable(Player player)
+        public PlayerDrawable(Player player, PlayerAnimations animations)
         {
+            player.PlayerDrawable = this;
+
             m_player = player;
-
-            Bomb[] bombs = player.bombs.array;
-            m_bombDrawables = new BombDrawable[bombs.Length];
-            for (int i = 0; i < bombs.Length; ++i)
-            {
-                m_bombDrawables[i] = new BombDrawable(bombs[i]);
-            }
-
             m_currentAnimation = new AnimationInstance();
+            m_animations = animations;
+
+            Reset();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -58,7 +54,7 @@ namespace Bomberman.Gameplay.Elements.Players
             IsPickingUpBomb = false;
             IsPunchingBomb = false;
 
-            SetNeedUpdateAnimation();
+            UpdateAnimation();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -159,7 +155,13 @@ namespace Bomberman.Gameplay.Elements.Players
 
         public Player Player
         {
-            get { return m_player; }
+            get { return m_player;}
+        }
+
+        public PlayerAnimations Animations
+        {
+            get { return m_animations; }
+            set { m_animations = value; }
         }
 
         #endregion

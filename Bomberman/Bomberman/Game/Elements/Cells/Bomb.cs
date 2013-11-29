@@ -50,6 +50,8 @@ namespace Bomberman.Gameplay.Elements.Cells
         private bool m_short;
         private bool m_golden;
 
+        private IBombDrawable m_drawable;
+
         public Bomb(Player player)
            : base(FieldCellType.Bomb, player.GetCx(), player.GetCy())
         {
@@ -82,6 +84,8 @@ namespace Bomberman.Gameplay.Elements.Cells
             m_blocked = false;
             m_short = false;
             m_golden = false;
+
+            m_drawable.Reset();
         }
 
         #endregion
@@ -94,6 +98,7 @@ namespace Bomberman.Gameplay.Elements.Cells
         {
             base.Update(delta);
             m_updater(delta);
+            m_drawable.Update(delta);
         }
 
         public override void UpdateMoving(float delta)
@@ -811,7 +816,11 @@ namespace Bomberman.Gameplay.Elements.Cells
             get { return m_fallHeight; }
         }
 
-        public IBombDrawable BombDrawable { get; set; }
+        public IBombDrawable BombDrawable 
+        { 
+            get { return m_drawable; }
+            set { m_drawable = value; }
+        }
 
         #endregion
     }

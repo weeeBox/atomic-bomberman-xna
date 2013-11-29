@@ -16,10 +16,14 @@ namespace Bomberman.Gameplay.Elements.Cells
         private AnimationInstance m_currentAnimation;
         private bool m_needsUpdateAnimation;
 
-        public BombDrawable(Bomb bomb)
-        {   
+        public BombDrawable(Bomb bomb, BombAnimations animations)
+        {
+            bomb.BombDrawable = this;
+
             m_bomb = bomb;
             m_currentAnimation = new AnimationInstance();
+            m_animations = animations;
+            Reset();
         }
 
         public void Update(float delta)
@@ -38,7 +42,7 @@ namespace Bomberman.Gameplay.Elements.Cells
 
         public void Reset()
         {
-            m_currentAnimation.Reset();
+            UpdateAnimation();
         }
 
         public void SetNeedUpdateAnimation()
@@ -66,6 +70,12 @@ namespace Bomberman.Gameplay.Elements.Cells
             m_currentAnimation.Init(animation);
 
             m_needsUpdateAnimation = false;
+        }
+
+        public BombAnimations Animations
+        {
+            get { return m_animations; }
+            set { m_animations = value; }
         }
     }
 }

@@ -60,10 +60,15 @@ namespace Bomberman.Gameplay.Elements.Fields
 
         private List<PlayerDrawable> m_playersDrawables;
 
+        private PlayerAnimations m_playerAnimations;
+        private BombAnimations m_bombAnimations;
+
         public FieldDrawable(Field field, int x, int y, int width, int height)
             : base(x, y, width, height)
         {
             this.field = field;
+
+            field.FieldDrawable = this;
 
             cellWidth = width / field.GetWidth();
             cellHeight = height / field.GetHeight();
@@ -74,6 +79,14 @@ namespace Bomberman.Gameplay.Elements.Fields
             field.ScheduleTimer(UpdateFlameAnimation, 0.0f, true);
 
             m_playersDrawables = new List<PlayerDrawable>(10);
+            m_playerAnimations = new PlayerAnimations();
+            m_bombAnimations = new BombAnimations();
+
+            List<Player> players = field.GetPlayers().list;
+            foreach (Player player in players)
+            {
+                AddPlayer(player);
+            }
         }
 
         private void ToggleBlink()
@@ -363,9 +376,8 @@ namespace Bomberman.Gameplay.Elements.Fields
         public void AddPlayer(Player player)
         {
             Assert.IsTrue(IndexOf(player) == -1);
-            PlayerDrawable drawable = new PlayerDrawable(player);
-            player.PlayerDrawable = drawable;
 
+            PlayerDrawable drawable = CreateDrawable(player);
             m_playersDrawables.Add(drawable);
         }
 
@@ -391,6 +403,21 @@ namespace Bomberman.Gameplay.Elements.Fields
             }
 
             return -1;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        private PlayerDrawable CreateDrawable(Player player)
+        {
+            PlayerDrawable drawable = new PlayerDrawable(player, m_playerAnimations);
+
+            // bombs
+            Bomb[] bombs = player.bombs.array;
+            for (int i = 0; i < bombs.Length; ++i)
+            {
+                new BombDrawable(bombs[i], m_bombAnimations);
+            }
+            return drawable;
         }
 
         //////////////////////////////////////////////////////////////////////////////
