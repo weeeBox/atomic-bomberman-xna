@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 
 namespace BomberEngine
 {
@@ -8,6 +9,9 @@ namespace BomberEngine
         private static int BitsPerCmdType = BitUtils.BitsToHoldUInt((int)DemoCmdType.Count);
 
         private BitWriteBuffer m_buffer;
+
+        private BitWriteBuffer m_networkBuffer;
+        private BitWriteBuffer m_networkTickBuffer;
 
         private DemoTickCmd m_tickCmd;
         private DemoInputCmd m_inputCmd;
@@ -19,6 +23,9 @@ namespace BomberEngine
             m_instance = this;
 
             m_buffer = new BitWriteBuffer();
+            m_networkBuffer = new BitWriteBuffer();
+            m_networkTickBuffer = new BitWriteBuffer();
+
             m_tickCmd = new DemoTickCmd();
             m_inputCmd = new DemoInputCmd();
 
@@ -84,6 +91,9 @@ namespace BomberEngine
                     // storage
                     WriteStorage(writer);
 
+                    // write cvars
+                    WriteCvars(writer);
+
                     // demo data
                     WriteDemo(writer);
                 }
@@ -107,14 +117,31 @@ namespace BomberEngine
             }
         }
 
+        private void WriteCvars(BinaryWriter writer)
+        {
+            List<CVar> vars = Application.RootController().Console.ListVars();
+            writer.Write(vars.Count);
+            for (int i = 0; i < vars.Count; ++i)
+            {
+                CVar var = vars[i];
+                writer.Write(var.name);
+                writer.Write(var.value);
+            }
+        }
+
         private void WriteDemo(BinaryWriter writer)
         {
-            byte[] data = m_buffer.Data;
-            int length = m_buffer.LengthBytes;
-            int bitLegth = m_buffer.LengthBits;
+            WriteBuffer(writer, m_buffer);
+            WriteBuffer(writer, m_networkBuffer);
+        }
+
+        private void WriteBuffer(BinaryWriter writer, BitWriteBuffer buffer)
+        {
+            byte[] data = buffer.Data;
+            int length = buffer.LengthBytes;
+            int bitLegth = buffer.LengthBits;
 
             writer.Write(bitLegth);
-            writer.Write(length);
             writer.Write(data, 0, length);
         }
 
@@ -157,6 +184,61 @@ namespace BomberEngine
         public void OnPointerReleased(int x, int y, int fingerId)
         {
             m_inputCmd.OnPointerReleased(x, y, fingerId);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Network
+
+        private int m_messagesPerTick;
+
+        public void WriteNetworkTick()
+        {
+            bool hasMessages = m_messagesPerTick > 0;
+            m_networkTickBuffer.Write(hasMessages);
+
+            if (hasMessages)
+            {
+                m_networkBuffer.Write(m_networkTickBuffer.Data, 0, m_networkTickBuffer.LengthBytes);
+                m_messagesPerTick = 0;
+                m_networkTickBuffer.Reset();
+            }
+        }
+
+        public void WritePeerConnected(int connectionIndex)
+        {
+            m_networkTickBuffer.Write(false); // not a data message
+            m_networkTickBuffer.Write(true);  // is connected
+            m_networkTickBuffer.Write((byte)connectionIndex);
+        }
+
+        public void WritePeerDisconnected(int connectionIndex)
+        {
+            m_networkTickBuffer.Write(false); // not a data message
+            m_networkTickBuffer.Write(false); // not connected
+            m_networkTickBuffer.Write((byte)connectionIndex);
+        }
+
+        public void WritePeerMessage(int bitsLen, byte[] data)
+        {
+            m_networkTickBuffer.Write(true); // is a data message
+            m_networkTickBuffer.Write(bitsLen);
+
+            int bytesLen = (bitsLen + 7) >> 3;
+            m_networkTickBuffer.Write(data, 0, bytesLen);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Properties
+
+        public static DemoRecorder Instance
+        {
+            get { return m_instance; }
         }
 
         #endregion

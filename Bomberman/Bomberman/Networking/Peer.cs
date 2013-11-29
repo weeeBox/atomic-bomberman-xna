@@ -1,6 +1,7 @@
 ﻿using System;
 using BomberEngine;
 using Lidgren.Network;
+using System.Collections.Generic;
 
 namespace Bomberman.Networking
 {
@@ -48,6 +49,8 @@ namespace Bomberman.Networking
             {
                 HandleMessage(m_peer, msg);
             }
+
+            RecordNetworkTick();
         }
 
         protected virtual bool HandleMessage(NetPeer peer, NetIncomingMessage msg)
@@ -59,13 +62,13 @@ namespace Bomberman.Networking
                     NetConnectionStatus status = (NetConnectionStatus)msg.ReadByte();
                     if (status == NetConnectionStatus.Connected)
                     {   
-                        OnPeerConnected(msg.SenderConnection);
+                        ReadPeerConnected(msg);
                         return true;
                     }
 
                     if (status == NetConnectionStatus.Disconnected)
                     {
-                        OnPeerDisconnected(msg.SenderConnection);
+                        ReadPeerDisconnected(msg);
                         return true;
                     }
 
@@ -75,7 +78,7 @@ namespace Bomberman.Networking
                 case NetIncomingMessageType.Data:
                 {
                     ReadMessage(msg);
-                    break;
+                    return true;
                 }
             }
 
@@ -101,8 +104,21 @@ namespace Bomberman.Networking
 
         #region Messages
 
+        private void ReadPeerConnected(NetIncomingMessage msg)
+        {
+            RecordPeerConnected(msg);
+            OnPeerConnected(msg.SenderConnection);
+        }
+
+        private void ReadPeerDisconnected(NetIncomingMessage msg)
+        {
+            RecordPeerDisconnected(msg);
+            OnPeerDisconnected(msg.SenderConnection);
+        }
+
         private void ReadMessage(NetIncomingMessage msg)
         {
+            RecordMessage(msg);
             OnMessageReceive(msg);
         }
 
@@ -136,6 +152,56 @@ namespace Bomberman.Networking
         public void SetPeerListener(IPeerListener listener)
         {
             m_listener = listener != null ? listener : s_nullPeerListener;
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region Demo
+
+        private IDictionary<NetConnection, int> m_connectionIndexLookup = new Dictionary<NetConnection, int>();
+        private int m_nextConnectionIndex = -1;
+
+        [System.Diagnostics.Conditional("DEBUG_DEMO")]
+        private void RecordNetworkTick()
+        {
+            DemoRecorder.Instance.WriteNetworkTick();
+        }
+
+        [System.Diagnostics.Conditional("DEBUG_DEMO")]
+        private void RecordPeerConnected(NetIncomingMessage msg)
+        {   
+            Assert.AreEqual(-1, ConnectionIndex(msg.SenderConnection));
+
+            m_connectionIndexLookup[msg.SenderConnection] = ++m_nextConnectionIndex;
+            DemoRecorder.Instance.WritePeerConnected(m_nextConnectionIndex);
+        }
+
+        [System.Diagnostics.Conditional("DEBUG_DEMO")]
+        private void RecordPeerDisconnected(NetIncomingMessage msg)
+        {
+            int index = ConnectionIndex(msg.SenderConnection);
+            Assert.IsTrue(index != -1);
+
+            m_connectionIndexLookup.Remove(msg.SenderConnection);
+            DemoRecorder.Instance.WritePeerDisconnected(index);
+        }
+
+        [System.Diagnostics.Conditional("DEBUG_DEMO")]
+        private void RecordMessage(NetIncomingMessage msg)
+        {
+            DemoRecorder.Instance.WritePeerMessage(msg.LengthBits, msg.Data);
+        }
+
+        private int ConnectionIndex(NetConnection con)
+        {   
+            int index;
+            if (m_connectionIndexLookup.TryGetValue(con, out index))
+            {
+                return index;
+            }
+            return -1;
         }
 
         #endregion

@@ -9,6 +9,8 @@ namespace BomberEngine
         private static int BitsPerCmdType = BitUtils.BitsToHoldUInt((int)DemoCmdType.Count);
 
         private BitReadBuffer m_buffer;
+        private BitReadBuffer m_networkBuffer;
+
         private IDictionary<DemoCmdType, DemoCmd> m_cmdLookup;
 
         private DefaultInputManager m_inputManager;
@@ -65,6 +67,9 @@ namespace BomberEngine
                     // storage
                     ReadStorage(reader);
 
+                    // cvars
+                    ReadCvars(reader);
+
                     // demo data
                     ReadDemo(reader);
                 }
@@ -88,10 +93,41 @@ namespace BomberEngine
             }
         }
 
+        private void ReadCvars(BinaryReader reader)
+        {
+            List<CVar> vars = Application.RootController().Console.ListVars();
+            int count = reader.ReadInt32();
+
+            if (count != vars.Count)
+            {
+                throw new IOException("Wrong cvars count: " + count + " expected: " + vars.Count);
+            }
+
+            for (int i = 0; i < vars.Count; ++i)
+            {
+                CVar var = vars[i];
+                String name = reader.ReadString();
+                String value = reader.ReadString();
+
+                if (var.name != name)
+                {
+                    throw new IOException("Unexpected var name: '" + name + "' expected: '" + var.name + "'");
+                }
+
+                var.SetValue(value);
+            }
+        }
+
         private void ReadDemo(BinaryReader reader)
         {
+            m_buffer = ReadBuffer(reader);
+            m_networkBuffer = ReadBuffer(reader);
+        }
+
+        private BitReadBuffer ReadBuffer(BinaryReader reader)
+        {
             int bitLength = reader.ReadInt32();
-            int length = reader.ReadInt32();
+            int length = (bitLength + 7) >> 3;
             byte[] data = new byte[length];
             int bytesRead = reader.Read(data, 0, length);
             if (bytesRead != length)
@@ -99,7 +135,7 @@ namespace BomberEngine
                 throw new IOException("Wrong data size: " + bytesRead + " expected: " + length);
             }
 
-            m_buffer = new BitReadBuffer(data, bitLength);
+            return new BitReadBuffer(data, bitLength);
         }
 
         public void Update(float delta)
