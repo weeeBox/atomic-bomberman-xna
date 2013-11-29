@@ -17,6 +17,9 @@ namespace Bomberman.Gameplay.Elements.Players
 
         private bool m_needUpdateAnimation;
 
+        private bool m_pickingUpBomb;
+        private bool m_punchingBomb;
+
         public PlayerDrawable(Player player, PlayerAnimations animations)
         {
             player.PlayerDrawable = this;
@@ -51,8 +54,8 @@ namespace Bomberman.Gameplay.Elements.Players
 
         public void Reset()
         {
-            IsPickingUpBomb = false;
-            IsPunchingBomb = false;
+            m_pickingUpBomb = false;
+            m_punchingBomb = false;
 
             UpdateAnimation();
         }
@@ -74,7 +77,7 @@ namespace Bomberman.Gameplay.Elements.Players
 
             if (m_player.IsAlive)
             {
-                if (IsPunchingBomb)
+                if (m_punchingBomb)
                 {
                     if (currentId == PlayerAnimations.Id.PunchBomb)
                     {
@@ -84,7 +87,7 @@ namespace Bomberman.Gameplay.Elements.Players
                     id = PlayerAnimations.Id.PunchBomb;
                     mode = AnimationInstance.Mode.Normal;
                 }
-                else if (IsPickingUpBomb)
+                else if (m_pickingUpBomb)
                 {
                     id = PlayerAnimations.Id.PickupBomb;
                     mode = AnimationInstance.Mode.Normal;
@@ -129,18 +132,18 @@ namespace Bomberman.Gameplay.Elements.Players
             {
                 case PlayerAnimations.Id.PunchBomb:
                 {
-                    IsPunchingBomb = false;
+                    m_punchingBomb = false;
                     break;
                 }
 
                 case PlayerAnimations.Id.PickupBomb:
                 {
-                    IsPunchingBomb = false;
+                    m_punchingBomb = false;
                     break;
                 }
             }
 
-            AnimationDelegate.OnAnimationFinished(id);
+            m_player.OnAnimationFinished(id);
         }
 
         #endregion
@@ -148,10 +151,6 @@ namespace Bomberman.Gameplay.Elements.Players
         //////////////////////////////////////////////////////////////////////////////
 
         #region Properties
-
-        public bool IsPickingUpBomb { get; set; }
-        public bool IsPunchingBomb { get; set; }
-        public IPlayerAnimationDelegate AnimationDelegate { get; set; }
 
         public Player Player
         {
@@ -162,6 +161,26 @@ namespace Bomberman.Gameplay.Elements.Players
         {
             get { return m_animations; }
             set { m_animations = value; }
+        }
+
+        public bool IsPickingUpBomb
+        {
+            get { return m_pickingUpBomb; }
+            set 
+            {
+                m_needUpdateAnimation = m_pickingUpBomb != value;
+                m_pickingUpBomb = value; 
+            }
+        }
+
+        public bool IsPunchingBomb
+        {
+            get { return m_punchingBomb; }
+            set 
+            {
+                m_needUpdateAnimation = m_punchingBomb != value;
+                m_punchingBomb = value; 
+            }
         }
 
         #endregion

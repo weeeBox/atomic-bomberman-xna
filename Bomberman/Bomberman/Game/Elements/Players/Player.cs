@@ -145,7 +145,6 @@ namespace Bomberman.Gameplay.Elements.Players
                 }
 
                 m_diseases.Update(delta);
-                m_drawable.Update(delta);
             }
 
             for (int bombIndex = 0; bombIndex < m_thrownBombs.Count; ++bombIndex)
@@ -153,7 +152,7 @@ namespace Bomberman.Gameplay.Elements.Players
                 m_thrownBombs[bombIndex].Update(delta);
             }
 
-            m_drawable.SetNeedUpdateAnimation();
+            m_drawable.Update(delta);
         }
 
         public void ReplayUpdate(float delta)
