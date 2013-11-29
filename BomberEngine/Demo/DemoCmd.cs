@@ -38,6 +38,8 @@ namespace BomberEngine
 
     //////////////////////////////////////////////////////////////////////////////
 
+    #region Tick command
+
     public class DemoTickCmd : DemoCmd
     {
         private float m_frameTime;
@@ -92,7 +94,11 @@ namespace BomberEngine
         }
     }
 
+    #endregion
+
     //////////////////////////////////////////////////////////////////////////////
+
+    #region Init command
 
     public class DemoInitCmd : DemoCmd
     {
@@ -121,7 +127,11 @@ namespace BomberEngine
         }
     }
 
+    #endregion
+
     //////////////////////////////////////////////////////////////////////////////
+
+    #region Input cmd
 
     public class DemoInputCmd : DemoCmd, IInputListener
     {
@@ -322,4 +332,6 @@ namespace BomberEngine
             get { return m_changed; }
         }
     }
+
+    #endregion
 }
