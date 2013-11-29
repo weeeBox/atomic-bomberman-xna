@@ -408,6 +408,7 @@ namespace BomberEngine
             {
                 String path = "demo.dm";
                 m_demoRecorder.Save(path);
+                m_demoRecorder.Destroy();
                 Log.d("Demo saved: " + path);
             }
         }

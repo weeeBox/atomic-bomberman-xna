@@ -3,7 +3,7 @@ using System.IO;
 
 namespace BomberEngine
 {
-    public class DemoRecorder : IUpdatable, IInputListener
+    public class DemoRecorder : IUpdatable, IInputListener, IDestroyable
     {
         private static int BitsPerCmdType = BitUtils.BitsToHoldUInt((int)DemoCmdType.Count);
 
@@ -11,9 +11,13 @@ namespace BomberEngine
 
         private DemoTickCmd m_tickCmd;
         private DemoInputCmd m_inputCmd;
-        
+
+        private static DemoRecorder m_instance;
+
         public DemoRecorder()
         {
+            m_instance = this;
+
             m_buffer = new BitWriteBuffer();
             m_tickCmd = new DemoTickCmd();
             m_inputCmd = new DemoInputCmd();
@@ -34,6 +38,20 @@ namespace BomberEngine
 
             m_tickCmd.frameTime = delta;
             Write(m_tickCmd);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        #region IDestroyable
+
+        public void Destroy()
+        {
+            if (m_instance == this)
+            {
+                m_instance = null;
+            }
         }
 
         #endregion
